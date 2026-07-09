@@ -249,7 +249,7 @@
   <div class="nav-inner">
     <a href="#top" class="brand">AROMIA</a>
     <nav class="links">
-      <a href="#tienda" data-i18n="navMagazine">Magazine</a>
+      <a href="magazine.html" data-i18n="navMagazine">Magazine</a>
       <a href="#tienda" data-i18n="navTienda">Tienda</a>
       <a href="#academia" data-i18n="navAcademia">Academia</a>
       <a href="#academia" data-i18n="navClub">Club</a>
@@ -387,7 +387,7 @@
     <div>
       <div class="footer-h" data-i18n="footerEcosystem">Ecosistema</div>
       <div class="footer-links">
-        <a href="#tienda" data-i18n="navMagazine">Magazine</a>
+        <a href="magazine.html" data-i18n="navMagazine">Magazine</a>
         <a href="#tienda" data-i18n="navTienda">Tienda</a>
         <a href="#academia" data-i18n="navAcademia">Academia</a>
       </div>
@@ -399,6 +399,7 @@
         <a href="#">Aromia AI</a>
         <a href="#" data-i18n="footerReviews">Reseñas</a>
         <a href="#" data-i18n="footerAbout">Sobre Aromia</a>
+        <a href="privacidad.html" data-i18n="footerPrivacy">Política de Privacidad</a>
       </div>
     </div>
     <div>
@@ -407,7 +408,8 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-bottom-inner">
+    <div class="footer-bottom-inner" style="flex-direction:column;align-items:flex-start;gap:8px">
+      <span data-i18n="amazonDisclosure" style="font-weight:500;color:var(--ink)">As an Amazon Associate, I earn from qualifying purchases.</span>
       <span data-i18n="footerCopyright">© 2026 Aromia. La autoridad editorial que además vende. Este sitio contiene enlaces de afiliado; podemos recibir comisión por compras realizadas a través de ellos.</span>
       <span data-i18n="footerLocation">Hecho con honestidad · Madrid · Ciudad de México</span>
     </div>
@@ -444,6 +446,8 @@
       footerValues:"Valores", footerValuesList:"Honestidad<br>Educación<br>Elegancia<br>Curiosidad<br>Excelencia",
       footerCopyright:"© 2026 Aromia. La autoridad editorial que además vende. Este sitio contiene enlaces de afiliado; podemos recibir comisión por compras realizadas a través de ellos.",
       footerLocation:"Hecho con honestidad · Madrid · Ciudad de México",
+      footerPrivacy:"Política de Privacidad",
+      amazonDisclosure:"Como Afiliado de Amazon, gano por las compras que califican.",
       discover:"Descubrir", noResults:"No encontramos fragancias con esos filtros. Prueba a limpiar alguno.",
       topNotes:"Notas de salida", heartNotes:"Notas de corazón", baseNotes:"Notas de fondo",
       performance:"Rendimiento en piel", longevity:"Longevidad", sillage:"Estela", projection:"Proyección",
@@ -475,6 +479,8 @@
       footerValues:"Values", footerValuesList:"Honesty<br>Education<br>Elegance<br>Curiosity<br>Excellence",
       footerCopyright:"© 2026 Aromia. The editorial authority that also sells. This site contains affiliate links; we may receive a commission for purchases made through them.",
       footerLocation:"Made with honesty · Madrid · Mexico City",
+      footerPrivacy:"Privacy Policy",
+      amazonDisclosure:"As an Amazon Associate, I earn from qualifying purchases.",
       discover:"Discover", noResults:"No fragrances match those filters. Try clearing one.",
       topNotes:"Top notes", heartNotes:"Heart notes", baseNotes:"Base notes",
       performance:"Skin performance", longevity:"Longevity", sillage:"Sillage", projection:"Projection",
@@ -596,7 +602,6 @@
     var full = Math.round(rating5);
     return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full);
   }
-  // derive a 0-5 "rating" proxy from longevity+sillage+projection for display consistency
   function ratingOf(p){ return Math.min(5, ((p.longevity/12*5) + p.sillage + p.projection) / 3); }
 
   var collectionGrid = document.getElementById('collectionGrid');
