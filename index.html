@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aromia — La autoridad editorial que además vende</title>
-<meta name="description" content="Magazine, Lab, Tienda y Academia de perfumería. Reseñas honestas, ingredientes en profundidad y comparador de precios.">
+<title>Aromia Lab — La autoridad editorial que además vende</title>
+<meta name="description" content="Magazine, Lab, Tienda y Academia de perfumería. Comparador de 33 fragancias reales: notas, longevidad, estela y proyección.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
@@ -36,6 +36,7 @@
   a{color:inherit}
   img{max-width:100%;display:block}
   button{font:inherit}
+  [data-i18n]{transition:opacity .15s ease}
 
   .banner{background:var(--ink);color:color-mix(in srgb, var(--bg) 70%, transparent);text-align:center;
     font-size:11.5px;letter-spacing:.03em;padding:7px 16px;line-height:1.5}
@@ -53,6 +54,7 @@
   .pill-btn{font-family:var(--fbody);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
     background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;transition:.25s}
   .pill-btn:hover{border-color:var(--gold);color:var(--ink)}
+  .pill-btn.active{border-color:var(--gold);color:var(--ink);background:var(--gold-soft)}
   .icon-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--muted);
     background:transparent;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:14px;transition:.25s}
   .icon-btn:hover{border-color:var(--gold);color:var(--ink)}
@@ -70,7 +72,7 @@
   .cta-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
   .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);
     font-family:var(--fbody);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
-    padding:15px 26px;border-radius:var(--rad);transition:.3s}
+    padding:15px 26px;border-radius:var(--rad);transition:.3s;border:none;cursor:pointer}
   .btn-primary:hover{background:var(--gold);color:#fff}
   .link-underline{font-family:var(--fbody);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
     text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:4px;transition:.25s}
@@ -98,6 +100,22 @@
   .kicker-gold{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
 
   .tienda{padding:64px 30px 30px}
+
+  /* ---------- FILTERS / COMPARATOR ---------- */
+  .filters-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:26px 28px;margin-bottom:36px}
+  .filters-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+  @media(max-width:1000px){.filters-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:620px){.filters-grid{grid-template-columns:repeat(2,1fr)}}
+  .filter-field label{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .filter-field select, .filter-field input[type="text"]{
+    width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:var(--rad);
+    padding:9px 10px;font-family:var(--fbody);font-size:13px;color:var(--ink);outline:none}
+  .filters-foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;flex-wrap:wrap;gap:10px}
+  .results-count{font-size:12.5px;color:var(--muted)}
+  .reset-btn{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);
+    border-radius:999px;padding:8px 14px;cursor:pointer;transition:.2s}
+  .reset-btn:hover{border-color:var(--gold);color:var(--ink)}
+
   .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 26px}
   @media(max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:620px){.grid-3{grid-template-columns:1fr}.hero{grid-template-columns:1fr}}
@@ -112,8 +130,10 @@
   .card-tag{position:absolute;top:12px;left:12px;background:color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter:blur(6px);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);
     padding:6px 10px;border-radius:999px}
+  .card-seg{position:absolute;top:12px;right:12px;background:var(--gold);color:#fff;
+    font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:5px 9px;border-radius:999px}
   .card-title-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-  .card h3{font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0;line-height:1.1}
+  .card h3{font-family:var(--fdisp);font-weight:600;font-size:22px;margin:0;line-height:1.1}
   .card-price{font-family:var(--fbody);font-size:15px;color:var(--ink);white-space:nowrap}
   .card-house{font-size:12.5px;color:var(--muted);margin-top:5px}
   .card-notes{font-size:13px;color:var(--muted);margin-top:11px;line-height:1.5}
@@ -122,6 +142,17 @@
   .card-foot .rating{font-size:12px;color:var(--muted)}
   .card-foot .discover{margin-left:auto;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
     border-bottom:1px solid var(--gold);padding-bottom:2px}
+  .no-results{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+
+  .pagination{display:flex;justify-content:center;gap:8px;margin-top:36px}
+  .page-btn{width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--surface);
+    color:var(--muted);cursor:pointer;font-size:13px;transition:.2s}
+  .page-btn.active{background:var(--gold);border-color:var(--gold);color:#fff}
+  .page-btn:hover{border-color:var(--gold)}
+
+  .back-link{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;margin-bottom:24px;cursor:pointer;background:none;border:none;padding:0}
+  .back-link:hover{color:var(--gold)}
 
   .estudio{background:var(--surface2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:64px}
   .estudio-inner{max-width:1240px;margin:0 auto;padding:78px 30px}
@@ -136,11 +167,6 @@
   .gallery-main .letter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font-family:var(--fdisp);font-size:150px;color:rgba(255,255,255,.14)}
   .gallery-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .thumbs{display:flex;gap:12px;margin-top:14px}
-  .thumb{flex:1;aspect-ratio:1/1;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);padding:0;
-    cursor:pointer;background:linear-gradient(150deg,#cbb393,#7a5f3c);position:relative;transition:.25s}
-  .thumb.active{border-color:var(--gold)}
-  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
   .prod-kicker{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
   .prod-title{font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(38px,4.4vw,58px);line-height:1;margin:0 0 10px}
@@ -176,76 +202,11 @@
   .metric-bar span{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--gold),color-mix(in srgb,var(--gold) 60%, #fff));
     border-radius:999px;transition:width 1.4s cubic-bezier(.16,1,.3,1)}
 
-  .modules{display:grid;grid-template-columns:1fr 1.25fr;gap:26px;margin-top:30px}
-  @media(max-width:900px){.modules{grid-template-columns:1fr}}
-  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:30px 28px}
-  .panel h4{font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0 0 8px}
-
-  .pyramid-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;gap:12px;flex-wrap:wrap}
-  .pyramid-body{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center}
-  @media(max-width:560px){.pyramid-body{grid-template-columns:1fr}}
-  .bands{display:flex;flex-direction:column;align-items:center;gap:9px}
-  .band{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:var(--rad);
-    padding:15px 12px;cursor:pointer;text-align:center;transition:.3s;font-family:var(--fbody)}
-  .band.active{border-color:var(--gold);background:var(--gold);color:#fff}
-  .band .lbl{font-size:13.5px;letter-spacing:.08em;text-transform:uppercase}
-  .band .tm{font-size:11px;opacity:.7;margin-top:3px}
-  .tier-title{font-family:var(--fdisp);font-size:26px;line-height:1.05;margin-bottom:4px}
-  .tier-time{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
-  .tier-desc{font-size:13.5px;line-height:1.65;color:var(--muted);margin:0 0 16px}
   .chip-row{display:flex;flex-wrap:wrap;gap:8px}
   .chip{font-size:12.5px;color:var(--ink);background:var(--gold-soft);border:1px solid var(--line);border-radius:999px;padding:7px 13px}
-
-  .rating-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 36px;
-    margin-top:26px;display:grid;grid-template-columns:auto 1fr auto;gap:44px;align-items:center}
-  @media(max-width:800px){.rating-panel{grid-template-columns:1fr;text-align:center}.rating-panel .border-l{border-left:none!important;padding-left:0!important;border-top:1px solid var(--line);padding-top:24px}}
-  .rating-avg{text-align:center}
-  .rating-avg b{font-family:var(--fdisp);font-size:64px;line-height:1;color:var(--ink);font-weight:400}
-  .stars-static{position:relative;display:inline-block;margin-top:8px;font-size:20px;letter-spacing:3px}
-  .stars-static .bg{color:var(--line)}
-  .stars-static .fill{position:absolute;left:0;top:0;width:0;overflow:hidden;white-space:nowrap;color:var(--gold);
-    transition:width 1.2s cubic-bezier(.16,1,.3,1)}
-  .rating-votes{font-size:12px;color:var(--muted);margin-top:8px}
-  .border-l{border-left:1px solid var(--line);padding-left:44px}
-  .quote{font-family:var(--fdisp);font-size:22px;line-height:1.35;font-style:italic;color:var(--ink);margin:0}
-  .quote-meta{font-size:12.5px;color:var(--muted);margin-top:10px}
-  .your-rating .lbl{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .user-stars{display:flex;gap:5px;justify-content:center;font-size:30px;cursor:pointer}
-  .user-stars span{color:var(--line);transition:.15s}
-  .user-stars span.lit{color:var(--gold)}
-  .rating-msg{font-size:12px;color:var(--muted);margin-top:10px;min-height:16px}
-
-  .academia{padding:84px 30px 40px}
-  .lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:80px}
-  @media(max-width:800px){.lessons{grid-template-columns:1fr}}
-  .lesson{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 30px}
-  .lesson .num{font-family:var(--fdisp);font-size:40px;color:var(--gold);line-height:1;margin-bottom:18px}
-  .lesson h4{font-family:var(--fdisp);font-weight:600;font-size:25px;margin:0 0 12px}
-  .lesson p{font-size:14.5px;line-height:1.7;color:var(--muted);margin:0 0 16px}
-  .lesson .tip{font-size:12.5px;letter-spacing:.06em;color:var(--gold);border-top:1px solid var(--line);padding-top:14px}
-
-  .ingredients{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-  @media(max-width:900px){.ingredients{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:480px){.ingredients{grid-template-columns:1fr}}
-  .ing-card{text-align:left;padding:0;border:1px solid var(--line);background:var(--surface);border-radius:var(--rad);
-    overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:.35s;font-family:var(--fbody);width:100%}
-  .ing-card:hover{border-color:var(--gold)}
-  .ing-card.open{border-color:var(--gold)}
-  .ing-img{position:relative;aspect-ratio:4/5;overflow:hidden;transition:.4s}
-  .ing-card.open .ing-img{aspect-ratio:4/3}
-  .ing-img .letter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:var(--fdisp);font-size:54px;color:rgba(255,255,255,.22)}
-  .ing-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .ing-caption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(transparent,rgba(15,10,4,.78))}
-  .ing-caption .name{font-family:var(--fdisp);font-size:23px;color:#fff;line-height:1.05}
-  .ing-caption .fam{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:3px}
-  .ing-detail{padding:18px 16px;border-top:1px solid var(--line)}
-  .ing-detail p{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 12px}
-  .ing-row{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);padding-top:10px;border-top:1px dashed var(--line)}
-  .ing-row + .ing-row{border-top:none;margin-top:7px;padding-top:0}
-  .ing-row span:last-child{color:var(--ink)}
-  .ing-row.pos span:last-child{color:var(--gold)}
-  .ing-cta{padding:13px 16px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+  .pyramid-tiers{display:flex;flex-direction:column;gap:14px;margin-top:18px}
+  .pyramid-tier{border:1px solid var(--line);border-radius:var(--rad);padding:16px 18px;background:var(--surface)}
+  .pyramid-tier .lbl{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 
   .newsletter{background:var(--ink);color:var(--bg);margin-top:60px}
   .newsletter-inner{max-width:760px;margin:0 auto;padding:84px 30px;text-align:center}
@@ -275,23 +236,26 @@
   .footer-bottom{border-top:1px solid var(--line)}
   .footer-bottom-inner{max-width:1240px;margin:0 auto;padding:20px 30px;display:flex;justify-content:space-between;
     flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)}
+
+  #productView{display:none}
+  #catalogView.hidden, #productView.hidden{display:none}
 </style>
 </head>
 <body>
 
-<div class="banner">Aromia contiene enlaces de afiliado · podemos ganar comisión por compras cualificadas, sin coste extra para ti.</div>
+<div class="banner" data-i18n="banner">Aromia contiene enlaces de afiliado · podemos ganar comisión por compras cualificadas, sin coste extra para ti.</div>
 
 <header class="nav">
   <div class="nav-inner">
     <a href="#top" class="brand">AROMIA</a>
     <nav class="links">
-      <a href="#tienda">Magazine</a>
-      <a href="#tienda">Tienda</a>
-      <a href="#estudio">Lab</a>
-      <a href="#academia">Academia</a>
-      <a href="#academia">Club</a>
+      <a href="#tienda" data-i18n="navMagazine">Magazine</a>
+      <a href="#tienda" data-i18n="navTienda">Tienda</a>
+      <a href="#academia" data-i18n="navAcademia">Academia</a>
+      <a href="#academia" data-i18n="navClub">Club</a>
     </nav>
     <div class="nav-actions">
+      <button class="pill-btn" id="langToggle" type="button">ES</button>
       <button class="pill-btn" id="styleToggle" type="button">Editorial</button>
       <button class="icon-btn" id="modeToggle" type="button" aria-label="Cambiar modo">☾</button>
     </div>
@@ -300,17 +264,17 @@
 
 <section class="hero" id="top">
   <div>
-    <div class="eyebrow"><span class="dash"></span><span>La autoridad editorial que además vende</span></div>
-    <h1>No vendemos perfumes.<br><em>Revelamos identidades.</em></h1>
-    <p class="lede">Magazine, Lab, Tienda y Academia en un solo ecosistema. Aprende a leer una fragancia —su pirámide, su longevidad, su estela— antes de elegir la que cuenta tu historia.</p>
+    <div class="eyebrow"><span class="dash"></span><span data-i18n="heroEyebrow">La autoridad editorial que además vende</span></div>
+    <h1 data-i18n="heroTitle">No vendemos perfumes.<br><em>Revelamos identidades.</em></h1>
+    <p class="lede" data-i18n="heroLede">Magazine, Lab, Tienda y Academia en un solo ecosistema. Compara 33 fragancias reales por temporada, longevidad, notas y estela antes de elegir la que cuenta tu historia.</p>
     <div class="cta-row">
-      <a href="#tienda" class="btn-primary">Explorar la colección<span>→</span></a>
-      <a href="#academia" class="link-underline">Cómo leer un perfume</a>
+      <a href="#tienda" class="btn-primary" data-i18n="heroCta1">Explorar el comparador<span>→</span></a>
+      <a href="#academia" class="link-underline" data-i18n="heroCta2">Cómo leer un perfume</a>
     </div>
     <div class="stat-row">
-      <div class="stat"><b>240+</b><span>Reseñas honestas</span></div>
-      <div class="stat"><b>98</b><span>Ingredientes estudiados</span></div>
-      <div class="stat"><b>6</b><span>Casas en el Lab</span></div>
+      <div class="stat"><b>33</b><span data-i18n="statFragrances">Fragancias comparadas</span></div>
+      <div class="stat"><b>8</b><span data-i18n="statIngredients">Familias olfativas</span></div>
+      <div class="stat"><b>6</b><span data-i18n="statFilters">Filtros de búsqueda</span></div>
     </div>
   </div>
   <div class="hero-art">
@@ -319,134 +283,96 @@
       <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=70" alt="Aromia perfume editorial">
     </div>
     <div class="hero-badge">
-      <div class="kicker">Perfume del mes</div>
-      <div class="name">Ámbar Nómada</div>
-      <div class="sub">Ámbar especiado · 50 ml</div>
+      <div class="kicker" data-i18n="badgeKicker">Perfume del mes</div>
+      <div class="name">Baccarat Rouge 540</div>
+      <div class="sub">Maison Francis Kurkdjian</div>
     </div>
   </div>
 </section>
 
 <section class="tienda" id="tienda">
-  <div class="section-head">
-    <div>
-      <div class="kicker-gold">La Colección</div>
-      <h2>Seis fragancias, seis identidades.</h2>
+
+  <div id="catalogView">
+    <div class="section-head">
+      <div>
+        <div class="kicker-gold" data-i18n="collectionKicker">El Comparador</div>
+        <h2 data-i18n="collectionTitle">Encuentra tu fragancia ideal</h2>
+      </div>
     </div>
-    <a href="#estudio" class="link-underline" style="border-color:var(--line)">Ver todo el Lab →</a>
+
+    <div class="filters-panel">
+      <div class="filters-grid">
+        <div class="filter-field">
+          <label data-i18n="filterSearch">Buscar</label>
+          <input type="text" id="fSearch" placeholder="Nombre o marca...">
+        </div>
+        <div class="filter-field">
+          <label data-i18n="filterSeason">Temporada</label>
+          <select id="fSeason"><option value="">—</option></select>
+        </div>
+        <div class="filter-field">
+          <label data-i18n="filterOccasion">Ocasión</label>
+          <select id="fOccasion"><option value="">—</option></select>
+        </div>
+        <div class="filter-field">
+          <label data-i18n="filterFamily">Familia / Nota</label>
+          <select id="fFamily"><option value="">—</option></select>
+        </div>
+        <div class="filter-field">
+          <label data-i18n="filterLongevity">Longevidad mínima</label>
+          <select id="fLongevity">
+            <option value="0">—</option>
+            <option value="6">6h+</option>
+            <option value="8">8h+</option>
+            <option value="10">10h+</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label data-i18n="filterSillage">Estela mínima</label>
+          <select id="fSillage">
+            <option value="0">—</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+      </div>
+      <div class="filters-foot">
+        <span class="results-count" id="resultsCount"></span>
+        <button class="reset-btn" id="resetFilters" data-i18n="filterReset">Limpiar filtros</button>
+      </div>
+    </div>
+
+    <div class="grid-3" id="collectionGrid"></div>
+    <div class="pagination" id="pagination"></div>
   </div>
-  <div class="grid-3" id="collectionGrid"></div>
+
+  <div id="productView">
+    <button class="back-link" id="backBtn">← <span data-i18n="backToComparator">Volver al comparador</span></button>
+    <div id="productDetail"></div>
+  </div>
+
 </section>
 
-<section class="estudio" id="estudio">
+<section class="estudio" id="academia">
   <div class="estudio-inner">
     <div class="center-head">
-      <div class="kicker-gold">El Estudio · Lab Aromia</div>
-      <h2>Anatomía de una fragancia</h2>
-      <p>Cada perfume del Lab se disecciona con honestidad: rendimiento real en piel, carácter, pirámide olfativa y la voz de la comunidad.</p>
+      <div class="kicker-gold" data-i18n="academiaKicker">Academia Aromia</div>
+      <h2 data-i18n="academiaTitle">Cómo leer una fragancia</h2>
+      <p data-i18n="academiaLede">Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.</p>
     </div>
-
-    <div class="estudio-top">
-      <div>
-        <div class="gallery-main">
-          <div class="letter">A</div>
-          <img id="mainImg" src="" alt="Ámbar Nómada">
-        </div>
-        <div class="thumbs" id="thumbs"></div>
-      </div>
-
-      <div>
-        <div class="prod-kicker">Ámbar especiado · Amaderado oriental</div>
-        <h3 class="prod-title">Ámbar Nómada</h3>
-        <div class="prod-meta">Aromia Lab · Nariz <em>Élise Marchand</em> · 2025</div>
-        <p class="prod-desc">Un ámbar que viaja: abre con la chispa del cardamomo y el jengibre sobre bergamota soleada, se asienta en un corazón de iris y azafrán, y termina envolviéndote en sándalo lácteo, vainilla y vetiver. Cálido, sofisticado, nómada.</p>
-        <div class="price-row">
-          <div><div class="price">Desde 128 €</div><div class="price-sub">Eau de Parfum · 50 ml</div></div>
-          <div class="price-sep"></div>
-          <div class="specs">Concentración <strong>18%</strong><br>Difusión <strong>Alta</strong></div>
-        </div>
-
-        <div class="retailers" id="retailers"></div>
-
-        <div class="affiliate-note"><span class="ico">ⓘ</span><span>Aromia participa en programas de afiliados. Al comprar a través de estos enlaces podemos recibir una comisión, sin coste adicional para ti — esto financia nuestro trabajo editorial independiente.</span></div>
-
-        <div>
-          <div class="metrics-kicker">Rendimiento en piel</div>
-          <div id="metrics"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modules">
-      <div class="panel">
-        <div class="kicker-gold" style="margin-bottom:4px">Carácter del aroma</div>
-        <h4>El retrato olfativo</h4>
-        <div style="display:flex;justify-content:center">
-          <svg id="radarSvg" viewBox="0 0 240 240" style="width:100%;max-width:300px;overflow:visible"></svg>
-        </div>
-        <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:10px 0 0;text-align:center">Dominante <strong style="color:var(--ink);font-weight:500">especiado-cálido</strong>, con una base amaderada y un guiño floral.</p>
-      </div>
-
-      <div class="panel">
-        <div class="pyramid-head">
-          <div>
-            <div class="kicker-gold" style="margin-bottom:4px">Pirámide olfativa</div>
-            <h4>Cómo evoluciona en tu piel</h4>
-          </div>
-          <span style="font-size:11.5px;color:var(--muted)">Toca cada nivel ↓</span>
-        </div>
-        <div class="pyramid-body">
-          <div class="bands" id="bands"></div>
-          <div id="tierDetail"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rating-panel">
-      <div class="rating-avg">
-        <b>4.6</b>
-        <div class="stars-static"><span class="bg">★★★★★</span><span class="fill" id="avgFill">★★★★★</span></div>
-        <div class="rating-votes">1.284 valoraciones</div>
-      </div>
-      <div class="border-l">
-        <div class="kicker-gold" style="margin-bottom:6px">La voz de la comunidad</div>
-        <p class="quote">«Empieza chispeante y termina como un abrazo. El ámbar nunca se vuelve pesado.»</p>
-        <div class="quote-meta">— 1.284 reseñas verificadas · 92% lo recomienda</div>
-      </div>
-      <div class="your-rating border-l">
-        <div class="lbl">Tu valoración</div>
-        <div class="user-stars" id="userStars"></div>
-        <div class="rating-msg" id="ratingMsg">Pasa el cursor y elige</div>
-      </div>
-    </div>
+    <div class="grid-3" id="lessons" style="margin-bottom:0"></div>
   </div>
-</section>
-
-<section class="academia" id="academia">
-  <div class="center-head">
-    <div class="kicker-gold">Academia Aromia</div>
-    <h2>Cómo leer una fragancia</h2>
-    <p>Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.</p>
-  </div>
-  <div class="lessons" id="lessons"></div>
-
-  <div class="section-head">
-    <div>
-      <div class="kicker-gold">El jardín de Aromia</div>
-      <h3 style="font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(28px,3.2vw,42px);line-height:1.05;margin:0">Los ingredientes, uno a uno</h3>
-    </div>
-    <span style="font-size:12px;color:var(--muted);white-space:nowrap">Toca un ingrediente para descubrirlo</span>
-  </div>
-  <div class="ingredients" id="ingredients"></div>
 </section>
 
 <section class="newsletter">
   <div class="newsletter-inner">
-    <div class="kicker-gold">La Carta de Aromia</div>
-    <h2>Una fragancia, una historia, cada domingo.</h2>
-    <p>Reseñas honestas, ingredientes en profundidad y lanzamientos del Lab. Sin ruido, sin spam.</p>
+    <div class="kicker-gold" data-i18n="newsletterKicker">La Carta de Aromia</div>
+    <h2 data-i18n="newsletterTitle">Una fragancia, una historia, cada domingo.</h2>
+    <p data-i18n="newsletterLede">Reseñas honestas, comparativas en profundidad y lanzamientos del Lab. Sin ruido, sin spam.</p>
     <form id="newsletterForm">
       <input type="email" id="newsletterEmail" placeholder="tu@correo.com" required>
-      <button type="submit">Suscribirme</button>
+      <button type="submit" data-i18n="newsletterBtn">Suscribirme</button>
     </form>
     <div class="newsletter-msg" id="newsletterMsg"></div>
   </div>
@@ -456,35 +382,34 @@
   <div class="footer-grid">
     <div>
       <div class="footer-brand">AROMIA</div>
-      <p class="footer-desc">La plataforma de perfumería más respetada del mundo hispanohablante. Honestidad, educación y elegancia.</p>
+      <p class="footer-desc" data-i18n="footerDesc">La plataforma de perfumería más respetada del mundo hispanohablante. Honestidad, educación y elegancia.</p>
     </div>
     <div>
-      <div class="footer-h">Ecosistema</div>
+      <div class="footer-h" data-i18n="footerEcosystem">Ecosistema</div>
       <div class="footer-links">
-        <a href="#tienda">Magazine</a>
-        <a href="#tienda">Tienda</a>
-        <a href="#estudio">Lab</a>
-        <a href="#academia">Academia</a>
+        <a href="#tienda" data-i18n="navMagazine">Magazine</a>
+        <a href="#tienda" data-i18n="navTienda">Tienda</a>
+        <a href="#academia" data-i18n="navAcademia">Academia</a>
       </div>
     </div>
     <div>
-      <div class="footer-h">Comunidad</div>
+      <div class="footer-h" data-i18n="footerCommunity">Comunidad</div>
       <div class="footer-links">
-        <a href="#">Club</a>
+        <a href="#" data-i18n="navClub">Club</a>
         <a href="#">Aromia AI</a>
-        <a href="#">Reseñas</a>
-        <a href="#">Sobre Aromia</a>
+        <a href="#" data-i18n="footerReviews">Reseñas</a>
+        <a href="#" data-i18n="footerAbout">Sobre Aromia</a>
       </div>
     </div>
     <div>
-      <div class="footer-h">Valores</div>
-      <div class="values">Honestidad<br>Educación<br>Elegancia<br>Curiosidad<br>Excelencia</div>
+      <div class="footer-h" data-i18n="footerValues">Valores</div>
+      <div class="values" data-i18n="footerValuesList">Honestidad<br>Educación<br>Elegancia<br>Curiosidad<br>Excelencia</div>
     </div>
   </div>
   <div class="footer-bottom">
     <div class="footer-bottom-inner">
-      <span>© 2026 Aromia. La autoridad editorial que además vende. Este sitio contiene enlaces de afiliado; podemos recibir comisión por compras realizadas a través de ellos.</span>
-      <span>Hecho con honestidad · Madrid · Ciudad de México</span>
+      <span data-i18n="footerCopyright">© 2026 Aromia. La autoridad editorial que además vende. Este sitio contiene enlaces de afiliado; podemos recibir comisión por compras realizadas a través de ellos.</span>
+      <span data-i18n="footerLocation">Hecho con honestidad · Madrid · Ciudad de México</span>
     </div>
   </div>
 </footer>
@@ -492,6 +417,89 @@
 <script>
 (function(){
   "use strict";
+
+  // ================= i18n =================
+  var i18n = {
+    es: {
+      banner:"Aromia contiene enlaces de afiliado · podemos ganar comisión por compras cualificadas, sin coste extra para ti.",
+      navMagazine:"Magazine", navTienda:"Tienda", navAcademia:"Academia", navClub:"Club",
+      heroEyebrow:"La autoridad editorial que además vende",
+      heroTitle:"No vendemos perfumes.<br><em>Revelamos identidades.</em>",
+      heroLede:"Magazine, Lab, Tienda y Academia en un solo ecosistema. Compara 33 fragancias reales por temporada, longevidad, notas y estela antes de elegir la que cuenta tu historia.",
+      heroCta1:"Explorar el comparador<span>→</span>", heroCta2:"Cómo leer un perfume",
+      statFragrances:"Fragancias comparadas", statIngredients:"Familias olfativas", statFilters:"Filtros de búsqueda",
+      badgeKicker:"Perfume del mes",
+      collectionKicker:"El Comparador", collectionTitle:"Encuentra tu fragancia ideal",
+      filterSearch:"Buscar", filterSeason:"Temporada", filterOccasion:"Ocasión", filterFamily:"Familia / Nota",
+      filterLongevity:"Longevidad mínima", filterSillage:"Estela mínima", filterReset:"Limpiar filtros",
+      resultsCount:function(n){return n + " fragancias encontradas";},
+      backToComparator:"Volver al comparador",
+      academiaKicker:"Academia Aromia", academiaTitle:"Cómo leer una fragancia",
+      academiaLede:"Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.",
+      newsletterKicker:"La Carta de Aromia", newsletterTitle:"Una fragancia, una historia, cada domingo.",
+      newsletterLede:"Reseñas honestas, comparativas en profundidad y lanzamientos del Lab. Sin ruido, sin spam.",
+      newsletterBtn:"Suscribirme",
+      footerDesc:"La plataforma de perfumería más respetada del mundo hispanohablante. Honestidad, educación y elegancia.",
+      footerEcosystem:"Ecosistema", footerCommunity:"Comunidad", footerReviews:"Reseñas", footerAbout:"Sobre Aromia",
+      footerValues:"Valores", footerValuesList:"Honestidad<br>Educación<br>Elegancia<br>Curiosidad<br>Excelencia",
+      footerCopyright:"© 2026 Aromia. La autoridad editorial que además vende. Este sitio contiene enlaces de afiliado; podemos recibir comisión por compras realizadas a través de ellos.",
+      footerLocation:"Hecho con honestidad · Madrid · Ciudad de México",
+      discover:"Descubrir", noResults:"No encontramos fragancias con esos filtros. Prueba a limpiar alguno.",
+      topNotes:"Notas de salida", heartNotes:"Notas de corazón", baseNotes:"Notas de fondo",
+      performance:"Rendimiento en piel", longevity:"Longevidad", sillage:"Estela", projection:"Proyección",
+      seasonLbl:"Temporada", occasionLbl:"Ocasión", perfumerLbl:"Nariz", yearLbl:"Año",
+      viewOnAmazon:"Ver en Amazon →", affiliateNote:"Aromia participa en el Programa de Afiliados de Amazon. Al comprar a través de estos enlaces podemos recibir una comisión, sin coste adicional para ti — esto financia nuestro trabajo editorial independiente.",
+      hoursLbl:"h", allSeasons:"Todo el año"
+    },
+    en: {
+      banner:"Aromia contains affiliate links · we may earn a commission on qualifying purchases, at no extra cost to you.",
+      navMagazine:"Magazine", navTienda:"Shop", navAcademia:"Academy", navClub:"Club",
+      heroEyebrow:"The editorial authority that also sells",
+      heroTitle:"We don't sell perfumes.<br><em>We reveal identities.</em>",
+      heroLede:"Magazine, Lab, Shop and Academy in one ecosystem. Compare 33 real fragrances by season, longevity, notes and sillage before choosing the one that tells your story.",
+      heroCta1:"Explore the comparator<span>→</span>", heroCta2:"How to read a perfume",
+      statFragrances:"Fragrances compared", statIngredients:"Olfactive families", statFilters:"Search filters",
+      badgeKicker:"Perfume of the month",
+      collectionKicker:"The Comparator", collectionTitle:"Find your ideal fragrance",
+      filterSearch:"Search", filterSeason:"Season", filterOccasion:"Occasion", filterFamily:"Family / Note",
+      filterLongevity:"Min. longevity", filterSillage:"Min. sillage", filterReset:"Clear filters",
+      resultsCount:function(n){return n + " fragrances found";},
+      backToComparator:"Back to comparator",
+      academiaKicker:"Aromia Academy", academiaTitle:"How to read a fragrance",
+      academiaLede:"Understand before you buy. Three concepts that will change forever how you choose a perfume.",
+      newsletterKicker:"The Aromia Letter", newsletterTitle:"One fragrance, one story, every Sunday.",
+      newsletterLede:"Honest reviews, in-depth comparisons and Lab releases. No noise, no spam.",
+      newsletterBtn:"Subscribe",
+      footerDesc:"The most respected perfumery platform in the Spanish-speaking world. Honesty, education and elegance.",
+      footerEcosystem:"Ecosystem", footerCommunity:"Community", footerReviews:"Reviews", footerAbout:"About Aromia",
+      footerValues:"Values", footerValuesList:"Honesty<br>Education<br>Elegance<br>Curiosity<br>Excellence",
+      footerCopyright:"© 2026 Aromia. The editorial authority that also sells. This site contains affiliate links; we may receive a commission for purchases made through them.",
+      footerLocation:"Made with honesty · Madrid · Mexico City",
+      discover:"Discover", noResults:"No fragrances match those filters. Try clearing one.",
+      topNotes:"Top notes", heartNotes:"Heart notes", baseNotes:"Base notes",
+      performance:"Skin performance", longevity:"Longevity", sillage:"Sillage", projection:"Projection",
+      seasonLbl:"Season", occasionLbl:"Occasion", perfumerLbl:"Nose", yearLbl:"Year",
+      viewOnAmazon:"View on Amazon →", affiliateNote:"Aromia participates in the Amazon Associates Program. Purchases made through these links may earn us a commission, at no extra cost to you — this funds our independent editorial work.",
+      hoursLbl:"h", allSeasons:"All year"
+    }
+  };
+  var currentLang = 'es';
+  function t(key){ return i18n[currentLang][key] || i18n.es[key] || key; }
+  function applyI18n(){
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      var val = i18n[currentLang][key];
+      if(val !== undefined) el.innerHTML = val;
+    });
+    document.getElementById('langToggle').textContent = currentLang.toUpperCase();
+    document.documentElement.lang = currentLang;
+    renderCollection();
+    if(currentProduct) renderProduct(currentProduct);
+  }
+  document.getElementById('langToggle').addEventListener('click', function(){
+    currentLang = currentLang === 'es' ? 'en' : 'es';
+    applyI18n();
+  });
 
   // ---------- THEME ----------
   var html = document.documentElement;
@@ -508,283 +516,232 @@
   styleBtn.addEventListener('click', function(){ styleK = styleK === 'editorial' ? 'moderno' : 'editorial'; applyTheme(); });
   applyTheme();
 
-  // ---------- DATA ----------
-  function starsFor(r){ var full = Math.round(r); return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full); }
+  // ================= DATA =================
+  var perfumes = [{"id": 1, "name": "Baccarat Rouge 540", "brand": "Maison Francis Kurkdjian", "segment": "Nicho", "family": "Amaderado ambarado", "top": "Azafrán, jazmín", "heart": "Ámbar, sal", "base": "Cedro, abeto", "longevity": 10, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, ocasiones especiales", "gender": "Unisex", "year": 2015, "perfumer": "Francis Kurkdjian", "price": 325, "size": 70, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70", "initial": "B"}, {"id": 2, "name": "Santal 33", "brand": "Le Labo", "segment": "Nicho", "family": "Amaderado especiado", "top": "Cardamomo, violeta", "heart": "Cuero, ámbar", "base": "Sándalo, cedro", "longevity": 9, "sillage": 3, "projection": 3, "season": "Todo el año", "occasion": "Casual sofisticado, unisex icónico", "gender": "Unisex", "year": 2011, "perfumer": "Frank Voelkl", "price": 293, "size": 100, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70", "initial": "S"}, {"id": 3, "name": "Aventus", "brand": "Creed", "segment": "Nicho premium", "family": "Afrutado amaderado", "top": "Piña, bergamota, manzana", "heart": "Rosa, jazmín, abedul", "base": "Ámbar gris, almizcle, roble", "longevity": 9, "sillage": 4, "projection": 4, "season": "Primavera/Otoño", "occasion": "Oficina, día a día con carácter", "gender": "Masculino", "year": 2010, "perfumer": "Olivier Creed", "price": 425, "size": 100, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=800&q=70", "initial": "A"}, {"id": 4, "name": "Oud Wood", "brand": "Tom Ford Private Blend", "segment": "Nicho premium", "family": "Amaderado oriental", "top": "Oud, cardamomo", "heart": "Sándalo, palo de rosa", "base": "Vetiver, ámbar", "longevity": 8, "sillage": 3, "projection": 3, "season": "Otoño/Invierno", "occasion": "Noche, eventos formales", "gender": "Unisex", "year": 2007, "perfumer": "Richard Herpin / Christophe Laudamiel", "price": 250, "size": 50, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=70", "initial": "O"}, {"id": 5, "name": "Black Orchid", "brand": "Tom Ford", "segment": "Nicho premium", "family": "Floral oriental gourmand", "top": "Trufa negra, ylang-ylang", "heart": "Orquídea negra, especias", "base": "Pachulí, chocolate, vainilla", "longevity": 9, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, seducción", "gender": "Unisex", "year": 2006, "perfumer": "David Apel", "price": 158, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=800&q=70", "initial": "B"}, {"id": 6, "name": "Interlude Man", "brand": "Amouage", "segment": "Nicho premium", "family": "Amaderado especiado ahumado", "top": "Incienso, pimienta rosa", "heart": "Clavo, lavanda", "base": "Ámbar, benjuí, cuero", "longevity": 10, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, personalidad fuerte", "gender": "Masculino", "year": 2012, "perfumer": "Alberto Morillas / Rodrigo Flores-Roux", "price": 345, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=70", "initial": "I"}, {"id": 7, "name": "Reflection Man", "brand": "Amouage", "segment": "Nicho premium", "family": "Floral amaderado", "top": "Bergamota, angélica", "heart": "Jazmín, geranio", "base": "Cedro, ámbar, almizcle", "longevity": 8, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, oficina elegante", "gender": "Masculino", "year": 2007, "perfumer": "Pierre Bourdon", "price": 280, "size": 100, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=70", "initial": "R"}, {"id": 8, "name": "La Vie Est Belle", "brand": "Lancôme", "segment": "Diseñador premium", "family": "Floral afrutado gourmand", "top": "Grosella negra, pera", "heart": "Iris, jazmín, azahar", "base": "Praliné, vainilla, pachulí", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Día a día, femenino dulce", "gender": "Femenino", "year": 2012, "perfumer": "Dominique Ropion / Anne Flipo", "price": 98, "size": 75, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=800&q=70", "initial": "L"}, {"id": 9, "name": "Black Opium", "brand": "Yves Saint Laurent", "segment": "Diseñador premium", "family": "Oriental gourmand", "top": "Pera, mandarina, pimienta rosa", "heart": "Café, jazmín, flor de azahar", "base": "Vainilla, pachulí, cedro", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, salidas", "gender": "Femenino", "year": 2014, "perfumer": "Nathalie Lorson / Olivier Cresp / Marie Salamagne", "price": 92, "size": 90, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70", "initial": "B"}, {"id": 10, "name": "Good Girl", "brand": "Carolina Herrera", "segment": "Diseñador premium", "family": "Oriental floral", "top": "Almendra, café", "heart": "Jazmín sambac, tuberosa", "base": "Cacao, haba tonka, sándalo", "longevity": 9, "sillage": 4, "projection": 5, "season": "Otoño/Invierno", "occasion": "Noche, eventos", "gender": "Femenino", "year": 2016, "perfumer": "Rodrigo Flores-Roux / Louise Turner", "price": 108, "size": 80, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70", "initial": "G"}, {"id": 11, "name": "Sauvage", "brand": "Dior", "segment": "Diseñador masivo", "family": "Fresco amaderado especiado", "top": "Bergamota, pimienta", "heart": "Lavanda, geranio", "base": "Ambroxan, cedro, vetiver", "longevity": 7, "sillage": 4, "projection": 5, "season": "Todo el año", "occasion": "Día a día versátil", "gender": "Masculino", "year": 2015, "perfumer": "François Demachy", "price": 95, "size": 100, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=800&q=70", "initial": "S"}, {"id": 12, "name": "Bleu de Chanel", "brand": "Chanel", "segment": "Diseñador masivo", "family": "Amaderado aromático", "top": "Pomelo, menta", "heart": "Jengibre, nuez moscada", "base": "Sándalo, cedro, incienso", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Oficina, versátil elegante", "gender": "Masculino", "year": 2010, "perfumer": "Jacques Polge", "price": 98, "size": 100, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=70", "initial": "B"}, {"id": 13, "name": "Acqua di Giò", "brand": "Giorgio Armani", "segment": "Diseñador masivo", "family": "Acuático aromático", "top": "Bergamota, notas marinas", "heart": "Jazmín, romero", "base": "Cedro, ámbar blanco, almizcle", "longevity": 6, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, verano, casual", "gender": "Masculino", "year": 1996, "perfumer": "Alberto Morillas", "price": 78, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=800&q=70", "initial": "A"}, {"id": 14, "name": "1 Million", "brand": "Paco Rabanne", "segment": "Diseñador masivo", "family": "Oriental especiado", "top": "Sangre de mandarina, canela", "heart": "Rosa, especias", "base": "Cuero, ámbar, madera blanca", "longevity": 7, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, salidas", "gender": "Masculino", "year": 2008, "perfumer": "Christophe Raynaud", "price": 72, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=70", "initial": "1"}, {"id": 15, "name": "Miss Dior", "brand": "Dior", "segment": "Diseñador masivo", "family": "Floral afrutado chipre", "top": "Mandarina, bayas rosas", "heart": "Peonía, rosa centifolia", "base": "Pachulí, almizcle blanco", "longevity": 7, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, romántico", "gender": "Femenino", "year": 2017, "perfumer": "François Demachy", "price": 105, "size": 100, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=70", "initial": "M"}, {"id": 16, "name": "Chance Eau Tendre", "brand": "Chanel", "segment": "Diseñador masivo", "family": "Floral afrutado", "top": "Toronja, quinoa", "heart": "Jazmín, hibisco", "base": "Ámbar blanco, almizcle", "longevity": 6, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, casual femenino", "gender": "Femenino", "year": 2010, "perfumer": "Jacques Polge", "price": 88, "size": 100, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=800&q=70", "initial": "C"}, {"id": 17, "name": "Light Blue", "brand": "Dolce & Gabbana", "segment": "Diseñador masivo", "family": "Cítrico floral", "top": "Manzana, limón siciliano", "heart": "Bambú, jazmín", "base": "Cedro, almizcle", "longevity": 5, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, verano fresco", "gender": "Femenino", "year": 2001, "perfumer": "Olivier Cresp / Honorine Blanc", "price": 68, "size": 100, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70", "initial": "L"}, {"id": 18, "name": "Le Male", "brand": "Jean Paul Gaultier", "segment": "Diseñador masivo", "family": "Oriental aromático fougère", "top": "Menta, lavanda, bergamota", "heart": "Canela, comino", "base": "Vainilla, sándalo, ámbar", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, personalidad", "gender": "Masculino", "year": 1995, "perfumer": "Francis Kurkdjian", "price": 82, "size": 125, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70", "initial": "L"}, {"id": 19, "name": "Invictus", "brand": "Paco Rabanne", "segment": "Diseñador masivo", "family": "Acuático amaderado", "top": "Toronja, mandarina", "heart": "Laurel, jazmín", "base": "Ámbar gris, madera de guayaco", "longevity": 6, "sillage": 3, "projection": 4, "season": "Primavera/Verano", "occasion": "Deporte, día a día", "gender": "Masculino", "year": 2013, "perfumer": "Olivier Pescheux / Dora Baghriche", "price": 65, "size": 100, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=800&q=70", "initial": "I"}, {"id": 20, "name": "Olympéa", "brand": "Paco Rabanne", "segment": "Diseñador masivo", "family": "Floral amaderado salado", "top": "Flor de sal, mandarina verde", "heart": "Jazmín sambac", "base": "Vainilla, cashmerán, ámbar", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Día a día, femenino moderno", "gender": "Femenino", "year": 2015, "perfumer": "Anne Flipo / Dora Baghriche / Loc Dong", "price": 78, "size": 80, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=70", "initial": "O"}, {"id": 21, "name": "Jazz Club", "brand": "Maison Margiela Replica", "segment": "Nicho", "family": "Amaderado especiado", "top": "Pimienta rosa, naranja", "heart": "Ron, tabaco", "base": "Vainilla, haba tonka", "longevity": 6, "sillage": 3, "projection": 3, "season": "Otoño/Invierno", "occasion": "Noche, casual sofisticado", "gender": "Unisex", "year": 2013, "perfumer": "Marie Salamagne", "price": 145, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=800&q=70", "initial": "J"}, {"id": 22, "name": "Flowerbomb", "brand": "Viktor & Rolf", "segment": "Diseñador premium", "family": "Floral oriental", "top": "Té, bergamota", "heart": "Jazmín, rosa, orquídea", "base": "Pachulí, vainilla, ámbar", "longevity": 9, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, femenino intenso", "gender": "Femenino", "year": 2005, "perfumer": "Olivier Polge / Carlos Benaim / Domitille Bertier / Dominique Ropion / Alberto Morillas", "price": 118, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=70", "initial": "F"}, {"id": 23, "name": "Mon Paris", "brand": "Yves Saint Laurent", "segment": "Diseñador premium", "family": "Floral afrutado gourmand", "top": "Frambuesa, bergamota", "heart": "Peonía, jazmín", "base": "Praliné, ámbar gris, pachulí", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Día a día romántico", "gender": "Femenino", "year": 2016, "perfumer": "Marie Salamagne / Olivier Cresp / Nathalie Lorson", "price": 95, "size": 90, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=70", "initial": "M"}, {"id": 24, "name": "Terre d'Hermès", "brand": "Hermès", "segment": "Diseñador premium", "family": "Amaderado mineral", "top": "Naranja, pomelo", "heart": "Pimienta, geranio", "base": "Vetiver, cedro, benjuí", "longevity": 7, "sillage": 3, "projection": 3, "season": "Todo el año", "occasion": "Oficina, elegante versátil", "gender": "Masculino", "year": 2006, "perfumer": "Jean-Claude Ellena", "price": 105, "size": 100, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=800&q=70", "initial": "T"}, {"id": 25, "name": "Aventus for Her", "brand": "Creed", "segment": "Nicho premium", "family": "Afrutado chipre", "top": "Grosella negra, bergamota", "heart": "Rosa, jazmín, jacinto", "base": "Ámbar gris, almizcle, madera de casis", "longevity": 8, "sillage": 3, "projection": 3, "season": "Primavera/Otoño", "occasion": "Día a día elegante", "gender": "Femenino", "year": 2016, "perfumer": "Olivier Creed / Erwin Creed", "price": 405, "size": 75, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70", "initial": "A"}, {"id": 26, "name": "Delina", "brand": "Parfums de Marly", "segment": "Nicho premium", "family": "Floral afrutado", "top": "Ruibarbo, lichi", "heart": "Peonía, rosa turca, lirio de los valles", "base": "Almizcle, cedro, vainilla", "longevity": 8, "sillage": 4, "projection": 4, "season": "Primavera/Verano", "occasion": "Día a día romántico, bodas", "gender": "Femenino", "year": 2017, "perfumer": "Hamid Merati-Kashani", "price": 195, "size": 75, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70", "initial": "D"}, {"id": 27, "name": "Layton", "brand": "Parfums de Marly", "segment": "Nicho premium", "family": "Floral amaderado especiado", "top": "Manzana, bergamota, lavanda", "heart": "Geranio, violeta", "base": "Vainilla, haba tonka, cedro", "longevity": 9, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, día versátil", "gender": "Masculino", "year": 2016, "perfumer": "Hamid Merati-Kashani", "price": 195, "size": 125, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=800&q=70", "initial": "L"}, {"id": 28, "name": "Erba Pura", "brand": "Xerjoff", "segment": "Nicho premium", "family": "Cítrico afrutado", "top": "Bergamota, limón, piña", "heart": "Fresa, algodón de azúcar", "base": "Almizcle, madera", "longevity": 6, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, casual alegre", "gender": "Unisex", "year": 2016, "perfumer": "Christian Provenzano", "price": 240, "size": 100, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=70", "initial": "E"}, {"id": 29, "name": "Boss Bottled", "brand": "Hugo Boss", "segment": "Diseñador masivo", "family": "Amaderado afrutado", "top": "Manzana, ciruela, bergamota", "heart": "Canela, geranio, clavo", "base": "Sándalo, vetiver, cedro", "longevity": 7, "sillage": 3, "projection": 3, "season": "Todo el año", "occasion": "Oficina, profesional", "gender": "Masculino", "year": 1998, "perfumer": "Annick Menardo", "price": 62, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=800&q=70", "initial": "B"}, {"id": 30, "name": "Y Eau de Parfum", "brand": "Yves Saint Laurent", "segment": "Diseñador masivo", "family": "Aromático amaderado", "top": "Manzana, bergamota, jengibre", "heart": "Salvia, geranio", "base": "Ámbar gris, haba tonka, cedro", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Oficina, versátil", "gender": "Masculino", "year": 2018, "perfumer": "Dominique Ropion / Anne Flipo / Jacques Cavallier-Belletrud / Nathalie Lorson", "price": 95, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=70", "initial": "Y"}, {"id": 31, "name": "Gucci Bloom", "brand": "Gucci", "segment": "Diseñador premium", "family": "Floral blanco", "top": "Jazmín sambac", "heart": "Tuberosa, azucena", "base": "Almizcle blanco", "longevity": 7, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, femenino floral intenso", "gender": "Femenino", "year": 2017, "perfumer": "Alberto Morillas", "price": 98, "size": 100, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=70", "initial": "G"}, {"id": 32, "name": "Libre", "brand": "Yves Saint Laurent", "segment": "Diseñador premium", "family": "Floral amaderado especiado", "top": "Lavanda, mandarina", "heart": "Flor de azahar, jazmín", "base": "Vainilla de Madagascar, cedro, almizcle blanco", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Día a día, personalidad fuerte", "gender": "Femenino", "year": 2019, "perfumer": "Anne Flipo / Carlos Benaim / Fabrice Pellegrin / Dominique Ropion", "price": 102, "size": 90, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=800&q=70", "initial": "L"}, {"id": 33, "name": "Angel", "brand": "Mugler", "segment": "Diseñador premium", "family": "Oriental gourmand", "top": "Bergamota, mandarina", "heart": "Miel, praliné", "base": "Pachulí, chocolate, vainilla", "longevity": 9, "sillage": 5, "projection": 5, "season": "Otoño/Invierno", "occasion": "Noche, distintivo intenso", "gender": "Femenino", "year": 1992, "perfumer": "Olivier Cresp / Yves de Chirin", "price": 88, "size": 100, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70", "initial": "A"}];
 
-  var grads = ['linear-gradient(150deg,#cbb393,#7a5f3c)','linear-gradient(150deg,#cfd6c4,#6f8367)','linear-gradient(150deg,#cdc1d8,#6a5a7e)','linear-gradient(150deg,#bcc4c0,#586b62)','linear-gradient(150deg,#dcc0bd,#955a59)','linear-gradient(150deg,#daccb0,#9a7d52)'];
-  var imgs = [
-    'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70',
-    'https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70',
-    'https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=800&q=70',
-    'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=70',
-    'https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=800&q=70',
-    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=70'
-  ];
-  var pdata = [
-    ['Ámbar Nómada','Ámbar amaderado','148 €','Aromia Lab','Élise Marchand','Bergamota, cardamomo, sándalo, ámbar',4.6],
-    ['Marea Cítrica','Cítrico aromático','120 €','Aromia Lab','Tomás Vidal','Bergamota, neroli, vetiver, sal',4.3],
-    ['Iris Nocturno','Floral polvoso','135 €','Aromia Lab','Élise Marchand','Iris, violeta, almizcle, haba tonka',4.7],
-    ['Madera de Lluvia','Amaderado verde','128 €','Aromia Lab','Koji Nara','Petricor, vetiver, cedro, musgo',4.4],
-    ['Rosa Insurgente','Floral especiado','142 €','Aromia Lab','Lucía Romero','Rosa, pimienta rosa, pachulí, oud',4.5],
-    ['Sal & Higo','Frutal salino','115 €','Aromia Lab','Tomás Vidal','Higo, sal marina, leche de higo, cedro',4.2]
-  ];
-  var perfumes = pdata.map(function(p, i){
-    return { name:p[0], family:p[1], price:p[2], house:p[3], perfumer:p[4], notes:p[5],
-      rating:p[6].toFixed(1), starsStr:starsFor(p[6]), grad:grads[i], img:imgs[i], initial:p[0][0] };
-  });
-
-  var galleryUrls = [
-    'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=900&q=70',
-    'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=70',
-    'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=900&q=70',
-    'https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=900&q=70'
-  ];
-
-  var metricsData = [
-    ['Longevidad',8.5,'Larga · 8–10 h en piel'],
-    ['Estela',7.0,'Moderada-alta · deja rastro'],
-    ['Proyección',7.5,'Notable la primera hora'],
-    ['Precio-valor',8.0,'Justo para su concentración']
-  ];
-
-  var axisData = [['Especiado',9],['Amaderado',8],['Cálido',8.5],['Floral',5],['Cítrico',4],['Dulce',6]];
-
-  var tiers = {
-    salida:{label:'Salida', time:'0 – 15 min', desc:'La primera impresión: volátil y luminosa. Dura poco, pero define el encuentro y abre la puerta a todo lo demás.', notes:['Bergamota','Cardamomo','Jengibre'], width:'56%'},
-    corazon:{label:'Corazón', time:'15 min – 3 h', desc:'El alma de la fragancia. Emerge cuando la salida se desvanece y marca el carácter que recordarás.', notes:['Ylang Ylang','Iris','Azafrán'], width:'78%'},
-    fondo:{label:'Fondo', time:'3 – 10 h +', desc:'La huella. Moléculas pesadas que fijan el perfume a la piel y construyen su estela durante horas.', notes:['Sándalo','Ámbar','Vainilla','Vetiver'], width:'100%'}
+  var retailersTemplate = function(p){
+    return [
+      {name:'Amazon', tag: currentLang==='es' ? 'Envío rápido · devoluciones fáciles' : 'Fast shipping · easy returns', price:'$'+p.price, url:'https://www.amazon.com/s?k=' + encodeURIComponent(p.name + ' ' + p.brand)}
+    ];
   };
-  var tierOrder = ['salida','corazon','fondo'];
 
-  var retailers = [
-    {name:'Notino', tag:'Envío 24–48h · devolución gratis', price:'128 €', url:'https://www.notino.es/'},
-    {name:'Druni', tag:'Recogida en tienda disponible', price:'134,90 €', url:'https://www.druni.es/'},
-    {name:'Sephora', tag:'Puntos de fidelidad Beauty Pass', price:'148 €', url:'https://www.sephora.es/'}
-  ];
+  var lessonsData = {
+    es: [
+      {num:'01', title:'La pirámide', body:'Un perfume no huele igual al minuto que a las cuatro horas. Se despliega en tres pisos —salida, corazón y fondo— que aparecen y se relevan con el tiempo.', tip:'Lee siempre el fondo: es lo que de verdad llevarás puesto.'},
+      {num:'02', title:'La longevidad', body:'Es cuántas horas permanece detectable sobre tu piel. Depende de la concentración, los ingredientes de fondo y tu propia química cutánea.', tip:'EDP > EDT. La piel hidratada retiene mejor el aroma.'},
+      {num:'03', title:'Estela y proyección', body:'La proyección es la burbuja que te rodea; la estela, el rastro que dejas al pasar. Más no es mejor: 2 pulverizaciones bien puestas bastan.', tip:'Ajusta la cantidad según la ocasión, no siempre más es mejor.'}
+    ],
+    en: [
+      {num:'01', title:'The pyramid', body:"A perfume doesn't smell the same at minute one as it does four hours later. It unfolds in three layers —top, heart and base— that appear and hand off over time.", tip:'Always read the base notes: that is what you will actually be wearing.'},
+      {num:'02', title:'Longevity', body:'How many hours a fragrance stays detectable on your skin. It depends on concentration, base ingredients and your own skin chemistry.', tip:'EDP > EDT. Hydrated skin holds scent better.'},
+      {num:'03', title:'Sillage & projection', body:'Projection is the bubble around you; sillage is the trail you leave behind. More is not always better: 2 well-placed sprays are usually enough.', tip:'Adjust the amount to the occasion, not always more.'}
+    ]
+  };
 
-  var lessons = [
-    {num:'01', title:'La pirámide', body:'Un perfume no huele igual al minuto que a las cuatro horas. Se despliega en tres pisos —salida, corazón y fondo— que aparecen y se relevan con el tiempo.', tip:'Lee siempre el fondo: es lo que de verdad llevarás puesto.'},
-    {num:'02', title:'La longevidad', body:'Es cuántas horas permanece detectable sobre tu piel. Depende de la concentración, los ingredientes de fondo y tu propia química cutánea.', tip:'EDP > EDT. La piel hidratada retiene mejor el aroma.'},
-    {num:'03', title:'Estela y proyección', body:'La proyección es la burbuja que te rodea; la estela, el rastro que dejas al pasar. Una bestia silenciosa proyecta poco pero deja huella.', tip:'Más no es mejor: 2 pulverizaciones bien puestas bastan.'}
-  ];
+  // ---------- FILTER OPTIONS ----------
+  function unique(arr){ return Array.from(new Set(arr)).sort(); }
+  var seasons = unique(perfumes.map(function(p){ return p.season; }));
+  var occasions = unique(perfumes.map(function(p){ return p.occasion.split(',')[0].trim(); }));
+  var families = unique(perfumes.map(function(p){ return p.family; }));
 
-  var idata = [
-    ['Bergamota','Cítrica','Calabria, Italia','Chispeante y soleada, con un filo ligeramente amargo. La apertura más luminosa de la perfumería.','Salida','https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=600&q=70'],
-    ['Cardamomo','Especiada','Guatemala · India','Fresco y especiado a la vez, verde y aromático. Aporta una sofisticación cálida e inesperada.','Salida','https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=70'],
-    ['Jengibre','Especiada','Costa de Marfil','Picante, efervescente y terroso. Una corriente eléctrica que despierta la composición.','Salida','https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=70'],
-    ['Ylang Ylang','Floral','Comoras · Madagascar','Floral cremoso y exótico, con un guiño a plátano maduro. Sensual y solar.','Corazón','https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600&q=70'],
-    ['Iris','Floral polvosa','Florencia, Italia','Polvoso, mantecoso y aristocrático. Uno de los materiales más caros y elegantes que existen.','Corazón','https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=600&q=70'],
-    ['Azafrán','Especiada','Irán · La Mancha','Cuero suave, ámbar y un dulzor amargo. Profundidad y un aire oriental inconfundible.','Corazón','https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=600&q=70'],
-    ['Sándalo','Amaderada','Mysore · Australia','Lácteo, cálido y balsámico. La madera más cremosa y reconfortante de la perfumería.','Fondo','https://images.unsplash.com/photo-1503424886307-b090341d25d1?auto=format&fit=crop&w=600&q=70'],
-    ['Vainilla','Gourmand','Madagascar','Dulce, balsámica y envolvente. El abrazo final que redondea cualquier fondo cálido.','Fondo','https://images.unsplash.com/photo-1631206753348-db44968fd440?auto=format&fit=crop&w=600&q=70']
-  ];
+  function populateSelect(id, values){
+    var sel = document.getElementById(id);
+    values.forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      sel.appendChild(o);
+    });
+  }
+  populateSelect('fSeason', seasons);
+  populateSelect('fOccasion', occasions);
+  populateSelect('fFamily', families);
 
-  // ---------- RENDER: COLLECTION ----------
+  // ---------- FILTER STATE ----------
+  var filters = { search:'', season:'', occasion:'', family:'', longevity:0, sillage:0 };
+  var currentPage = 1;
+  var PAGE_SIZE = 9;
+  var currentProduct = null;
+
+  document.getElementById('fSearch').addEventListener('input', function(e){ filters.search = e.target.value.toLowerCase(); currentPage=1; renderCollection(); });
+  document.getElementById('fSeason').addEventListener('change', function(e){ filters.season = e.target.value; currentPage=1; renderCollection(); });
+  document.getElementById('fOccasion').addEventListener('change', function(e){ filters.occasion = e.target.value; currentPage=1; renderCollection(); });
+  document.getElementById('fFamily').addEventListener('change', function(e){ filters.family = e.target.value; currentPage=1; renderCollection(); });
+  document.getElementById('fLongevity').addEventListener('change', function(e){ filters.longevity = Number(e.target.value); currentPage=1; renderCollection(); });
+  document.getElementById('fSillage').addEventListener('change', function(e){ filters.sillage = Number(e.target.value); currentPage=1; renderCollection(); });
+  document.getElementById('resetFilters').addEventListener('click', function(){
+    filters = { search:'', season:'', occasion:'', family:'', longevity:0, sillage:0 };
+    document.getElementById('fSearch').value = '';
+    document.getElementById('fSeason').value = '';
+    document.getElementById('fOccasion').value = '';
+    document.getElementById('fFamily').value = '';
+    document.getElementById('fLongevity').value = '0';
+    document.getElementById('fSillage').value = '0';
+    currentPage = 1;
+    renderCollection();
+  });
+
+  function filteredPerfumes(){
+    return perfumes.filter(function(p){
+      if(filters.search && !(p.name.toLowerCase().indexOf(filters.search) > -1 || p.brand.toLowerCase().indexOf(filters.search) > -1)) return false;
+      if(filters.season && p.season !== filters.season) return false;
+      if(filters.occasion && p.occasion.indexOf(filters.occasion) === -1) return false;
+      if(filters.family && p.family !== filters.family) return false;
+      if(filters.longevity && p.longevity < filters.longevity) return false;
+      if(filters.sillage && p.sillage < filters.sillage) return false;
+      return true;
+    });
+  }
+
+  function starsFor(rating5){
+    var full = Math.round(rating5);
+    return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full);
+  }
+  // derive a 0-5 "rating" proxy from longevity+sillage+projection for display consistency
+  function ratingOf(p){ return Math.min(5, ((p.longevity/12*5) + p.sillage + p.projection) / 3); }
+
   var collectionGrid = document.getElementById('collectionGrid');
-  perfumes.forEach(function(p){
-    var a = document.createElement('a');
-    a.href = '#estudio';
-    a.className = 'card';
-    a.innerHTML =
-      '<div class="card-img" style="background:' + p.grad + '">' +
-        '<div class="letter">' + p.initial + '</div>' +
-        '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" onerror="this.style.opacity=0">' +
-        '<div class="card-tag">' + p.family + '</div>' +
-      '</div>' +
-      '<div class="card-title-row"><h3>' + p.name + '</h3><span class="card-price">' + p.price + '</span></div>' +
-      '<div class="card-house">' + p.house + ' · ' + p.perfumer + '</div>' +
-      '<div class="card-notes">' + p.notes + '</div>' +
-      '<div class="card-foot"><span class="stars">' + p.starsStr + '</span><span class="rating">' + p.rating + '</span><span class="discover">Descubrir</span></div>';
-    collectionGrid.appendChild(a);
-  });
+  var resultsCountEl = document.getElementById('resultsCount');
+  var paginationEl = document.getElementById('pagination');
 
-  // ---------- RENDER: GALLERY ----------
-  var galleryIndex = 0;
-  var mainImgEl = document.getElementById('mainImg');
-  var thumbsEl = document.getElementById('thumbs');
-  function renderGallery(){
-    mainImgEl.src = galleryUrls[galleryIndex];
-    thumbsEl.innerHTML = '';
-    galleryUrls.forEach(function(u, i){
-      var b = document.createElement('button');
-      b.className = 'thumb' + (i === galleryIndex ? ' active' : '');
-      b.innerHTML = '<img src="' + u + '" alt="vista" loading="lazy" onerror="this.style.opacity=0">';
-      b.addEventListener('click', function(){ galleryIndex = i; renderGallery(); });
-      thumbsEl.appendChild(b);
-    });
-  }
-  renderGallery();
+  function renderCollection(){
+    var list = filteredPerfumes();
+    resultsCountEl.textContent = t('resultsCount')(list.length);
+    var totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    if(currentPage > totalPages) currentPage = totalPages;
+    var pageItems = list.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
 
-  // ---------- RENDER: RETAILERS ----------
-  var retailersEl = document.getElementById('retailers');
-  retailers.forEach(function(r){
-    var a = document.createElement('a');
-    a.href = r.url; a.target = '_blank'; a.rel = 'sponsored noopener';
-    a.className = 'retailer';
-    a.innerHTML = '<span class="rname">' + r.name + '</span><span class="rtag">' + r.tag + '</span><span class="rprice">' + r.price + '</span><span class="rcta">Ver oferta →</span>';
-    retailersEl.appendChild(a);
-  });
-
-  // ---------- RENDER: METRICS ----------
-  var metricsEl = document.getElementById('metrics');
-  metricsData.forEach(function(m){
-    var div = document.createElement('div');
-    div.className = 'metric';
-    div.innerHTML = '<div class="metric-head"><span class="k">' + m[0] + '</span><span class="d">' + m[2] + '</span></div>' +
-      '<div class="metric-bar"><span data-val="' + Math.round(m[1] * 10) + '"></span></div>';
-    metricsEl.appendChild(div);
-  });
-
-  // ---------- RENDER: RADAR ----------
-  var cx = 120, cy = 120, R = 78;
-  function pt(i, r){ var a = (-90 + i * 60) * Math.PI / 180; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
-  var radarPoints = axisData.map(function(d, i){ var p = pt(i, R * d[1] / 10); return p.join(','); }).join(' ');
-  var svgNS = 'http://www.w3.org/2000/svg';
-  var svg = document.getElementById('radarSvg');
-  [1, 0.66, 0.33].forEach(function(f){
-    var poly = document.createElementNS(svgNS, 'polygon');
-    poly.setAttribute('points', axisData.map(function(d, i){ return pt(i, R * f).join(','); }).join(' '));
-    poly.setAttribute('fill', 'none'); poly.setAttribute('stroke', 'var(--line)'); poly.setAttribute('stroke-width', '1');
-    svg.appendChild(poly);
-  });
-  axisData.forEach(function(d, i){
-    var p = pt(i, R);
-    var line = document.createElementNS(svgNS, 'line');
-    line.setAttribute('x1', cx); line.setAttribute('y1', cy); line.setAttribute('x2', p[0]); line.setAttribute('y2', p[1]);
-    line.setAttribute('stroke', 'var(--line)'); line.setAttribute('stroke-width', '1');
-    svg.appendChild(line);
-  });
-  var radarG = document.createElementNS(svgNS, 'g');
-  radarG.style.transform = 'scale(0)'; radarG.style.transformOrigin = '120px 120px';
-  radarG.style.transition = 'transform 1.2s cubic-bezier(.16,1,.3,1)';
-  var radarPoly = document.createElementNS(svgNS, 'polygon');
-  radarPoly.setAttribute('points', radarPoints);
-  radarPoly.setAttribute('fill', 'color-mix(in srgb, var(--gold) 24%, transparent)');
-  radarPoly.setAttribute('stroke', 'var(--gold)'); radarPoly.setAttribute('stroke-width', '2'); radarPoly.setAttribute('stroke-linejoin', 'round');
-  radarG.appendChild(radarPoly);
-  svg.appendChild(radarG);
-  axisData.forEach(function(d, i){
-    var lp = pt(i, R + 15), dp = pt(i, R * d[1] / 10);
-    var anchor = lp[0] > cx + 4 ? 'start' : (lp[0] < cx - 4 ? 'end' : 'middle');
-    var g = document.createElementNS(svgNS, 'g');
-    var circle = document.createElementNS(svgNS, 'circle');
-    circle.setAttribute('cx', dp[0]); circle.setAttribute('cy', dp[1]); circle.setAttribute('r', '2.4'); circle.setAttribute('fill', 'var(--gold)');
-    var text = document.createElementNS(svgNS, 'text');
-    text.setAttribute('x', lp[0]); text.setAttribute('y', lp[1] + 3.5); text.setAttribute('text-anchor', anchor);
-    text.style.font = '10.5px var(--fbody)'; text.style.fill = 'var(--muted)'; text.style.letterSpacing = '.04em';
-    text.textContent = d[0];
-    g.appendChild(circle); g.appendChild(text);
-    svg.appendChild(g);
-  });
-
-  // ---------- RENDER: PYRAMID ----------
-  var currentTier = 'salida';
-  var bandsEl = document.getElementById('bands');
-  var tierDetailEl = document.getElementById('tierDetail');
-  function renderPyramid(){
-    bandsEl.innerHTML = '';
-    tierOrder.forEach(function(k){
-      var t = tiers[k];
-      var b = document.createElement('button');
-      b.className = 'band' + (currentTier === k ? ' active' : '');
-      b.style.width = t.width;
-      b.innerHTML = '<div class="lbl">' + t.label + '</div><div class="tm">' + t.time + '</div>';
-      b.addEventListener('click', function(){ currentTier = k; renderPyramid(); });
-      bandsEl.appendChild(b);
-    });
-    var t = tiers[currentTier];
-    tierDetailEl.innerHTML =
-      '<div class="tier-title">' + t.label + '</div>' +
-      '<div class="tier-time">' + t.time + '</div>' +
-      '<p class="tier-desc">' + t.desc + '</p>' +
-      '<div class="chip-row">' + t.notes.map(function(n){ return '<span class="chip">' + n + '</span>'; }).join('') + '</div>';
-  }
-  renderPyramid();
-
-  // ---------- RENDER: LESSONS ----------
-  var lessonsEl = document.getElementById('lessons');
-  lessons.forEach(function(le){
-    var div = document.createElement('div');
-    div.className = 'lesson';
-    div.innerHTML = '<div class="num">' + le.num + '</div><h4>' + le.title + '</h4><p>' + le.body + '</p><div class="tip">' + le.tip + '</div>';
-    lessonsEl.appendChild(div);
-  });
-
-  // ---------- RENDER: INGREDIENTS ----------
-  var ingredientsEl = document.getElementById('ingredients');
-  var openIndex = null;
-  function renderIngredients(){
-    ingredientsEl.innerHTML = '';
-    idata.forEach(function(d, i){
-      var open = openIndex === i;
-      var btn = document.createElement('button');
-      btn.className = 'ing-card' + (open ? ' open' : '');
-      var inner = '<div class="ing-img"><div class="letter">' + d[0][0] + '</div>' +
-        '<img src="' + d[5] + '" alt="' + d[0] + '" loading="lazy" onerror="this.style.opacity=0">' +
-        '<div class="ing-caption"><div class="name">' + d[0] + '</div><div class="fam">' + d[1] + '</div></div></div>';
-      if(open){
-        inner += '<div class="ing-detail"><p>' + d[3] + '</p>' +
-          '<div class="ing-row"><span>Origen</span><span>' + d[2] + '</span></div>' +
-          '<div class="ing-row pos"><span>Posición</span><span>' + d[4] + '</span></div></div>';
-      } else {
-        inner += '<div class="ing-cta">Descubrir +</div>';
-      }
-      btn.innerHTML = inner;
-      btn.addEventListener('click', function(){ openIndex = open ? null : i; renderIngredients(); });
-      ingredientsEl.appendChild(btn);
-    });
-  }
-  renderIngredients();
-
-  // ---------- RENDER: USER RATING ----------
-  var userRating = 0, hoverRating = 0;
-  var userStarsEl = document.getElementById('userStars');
-  var ratingMsgEl = document.getElementById('ratingMsg');
-  var ratingMsgs = ['', '«No es para mí»', '«Correcto»', '«Me gusta»', '«Excelente»', '«Una obra»'];
-  function renderUserStars(){
-    userStarsEl.innerHTML = '';
-    for(var i = 1; i <= 5; i++){
-      (function(i){
-        var span = document.createElement('span');
-        var lit = i <= (hoverRating || userRating);
-        span.className = lit ? 'lit' : '';
-        span.style.transform = i === hoverRating ? 'scale(1.18)' : 'scale(1)';
-        span.textContent = '★';
-        span.addEventListener('mouseenter', function(){ hoverRating = i; renderUserStars(); });
-        span.addEventListener('click', function(){ userRating = i; renderUserStars(); });
-        userStarsEl.appendChild(span);
-      })(i);
+    collectionGrid.innerHTML = '';
+    if(pageItems.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'no-results';
+      empty.textContent = t('noResults');
+      collectionGrid.appendChild(empty);
     }
-    ratingMsgEl.textContent = userRating ? ratingMsgs[userRating] : 'Pasa el cursor y elige';
+    pageItems.forEach(function(p){
+      var rt = ratingOf(p);
+      var a = document.createElement('a');
+      a.href = 'javascript:void(0)';
+      a.className = 'card';
+      a.innerHTML =
+        '<div class="card-img" style="background:' + p.grad + '">' +
+          '<div class="letter">' + p.initial + '</div>' +
+          '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" onerror="this.style.opacity=0">' +
+          '<div class="card-tag">' + p.family + '</div>' +
+          '<div class="card-seg">' + p.segment + '</div>' +
+        '</div>' +
+        '<div class="card-title-row"><h3>' + p.name + '</h3><span class="card-price">$' + p.price + '</span></div>' +
+        '<div class="card-house">' + p.brand + ' · ' + p.year + '</div>' +
+        '<div class="card-notes">' + p.top + '</div>' +
+        '<div class="card-foot"><span class="stars">' + starsFor(rt) + '</span><span class="rating">' + rt.toFixed(1) + '</span><span class="discover">' + t('discover') + '</span></div>';
+      a.addEventListener('click', function(){ openProduct(p.id); });
+      collectionGrid.appendChild(a);
+    });
+
+    paginationEl.innerHTML = '';
+    if(totalPages > 1){
+      for(var i=1;i<=totalPages;i++){
+        (function(i){
+          var b = document.createElement('button');
+          b.className = 'page-btn' + (i===currentPage ? ' active':'');
+          b.textContent = i;
+          b.addEventListener('click', function(){ currentPage = i; renderCollection(); window.scrollTo({top: document.getElementById('tienda').offsetTop - 80, behavior:'smooth'}); });
+          paginationEl.appendChild(b);
+        })(i);
+      }
+    }
   }
-  userStarsEl.addEventListener('mouseleave', function(){ hoverRating = 0; renderUserStars(); });
-  renderUserStars();
+  renderCollection();
+
+  // ---------- LESSONS ----------
+  function renderLessons(){
+    var lessonsEl = document.getElementById('lessons');
+    lessonsEl.innerHTML = '';
+    lessonsData[currentLang].forEach(function(le){
+      var div = document.createElement('div');
+      div.style.cssText = "background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 30px";
+      div.innerHTML = '<div style="font-family:var(--fdisp);font-size:40px;color:var(--gold);line-height:1;margin-bottom:18px">' + le.num + '</div>' +
+        '<h4 style="font-family:var(--fdisp);font-weight:600;font-size:25px;margin:0 0 12px">' + le.title + '</h4>' +
+        '<p style="font-size:14.5px;line-height:1.7;color:var(--muted);margin:0 0 16px">' + le.body + '</p>' +
+        '<div style="font-size:12.5px;letter-spacing:.06em;color:var(--gold);border-top:1px solid var(--line);padding-top:14px">' + le.tip + '</div>';
+      lessonsEl.appendChild(div);
+    });
+  }
+
+  // ---------- PRODUCT DETAIL ----------
+  var catalogView = document.getElementById('catalogView');
+  var productView = document.getElementById('productView');
+  var productDetail = document.getElementById('productDetail');
+  var backBtn = document.getElementById('backBtn');
+
+  function openProduct(id){
+    currentProduct = perfumes.find(function(p){ return p.id === id; });
+    renderProduct(currentProduct);
+    catalogView.classList.add('hidden');
+    productView.style.display = 'block';
+    window.scrollTo({top: document.getElementById('tienda').offsetTop - 80, behavior:'smooth'});
+  }
+  backBtn.addEventListener('click', function(){
+    currentProduct = null;
+    productView.style.display = 'none';
+    catalogView.classList.remove('hidden');
+  });
+
+  function renderProduct(p){
+    var retailers = retailersTemplate(p);
+    var metricsData = [
+      [t('longevity'), p.longevity + t('hoursLbl'), Math.min(100, Math.round(p.longevity/12*100))],
+      [t('sillage'), p.sillage + '/5', p.sillage*20],
+      [t('projection'), p.projection + '/5', p.projection*20]
+    ];
+    productDetail.innerHTML =
+      '<div class="estudio-top" style="padding:0">' +
+        '<div>' +
+          '<div class="gallery-main" style="background:' + p.grad + '">' +
+            '<div class="letter">' + p.initial + '</div>' +
+            '<img src="' + p.img + '" alt="' + p.name + '" onerror="this.style.opacity=0">' +
+          '</div>' +
+        '</div>' +
+        '<div>' +
+          '<div class="prod-kicker">' + p.family + '</div>' +
+          '<h3 class="prod-title">' + p.name + '</h3>' +
+          '<div class="prod-meta">' + p.brand + ' · ' + t('perfumerLbl') + ' <em>' + p.perfumer + '</em> · ' + p.year + '</div>' +
+          '<div class="price-row">' +
+            '<div><div class="price">$' + p.price + '</div><div class="price-sub">Eau de Parfum · ' + p.size + ' ml</div></div>' +
+            '<div class="price-sep"></div>' +
+            '<div class="specs">' + t('seasonLbl') + ' <strong>' + p.season + '</strong><br>' + t('occasionLbl') + ' <strong>' + p.occasion + '</strong></div>' +
+          '</div>' +
+          '<div class="retailers">' + retailers.map(function(r){
+            return '<a class="retailer" href="' + r.url + '" target="_blank" rel="sponsored noopener">' +
+              '<span class="rname">' + r.name + '</span><span class="rtag">' + r.tag + '</span>' +
+              '<span class="rprice">' + r.price + '</span><span class="rcta">' + t('viewOnAmazon') + '</span></a>';
+          }).join('') + '</div>' +
+          '<div class="affiliate-note"><span class="ico">ⓘ</span><span>' + t('affiliateNote') + '</span></div>' +
+          '<div class="metrics-kicker">' + t('performance') + '</div>' +
+          '<div id="metricsBlock">' + metricsData.map(function(m){
+            return '<div class="metric"><div class="metric-head"><span class="k">' + m[0] + '</span><span class="d">' + m[1] + '</span></div>' +
+              '<div class="metric-bar"><span style="width:' + m[2] + '%"></span></div></div>';
+          }).join('') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="panel" style="margin-top:30px">' +
+        '<div class="kicker-gold" style="margin-bottom:4px">' + t('collectionKicker') + '</div>' +
+        '<h4 style="font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0 0 18px">' + (currentLang==='es' ? 'Pirámide olfativa' : 'Olfactive pyramid') + '</h4>' +
+        '<div class="pyramid-tiers">' +
+          '<div class="pyramid-tier"><div class="lbl">' + t('topNotes') + '</div><div class="chip-row">' + p.top.split(',').map(function(n){return '<span class="chip">'+n.trim()+'</span>';}).join('') + '</div></div>' +
+          '<div class="pyramid-tier"><div class="lbl">' + t('heartNotes') + '</div><div class="chip-row">' + p.heart.split(',').map(function(n){return '<span class="chip">'+n.trim()+'</span>';}).join('') + '</div></div>' +
+          '<div class="pyramid-tier"><div class="lbl">' + t('baseNotes') + '</div><div class="chip-row">' + p.base.split(',').map(function(n){return '<span class="chip">'+n.trim()+'</span>';}).join('') + '</div></div>' +
+        '</div>' +
+      '</div>';
+  }
 
   // ---------- NEWSLETTER ----------
   document.getElementById('newsletterForm').addEventListener('submit', function(e){
     e.preventDefault();
-    document.getElementById('newsletterMsg').textContent = '¡Gracias por suscribirte! Revisa tu correo para confirmar.';
+    document.getElementById('newsletterMsg').textContent = currentLang==='es' ? '¡Gracias por suscribirte! Revisa tu correo para confirmar.' : 'Thanks for subscribing! Check your email to confirm.';
     document.getElementById('newsletterEmail').value = '';
   });
 
-  // ---------- ANIMATE ON SCROLL ----------
-  var animated = false;
-  function animate(){
-    if(animated) return;
-    animated = true;
-    document.querySelectorAll('.metric-bar span').forEach(function(el){ el.style.width = (el.dataset.val || 0) + '%'; });
-    radarG.style.transform = 'scale(1)';
-    document.getElementById('avgFill').style.width = (4.6 / 5 * 100) + '%';
-  }
-  var vizTarget = document.querySelector('.estudio-top');
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){ if(entry.isIntersecting){ animate(); io.disconnect(); } });
-    }, { threshold: 0.2 });
-    io.observe(vizTarget);
-  } else {
-    animate();
-  }
+  renderLessons();
 })();
 </script>
 </body>
