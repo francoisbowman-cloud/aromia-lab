@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;}
+  ::selection{background:rgba(176,141,76,.22);}
+</style>
+</helmet>
+<div id="top" ref="{{ setRoot }}" style="--bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#6E675B;--line:rgba(21,18,13,.12);--gold:#B08D4C;--gold-soft:rgba(176,141,76,.13);--fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;--rad:2px;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;-webkit-font-smoothing:antialiased;transition:background .5s ease,color .5s ease;overflow-x:hidden">
+
+  <!-- ===================== AVISO AFILIADOS ===================== -->
+  <div style="background:var(--ink);color:color-mix(in srgb, var(--bg) 70%, transparent);text-align:center;font-size:11.5px;letter-spacing:.03em;padding:7px 16px;line-height:1.5">
+    Aromia contiene enlaces de afiliado · podemos ganar comisión por compras cualificadas, sin coste extra para ti.
+  </div>
+
+  <!-- ===================== NAV ===================== -->
+  <header style="position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:color-mix(in srgb, var(--bg) 84%, transparent);border-bottom:1px solid var(--line)">
+    <div style="max-width:1240px;margin:0 auto;padding:15px 30px;display:flex;align-items:center;gap:26px">
+      <a href="#top" style="font-family:var(--fdisp);font-weight:700;font-size:23px;letter-spacing:.34em;color:var(--ink);text-decoration:none;padding-left:.34em">AROMIA</a>
+      <nav style="display:flex;gap:26px;margin-left:14px;flex:1">
+        <a href="#tienda" style="font-family:var(--fbody);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s" style-hover="color:var(--ink)">Magazine</a>
+        <a href="#tienda" style="font-family:var(--fbody);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s" style-hover="color:var(--ink)">Tienda</a>
+        <a href="#estudio" style="font-family:var(--fbody);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s" style-hover="color:var(--ink)">Lab</a>
+        <a href="#academia" style="font-family:var(--fbody);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s" style-hover="color:var(--ink)">Academia</a>
+        <a href="#academia" style="font-family:var(--fbody);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s" style-hover="color:var(--ink)">Club</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:9px">
+        <button onClick="{{ toggleStyle }}" style="font-family:var(--fbody);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;transition:.25s" style-hover="border-color:var(--gold);color:var(--ink)">{{ styleLabel }}</button>
+        <button onClick="{{ toggleMode }}" aria-label="modo" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:14px;transition:.25s" style-hover="border-color:var(--gold);color:var(--ink)">{{ modeIcon }}</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section style="max-width:1240px;margin:0 auto;padding:74px 30px 56px;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:26px">
+        <span style="width:34px;height:1px;background:var(--gold)"></span>
+        <span style="font-family:var(--fbody);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)">La autoridad editorial que además vende</span>
+      </div>
+      <h1 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(46px,5.6vw,80px);line-height:1.02;letter-spacing:var(--disp-spacing,.004em);margin:0 0 24px">No vendemos perfumes.<br><em style="font-style:italic;color:var(--gold)">Revelamos identidades.</em></h1>
+      <p style="max-width:454px;font-size:17px;line-height:1.7;color:var(--muted);margin:0 0 34px">Magazine, Lab, Tienda y Academia en un solo ecosistema. Aprende a leer una fragancia —su pirámide, su longevidad, su estela— antes de elegir la que cuenta tu historia.</p>
+      <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+        <a href="#tienda" style="display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);font-family:var(--fbody);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding:15px 26px;border-radius:var(--rad);transition:.3s" style-hover="background:var(--gold);color:#fff">Explorar la colección<span style="font-size:15px">→</span></a>
+        <a href="#academia" style="font-family:var(--fbody);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:4px;transition:.25s" style-hover="color:var(--gold)">Cómo leer un perfume</a>
+      </div>
+      <div style="display:flex;gap:42px;margin-top:54px">
+        <div><div style="font-family:var(--fdisp);font-size:34px;color:var(--ink);line-height:1">240+</div><div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px">Reseñas honestas</div></div>
+        <div><div style="font-family:var(--fdisp);font-size:34px;color:var(--ink);line-height:1">98</div><div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px">Ingredientes estudiados</div></div>
+        <div><div style="font-family:var(--fdisp);font-size:34px;color:var(--ink);line-height:1">6</div><div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px">Casas en el Lab</div></div>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div style="position:relative;aspect-ratio:4/5;border-radius:var(--rad);overflow:hidden;background:linear-gradient(150deg,#cdb89a,#7c6448 70%);box-shadow:0 40px 80px -36px rgba(40,28,12,.45)">
+        <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;font-family:var(--fdisp);font-size:120px;color:rgba(255,255,255,.16);padding-bottom:18px">A</div>
+        <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=70" alt="Aromia perfume editorial" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+      </div>
+      <div style="position:absolute;left:-24px;bottom:34px;background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:16px 20px;box-shadow:0 24px 48px -24px rgba(20,14,6,.4);max-width:220px">
+        <div style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px">Perfume del mes</div>
+        <div style="font-family:var(--fdisp);font-size:23px;line-height:1.05;color:var(--ink)">Ámbar Nómada</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Ámbar especiado · 50 ml</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TIENDA / COLECCIÓN ===================== -->
+  <section id="tienda" style="max-width:1240px;margin:0 auto;padding:64px 30px 30px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:42px;border-bottom:1px solid var(--line);padding-bottom:26px">
+      <div>
+        <div style="font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">La Colección</div>
+        <h2 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(32px,3.6vw,48px);line-height:1.05;letter-spacing:var(--disp-spacing,.004em);margin:0">Seis fragancias, seis identidades.</h2>
+      </div>
+      <a href="#estudio" style="font-family:var(--fbody);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:1px solid var(--line);padding-bottom:4px;transition:.25s" style-hover="color:var(--gold);border-color:var(--gold)">Ver todo el Lab →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:30px 26px">
+      <sc-for list="{{ perfumes }}" as="p" hint-placeholder-count="6">
+        <a href="#estudio" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;group">
+          <div style="position:relative;aspect-ratio:3/4;border-radius:var(--rad);overflow:hidden;background:{{ p.grad }};margin-bottom:16px">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fdisp);font-size:80px;color:rgba(255,255,255,.18)">{{ p.initial }}</div>
+            <img src="{{ p.img }}" alt="{{ p.name }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.16,1,.3,1)" style-hover="transform:scale(1.05)">
+            <div style="position:absolute;top:12px;left:12px;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(6px);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);padding:6px 10px;border-radius:999px">{{ p.family }}</div>
+          </div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+            <h3 style="font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0;line-height:1.1">{{ p.name }}</h3>
+            <span style="font-family:var(--fbody);font-size:15px;color:var(--ink);white-space:nowrap">{{ p.price }}</span>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:5px">{{ p.house }} · {{ p.perfumer }}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:11px;line-height:1.5">{{ p.notes }}</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px">
+            <span style="font-size:14px;color:var(--gold);letter-spacing:2px">{{ p.starsStr }}</span>
+            <span style="font-size:12px;color:var(--muted)">{{ p.rating }}</span>
+            <span style="margin-left:auto;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--gold);padding-bottom:2px">Descubrir</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== ESTUDIO DEL PERFUME (FICHA) ===================== -->
+  <section id="estudio" style="background:var(--surface2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:64px">
+    <div style="max-width:1240px;margin:0 auto;padding:78px 30px">
+      <div style="text-align:center;margin-bottom:54px">
+        <div style="font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">El Estudio · Lab Aromia</div>
+        <h2 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(34px,4vw,54px);line-height:1.04;margin:0">Anatomía de una fragancia</h2>
+        <p style="max-width:560px;margin:18px auto 0;font-size:16px;line-height:1.7;color:var(--muted)">Cada perfume del Lab se disecciona con honestidad: rendimiento real en piel, carácter, pirámide olfativa y la voz de la comunidad.</p>
+      </div>
+
+      <!-- top: gallery + details -->
+      <div style="display:grid;grid-template-columns:.92fr 1.08fr;gap:50px;align-items:start">
+        <div>
+          <div style="position:relative;aspect-ratio:1/1;border-radius:var(--rad);overflow:hidden;background:linear-gradient(150deg,#cdb89a,#6e5638 75%);box-shadow:0 36px 70px -34px rgba(40,28,12,.5)">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fdisp);font-size:150px;color:rgba(255,255,255,.14)">A</div>
+            <img src="{{ mainImg }}" alt="Ámbar Nómada" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+          <div style="display:flex;gap:12px;margin-top:14px">
+            <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="4">
+              <button onClick="{{ t.click }}" style="flex:1;aspect-ratio:1/1;border-radius:var(--rad);overflow:hidden;border:1px solid {{ t.border }};padding:0;cursor:pointer;background:{{ t.grad }};position:relative;transition:.25s">
+                <img src="{{ t.u }}" alt="vista" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Ámbar especiado · Amaderado oriental</div>
+          <h3 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(38px,4.4vw,58px);line-height:1;margin:0 0 10px">Ámbar Nómada</h3>
+          <div style="font-size:14px;color:var(--muted);margin-bottom:22px">Aromia Lab · Nariz <em style="color:var(--ink);font-style:italic">Élise Marchand</em> · 2025</div>
+          <p style="font-size:16.5px;line-height:1.75;color:var(--muted);margin:0 0 26px;max-width:520px">Un ámbar que viaja: abre con la chispa del cardamomo y el jengibre sobre bergamota soleada, se asienta en un corazón de iris y azafrán, y termina envolviéndote en sándalo lácteo, vainilla y vetiver. Cálido, sofisticado, nómada.</p>
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:22px 0 18px;border-top:1px solid var(--line);margin-bottom:18px">
+            <div><div style="font-family:var(--fdisp);font-size:30px;line-height:1">Desde 128 €</div><div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px">Eau de Parfum · 50 ml</div></div>
+            <div style="height:38px;width:1px;background:var(--line)"></div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6">Concentración <strong style="color:var(--ink);font-weight:500">18%</strong><br>Difusión <strong style="color:var(--ink);font-weight:500">Alta</strong></div>
+          </div>
+          <!-- COMPARADOR DE TIENDAS (AFILIADOS) -->
+          <div style="border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;margin-bottom:22px">
+            <sc-for list="{{ retailers }}" as="r" hint-placeholder-count="3">
+              <a href="{{ r.url }}" target="_blank" rel="sponsored noopener" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line);transition:.2s;background:var(--surface)" style-hover="background:var(--gold-soft)">
+                <span style="font-size:13.5px;color:var(--ink);font-weight:500;min-width:110px">{{ r.name }}</span>
+                <span style="font-size:12px;color:var(--muted);flex:1">{{ r.tag }}</span>
+                <span style="font-family:var(--fdisp);font-size:19px;color:var(--ink)">{{ r.price }}</span>
+                <span style="font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:2px;white-space:nowrap">Ver oferta →</span>
+              </a>
+            </sc-for>
+          </div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.6;margin-bottom:26px;display:flex;align-items:flex-start;gap:8px">
+            <span style="color:var(--gold)">ⓘ</span>
+            <span>Aromia participa en programas de afiliados. Al comprar a través de estos enlaces podemos recibir una comisión, sin coste adicional para ti — esto financia nuestro trabajo editorial independiente.</span>
+          </div>
+          <!-- PERFORMANCE BARS -->
+          <div ref="{{ setViz }}">
+            <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">Rendimiento en piel</div>
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+                    <span style="font-size:13.5px;color:var(--ink);letter-spacing:.02em">{{ m.k }}</span>
+                    <span style="font-size:12px;color:var(--muted)">{{ m.d }}</span>
+                  </div>
+                  <div style="position:relative;height:6px;background:var(--gold-soft);border-radius:999px;overflow:hidden">
+                    <div ref="{{ collectBar }}" data-val="{{ m.pct }}" style="position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--gold),color-mix(in srgb,var(--gold) 60%, #fff));border-radius:999px;transition:width 1.5s cubic-bezier(.16,1,.3,1)"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- modules: radar + pyramid -->
+      <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:26px;margin-top:30px">
+        <!-- RADAR -->
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:30px 28px">
+          <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Carácter del aroma</div>
+          <h4 style="font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0 0 8px">El retrato olfativo</h4>
+          <div style="display:flex;justify-content:center">
+            <svg viewBox="0 0 240 240" style="width:100%;max-width:300px;overflow:visible">
+              <sc-for list="{{ radarGrid }}" as="g" hint-placeholder-count="3">
+                <polygon points="{{ g }}" fill="none" stroke="var(--line)" stroke-width="1"></polygon>
+              </sc-for>
+              <sc-for list="{{ radarSpokes }}" as="s" hint-placeholder-count="6">
+                <line x1="{{ s.x1 }}" y1="{{ s.y1 }}" x2="{{ s.x2 }}" y2="{{ s.y2 }}" stroke="var(--line)" stroke-width="1"></line>
+              </sc-for>
+              <g ref="{{ setRadar }}" style="transform:scale(0);transform-origin:120px 120px;transition:transform 1.3s cubic-bezier(.16,1,.3,1)">
+                <polygon points="{{ radarPoints }}" fill="color-mix(in srgb, var(--gold) 24%, transparent)" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round"></polygon>
+              </g>
+              <sc-for list="{{ radarLabels }}" as="l" hint-placeholder-count="6">
+                <g>
+                  <circle cx="{{ l.dx }}" cy="{{ l.dy }}" r="2.4" fill="var(--gold)"></circle>
+                  <text x="{{ l.x }}" y="{{ l.y }}" text-anchor="{{ l.anchor }}" style="font-family:var(--fbody);font-size:10.5px;fill:var(--muted);letter-spacing:.04em">{{ l.name }}</text>
+                </g>
+              </sc-for>
+            </svg>
+          </div>
+          <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:10px 0 0;text-align:center">Dominante <strong style="color:var(--ink);font-weight:500">especiado-cálido</strong>, con una base amaderada y un guiño floral.</p>
+        </div>
+
+        <!-- PYRAMID -->
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:30px 30px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px">
+            <div>
+              <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Pirámide olfativa</div>
+              <h4 style="font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0">Cómo evoluciona en tu piel</h4>
+            </div>
+            <span style="font-size:11.5px;color:var(--muted)">Toca cada nivel ↓</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:9px">
+              <sc-for list="{{ bands }}" as="b" hint-placeholder-count="3">
+                <button onClick="{{ b.click }}" style="width:{{ b.width }};border:1px solid {{ b.bd }};background:{{ b.bg }};color:{{ b.fg }};border-radius:var(--rad);padding:15px 12px;cursor:pointer;text-align:center;transition:.3s;font-family:var(--fbody)">
+                  <div style="font-size:13.5px;letter-spacing:.08em;text-transform:uppercase">{{ b.label }}</div>
+                  <div style="font-size:11px;opacity:.7;margin-top:3px">{{ b.time }}</div>
+                </button>
+              </sc-for>
+            </div>
+            <div>
+              <div style="font-family:var(--fdisp);font-size:26px;line-height:1.05;margin-bottom:4px">{{ aTier.label }}</div>
+              <div style="font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">{{ aTier.time }}</div>
+              <p style="font-size:13.5px;line-height:1.65;color:var(--muted);margin:0 0 16px">{{ aTier.desc }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ aTier.notes }}" as="n" hint-placeholder-count="3">
+                  <span style="font-size:12.5px;color:var(--ink);background:var(--gold-soft);border:1px solid var(--line);border-radius:999px;padding:7px 13px">{{ n }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RATING -->
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 36px;margin-top:26px;display:grid;grid-template-columns:auto 1fr auto;gap:44px;align-items:center">
+        <div style="text-align:center">
+          <div style="font-family:var(--fdisp);font-size:64px;line-height:1;color:var(--ink)">{{ avgStr }}</div>
+          <div style="position:relative;display:inline-block;margin-top:8px;font-size:20px;letter-spacing:3px">
+            <span style="color:var(--line)">★★★★★</span>
+            <span ref="{{ setStarFill }}" style="position:absolute;left:0;top:0;width:0;overflow:hidden;white-space:nowrap;color:var(--gold);transition:width 1.4s cubic-bezier(.16,1,.3,1)">★★★★★</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px">{{ votes }} valoraciones</div>
+        </div>
+        <div style="border-left:1px solid var(--line);padding-left:44px">
+          <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">La voz de la comunidad</div>
+          <p style="font-family:var(--fdisp);font-size:22px;line-height:1.35;font-style:italic;color:var(--ink);margin:0">«Empieza chispeante y termina como un abrazo. El ámbar nunca se vuelve pesado.»</p>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:10px">— 1.284 reseñas verificadas · 92% lo recomienda</div>
+        </div>
+        <div style="text-align:center;border-left:1px solid var(--line);padding-left:44px">
+          <div style="font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Tu valoración</div>
+          <div onMouseLeave="{{ starsLeave }}" style="display:flex;gap:5px;justify-content:center;font-size:30px;cursor:pointer">
+            <sc-for list="{{ userStars }}" as="u" hint-placeholder-count="5">
+              <span onMouseEnter="{{ u.enter }}" onClick="{{ u.click }}" style="color:{{ u.color }};transition:.15s;transform:{{ u.scale }}">★</span>
+            </sc-for>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:10px;min-height:16px">{{ ratingMsg }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ACADEMIA ===================== -->
+  <section id="academia" style="max-width:1240px;margin:0 auto;padding:84px 30px 40px">
+    <div style="text-align:center;margin-bottom:50px">
+      <div style="font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Academia Aromia</div>
+      <h2 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(34px,4vw,54px);line-height:1.04;margin:0">Cómo leer una fragancia</h2>
+      <p style="max-width:560px;margin:18px auto 0;font-size:16px;line-height:1.7;color:var(--muted)">Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:80px">
+      <sc-for list="{{ lessons }}" as="le" hint-placeholder-count="3">
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 30px">
+          <div style="font-family:var(--fdisp);font-size:40px;color:var(--gold);line-height:1;margin-bottom:18px">{{ le.num }}</div>
+          <h4 style="font-family:var(--fdisp);font-weight:600;font-size:25px;margin:0 0 12px">{{ le.title }}</h4>
+          <p style="font-size:14.5px;line-height:1.7;color:var(--muted);margin:0 0 16px">{{ le.body }}</p>
+          <div style="font-size:12.5px;letter-spacing:.06em;color:var(--gold);border-top:1px solid var(--line);padding-top:14px">{{ le.tip }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- INGREDIENTES -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:34px;border-bottom:1px solid var(--line);padding-bottom:24px">
+      <div>
+        <div style="font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">El jardín de Aromia</div>
+        <h3 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(28px,3.2vw,42px);line-height:1.05;margin:0">Los ingredientes, uno a uno</h3>
+      </div>
+      <span style="font-size:12px;color:var(--muted);white-space:nowrap">Toca un ingrediente para descubrirlo</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <sc-for list="{{ ingredients }}" as="ing" hint-placeholder-count="8">
+        <button onClick="{{ ing.toggle }}" style="text-align:left;padding:0;border:1px solid {{ ing.bd }};background:var(--surface);border-radius:var(--rad);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:.35s;font-family:var(--fbody)" style-hover="border-color:var(--gold)">
+          <div style="position:relative;aspect-ratio:{{ ing.ar }};background:{{ ing.grad }};overflow:hidden;transition:.4s">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fdisp);font-size:54px;color:rgba(255,255,255,.22)">{{ ing.initial }}</div>
+            <img src="{{ ing.img }}" alt="{{ ing.name }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(transparent,rgba(15,10,4,.78))">
+              <div style="font-family:var(--fdisp);font-size:23px;color:#fff;line-height:1.05">{{ ing.name }}</div>
+              <div style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:3px">{{ ing.family }}</div>
+            </div>
+          </div>
+          <sc-if value="{{ ing.open }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:18px 16px;border-top:1px solid var(--line)">
+              <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 12px">{{ ing.character }}</p>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px">
+                <span>Origen</span><span style="color:var(--ink)">{{ ing.origin }}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:7px">
+                <span>Posición</span><span style="color:var(--gold)">{{ ing.pos }}</span>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ ing.closed }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:13px 16px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)">Descubrir +</div>
+          </sc-if>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== NEWSLETTER ===================== -->
+  <section style="background:var(--ink);color:var(--bg);margin-top:60px">
+    <div style="max-width:760px;margin:0 auto;padding:84px 30px;text-align:center">
+      <div style="font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">La Carta de Aromia</div>
+      <h2 style="font-family:var(--fdisp);font-weight:var(--disp-weight,600);font-size:clamp(32px,4vw,50px);line-height:1.06;margin:0 0 18px;color:var(--bg)">Una fragancia, una historia, cada domingo.</h2>
+      <p style="font-size:16px;line-height:1.7;color:color-mix(in srgb, var(--bg) 64%, transparent);max-width:480px;margin:0 auto 32px">Reseñas honestas, ingredientes en profundidad y lanzamientos del Lab. Sin ruido, sin spam.</p>
+      <form onSubmit="{{ noSubmit }}" style="display:flex;gap:10px;max-width:440px;margin:0 auto">
+        <input type="email" placeholder="tu@correo.com" style="flex:1;background:transparent;border:1px solid color-mix(in srgb, var(--bg) 30%, transparent);border-radius:var(--rad);padding:14px 16px;color:var(--bg);font-family:var(--fbody);font-size:14px;outline:none">
+        <button type="submit" style="background:var(--gold);color:#fff;font-family:var(--fbody);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;border:none;border-radius:var(--rad);padding:14px 22px;cursor:pointer;white-space:nowrap;transition:.3s" style-hover="background:#fff;color:var(--ink)">Suscribirme</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="border-top:1px solid var(--line);background:var(--bg)">
+    <div style="max-width:1240px;margin:0 auto;padding:56px 30px 40px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px">
+      <div>
+        <div style="font-family:var(--fdisp);font-weight:700;font-size:24px;letter-spacing:.3em;padding-left:.3em">AROMIA</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--muted);margin:16px 0 0;max-width:260px">La plataforma de perfumería más respetada del mundo hispanohablante. Honestidad, educación y elegancia.</p>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Ecosistema</div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <a href="#tienda" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Magazine</a>
+          <a href="#tienda" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Tienda</a>
+          <a href="#estudio" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Lab</a>
+          <a href="#academia" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Academia</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Comunidad</div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <a href="#" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Club</a>
+          <a href="#" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Aromia AI</a>
+          <a href="#" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Reseñas</a>
+          <a href="#" style="font-size:13.5px;color:var(--muted);text-decoration:none;transition:.2s" style-hover="color:var(--ink)">Sobre Aromia</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Valores</div>
+        <div style="font-size:13px;line-height:1.9;color:var(--muted)">Honestidad<br>Educación<br>Elegancia<br>Curiosidad<br>Excelencia</div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--line)">
+      <div style="max-width:1240px;margin:0 auto;padding:20px 30px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)">
+        <span>© 2026 Aromia. La autoridad editorial que además vende. Este sitio contiene enlaces de afiliado; podemos recibir comisión por compras realizadas a través de ellos.</span>
+        <span>Hecho con honestidad · Madrid · Ciudad de México</span>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;initialStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;editorial&quot;,&quot;moderno&quot;],&quot;default&quot;:&quot;editorial&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estilo&quot;},&quot;initialMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estilo&quot;},&quot;accentGold&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#B08D4C&quot;,&quot;options&quot;:[&quot;#B08D4C&quot;,&quot;#BE7C46&quot;,&quot;#9C7BB0&quot;,&quot;#5E7E6B&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estilo&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = {
+      mode: props.initialMode || 'light',
+      sk: props.initialStyle || 'editorial',
+      tier: 'salida',
+      expanded: null,
+      userRating: 0,
+      hover: 0,
+      added: false
+    };
+    this.barRefs = [];
+  }
+
+  componentDidMount(){ 
+    this.applyTheme();
+    this.hideBrokenImages();
+    this.io = new IntersectionObserver((es)=>{
+      es.forEach(e=>{ if(e.isIntersecting){ this.animate(); this.io.disconnect(); } });
+    }, { threshold: 0.2 });
+    if(this.vizRef) this.io.observe(this.vizRef);
+  }
+  componentDidUpdate(prev){
+    if(prev.initialMode!==this.props.initialMode){ this.setState({mode:this.props.initialMode}); }
+    if(prev.initialStyle!==this.props.initialStyle){ this.setState({sk:this.props.initialStyle}); }
+    if(prev.accentGold!==this.props.accentGold){ this.applyTheme(); }
+  }
+
+  hideBrokenImages(){
+    if(!this.rootRef) return;
+    const fix=(img)=>{ if(img.complete && img.naturalWidth===0) img.style.opacity=0; };
+    this.rootRef.querySelectorAll('img').forEach(img=>{
+      img.addEventListener('error',()=>{ img.style.opacity=0; });
+      img.addEventListener('load',()=>{ img.style.opacity=1; });
+      fix(img);
+    });
+    setTimeout(()=>{ if(this.rootRef) this.rootRef.querySelectorAll('img').forEach(fix); }, 2500);
+  }
+  animate(){
+    this.barRefs.forEach(el=>{ if(el) el.style.width = (el.dataset.val||0)+'%'; });
+    if(this.radarRef) this.radarRef.style.transform = 'scale(1)';
+    if(this.starRef) this.starRef.style.width = this.avgPct + '%';
+  }
+
+  themeVars(){
+    const dark = this.state.mode === 'dark';
+    const mod = this.state.sk === 'moderno';
+    const v = dark ? {
+      '--bg':'#0E0C0A','--surface':'#17120D','--surface2':'#1C1610','--ink':'#F2EBDD','--muted':'#A39A88',
+      '--line':'rgba(242,235,221,.13)','--gold-soft':'rgba(201,164,92,.16)'
+    } : {
+      '--bg':'#F6F2EA','--surface':'#FFFFFF','--surface2':'#FBF7F0','--ink':'#15120D','--muted':'#6E675B',
+      '--line':'rgba(21,18,13,.12)','--gold-soft':'rgba(176,141,76,.13)'
+    };
+    v['--gold'] = this.props.accentGold || (mod ? (dark?'#D08A4F':'#BE7C46') : (dark?'#C9A45C':'#B08D4C'));
+    v['--fdisp'] = mod ? "'Syne',system-ui,sans-serif" : "'Cormorant Garamond',Georgia,serif";
+    v['--fbody'] = "'Jost',system-ui,sans-serif";
+    v['--rad'] = mod ? '11px' : '2px';
+    v['--disp-spacing'] = mod ? '-0.02em' : '0.004em';
+    v['--disp-weight'] = mod ? '700' : '600';
+    return v;
+  }
+  applyTheme(){
+    if(!this.rootRef) return;
+    const v = this.themeVars();
+    for(const k in v) this.rootRef.style.setProperty(k, v[k]);
+  }
+
+  starsFor(r){ const full=Math.round(r); return '★★★★★'.slice(0,full)+'☆☆☆☆☆'.slice(0,5-full); }
+
+  renderVals(){
+    const st = this.state;
+    // theme controls
+    const modeIcon = st.mode==='light' ? '☾' : '☀';
+    const styleLabel = st.sk==='editorial' ? 'Editorial' : 'Moderno';
+
+    // ---- collection ----
+    const grads = ['linear-gradient(150deg,#cbb393,#7a5f3c)','linear-gradient(150deg,#cfd6c4,#6f8367)','linear-gradient(150deg,#cdc1d8,#6a5a7e)','linear-gradient(150deg,#bcc4c0,#586b62)','linear-gradient(150deg,#dcc0bd,#955a59)','linear-gradient(150deg,#daccb0,#9a7d52)'];
+    const imgs = [
+      'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70',
+      'https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70',
+      'https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=800&q=70',
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=70',
+      'https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=800&q=70',
+      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=70'
+    ];
+    const pdata = [
+      ['Ámbar Nómada','Ámbar amaderado','148 €','Aromia Lab','Élise Marchand','Bergamota, cardamomo, sándalo, ámbar',4.6],
+      ['Marea Cítrica','Cítrico aromático','120 €','Aromia Lab','Tomás Vidal','Bergamota, neroli, vetiver, sal',4.3],
+      ['Iris Nocturno','Floral polvoso','135 €','Aromia Lab','Élise Marchand','Iris, violeta, almizcle, haba tonka',4.7],
+      ['Madera de Lluvia','Amaderado verde','128 €','Aromia Lab','Koji Nara','Petricor, vetiver, cedro, musgo',4.4],
+      ['Rosa Insurgente','Floral especiado','142 €','Aromia Lab','Lucía Romero','Rosa, pimienta rosa, pachulí, oud',4.5],
+      ['Sal & Higo','Frutal salino','115 €','Aromia Lab','Tomás Vidal','Higo, sal marina, leche de higo, cedro',4.2]
+    ];
+    const perfumes = pdata.map((p,i)=>({
+      name:p[0], family:p[1], price:p[2], house:p[3], perfumer:p[4], notes:p[5],
+      rating:p[6].toFixed(1), starsStr:this.starsFor(p[6]),
+      grad:grads[i], img:imgs[i], initial:p[0][0]
+    }));
+
+    // ---- flagship gallery ----
+    const galleryUrls = [
+      'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=900&q=70',
+      'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=70',
+      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=900&q=70',
+      'https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=900&q=70'
+    ];
+    const g = st.gimg || 0;
+    const thumbs = galleryUrls.map((u,i)=>({
+      u, grad:'linear-gradient(150deg,#cbb393,#7a5f3c)',
+      border: i===g ? 'var(--gold)' : 'var(--line)',
+      click: ()=>this.setState({gimg:i})
+    }));
+
+    // ---- performance ----
+    const md = [['Longevidad',8.5,'Larga · 8–10 h en piel'],['Estela',7.0,'Moderada-alta · deja rastro'],['Proyección',7.5,'Notable la primera hora'],['Precio-valor',8.0,'Justo para su concentración']];
+    const metrics = md.map(m=>({k:m[0], d:m[2], pct:Math.round(m[1]*10)}));
+
+    // ---- radar ----
+    const ax = [['Especiado',9],['Amaderado',8],['Cálido',8.5],['Floral',5],['Cítrico',4],['Dulce',6]];
+    const cx=120, cy=120, R=78;
+    const pt=(i,r)=>{ const a=(-90+i*60)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
+    const radarPoints = ax.map((d,i)=>pt(i,R*d[1]/10).join(',')).join(' ');
+    const radarGrid = [1,0.66,0.33].map(f=>ax.map((d,i)=>pt(i,R*f).join(',')).join(' '));
+    const radarSpokes = ax.map((d,i)=>{ const p=pt(i,R); return {x1:cx,y1:cy,x2:p[0],y2:p[1]}; });
+    const radarLabels = ax.map((d,i)=>{ const p=pt(i,R+15); const dp=pt(i,R*d[1]/10); return {x:p[0], y:p[1]+3.5, dx:dp[0], dy:dp[1], name:d[0], anchor: p[0]>cx+4?'start':(p[0]<cx-4?'end':'middle')}; });
+
+    // ---- pyramid ----
+    const tiers = {
+      salida:{label:'Salida', time:'0 – 15 min', desc:'La primera impresión: volátil y luminosa. Dura poco, pero define el encuentro y abre la puerta a todo lo demás.', notes:['Bergamota','Cardamomo','Jengibre']},
+      corazon:{label:'Corazón', time:'15 min – 3 h', desc:'El alma de la fragancia. Emerge cuando la salida se desvanece y marca el carácter que recordarás.', notes:['Ylang Ylang','Iris','Azafrán']},
+      fondo:{label:'Fondo', time:'3 – 10 h +', desc:'La huella. Moléculas pesadas que fijan el perfume a la piel y construyen su estela durante horas.', notes:['Sándalo','Ámbar','Vainilla','Vetiver']}
+    };
+    const order=[['salida','56%'],['corazon','78%'],['fondo','100%']];
+    const bands = order.map(o=>{ const k=o[0]; const on=st.tier===k; return {
+      label:tiers[k].label, time:tiers[k].time, width:o[1],
+      bg: on?'var(--gold)':'transparent', fg: on?'#fff':'var(--ink)', bd: on?'var(--gold)':'var(--line)',
+      click:()=>this.setState({tier:k})
+    };});
+    const aTier = tiers[st.tier];
+
+    // ---- retailers (affiliate comparator) ----
+    const retailers = [
+      {name:'Notino', tag:'Envío 24–48h · devolución gratis', price:'128 €', url:'https://www.notino.es/'},
+      {name:'Druni', tag:'Recogida en tienda disponible', price:'134,90 €', url:'https://www.druni.es/'},
+      {name:'Sephora', tag:'Puntos de fidelidad Beauty Pass', price:'148 €', url:'https://www.sephora.es/'}
+    ];
+
+    // ---- rating ----
+    const avg=4.6; this.avgPct = avg/5*100;
+    const userStars = [1,2,3,4,5].map(i=>{ const lit = i <= (st.hover||st.userRating); return {
+      color: lit?'var(--gold)':'var(--line)', scale: i===st.hover?'scale(1.18)':'scale(1)',
+      enter:()=>this.setState({hover:i}), click:()=>this.setState({userRating:i})
+    };});
+    const ratingMsg = st.userRating ? ['','«No es para mí»','«Correcto»','«Me gusta»','«Excelente»','«Una obra»'][st.userRating] : 'Pasa el cursor y elige';
+
+    // ---- lessons ----
+    const lessons = [
+      {num:'01', title:'La pirámide', body:'Un perfume no huele igual al minuto que a las cuatro horas. Se despliega en tres pisos —salida, corazón y fondo— que aparecen y se relevan con el tiempo.', tip:'Lee siempre el fondo: es lo que de verdad llevarás puesto.'},
+      {num:'02', title:'La longevidad', body:'Es cuántas horas permanece detectable sobre tu piel. Depende de la concentración, los ingredientes de fondo y tu propia química cutánea.', tip:'EDP > EDT. La piel hidratada retiene mejor el aroma.'},
+      {num:'03', title:'Estela y proyección', body:'La proyección es la burbuja que te rodea; la estela, el rastro que dejas al pasar. Una bestia silenciosa proyecta poco pero deja huella.', tip:'Más no es mejor: 2 pulverizaciones bien puestas bastan.'}
+    ];
+
+    // ---- ingredients ----
+    const idata = [
+      ['Bergamota','Cítrica','Calabria, Italia','Chispeante y soleada, con un filo ligeramente amargo. La apertura más luminosa de la perfumería.','Salida','linear-gradient(150deg,#e7d98a,#b89a2e)','https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=600&q=70'],
+      ['Cardamomo','Especiada','Guatemala · India','Fresco y especiado a la vez, verde y aromático. Aporta una sofisticación cálida e inesperada.','Salida','linear-gradient(150deg,#cdd6a8,#7d8a4e)','https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=70'],
+      ['Jengibre','Especiada','Costa de Marfil','Picante, efervescente y terroso. Una corriente eléctrica que despierta la composición.','Salida','linear-gradient(150deg,#e8c79a,#bd7f3c)','https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=70'],
+      ['Ylang Ylang','Floral','Comoras · Madagascar','Floral cremoso y exótico, con un guiño a plátano maduro. Sensual y solar.','Corazón','linear-gradient(150deg,#f0df9c,#c9a93e)','https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600&q=70'],
+      ['Iris','Floral polvosa','Florencia, Italia','Polvoso, mantecoso y aristocrático. Uno de los materiales más caros y elegantes que existen.','Corazón','linear-gradient(150deg,#cfc6dd,#7d6f97)','https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=600&q=70'],
+      ['Azafrán','Especiada','Irán · La Mancha','Cuero suave, ámbar y un dulzor amargo. Profundidad y un aire oriental inconfundible.','Corazón','linear-gradient(150deg,#e6a76a,#a8521f)','https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=600&q=70'],
+      ['Sándalo','Amaderada','Mysore · Australia','Lácteo, cálido y balsámico. La madera más cremosa y reconfortante de la perfumería.','Fondo','linear-gradient(150deg,#d8c19a,#8a6a40)','https://images.unsplash.com/photo-1503424886307-b090341d25d1?auto=format&fit=crop&w=600&q=70'],
+      ['Vainilla','Gourmand','Madagascar','Dulce, balsámica y envolvente. El abrazo final que redondea cualquier fondo cálido.','Fondo','linear-gradient(150deg,#e3cba2,#9c7544)','https://images.unsplash.com/photo-1631206753348-db44968fd440?auto=format&fit=crop&w=600&q=70']
+    ];
+    const ingredients = idata.map((d,i)=>{ const open=st.expanded===i; return {
+      name:d[0], family:d[1], origin:d[2], character:d[3], pos:d[4], grad:d[5], img:d[6], initial:d[0][0],
+      open, closed:!open, ar: open?'4/3':'4/5', bd: open?'var(--gold)':'var(--line)',
+      toggle:()=>this.setState({expanded: open?null:i})
+    };});
+
+    const noSubmit = (e)=>{ e.preventDefault(); };
+
+    return {
+      setRoot:(el)=>{ if(el){ this.rootRef=el; } },
+      setViz:(el)=>{ if(el) this.vizRef=el; },
+      setRadar:(el)=>{ if(el) this.radarRef=el; },
+      setStarFill:(el)=>{ if(el) this.starRef=el; },
+      collectBar:(el)=>{ if(el && !this.barRefs.includes(el)) this.barRefs.push(el); },
+      modeIcon, styleLabel, toggleMode:()=>this.setState({mode:this.state.mode==='light'?'dark':'light'}, ()=>this.applyTheme()),
+      toggleStyle:()=>this.setState({sk:this.state.sk==='editorial'?'moderno':'editorial'}, ()=>this.applyTheme()),
+      imgErr:(e)=>{ e.target.style.opacity=0; },
+      perfumes,
+      mainImg: galleryUrls[g], thumbs,
+      metrics,
+      radarPoints, radarGrid, radarSpokes, radarLabels,
+      bands, aTier, retailers,
+      avgStr: avg.toFixed(1), votes:'1.284', userStars, starsLeave:()=>this.setState({hover:0}), ratingMsg,
+      noSubmit,
+      lessons, ingredients
+    };
+  }
+}
+</script>
+</body>
+</html>
