@@ -15,8 +15,8 @@
   ::selection{background:rgba(176,141,76,.22);}
 
   :root{
-    --bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#6E675B;
-    --line:rgba(21,18,13,.12);--gold:#B08D4C;--gold-soft:rgba(176,141,76,.13);
+    --bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#5A5347;
+    --line:rgba(21,18,13,.16);--gold:#7F5F2A;--gold-soft:rgba(127,95,42,.14);
     --fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;
     --rad:2px;--disp-weight:600;--disp-spacing:.004em;
   }
@@ -104,7 +104,7 @@
   .tienda{padding:64px 30px 30px}
 
   /* ---------- FILTERS / COMPARATOR ---------- */
-  .filters-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:26px 28px;margin-bottom:36px}
+  .filters-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:30px 32px;margin-bottom:36px;box-shadow:0 20px 40px -32px rgba(20,14,6,.25)}
   .filters-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
   @media(max-width:1000px){.filters-grid{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:620px){.filters-grid{grid-template-columns:repeat(2,1fr)}}
@@ -524,6 +524,24 @@
     </div>
   </div>
 </footer>
+
+<div class="cmp-bar" id="cmpBar">
+  <div class="cmp-bar-inner">
+    <div class="cmp-slots" id="cmpSlots"></div>
+    <div class="cmp-bar-actions">
+      <button class="cmp-clear" id="cmpClear">Vaciar</button>
+      <button class="cmp-go" id="cmpGo" disabled>Comparar (<span id="cmpCount">0</span>/4)</button>
+    </div>
+  </div>
+</div>
+
+<div class="cmp-overlay" id="cmpOverlay">
+  <div class="cmp-modal">
+    <button class="cmp-close" id="cmpClose">✕</button>
+    <h2>Comparación cara a cara</h2>
+    <div id="cmpTableWrap"></div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -1898,7 +1916,7 @@
     lessonsEl.innerHTML = '';
     lessonsData[currentLang].forEach(function(le){
       var div = document.createElement('div');
-      div.style.cssText = "background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 30px";
+      div.style.cssText = "background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:34px 30px;box-shadow:0 20px 40px -32px rgba(20,14,6,.22);transition:transform .3s cubic-bezier(.16,1,.3,1)";
       div.innerHTML = '<div style="font-family:var(--fdisp);font-size:40px;color:var(--gold);line-height:1;margin-bottom:18px">' + le.num + '</div>' +
         '<h4 style="font-family:var(--fdisp);font-weight:600;font-size:25px;margin:0 0 12px">' + le.title + '</h4>' +
         '<p style="font-size:14.5px;line-height:1.7;color:var(--muted);margin:0 0 16px">' + le.body + '</p>' +
@@ -2068,23 +2086,5 @@
   initHeroRotation();
 })();
 </script>
-<div class="cmp-bar" id="cmpBar">
-  <div class="cmp-bar-inner">
-    <div class="cmp-slots" id="cmpSlots"></div>
-    <div class="cmp-bar-actions">
-      <button class="cmp-clear" id="cmpClear">Vaciar</button>
-      <button class="cmp-go" id="cmpGo" disabled>Comparar (<span id="cmpCount">0</span>/4)</button>
-    </div>
-  </div>
-</div>
-
-<div class="cmp-overlay" id="cmpOverlay">
-  <div class="cmp-modal">
-    <button class="cmp-close" id="cmpClose">✕</button>
-    <h2>Comparación cara a cara</h2>
-    <div id="cmpTableWrap"></div>
-  </div>
-</div>
-
 </body>
 </html>
