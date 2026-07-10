@@ -208,6 +208,19 @@
     text-transform:uppercase;color:#F2EBDD}
   .video-block iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
 
+  .slideshow{position:absolute;inset:0}
+  .slideshow .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
+  .slideshow .slide.active{opacity:1}
+  .slideshow .slide img{width:100%;height:100%;object-fit:cover}
+  .slideshow .slide.kenburns img{animation:aromiaKenBurns 9s ease-in-out infinite alternate}
+  @keyframes aromiaKenBurns{
+    0%{transform:scale(1) translate(0,0);}
+    100%{transform:scale(1.12) translate(-1.5%,-1.5%);}
+  }
+  .slide-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;gap:6px;justify-content:center;z-index:3}
+  .slide-dots span{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.45);transition:.3s}
+  .slide-dots span.active{background:#fff;width:16px}
+
   .prod-kicker{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
   .prod-title{font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(38px,4.4vw,58px);line-height:1;margin:0 0 10px}
   .prod-meta{font-size:14px;color:var(--muted);margin-bottom:22px}
@@ -581,7 +594,15 @@
     "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)",
     "img": "https://m.media-amazon.com/images/I/71xVLhLWrvL._SL1500_.jpg",
     "initial": "B",
-    "asin": "B074V34X4C"
+    "asin": "B074V34X4C",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/411K6RDfdLL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/416pzrZqEkL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41BYs3sx+JL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41ODRFkF35L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41IjpvJP9qL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51sVvq1AXZL._SL1500_.jpg"
+    ]
   },
   {
     "id": 2,
@@ -629,7 +650,15 @@
     "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)",
     "img": "https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg",
     "initial": "A",
-    "asin": "B071CYS5ZZ"
+    "asin": "B071CYS5ZZ",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/316e08HCUAL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/319VSlo3DPL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51Ik7-lBhML._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41R+dQuKDqL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41dc6UvnFZL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41mz3O-X12L._SL1500_.jpg"
+    ]
   },
   {
     "id": 4,
@@ -653,7 +682,10 @@
     "grad": "linear-gradient(150deg,#bcc4c0,#586b62)",
     "img": "https://m.media-amazon.com/images/I/61HCNHc5LeL._SL1500_.jpg",
     "initial": "O",
-    "asin": "B01APUYR9E"
+    "asin": "B01APUYR9E",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41RfujEHz4L._SL1500_.jpg"
+    ]
   },
   {
     "id": 5,
@@ -677,7 +709,10 @@
     "grad": "linear-gradient(150deg,#dcc0bd,#955a59)",
     "img": "https://m.media-amazon.com/images/I/71PbQRLh0KL._SL1500_.jpg",
     "initial": "B",
-    "asin": "B000PKESNA"
+    "asin": "B000PKESNA",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41yy0gy+apL._SL1500_.jpg"
+    ]
   },
   {
     "id": 6,
@@ -701,7 +736,12 @@
     "grad": "linear-gradient(150deg,#daccb0,#9a7d52)",
     "img": "https://m.media-amazon.com/images/I/61wCYX-x36L._SL1500_.jpg",
     "initial": "I",
-    "asin": "B0BYTJ68R2"
+    "asin": "B0BYTJ68R2",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31zbs82vw8L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/410K2ncWQaL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41A48UjW-eL._SL1500_.jpg"
+    ]
   },
   {
     "id": 7,
@@ -725,7 +765,12 @@
     "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)",
     "img": "https://m.media-amazon.com/images/I/61yifiaONJL._SL1500_.jpg",
     "initial": "R",
-    "asin": "B0C3LGBPYX"
+    "asin": "B0C3LGBPYX",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31WmFzd1P7L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/412pMdaqVnL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41f1EScISbL._SL1500_.jpg"
+    ]
   },
   {
     "id": 8,
@@ -749,7 +794,15 @@
     "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)",
     "img": "https://m.media-amazon.com/images/I/61hj1sr5zhL._SL1500_.jpg",
     "initial": "L",
-    "asin": "B0BC3YNMZN"
+    "asin": "B0BC3YNMZN",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31VjOYtntvL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51b9Vig0YIL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41vVuMSjJQL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41QbT3kRlAL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31re-JEgrPL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51XOZrKG58L._SL1500_.jpg"
+    ]
   },
   {
     "id": 9,
@@ -774,7 +827,11 @@
     "img": "https://m.media-amazon.com/images/I/71w9icubQlL._SL1500_.jpg",
     "initial": "B",
     "asin": "B07P9VPR96",
-    "youtubeId": "AfrH1UJ28As"
+    "youtubeId": "AfrH1UJ28As",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41t8-WCYo6L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31xRMkfSaJL._SL1500_.jpg"
+    ]
   },
   {
     "id": 10,
@@ -799,7 +856,16 @@
     "img": "https://m.media-amazon.com/images/I/51Qo6szNjLL._SL1500_.jpg",
     "initial": "G",
     "asin": "B09B678JQC",
-    "youtubeId": "LE92Pm-cpBA"
+    "youtubeId": "LE92Pm-cpBA",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/3109rqs7PIL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51Y3AzXjpuL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41AmcDrU-SL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51NXnHK0qAL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41GmnGGOctL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41LvKrK1yHL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41oIU+uRjsL._SL1500_.jpg"
+    ]
   },
   {
     "id": 11,
@@ -824,7 +890,15 @@
     "img": "https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg",
     "initial": "S",
     "asin": "B000RO0NOW",
-    "youtubeId": "mC-NysO3aHM"
+    "youtubeId": "mC-NysO3aHM",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41+LrAZN3GL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41+j3PEL0TL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31et+bPZWTL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51WSW9FP4hL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41LE4u473GL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/419Y7CoLqjL._SL1500_.jpg"
+    ]
   },
   {
     "id": 12,
@@ -849,7 +923,10 @@
     "img": "https://m.media-amazon.com/images/I/41tz3PhoH9L._SL1000_.jpg",
     "initial": "B",
     "asin": "B07P5NBN5L",
-    "youtubeId": "tgetStLp1PU"
+    "youtubeId": "tgetStLp1PU",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/317t4GQJjoL._SL1500_.jpg"
+    ]
   },
   {
     "id": 13,
@@ -873,7 +950,15 @@
     "grad": "linear-gradient(150deg,#dcc0bd,#955a59)",
     "img": "https://m.media-amazon.com/images/I/51DpfV3dkVL._SL1500_.jpg",
     "initial": "A",
-    "asin": "B0002JVJ2C"
+    "asin": "B0002JVJ2C",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31H3IqcFCrL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41V3PC0lDJL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41qG+1iAkML._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41gUGBGZS+L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/514HH0vyddL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41xdfU65JEL._SL1500_.jpg"
+    ]
   },
   {
     "id": 14,
@@ -897,7 +982,11 @@
     "grad": "linear-gradient(150deg,#daccb0,#9a7d52)",
     "img": "https://m.media-amazon.com/images/I/518jalZnh4L._SL1000_.jpg",
     "initial": "1",
-    "asin": "B00F4A6ZKK"
+    "asin": "B00F4A6ZKK",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41Yg9s5z1UL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31Y6RFUWbFL._SL1500_.jpg"
+    ]
   },
   {
     "id": 15,
@@ -921,7 +1010,13 @@
     "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)",
     "img": "https://m.media-amazon.com/images/I/51bTkvCCQSL._SL1024_.jpg",
     "initial": "M",
-    "asin": "B09FY98RSG"
+    "asin": "B09FY98RSG",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31FqT2mvTrL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41DZw2CxfGL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31HVTXTzQ0L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31B5xORULNL._SL1500_.jpg"
+    ]
   },
   {
     "id": 16,
@@ -945,7 +1040,12 @@
     "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)",
     "img": "https://m.media-amazon.com/images/I/81ZOAYdt2pL._SL1500_.jpg",
     "initial": "C",
-    "asin": "B00F642WEW"
+    "asin": "B00F642WEW",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31f1I3w3XzL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31Ghz0cDDAL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41Gu50imi1L._SL1500_.jpg"
+    ]
   },
   {
     "id": 17,
@@ -969,7 +1069,15 @@
     "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)",
     "img": "https://m.media-amazon.com/images/I/41KgNYHnLFL._SL1500_.jpg",
     "initial": "L",
-    "asin": "B0F6NVR4BX"
+    "asin": "B0F6NVR4BX",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/21vSUumD2dL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/21Xj+CIVXqL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51h9Yxtg50L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51mrWFuEAQL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51X532DWCCL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41wcY97inlL._SL1500_.jpg"
+    ]
   },
   {
     "id": 18,
@@ -993,7 +1101,14 @@
     "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)",
     "img": "https://m.media-amazon.com/images/I/71pKdosF-kL._SL1500_.jpg",
     "initial": "L",
-    "asin": "B0733677R6"
+    "asin": "B0733677R6",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/51nd-r5Gy8L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/3126GbRbKCL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41v6NbDmT8L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41ksU9F5WQL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31vmYjcrZjL._SL1500_.jpg"
+    ]
   },
   {
     "id": 19,
@@ -1017,7 +1132,15 @@
     "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)",
     "img": "https://m.media-amazon.com/images/I/51E+rohqrjL._SL1500_.jpg",
     "initial": "I",
-    "asin": "B08XQNCXMH"
+    "asin": "B08XQNCXMH",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31QyIt9SdtL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31dAR5FMPqL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51Vt8sGdV9L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41nZ1GQNsXL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51yzgO8PUmL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41iu0iKDknL._SL1500_.jpg"
+    ]
   },
   {
     "id": 20,
@@ -1041,7 +1164,11 @@
     "grad": "linear-gradient(150deg,#bcc4c0,#586b62)",
     "img": "https://m.media-amazon.com/images/I/615s65U6x+L._SL1500_.jpg",
     "initial": "O",
-    "asin": "B0BNQPGGZL"
+    "asin": "B0BNQPGGZL",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41JkaUd6BBL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41+j3PEL0TL._SL1500_.jpg"
+    ]
   },
   {
     "id": 21,
@@ -1065,7 +1192,15 @@
     "grad": "linear-gradient(150deg,#dcc0bd,#955a59)",
     "img": "https://m.media-amazon.com/images/I/713JwZYtnsL._SL1500_.jpg",
     "initial": "J",
-    "asin": "B08R2CSXH1"
+    "asin": "B08R2CSXH1",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/317MOjvEg2L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41gsoRE+nuL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51eW8CcaZ+L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41f3mkJZCuL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41JpqTBkXsL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41RNVPdDV-L._SL1500_.jpg"
+    ]
   },
   {
     "id": 22,
@@ -1089,7 +1224,15 @@
     "grad": "linear-gradient(150deg,#daccb0,#9a7d52)",
     "img": "https://m.media-amazon.com/images/I/51KRyUmvmcL._SL1500_.jpg",
     "initial": "F",
-    "asin": "B0010VY4HI"
+    "asin": "B0010VY4HI",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/21IvF0d4MAL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51mMMEnjO2L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41FHgTJtROL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51x48LJGwhL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/3118y-3zOfL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31sl4IkpoTL._SL1500_.jpg"
+    ]
   },
   {
     "id": 23,
@@ -1113,7 +1256,13 @@
     "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)",
     "img": "https://m.media-amazon.com/images/I/51p7ouM7xtL._SL1024_.jpg",
     "initial": "M",
-    "asin": "B01H2D7G72"
+    "asin": "B01H2D7G72",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41l12D9xLHL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/310If76deXL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41UZbI10CfL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51YMmWezHDL._SL1500_.jpg"
+    ]
   },
   {
     "id": 24,
@@ -1138,7 +1287,14 @@
     "img": "https://m.media-amazon.com/images/I/51-fFGx+Y3L._SL1024_.jpg",
     "initial": "T",
     "asin": "B09N3WKW1S",
-    "youtubeId": "PvQ8bonXvCc"
+    "youtubeId": "PvQ8bonXvCc",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31b3DqZvV0L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/317XcOm6O5L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31eNmdD+6CL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/21uxRHNT06L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41gXIWmjHfL._SL1500_.jpg"
+    ]
   },
   {
     "id": 25,
@@ -1162,7 +1318,15 @@
     "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)",
     "img": "https://m.media-amazon.com/images/I/61y-g8NoKcL._SL1500_.jpg",
     "initial": "A",
-    "asin": "B0035BOFRK"
+    "asin": "B0035BOFRK",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31ABTrWwxbL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31R8ykvrX6L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41xoe+64CqL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31pvj97wGNL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51Cy+eoUhtL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31+F7jUU25L._SL1500_.jpg"
+    ]
   },
   {
     "id": 26,
@@ -1186,7 +1350,15 @@
     "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)",
     "img": "https://m.media-amazon.com/images/I/419m37SbQ-L._SL1000_.jpg",
     "initial": "D",
-    "asin": "B06ZZV8BQD"
+    "asin": "B06ZZV8BQD",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31T1nAEsihL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31Z95FwBVcL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41-cCTgBXoL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41LSYjIft5L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41Gm7SswHJL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41VTS-pxveL._SL1500_.jpg"
+    ]
   },
   {
     "id": 27,
@@ -1210,7 +1382,14 @@
     "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)",
     "img": "https://m.media-amazon.com/images/I/61wXNLe0iaL._SL1500_.jpg",
     "initial": "L",
-    "asin": "B072WCC7HB"
+    "asin": "B072WCC7HB",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31Kyl6h6JKL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41r5kSrpAML._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41IysuwD5yL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41gLLJZ+olL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41wNuvXijwL._SL1500_.jpg"
+    ]
   },
   {
     "id": 28,
@@ -1234,7 +1413,14 @@
     "grad": "linear-gradient(150deg,#bcc4c0,#586b62)",
     "img": "https://m.media-amazon.com/images/I/51h-KPGkCWL._SL1500_.jpg",
     "initial": "E",
-    "asin": "B0CZTW6FZ7"
+    "asin": "B0CZTW6FZ7",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/21O8B53qwkL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31X9UMQ9L6L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/316AVcCS3WL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31IR2KWSJtL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51u3SH3aPfL._SL1500_.jpg"
+    ]
   },
   {
     "id": 29,
@@ -1258,7 +1444,15 @@
     "grad": "linear-gradient(150deg,#dcc0bd,#955a59)",
     "img": "https://m.media-amazon.com/images/I/81P3309iYrL._SL1500_.jpg",
     "initial": "B",
-    "asin": "B0FC7PNHHC"
+    "asin": "B0FC7PNHHC",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31xMeIe7BuL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/31sgU06XIxL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51gJebDL3ZL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/513rAMulA-L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41SHq+VUzAL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/414QUaxEQtL._SL1500_.jpg"
+    ]
   },
   {
     "id": 30,
@@ -1282,7 +1476,14 @@
     "grad": "linear-gradient(150deg,#daccb0,#9a7d52)",
     "img": "https://m.media-amazon.com/images/I/61elWQ38Y9L._SL1500_.jpg",
     "initial": "Y",
-    "asin": "B07GB6B37N"
+    "asin": "B07GB6B37N",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/41y2zXT03PL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41zzIWjDlBL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51QUFjPOVWL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/517OEs142vL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41HJcD4WRML._SL1500_.jpg"
+    ]
   },
   {
     "id": 31,
@@ -1306,7 +1507,11 @@
     "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)",
     "img": "https://m.media-amazon.com/images/I/7134Ds7j4dL._SL1000_.jpg",
     "initial": "G",
-    "asin": "B0757ZLMLZ"
+    "asin": "B0757ZLMLZ",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/51+3ZfnChsL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51Pdf-pN20L._SL1500_.jpg"
+    ]
   },
   {
     "id": 32,
@@ -1330,7 +1535,15 @@
     "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)",
     "img": "https://m.media-amazon.com/images/I/51v0HbffdGL._SL1000_.jpg",
     "initial": "L",
-    "asin": "B07X1YGWSX"
+    "asin": "B07X1YGWSX",
+    "gallery": [
+      "https://m.media-amazon.com/images/I/31z47CPVC0L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41L0k6O5gtL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51A+ymUYAoL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41XwbuOjUeL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41DrBQG4D2L._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/41An2mgVIXL._SL1500_.jpg"
+    ]
   },
   {
     "id": 33,
@@ -1542,6 +1755,34 @@
     catalogView.classList.remove('hidden');
   });
 
+  var slideshowTimer = null;
+  function buildSlideshowHtml(p){
+    var imgs = (p.gallery && p.gallery.length) ? p.gallery : [p.img];
+    var kenburns = imgs.length === 1;
+    return '<div class="slideshow" id="prodSlideshow">' +
+      imgs.map(function(src, i){
+        return '<div class="slide' + (i===0?' active':'') + (kenburns?' kenburns':'') + '" data-i="' + i + '">' +
+          '<img src="' + src + '" alt="' + p.name + '" onerror="this.parentElement.style.opacity=0">' +
+        '</div>';
+      }).join('') +
+      (imgs.length > 1 ? '<div class="slide-dots">' + imgs.map(function(_, i){
+        return '<span' + (i===0?' class="active"':'') + '></span>';
+      }).join('') + '</div>' : '') +
+    '</div>';
+  }
+  function startSlideshow(count){
+    if(slideshowTimer) clearInterval(slideshowTimer);
+    if(count <= 1) return;
+    var idx = 0;
+    slideshowTimer = setInterval(function(){
+      idx = (idx + 1) % count;
+      var wrap = document.getElementById('prodSlideshow');
+      if(!wrap){ clearInterval(slideshowTimer); return; }
+      wrap.querySelectorAll('.slide').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+      wrap.querySelectorAll('.slide-dots span').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    }, 3400);
+  }
+
   function renderProduct(p){
     var retailers = retailersTemplate(p);
     var metricsData = [
@@ -1554,7 +1795,7 @@
         '<div>' +
           '<div class="gallery-main" style="background:' + p.grad + '">' +
             '<div class="letter">' + p.initial + '</div>' +
-            '<img src="' + p.img + '" alt="' + p.name + '" onerror="this.style.opacity=0">' +
+            buildSlideshowHtml(p) +
           '</div>' +
           (p.youtubeId ? (
             '<div class="video-block">' +
@@ -1597,6 +1838,7 @@
           '<div class="pyramid-tier"><div class="lbl">' + t('baseNotes') + '</div><div class="chip-row">' + p.base.split(',').map(function(n){return '<span class="chip">'+n.trim()+'</span>';}).join('') + '</div></div>' +
         '</div>' +
       '</div>';
+    startSlideshow((p.gallery && p.gallery.length) ? p.gallery.length : 1);
   }
 
   // ---------- NEWSLETTER ----------
