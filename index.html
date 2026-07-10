@@ -7,7 +7,7 @@
 <meta name="description" content="Magazine, Lab, Tienda y Academia de perfumería. Comparador de 33 fragancias reales: notas, longevidad, estela y proyección.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -24,11 +24,6 @@
     --bg:#0E0C0A;--surface:#17120D;--surface2:#1C1610;--ink:#F2EBDD;--muted:#A39A88;
     --line:rgba(242,235,221,.13);--gold-soft:rgba(201,164,92,.16);--gold:#C9A45C;
   }
-  html[data-style="moderno"]{
-    --fdisp:'Syne',system-ui,sans-serif;--rad:11px;--disp-spacing:-0.02em;--disp-weight:700;
-  }
-  html[data-mode="dark"][data-style="moderno"]{ --gold:#D08A4F; }
-  html[data-mode="light"][data-style="moderno"]{ --gold:#BE7C46; }
 
   body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;
     -webkit-font-smoothing:antialiased;transition:background .5s ease,color .5s ease;overflow-x:hidden}
@@ -284,7 +279,6 @@
     </nav>
     <div class="nav-actions">
       <button class="pill-btn" id="langToggle" type="button">ES</button>
-      <button class="pill-btn" id="styleToggle" type="button">Editorial</button>
       <button class="icon-btn" id="modeToggle" type="button" aria-label="Cambiar modo">☾</button>
     </div>
   </div>
@@ -537,17 +531,13 @@
 
   // ---------- THEME ----------
   var html = document.documentElement;
-  var mode = 'light', styleK = 'editorial';
+  var mode = 'light';
   var modeBtn = document.getElementById('modeToggle');
-  var styleBtn = document.getElementById('styleToggle');
   function applyTheme(){
     html.setAttribute('data-mode', mode);
-    html.setAttribute('data-style', styleK);
     modeBtn.textContent = mode === 'light' ? '☾' : '☀';
-    styleBtn.textContent = styleK === 'editorial' ? 'Editorial' : 'Moderno';
   }
   modeBtn.addEventListener('click', function(){ mode = mode === 'light' ? 'dark' : 'light'; applyTheme(); });
-  styleBtn.addEventListener('click', function(){ styleK = styleK === 'editorial' ? 'moderno' : 'editorial'; applyTheme(); });
   applyTheme();
 
   // ================= DATA =================
