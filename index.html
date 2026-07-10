@@ -90,6 +90,10 @@
   .hero-badge .kicker{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
   .hero-badge .name{font-family:var(--fdisp);font-size:23px;line-height:1.05;color:var(--ink)}
   .hero-badge .sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .hero-badge{cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+  .hero-badge:hover{transform:translateY(-3px)}
+  .hero-frame img{transition:opacity .6s ease}
+  .hero-frame img.swap{opacity:0}
 
   .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:42px;
     border-bottom:1px solid var(--line);padding-bottom:26px;flex-wrap:wrap}
@@ -331,13 +335,13 @@
   </div>
   <div class="hero-art">
     <div class="hero-frame">
-      <div class="letter">A</div>
-      <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=70" alt="Aromia perfume editorial">
+      <div class="letter" id="heroLetter">A</div>
+      <img id="heroImg" src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=70" alt="Aromia perfume editorial">
     </div>
-    <div class="hero-badge glass">
-      <div class="kicker" data-i18n="badgeKicker">Perfume del mes</div>
-      <div class="name">Baccarat Rouge 540</div>
-      <div class="sub">Maison Francis Kurkdjian</div>
+    <div class="hero-badge glass" id="heroBadge" role="button" tabindex="0">
+      <div class="kicker" data-i18n="badgeKicker">Perfume del día</div>
+      <div class="name" id="heroName">Baccarat Rouge 540</div>
+      <div class="sub" id="heroSub">Maison Francis Kurkdjian</div>
     </div>
   </div>
 </section>
@@ -482,7 +486,7 @@
       heroLede:"Magazine, Lab, Tienda y Academia en un solo ecosistema. Compara 33 fragancias reales por temporada, longevidad, notas y estela antes de elegir la que cuenta tu historia.",
       heroCta1:"Explorar el comparador<span>→</span>", heroCta2:"Cómo leer un perfume",
       statFragrances:"Fragancias comparadas", statIngredients:"Familias olfativas", statFilters:"Filtros de búsqueda",
-      badgeKicker:"Perfume del mes",
+      badgeKicker:"Perfume del día",
       collectionKicker:"El Comparador", collectionTitle:"Encuentra tu fragancia ideal",
       filterSearch:"Buscar", filterSeason:"Temporada", filterOccasion:"Ocasión", filterFamily:"Familia / Nota",
       filterLongevity:"Longevidad mínima", filterSillage:"Estela mínima", filterReset:"Limpiar filtros",
@@ -515,7 +519,7 @@
       heroLede:"Magazine, Lab, Shop and Academy in one ecosystem. Compare 33 real fragrances by season, longevity, notes and sillage before choosing the one that tells your story.",
       heroCta1:"Explore the comparator<span>→</span>", heroCta2:"How to read a perfume",
       statFragrances:"Fragrances compared", statIngredients:"Olfactive families", statFilters:"Search filters",
-      badgeKicker:"Perfume of the month",
+      badgeKicker:"Perfume of the day",
       collectionKicker:"The Comparator", collectionTitle:"Find your ideal fragrance",
       filterSearch:"Search", filterSeason:"Season", filterOccasion:"Occasion", filterFamily:"Family / Note",
       filterLongevity:"Min. longevity", filterSillage:"Min. sillage", filterReset:"Clear filters",
@@ -1783,6 +1787,39 @@
     }, 3400);
   }
 
+  function dayOfYear(d){
+    var start = new Date(d.getFullYear(), 0, 0);
+    var diff = d - start;
+    return Math.floor(diff / 86400000);
+  }
+  function initHeroRotation(){
+    if(!perfumes.length) return;
+    var withImg = perfumes.filter(function(p){ return p.img; });
+    var pool = withImg.length ? withImg : perfumes;
+    var idx = dayOfYear(new Date()) % pool.length;
+    var p = pool[idx];
+    var img = document.getElementById('heroImg');
+    var letter = document.getElementById('heroLetter');
+    var badge = document.getElementById('heroBadge');
+    var nameEl = document.getElementById('heroName');
+    var subEl = document.getElementById('heroSub');
+    if(img){
+      img.classList.add('swap');
+      setTimeout(function(){
+        img.src = p.img;
+        img.alt = p.name;
+        img.classList.remove('swap');
+      }, 260);
+    }
+    if(letter) letter.textContent = p.initial || p.name.charAt(0);
+    if(nameEl) nameEl.textContent = p.name;
+    if(subEl) subEl.textContent = p.brand;
+    if(badge){
+      badge.onclick = function(){ openProduct(p.id); };
+      badge.onkeydown = function(e){ if(e.key==='Enter' || e.key===' ') openProduct(p.id); };
+    }
+  }
+
   function renderProduct(p){
     var retailers = retailersTemplate(p);
     var metricsData = [
@@ -1860,6 +1897,7 @@
   };
 
   renderLessons();
+  initHeroRotation();
 })();
 </script>
 </body>
