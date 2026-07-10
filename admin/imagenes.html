@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Imágenes — Aromia Lab</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  :root{
+    --bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#6E675B;
+    --line:rgba(21,18,13,.12);--gold:#B08D4C;--gold-soft:rgba(176,141,76,.13);
+    --ok:#4C7A5E;--warn:#B0654C;
+    --fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;--rad:2px;
+  }
+  html[data-mode="dark"]{
+    --bg:#0E0C0A;--surface:#17120D;--surface2:#1C1610;--ink:#F2EBDD;--muted:#A39A88;
+    --line:rgba(242,235,221,.13);--gold-soft:rgba(201,164,92,.16);--gold:#C9A45C;
+  }
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .glass{background:color-mix(in srgb, var(--surface) 72%, transparent);backdrop-filter:blur(16px) saturate(140%);
+    border:1px solid color-mix(in srgb, var(--gold) 18%, var(--line));
+    box-shadow:0 1px 0 0 color-mix(in srgb, #fff 40%, transparent) inset, 0 20px 40px -28px rgba(20,14,6,.35)}
+
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+    background:color-mix(in srgb, var(--bg) 88%, transparent);border-bottom:1px solid var(--line)}
+  .nav-inner{max-width:1320px;margin:0 auto;padding:15px 30px;display:flex;align-items:center;gap:20px}
+  .brand{font-family:var(--fdisp);font-weight:700;font-size:20px;letter-spacing:.3em;padding-left:.3em}
+  .brand small{display:block;font-family:var(--fbody);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);margin-top:2px;padding-left:0}
+  .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .icon-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--muted);
+    background:transparent;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:14px}
+  .icon-btn:hover{border-color:var(--gold);color:var(--ink)}
+  .pill-btn{font-family:var(--fbody);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+    background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+  .pill-btn:hover{border-color:var(--gold);color:var(--ink)}
+  .pill-btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  html[data-mode="dark"] .pill-btn.primary{background:var(--gold);color:#15120D;border-color:var(--gold)}
+
+  main{max-width:1320px;margin:0 auto;padding:34px 30px 90px}
+  .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  h1{font-family:var(--fdisp);font-weight:600;font-size:clamp(28px,3.6vw,40px);margin:0 0 10px}
+  .lede{color:var(--muted);font-size:14.5px;line-height:1.65;max-width:680px;margin:0 0 26px}
+
+  .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px;padding:16px 18px;
+    border-radius:var(--rad);border:1px solid var(--line)}
+  .toolbar input[type=text]{flex:1;min-width:200px;background:transparent;border:1px solid var(--line);
+    border-radius:999px;padding:9px 16px;color:var(--ink);font-family:var(--fbody);font-size:13px}
+  .toolbar input[type=text]:focus{outline:none;border-color:var(--gold)}
+  .stat{font-size:12px;color:var(--muted);white-space:nowrap}
+  .stat b{color:var(--ink);font-weight:500}
+  select.filter{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px;
+    color:var(--ink);font-family:var(--fbody);font-size:12.5px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;
+    cursor:pointer;transition:.2s;position:relative}
+  .card:hover{border-color:var(--gold);transform:translateY(-3px)}
+  .card-img{aspect-ratio:3/4;background:var(--surface2);display:flex;align-items:center;justify-content:center;
+    overflow:hidden;position:relative}
+  .card-img img{width:100%;height:100%;object-fit:cover}
+  .card-img .fallback{font-family:var(--fdisp);font-size:44px;color:var(--gold);opacity:.5}
+  .badge{position:absolute;top:8px;right:8px;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 9px;border-radius:999px;font-weight:500}
+  .badge.ok{background:color-mix(in srgb, var(--ok) 18%, var(--surface));color:var(--ok)}
+  .badge.warn{background:color-mix(in srgb, var(--warn) 20%, var(--surface));color:var(--warn)}
+  .card-body{padding:12px 13px 14px}
+  .card-body .n{font-family:var(--fdisp);font-weight:600;font-size:15.5px;line-height:1.2;margin-bottom:2px}
+  .card-body .b{font-size:11px;color:var(--muted)}
+
+  .overlay{position:fixed;inset:0;background:rgba(10,8,5,.55);backdrop-filter:blur(3px);z-index:100;
+    display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+  .overlay.show{display:flex}
+  .modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);max-width:760px;width:100%;
+    padding:30px;position:relative}
+  .modal-close{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:999px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;font-size:16px}
+  .modal-close:hover{border-color:var(--gold);color:var(--ink)}
+  .modal-head{display:flex;gap:20px;margin-bottom:22px}
+  .modal-head .thumb{width:100px;height:133px;border-radius:var(--rad);overflow:hidden;background:var(--surface2);
+    flex-shrink:0}
+  .modal-head .thumb img{width:100%;height:100%;object-fit:cover}
+  .modal-head h2{font-family:var(--fdisp);font-weight:600;font-size:24px;margin:0 0 4px}
+  .modal-head .b{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .asin-row{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .asin-row code{background:var(--gold-soft);padding:2px 8px;border-radius:999px;color:var(--ink)}
+
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .tab{padding:10px 16px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tab.active{color:var(--ink);border-color:var(--gold)}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+    margin-bottom:7px}
+  .field input[type=text],.field input[type=url]{width:100%;background:var(--surface2);border:1px solid var(--line);
+    border-radius:var(--rad);padding:11px 14px;color:var(--ink);font-family:var(--fbody);font-size:13.5px}
+  .field input:focus{outline:none;border-color:var(--gold)}
+  .field .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+  .dropzone{border:1.5px dashed var(--line);border-radius:var(--rad);padding:34px 20px;text-align:center;
+    cursor:pointer;transition:.2s}
+  .dropzone:hover,.dropzone.drag{border-color:var(--gold);background:var(--gold-soft)}
+  .dropzone p{margin:0;font-size:13px;color:var(--muted)}
+  .dropzone strong{color:var(--ink)}
+
+  .crop-stage{margin-top:18px;display:none}
+  .crop-stage.show{display:block}
+  .crop-wrap{position:relative;width:100%;max-width:320px;aspect-ratio:3/4;margin:0 auto 14px;overflow:hidden;
+    border-radius:var(--rad);border:1px solid var(--line);background:var(--surface2);cursor:grab}
+  .crop-wrap:active{cursor:grabbing}
+  .crop-wrap img{position:absolute;user-select:none;pointer-events:none}
+  .zoom-row{display:flex;align-items:center;gap:12px;max-width:320px;margin:0 auto}
+  .zoom-row input[type=range]{flex:1;accent-color:var(--gold)}
+  .zoom-row span{font-size:11px;color:var(--muted);width:34px}
+
+  .ai-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .ai-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);
+    background:var(--gold-soft);color:var(--ink);font-size:12px;cursor:pointer}
+  .ai-btn:hover{border-color:var(--gold)}
+  .ai-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6}
+
+  .actions-row{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding-top:20px;
+    border-top:1px solid var(--line)}
+  .actions-row .left{display:flex;gap:10px}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);
+    color:var(--bg);padding:12px 22px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;
+    transition:.3s;z-index:200}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .export-box{margin-top:20px;padding:16px;background:var(--surface2);border-radius:var(--rad);border:1px solid var(--line);
+    display:none}
+  .export-box.show{display:block}
+  .export-box textarea{width:100%;height:120px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--rad);padding:10px;color:var(--ink);font-family:monospace;font-size:11.5px;resize:vertical}
+  .export-box .hint{margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="brand">AROMIA<small>Admin</small></a>
+    <div class="nav-actions">
+      <span class="stat" id="statLine"></span>
+      <button class="icon-btn" id="modeToggle" title="Cambiar modo">☾</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="kicker">Panel interno · no indexado</div>
+  <h1>Gestión de imágenes de producto</h1>
+  <p class="lede">Buscá un perfume, subí o pegá su imagen real, recortala a proporción 3:4 y, si querés, mejorala con IA (nitidez, fondo limpio) antes de asignarla. Al terminar, exportás el bloque de datos listo para aplicar al catálogo.</p>
+
+  <div class="toolbar">
+    <input type="text" id="searchBox" placeholder="Buscar por nombre o marca…">
+    <select class="filter" id="filterStatus">
+      <option value="all">Todos</option>
+      <option value="ok">Con imagen real</option>
+      <option value="missing">Sin imagen real / placeholder</option>
+    </select>
+    <span class="stat" id="filterCount"></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-head">
+      <div class="thumb" id="modalThumb"></div>
+      <div>
+        <h2 id="modalName"></h2>
+        <div class="b" id="modalBrand"></div>
+        <div class="asin-row" id="modalAsinRow"></div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="upload">Subir / pegar imagen</div>
+      <div class="tab" data-tab="ai">Mejorar con IA</div>
+    </div>
+
+    <div class="panel active" id="panel-upload">
+      <div class="field">
+        <label>Pegar URL de imagen (ej. imagen de producto de Amazon)</label>
+        <input type="url" id="urlInput" placeholder="https://m.media-amazon.com/images/...">
+        <div class="hint">Click derecho sobre la foto principal en la página del producto de Amazon → "Copiar dirección de la imagen" → pegar acá.</div>
+      </div>
+      <div class="field">
+        <label>o subir un archivo</label>
+        <div class="dropzone" id="dropzone">
+          <p><strong>Arrastrá una imagen acá</strong> o hacé click para elegir un archivo</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none">
+      </div>
+
+      <div class="crop-stage" id="cropStage">
+        <label style="display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Recorte 3:4 — arrastrá para mover, deslizá para zoom</label>
+        <div class="crop-wrap" id="cropWrap">
+          <img id="cropImg" src="" alt="">
+        </div>
+        <div class="zoom-row">
+          <span>−</span>
+          <input type="range" id="zoomSlider" min="100" max="300" value="100">
+          <span>+</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-ai">
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:0">
+        Aplicá una mejora técnica a la imagen ya cargada: recorte inteligente a 3:4, fondo limpio y nitidez/color consistente.
+        Esto <strong>no</strong> altera el producto real — solo estandariza la presentación entre todas las fotos del catálogo.
+      </p>
+      <div class="ai-row">
+        <button class="ai-btn" id="btnRemoveBg">🧼 Limpiar fondo</button>
+        <button class="ai-btn" id="btnEnhance">✨ Mejorar nitidez/color</button>
+      </div>
+      <p class="ai-note" id="aiStatus">Cargá primero una imagen en la pestaña "Subir / pegar imagen".</p>
+    </div>
+
+    <div class="export-box" id="exportBox">
+      <p class="hint">Copiá este bloque y pasámelo en el chat — lo aplico al catálogo del sitio con el mismo proceso validado que usamos para los demás productos.</p>
+      <textarea id="exportText" readonly></textarea>
+    </div>
+
+    <div class="actions-row">
+      <div class="left">
+        <button class="pill-btn" id="btnReset">Reiniciar</button>
+      </div>
+      <button class="pill-btn primary" id="btnConfirm">Confirmar y generar bloque</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var PERFUMES = [{"id": 1, "name": "Baccarat Rouge 540", "brand": "Maison Francis Kurkdjian", "segment": "Nicho", "family": "Amaderado ambarado", "top": "Azafrán, jazmín", "heart": "Ámbar, sal", "base": "Cedro, abeto", "longevity": 10, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, ocasiones especiales", "gender": "Unisex", "year": 2015, "perfumer": "Francis Kurkdjian", "price": 325, "size": 70, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://m.media-amazon.com/images/I/71xVLhLWrvL._SL1500_.jpg", "initial": "B", "asin": "B074V34X4C"}, {"id": 2, "name": "Santal 33", "brand": "Le Labo", "segment": "Nicho", "family": "Amaderado especiado", "top": "Cardamomo, violeta", "heart": "Cuero, ámbar", "base": "Sándalo, cedro", "longevity": 9, "sillage": 3, "projection": 3, "season": "Todo el año", "occasion": "Casual sofisticado, unisex icónico", "gender": "Unisex", "year": 2011, "perfumer": "Frank Voelkl", "price": 293, "size": 100, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=800&q=70", "initial": "S", "asin": null}, {"id": 3, "name": "Aventus", "brand": "Creed", "segment": "Nicho premium", "family": "Afrutado amaderado", "top": "Piña, bergamota, manzana", "heart": "Rosa, jazmín, abedul", "base": "Ámbar gris, almizcle, roble", "longevity": 9, "sillage": 4, "projection": 4, "season": "Primavera/Otoño", "occasion": "Oficina, día a día con carácter", "gender": "Masculino", "year": 2010, "perfumer": "Olivier Creed", "price": 425, "size": 100, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg", "initial": "A", "asin": "B071CYS5ZZ"}, {"id": 4, "name": "Oud Wood", "brand": "Tom Ford Private Blend", "segment": "Nicho premium", "family": "Amaderado oriental", "top": "Oud, cardamomo", "heart": "Sándalo, palo de rosa", "base": "Vetiver, ámbar", "longevity": 8, "sillage": 3, "projection": 3, "season": "Otoño/Invierno", "occasion": "Noche, eventos formales", "gender": "Unisex", "year": 2007, "perfumer": "Richard Herpin / Christophe Laudamiel", "price": 250, "size": 50, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://m.media-amazon.com/images/I/61HCNHc5LeL._SL1500_.jpg", "initial": "O", "asin": "B01APUYR9E"}, {"id": 5, "name": "Black Orchid", "brand": "Tom Ford", "segment": "Nicho premium", "family": "Floral oriental gourmand", "top": "Trufa negra, ylang-ylang", "heart": "Orquídea negra, especias", "base": "Pachulí, chocolate, vainilla", "longevity": 9, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, seducción", "gender": "Unisex", "year": 2006, "perfumer": "David Apel", "price": 158, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://m.media-amazon.com/images/I/71PbQRLh0KL._SL1500_.jpg", "initial": "B", "asin": "B000PKESNA"}, {"id": 6, "name": "Interlude Man", "brand": "Amouage", "segment": "Nicho premium", "family": "Amaderado especiado ahumado", "top": "Incienso, pimienta rosa", "heart": "Clavo, lavanda", "base": "Ámbar, benjuí, cuero", "longevity": 10, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, personalidad fuerte", "gender": "Masculino", "year": 2012, "perfumer": "Alberto Morillas / Rodrigo Flores-Roux", "price": 345, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://m.media-amazon.com/images/I/61wCYX-x36L._SL1500_.jpg", "initial": "I", "asin": "B0BYTJ68R2"}, {"id": 7, "name": "Reflection Man", "brand": "Amouage", "segment": "Nicho premium", "family": "Floral amaderado", "top": "Bergamota, angélica", "heart": "Jazmín, geranio", "base": "Cedro, ámbar, almizcle", "longevity": 8, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, oficina elegante", "gender": "Masculino", "year": 2007, "perfumer": "Pierre Bourdon", "price": 280, "size": 100, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://m.media-amazon.com/images/I/61yifiaONJL._SL1500_.jpg", "initial": "R", "asin": "B0C3LGBPYX"}, {"id": 8, "name": "La Vie Est Belle", "brand": "Lancôme", "segment": "Diseñador premium", "family": "Floral afrutado gourmand", "top": "Grosella negra, pera", "heart": "Iris, jazmín, azahar", "base": "Praliné, vainilla, pachulí", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Día a día, femenino dulce", "gender": "Femenino", "year": 2012, "perfumer": "Dominique Ropion / Anne Flipo", "price": 98, "size": 75, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://m.media-amazon.com/images/I/61hj1sr5zhL._SL1500_.jpg", "initial": "L", "asin": "B0BC3YNMZN"}, {"id": 9, "name": "Black Opium", "brand": "Yves Saint Laurent", "segment": "Diseñador premium", "family": "Oriental gourmand", "top": "Pera, mandarina, pimienta rosa", "heart": "Café, jazmín, flor de azahar", "base": "Vainilla, pachulí, cedro", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, salidas", "gender": "Femenino", "year": 2014, "perfumer": "Nathalie Lorson / Olivier Cresp / Marie Salamagne", "price": 92, "size": 90, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://m.media-amazon.com/images/I/71w9icubQlL._SL1500_.jpg", "initial": "B", "asin": "B07P9VPR96"}, {"id": 10, "name": "Good Girl", "brand": "Carolina Herrera", "segment": "Diseñador premium", "family": "Oriental floral", "top": "Almendra, café", "heart": "Jazmín sambac, tuberosa", "base": "Cacao, haba tonka, sándalo", "longevity": 9, "sillage": 4, "projection": 5, "season": "Otoño/Invierno", "occasion": "Noche, eventos", "gender": "Femenino", "year": 2016, "perfumer": "Rodrigo Flores-Roux / Louise Turner", "price": 108, "size": 80, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://m.media-amazon.com/images/I/51Qo6szNjLL._SL1500_.jpg", "initial": "G", "asin": "B09B678JQC"}, {"id": 11, "name": "Sauvage", "brand": "Dior", "segment": "Diseñador masivo", "family": "Fresco amaderado especiado", "top": "Bergamota, pimienta", "heart": "Lavanda, geranio", "base": "Ambroxan, cedro, vetiver", "longevity": 7, "sillage": 4, "projection": 5, "season": "Todo el año", "occasion": "Día a día versátil", "gender": "Masculino", "year": 2015, "perfumer": "François Demachy", "price": 95, "size": 100, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg", "initial": "S", "asin": "B000RO0NOW"}, {"id": 12, "name": "Bleu de Chanel", "brand": "Chanel", "segment": "Diseñador masivo", "family": "Amaderado aromático", "top": "Pomelo, menta", "heart": "Jengibre, nuez moscada", "base": "Sándalo, cedro, incienso", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Oficina, versátil elegante", "gender": "Masculino", "year": 2010, "perfumer": "Jacques Polge", "price": 98, "size": 100, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://m.media-amazon.com/images/I/41tz3PhoH9L._SL1000_.jpg", "initial": "B", "asin": "B07P5NBN5L"}, {"id": 13, "name": "Acqua di Giò", "brand": "Giorgio Armani", "segment": "Diseñador masivo", "family": "Acuático aromático", "top": "Bergamota, notas marinas", "heart": "Jazmín, romero", "base": "Cedro, ámbar blanco, almizcle", "longevity": 6, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, verano, casual", "gender": "Masculino", "year": 1996, "perfumer": "Alberto Morillas", "price": 78, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://m.media-amazon.com/images/I/51DpfV3dkVL._SL1500_.jpg", "initial": "A", "asin": "B0002JVJ2C"}, {"id": 14, "name": "1 Million", "brand": "Paco Rabanne", "segment": "Diseñador masivo", "family": "Oriental especiado", "top": "Sangre de mandarina, canela", "heart": "Rosa, especias", "base": "Cuero, ámbar, madera blanca", "longevity": 7, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, salidas", "gender": "Masculino", "year": 2008, "perfumer": "Christophe Raynaud", "price": 72, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://m.media-amazon.com/images/I/518jalZnh4L._SL1000_.jpg", "initial": "1", "asin": "B00F4A6ZKK"}, {"id": 15, "name": "Miss Dior", "brand": "Dior", "segment": "Diseñador masivo", "family": "Floral afrutado chipre", "top": "Mandarina, bayas rosas", "heart": "Peonía, rosa centifolia", "base": "Pachulí, almizcle blanco", "longevity": 7, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, romántico", "gender": "Femenino", "year": 2017, "perfumer": "François Demachy", "price": 105, "size": 100, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://m.media-amazon.com/images/I/51bTkvCCQSL._SL1024_.jpg", "initial": "M", "asin": "B09FY98RSG"}, {"id": 16, "name": "Chance Eau Tendre", "brand": "Chanel", "segment": "Diseñador masivo", "family": "Floral afrutado", "top": "Toronja, quinoa", "heart": "Jazmín, hibisco", "base": "Ámbar blanco, almizcle", "longevity": 6, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, casual femenino", "gender": "Femenino", "year": 2010, "perfumer": "Jacques Polge", "price": 88, "size": 100, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://m.media-amazon.com/images/I/81ZOAYdt2pL._SL1500_.jpg", "initial": "C", "asin": "B00F642WEW"}, {"id": 17, "name": "Light Blue", "brand": "Dolce & Gabbana", "segment": "Diseñador masivo", "family": "Cítrico floral", "top": "Manzana, limón siciliano", "heart": "Bambú, jazmín", "base": "Cedro, almizcle", "longevity": 5, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, verano fresco", "gender": "Femenino", "year": 2001, "perfumer": "Olivier Cresp / Honorine Blanc", "price": 68, "size": 100, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://m.media-amazon.com/images/I/41KgNYHnLFL._SL1500_.jpg", "initial": "L", "asin": "B0F6NVR4BX"}, {"id": 18, "name": "Le Male", "brand": "Jean Paul Gaultier", "segment": "Diseñador masivo", "family": "Oriental aromático fougère", "top": "Menta, lavanda, bergamota", "heart": "Canela, comino", "base": "Vainilla, sándalo, ámbar", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, personalidad", "gender": "Masculino", "year": 1995, "perfumer": "Francis Kurkdjian", "price": 82, "size": 125, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://m.media-amazon.com/images/I/71pKdosF-kL._SL1500_.jpg", "initial": "L", "asin": "B0733677R6"}, {"id": 19, "name": "Invictus", "brand": "Paco Rabanne", "segment": "Diseñador masivo", "family": "Acuático amaderado", "top": "Toronja, mandarina", "heart": "Laurel, jazmín", "base": "Ámbar gris, madera de guayaco", "longevity": 6, "sillage": 3, "projection": 4, "season": "Primavera/Verano", "occasion": "Deporte, día a día", "gender": "Masculino", "year": 2013, "perfumer": "Olivier Pescheux / Dora Baghriche", "price": 65, "size": 100, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://m.media-amazon.com/images/I/51E+rohqrjL._SL1500_.jpg", "initial": "I", "asin": "B08XQNCXMH"}, {"id": 20, "name": "Olympéa", "brand": "Paco Rabanne", "segment": "Diseñador masivo", "family": "Floral amaderado salado", "top": "Flor de sal, mandarina verde", "heart": "Jazmín sambac", "base": "Vainilla, cashmerán, ámbar", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Día a día, femenino moderno", "gender": "Femenino", "year": 2015, "perfumer": "Anne Flipo / Dora Baghriche / Loc Dong", "price": 78, "size": 80, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://m.media-amazon.com/images/I/615s65U6x+L._SL1500_.jpg", "initial": "O", "asin": "B0BNQPGGZL"}, {"id": 21, "name": "Jazz Club", "brand": "Maison Margiela Replica", "segment": "Nicho", "family": "Amaderado especiado", "top": "Pimienta rosa, naranja", "heart": "Ron, tabaco", "base": "Vainilla, haba tonka", "longevity": 6, "sillage": 3, "projection": 3, "season": "Otoño/Invierno", "occasion": "Noche, casual sofisticado", "gender": "Unisex", "year": 2013, "perfumer": "Marie Salamagne", "price": 145, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://m.media-amazon.com/images/I/713JwZYtnsL._SL1500_.jpg", "initial": "J", "asin": "B08R2CSXH1"}, {"id": 22, "name": "Flowerbomb", "brand": "Viktor & Rolf", "segment": "Diseñador premium", "family": "Floral oriental", "top": "Té, bergamota", "heart": "Jazmín, rosa, orquídea", "base": "Pachulí, vainilla, ámbar", "longevity": 9, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, femenino intenso", "gender": "Femenino", "year": 2005, "perfumer": "Olivier Polge / Carlos Benaim / Domitille Bertier / Dominique Ropion / Alberto Morillas", "price": 118, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://m.media-amazon.com/images/I/51KRyUmvmcL._SL1500_.jpg", "initial": "F", "asin": "B0010VY4HI"}, {"id": 23, "name": "Mon Paris", "brand": "Yves Saint Laurent", "segment": "Diseñador premium", "family": "Floral afrutado gourmand", "top": "Frambuesa, bergamota", "heart": "Peonía, jazmín", "base": "Praliné, ámbar gris, pachulí", "longevity": 8, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Día a día romántico", "gender": "Femenino", "year": 2016, "perfumer": "Marie Salamagne / Olivier Cresp / Nathalie Lorson", "price": 95, "size": 90, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://m.media-amazon.com/images/I/51p7ouM7xtL._SL1024_.jpg", "initial": "M", "asin": "B01H2D7G72"}, {"id": 24, "name": "Terre d'Hermès", "brand": "Hermès", "segment": "Diseñador premium", "family": "Amaderado mineral", "top": "Naranja, pomelo", "heart": "Pimienta, geranio", "base": "Vetiver, cedro, benjuí", "longevity": 7, "sillage": 3, "projection": 3, "season": "Todo el año", "occasion": "Oficina, elegante versátil", "gender": "Masculino", "year": 2006, "perfumer": "Jean-Claude Ellena", "price": 105, "size": 100, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://m.media-amazon.com/images/I/51-fFGx+Y3L._SL1024_.jpg", "initial": "T", "asin": "B09N3WKW1S"}, {"id": 25, "name": "Aventus for Her", "brand": "Creed", "segment": "Nicho premium", "family": "Afrutado chipre", "top": "Grosella negra, bergamota", "heart": "Rosa, jazmín, jacinto", "base": "Ámbar gris, almizcle, madera de casis", "longevity": 8, "sillage": 3, "projection": 3, "season": "Primavera/Otoño", "occasion": "Día a día elegante", "gender": "Femenino", "year": 2016, "perfumer": "Olivier Creed / Erwin Creed", "price": 405, "size": 75, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://m.media-amazon.com/images/I/61y-g8NoKcL._SL1500_.jpg", "initial": "A", "asin": "B0035BOFRK"}, {"id": 26, "name": "Delina", "brand": "Parfums de Marly", "segment": "Nicho premium", "family": "Floral afrutado", "top": "Ruibarbo, lichi", "heart": "Peonía, rosa turca, lirio de los valles", "base": "Almizcle, cedro, vainilla", "longevity": 8, "sillage": 4, "projection": 4, "season": "Primavera/Verano", "occasion": "Día a día romántico, bodas", "gender": "Femenino", "year": 2017, "perfumer": "Hamid Merati-Kashani", "price": 195, "size": 75, "grad": "linear-gradient(150deg,#cfd6c4,#6f8367)", "img": "https://m.media-amazon.com/images/I/419m37SbQ-L._SL1000_.jpg", "initial": "D", "asin": "B06ZZV8BQD"}, {"id": 27, "name": "Layton", "brand": "Parfums de Marly", "segment": "Nicho premium", "family": "Floral amaderado especiado", "top": "Manzana, bergamota, lavanda", "heart": "Geranio, violeta", "base": "Vainilla, haba tonka, cedro", "longevity": 9, "sillage": 4, "projection": 4, "season": "Otoño/Invierno", "occasion": "Noche, día versátil", "gender": "Masculino", "year": 2016, "perfumer": "Hamid Merati-Kashani", "price": 195, "size": 125, "grad": "linear-gradient(150deg,#cdc1d8,#6a5a7e)", "img": "https://m.media-amazon.com/images/I/61wXNLe0iaL._SL1500_.jpg", "initial": "L", "asin": "B072WCC7HB"}, {"id": 28, "name": "Erba Pura", "brand": "Xerjoff", "segment": "Nicho premium", "family": "Cítrico afrutado", "top": "Bergamota, limón, piña", "heart": "Fresa, algodón de azúcar", "base": "Almizcle, madera", "longevity": 6, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, casual alegre", "gender": "Unisex", "year": 2016, "perfumer": "Christian Provenzano", "price": 240, "size": 100, "grad": "linear-gradient(150deg,#bcc4c0,#586b62)", "img": "https://m.media-amazon.com/images/I/51h-KPGkCWL._SL1500_.jpg", "initial": "E", "asin": "B0CZTW6FZ7"}, {"id": 29, "name": "Boss Bottled", "brand": "Hugo Boss", "segment": "Diseñador masivo", "family": "Amaderado afrutado", "top": "Manzana, ciruela, bergamota", "heart": "Canela, geranio, clavo", "base": "Sándalo, vetiver, cedro", "longevity": 7, "sillage": 3, "projection": 3, "season": "Todo el año", "occasion": "Oficina, profesional", "gender": "Masculino", "year": 1998, "perfumer": "Annick Menardo", "price": 62, "size": 100, "grad": "linear-gradient(150deg,#dcc0bd,#955a59)", "img": "https://m.media-amazon.com/images/I/81P3309iYrL._SL1500_.jpg", "initial": "B", "asin": "B0FC7PNHHC"}, {"id": 30, "name": "Y Eau de Parfum", "brand": "Yves Saint Laurent", "segment": "Diseñador masivo", "family": "Aromático amaderado", "top": "Manzana, bergamota, jengibre", "heart": "Salvia, geranio", "base": "Ámbar gris, haba tonka, cedro", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Oficina, versátil", "gender": "Masculino", "year": 2018, "perfumer": "Dominique Ropion / Anne Flipo / Jacques Cavallier-Belletrud / Nathalie Lorson", "price": 95, "size": 100, "grad": "linear-gradient(150deg,#daccb0,#9a7d52)", "img": "https://m.media-amazon.com/images/I/61elWQ38Y9L._SL1500_.jpg", "initial": "Y", "asin": "B07GB6B37N"}, {"id": 31, "name": "Gucci Bloom", "brand": "Gucci", "segment": "Diseñador premium", "family": "Floral blanco", "top": "Jazmín sambac", "heart": "Tuberosa, azucena", "base": "Almizcle blanco", "longevity": 7, "sillage": 3, "projection": 3, "season": "Primavera/Verano", "occasion": "Día, femenino floral intenso", "gender": "Femenino", "year": 2017, "perfumer": "Alberto Morillas", "price": 98, "size": 100, "grad": "linear-gradient(150deg,#e7d98a,#b89a2e)", "img": "https://m.media-amazon.com/images/I/7134Ds7j4dL._SL1000_.jpg", "initial": "G", "asin": "B0757ZLMLZ"}, {"id": 32, "name": "Libre", "brand": "Yves Saint Laurent", "segment": "Diseñador premium", "family": "Floral amaderado especiado", "top": "Lavanda, mandarina", "heart": "Flor de azahar, jazmín", "base": "Vainilla de Madagascar, cedro, almizcle blanco", "longevity": 8, "sillage": 4, "projection": 4, "season": "Todo el año", "occasion": "Día a día, personalidad fuerte", "gender": "Femenino", "year": 2019, "perfumer": "Anne Flipo / Carlos Benaim / Fabrice Pellegrin / Dominique Ropion", "price": 102, "size": 90, "grad": "linear-gradient(150deg,#cdd6a8,#7d8a4e)", "img": "https://m.media-amazon.com/images/I/51v0HbffdGL._SL1000_.jpg", "initial": "L", "asin": "B07X1YGWSX"}, {"id": 33, "name": "Angel", "brand": "Mugler", "segment": "Diseñador premium", "family": "Oriental gourmand", "top": "Bergamota, mandarina", "heart": "Miel, praliné", "base": "Pachulí, chocolate, vainilla", "longevity": 9, "sillage": 5, "projection": 5, "season": "Otoño/Invierno", "occasion": "Noche, distintivo intenso", "gender": "Femenino", "year": 1992, "perfumer": "Olivier Cresp / Yves de Chirin", "price": 88, "size": 100, "grad": "linear-gradient(150deg,#cbb393,#7a5f3c)", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=70", "initial": "A", "asin": null}];
+
+  var mode = 'light';
+  var modeBtn = document.getElementById('modeToggle');
+  modeBtn.addEventListener('click', function(){
+    mode = mode === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-mode', mode);
+    modeBtn.textContent = mode === 'light' ? '☾' : '☀';
+  });
+
+  var grid = document.getElementById('grid');
+  var searchBox = document.getElementById('searchBox');
+  var filterStatus = document.getElementById('filterStatus');
+  var filterCount = document.getElementById('filterCount');
+  var statLine = document.getElementById('statLine');
+
+  function isRealImg(p){
+    return p.img && p.img.indexOf('media-amazon.com') !== -1;
+  }
+
+  function renderGrid(){
+    var q = searchBox.value.trim().toLowerCase();
+    var f = filterStatus.value;
+    var list = PERFUMES.filter(function(p){
+      var matchQ = !q || p.name.toLowerCase().indexOf(q) !== -1 || p.brand.toLowerCase().indexOf(q) !== -1;
+      var real = isRealImg(p);
+      var matchF = f === 'all' || (f === 'ok' && real) || (f === 'missing' && !real);
+      return matchQ && matchF;
+    });
+    filterCount.textContent = list.length + ' / ' + PERFUMES.length;
+    grid.innerHTML = '';
+    list.forEach(function(p){
+      var real = isRealImg(p);
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML =
+        '<div class="card-img" style="background:'+(p.grad||'var(--surface2)')+'">'+
+          (p.img ? '<img src="'+p.img+'" alt="">' : '<div class="fallback">'+(p.initial||'?')+'</div>')+
+          '<span class="badge '+(real?'ok':'warn')+'">'+(real?'Real':(p.asin?'Placeholder':'Sin ASIN'))+'</span>'+
+        '</div>'+
+        '<div class="card-body"><div class="n">'+p.name+'</div><div class="b">'+p.brand+'</div></div>';
+      card.addEventListener('click', function(){ openModal(p); });
+      grid.appendChild(card);
+    });
+  }
+  searchBox.addEventListener('input', renderGrid);
+  filterStatus.addEventListener('change', renderGrid);
+
+  function updateStatLine(){
+    var real = PERFUMES.filter(isRealImg).length;
+    statLine.textContent = real + ' / ' + PERFUMES.length + ' con imagen real';
+  }
+
+  // ---- Modal ----
+  var overlay = document.getElementById('overlay');
+  var current = null;
+  var currentImageDataUrl = null; // imagen cargada (url remota o archivo local) lista para recorte
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+
+  function openModal(p){
+    current = p;
+    currentImageDataUrl = null;
+    document.getElementById('modalName').textContent = p.name;
+    document.getElementById('modalBrand').textContent = p.brand;
+    document.getElementById('modalThumb').innerHTML = p.img ? '<img src="'+p.img+'">' : '';
+    document.getElementById('modalAsinRow').innerHTML = p.asin
+      ? 'ASIN: <code>'+p.asin+'</code>'
+      : '<span style="color:var(--warn)">Sin ASIN asignado todavía</span>';
+    document.getElementById('urlInput').value = '';
+    document.getElementById('cropStage').classList.remove('show');
+    document.getElementById('exportBox').classList.remove('show');
+    document.getElementById('aiStatus').textContent = 'Cargá primero una imagen en la pestaña "Subir / pegar imagen".';
+    switchTab('upload');
+    overlay.classList.add('show');
+  }
+  function closeModal(){ overlay.classList.remove('show'); current = null; }
+
+  // ---- Tabs ----
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){ switchTab(t.getAttribute('data-tab')); });
+  });
+  function switchTab(name){
+    document.querySelectorAll('.tab').forEach(function(t){
+      t.classList.toggle('active', t.getAttribute('data-tab') === name);
+    });
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.id === 'panel-' + name);
+    });
+  }
+
+  // ---- Carga por URL ----
+  document.getElementById('urlInput').addEventListener('change', function(){
+    var url = this.value.trim();
+    if(!url) return;
+    loadImageIntoCropper(url);
+  });
+
+  // ---- Drag & drop / file input ----
+  var dropzone = document.getElementById('dropzone');
+  var fileInput = document.getElementById('fileInput');
+  dropzone.addEventListener('click', function(){ fileInput.click(); });
+  dropzone.addEventListener('dragover', function(e){ e.preventDefault(); dropzone.classList.add('drag'); });
+  dropzone.addEventListener('dragleave', function(){ dropzone.classList.remove('drag'); });
+  dropzone.addEventListener('drop', function(e){
+    e.preventDefault(); dropzone.classList.remove('drag');
+    if(e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', function(){
+    if(this.files && this.files[0]) handleFile(this.files[0]);
+  });
+  function handleFile(file){
+    var reader = new FileReader();
+    reader.onload = function(e){ loadImageIntoCropper(e.target.result); };
+    reader.readAsDataURL(file);
+  }
+
+  // ---- Cropper (pan + zoom simple) ----
+  var cropStage = document.getElementById('cropStage');
+  var cropWrap = document.getElementById('cropWrap');
+  var cropImg = document.getElementById('cropImg');
+  var zoomSlider = document.getElementById('zoomSlider');
+  var imgState = {natW:0, natH:0, scale:1, x:0, y:0, dragging:false, startX:0, startY:0};
+
+  function loadImageIntoCropper(src){
+    cropImg.crossOrigin = 'anonymous';
+    cropImg.onload = function(){
+      imgState.natW = cropImg.naturalWidth;
+      imgState.natH = cropImg.naturalHeight;
+      fitImage();
+      cropStage.classList.add('show');
+      document.getElementById('aiStatus').textContent = 'Imagen cargada. Ya podés aplicar mejoras con IA.';
+    };
+    cropImg.onerror = function(){
+      showToast('No se pudo cargar esa imagen (revisá la URL o probá subiendo el archivo).');
+    };
+    cropImg.src = src;
+    currentImageDataUrl = src;
+  }
+
+  function fitImage(){
+    var wrapW = cropWrap.clientWidth, wrapH = cropWrap.clientHeight;
+    var scale = Math.max(wrapW / imgState.natW, wrapH / imgState.natH);
+    imgState.scale = scale;
+    imgState.x = (wrapW - imgState.natW*scale)/2;
+    imgState.y = (wrapH - imgState.natH*scale)/2;
+    zoomSlider.value = 100;
+    applyTransform();
+  }
+  function applyTransform(){
+    cropImg.style.width = (imgState.natW*imgState.scale)+'px';
+    cropImg.style.height = (imgState.natH*imgState.scale)+'px';
+    cropImg.style.left = imgState.x+'px';
+    cropImg.style.top = imgState.y+'px';
+  }
+  zoomSlider.addEventListener('input', function(){
+    var wrapW = cropWrap.clientWidth, wrapH = cropWrap.clientHeight;
+    var baseScale = Math.max(wrapW / imgState.natW, wrapH / imgState.natH);
+    var factor = this.value/100;
+    var cx = wrapW/2, cy = wrapH/2;
+    var oldScale = imgState.scale;
+    imgState.scale = baseScale*factor;
+    var ratio = imgState.scale/oldScale;
+    imgState.x = cx - (cx - imgState.x)*ratio;
+    imgState.y = cy - (cy - imgState.y)*ratio;
+    clampPan();
+    applyTransform();
+  });
+  cropWrap.addEventListener('pointerdown', function(e){
+    imgState.dragging = true; imgState.startX = e.clientX - imgState.x; imgState.startY = e.clientY - imgState.y;
+    cropWrap.setPointerCapture(e.pointerId);
+  });
+  cropWrap.addEventListener('pointermove', function(e){
+    if(!imgState.dragging) return;
+    imgState.x = e.clientX - imgState.startX; imgState.y = e.clientY - imgState.startY;
+    clampPan(); applyTransform();
+  });
+  cropWrap.addEventListener('pointerup', function(){ imgState.dragging = false; });
+  cropWrap.addEventListener('pointercancel', function(){ imgState.dragging = false; });
+  function clampPan(){
+    var wrapW = cropWrap.clientWidth, wrapH = cropWrap.clientHeight;
+    var w = imgState.natW*imgState.scale, h = imgState.natH*imgState.scale;
+    imgState.x = Math.min(0, Math.max(wrapW - w, imgState.x));
+    imgState.y = Math.min(0, Math.max(wrapH - h, imgState.y));
+  }
+
+  function getCroppedDataUrl(){
+    var wrapW = cropWrap.clientWidth, wrapH = cropWrap.clientHeight;
+    var outW = 900, outH = 1200; // 3:4
+    var canvas = document.createElement('canvas');
+    canvas.width = outW; canvas.height = outH;
+    var ctx = canvas.getContext('2d');
+    var sx = (-imgState.x) * (imgState.natW/(imgState.natW*imgState.scale));
+    var sy = (-imgState.y) * (imgState.natH/(imgState.natH*imgState.scale));
+    var sw = wrapW / imgState.scale, sh = wrapH / imgState.scale;
+    try{
+      ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, outW, outH);
+      return canvas.toDataURL('image/jpeg', 0.92);
+    }catch(err){
+      return null; // imagen cross-origin sin CORS habilitado
+    }
+  }
+
+  // ---- IA (placeholder de integración — requiere conexión aparte) ----
+  document.getElementById('btnRemoveBg').addEventListener('click', function(){
+    document.getElementById('aiStatus').textContent = 'Para usar "Limpiar fondo" con IA, pedile a Cowork en el chat que lo aplique a esta imagen — la integración de edición IA se conecta desde ahí.';
+  });
+  document.getElementById('btnEnhance').addEventListener('click', function(){
+    document.getElementById('aiStatus').textContent = 'Para usar "Mejorar nitidez/color" con IA, pedile a Cowork en el chat que lo aplique a esta imagen — la integración de edición IA se conecta desde ahí.';
+  });
+
+  // ---- Confirmar / exportar ----
+  document.getElementById('btnReset').addEventListener('click', function(){
+    document.getElementById('urlInput').value = '';
+    cropStage.classList.remove('show');
+    document.getElementById('exportBox').classList.remove('show');
+    currentImageDataUrl = null;
+  });
+
+  document.getElementById('btnConfirm').addEventListener('click', function(){
+    if(!current){ return; }
+    var finalUrl = null;
+    var urlVal = document.getElementById('urlInput').value.trim();
+    if(cropStage.classList.contains('show')){
+      var cropped = getCroppedDataUrl();
+      if(cropped){
+        finalUrl = cropped;
+      } else if(urlVal){
+        finalUrl = urlVal; // fallback: usar la URL directa si el recorte no pudo exportarse (CORS)
+      }
+    } else if(urlVal){
+      finalUrl = urlVal;
+    }
+    if(!finalUrl){
+      showToast('Cargá y recortá una imagen antes de confirmar.');
+      return;
+    }
+    var block = {
+      id: current.id,
+      name: current.name,
+      asin: current.asin || null,
+      img: finalUrl.indexOf('data:') === 0 ? '[imagen recortada adjunta — ver archivo]' : finalUrl
+    };
+    document.getElementById('exportText').value = JSON.stringify(block, null, 2);
+    document.getElementById('exportBox').classList.add('show');
+    showToast('Bloque generado. Copialo y pasámelo en el chat.');
+
+    // si es una imagen recortada localmente, ofrecemos también la descarga directa
+    if(finalUrl.indexOf('data:') === 0){
+      var a = document.createElement('a');
+      a.href = finalUrl;
+      a.download = 'aromia_' + current.id + '_' + current.name.toLowerCase().replace(/[^a-z0-9]+/g,'-') + '.jpg';
+      a.textContent = 'Descargar imagen recortada';
+      a.style.cssText = 'display:inline-block;margin-top:10px;font-size:12px;color:var(--gold)';
+      var box = document.getElementById('exportBox');
+      var prevLink = box.querySelector('a');
+      if(prevLink) prevLink.remove();
+      box.appendChild(a);
+    }
+  });
+
+  // ---- Toast ----
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 3200);
+  }
+
+  renderGrid();
+  updateStatLine();
+})();
+</script>
+
+</body>
+</html>
