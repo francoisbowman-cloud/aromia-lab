@@ -177,6 +177,59 @@
   .page-btn.active{background:var(--gold);border-color:var(--gold);color:#fff}
   .page-btn:hover{border-color:var(--gold)}
 
+  /* ---------- COMPARADOR CARA A CARA ---------- */
+  .cmp-toggle{position:absolute;top:12px;left:12px;z-index:4;width:26px;height:26px;border-radius:999px;
+    border:1px solid color-mix(in srgb, #fff 40%, transparent);background:color-mix(in srgb, var(--bg) 60%, transparent);
+    backdrop-filter:blur(8px);color:var(--ink);font-size:14px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:.2s}
+  .cmp-toggle.active{background:var(--gold);border-color:var(--gold);color:#fff}
+  .cmp-toggle:hover{border-color:var(--gold)}
+  .card-img{position:relative}
+
+  .cmp-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;transform:translateY(120%);transition:transform .4s cubic-bezier(.16,1,.3,1);
+    background:color-mix(in srgb, var(--surface) 92%, transparent);backdrop-filter:blur(16px) saturate(140%);
+    border-top:1px solid var(--line);box-shadow:0 -20px 40px -28px rgba(20,14,6,.35)}
+  .cmp-bar.show{transform:translateY(0)}
+  .cmp-bar-inner{max-width:1240px;margin:0 auto;padding:14px 30px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .cmp-slots{display:flex;gap:10px;flex:1;flex-wrap:wrap}
+  .cmp-slot{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);
+    border-radius:999px;padding:6px 8px 6px 6px;font-size:12.5px}
+  .cmp-slot img{width:26px;height:26px;border-radius:999px;object-fit:cover}
+  .cmp-slot button{border:none;background:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 2px}
+  .cmp-slot button:hover{color:var(--gold)}
+  .cmp-bar-actions{display:flex;align-items:center;gap:10px}
+  .cmp-clear{font-size:11.5px;color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;
+    padding:9px 14px;cursor:pointer}
+  .cmp-clear:hover{border-color:var(--gold);color:var(--ink)}
+  .cmp-go{font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--bg);
+    border:none;border-radius:999px;padding:10px 20px;cursor:pointer;white-space:nowrap}
+  .cmp-go:hover{background:var(--gold);color:#fff}
+  .cmp-go:disabled{opacity:.4;cursor:not-allowed}
+
+  .cmp-overlay{position:fixed;inset:0;background:rgba(10,8,5,.6);backdrop-filter:blur(4px);z-index:90;
+    display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+  .cmp-overlay.show{display:flex}
+  .cmp-modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);max-width:1100px;width:100%;
+    padding:32px;position:relative}
+  .cmp-close{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:999px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;font-size:16px;z-index:2}
+  .cmp-close:hover{border-color:var(--gold);color:var(--ink)}
+  .cmp-modal h2{font-family:var(--fdisp);font-weight:600;font-size:28px;margin:0 0 24px}
+  .cmp-table{width:100%;border-collapse:collapse;overflow-x:auto;display:block}
+  .cmp-table thead{display:table;width:100%;table-layout:fixed}
+  .cmp-table tbody{display:table;width:100%;table-layout:fixed}
+  .cmp-table th, .cmp-table td{border:1px solid var(--line);padding:14px 16px;text-align:left;font-size:13.5px;vertical-align:top}
+  .cmp-table th.rowlabel, .cmp-table td.rowlabel{background:var(--surface2);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--gold);width:150px;font-weight:500}
+  .cmp-th-prod{background:var(--surface)}
+  .cmp-th-img{width:100%;aspect-ratio:1/1;border-radius:var(--rad);overflow:hidden;margin-bottom:10px;background:var(--surface2)}
+  .cmp-th-img img{width:100%;height:100%;object-fit:cover}
+  .cmp-th-name{font-family:var(--fdisp);font-weight:600;font-size:17px;line-height:1.15;margin-bottom:4px}
+  .cmp-th-brand{font-size:12px;color:var(--muted)}
+  .cmp-th-link{display:inline-block;margin-top:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:2px}
+  @media(max-width:800px){.cmp-modal{padding:22px}.cmp-table th, .cmp-table td{padding:10px 12px;font-size:12.5px}}
+
   .back-link{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--muted);text-decoration:none;margin-bottom:24px;cursor:pointer;background:none;border:none;padding:0}
   .back-link:hover{color:var(--gold)}
@@ -308,8 +361,8 @@
     <nav class="links">
       <a href="magazine.html" data-i18n="navMagazine">Magazine</a>
       <a href="#tienda" data-i18n="navTienda">Tienda</a>
-      <a href="#academia" data-i18n="navAcademia">Academia</a>
-      <a href="#academia" data-i18n="navClub">Club</a>
+      <a href="academia.html" data-i18n="navAcademia">Academia</a>
+      <a href="club.html" data-i18n="navClub">Club</a>
     </nav>
     <div class="nav-actions">
       <button class="pill-btn" id="langToggle" type="button">ES</button>
@@ -328,9 +381,9 @@
       <a href="#academia" class="link-underline" data-i18n="heroCta2">Cómo leer un perfume</a>
     </div>
     <div class="stat-row">
-      <div class="stat"><b>33</b><span data-i18n="statFragrances">Fragancias comparadas</span></div>
-      <div class="stat"><b>8</b><span data-i18n="statIngredients">Familias olfativas</span></div>
-      <div class="stat"><b>6</b><span data-i18n="statFilters">Filtros de búsqueda</span></div>
+      <div class="stat"><b id="statFragranciesNum">33</b><span data-i18n="statFragrances">Fragancias comparadas</span></div>
+      <div class="stat"><b id="statFamiliesNum">8</b><span data-i18n="statIngredients">Familias olfativas</span></div>
+      <div class="stat"><b id="statFiltersNum">6</b><span data-i18n="statFilters">Filtros de búsqueda</span></div>
     </div>
   </div>
   <div class="hero-art">
@@ -418,6 +471,9 @@
       <p data-i18n="academiaLede">Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.</p>
     </div>
     <div class="grid-3" id="lessons" style="margin-bottom:0"></div>
+    <div style="text-align:center;margin-top:34px">
+      <a href="academia.html" class="link-underline" data-i18n="academiaCta">Ver la Academia completa →</a>
+    </div>
   </div>
 </section>
 
@@ -445,14 +501,13 @@
       <div class="footer-links">
         <a href="magazine.html" data-i18n="navMagazine">Magazine</a>
         <a href="#tienda" data-i18n="navTienda">Tienda</a>
-        <a href="#academia" data-i18n="navAcademia">Academia</a>
+        <a href="academia.html" data-i18n="navAcademia">Academia</a>
       </div>
     </div>
     <div>
       <div class="footer-h" data-i18n="footerCommunity">Comunidad</div>
       <div class="footer-links">
-        <a href="#" data-i18n="navClub">Club</a>
-        <a href="#">Aromia AI</a>
+        <a href="club.html" data-i18n="navClub">Club</a>
         <a href="#" data-i18n="footerReviews">Reseñas</a>
         <a href="#" data-i18n="footerAbout">Sobre Aromia</a>
         <a href="privacidad.html" data-i18n="footerPrivacy">Política de Privacidad</a>
@@ -494,6 +549,7 @@
       backToComparator:"Volver al comparador",
       academiaKicker:"Academia Aromia", academiaTitle:"Cómo leer una fragancia",
       academiaLede:"Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.",
+      academiaCta:"Ver la Academia completa →",
       newsletterKicker:"La Carta de Aromia", newsletterTitle:"Una fragancia, una historia, cada domingo.",
       newsletterLede:"Reseñas honestas, comparativas en profundidad y lanzamientos del Lab. Sin ruido, sin spam.",
       newsletterBtn:"Suscribirme",
@@ -527,6 +583,7 @@
       backToComparator:"Back to comparator",
       academiaKicker:"Aromia Academy", academiaTitle:"How to read a fragrance",
       academiaLede:"Understand before you buy. Three concepts that will change forever how you choose a perfume.",
+      academiaCta:"See the full Academy →",
       newsletterKicker:"The Aromia Letter", newsletterTitle:"One fragrance, one story, every Sunday.",
       newsletterLede:"Honest reviews, in-depth comparisons and Lab releases. No noise, no spam.",
       newsletterBtn:"Subscribe",
@@ -1629,6 +1686,19 @@
   populateSelect('fOccasion', occasions);
   populateSelect('fFamily', families);
 
+  // ---------- HERO STATS (dinámicas, reflejan el catálogo real) ----------
+  (function updateHeroStats(){
+    var fEl = document.getElementById('statFragranciesNum');
+    var famEl = document.getElementById('statFamiliesNum');
+    var filtEl = document.getElementById('statFiltersNum');
+    if(fEl) fEl.textContent = perfumes.length;
+    if(famEl) famEl.textContent = families.length;
+    if(filtEl){
+      var filterInputs = ['fSearch','fSeason','fOccasion','fFamily','fLongevity','fSillage'];
+      filtEl.textContent = filterInputs.length;
+    }
+  })();
+
   // ---------- FILTER STATE ----------
   var filters = { search:'', season:'', occasion:'', family:'', longevity:0, sillage:0 };
   var currentPage = 1;
@@ -1675,6 +1745,104 @@
   var resultsCountEl = document.getElementById('resultsCount');
   var paginationEl = document.getElementById('pagination');
 
+  // ---------- COMPARADOR CARA A CARA ----------
+  var compareList = [];
+  var cmpBar = document.getElementById('cmpBar');
+  var cmpSlots = document.getElementById('cmpSlots');
+  var cmpGo = document.getElementById('cmpGo');
+  var cmpCount = document.getElementById('cmpCount');
+  var cmpOverlay = document.getElementById('cmpOverlay');
+  var cmpTableWrap = document.getElementById('cmpTableWrap');
+
+  window.__toggleCompare = function(id){
+    var idx = compareList.indexOf(id);
+    if(idx > -1){
+      compareList.splice(idx, 1);
+    } else {
+      if(compareList.length >= 4){
+        showCmpLimitHint();
+        return;
+      }
+      compareList.push(id);
+    }
+    renderCmpBar();
+    document.querySelectorAll('.cmp-toggle').forEach(function(btn){
+      var bid = parseInt(btn.getAttribute('data-cmp-id'), 10);
+      btn.classList.toggle('active', compareList.indexOf(bid) > -1);
+    });
+  };
+
+  function showCmpLimitHint(){
+    cmpGo.textContent = 'Máximo 4';
+    setTimeout(function(){ cmpGo.innerHTML = 'Comparar (<span id="cmpCount">' + compareList.length + '</span>/4)'; }, 1400);
+  }
+
+  function renderCmpBar(){
+    cmpSlots.innerHTML = '';
+    compareList.forEach(function(id){
+      var p = perfumes.find(function(x){ return x.id === id; });
+      if(!p) return;
+      var slot = document.createElement('div');
+      slot.className = 'cmp-slot';
+      slot.innerHTML = '<img src="' + p.img + '" alt="' + p.name + '"><span>' + p.name + '</span>' +
+        '<button onclick="window.__toggleCompare(' + p.id + ')">✕</button>';
+      cmpSlots.appendChild(slot);
+    });
+    cmpCount.textContent = compareList.length;
+    cmpGo.disabled = compareList.length < 2;
+    cmpBar.classList.toggle('show', compareList.length > 0);
+  }
+
+  document.getElementById('cmpClear').addEventListener('click', function(){
+    compareList = [];
+    renderCmpBar();
+    document.querySelectorAll('.cmp-toggle').forEach(function(btn){ btn.classList.remove('active'); });
+  });
+
+  cmpGo.addEventListener('click', function(){
+    if(compareList.length < 2) return;
+    renderCmpTable();
+    cmpOverlay.classList.add('show');
+  });
+  document.getElementById('cmpClose').addEventListener('click', function(){ cmpOverlay.classList.remove('show'); });
+  cmpOverlay.addEventListener('click', function(e){ if(e.target === cmpOverlay) cmpOverlay.classList.remove('show'); });
+
+  function renderCmpTable(){
+    var items = compareList.map(function(id){ return perfumes.find(function(x){ return x.id === id; }); }).filter(Boolean);
+    var rows = [
+      ['Marca', function(p){ return p.brand; }],
+      ['Familia', function(p){ return p.family; }],
+      ['Notas de salida', function(p){ return p.top; }],
+      ['Notas de corazón', function(p){ return p.heart; }],
+      ['Notas de fondo', function(p){ return p.base; }],
+      ['Longevidad', function(p){ return p.longevity + ' h'; }],
+      ['Estela', function(p){ return p.sillage + '/5'; }],
+      ['Proyección', function(p){ return p.projection + '/5'; }],
+      ['Temporada', function(p){ return p.season; }],
+      ['Ocasión', function(p){ return p.occasion; }],
+      ['Género', function(p){ return p.gender; }],
+      ['Año', function(p){ return p.year; }],
+      ['Perfumista', function(p){ return p.perfumer; }],
+      ['Precio', function(p){ return '$' + p.price + ' · ' + p.size + ' ml'; }]
+    ];
+    var html2 = '<table class="cmp-table">' +
+      '<thead><tr><th class="rowlabel"></th>' + items.map(function(p){
+        return '<th class="cmp-th-prod">' +
+          '<div class="cmp-th-img"><img src="' + p.img + '" alt="' + p.name + '"></div>' +
+          '<div class="cmp-th-name">' + p.name + '</div>' +
+          '<div class="cmp-th-brand">' + p.brand + '</div>' +
+          '<a class="cmp-th-link" href="javascript:void(0)" onclick="document.getElementById(\'cmpOverlay\').classList.remove(\'show\'); window.openProduct(' + p.id + ');">Ver ficha →</a>' +
+        '</th>';
+      }).join('') + '</tr></thead><tbody>' +
+      rows.map(function(r){
+        return '<tr><td class="rowlabel">' + r[0] + '</td>' + items.map(function(p){
+          return '<td>' + r[1](p) + '</td>';
+        }).join('') + '</tr>';
+      }).join('') +
+      '</tbody></table>';
+    cmpTableWrap.innerHTML = html2;
+  }
+
   function renderCollection(){
     var list = filteredPerfumes();
     resultsCountEl.textContent = t('resultsCount')(list.length);
@@ -1697,6 +1865,7 @@
       a.style.animationDelay = (idx * 0.05) + 's';
       a.innerHTML =
         '<div class="card-img" style="background:' + p.grad + '">' +
+          '<button class="cmp-toggle' + (compareList.indexOf(p.id)>-1?' active':'') + '" data-cmp-id="' + p.id + '" title="Comparar" onclick="event.stopPropagation(); event.preventDefault(); window.__toggleCompare(' + p.id + ');">+</button>' +
           '<div class="letter">' + p.initial + '</div>' +
           '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" onerror="this.style.opacity=0">' +
           '<div class="card-tag">' + p.family + '</div>' +
@@ -1746,6 +1915,7 @@
   var productDetail = document.getElementById('productDetail');
   var backBtn = document.getElementById('backBtn');
 
+  window.openProduct = openProduct;
   function openProduct(id){
     currentProduct = perfumes.find(function(p){ return p.id === id; });
     renderProduct(currentProduct);
@@ -1900,5 +2070,23 @@
   initHeroRotation();
 })();
 </script>
+<div class="cmp-bar" id="cmpBar">
+  <div class="cmp-bar-inner">
+    <div class="cmp-slots" id="cmpSlots"></div>
+    <div class="cmp-bar-actions">
+      <button class="cmp-clear" id="cmpClear">Vaciar</button>
+      <button class="cmp-go" id="cmpGo" disabled>Comparar (<span id="cmpCount">0</span>/4)</button>
+    </div>
+  </div>
+</div>
+
+<div class="cmp-overlay" id="cmpOverlay">
+  <div class="cmp-modal">
+    <button class="cmp-close" id="cmpClose">✕</button>
+    <h2>Comparación cara a cara</h2>
+    <div id="cmpTableWrap"></div>
+  </div>
+</div>
+
 </body>
 </html>
