@@ -143,6 +143,12 @@
   .card:hover{transform:translateY(-5px)}
   .card-img{position:relative;aspect-ratio:3/4;border-radius:var(--rad);overflow:hidden;margin-bottom:16px;
     transition:box-shadow .35s ease}
+  .card-thumbs{display:flex;gap:6px;margin:-8px 0 16px;padding:0 2px}
+  .card-thumb{width:34px;height:34px;border-radius:8px;overflow:hidden;border:1.5px solid transparent;
+    cursor:pointer;flex-shrink:0;background:var(--surface2);padding:0;opacity:.6;transition:opacity .25s ease,border-color .25s ease}
+  .card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-thumb:hover{opacity:1}
+  .card-thumb.active{opacity:1;border-color:var(--gold)}
   .card:hover .card-img{box-shadow:0 24px 44px -22px rgba(20,14,6,.4)}
   .card-img .letter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font-family:var(--fdisp);font-size:80px;color:rgba(255,255,255,.18)}
@@ -173,7 +179,7 @@
   .card:hover .card-foot .discover{padding-bottom:5px}
   .no-results{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
 
-  .pagination{display:flex;justify-content:center;gap:8px;margin-top:36px}
+  .pagination{display:flex;justify-content:center;gap:8px;margin-top:36px;min-height:24px;color:var(--muted);font-size:14px;letter-spacing:.02em}
   .page-btn{width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--surface);
     color:var(--muted);cursor:pointer;font-size:13px;transition:.2s}
   .page-btn.active{background:var(--gold);border-color:var(--gold);color:#fff}
@@ -564,6 +570,8 @@
       filterSearch:"Buscar", filterSeason:"Temporada", filterOccasion:"Ocasión", filterFamily:"Familia / Nota",
       filterLongevity:"Longevidad mínima", filterSillage:"Estela mínima", filterReset:"Limpiar filtros",
       resultsCount:function(n){return n + " fragancias encontradas";},
+      loadingMore:"Cargando más fragancias…",
+      endOfResults:"Has visto todo el catálogo",
       backToComparator:"Volver al comparador",
       academiaKicker:"Academia Aromia", academiaTitle:"Cómo leer una fragancia",
       academiaLede:"Antes de comprar, entiende. Tres conceptos que cambian para siempre tu forma de elegir un perfume.",
@@ -598,6 +606,8 @@
       filterSearch:"Search", filterSeason:"Season", filterOccasion:"Occasion", filterFamily:"Family / Note",
       filterLongevity:"Min. longevity", filterSillage:"Min. sillage", filterReset:"Clear filters",
       resultsCount:function(n){return n + " fragrances found";},
+      loadingMore:"Loading more fragrances…",
+      endOfResults:"You've seen the whole catalog",
       backToComparator:"Back to comparator",
       academiaKicker:"Aromia Academy", academiaTitle:"How to read a fragrance",
       academiaLede:"Understand before you buy. Three concepts that will change forever how you choose a perfume.",
@@ -1719,16 +1729,16 @@
 
   // ---------- FILTER STATE ----------
   var filters = { search:'', season:'', occasion:'', family:'', longevity:0, sillage:0 };
-  var currentPage = 1;
+  var loadedCount = 0;
   var PAGE_SIZE = 9;
   var currentProduct = null;
 
-  document.getElementById('fSearch').addEventListener('input', function(e){ filters.search = e.target.value.toLowerCase(); currentPage=1; renderCollection(); });
-  document.getElementById('fSeason').addEventListener('change', function(e){ filters.season = e.target.value; currentPage=1; renderCollection(); });
-  document.getElementById('fOccasion').addEventListener('change', function(e){ filters.occasion = e.target.value; currentPage=1; renderCollection(); });
-  document.getElementById('fFamily').addEventListener('change', function(e){ filters.family = e.target.value; currentPage=1; renderCollection(); });
-  document.getElementById('fLongevity').addEventListener('change', function(e){ filters.longevity = Number(e.target.value); currentPage=1; renderCollection(); });
-  document.getElementById('fSillage').addEventListener('change', function(e){ filters.sillage = Number(e.target.value); currentPage=1; renderCollection(); });
+  document.getElementById('fSearch').addEventListener('input', function(e){ filters.search = e.target.value.toLowerCase(); renderCollection(); });
+  document.getElementById('fSeason').addEventListener('change', function(e){ filters.season = e.target.value; renderCollection(); });
+  document.getElementById('fOccasion').addEventListener('change', function(e){ filters.occasion = e.target.value; renderCollection(); });
+  document.getElementById('fFamily').addEventListener('change', function(e){ filters.family = e.target.value; renderCollection(); });
+  document.getElementById('fLongevity').addEventListener('change', function(e){ filters.longevity = Number(e.target.value); renderCollection(); });
+  document.getElementById('fSillage').addEventListener('change', function(e){ filters.sillage = Number(e.target.value); renderCollection(); });
   document.getElementById('resetFilters').addEventListener('click', function(){
     filters = { search:'', season:'', occasion:'', family:'', longevity:0, sillage:0 };
     document.getElementById('fSearch').value = '';
@@ -1737,7 +1747,6 @@
     document.getElementById('fFamily').value = '';
     document.getElementById('fLongevity').value = '0';
     document.getElementById('fSillage').value = '0';
-    currentPage = 1;
     renderCollection();
   });
 
@@ -1771,6 +1780,15 @@
   var cmpCount = document.getElementById('cmpCount');
   var cmpOverlay = document.getElementById('cmpOverlay');
   var cmpTableWrap = document.getElementById('cmpTableWrap');
+
+  window.__swapCardImg = function(btn, imgId, src){
+    var img = document.getElementById(imgId);
+    if(!img) return;
+    img.src = src;
+    var thumbs = btn.parentElement.querySelectorAll('.card-thumb');
+    thumbs.forEach(function(t){ t.classList.remove('active'); });
+    btn.classList.add('active');
+  };
 
   window.__toggleCompare = function(id){
     var idx = compareList.indexOf(id);
@@ -1861,34 +1879,41 @@
     cmpTableWrap.innerHTML = html2;
   }
 
+  var currentList = [];
   function renderCollection(){
-    var list = filteredPerfumes();
-    resultsCountEl.textContent = t('resultsCount')(list.length);
-    var totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
-    if(currentPage > totalPages) currentPage = totalPages;
-    var pageItems = list.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
-
+    currentList = filteredPerfumes();
+    resultsCountEl.textContent = t('resultsCount')(currentList.length);
+    loadedCount = 0;
     collectionGrid.innerHTML = '';
-    if(pageItems.length === 0){
+    if(currentList.length === 0){
       var empty = document.createElement('div');
       empty.className = 'no-results';
       empty.textContent = t('noResults');
       collectionGrid.appendChild(empty);
     }
+    loadMoreItems();
+  }
+  function loadMoreItems(){
+    var pageItems = currentList.slice(loadedCount, loadedCount + PAGE_SIZE);
     pageItems.forEach(function(p, idx){
       var rt = ratingOf(p);
       var a = document.createElement('a');
       a.href = 'javascript:void(0)';
       a.className = 'card fade-in';
       a.style.animationDelay = (idx * 0.05) + 's';
+      var cardImgs = (p.gallery && p.gallery.length > 1) ? p.gallery.slice(0,5) : null;
+      var cardImgId = 'cardImg' + p.id;
       a.innerHTML =
         '<div class="card-img" style="background:' + p.grad + '">' +
           '<button class="cmp-toggle' + (compareList.indexOf(p.id)>-1?' active':'') + '" data-cmp-id="' + p.id + '" title="Comparar" onclick="event.stopPropagation(); event.preventDefault(); window.__toggleCompare(' + p.id + ');">+</button>' +
           '<div class="letter">' + p.initial + '</div>' +
-          '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" onerror="this.style.opacity=0">' +
+          '<img id="' + cardImgId + '" src="' + p.img + '" alt="' + p.name + '" loading="lazy" onerror="this.style.opacity=0">' +
           '<div class="card-tag">' + p.family + '</div>' +
           '<div class="card-seg">' + p.segment + '</div>' +
         '</div>' +
+        (cardImgs ? '<div class="card-thumbs">' + cardImgs.map(function(src, ti){
+          return '<button type="button" class="card-thumb' + (ti===0?' active':'') + '" onclick="event.stopPropagation(); event.preventDefault(); window.__swapCardImg(this, \'' + cardImgId + '\', \'' + src + '\');"><img src="' + src + '" alt="" loading="lazy"></button>';
+        }).join('') + '</div>' : '') +
         '<div class="card-title-row"><h3>' + p.name + '</h3><span class="card-price">$' + p.price + '</span></div>' +
         '<div class="card-house">' + p.brand + ' · ' + p.year + '</div>' +
         '<div class="card-notes">' + p.top + '</div>' +
@@ -1897,20 +1922,15 @@
       a.addEventListener('animationend', function(){ a.classList.add('fade-in-done'); });
       collectionGrid.appendChild(a);
     });
-
-    paginationEl.innerHTML = '';
-    if(totalPages > 1){
-      for(var i=1;i<=totalPages;i++){
-        (function(i){
-          var b = document.createElement('button');
-          b.className = 'page-btn' + (i===currentPage ? ' active':'');
-          b.textContent = i;
-          b.addEventListener('click', function(){ currentPage = i; renderCollection(); window.scrollTo({top: document.getElementById('tienda').offsetTop - 80, behavior:'smooth'}); });
-          paginationEl.appendChild(b);
-        })(i);
-      }
-    }
+    loadedCount += pageItems.length;
+    paginationEl.textContent = loadedCount < currentList.length ? t('loadingMore') : (currentList.length ? t('endOfResults') : '');
   }
+  var scrollObserver = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting && loadedCount < currentList.length){
+      loadMoreItems();
+    }
+  }, {rootMargin: '600px'});
+  scrollObserver.observe(paginationEl);
   renderCollection();
 
   // ---------- LESSONS ----------
