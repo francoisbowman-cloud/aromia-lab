@@ -1928,8 +1928,12 @@
   var scrollObserver = new IntersectionObserver(function(entries){
     if(entries[0].isIntersecting && loadedCount < currentList.length){
       loadMoreItems();
+      scrollObserver.unobserve(paginationEl);
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ scrollObserver.observe(paginationEl); });
+      });
     }
-  }, {rootMargin: '600px'});
+  }, {rootMargin: '600px', threshold: 0});
   scrollObserver.observe(paginationEl);
   renderCollection();
 
