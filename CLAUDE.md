@@ -6,8 +6,10 @@ Memoria operativa técnica para trabajar en este repo. Las decisiones de
 
 No se encontró un borrador de `CLAUDE.md` de Cowork en el repo al momento
 de este Sprint 1 — este documento se escribió desde cero con lo técnico
-real implementado en el scaffolding. Si Cowork entrega su borrador de
-producto/contenido más tarde, se integra sin pisar lo de acá.
+real implementado en el scaffolding. Cowork trabajó en paralelo sin acceso
+al repo (ver `AROMIA_WORKFLOW_MASTER.md`, sección 3) y entregó su propio
+borrador más tarde, en la reconciliación — ver sección "Contenido (Sprint
+1 — Cowork)" más abajo, fusionada acá sin pisar lo técnico ya escrito.
 
 ## Qué es este repo
 
@@ -149,3 +151,123 @@ Sin deploy todavía (Vercel/Railway quedan para una fase posterior).
   (nombres de funciones, variables técnicas) en inglés.
 - Sin comentarios explicativos de "qué hace" el código — solo cuando haya
   una razón no obvia.
+
+## Contenido (Sprint 1 — Cowork)
+
+Fusionado desde el borrador de `CLAUDE.md` que entregó Cowork en la
+reconciliación de Sprint 1 (ver `SPRINT1_COMPLETE_CODE.md` para el detalle
+completo de la reconciliación). Describe cómo está estructurado el
+contenido generado por Cowork y cómo el frontend debe consumirlo — no
+duplica decisiones de producto, esas viven en `ESTADO-aromia.md`.
+
+### Catálogo de perfumes — `PERFUMES_INITIAL_50.csv` (raíz del repo)
+
+CSV con 50 filas ya reconciliadas contra `schema/perfume.schema.json`.
+Columnas (en este orden):
+
+```
+slug, nombre, marca, genero, familia_olfativa, notas_salida,
+notas_corazon, notas_fondo, precio_referencia, moneda, categoria_precio,
+imagen_url, link_afiliado, descripcion_corta, nicho_o_comercial
+```
+
+Notas para el parser:
+
+- `notas_salida`, `notas_corazon`, `notas_fondo` son listas internas
+  separadas por `;` (no coma), tal como especifica
+  `schema/perfume.schema.json`.
+- `descripcion_corta` puede contener comas dentro de texto entrecomillado
+  (CSV estándar RFC 4180) — usar un parser de CSV real, no split manual
+  por coma.
+- `genero`: `masculino` | `femenino` | `unisex` (coincide con el enum del
+  schema).
+- `categoria_precio`: debería ser `económico` | `medio` | `premium` |
+  `lujo` (enum del schema). **5 filas todavía tienen el valor `nicho`**,
+  que no es una categoría de precio válida — quedó así a propósito, sin
+  reasignar, porque no es una decisión técnica (ver
+  `SPRINT1_COMPLETE_CODE.md` para el detalle y la lista de perfumes
+  afectados).
+- `nicho_o_comercial` (`nicho` | `comercial`): columna que trajo Cowork y
+  que **no está en `schema/perfume.schema.json`** — es información de
+  producto útil (mezcla de catálogo) que el schema no contempló. Se dejó
+  como columna extra al final del CSV en vez de agregarla al schema por
+  cuenta propia; si se va a usar para filtros en el frontend, hace falta
+  sumarla al schema y a la migración en una decisión aparte.
+- `link_afiliado` e `imagen_url` son **placeholders** (`https://afiliado
+  .placeholder/...`, `https://img.placeholder/...`) — no son datos de
+  producción todavía.
+- `slug` fue generado por Code a partir de `nombre` (y `marca` como
+  desempate si hay colisión) — no venía en el CSV original de Cowork, que
+  traía un `id` numérico secuencial en su lugar. Ese `id` no se conservó:
+  Postgres genera su propia PK (`SERIAL`) en la migración.
+
+### Artículos — `articles/*.md`
+
+11 archivos markdown (10 pedidos + 1 de más, señalado por Cowork como
+exceso menor — se dejó, no se borró contenido válido). Conviven con los
+18 artículos `.html` de v1 en la misma carpeta `articles/` — no hay
+colisión de nombre de archivo (extensiones distintas), salvo
+`resena-baccarat-rouge-540`, que ahora existe como `.html` (v1) y `.md`
+(v2.0) — mismo perfume, dos piezas de contenido distintas conviviendo;
+no se resolvió esa duplicación de contenido acá, es una decisión de
+contenido/SEO, no técnica.
+
+Cada archivo tiene front-matter YAML:
+
+```yaml
+---
+titulo: "..."
+tipo: resena_individual | comparativa | guia_temporada | guia_ocasion
+perfumes: ["Nombre exacto del perfume", "..."]
+keyword_objetivo: "..."
+---
+```
+
+`perfumes` contiene el `nombre` exacto tal como aparece en
+`PERFUMES_INITIAL_50.csv`, para cruzar el artículo con su ficha de
+perfume en el frontend (ej. "perfumes mencionados en este artículo" con
+link a `/perfumes/[slug]/`). El cuerpo es markdown estándar después del
+front-matter.
+
+De los 50 perfumes del CSV, 15 tienen al menos un artículo propio; los 35
+restantes quedan como prioridad de contenido para la siguiente ronda (ver
+`SEO_STRATEGY.md`).
+
+### Quiz — `COPY/quiz-questions.md`
+
+Documento de especificación de producto, no JSON — hay que traducirlo a
+la estructura de datos que use el frontend (array de preguntas en
+TypeScript, o tabla en la base). Contiene 6 preguntas (3-4 opciones cada
+una), un sistema de puntaje por tags (7 tags posibles), una tabla de
+mapeo de tag dominante → `familia_olfativa` + `nicho_o_comercial` del CSV
+(para filtrar recomendaciones), y copy de resultado por perfil (título +
+descripción) pensado para `og:title` / `og:description` en la página de
+resultado compartible. La lógica de matching es de reglas simples (suma
+de puntos, sin ML) — implementable como función pura, sin modelo ni
+servicio externo.
+
+### Estrategia SEO — `SEO_STRATEGY.md` (raíz del repo)
+
+Define la estructura de URLs propuesta para v2.0:
+
+```
+/articulos/[slug]/
+/perfumes/[slug]/
+/quiz/
+/quiz/resultado/[perfil]/
+```
+
+**Redirects v1→v2 (decisión #5 de `ESTADO-aromia.md`): sin confirmar.**
+Cowork no tuvo acceso a `ESTADO-aromia.md` durante su sprint para
+verificar las URLs reales de v1 contra esta estructura propuesta. Sigue
+pendiente — es una decisión de contenido/SEO (mapa de URLs viejas →
+nuevas), no algo que Code deba completar unilateralmente. Una vez que
+haya mapa confirmado, la implementación de los redirects 301 en Next.js
+(`next.config.js`) sí es tarea técnica.
+
+### Convenciones de nombres
+
+- Slug de artículo = nombre de archivo sin extensión (ej.
+  `resena-santal-33.md` → slug `resena-santal-33`).
+- Carpeta `articles/` en minúsculas (ya así en v1) — nunca `/ARTICLES/`
+  en mayúsculas (GitHub Pages es case-sensitive).

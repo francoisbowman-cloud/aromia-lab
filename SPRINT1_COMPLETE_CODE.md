@@ -1,5 +1,6 @@
 # Sprint 1 — Cierre Code
 Generado: 12 de julio de 2026
+Actualizado: 12 de julio de 2026 — reconciliación con entregables de Cowork
 
 ## Punto de contacto con Cowork
 
@@ -56,6 +57,90 @@ Generado: 12 de julio de 2026
 ### 6. Cierre
 - [x] Este documento.
 
+## Reconciliación con entregables de Cowork
+
+Cowork completó su parte de Sprint 1 sin acceso al repo ni a
+`schema/perfume.schema.json` (como estaba previsto en
+`AROMIA_WORKFLOW_MASTER.md`, sección 3 — no bloqueante). Brey copió el
+working folder de Cowork a `_cowork-handoff/` en la raíz de este mismo
+worktree; esta sección documenta cómo se integró.
+
+### 1. CSV mapeado contra el schema
+- [x] Comparado `_cowork-handoff/PERFUMES_INITIAL_50.csv` (14 columnas,
+      formato propio de Cowork, documentado en su propio `CLAUDE.md`)
+      contra `schema/perfume.schema.json`
+- [x] Transformado a `PERFUMES_INITIAL_50.csv` (raíz del repo), 50 filas:
+      - Se generó `slug` (no existía; el CSV de Cowork traía un `id`
+        numérico secuencial en su lugar, que no se conservó — Postgres
+        genera su propia PK).
+      - `precio_referencia_usd` → `precio_referencia` + columna nueva
+        `moneda` = `USD`.
+      - `categoria_precio`: el valor `entrada` se mapeó a `económico`
+        (mismo concepto, el schema usa otro nombre). **5 filas quedaron
+        con el valor `nicho`, que no es una categoría de precio válida
+        del schema** — no se reasignó por cuenta propia, ver "Pendiente
+        de contenido" abajo.
+      - `nicho_o_comercial` (nicho vs. comercial): campo legítimo que el
+        schema no contempla. Se dejó como columna extra al final del CSV
+        en vez de agregarla al schema sin autorización — ver "Pendiente
+        de contenido".
+- [x] No se cambió `schema/perfume.schema.json` para acomodar el CSV —
+      se transformó el CSV para calzar con el schema, tal como pedía el
+      checklist de reconciliación.
+
+### 2. Artículos
+- [x] Movidos los 11 artículos de `_cowork-handoff/articles/` a
+      `articles/` (la carpeta real de v1, en minúsculas — no se creó
+      `/ARTICLES/`). Sin colisión de nombre de archivo con los 18 `.html`
+      de v1 (extensión distinta), salvo que `resena-baccarat-rouge-540`
+      ahora existe como `.html` (v1) y `.md` (v2.0) — dos piezas de
+      contenido del mismo perfume conviviendo. No se resolvió esa
+      duplicación acá, es una decisión de contenido/SEO.
+- [x] El artículo 11 (excede el objetivo de 10) se dejó tal cual, sin
+      borrar contenido válido — señalado, no corregido.
+
+### 3. Quiz y SEO
+- [x] `quiz-questions.md` → `COPY/quiz-questions.md`
+- [x] `SEO_STRATEGY.md` → raíz del repo
+- [x] Revisado: `SEO_STRATEGY.md` **no cubre el mapeo de redirects
+      v1→v2** (decisión #5 de `ESTADO-aromia.md`). Cowork lo señala
+      explícitamente en su propio documento como pendiente por falta de
+      acceso al `ESTADO`. No se completó acá — es una decisión de
+      contenido/SEO (qué URLs viejas mapean a cuáles nuevas), no técnica.
+      Sigue pendiente.
+
+### 4. `CLAUDE.md` fusionado
+- [x] Se agregó una sección nueva, "Contenido (Sprint 1 — Cowork)", al
+      `CLAUDE.md` real del repo, con la documentación de estructura de
+      CSV/artículos/quiz/SEO que trajo Cowork — sin reemplazar ni pisar
+      las secciones técnicas ya escritas.
+- [x] Borrado el `CLAUDE.md` duplicado de `_cowork-handoff/` (junto con
+      el resto de la carpeta temporal, ver punto 5).
+
+### 5. Limpieza
+- [x] `_cowork-handoff/` borrada por completo una vez movido todo a su
+      ubicación definitiva.
+
+## Pendiente de contenido (no resuelto en esta reconciliación, a propósito)
+
+Estas son decisiones de **producto/contenido**, no técnicas — se dejan
+señaladas para Brey/Cowork, no decididas unilateralmente por Code:
+
+1. **5 perfumes con `categoria_precio` inválida** (valor `nicho` en vez
+   de un tier de precio real): Santal 33, Molecule 01, Kirke, Le Labo
+   Another 13, Nishane Hacivat. Todos son perfumes de nicho de precio
+   alto — probablemente debería ser `premium` o `lujo`, pero no se
+   asignó un valor a ciegas.
+2. **¿Sumar `nicho_o_comercial` al schema oficial?** Es información útil
+   para filtros (26 comercial / 24 nicho) que Cowork agregó por cuenta
+   propia. Si se usa en el frontend, hace falta una decisión explícita
+   para sumarla a `schema/perfume.schema.json` y a la migración.
+3. **Redirects v1→v2 sin confirmar** (ver punto 3 arriba) — falta el
+   mapa de URLs viejas → nuevas contra `ESTADO-aromia.md`.
+4. **Duplicación de contenido** en `resena-baccarat-rouge-540` (`.html`
+   de v1 + `.md` nuevo) — decidir si se fusionan, se reemplaza uno, o
+   conviven a propósito.
+
 ## Nota de entorno (no bloqueante, pero relevante)
 
 El sandbox de esta sesión no pudo ejecutar binarios nativos de Node
@@ -102,6 +187,27 @@ descartarlo primero.
 8. No se encontró un borrador de `CLAUDE.md` de Cowork en el repo — se
    escribió desde cero. Si aparece más tarde, integrar sin duplicar
    contenido de producto (eso vive en `ESTADO-aromia.md`).
-9. No hubo ambigüedades de **producto** que señalar en este sprint —
-   todo lo pedido en `SPRINT1_CODE.md` era scaffolding técnico dentro
-   de decisiones ya tomadas en `ESTADO-aromia.md`.
+9. No hubo ambigüedades de **producto** que señalar en el scaffolding
+   inicial — todo lo pedido en `SPRINT1_CODE.md` era técnico dentro de
+   decisiones ya tomadas en `ESTADO-aromia.md`. La reconciliación
+   posterior con Cowork sí dejó pendientes de contenido, ver sección
+   correspondiente arriba.
+
+## Resumen de la reconciliación (5-10 líneas, para pegar en `ESTADO-aromia.md`)
+
+Se integraron los entregables de Cowork (`_cowork-handoff/`) al repo real
+en `feature/v2.0`: `PERFUMES_INITIAL_50.csv` (50 filas, transformado para
+calzar con `schema/perfume.schema.json` — se generaron slugs, se separó
+precio/moneda, se mapeó `entrada`→`económico`), 11 artículos movidos a
+`articles/`, `quiz-questions.md` a `COPY/`, y `SEO_STRATEGY.md` a la raíz.
+El `CLAUDE.md` de Cowork se fusionó como sección nueva dentro del
+`CLAUDE.md` real (no se reemplazó nada técnico) y se borró el duplicado
+junto con toda la carpeta temporal. Quedan 4 pendientes de contenido sin
+resolver a propósito (no son decisiones técnicas): 5 perfumes con
+categoría de precio inválida (`nicho` en vez de un tier real), si sumar
+`nicho_o_comercial` al schema oficial, el mapeo de redirects v1→v2
+todavía sin confirmar, y una duplicación de contenido en
+`resena-baccarat-rouge-540` (`.html` de v1 + `.md` nuevo). El pendiente
+técnico de la sesión anterior (build/dev sin verificar por la limitación
+de binarios nativos del sandbox) sigue sin resolverse — no se pudo
+verificar en esta sesión tampoco, se mantiene explícito en el checklist.
