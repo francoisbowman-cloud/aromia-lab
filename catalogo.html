@@ -2015,15 +2015,6 @@
   scrollObserver.observe(paginationEl);
   renderCollection();
 
-  // ---------- DEEP LINK (?p=ID) desde Lab u otras páginas ----------
-  (function checkDeepLink(){
-    var params = new URLSearchParams(window.location.search);
-    var pid = Number(params.get('p'));
-    if(pid && perfumes.some(function(p){ return p.id === pid; })){
-      openProduct(pid);
-    }
-  })();
-
   // ---------- LESSONS ----------
   function renderLessons(){
     var lessonsEl = document.getElementById('lessons');
@@ -2206,6 +2197,19 @@
     wrap.innerHTML = '';
     wrap.appendChild(iframe);
   };
+
+  // ---------- DEEP LINK (?p=ID) desde Lab u otras páginas ----------
+  // Se ejecuta al final: openProduct() depende de catalogView/productView/
+  // productDetail/backBtn, asignados más arriba en el script — llamarlo
+  // antes de esas asignaciones lanza un TypeError y corta el resto del
+  // script (incluida la asignación de window.openProduct).
+  (function checkDeepLink(){
+    var params = new URLSearchParams(window.location.search);
+    var pid = Number(params.get('p'));
+    if(pid && perfumes.some(function(p){ return p.id === pid; })){
+      openProduct(pid);
+    }
+  })();
 
 })();
 </script>
