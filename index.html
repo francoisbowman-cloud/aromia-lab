@@ -16,13 +16,13 @@
 
   :root{
     --bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#5A5347;
-    --line:rgba(21,18,13,.16);--gold:#7F5F2A;--gold-soft:rgba(127,95,42,.14);
+    --line:rgba(21,18,13,.16);--gold:#B68A44;--gold-soft:rgba(182,138,68,.14);
     --fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;
     --rad:2px;--disp-weight:600;--disp-spacing:.004em;
   }
   html[data-mode="dark"]{
     --bg:#0E0C0A;--surface:#17120D;--surface2:#1C1610;--ink:#F2EBDD;--muted:#A39A88;
-    --line:rgba(242,235,221,.13);--gold-soft:rgba(201,164,92,.16);--gold:#C9A45C;
+    --line:rgba(242,235,221,.13);--gold-soft:rgba(200,168,107,.16);--gold:#C8A86B;
   }
 
   body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;
@@ -59,7 +59,20 @@
 
   section{max-width:1240px;margin:0 auto;padding:0 30px}
 
-  .hero{padding:74px 30px 56px;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  .hero{position:relative;min-height:600px;display:flex;align-items:center;padding:74px 30px;overflow:hidden;
+    background-image:linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 82%, transparent) 34%, color-mix(in srgb, var(--bg) 30%, transparent) 62%, transparent 100%), url('assets/hero-light.webp');
+    background-size:cover;background-position:center right;transition:background-image .3s ease}
+  html[data-mode="dark"] .hero{
+    background-image:linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 84%, transparent) 34%, color-mix(in srgb, var(--bg) 32%, transparent) 62%, transparent 100%), url('assets/hero-dark.webp');
+  }
+  .hero-glow{position:absolute;width:520px;height:520px;right:-140px;top:-160px;border-radius:50%;
+    background:radial-gradient(circle, color-mix(in srgb, var(--gold) 30%, transparent), transparent 70%);
+    filter:blur(60px);pointer-events:none}
+  .hero-particles{position:absolute;inset:0;pointer-events:none}
+  .hero-particles span{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold);
+    opacity:0;filter:blur(.5px);animation:heroFloat 9s ease-in-out infinite}
+  @keyframes heroFloat{0%{transform:translateY(0);opacity:.15}50%{transform:translateY(-40px);opacity:.6}100%{transform:translateY(0);opacity:.15}}
+  .hero-copy{position:relative;z-index:2;max-width:540px}
   .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:26px}
   .eyebrow .dash{width:34px;height:1px;background:var(--gold)}
   .eyebrow span{font-family:var(--fbody);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
@@ -120,7 +133,8 @@
 
   .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 26px}
   @media(max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:620px){.grid-3{grid-template-columns:1fr}.hero{grid-template-columns:1fr}}
+  @media(max-width:620px){.grid-3{grid-template-columns:1fr}}
+  @media(max-width:760px){.hero{background-position:center 30%}}
 
   /* ---------- GLASS (vidrio esmerilado sutil, solo en superficies flotantes) ---------- */
   .glass{
@@ -426,7 +440,9 @@
 </header>
 
 <section class="hero" id="top">
-  <div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
+  <div class="hero-copy">
     <div class="eyebrow"><span class="dash"></span><span data-i18n="heroEyebrow">La autoridad editorial que además vende</span></div>
     <h1 data-i18n="heroTitle">No fabricamos perfumes.<br><em>Revelamos identidades.</em></h1>
     <p class="lede" data-i18n="heroLede">Magazine, Lab, Catálogo y Academia en un solo ecosistema. Compara 33 fragancias reales por temporada, longevidad, notas y estela antes de elegir la que cuenta tu historia.</p>
@@ -438,11 +454,6 @@
       <div class="stat"><b>33</b><span data-i18n="statFragrances">Fragancias comparadas</span></div>
       <div class="stat"><b>8</b><span data-i18n="statIngredients">Familias olfativas</span></div>
       <div class="stat"><b>6</b><span data-i18n="statFilters">Filtros de búsqueda</span></div>
-    </div>
-  </div>
-  <div class="hero-art">
-    <div class="hero-frame">
-      <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=70" alt="Aromia perfume editorial">
     </div>
   </div>
 </section>
@@ -615,6 +626,15 @@
   }
   modeBtn.addEventListener('click', function(){ mode = mode === 'light' ? 'dark' : 'light'; applyTheme(); });
   applyTheme();
+
+  var heroParticles = document.getElementById('heroParticles');
+  for (var i = 0; i < 14; i++) {
+    var dot = document.createElement('span');
+    dot.style.left = Math.round(Math.random() * 100) + '%';
+    dot.style.top = Math.round(Math.random() * 100) + '%';
+    dot.style.animationDelay = (Math.random() * 9).toFixed(2) + 's';
+    heroParticles.appendChild(dot);
+  }
 
   document.getElementById('newsletterForm').addEventListener('submit', function(e){
     e.preventDefault();
