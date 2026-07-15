@@ -9,8 +9,7 @@ export default async function PerfumesPage() {
 
   try {
     perfumes = await getPerfumes();
-  } catch (err) {
-    console.error("DIAG getPerfumes failed:", err);
+  } catch {
     error = "No se pudo conectar con el backend (¿está corriendo la API?).";
   }
 
