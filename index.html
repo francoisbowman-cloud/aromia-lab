@@ -59,27 +59,33 @@
 
   section{max-width:1240px;margin:0 auto;padding:0 30px}
 
-  .hero{position:relative;min-height:600px;display:flex;align-items:center;padding:74px 30px;overflow:hidden;
-    background-image:linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 82%, transparent) 34%, color-mix(in srgb, var(--bg) 30%, transparent) 62%, transparent 100%), url('assets/hero-light.webp');
+  .hero{position:relative;min-height:360px;display:flex;align-items:center;padding:28px 30px;overflow:hidden;
+    background-image:
+      radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--gold) 12%, transparent), transparent 55%),
+      linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 82%, transparent) 34%, color-mix(in srgb, var(--bg) 30%, transparent) 62%, transparent 100%),
+      url('assets/hero-light.webp');
     background-size:cover;background-position:center right;transition:background-image .3s ease}
   html[data-mode="dark"] .hero{
-    background-image:linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 84%, transparent) 34%, color-mix(in srgb, var(--bg) 32%, transparent) 62%, transparent 100%), url('assets/hero-dark.webp');
+    background-image:
+      radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--gold) 14%, transparent), transparent 55%),
+      linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 84%, transparent) 34%, color-mix(in srgb, var(--bg) 32%, transparent) 62%, transparent 100%),
+      url('assets/hero-dark.webp');
   }
-  .hero-glow{position:absolute;width:520px;height:520px;right:-140px;top:-160px;border-radius:50%;
+  .hero-glow{position:absolute;width:420px;height:420px;right:-120px;top:-130px;border-radius:50%;
     background:radial-gradient(circle, color-mix(in srgb, var(--gold) 30%, transparent), transparent 70%);
     filter:blur(60px);pointer-events:none}
   .hero-particles{position:absolute;inset:0;pointer-events:none}
   .hero-particles span{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold);
     opacity:0;filter:blur(.5px);animation:heroFloat 9s ease-in-out infinite}
   @keyframes heroFloat{0%{transform:translateY(0);opacity:.15}50%{transform:translateY(-40px);opacity:.6}100%{transform:translateY(0);opacity:.15}}
-  .hero-copy{position:relative;z-index:2;max-width:540px}
-  .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+  .hero-copy{position:relative;z-index:2;max-width:520px}
+  .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px}
   .eyebrow .dash{width:34px;height:1px;background:var(--gold)}
   .eyebrow span{font-family:var(--fbody);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
-  h1{font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(46px,5.6vw,80px);line-height:1.02;
-    letter-spacing:var(--disp-spacing);margin:0 0 24px}
+  h1{font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(30px,3.4vw,46px);line-height:1.08;
+    letter-spacing:var(--disp-spacing);margin:0 0 14px}
   h1 em{font-style:italic;color:var(--gold)}
-  .hero p.lede{max-width:454px;font-size:17px;line-height:1.7;color:var(--muted);margin:0 0 34px}
+  .hero p.lede{max-width:454px;font-size:16px;line-height:1.65;color:var(--muted);margin:0 0 22px}
   .cta-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
   .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);
     font-family:var(--fbody);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
@@ -88,9 +94,9 @@
   .link-underline{font-family:var(--fbody);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
     text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:4px;transition:.25s}
   .link-underline:hover{color:var(--gold)}
-  .stat-row{display:flex;gap:42px;margin-top:54px;flex-wrap:wrap}
-  .stat b{display:block;font-family:var(--fdisp);font-weight:400;font-size:34px;color:var(--ink);line-height:1}
-  .stat span{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  .stat-row{display:flex;gap:36px;margin-top:16px;flex-wrap:wrap}
+  .stat b{display:block;font-family:var(--fdisp);font-weight:400;font-size:28px;color:var(--ink);line-height:1}
+  .stat span{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:5px}
 
   .hero-art{position:relative}
   .hero-frame{position:relative;aspect-ratio:4/5;border-radius:var(--rad);overflow:hidden;
@@ -370,18 +376,19 @@
   .comm-blurb p{font-family:var(--fdisp);font-style:italic;font-size:17px;line-height:1.55;margin:0;color:color-mix(in srgb, var(--bg) 92%, transparent)}
   .comm-blurb .comm-source{display:block;margin-top:10px;font-family:var(--fbody);font-style:normal;font-size:11.5px;color:color-mix(in srgb, var(--bg) 55%, transparent)}
 
-  .newsletter{background:var(--ink);color:var(--bg);margin-top:60px}
-  .newsletter-inner{max-width:760px;margin:0 auto;padding:84px 30px;text-align:center}
+  .newsletter{background:linear-gradient(180deg, var(--surface2), var(--surface));color:var(--ink);margin-top:60px;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .newsletter-inner{max-width:760px;margin:0 auto;padding:70px 30px;text-align:center}
   .newsletter .kicker-gold{margin-bottom:18px}
   .newsletter h2{font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(32px,4vw,50px);line-height:1.06;
-    margin:0 0 18px;color:var(--bg)}
-  .newsletter p{font-size:16px;line-height:1.7;color:color-mix(in srgb, var(--bg) 64%, transparent);max-width:480px;margin:0 auto 32px}
+    margin:0 0 18px;color:var(--ink)}
+  .newsletter p{font-size:16px;line-height:1.7;color:var(--muted);max-width:480px;margin:0 auto 32px}
   .newsletter form{display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap}
-  .newsletter input{flex:1;min-width:180px;background:transparent;border:1px solid color-mix(in srgb, var(--bg) 30%, transparent);
-    border-radius:var(--rad);padding:14px 16px;color:var(--bg);font-family:var(--fbody);font-size:14px;outline:none}
+  .newsletter input{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--rad);padding:14px 16px;color:var(--ink);font-family:var(--fbody);font-size:14px;outline:none}
   .newsletter button{background:var(--gold);color:#fff;font-family:var(--fbody);font-size:12.5px;letter-spacing:.14em;
     text-transform:uppercase;border:none;border-radius:var(--rad);padding:14px 22px;cursor:pointer;white-space:nowrap;transition:.3s}
-  .newsletter button:hover{background:#fff;color:var(--ink)}
+  .newsletter button:hover{background:var(--ink);color:var(--bg)}
   .newsletter-msg{margin-top:14px;font-size:13px;color:var(--gold);min-height:18px}
 
   footer{border-top:1px solid var(--line);background:var(--bg)}
@@ -403,19 +410,36 @@
   #catalogView.hidden, #productView.hidden{display:none}
 
   /* ---------- ACCESOS (landing minimalista) ---------- */
-  .accesos{padding:70px 30px 90px;max-width:1240px;margin:0 auto}
-  .accesos .center-head{text-align:center;margin-bottom:40px}
-  .access-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+  .accesos{padding:16px 30px 44px;max-width:1240px;margin:0 auto}
+  .accesos .center-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .accesos .center-head .kicker-gold{margin-bottom:0;white-space:nowrap}
+  .accesos .center-head .chead-dash{width:22px;height:1px;background:var(--line);flex-shrink:0}
+  .accesos .center-head h2{font-family:var(--fdisp);font-weight:600;font-size:19px;margin:0;line-height:1;color:var(--ink)}
+  .access-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
   @media(max-width:980px){.access-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.access-grid{grid-template-columns:1fr}}
   .access-card{border:1px solid var(--line);border-radius:var(--rad);background:var(--surface);
-    padding:28px 22px;transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .25s;display:block}
+    padding:16px 16px;transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .25s;display:block}
   .access-card:hover{transform:translateY(-4px);border-color:var(--gold)}
-  .access-card .ac-icon{width:38px;height:38px;margin-bottom:18px;color:var(--gold)}
+  .access-card .ac-icon{width:32px;height:32px;margin-bottom:12px;color:var(--gold)}
   .access-card .ac-icon svg{width:100%;height:100%}
-  .access-card h4{font-family:var(--fdisp);font-weight:600;font-size:19px;margin:0 0 8px}
-  .access-card p{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 14px}
+  .access-card h4{font-family:var(--fdisp);font-weight:600;font-size:18px;margin:0 0 6px}
+  .access-card p{font-size:12.5px;line-height:1.55;color:var(--muted);margin:0 0 10px}
   .access-card .ac-arrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+
+  /* ---------- NOTAS (Encuentra tu esencia) ---------- */
+  .notas{padding:0 30px 56px;max-width:1240px;margin:0 auto}
+  .notas-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+  .notas-head h2{font-family:var(--fdisp);font-weight:var(--disp-weight);font-size:clamp(22px,2.6vw,30px);margin:4px 0 0}
+  .notas-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  @media(max-width:900px){.notas-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.notas-grid{grid-template-columns:repeat(2,1fr)}}
+  .nota-card{position:relative;aspect-ratio:1/1;border-radius:var(--rad);overflow:hidden;background-size:cover;
+    background-position:center;display:flex;align-items:flex-end;text-decoration:none;
+    transition:transform .3s cubic-bezier(.16,1,.3,1)}
+  .nota-card:hover{transform:translateY(-4px)}
+  .nota-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(10,8,5,.7) 100%)}
+  .nota-card span{position:relative;z-index:1;padding:12px;color:#F2EBDD;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -460,7 +484,8 @@
 
 <section class="accesos">
   <div class="center-head">
-    <div class="kicker-gold" data-i18n="accesosKicker">El Ecosistema</div>
+    <span class="kicker-gold" data-i18n="accesosKicker">El Ecosistema</span>
+    <span class="chead-dash" aria-hidden="true"></span>
     <h2 data-i18n="accesosTitle">Explora Aromia</h2>
   </div>
   <div class="access-grid">
@@ -494,6 +519,24 @@
       <p data-i18n="accesoClubDesc">Comunidad, sorteos y beneficios para los amantes de Aromia.</p>
       <span class="ac-arrow">→</span>
     </a>
+  </div>
+</section>
+
+<section class="notas">
+  <div class="notas-head">
+    <div>
+      <div class="kicker-gold" data-i18n="notasKicker">Explora por notas</div>
+      <h2 data-i18n="notasTitle">Encuentra tu esencia</h2>
+    </div>
+    <a href="catalogo.html" class="link-underline" data-i18n="notasCta">Ver todas las notas →</a>
+  </div>
+  <div class="notas-grid">
+    <a class="nota-card" href="catalogo.html?familia=citrico" style="background-image:url('https://images.unsplash.com/photo-1605185189315-fc269c231e41?auto=format&fit=crop&w=500&q=70')"><span data-i18n="notaCitrico">Cítricos</span></a>
+    <a class="nota-card" href="catalogo.html?familia=floral" style="background-image:url('https://images.unsplash.com/photo-1558860671-c7811ccf4862?auto=format&fit=crop&w=500&q=70')"><span data-i18n="notaFloral">Florales</span></a>
+    <a class="nota-card" href="catalogo.html?familia=amaderado" style="background-image:url('https://images.unsplash.com/photo-1519606247872-0440aae9b827?auto=format&fit=crop&w=500&q=70')"><span data-i18n="notaAmaderado">Amaderadas</span></a>
+    <a class="nota-card" href="catalogo.html?familia=oriental" style="background-image:url('https://images.unsplash.com/photo-1631624406592-f599694e6b2c?auto=format&fit=crop&w=500&q=70')"><span data-i18n="notaOriental">Orientales</span></a>
+    <a class="nota-card" href="catalogo.html?familia=acuatico" style="background-image:url('https://images.unsplash.com/photo-1535868118629-f37bcd69ff59?auto=format&fit=crop&w=500&q=70')"><span data-i18n="notaFresco">Frescas</span></a>
+    <a class="nota-card" href="catalogo.html?familia=especiado" style="background-image:url('https://images.unsplash.com/photo-1554345795-1243a276630e?auto=format&fit=crop&w=500&q=70')"><span data-i18n="notaEspeciado">Especiadas</span></a>
   </div>
 </section>
 
@@ -565,6 +608,9 @@
       accesoLabDesc:"Arma tu fragancia ideal según tus propias preferencias.",
       accesoAcademiaDesc:"Aprende a leer y elegir una fragancia con nuestras guías.",
       accesoClubDesc:"Comunidad, sorteos y beneficios para los amantes de Aromia.",
+      notasKicker:"Explora por notas", notasTitle:"Encuentra tu esencia", notasCta:"Ver todas las notas →",
+      notaCitrico:"Cítricos", notaFloral:"Florales", notaAmaderado:"Amaderadas",
+      notaOriental:"Orientales", notaFresco:"Frescas", notaEspeciado:"Especiadas",
       newsletterKicker:"La Carta de Aromia", newsletterTitle:"Una fragancia, una historia, cada domingo.",
       newsletterLede:"Reseñas honestas, comparativas en profundidad y lanzamientos del Lab. Sin ruido, sin spam.",
       newsletterBtn:"Suscribirme",
@@ -590,6 +636,9 @@
       accesoLabDesc:"Build your ideal fragrance based on your own preferences.",
       accesoAcademiaDesc:"Learn to read and choose a fragrance with our guides.",
       accesoClubDesc:"Community, giveaways and perks for Aromia lovers.",
+      notasKicker:"Explore by notes", notasTitle:"Find your essence", notasCta:"See all notes →",
+      notaCitrico:"Citrus", notaFloral:"Floral", notaAmaderado:"Woody",
+      notaOriental:"Oriental", notaFresco:"Fresh", notaEspeciado:"Spicy",
       newsletterKicker:"The Aromia Letter", newsletterTitle:"One fragrance, one story, every Sunday.",
       newsletterLede:"Honest reviews, in-depth comparisons and Lab releases. No noise, no spam.",
       newsletterBtn:"Subscribe",
