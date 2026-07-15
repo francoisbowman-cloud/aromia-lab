@@ -5,6 +5,16 @@ Registro corto de cada entrega al repo. Una entrada por deploy: fecha + qué se 
 ## 2026-07-13 — Code
 - Nuevo: `lab.html` (armador de fragancia interactivo, quiz de 4 pasos, resultados con link a Catálogo y a Amazon).
 - Reemplazo: `index.html` (landing minimalista), `catalogo.html` (+ soporte deep-link `?p=ID`), `magazine.html`, `academia.html`, `club.html` (nav con Catálogo + Lab agregado).
-- Fix: deep-link `?p=ID` de `catalogo.html` corría antes de que se asignaran las variables de las que depende `openProduct()`, tiraba un error sin capturar y cortaba el resto del script de esa carga de página — encontrado probando en vivo el flujo Lab → "Ver ficha →", corregido moviendo el chequeo al final del script.
-- Rediseño de hero en `index.html`: fondo full-bleed con las plantillas Light/Dark (imágenes convertidas a WebP, `assets/hero-light.webp` y `hero-dark.webp`), glow dorado, partículas CSS animadas, paleta `--gold` actualizada (`#B68A44` / `#C8A86B`). Se descartó explícitamente la versión Three.js/WebGL de las specs originales (partículas 3D, vidrio con material físico, mármol por shader, post-procesado) por ser sobre-ingeniería para un sitio sin build step. Alcance: solo `index.html` — el resto de páginas queda pendiente si se confirma el resultado.
-- Pendiente próxima entrega: aplicar el mismo rediseño de hero a `catalogo.html`/`magazine.html`/`academia.html`/`club.html`/`lab.html` si se aprueba; sub-nav sticky y rediseño editorial de tarjetas en Magazine; completar rating real de Amazon en 31/33 perfumes de `catalogo.html`.
+- Pendiente próxima entrega: sub-nav sticky y rediseño editorial de tarjetas en Magazine; completar rating real de Amazon en 31/33 perfumes de `catalogo.html`.
+
+## 2026-07-15 — Chat (pendiente de subir por Cowork)
+- Reemplazo: `magazine.html` — hero editorial + Carta del Editor + Editor's Picks + Tendencias + "Más historias" (18 artículos integrados al flujo en filas zigzag, scroll infinito, sin nav de categorías). Newsletter removido de esta página.
+- Reemplazo: `articles/resena-baccarat-rouge-540.html` — primera plantilla real de artículo individual (antes era placeholder simple). Sirve de modelo para los 17 restantes.
+- Nuevo: `CONTEXTO-aromia-diseno.md` (raíz del repo) — memoria de diseño/frontend para Chat entre sesiones.
+- Nuevo: `.claude/commands/retomar-aromia-magazine.md` — comando de Code para retomar este trabajo con contexto correcto tras un `/clear`.
+- Pendiente real (no confundir con "ya hecho"): los otros 17 artículos siguen siendo placeholders simples. 9 tienen contenido editorial ya redactado por Chat pero el script que los generaba falló (error de Python sin corregir) — hay que retomarlo en la próxima sesión de Chat, no es tarea de Cowork.
+
+## 2026-07-15 — Cowork
+- Subido (en nombre de Chat, sin modificar contenido): `magazine.html`, `articles/resena-baccarat-rouge-540.html`, `CONTEXTO-aromia-diseno.md`, `.claude/commands/retomar-aromia-magazine.md` — verificados antes de subir (balance de llaves/tags, nav completo Magazine·Catálogo·Lab·Academia·Club, ausencia de nav de categorías y de newsletter en `magazine.html` según lo pedido, links de recomendación a `catalogo.html?p=ID` reales en el artículo).
+- Nota operativa: no se pudo hacer el commit/push directo al repo desde esta sesión — el sandbox de Cowork bloquea el tráfico saliente hacia `api.github.com` (confirmado también al intentar usar un token de acceso personal para otra tarea). Los 4 archivos quedan preparados en el output de esta sesión; el push real a `main` requiere que se suban por otra vía (terminal local de Brey, o la sesión de Code).
+- Pendiente sin cambios respecto a la entrada anterior: los 17 artículos restantes y el error de script (`NameError: name 'os' is not defined`) siguen abiertos, no es tarea resuelta en esta entrega.

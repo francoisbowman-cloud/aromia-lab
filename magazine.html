@@ -4,34 +4,36 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Magazine — Aromia Lab</title>
-<meta name="description" content="Reseñas, guías de temporada y academia de perfumería de Aromia Lab.">
+<meta name="description" content="Reseñas, guías de temporada y academia de perfumería de Aromia Lab. Una nueva edición, cada semana.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Parisienne&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{margin:0;}
   :root{
-    --bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#6E675B;
-    --line:rgba(21,18,13,.12);--gold:#B68A44;--gold-soft:rgba(182,138,68,.14);
-    --fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;--rad:2px;
+    --bg:#F7F1E7;--surface:#FFFFFF;--surface2:#EFE6D5;--ink:#1E1810;--muted:#7C7160;
+    --line:rgba(30,24,16,.10);--gold:#B68A44;--gold-soft:rgba(182,138,68,.14);
+    --fdisp:'Cormorant Garamond',Georgia,serif;--fscript:'Parisienne',cursive;
+    --fbody:'Jost',system-ui,sans-serif;--rad:2px;
   }
   html[data-mode="dark"]{
-    --bg:#0E0C0A;--surface:#17120D;--surface2:#1C1610;--ink:#F2EBDD;--muted:#A39A88;
-    --line:rgba(242,235,221,.13);--gold-soft:rgba(200,168,107,.16);--gold:#C8A86B;
+    --bg:#0D0A07;--surface:#161109;--surface2:#1C1610;--ink:#F3EAD9;--muted:#A89A83;
+    --line:rgba(255,255,255,.08);--gold-soft:rgba(200,168,107,.16);--gold:#C8A86B;
   }
   body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;
     -webkit-font-smoothing:antialiased;transition:background .5s ease,color .5s ease}
   a{color:inherit;text-decoration:none}
   img{max-width:100%;display:block}
   button{font:inherit}
+  @keyframes fadeUp{ from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .fade-in{animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both}
 
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
     background:color-mix(in srgb, var(--bg) 84%, transparent);border-bottom:1px solid var(--line)}
-  .nav-inner{max-width:1240px;margin:0 auto;padding:15px 30px;display:flex;align-items:center;gap:26px}
-  .brand{font-family:var(--fdisp);font-weight:700;font-size:23px;letter-spacing:.34em;color:var(--ink);
-    padding-left:.34em}
+  .nav-inner{max-width:1320px;margin:0 auto;padding:15px 30px;display:flex;align-items:center;gap:26px}
+  .brand{font-family:var(--fdisp);font-weight:700;font-size:23px;letter-spacing:.34em;color:var(--ink);padding-left:.34em}
   nav.links{display:flex;gap:26px;margin-left:14px;flex:1;flex-wrap:wrap}
   nav.links a{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .25s}
   nav.links a:hover, nav.links a.current{color:var(--ink)}
@@ -40,72 +42,95 @@
     transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .25s,color .25s;margin-left:auto}
   .icon-btn:hover{border-color:var(--gold);color:var(--ink);transform:rotate(-14deg) scale(1.08)}
 
-  .glass{background:color-mix(in srgb, var(--surface) 72%, transparent);backdrop-filter:blur(16px) saturate(140%);
-    border:1px solid color-mix(in srgb, var(--gold) 18%, var(--line));
-    box-shadow:0 1px 0 0 color-mix(in srgb, #fff 40%, transparent) inset, 0 20px 40px -28px rgba(20,14,6,.35)}
-  @keyframes fadeUp{ from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-  .fade-in{animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both}
+  /* ---------- HERO ---------- */
+  .mg-hero{max-width:1320px;margin:0 auto;padding:64px 30px 0}
+  .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+  @media(max-width:960px){.hero-inner{grid-template-columns:1fr;gap:30px}}
+  .kicker{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+  h1{font-family:var(--fdisp);font-weight:400;font-size:clamp(38px,4.6vw,58px);line-height:1.08;margin:0 0 20px}
+  .lede{max-width:440px;font-size:17px;line-height:1.75;color:var(--muted);margin:0 0 26px}
+  .hero-cta{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+    border-bottom:1px solid var(--gold);padding-bottom:5px}
+  .hero-visual{position:relative;aspect-ratio:5/4;overflow:hidden;border-radius:var(--rad);background:var(--surface2)}
+  .hero-visual img{width:100%;height:100%;object-fit:cover}
+  .hero-spotlight{position:absolute;left:16px;right:16px;bottom:16px;background:var(--surface);padding:18px 20px}
+  .hero-spotlight .hs-kicker{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .hero-spotlight .hs-title{font-family:var(--fdisp);font-weight:600;font-size:21px;line-height:1.2}
+  .hero-spotlight .hs-meta{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
 
-  .mg-hero{max-width:100%;margin:0 auto;padding:56px 30px 20px;position:relative;overflow:hidden;
-    background-image:linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 88%, transparent) 45%, color-mix(in srgb, var(--bg) 55%, transparent) 78%, transparent 100%), url('assets/hero-light.webp');
-    background-size:cover;background-position:center right}
-  .mg-hero > *{max-width:1240px;margin-left:auto;margin-right:auto}
-  html[data-mode="dark"] .mg-hero{
-    background-image:linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 90%, transparent) 45%, color-mix(in srgb, var(--bg) 58%, transparent) 78%, transparent 100%), url('assets/hero-dark.webp');
-  }
-  .kicker{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
-  h1{font-family:var(--fdisp);font-weight:600;font-size:clamp(38px,5vw,58px);line-height:1.05;margin:0 0 16px}
-  .lede{max-width:560px;font-size:16px;line-height:1.7;color:var(--muted);margin:0}
+  /* ---------- EDITOR'S LETTER (más angosta verticalmente) ---------- */
+  .editor-letter{max-width:1320px;margin:56px auto 0;padding:40px 30px;border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);display:grid;grid-template-columns:110px 1fr 260px;gap:44px;align-items:center}
+  @media(max-width:900px){.editor-letter{grid-template-columns:1fr;gap:20px;padding:30px 24px}}
+  .el-photo{width:84px;height:84px;border-radius:50%;background:var(--gold-soft);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;font-family:var(--fdisp);font-weight:600;font-size:28px}
+  @media(max-width:900px){.el-photo{margin:0}}
+  .el-body h2{font-family:var(--fdisp);font-weight:600;font-size:22px;margin:0 0 8px}
+  .el-body p{font-size:13.5px;line-height:1.6;color:var(--muted);margin:0 0 10px;max-width:480px}
+  .el-sign{font-family:var(--fscript);font-size:20px;color:var(--gold);margin-bottom:1px}
+  .el-role{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .el-quote{font-family:var(--fdisp);font-weight:400;font-style:italic;font-size:19px;line-height:1.35;
+    color:var(--ink);border-left:2px solid var(--gold);padding-left:20px}
 
-  /* Destacado */
-  .featured{max-width:1240px;margin:40px auto 10px;padding:0 30px}
-  .featured-card{display:grid;grid-template-columns:1.1fr .9fr;gap:0;border-radius:var(--rad);overflow:hidden;
-    border:1px solid var(--line);background:var(--surface);transition:.3s}
-  .featured-card:hover{border-color:var(--gold)}
-  @media(max-width:800px){.featured-card{grid-template-columns:1fr}}
-  .featured-img{position:relative;aspect-ratio:16/11;overflow:hidden;background:var(--surface2)}
-  .featured-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1)}
-  .featured-card:hover .featured-img img{transform:scale(1.05)}
-  .featured-body{padding:40px 42px;display:flex;flex-direction:column;justify-content:center}
-  @media(max-width:800px){.featured-body{padding:30px 26px}}
-  .f-kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-  .featured-body h2{font-family:var(--fdisp);font-weight:600;font-size:clamp(24px,3vw,32px);line-height:1.15;margin:0 0 14px}
-  .featured-body p{font-size:14.5px;line-height:1.7;color:var(--muted);margin:0 0 20px}
-  .f-meta{font-size:12px;color:var(--muted);margin-bottom:18px}
-  .f-read{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--gold);
-    padding-bottom:3px;align-self:flex-start;transition:padding-bottom .25s}
-  .featured-card:hover .f-read{padding-bottom:6px}
+  /* ---------- EDITOR'S PICKS ---------- */
+  .picks-wrap{max-width:1320px;margin:60px auto 0;padding:0 30px}
+  .picks-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:26px;flex-wrap:wrap;gap:10px}
+  .picks-head h2{font-family:var(--fbody);font-weight:600;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;margin:0}
+  .picks-head span{font-size:11px;letter-spacing:.05em;color:var(--muted)}
+  .picks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  @media(max-width:900px){.picks-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.picks-grid{grid-template-columns:1fr}}
+  .pick-img{border-radius:var(--rad);overflow:hidden;background:var(--surface2);margin-bottom:14px}
+  .pick-img img{width:100%;height:100%;object-fit:cover}
+  .pick.tall .pick-img{aspect-ratio:3/4}
+  .pick.wide .pick-img{aspect-ratio:5/4}
+  .pick-cat{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .pick h3{font-family:var(--fdisp);font-weight:600;font-size:17px;line-height:1.28;margin:0 0 6px}
+  .pick .p-meta{font-size:10.5px;letter-spacing:.03em;color:var(--muted)}
 
-  /* Filtros */
-  .cat-filters{max-width:1240px;margin:50px auto 0;padding:0 30px;display:flex;gap:10px;flex-wrap:wrap}
-  .cat-pill{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-    border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;background:none;transition:.2s}
-  .cat-pill:hover{border-color:var(--gold);color:var(--ink)}
-  .cat-pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-  html[data-mode="dark"] .cat-pill.active{background:var(--gold);color:#15120D;border-color:var(--gold)}
+  /* ---------- TENDENCIAS (3 col) ---------- */
+  .trend-wrap{max-width:1320px;margin:64px auto 0;padding:0 30px;display:grid;
+    grid-template-columns:.75fr 1.15fr .75fr;gap:36px}
+  @media(max-width:960px){.trend-wrap{grid-template-columns:1fr;gap:26px}}
+  .trend-text{display:flex;flex-direction:column;justify-content:center}
+  .trend-text h2{font-family:var(--fdisp);font-weight:500;font-size:clamp(24px,2.6vw,32px);line-height:1.15;margin:0 0 14px}
+  .trend-text p{font-size:14.5px;line-height:1.65;color:var(--muted);margin:0 0 18px}
+  .trend-img{aspect-ratio:4/5;border-radius:var(--rad);overflow:hidden;background:var(--surface2)}
+  .trend-img img{width:100%;height:100%;object-fit:cover}
+  .trend-list{display:flex;flex-direction:column;justify-content:center;gap:20px}
+  .trend-list a{display:flex;gap:12px}
+  .trend-list img{width:52px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0}
+  .trend-list .tl-title{font-family:var(--fdisp);font-weight:600;font-size:14.5px;line-height:1.25}
+  .trend-list .tl-meta{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
 
-  .grid{max-width:1240px;margin:0 auto;padding:30px 30px 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
-  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  /* ---------- MÁS HISTORIAS (integrado al flujo, sin caja separada, sin nav de categorías) ---------- */
+  .journal{max-width:1120px;margin:70px auto 0;padding:0 30px}
+  .journal-head{font-family:var(--fdisp);font-weight:600;font-size:26px;margin:0 0 46px;text-align:center}
 
-  .article-card{text-decoration:none;color:inherit;display:flex;flex-direction:column;
-    transition:transform .35s cubic-bezier(.16,1,.3,1)}
-  .article-card:hover{transform:translateY(-3px)}
-  .ac-img{position:relative;aspect-ratio:5/4;overflow:hidden;border-radius:var(--rad);background:var(--surface2)}
-  .ac-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.92);
-    transition:transform .8s cubic-bezier(.16,1,.3,1),filter .5s ease}
-  .article-card:hover .ac-img img{transform:scale(1.05);filter:saturate(1.1)}
-  .ac-cat{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:16px 0 8px}
-  .article-card h3{font-family:var(--fdisp);font-weight:600;font-size:22px;line-height:1.2;margin:0 0 10px;
-    transition:color .25s}
-  .article-card:hover h3{color:var(--gold)}
-  .a-meta{font-size:11.5px;color:var(--muted)}
-  .read-more{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
-    margin-top:14px;display:inline-flex;align-self:flex-start;transition:color .25s}
-  .article-card:hover .read-more{color:var(--gold)}
+  .journal-row{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:80px}
+  @media(max-width:820px){.journal-row{grid-template-columns:1fr;gap:20px;margin-bottom:52px}}
+  .journal-row.rev .j-img{order:2}
+  .journal-row.rev .j-text{order:1}
+  @media(max-width:820px){.journal-row.rev .j-img, .journal-row.rev .j-text{order:initial}}
+  .j-img{aspect-ratio:4/3;border-radius:var(--rad);overflow:hidden;background:var(--surface2)}
+  .j-img img{width:100%;height:100%;object-fit:cover}
+  .j-kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .j-text h3{font-family:var(--fdisp);font-weight:600;font-size:clamp(22px,2.4vw,30px);line-height:1.18;margin:0 0 14px}
+  .j-text .j-meta{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .j-read{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+    border-bottom:1px solid var(--gold);padding-bottom:3px}
 
-  footer{border-top:1px solid var(--line);background:var(--bg)}
-  .footer-bottom-inner{max-width:1240px;margin:0 auto;padding:24px 30px;display:flex;justify-content:space-between;
+  /* fila "feature" cada 6 — imagen enorme arriba, texto centrado debajo */
+  .journal-row.feature{grid-template-columns:1fr;text-align:center;max-width:900px;margin-left:auto;margin-right:auto}
+  .journal-row.feature .j-img{aspect-ratio:16/9;margin-bottom:30px}
+  .journal-row.feature .j-text{max-width:640px;margin:0 auto}
+
+  .archive-sentinel{height:1px}
+  .archive-loading{text-align:center;padding:30px 0;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .archive-end{text-align:center;padding:20px 0 60px;font-family:var(--fdisp);font-style:italic;font-size:17px;color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);background:var(--bg);margin-top:20px}
+  .footer-bottom-inner{max-width:1320px;margin:0 auto;padding:24px 30px;display:flex;justify-content:space-between;
     flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)}
 </style>
 </head>
@@ -121,206 +146,107 @@
       <a href="academia.html">Academia</a>
       <a href="club.html">Club</a>
     </nav>
-    <button class="icon-btn" id="modeToggle" type="button" aria-label="Cambiar modo">☾</button>
+    <button class="icon-btn" id="modeToggle" type="button" aria-label="Cambiar modo">&#9789;</button>
   </div>
 </header>
 
 <div class="mg-hero">
-  <div class="kicker">El Magazine</div>
-  <h1>Reseñas, guías y academia de perfumería.</h1>
-  <p class="lede">Contenido editorial para entender el mundo de la perfumería antes de elegir tu próxima fragancia. Un artículo nuevo, cada día.</p>
-</div>
-
-<div class="featured">
-  <a class="featured-card fade-in" href="articles/comparativa-sauvage-vs-y-ysl.html">
-    <div class="featured-img">
-      <img src="https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg" alt="Sauvage vs Y Eau de Parfum">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">El Magazine</div>
+      <h1>Reseñas, guías y academia de perfumería.</h1>
+      <p class="lede">Contenido editorial para entender el mundo de la perfumería antes de elegir tu próxima fragancia. Una edición nueva, cada semana.</p>
+      <a class="hero-cta" href="#archivo">Ver todas las historias &#8594;</a>
     </div>
-    <div class="featured-body">
-      <div class="f-kicker">Lo último · Comparativa · Diseñador masivo</div>
-      <h2>Sauvage vs. Y Eau de Parfum: los dos amaderados aromáticos que dominan el mostrador</h2>
-      <p>Mismo precio, familia olfativa vecina y el mismo público objetivo. Comparamos ficha técnica, evolución en piel y a quién le conviene cada uno de estos dos best-sellers masculinos.</p>
-      <div class="f-meta">15 jul 2026 · 7 min de lectura</div>
-      <span class="f-read">Leer el artículo →</span>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&q=75" alt="Perfumería editorial">
+      <a class="hero-spotlight" href="articles/resena-baccarat-rouge-540.html">
+        <div class="hs-kicker">Reseña destacada</div>
+        <div class="hs-title">Baccarat Rouge 540: por qué todo el mundo habla de este ámbar</div>
+        <div class="hs-meta">6 min de lectura &#8594;</div>
+      </a>
     </div>
-  </a>
+  </div>
 </div>
 
-<div class="cat-filters" id="catFilters">
-  <button class="cat-pill active" data-cat="todos">Todos</button>
-  <button class="cat-pill" data-cat="resena">Reseñas</button>
-  <button class="cat-pill" data-cat="guia">Guías</button>
-  <button class="cat-pill" data-cat="academia">Academia</button>
-  <button class="cat-pill" data-cat="analisis">Análisis y tendencias</button>
+<div class="editor-letter">
+  <div class="el-photo">A</div>
+  <div class="el-body">
+    <h2>Carta del Editor</h2>
+    <p>Bienvenido a una nueva edición del Magazine de Aromia. Aquí desmontamos lo que hay detrás de cada frasco: la química, la historia y las decisiones de un perfumista, sin humo ni palabras vacías.</p>
+    <div class="el-sign">Equipo Aromia</div>
+    <div class="el-role">Redacción editorial</div>
+  </div>
+  <div class="el-quote">Un perfume no se elige por moda. Se elige por lo que quieres que recuerden de ti.</div>
 </div>
 
-<div class="grid" id="articleGrid">
-  <a class="article-card fade-in" data-cat="analisis" href="articles/comparativa-sauvage-vs-y-ysl.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg" alt="Sauvage vs Y Eau de Parfum"></div>
-    <div class="ac-cat">Comparativa</div>
-    <h3>Sauvage vs. Y Eau de Parfum: los dos amaderados aromáticos que dominan el mostrador</h3>
-    <div class="a-meta">15 jul 2026 · 7 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
+<div class="picks-wrap">
+  <div class="picks-head"><h2>Editor's Picks</h2><span>Selección curada de esta edición</span></div>
+  <div class="picks-grid">
+    <a class="pick tall" href="articles/estela-proyeccion-longevidad-diferencias.html">
+      <div class="pick-img"><img src="https://images.unsplash.com/photo-1610375461369-d613b564f4c4?auto=format&fit=crop&w=500&q=70" alt=""></div>
+      <div class="pick-cat">Academia</div>
+      <h3>Estela, proyección y longevidad: la diferencia que nadie te explica bien</h3>
+      <div class="p-meta">5 min de lectura</div>
+    </a>
+    <a class="pick wide" href="articles/guia-perfumes-verano-2026.html">
+      <div class="pick-img"><img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=500&q=70" alt=""></div>
+      <div class="pick-cat">Guía</div>
+      <h3>Los mejores perfumes para el verano 2026</h3>
+      <div class="p-meta">6 min de lectura</div>
+    </a>
+    <a class="pick wide" href="articles/resena-aventus-creed.html">
+      <div class="pick-img"><img src="https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg" alt=""></div>
+      <div class="pick-cat">Reseña</div>
+      <h3>Aventus de Creed: el amaderado que lo cambió todo</h3>
+      <div class="p-meta">6 min de lectura</div>
+    </a>
+    <a class="pick tall" href="articles/resena-sauvage-dior.html">
+      <div class="pick-img"><img src="https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg" alt=""></div>
+      <div class="pick-cat">Reseña</div>
+      <h3>Sauvage de Dior: el best-seller que todo el mundo conoce</h3>
+      <div class="p-meta">6 min de lectura</div>
+    </a>
+  </div>
+</div>
 
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-santal-33.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?auto=format&fit=crop&w=700&q=70" alt="Santal 33 de Le Labo"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Santal 33 de Le Labo: el sándalo que se volvió el perfume de una generación</h3>
-    <div class="a-meta">14 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
+<div class="trend-wrap">
+  <div class="trend-text">
+    <div class="kicker">Tendencias</div>
+    <h2>Perfumes unisex: la línea de género que cada vez más gente cruza</h2>
+    <p>Por qué la fragancia deja de dividirse en femenino y masculino, y qué dice eso del olfato colectivo.</p>
+    <a class="hero-cta" href="articles/perfumes-unisex-recomendados.html">Leer más &#8594;</a>
+  </div>
+  <div class="trend-img">
+    <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=75" alt="">
+  </div>
+  <div class="trend-list">
+    <a href="articles/como-elegir-perfume-oficina.html">
+      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=200&q=60" alt="">
+      <div><div class="tl-meta">Guía</div><div class="tl-title">Cómo elegir un perfume para la oficina</div></div>
+    </a>
+    <a href="articles/resena-terre-hermes.html">
+      <img src="https://m.media-amazon.com/images/I/51-fFGx+Y3L._SL1024_.jpg" alt="">
+      <div><div class="tl-meta">Reseña</div><div class="tl-title">Terre d'Hermès: sofisticación discreta</div></div>
+    </a>
+    <a href="articles/perfumes-noche-eventos-especiales.html">
+      <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=200&q=60" alt="">
+      <div><div class="tl-meta">Guía</div><div class="tl-title">Cinco perfumes para una noche especial</div></div>
+    </a>
+  </div>
+</div>
 
-
-  <a class="article-card fade-in" data-cat="academia" href="articles/piramide-olfativa-explicada.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1615485500704-8e990f9900f9?auto=format&fit=crop&w=700&q=70" alt="Pirámide olfativa"></div>
-    <div class="ac-cat">Academia</div>
-    <h3>La pirámide olfativa explicada</h3>
-    <div class="a-meta">9 jul 2026 · 5 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="academia" href="articles/estela-proyeccion-longevidad-diferencias.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1610375461369-d613b564f4c4?auto=format&fit=crop&w=700&q=70" alt="Estela y proyección"></div>
-    <div class="ac-cat">Academia</div>
-    <h3>Estela, proyección y longevidad: la diferencia que nadie te explica bien</h3>
-    <div class="a-meta">9 jul 2026 · 5 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="analisis" href="articles/nicho-vs-disenador-diferencias.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=70" alt="Nicho vs diseñador"></div>
-    <div class="ac-cat">Análisis</div>
-    <h3>Nicho vs. diseñador: ¿en qué se diferencia realmente un perfume de 300 € de uno de 80 €?</h3>
-    <div class="a-meta">9 jul 2026 · 8 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-baccarat-rouge-540.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/71xVLhLWrvL._SL1500_.jpg" alt="Baccarat Rouge 540"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Baccarat Rouge 540: por qué todo el mundo habla de este ámbar</h3>
-    <div class="a-meta">9 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="guia" href="articles/guia-perfumes-verano-2026.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=70" alt="Perfumes de verano"></div>
-    <div class="ac-cat">Guía</div>
-    <h3>Los mejores perfumes para el verano</h3>
-    <div class="a-meta">9 jul 2026 · 7 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="guia" href="articles/perfumes-otono-invierno-calidos.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1511884642898-4c92249e20b6?auto=format&fit=crop&w=700&q=70" alt="Perfumes de otoño-invierno"></div>
-    <div class="ac-cat">Guía</div>
-    <h3>Los perfumes más envolventes para el otoño e invierno</h3>
-    <div class="a-meta">9 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="guia" href="articles/como-elegir-perfume-oficina.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=700&q=70" alt="Perfume para oficina"></div>
-    <div class="ac-cat">Guía</div>
-    <h3>Cómo elegir un perfume para la oficina (sin molestar a nadie)</h3>
-    <div class="a-meta">9 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="guia" href="articles/perfumes-noche-eventos-especiales.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=700&q=70" alt="Perfumes de noche"></div>
-    <div class="ac-cat">Guía</div>
-    <h3>Cinco perfumes para brillar en una noche especial</h3>
-    <div class="a-meta">9 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="analisis" href="articles/perfumes-unisex-recomendados.html">
-    <div class="ac-img"><img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=70" alt="Perfumes unisex"></div>
-    <div class="ac-cat">Tendencias</div>
-    <h3>Perfumes unisex: por qué cada vez más gente cruza la línea de género</h3>
-    <div class="a-meta">9 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-sauvage-dior.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg" alt="Sauvage de Dior"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Sauvage de Dior: el best-seller que todo el mundo conoce</h3>
-    <div class="a-meta">10 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-bleu-de-chanel.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/41tz3PhoH9L._SL1000_.jpg" alt="Bleu de Chanel"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Bleu de Chanel: la elegancia discreta que nunca pasa de moda</h3>
-    <div class="a-meta">10 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-black-opium.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/71w9icubQlL._SL1500_.jpg" alt="Black Opium"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Black Opium de YSL: el oriental gourmand que conquistó a una generación</h3>
-    <div class="a-meta">10 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-good-girl.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/51Qo6szNjLL._SL1500_.jpg" alt="Good Girl"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Good Girl de Carolina Herrera: la mejor proyección del catálogo</h3>
-    <div class="a-meta">10 jul 2026 · 5 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-acqua-di-gio.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/51DpfV3dkVL._SL1500_.jpg" alt="Acqua di Giò"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Acqua di Giò: 30 años después, sigue siendo el acuático de referencia</h3>
-    <div class="a-meta">10 jul 2026 · 5 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-le-male.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/71pKdosF-kL._SL1500_.jpg" alt="Le Male"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Le Male de Jean Paul Gaultier: rompiendo reglas desde 1995</h3>
-    <div class="a-meta">10 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-terre-hermes.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/51-fFGx+Y3L._SL1024_.jpg" alt="Terre d'Hermès"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Terre d'Hermès: la sofisticación discreta redefinida</h3>
-    <div class="a-meta">10 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-light-blue.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/41KgNYHnLFL._SL1500_.jpg" alt="Light Blue"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Light Blue de Dolce & Gabbana: el verano mediterráneo en un frasco</h3>
-    <div class="a-meta">10 jul 2026 · 5 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
-  <a class="article-card fade-in" data-cat="resena" href="articles/resena-aventus-creed.html">
-    <div class="ac-img"><img src="https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg" alt="Aventus de Creed"></div>
-    <div class="ac-cat">Reseña</div>
-    <h3>Aventus de Creed: el perfume que cambió lo que se espera de un amaderado</h3>
-    <div class="a-meta">10 jul 2026 · 6 min</div>
-    <span class="read-more">Leer →</span>
-  </a>
-
+<div class="journal" id="archivo">
+  <div class="journal-head">Más historias</div>
+  <div id="articleGrid"></div>
+  <div class="archive-loading" id="archiveLoading" style="display:none">Cargando más historias…</div>
+  <div class="archive-end" id="archiveEnd" style="display:none">Has llegado al final de esta edición.</div>
+  <div class="archive-sentinel" id="archiveSentinel"></div>
 </div>
 
 <footer>
   <div class="footer-bottom-inner">
-    <span>© 2026 Aromia. El Magazine crece cada día.</span>
+    <span>&copy; 2026 Aromia. El Magazine crece cada semana.</span>
     <a href="index.html">Volver al inicio</a>
   </div>
 </footer>
@@ -330,27 +256,61 @@
   var mode = localStorage.getItem('aromia_mode') || 'light';
   document.documentElement.setAttribute('data-mode', mode);
   var modeBtn = document.getElementById('modeToggle');
-  modeBtn.textContent = mode === 'light' ? '☾' : '☀';
+  modeBtn.textContent = mode === 'light' ? '\u262e' : '\u2600';
   modeBtn.addEventListener('click', function(){
     mode = mode === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-mode', mode);
-    modeBtn.textContent = mode === 'light' ? '☾' : '☀';
+    modeBtn.textContent = mode === 'light' ? '\u262e' : '\u2600';
     try{ localStorage.setItem('aromia_mode', mode); }catch(e){}
   });
 
-  var pills = document.querySelectorAll('.cat-pill');
-  var cards = document.querySelectorAll('.article-card');
-  pills.forEach(function(pill){
-    pill.addEventListener('click', function(){
-      pills.forEach(function(p){ p.classList.remove('active'); });
-      pill.classList.add('active');
-      var cat = pill.getAttribute('data-cat');
-      cards.forEach(function(card){
-        var show = cat === 'todos' || card.getAttribute('data-cat') === cat;
-        card.style.display = show ? '' : 'none';
-      });
+  var ARTICLES = [{"cat": "academia", "href": "articles/piramide-olfativa-explicada.html", "img": "https://images.unsplash.com/photo-1615485500704-8e990f9900f9?auto=format&fit=crop&w=700&q=70", "tag": "Academia", "title": "La pirámide olfativa explicada", "meta": "9 jul 2026 · 5 min"}, {"cat": "academia", "href": "articles/estela-proyeccion-longevidad-diferencias.html", "img": "https://images.unsplash.com/photo-1610375461369-d613b564f4c4?auto=format&fit=crop&w=700&q=70", "tag": "Academia", "title": "Estela, proyección y longevidad: la diferencia que nadie te explica bien", "meta": "9 jul 2026 · 5 min"}, {"cat": "analisis", "href": "articles/nicho-vs-disenador-diferencias.html", "img": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=70", "tag": "Análisis", "title": "Nicho vs. diseñador: ¿en qué se diferencia realmente un perfume de 300 € de uno de 80 €?", "meta": "9 jul 2026 · 8 min"}, {"cat": "resena", "href": "articles/resena-baccarat-rouge-540.html", "img": "https://m.media-amazon.com/images/I/41K6RDfdLL._SL1500_.jpg", "tag": "Reseña", "title": "Baccarat Rouge 540: por qué todo el mundo habla de este ámbar", "meta": "9 jul 2026 · 6 min"}, {"cat": "guia", "href": "articles/guia-perfumes-verano-2026.html", "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=70", "tag": "Guía", "title": "Los mejores perfumes para el verano 2026", "meta": "9 jul 2026 · 6 min"}, {"cat": "guia", "href": "articles/perfumes-otono-invierno-calidos.html", "img": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=700&q=70", "tag": "Guía", "title": "Perfumes cálidos para otoño-invierno", "meta": "9 jul 2026 · 6 min"}, {"cat": "guia", "href": "articles/como-elegir-perfume-oficina.html", "img": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=700&q=70", "tag": "Guía", "title": "Cómo elegir un perfume para la oficina (sin molestar a nadie)", "meta": "9 jul 2026 · 6 min"}, {"cat": "guia", "href": "articles/perfumes-noche-eventos-especiales.html", "img": "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=700&q=70", "tag": "Guía", "title": "Cinco perfumes para brillar en una noche especial", "meta": "9 jul 2026 · 6 min"}, {"cat": "analisis", "href": "articles/perfumes-unisex-recomendados.html", "img": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=70", "tag": "Tendencias", "title": "Perfumes unisex: por qué cada vez más gente cruza la línea de género", "meta": "9 jul 2026 · 6 min"}, {"cat": "resena", "href": "articles/resena-sauvage-dior.html", "img": "https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg", "tag": "Reseña", "title": "Sauvage de Dior: el best-seller que todo el mundo conoce", "meta": "10 jul 2026 · 6 min"}, {"cat": "resena", "href": "articles/resena-bleu-de-chanel.html", "img": "https://m.media-amazon.com/images/I/41tz3PhoH9L._SL1000_.jpg", "tag": "Reseña", "title": "Bleu de Chanel: la elegancia discreta que nunca pasa de moda", "meta": "10 jul 2026 · 6 min"}, {"cat": "resena", "href": "articles/resena-black-opium.html", "img": "https://m.media-amazon.com/images/I/71w9icubQlL._SL1500_.jpg", "tag": "Reseña", "title": "Black Opium de YSL: el oriental gourmand que conquistó a una generación", "meta": "10 jul 2026 · 6 min"}, {"cat": "resena", "href": "articles/resena-good-girl.html", "img": "https://m.media-amazon.com/images/I/51Qo6szNjLL._SL1500_.jpg", "tag": "Reseña", "title": "Good Girl de Carolina Herrera: la mejor proyección del catálogo", "meta": "10 jul 2026 · 5 min"}, {"cat": "resena", "href": "articles/resena-acqua-di-gio.html", "img": "https://m.media-amazon.com/images/I/51DpfV3dkVL._SL1500_.jpg", "tag": "Reseña", "title": "Acqua di Giò: 30 años después, sigue siendo el acuático de referencia", "meta": "10 jul 2026 · 5 min"}, {"cat": "resena", "href": "articles/resena-le-male.html", "img": "https://m.media-amazon.com/images/I/71pKdosF-kL._SL1500_.jpg", "tag": "Reseña", "title": "Le Male de Jean Paul Gaultier: rompiendo reglas desde 1995", "meta": "10 jul 2026 · 6 min"}, {"cat": "resena", "href": "articles/resena-terre-hermes.html", "img": "https://m.media-amazon.com/images/I/51-fFGx+Y3L._SL1024_.jpg", "tag": "Reseña", "title": "Terre d'Hermès: la sofisticación discreta redefinida", "meta": "10 jul 2026 · 6 min"}, {"cat": "resena", "href": "articles/resena-light-blue.html", "img": "https://m.media-amazon.com/images/I/41KgNYHnLFL._SL1500_.jpg", "tag": "Reseña", "title": "Light Blue de Dolce & Gabbana: el verano mediterráneo en un frasco", "meta": "10 jul 2026 · 5 min"}, {"cat": "resena", "href": "articles/resena-aventus-creed.html", "img": "https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg", "tag": "Reseña", "title": "Aventus de Creed: el perfume que cambió lo que se espera de un amaderado", "meta": "10 jul 2026 · 6 min"}];
+  var BATCH = 4;
+  var visibleCount = 0;
+  var gridEl = document.getElementById('articleGrid');
+  var loadingEl = document.getElementById('archiveLoading');
+  var endEl = document.getElementById('archiveEnd');
+
+  function rowHtml(a, globalIndex){
+    var isFeature = globalIndex > 0 && globalIndex % 6 === 5;
+    var isRev = globalIndex % 2 === 1;
+    var cls = 'journal-row fade-in' + (isFeature ? ' feature' : (isRev ? ' rev' : ''));
+    return '<div class="' + cls + '">' +
+      '<div class="j-img"><img src="' + a.img + '" alt="' + a.title + '" loading="lazy"></div>' +
+      '<a class="j-text" href="' + a.href + '">' +
+        '<div class="j-kicker">' + a.tag + '</div>' +
+        '<h3>' + a.title + '</h3>' +
+        '<div class="j-meta">' + a.meta + '</div>' +
+        '<span class="j-read">Leer el artículo &#8594;</span>' +
+      '</a>' +
+    '</div>';
+  }
+
+  function renderBatch(){
+    var next = ARTICLES.slice(visibleCount, visibleCount + BATCH);
+    if(next.length === 0){
+      loadingEl.style.display = 'none';
+      endEl.style.display = visibleCount > 0 ? 'block' : 'none';
+      return;
+    }
+    loadingEl.style.display = 'none';
+    var html = next.map(function(a, i){ return rowHtml(a, visibleCount + i); }).join('');
+    gridEl.insertAdjacentHTML('beforeend', html);
+    visibleCount += next.length;
+    if(visibleCount >= ARTICLES.length){ endEl.style.display = 'block'; }
+  }
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        loadingEl.style.display = 'block';
+        setTimeout(renderBatch, 250);
+      }
     });
-  });
+  }, {rootMargin: '400px', threshold: 0});
+  observer.observe(document.getElementById('archiveSentinel'));
+
+  renderBatch();
 })();
 </script>
 
