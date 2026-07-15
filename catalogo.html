@@ -1678,10 +1678,8 @@
 
   // --- Amazon Associates ---
   // AFFILIATE_ACTIVE controla si el tag de afiliado se añade a los enlaces.
-  // Dejar en false hasta que Amazon apruebe formalmente la cuenta de Associates
-  // (política: no se pueden publicar enlaces con tag activo antes de la aprobación).
-  // Cuando llegue la aprobación, cambiar a "true" y volver a publicar.
-  var AFFILIATE_ACTIVE = false;
+  // Activo desde la aprobación de la cuenta de Amazon Associates (aromialab-20).
+  var AFFILIATE_ACTIVE = true;
   var AMAZON_TRACKING_ID = 'aromialab-20';
 
   function amazonUrl(p){
