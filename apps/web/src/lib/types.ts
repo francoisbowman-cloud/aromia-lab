@@ -11,4 +11,5 @@ export interface Perfume {
   imagen_url: string;
   link_afiliado: string;
   descripcion_corta?: string;
+  nicho_o_comercial?: "nicho" | "comercial";
 }

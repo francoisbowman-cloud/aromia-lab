@@ -93,6 +93,11 @@
       "enum": ["económico", "medio", "premium", "lujo"],
       "description": "Categoría de precio derivada, usada para filtros rápidos en el comparador."
     },
+    "nicho_o_comercial": {
+      "type": "string",
+      "enum": ["nicho", "comercial"],
+      "description": "Tipo de mercado del perfume (independiente del precio) — usado para filtros en el frontend, ej. quiz y catálogo. Sumado 2026-07-16 tras decisión de producto confirmando su uso."
+    },
     "imagen_url": {
       "type": "string",
       "format": "uri",

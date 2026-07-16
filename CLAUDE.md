@@ -187,12 +187,15 @@ Notas para el parser:
   reasignar, porque no es una decisión técnica (ver
   `SPRINT1_COMPLETE_CODE.md` para el detalle y la lista de perfumes
   afectados).
-- `nicho_o_comercial` (`nicho` | `comercial`): columna que trajo Cowork y
-  que **no está en `schema/perfume.schema.json`** — es información de
-  producto útil (mezcla de catálogo) que el schema no contempló. Se dejó
-  como columna extra al final del CSV en vez de agregarla al schema por
-  cuenta propia; si se va a usar para filtros en el frontend, hace falta
-  sumarla al schema y a la migración en una decisión aparte.
+- `nicho_o_comercial` (`nicho` | `comercial`): **sumado al schema y a
+  Postgres el 2026-07-16** (`schema/perfume.schema.json`,
+  `apps/api/migrations/002_add_nicho_o_comercial.sql`) — Brey confirmó que
+  se va a usar para filtros en el frontend. `apps/api/src/db/seed.ts` ya
+  lo carga; la API lo expone (usa `SELECT *`); el tipo `Perfume` de
+  `apps/web/src/lib/types.ts` lo incluye. Las 50 filas del CSV tienen
+  valor (24 `nicho`, 26 `comercial`), columna `NOT NULL`-safe pero se
+  dejó nullable en la migración por consistencia con el resto de columnas
+  opcionales de la tabla.
 - `link_afiliado` e `imagen_url` son **placeholders** (`https://afiliado
   .placeholder/...`, `https://img.placeholder/...`) — no son datos de
   producción todavía.

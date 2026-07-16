@@ -1,15 +1,20 @@
 import "dotenv/config";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pool } from "./pool";
 
 async function migrate() {
-  const sql = readFileSync(
-    join(__dirname, "..", "..", "migrations", "001_create_perfumes.sql"),
-    "utf-8",
-  );
-  await pool.query(sql);
-  console.log("Migración aplicada: 001_create_perfumes.sql");
+  const migrationsDir = join(__dirname, "..", "..", "migrations");
+  const files = readdirSync(migrationsDir)
+    .filter((file) => file.endsWith(".sql"))
+    .sort();
+
+  for (const file of files) {
+    const sql = readFileSync(join(migrationsDir, file), "utf-8");
+    await pool.query(sql);
+    console.log(`Migración aplicada: ${file}`);
+  }
+
   await pool.end();
 }
 

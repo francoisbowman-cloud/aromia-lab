@@ -15,9 +15,14 @@ Registro corto de cada entrega al repo en `feature/v2.0` y ramas derivadas. Una 
 - `/quiz` sigue como placeholder de Sprint 1 — **corrección:** `COPY/quiz-questions.md` ya está en el repo desde Sprint 1, el placeholder es porque la lógica todavía no se implementó, no porque falte el insumo (gracias a Cowork por la corrección, ver `CLAUDE.md`).
 
 ### Pendiente para Cowork
-- `nicho_o_comercial` (columna del CSV que trajo Cowork) sigue **sin estar en `schema/perfume.schema.json` ni en la tabla Postgres** — si se va a usar para filtros en el frontend, hace falta sumarla al schema y a una migración nueva, en una decisión aparte (ver `CLAUDE.md`).
+- ~~`nicho_o_comercial` sin estar en el schema ni en Postgres~~ — **cerrado 2026-07-16:** Brey confirmó que se va a usar para filtros en el frontend. Sumado a `schema/perfume.schema.json`, migración `apps/api/migrations/002_add_nicho_o_comercial.sql`, `seed.ts` actualizado, tipo `Perfume` del frontend actualizado. Reseeded local y Railway con las 50 filas (24 `nicho`, 26 `comercial`).
 - ~~Los 5 perfumes de nicho quedaron con `categoria_precio = premium`~~ — **cerrado 2026-07-16:** comparado contra los precios reales del catálogo (`lujo` arranca en $275, `premium` llegaba hasta $240), los 5 van de $145 a $255 — ninguno alcanza el piso de `lujo`. `premium` es correcto, sin migración pendiente.
-- `COPY/quiz-questions.md` ya está disponible; el mapeo de matching usa `nicho_o_comercial`, que aún no está en Postgres — si se implementa el quiz antes de esa migración, ese filtro necesita leerse del CSV o esperar la columna.
+- `COPY/quiz-questions.md` ya está disponible; ahora que `nicho_o_comercial` está en Postgres, el mapeo de matching del quiz puede leer directo de la base, sin depender del CSV.
 
 ## 2026-07-16 — Cowork
 - Reconciliado: `CLAUDE.md` — confirmó que las 5 filas de `categoria_precio = nicho` fueron un error propio al cargar el CSV original (no ambigüedad de Code), y marcó revisar si alguna de esas 5 amerita `lujo` en vez de `premium` por precio real. Corrigió la nota de este changelog sobre `COPY/quiz-questions.md` (el archivo ya existía, no era un insumo faltante).
+
+## 2026-07-16 — Code
+- Nuevo: `apps/api/migrations/002_add_nicho_o_comercial.sql` — agrega la columna `nicho_o_comercial` (`nicho` | `comercial`, con `CHECK`) a la tabla `perfumes`, tras confirmación de Brey de que se va a usar para filtros. `schema/perfume.schema.json` y `apps/web/src/lib/types.ts` actualizados en consecuencia.
+- Corregido: `apps/api/src/db/migrate.ts` ahora aplica **todos** los archivos de `migrations/` en orden (antes tenía `001` hardcodeado — con la migración 002 nueva, hacía falta generalizarlo).
+- `apps/api/src/db/seed.ts` actualizado para sembrar también `nicho_o_comercial`. Verificado local (24 `nicho`, 26 `comercial` sobre 50 filas) antes de aplicar a Railway.

@@ -4,10 +4,9 @@ import { join } from "node:path";
 import { parse } from "csv-parse/sync";
 import { pool } from "./pool";
 
-// nicho_o_comercial no está en el schema (schema/perfume.schema.json) — se
-// descarta acá, ver CLAUDE.md para el motivo. categoria_precio="nicho" no es
-// un valor válido para esa columna (choca con el CHECK de la migración);
-// se remapea a "premium" por decisión explícita, no se inventa sin avisar.
+// categoria_precio="nicho" no es un valor válido para esa columna (choca
+// con el CHECK de la migración, confunde precio con tipo de mercado); se
+// remapea a "premium" por decisión explícita, no se inventa sin avisar.
 const CATEGORIA_PRECIO_FIX: Record<string, string> = {
   nicho: "premium",
 };
@@ -57,8 +56,8 @@ async function seed() {
         slug, nombre, marca, genero, familia_olfativa,
         notas_salida, notas_corazon, notas_fondo,
         precio_referencia, moneda, categoria_precio,
-        imagen_url, link_afiliado, descripcion_corta
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        imagen_url, link_afiliado, descripcion_corta, nicho_o_comercial
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       ON CONFLICT (slug) DO UPDATE SET
         nombre = EXCLUDED.nombre,
         marca = EXCLUDED.marca,
@@ -73,6 +72,7 @@ async function seed() {
         imagen_url = EXCLUDED.imagen_url,
         link_afiliado = EXCLUDED.link_afiliado,
         descripcion_corta = EXCLUDED.descripcion_corta,
+        nicho_o_comercial = EXCLUDED.nicho_o_comercial,
         actualizado_en = now()
       RETURNING (xmax = 0) AS inserted`,
       [
@@ -90,6 +90,7 @@ async function seed() {
         row.imagen_url,
         row.link_afiliado,
         row.descripcion_corta,
+        row.nicho_o_comercial,
       ],
     );
 
