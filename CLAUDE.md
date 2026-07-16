@@ -201,6 +201,25 @@ Notas para el parser:
   traía un `id` numérico secuencial en su lugar. Ese `id` no se conservó:
   Postgres genera su propia PK (`SERIAL`) en la migración.
 
+#### Estado real en staging (actualizado 2026-07-16, Code)
+
+Los 50 perfumes ya están sembrados en el Postgres del staging de Railway
+(proyecto `aromia-lab-v2`, rama `feature/v2.0` — ver `CHANGELOG-2.0.md`),
+vía `apps/api/src/db/seed.ts` (usa `csv-parse`, RFC 4180 real). Verificado
+navegando `/perfumes` y `/perfumes/santal-33` con datos reales.
+
+Confirmado: `link_afiliado` e `imagen_url` se sembraron **tal cual venían
+del CSV** (placeholders) — `seed.ts` no tiene ninguna lógica especial para
+esas columnas. Van a quedar con URLs falsas en staging hasta que se
+reemplacen por datos reales antes de producción.
+
+Las 5 filas con `categoria_precio = nicho` se remapearon a `premium` al
+sembrar (no se dejaron sin reasignar como decía la nota original de
+arriba — esa decisión ya se tomó con Brey). **Pendiente de revisión:**
+si el precio real de alguna de esas 5 amerita `lujo` en vez de `premium`
+(varias rondan o superan los $250), señalarlo para una migración de
+corrección puntual.
+
 ### Artículos — `articles/*.md`
 
 11 archivos markdown (10 pedidos + 1 de más, señalado por Cowork como
@@ -245,6 +264,15 @@ descripción) pensado para `og:title` / `og:description` en la página de
 resultado compartible. La lógica de matching es de reglas simples (suma
 de puntos, sin ML) — implementable como función pura, sin modelo ni
 servicio externo.
+
+**Corrección (2026-07-16, Code):** el archivo **ya está en el repo**
+desde Sprint 1 — el placeholder de `/quiz` en staging que dice "esperando
+este archivo" no es por falta de insumo, es que todavía no se
+implementó la lógica. Nota de `nicho_o_comercial`: el mapeo de matching
+de este documento usa esa columna, que aún no está en Postgres (ver
+sección de catálogo arriba) — si se implementa el quiz antes de esa
+migración, ese filtro específico va a necesitar leerse del CSV en vez
+de la base, o esperar a que se persista la columna.
 
 ### Estrategia SEO — `SEO_STRATEGY.md` (raíz del repo)
 
