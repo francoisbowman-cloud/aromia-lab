@@ -33,7 +33,8 @@
 12. [Entornos: staging vs. producción](#12-entornos-staging-vs-producción)
 13. [Deploy](#13-deploy)
 
-⏳ Por clasificar: *(vacío por ahora)*
+⏳ Por clasificar:
+- [Recorte de imágenes en CSS: `object-fit` y `object-position`, vs. estandarizar assets](#recorte-de-imágenes-en-css-object-fit-y-object-position-vs-estandarizar-assets)
 
 ---
 
@@ -257,4 +258,22 @@
 
 ---
 
-*Última actualización: 15 jul 2026, por Claude — creación inicial del documento a partir de los conceptos acumulados hasta la fecha (sección 9 del ESTADO).*
+## Por clasificar
+
+### Recorte de imágenes en CSS: `object-fit` y `object-position`, vs. estandarizar assets
+
+**En una frase:** cuando una imagen no tiene las mismas proporciones que el espacio donde se muestra, `object-fit` decide cómo se ajusta (recortando, estirando o encogiendo) y `object-position` decide qué parte de la imagen se prioriza al recortar — pero es un parche sobre la imagen original, no un reemplazo de tenerla bien preparada de antemano.
+
+**Analogía:** es como mirar una foto rectangular a través de una ventana redonda — `object-fit: cover` decide si la foto se agranda hasta llenar la ventana (recortando bordes) o se encoge para que entre completa (dejando espacios vacíos); `object-position` decide si esa ventana se centra en la cara de la persona o en sus pies.
+
+**¿Dónde aparece en nuestros proyectos?** Las tarjetas de `catalogo.html` usan `.card-img img { object-fit: cover }` sobre un marco de proporción fija (`aspect-ratio: 3/4`). Las fotos de producto vienen directo de Amazon (`m.media-amazon.com/...`), cada una con su propia composición — algunas centran bien el frasco, otras no — así que el recorte automático a veces corta mal la imagen.
+
+**Por qué importa:** hay dos soluciones de nivel distinto para el mismo síntoma. `object-position` es un ajuste de CSS, rápido, caso por caso, pero limitado por la imagen que ya existe — si la foto original tiene el producto corrido hacia un costado, no hay ajuste de CSS que la arregle del todo. La alternativa real es estandarizar: descargar cada imagen, recortarla/redimensionarla a un lienzo consistente, y alojarla en el propio servidor (`assets/`) en vez de enlazar a Amazon. Eso da control total y, de paso, independiza al sitio de que Amazon cambie o borre esas URLs — pero implica procesar cada imagen a mano (o con un script), no es gratis.
+
+**Se relaciona con:** [[9-tailwind-css]] usa las mismas utilidades de CSS por debajo del capó, aunque `catalogo.html` no use Tailwind directamente.
+
+**Fecha y contexto:** 16 jul 2026 — Code, decisión tomada con Brey: arreglo rápido con `object-position` ahora, estandarizar assets queda como tarea de fondo para más adelante.
+
+---
+
+*Última actualización: 16 jul 2026, por Code — agregada lección de `object-fit`/`object-position` en "Por clasificar".*
