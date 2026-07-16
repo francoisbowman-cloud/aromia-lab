@@ -215,10 +215,13 @@ reemplacen por datos reales antes de producción.
 
 Las 5 filas con `categoria_precio = nicho` se remapearon a `premium` al
 sembrar (no se dejaron sin reasignar como decía la nota original de
-arriba — esa decisión ya se tomó con Brey). **Pendiente de revisión:**
-si el precio real de alguna de esas 5 amerita `lujo` en vez de `premium`
-(varias rondan o superan los $250), señalarlo para una migración de
-corrección puntual.
+arriba — esa decisión ya se tomó con Brey). **Revisado y cerrado
+(2026-07-16):** comparando contra los precios reales del resto del
+catálogo, `lujo` arranca en $275 y `premium` llegaba hasta $240. Los 5
+perfumes de nicho van de $145 a $255 (Molecule 01 $145, Kirke $195,
+Nishane Hacivat $250, Le Labo Another 13 $250, Santal 33 $255) —
+ninguno alcanza el piso de `lujo`. `premium` es correcto para los 5, no
+hace falta migración.
 
 ### Artículos — `articles/*.md`
 

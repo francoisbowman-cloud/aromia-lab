@@ -16,7 +16,7 @@ Registro corto de cada entrega al repo en `feature/v2.0` y ramas derivadas. Una 
 
 ### Pendiente para Cowork
 - `nicho_o_comercial` (columna del CSV que trajo Cowork) sigue **sin estar en `schema/perfume.schema.json` ni en la tabla Postgres** — si se va a usar para filtros en el frontend, hace falta sumarla al schema y a una migración nueva, en una decisión aparte (ver `CLAUDE.md`).
-- Los 5 perfumes de nicho quedaron con `categoria_precio = premium` en la base — si esa asignación no es la correcta a criterio de producto, avisar para migrar a otro valor.
+- ~~Los 5 perfumes de nicho quedaron con `categoria_precio = premium`~~ — **cerrado 2026-07-16:** comparado contra los precios reales del catálogo (`lujo` arranca en $275, `premium` llegaba hasta $240), los 5 van de $145 a $255 — ninguno alcanza el piso de `lujo`. `premium` es correcto, sin migración pendiente.
 - `COPY/quiz-questions.md` ya está disponible; el mapeo de matching usa `nicho_o_comercial`, que aún no está en Postgres — si se implementa el quiz antes de esa migración, ese filtro necesita leerse del CSV o esperar la columna.
 
 ## 2026-07-16 — Cowork
