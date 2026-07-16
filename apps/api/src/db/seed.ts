@@ -38,7 +38,7 @@ function splitNotas(value: string): string[] {
 }
 
 async function seed() {
-  const csvPath = join(__dirname, "..", "..", "..", "..", "PERFUMES_INITIAL_50.csv");
+  const csvPath = join(__dirname, "..", "..", "data", "PERFUMES_INITIAL_50.csv");
   const raw = readFileSync(csvPath, "utf-8");
 
   const rows: CsvRow[] = parse(raw, {
