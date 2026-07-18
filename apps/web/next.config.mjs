@@ -34,11 +34,13 @@ const nextConfig = {
       { source: "/perfumes-noche-eventos-especiales.html", destination: "/articulos", permanent: true },
       { source: "/perfumes-otono-invierno-calidos.html", destination: "/articulos", permanent: true },
       { source: "/perfumes-unisex-recomendados.html", destination: "/articulos", permanent: true },
-      { source: "/piramide-olfativa-explicada.html", destination: "/articulos", permanent: true },
       { source: "/guia-perfumes-verano-2026.html", destination: "/articulos", permanent: true },
 
+      // Artículos de Academia (contenido migrado 18/07) — ahora con equivalente directo
+      { source: "/piramide-olfativa-explicada.html", destination: "/articulos/academia-piramide-olfativa", permanent: true },
+      { source: "/academia.html", destination: "/articulos", permanent: true },
+
       // Sin redirect todavía (pendiente de decisión/contenido — ver ESTADO-aromia.md):
-      // /academia.html — categoría "academia" existe en el schema pero sin artículos publicados
       // /club.html — sin equivalente en v2, se recrea más adelante
       // /catalogo.html?p=ID — deep-links por ID numérico, sin mapeo a slug
     ];
