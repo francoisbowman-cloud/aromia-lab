@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -13,11 +15,30 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+});
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "Aromia",
   description: "Comparador y recomendador de perfumes",
 };
+
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var theme = localStorage.getItem('aromia_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -25,12 +46,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" data-theme="light">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} ${jost.variable} antialiased`}
       >
         <NavBar />
-        {children}
+        <div className="flex-1">{children}</div>
+        <Footer />
       </body>
     </html>
   );

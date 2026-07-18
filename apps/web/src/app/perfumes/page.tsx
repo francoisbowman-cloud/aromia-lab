@@ -1,49 +1,27 @@
-import Link from "next/link";
 import { getPerfumes } from "@/lib/api";
+import { PerfumesCatalog } from "@/components/perfume/PerfumesCatalog";
 
 export const revalidate = 60;
 
 export default async function PerfumesPage() {
-  let perfumes: Awaited<ReturnType<typeof getPerfumes>> = [];
-  let error: string | null = null;
-
-  try {
-    perfumes = await getPerfumes();
-  } catch {
-    error = "No se pudo conectar con el backend (¿está corriendo la API?).";
-  }
+  const perfumes = await getPerfumes();
 
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-6 p-8">
-      <h1 className="text-2xl font-bold tracking-tight">Perfumes</h1>
-
-      {error && (
-        <p className="rounded border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
-          {error}
+    <main className="mx-auto flex max-w-6xl flex-col gap-8 p-6 lg:p-10">
+      <div>
+        <p className="font-sans text-[11px] uppercase tracking-[.24em] text-gold-contrast">
+          Catálogo
         </p>
-      )}
+        <h1 className="mt-2 font-display text-[40px] font-semibold leading-[0.98] text-ink">
+          Perfumes
+        </h1>
+      </div>
 
-      {!error && perfumes.length === 0 && (
-        <p className="text-black/60 dark:text-white/60">
-          Todavía no hay perfumes cargados en la base.
-        </p>
+      {perfumes.length === 0 ? (
+        <p className="font-sans text-sm text-muted">Todavía no hay perfumes cargados.</p>
+      ) : (
+        <PerfumesCatalog perfumes={perfumes} />
       )}
-
-      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {perfumes.map((perfume) => (
-          <li
-            key={perfume.slug}
-            className="rounded border border-black/10 p-4 dark:border-white/10"
-          >
-            <Link href={`/perfumes/${perfume.slug}`} className="font-medium hover:underline">
-              {perfume.nombre}
-            </Link>
-            <p className="text-sm text-black/60 dark:text-white/60">
-              {perfume.marca} · {perfume.familia_olfativa}
-            </p>
-          </li>
-        ))}
-      </ul>
     </main>
   );
 }

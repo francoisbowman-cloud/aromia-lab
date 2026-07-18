@@ -2,7 +2,8 @@
 
 Memoria operativa técnica para trabajar en este repo. Las decisiones de
 **producto** (alcance, exclusiones, roadmap) viven en `ESTADO-aromia.md`
-(fuera de este repo) — no se duplican acá.
+(raíz del repo desde el 17/07 — antes se manejaba fuera, en Descargas) — no
+se duplican acá.
 
 No se encontró un borrador de `CLAUDE.md` de Cowork en el repo al momento
 de este Sprint 1 — este documento se escribió desde cero con lo técnico
