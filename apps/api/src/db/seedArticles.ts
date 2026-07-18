@@ -13,6 +13,7 @@ const TIPO_A_CATEGORIA: Record<string, string> = {
   comparativa: "analisis",
   guia_temporada: "guia",
   guia_ocasion: "guia",
+  guia_educativa: "academia",
 };
 
 function slugFromFilename(filename: string): string {
