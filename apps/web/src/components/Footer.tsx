@@ -21,6 +21,11 @@ export default function Footer() {
               Quiz
             </Link>
           </li>
+          <li>
+            <Link href="/privacidad" className="hover:text-ink">
+              Privacidad
+            </Link>
+          </li>
         </ul>
         <span>&copy; {new Date().getFullYear()} Aromia</span>
       </div>

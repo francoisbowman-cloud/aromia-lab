@@ -62,6 +62,19 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 38 | Magazine público construido reusando la tabla `articles` del admin en vez de parsear los `.md` aparte — no existía ninguna ruta pública para leerla; single source of truth entre admin y sitio público | Code |
 | 39 | Plan de convergencia completo ejecutado y **deployado a producción real** (no solo local) — incluyó corregir 3 problemas de infraestructura no documentados hasta el intento de deploy real: target port de Railway pegado en un typo histórico, secrets de admin inexistentes en producción, y migraciones `002`-`007` nunca aplicadas a la Postgres de producción | Code |
 | 40 | Deploy a Railway confirmado como automático en cada push a `feature/v2.0` (Railway ya estaba configurado así desde el 15/07) — no hace falta accionarlo a mano, contradice el supuesto de la decisión #36 de que había que esperar al final del plan | Code |
+| 41 | Aromia todavía no genera ingresos reales — mientras eso no cambie, cualquier decisión que no implique gasto adicional (ej. GA4, que es gratis) se aprueba sin más análisis de costo/beneficio | Brey |
+| 42 | Redirects v1→v2 confirmados y activados: reseñas sin artículo propio van a su comparativa equivalente donde exista (Sauvage/Bleu de Chanel, Black Opium/Good Girl, Aventus), el resto sin comparativa va a la ficha de producto, y los artículos sin ningún destino razonable van al hub `/articulos` en vez de 404 | Brey |
+| 43 | `/lab.html` (armador de quiz v1) redirige a `/quiz` — se acepta el reemplazo de UX | Brey |
+| 44 | `/club.html` no se recrea todavía — sin redirect por ahora, queda pendiente de diseño futuro | Brey |
+| 45 | `/academia.html` no redirige todavía — se prioriza escribir contenido de categoría `academia` antes de activar el redirect (hoy 0 artículos la usan) | Brey |
+| 46 | Deep-links `/catalogo.html?p=ID` (perfume por ID numérico de v1) no se preservan — no vale la pena reconstruir el mapeo ID→slug | Brey |
+| 47 | `/privacidad` creada en v2 (gap real: v1 la tenía, v2 no tenía ninguna) — adaptación de `privacidad.html` al sistema de diseño nuevo, antes del corte de dominio | Brey |
+| 48 | Se usa **Google Analytics 4** en vez de migrar el DNS de `aromialab.com` a Cloudflare para tener Cloudflare Analytics — el dominio hoy usa los nameservers del registrador (Namecheap), no está en Cloudflare como zona. Migrar DNS es un cambio de infraestructura real que afecta todo el sitio v1 en producción; se evalúa junto con el corte de dominio real, no antes | Code (recomendación) / Brey (confirmación) |
+| 49 | Corte de dominio real (`aromialab.com` de GitHub Pages/v1 a Railway/v2): se evalúa **después de cerrar el resto de la Pista B**, no ahora | Brey |
+| 50 | Proveedor de newsletter: **SendGrid** — integrado vía API REST directa (sin SDK como dependencia nueva), envía email de bienvenida solo en altas nuevas, sin romper el flujo si `SENDGRID_API_KEY` no está seteada | Brey |
+| 51 | Scraper de precios: Brey pidió acotar alcance (retailers, frecuencia) — **todavía sin definir**, sigue pendiente | Brey |
+| 52 | Cowork se reactiva — coordinación pendiente, no ocurrió todavía en este repo | Brey |
+| 53 | GA4 sí, además de Cloudflare Analytics cuando esté disponible | Brey |
 
 ---
 
@@ -183,12 +196,14 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 ## 11. Próximo paso
 
 El plan de convergencia (decisiones #35-37) **ya se ejecutó y deployó** —
-2.0 está en producción real en el subdominio de Railway. Lo que sigue son
-decisiones de Brey, ninguna bloquea el estado actual del sitio:
+2.0 está en producción real en el subdominio de Railway. La ronda de Pista B
+del 18/07 cerró redirects, `/privacidad`, GA4 y SendGrid (decisiones #41-53).
+Lo que queda, ninguno bloquea el estado actual del sitio:
 
-1. **Corte de dominio** (`aromialab.com` de v1/GitHub Pages a v2/Railway) — la decisión de negocio más grande que queda. Requiere: confirmar el mapeo de redirects (`REDIRECTS_DRAFT_v1_a_v2.md`), decidir qué hacer con los 17 artículos de v1 sin equivalente en v2, y crear `/privacidad` en v2 antes de cortar.
-2. Elegir proveedor de email (SendGrid/Mailgun) para activar el newsletter ya scaffoldeado.
-3. Dar seguimiento a los pendientes de la sección 13.
+1. Acotar alcance del **scraper de precios** (retailers, frecuencia) — único ítem de producto original (decisión #7) sin construir.
+2. Coordinar la **reactivación de Cowork** (decisión #52).
+3. **Corte de dominio** (`aromialab.com` de v1/GitHub Pages a v2/Railway) — la decisión de negocio más grande que queda, se evalúa después de lo anterior (decisión #49).
+4. Dar seguimiento a los pendientes de la sección 13.
 
 ---
 
@@ -214,19 +229,21 @@ decisiones de Brey, ninguna bloquea el estado actual del sitio:
 ## 13. Pendientes / preguntas abiertas
 
 **Bloquean el corte de dominio a `aromialab.com`:**
-- Confirmar/ajustar `REDIRECTS_DRAFT_v1_a_v2.md` — 17 de 20 artículos de v1 sin equivalente directo en v2 (¿redirigir a ficha de producto, al hub, o escribir el artículo en v2 primero?).
-- Crear `/privacidad` en v2 (v1 la tiene, posible requisito de Amazon Associates).
-- Definir timing y ejecutar el cambio de DNS (decisión de negocio, no técnica).
+- ~~Confirmar/ajustar `REDIRECTS_DRAFT_v1_a_v2.md`~~ — **cerrado 18/07** (decisión #42), 24 redirects activados en `apps/web/next.config.mjs`.
+- ~~Crear `/privacidad` en v2~~ — **cerrado 18/07** (decisión #47).
+- Definir timing y ejecutar el cambio de DNS (decisión de negocio, no técnica) — se evalúa después de cerrar el resto de la Pista B (decisión #49).
+- `/academia.html` sigue sin redirect — falta escribir contenido de esa categoría primero (decisión #45).
+- `/club.html` sin redirect — se recrea más adelante (decisión #44).
 
 **No bloquean nada, se resuelven a su ritmo:**
 - Afiliados e imágenes reales (hoy placeholders en las 50 filas) — o seguir así más tiempo.
-- Elegir proveedor de email (SendGrid vs Mailgun) para el newsletter ya scaffoldeado.
-- Alcance y aprobación del scraper de precios real (único ítem del alcance original de producto, decisión #7, que sigue 100% sin construir).
-- ¿Se suma GA4 además de Cloudflare Analytics?
-- Credenciales de Cloudflare (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ZONE_ID`) para reemplazar el placeholder "sin datos" del dashboard admin de 2.0.
-- ¿Se reactiva Cowork o sigue en stand-by?
+- ~~Elegir proveedor de email~~ — **cerrado 18/07**: SendGrid, integrado y activo detrás de `SENDGRID_API_KEY`/`SENDGRID_FROM_EMAIL` (decisión #50) — falta que Brey genere y pase esas credenciales.
+- Alcance y aprobación del scraper de precios real (único ítem del alcance original de producto, decisión #7, que sigue 100% sin construir) — Brey pidió acotarlo, todavía sin definir (decisión #51).
+- ~~¿Se suma GA4?~~ — **cerrado 18/07**: sí, integrado y activo detrás de `NEXT_PUBLIC_GA_ID` (decisión #48/#53) — falta que Brey cree la property de GA4 y pase el Measurement ID.
+- Credenciales de Cloudflare (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ZONE_ID`): sin sentido pedirlas todavía — `aromialab.com` no está agregado como zona en Cloudflare (usa nameservers del registrador), ver decisión #48.
+- Coordinar la reactivación de Cowork (decisión #52) — confirmado que se reactiva, falta la coordinación real.
 - Duplicación de `resena-baccarat-rouge-540` (.html de v1 + .md nuevo) sin resolver.
-- ¿Sigue en pausa el arranque de Sprint 2 de OVL (documentar las 10 Skills) o se retoma?
+- ¿Sigue en pausa el arranque de Sprint 2 de OVL (documentar las 10 Skills) o se retoma? — sin pedido explícito de Brey, sigue en stand-by.
 
 ---
 

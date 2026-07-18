@@ -176,3 +176,63 @@ producción, **y lo deploya** — ya no vive solo en el worktree local.
   **ya estaba resuelto** desde el 16/07 (commit `3c5d0e9`) con una
   solución más precisa de lo que `ESTADO-aromia.md` describía — no
   hacía falta código nuevo, solo se corrigió el documento.
+
+## 2026-07-18 (2) — Code
+
+Ronda de Pista B resuelta con Brey por preguntas de selección múltiple
+(sin ambigüedad de mi parte, todo confirmado explícitamente antes de
+tocar código).
+
+### Redirects v1 → v2 activados
+- `apps/web/next.config.mjs`: 24 redirects 301 activados en base a
+  `REDIRECTS_DRAFT_v1_a_v2.md` con las decisiones de Brey — slugs
+  idénticos directos, reseñas sin artículo propio a su comparativa
+  equivalente donde exista, fallback a ficha de producto (`/perfumes/[slug]`)
+  para las que no tienen comparativa, y los artículos sin ningún
+  destino razonable al hub `/articulos` en vez de 404.
+- Sin redirect todavía, a propósito: `/academia.html` (Brey eligió
+  escribir contenido de esa categoría antes de redirigir — 0 artículos
+  la usan hoy), `/club.html` (se recrea más adelante, sin equivalente
+  en v2), deep-links `/catalogo.html?p=ID` (Brey confirmó que no
+  importa preservarlos, sin mapeo ID→slug disponible).
+
+### `/privacidad` (gap cerrado)
+- Nuevo: `apps/web/src/app/privacidad/page.tsx` — adaptación de
+  `privacidad.html` (v1) al sistema de diseño de v2, mismas 7
+  secciones (afiliados de Amazon, cookies, derechos, etc.) más una
+  sección de analítica agregada por la integración de GA4. Linkeada
+  desde el `Footer`.
+
+### Google Analytics 4
+- Nuevo: `apps/web/src/components/GoogleAnalytics.tsx`, montado en
+  `layout.tsx` detrás de `NEXT_PUBLIC_GA_ID` — si la variable no está
+  seteada, no renderiza nada (no rompe build ni local). Corre además
+  de Cloudflare Analytics (que sigue sin activar, ver nota abajo).
+- Brey eligió GA4 en vez de migrar el DNS del dominio a Cloudflare para
+  tener Cloudflare Analytics — **hallazgo de esta ronda:**
+  `aromialab.com` no está agregado como zona en la cuenta de
+  Cloudflare de Brey (usa los nameservers del registrador,
+  `registrar-servers.com`, típico de Namecheap). Verificado con
+  `nslookup -type=NS`. Cloudflare Analytics sigue sin activar — solo
+  se puede si en algún momento se decide migrar el DNS del dominio,
+  que es un cambio de infraestructura real (afecta todo el sitio v1 en
+  producción), no algo a resolver de paso por una métrica del admin.
+
+### SendGrid (envío real de newsletter)
+- Nuevo: `apps/api/src/lib/email.ts` — envía un email de bienvenida vía
+  la API REST de SendGrid (`fetch` directo, sin SDK nueva como
+  dependencia) cuando `SENDGRID_API_KEY` y `SENDGRID_FROM_EMAIL` están
+  seteadas; si no, no hace nada (no rompe el flujo de suscripción).
+  `apps/api/src/routes/subscribers.ts` ahora dispara el email solo en
+  altas nuevas (`RETURNING id` para detectar inserts reales vs.
+  `ON CONFLICT DO NOTHING`), y el error de envío se loguea sin romper
+  la respuesta 201 al usuario.
+
+### Pendiente, explícitamente no resuelto en esta ronda
+- Scraper de precios: Brey pidió definir alcance ahora (retailers,
+  frecuencia) — todavía no se acotó, queda para la próxima ronda.
+- Cowork: Brey confirmó reactivarlo — no se coordinó todavía en este
+  repo, es una acción pendiente de la próxima sesión.
+- OVL Sprint 2: sigue en stand-by, sin pedido explícito de retomarlo.
+- Credenciales de Cloudflare: no se generó token (no hay zona que
+  proteger todavía, ver nota de GA4 arriba).
