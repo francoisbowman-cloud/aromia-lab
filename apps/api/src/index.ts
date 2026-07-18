@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { redis } from "./redis/client";
 import { perfumesRouter } from "./routes/perfumes";
 import { articlesRouter } from "./routes/articles";
+import { subscribersRouter } from "./routes/subscribers";
 import { adminPerfumesRouter } from "./routes/admin/perfumes";
 import { adminDashboardRouter } from "./routes/admin/dashboard";
 import { adminArticlesRouter } from "./routes/admin/articles";
@@ -41,6 +42,7 @@ app.get("/health", async (_req, res) => {
 
 app.use("/api/perfumes", perfumesRouter);
 app.use("/api/articulos", articlesRouter);
+app.use("/api/subscribers", subscribersRouter);
 
 app.get("/api/admin/ping", adminAuth, (_req, res) => {
   res.json({ ok: true });

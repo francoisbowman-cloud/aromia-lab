@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPerfumes } from "@/lib/api";
 import { PerfumeCard } from "@/components/perfume/PerfumeCard";
+import { NewsletterForm } from "@/components/NewsletterForm";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +71,18 @@ export default async function Home() {
         >
           Empezar el quiz
         </Link>
+      </section>
+
+      <section className="mx-auto flex max-w-lg flex-col items-center gap-3 text-center">
+        <h2 className="font-display text-xl font-semibold text-ink">
+          Alertas de bajada de precio
+        </h2>
+        <p className="font-sans text-sm text-muted">
+          Deja tu email y te avisamos cuando tu perfume favorito baje de precio.
+        </p>
+        <div className="w-full">
+          <NewsletterForm fuente="home" />
+        </div>
       </section>
     </main>
   );

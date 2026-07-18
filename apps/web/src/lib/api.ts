@@ -14,6 +14,15 @@ export async function getPerfumes(): Promise<Perfume[]> {
   return res.json();
 }
 
+export async function subscribe(email: string, fuente: "home" | "quiz"): Promise<boolean> {
+  const res = await fetch(`${API_BASE_URL}/api/subscribers`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, fuente }),
+  });
+  return res.ok;
+}
+
 export async function getArticulos(): Promise<Article[]> {
   const res = await fetch(`${API_BASE_URL}/api/articulos`, {
     next: { revalidate: 60 },

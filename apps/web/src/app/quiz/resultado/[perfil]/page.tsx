@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getPerfumes } from "@/lib/api";
 import { getProfileBySlug, getRecommendationsForProfile } from "@/lib/quizData";
 import { PerfumeCard } from "@/components/perfume/PerfumeCard";
+import { NewsletterForm } from "@/components/NewsletterForm";
 
 export async function generateMetadata({
   params,
@@ -70,6 +71,18 @@ export default async function QuizResultadoPage({
           Todavía no tenemos recomendaciones para este perfil.
         </p>
       )}
+
+      <section className="mx-auto flex max-w-lg flex-col items-center gap-3 text-center">
+        <h2 className="font-display text-xl font-semibold text-ink">
+          Alertas de bajada de precio
+        </h2>
+        <p className="font-sans text-sm text-muted">
+          Deja tu email y te avisamos cuando alguno de estos perfumes baje de precio.
+        </p>
+        <div className="w-full">
+          <NewsletterForm fuente="quiz" />
+        </div>
+      </section>
     </main>
   );
 }
