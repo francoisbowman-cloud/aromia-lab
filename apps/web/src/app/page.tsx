@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getPerfumes } from "@/lib/api";
 import { PerfumeCard } from "@/components/perfume/PerfumeCard";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const perfumes = await getPerfumes();

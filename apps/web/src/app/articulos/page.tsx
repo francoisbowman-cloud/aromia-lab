@@ -1,7 +1,7 @@
 import { getArticulos } from "@/lib/api";
 import { ArticleCard } from "@/components/article/ArticleCard";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Magazine — Aromia",

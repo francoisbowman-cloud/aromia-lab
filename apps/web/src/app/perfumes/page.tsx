@@ -1,7 +1,7 @@
 import { getPerfumes } from "@/lib/api";
 import { PerfumesCatalog } from "@/components/perfume/PerfumesCatalog";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function PerfumesPage() {
   const perfumes = await getPerfumes();
