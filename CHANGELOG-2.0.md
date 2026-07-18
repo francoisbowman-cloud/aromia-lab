@@ -229,10 +229,71 @@ tocar código).
   la respuesta 201 al usuario.
 
 ### Pendiente, explícitamente no resuelto en esta ronda
-- Scraper de precios: Brey pidió definir alcance ahora (retailers,
-  frecuencia) — todavía no se acotó, queda para la próxima ronda.
 - Cowork: Brey confirmó reactivarlo — no se coordinó todavía en este
   repo, es una acción pendiente de la próxima sesión.
 - OVL Sprint 2: sigue en stand-by, sin pedido explícito de retomarlo.
 - Credenciales de Cloudflare: no se generó token (no hay zona que
   proteger todavía, ver nota de GA4 arriba).
+
+## 2026-07-18 (3) — Code
+
+Cowork entregó dos artefactos (contenido de Academia + investigación de
+scraper de precios), Brey los aprobó, Code los subió y los construyó.
+
+### Academia — 4 artículos nuevos
+- Nuevo: `articles/academia-historia-de-la-perfumeria.md`,
+  `academia-piramide-olfativa.md`, `academia-familias-olfativas.md`,
+  `academia-concentraciones-perfume.md` — contenido migrado de
+  `academia.html` (v1), con los datos y cifras del original preservados
+  tal cual y el desarrollo expandido para SEO. El componente de
+  "ingredientes interactivos" de v1 quedó fuera a propósito (es JS, no
+  contenido). Copiados también a `apps/api/data/articles/` (mismo patrón
+  que el resto del catálogo, por el root directory acotado del build de
+  Railway) y sembrados en la Postgres de producción — verificados en
+  `/articulos/academia-*` con 200 en las 4 rutas.
+- Nuevo: mapeo `guia_educativa → academia` en `seedArticles.ts` — la
+  categoría `academia` ya existía en el `CHECK` de la tabla `articles`
+  desde `006_create_articles.sql`, sin usar hasta ahora. No hizo falta
+  migración de esquema, solo el mapeo.
+- Redirects activados: `/academia.html` → `/articulos` (hub, la página
+  original cubría las 4 secciones a la vez) y
+  `/piramide-olfativa-explicada.html` → `/articulos/academia-piramide-olfativa`
+  (mejorado de un redirect genérico al hub a uno directo, ahora que existe
+  contenido real equivalente).
+
+### Scraper de precios — scaffold técnico de la Fase 2 (Douglas, Primor)
+- Investigación previa (research, sin código) de todo el universo de
+  programas de afiliados de perfumería más allá de los 4 ya identificados
+  — Perfume's Club (Tradedoubler), Douglas (Awin), Primor (Awin), Ulta,
+  FragranceX, FragranceNet, Perfumania, Scentbird, Twisted Lily,
+  Luckyscent — con fases de rollout y frecuencia de sync recomendada
+  (diaria, vía product feed de cada red en vez de scraping HTML directo;
+  Amazon aparte por el rate limit de su PA-API). Aprobado por Brey.
+- Nuevo: `apps/api/src/scraper/` — `types.ts`, `feeds/awin.ts` (parser
+  CSV del datafeed estándar de Awin, formato documentado públicamente),
+  `feeds/tradedoubler.ts` (stub explícito, sin activar — el formato del
+  feed de Perfume's Club no está confirmado sin credenciales reales de
+  afiliado), `matcher.ts` (matching de producto de feed → perfume del
+  catálogo por marca exacta + solapamiento de tokens del nombre, vía
+  `\p{Diacritic}` para normalizar acentos), `sync.ts` (upsert en
+  `retailers`, log en `activity_log`), `runner.ts` (orquesta las
+  configs activas y registra el cron).
+- Nuevo: `apps/api/migrations/008_add_retailer_sync_columns.sql` —
+  agrega `fuente` (default `'manual'`) y `sincronizado_en` a `retailers`,
+  con un índice único parcial que excluye `fuente='manual'`. El scraper
+  solo hace upsert sobre sus propias filas (`fuente='awin_douglas'`,
+  etc.) — nunca toca ni borra lo que un admin cargó a mano. Aplicada a
+  producción.
+- Nuevo: `POST /api/admin/scraper/run` — disparo manual del sync para
+  probar sin esperar al cron. Cron diario a las 06:00 vía `node-cron`,
+  registrado solo si `AWIN_API_TOKEN` + `AWIN_MERCHANT_ID_DOUGLAS`/
+  `AWIN_MERCHANT_ID_PRIMOR` están seteados — mismo patrón no-op que
+  SendGrid/GA4, sin credenciales no rompe nada. Verificado en producción:
+  el endpoint responde 200 con `results: []` sin credenciales
+  configuradas.
+- **Pendiente, no delegable a Code:** Brey tiene que registrarse como
+  afiliado en Awin para Douglas y Primor (y en Tradedoubler para
+  Perfume's Club, cuando se active esa fase) — Code no puede crear esas
+  cuentas. Una vez con las credenciales, hay que validar la URL exacta
+  del datafeed de Awin y el formato real del feed de Tradedoubler contra
+  cuentas reales antes de dejar correr el cron en serio.
