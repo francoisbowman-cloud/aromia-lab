@@ -95,9 +95,15 @@ GitHub = dónde vive el código (ambas versiones, mismo repo, ramas distintas). 
 - Cloudflare Web Analytics instalado
 - Imagen editorial IA en Erba Pura (prueba piloto)
 - `CHANGELOG-1.0.md` con entrada del 15 jul confirmada por Code
-
-**Pendiente de confirmación de Code:**
-- Fix de `object-fit`/`object-position` en tarjetas del catálogo (zoom/recorte excesivo)
+- ~~Fix de `object-fit`/`object-position` en tarjetas del catálogo~~ —
+  **cerrado, ya estaba resuelto desde el 16/07** (commit `3c5d0e9`,
+  `catalogo.html`): no fue un ajuste genérico de `object-position`, sino
+  un array `CARD_IMG_FIT_CONTAIN` con los 6 productos puntuales cuya
+  composición no toleraba `object-fit: cover` (Baccarat Rouge 540, Black
+  Opium, Sauvage, Bleu de Chanel, Miss Dior, Mon Paris) — a esos se les
+  aplica `object-fit: contain` en vez de recortar. Este documento lo
+  tenía marcado como pendiente por desactualización, no porque faltara
+  hacerlo — verificado el 17/07 revisando el código real de `main`.
 
 ### Aromia 2.0 (`feature/2.0`)
 
@@ -189,7 +195,6 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 
 ## 13. Pendientes / preguntas abiertas
 
-- ¿Se confirmó el fix de `object-fit`/`object-position` en las tarjetas del catálogo de 1.0?
 - ¿Se reactiva Cowork o sigue en stand-by?
 - ¿Se suma GA4 además de Cloudflare Analytics?
 - Redirects v1→v2 y duplicación de `resena-baccarat-rouge-540` siguen sin resolver (decisiones de contenido/SEO, no técnicas).
