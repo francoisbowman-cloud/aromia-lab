@@ -10,7 +10,9 @@ import { subscribersRouter } from "./routes/subscribers";
 import { adminPerfumesRouter } from "./routes/admin/perfumes";
 import { adminDashboardRouter } from "./routes/admin/dashboard";
 import { adminArticlesRouter } from "./routes/admin/articles";
+import { adminScraperRouter } from "./routes/admin/scraper";
 import { adminAuth } from "./middleware/adminAuth";
+import { startPriceSyncCron } from "./scraper/runner";
 
 // Sin esto, un error no capturado en cualquier parte del proceso (fuera de
 // una ruta Express) mata el proceso en silencio, sin log — Railway solo ve
@@ -51,6 +53,7 @@ app.get("/api/admin/ping", adminAuth, (_req, res) => {
 app.use("/api/admin/perfumes", adminAuth, adminPerfumesRouter);
 app.use("/api/admin/dashboard", adminAuth, adminDashboardRouter);
 app.use("/api/admin/articles", adminAuth, adminArticlesRouter);
+app.use("/api/admin/scraper", adminAuth, adminScraperRouter);
 
 // Middleware de error — último `app.use`, recibe todo lo que los handlers
 // pasan a `next(err)` (incluido lo que atrapa asyncHandler). Sin esto, un
@@ -63,4 +66,5 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 app.listen(port, () => {
   console.log(`API de Aromia escuchando en http://localhost:${port}`);
+  startPriceSyncCron();
 });
