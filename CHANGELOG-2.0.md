@@ -102,3 +102,77 @@ deployar a Railway todavía** — pendiente de revisión de Brey antes de subir.
   con hojeo `react-pageflip`, descarga PDF vía `@media print`) tampoco se
   construyó — sigue pendiente en su totalidad.
 - Nada de esto se subió a Railway todavía — vive solo en el worktree local.
+
+## 2026-07-18 — Code
+
+Plan de convergencia completo (decisión de Brey en `ESTADO-aromia.md`,
+decisiones #35-37): cierra los pendientes de arriba, endurece para
+producción, **y lo deploya** — ya no vive solo en el worktree local.
+
+### Magazine público (`/articulos`) — resuelve el pendiente del 16/07
+- Decisión técnica: en vez de parsear los `.md` directo en Next.js, se
+  reutiliza la tabla `articles` ya construida para `/admin/magazine` —
+  no existía **ninguna** ruta pública para leerla, solo la protegida de
+  admin. Nueva `GET /api/articulos` (pública, solo `estado='publicado'`).
+- `apps/api/src/db/seedArticles.ts`: siembra los 11 `.md` de `articles/`
+  (copiados a `apps/api/data/`, misma restricción de build de Railway
+  que el CSV) a esa tabla — gray-matter + marked, cruza `perfumes` del
+  frontmatter contra la tabla `perfumes` real.
+- `/articulos` y `/articulos/[slug]` con el sistema de diseño existente,
+  `@tailwindcss/typography` para el HTML, metadata OG por artículo.
+- Decisión de alcance (Brey, #35): el mockup `/catalogo` (scroll
+  infinito + "Perfume del mes") **no se retoma** — `/perfumes` queda
+  como versión final.
+
+### SEO técnico
+- `sitemap.ts`/`robots.ts` nativos de Next 14, incluyen perfumes y
+  artículos dinámicamente.
+- `REDIRECTS_DRAFT_v1_a_v2.md`: borrador de mapeo de las 20 URLs de
+  artículos + 8 páginas raíz de v1 — solo 2 coinciden de slug exacto,
+  17 sin equivalente en v2 todavía. Sin activar, pendiente de Brey.
+
+### Endurecimiento para producción
+- **Bug de build encontrado en el primer intento de deploy real:**
+  Next.js pre-renderiza en build-time cualquier página con
+  `revalidate` (ISR) — si la API está caída durante el build, el build
+  entero falla. Pasó de verdad (3 deploys fallidos seguidos). Se
+  reemplaza `revalidate=60` por `dynamic="force-dynamic"` en `/`,
+  `/perfumes`, `/articulos` y `sitemap.ts` — el contenido cambia todo
+  el tiempo vía admin de cualquier forma, no había beneficio real en
+  generación estática acá.
+- Ninguna ruta de `apps/api` capturaba errores (Express 4 no propaga
+  rechazos de promesas). Nuevo `asyncHandler` aplicado a las 15 rutas +
+  middleware de error global + `process.on('uncaughtException'/
+  'unhandledRejection')`.
+- Secrets de producción generados y seteados en Railway
+  (`ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, `ADMIN_API_TOKEN` —
+  no existían, el admin no iba a funcionar en producción tal cual).
+- **Bug de infraestructura encontrado y corregido:** el dominio de
+  Railway del servicio `api` tenía el *target port* pegado en `400`
+  (typo histórico de la variable `PORT`, a nivel de networking de
+  Railway, separado de la variable de entorno — cambiar la variable no
+  alcanzaba). Corregido con `railway domain update --port 4000`.
+  Healthcheck de producción (`/health`) verificado en 200 tras el fix.
+- Migraciones `002` a `007` aplicadas a la Postgres de producción (solo
+  tenía `001`) — con backup (`pg_dump`) previo guardado en
+  `.scratch/backups/` antes de correrlas.
+
+### Scaffold de newsletter
+- Tabla `subscribers` + `POST /api/subscribers` + formulario simple en
+  home y resultado del quiz. Sin proveedor de email integrado a
+  propósito — pendiente de que Brey elija SendGrid vs Mailgun.
+
+### Deploy real y verificación
+- `web` y `api` deployados a Railway (auto-deploy en cada push a
+  `feature/v2.0`, confirmado — no hace falta accionarlo a mano).
+  Smoke test completo contra las URLs reales de producción: home,
+  `/perfumes` con filtros, ficha de producto, quiz de punta a punta
+  hasta el resultado, `/articulos` + artículo individual, login de
+  admin + dashboard + catálogo + magazine (11 artículos, 50 perfumes,
+  datos reales), captura de newsletter. Sin errores 4xx/5xx en los
+  logs de Railway durante la verificación (salvo un 401 esperado de un
+  intento de login de prueba).
+- `object-fit`/`object-position` en `main` (Aromia 1.0): investigado,
+  **ya estaba resuelto** desde el 16/07 (commit `3c5d0e9`) con una
+  solución más precisa de lo que `ESTADO-aromia.md` describía — no
+  hacía falta código nuevo, solo se corrigió el documento.

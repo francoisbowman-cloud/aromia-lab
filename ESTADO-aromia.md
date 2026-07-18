@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 17 de julio de 2026 — por: Chat (mecanismo opusplan + instrucción pulida para Code)
+Última actualización: 18 de julio de 2026 — por: Code (plan de convergencia completo, deployado)
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -9,7 +9,7 @@ Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-com
 Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amazon, con Notino/Druni/Sephora en evaluación). Corre en dos versiones en paralelo:
 
 - **Aromia 1.0** — sitio estático HTML, rama `main`, **en producción real** (aromialab.com), afiliados activos generando ingresos.
-- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/2.0`, con staging en Railway. Eventualmente **reemplaza** a 1.0 en el mismo dominio (no coexisten como dos sitios). **Nota 17/07: el staging de Railway está desactualizado respecto al trabajo local — ver sección 6.**
+- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/2.0`. **Actualizado 18/07: el staging de Railway ya tiene todo el trabajo del panel admin, ficha de producto, home/perfumes/quiz y Magazine — verificado en producción real (`web-production-71f88.up.railway.app`), no solo local.** Todavía sirve desde el subdominio de Railway, no desde `aromialab.com` — el corte de dominio sigue siendo una decisión de Brey (ver sección 11).
 
 ---
 
@@ -59,6 +59,9 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 35 | Catálogo: el `/perfumes` simple ya implementado **queda como versión final** — no se retoma el mockup original de `/catalogo` (scroll infinito + tarjeta "Perfume del mes"). Magazine público (`/articulos/`) pasa a ser la **siguiente prioridad** de construcción | Brey |
 | 36 | Deploy a Railway del trabajo pendiente (Panel Admin, Página de Producto, Home/listado/Quiz, y ahora Magazine) se hace **al finalizar el plan completo** que Code está armando (ver decisión #29 de la sesión anterior) — no en entregas parciales | Brey |
 | 37 | Modo híbrido de modelo para el plan completo que arma Code: se usa el alias nativo de Claude Code **`opusplan`** (`/model opusplan`) — Opus mientras está en modo plan (arquitectura, decisiones difíciles), cambia automáticamente a Sonnet en modo ejecución (código). No requiere cambio manual de modelo en ningún momento | Chat |
+| 38 | Magazine público construido reusando la tabla `articles` del admin en vez de parsear los `.md` aparte — no existía ninguna ruta pública para leerla; single source of truth entre admin y sitio público | Code |
+| 39 | Plan de convergencia completo ejecutado y **deployado a producción real** (no solo local) — incluyó corregir 3 problemas de infraestructura no documentados hasta el intento de deploy real: target port de Railway pegado en un typo histórico, secrets de admin inexistentes en producción, y migraciones `002`-`007` nunca aplicadas a la Postgres de producción | Code |
+| 40 | Deploy a Railway confirmado como automático en cada push a `feature/v2.0` (Railway ya estaba configurado así desde el 15/07) — no hace falta accionarlo a mano, contradice el supuesto de la decisión #36 de que había que esperar al final del plan | Code |
 
 ---
 
@@ -107,28 +110,38 @@ GitHub = dónde vive el código (ambas versiones, mismo repo, ramas distintas). 
 
 ### Aromia 2.0 (`feature/2.0`)
 
-**⚠️ Todo lo de abajo está hecho y verificado en el worktree local de Code, pero NADA se subió a Railway todavía.** El staging en vivo sigue mostrando el placeholder de Sprint 1.
+**✅ Deployado y verificado en producción real desde el 18/07** —
+`web-production-71f88.up.railway.app` / `api-production-fe2f.up.railway.app`,
+no solo local. Railway auto-deploya en cada push a `feature/v2.0`
+(confirmado — no hace falta accionarlo a mano).
 
-**Hecho (implementado y verificado en navegador local desde el 16/07):**
-1. **Panel de Administración** (`/admin`) — Dashboard con KPIs reales y actividad reciente (el placeholder "Por Cowork" del mockup ya se reemplazó por actores reales: `Brey`/`Sistema`), Catálogo con búsqueda/filtros/paginación + CRUD completo de perfumes (imagen, retailers, reseña sintetizada, SEO), Magazine con editor Tiptap (crear/guardar borrador/publicar). Auth por contraseña compartida.
+**Hecho (verificado en producción, no solo local):**
+1. **Panel de Administración** (`/admin`) — Dashboard con KPIs reales y actividad reciente (el placeholder "Por Cowork" del mockup ya se reemplazó por actores reales: `Brey`/`Sistema`), Catálogo con búsqueda/filtros/paginación + CRUD completo de perfumes (imagen, retailers, reseña sintetizada, SEO), Magazine con editor Tiptap (crear/guardar borrador/publicar). Auth por contraseña compartida — **contraseña de producción regenerada el 18/07, pedila a Code si la necesitás.**
 2. **Página de Producto** (`/perfumes/[slug]`) — "Anatomía de una fragancia" completa: imagen, tabla de ofertas multi-retailer, radar "El retrato olfativo" (Recharts), evolución en piel, reseñas comunitarias.
 3. **Auditoría WCAG AA** (decisión #30) — dorado con contraste insuficiente en texto; corregido con `--gold-contrast`. Barrido responsive 1440→320px sin overflow.
-4. **Home, listado de perfumes y quiz** (antes placeholders de Sprint 1, nunca cubiertos por ningún mockup de ChatGPT):
-   - `/` — hero + destacados reales + banner al quiz.
-   - `/perfumes` — listado con tarjetas y filtros (texto, género, familia, precio, nicho/comercial).
-   - `/quiz` — las 6 preguntas y 7 perfiles de `COPY/quiz-questions.md` funcionando de verdad, con resultado compartible en `/quiz/resultado/[perfil]` (meta tags OG por perfil).
-5. **Bug de datos corregido** (decisión #31): perfumes en borrador ya no se filtran públicamente.
-
-**Mockups del 16/07 — resolución (decisión #35, 17/07):**
-3. **Catálogo** (`/catalogo`) — **cerrado.** El `/perfumes` implementado el 17/07 queda como versión final; no se construye el diseño original del mockup (scroll infinito + "Perfume del mes").
-4. **Magazine** (`/magazine`) — **siguiente prioridad de construcción.** Portada tipo revista, hojeo interactivo (`react-pageflip`), descarga PDF vía `@media print`. Sin implementar todavía.
+4. **Home, listado de perfumes y quiz**:
+   - `/` — hero + destacados reales + banner al quiz + captura de newsletter.
+   - `/perfumes` — listado con tarjetas y filtros (texto, género, familia, precio, nicho/comercial). Decisión #35: **versión final**, no se retoma el mockup `/catalogo` (scroll infinito + "Perfume del mes").
+   - `/quiz` — las 6 preguntas y 7 perfiles de `COPY/quiz-questions.md` funcionando de verdad, con resultado compartible en `/quiz/resultado/[perfil]` (meta tags OG por perfil) + captura de newsletter.
+5. **Magazine público** (`/articulos`) — reusa la misma tabla `articles` del admin (antes no tenía ninguna ruta pública). Los 11 `.md` de `articles/` sembrados ahí; cualquier artículo nuevo publicado desde el admin aparece automáticamente. Mockup original `/magazine` (hojeo + PDF) **no se construyó** — decisión de alcance, no de producto.
+6. **Bug de datos corregido** (decisión #31): perfumes en borrador ya no se filtran públicamente.
+7. **Scaffold de newsletter**: tabla `subscribers` + captura funcional en home y resultado del quiz. Sin envío real todavía (pendiente elegir proveedor, sección 13).
+8. **SEO técnico**: `sitemap.xml`/`robots.txt` reales, dinámicos.
 
 **Roadmap futuro — "Visión Panel v2"** (no bloquea nada, sin cambios): Service Accounts múltiples, módulo de Assets, Comparador con motor de reglas propio, multi-retailer automático, CMS modular tipo Notion, modelo de "entidades".
 
-**Schema — actualizado 17/07:**
-- ~~5 perfumes con categoría de precio inválida "nicho"~~ — **cerrado el 16/07** (Santal 33, Molecule 01, Kirke, Le Labo Another 13, Nishane Hacivat remapeados a `premium`; ninguno alcanza el piso de `lujo`). Este documento no lo había reflejado — ya consta en `CLAUDE.md`/`CHANGELOG-2.0.md` del repo.
-- Redirects v1 → v2 sin confirmar (sin cambios).
+**Infraestructura — hallazgos y fixes del 18/07 (no eran visibles hasta intentar el deploy real):**
+- El dominio de Railway del servicio `api` tenía el *target port* pegado en `400` desde el 15/07 (typo histórico, a nivel de networking de Railway, no de variable de entorno) — el admin nunca hubiera funcionado en producción sin este fix. Corregido.
+- Los secrets de admin (`ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, `ADMIN_API_TOKEN`) no existían en Railway — generados y seteados.
+- Las migraciones `002` a `007` nunca se habían aplicado a la Postgres de producción (solo tenía la tabla base de perfumes) — aplicadas, con backup previo.
+- Bug de build real (no solo hipotético): Next.js intenta pre-renderizar en build-time las páginas con `revalidate`, lo que rompe el build si la API está caída en ese momento — pasó 3 veces seguidas. Corregido con `dynamic="force-dynamic"`.
+- Ninguna ruta de la API capturaba errores — corregido con manejo de errores global.
+
+**Schema — actualizado 18/07:**
+- ~~5 perfumes con categoría de precio inválida "nicho"~~ — **cerrado el 16/07** (Santal 33, Molecule 01, Kirke, Le Labo Another 13, Nishane Hacivat remapeados a `premium`; ninguno alcanza el piso de `lujo`).
+- Redirects v1 → v2: **borrador técnico listo** en `REDIRECTS_DRAFT_v1_a_v2.md` (raíz del repo) — sin activar, pendiente de que Brey confirme los casos ambiguos (17 de 20 artículos de v1 sin equivalente directo en v2 todavía).
 - Duplicación de `resena-baccarat-rouge-540` (.html de v1 + .md nuevo) sin resolver (sin cambios).
+- **Nuevo hallazgo (18/07):** v2 no tiene ninguna página `/privacidad` — v1 sí la tiene (`privacidad.html`), posible requisito de Amazon Associates. Señalado en el draft de redirects, sin resolver.
 
 ---
 
@@ -161,15 +174,20 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 - `CURSO-PERSONAL-BREY.md` + skill `curso-tecnico-brey` — curso técnico personal de Brey, actualizable por los 3 actores
 - `SPEC-PANEL-ADMIN-2.0.md` — spec base del Panel Admin, incluye brief usado y la sección "Visión Panel v2"
 - `PROMPTS-CATALOGO-50.md` — los 50 prompts de imagen
-- `CHANGELOG-1.0.md` / `CHANGELOG-2.0.md` — changelogs separados por versión, viven en la raíz del repo; `CHANGELOG-2.0.md` recién actualizado el 17/07 con todo el trabajo de la sección 6.
+- `CHANGELOG-1.0.md` / `CHANGELOG-2.0.md` — changelogs separados por versión, viven en la raíz del repo; `CHANGELOG-2.0.md` recién actualizado el 18/07 con todo el trabajo de la sección 6, incluido el deploy real.
+- `REDIRECTS_DRAFT_v1_a_v2.md` (nuevo, raíz del repo) — borrador técnico del mapeo de URLs v1→v2, sin activar, esperando confirmación de Brey (sección 13).
 - Este documento (`ESTADO-aromia.md`) ahora vive en la raíz del repo junto al resto (decisión #34) — antes se manejaba fuera, en Descargas.
 
 ---
 
 ## 11. Próximo paso
 
-1. **Magazine público (`/articulos/`)** pasa a ser la siguiente pieza a construir (decisión #35) — parsear los 11 `.md` de `articles/`, portada tipo revista, hojeo interactivo, descarga PDF.
-2. **Deploy a Railway:** se hace al finalizar el plan completo que Code está armando (decisión #36) — no hay entregas parciales a staging hasta entonces.
+El plan de convergencia (decisiones #35-37) **ya se ejecutó y deployó** —
+2.0 está en producción real en el subdominio de Railway. Lo que sigue son
+decisiones de Brey, ninguna bloquea el estado actual del sitio:
+
+1. **Corte de dominio** (`aromialab.com` de v1/GitHub Pages a v2/Railway) — la decisión de negocio más grande que queda. Requiere: confirmar el mapeo de redirects (`REDIRECTS_DRAFT_v1_a_v2.md`), decidir qué hacer con los 17 artículos de v1 sin equivalente en v2, y crear `/privacidad` en v2 antes de cortar.
+2. Elegir proveedor de email (SendGrid/Mailgun) para activar el newsletter ya scaffoldeado.
 3. Dar seguimiento a los pendientes de la sección 13.
 
 ---
@@ -195,9 +213,19 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 
 ## 13. Pendientes / preguntas abiertas
 
-- ¿Se reactiva Cowork o sigue en stand-by?
+**Bloquean el corte de dominio a `aromialab.com`:**
+- Confirmar/ajustar `REDIRECTS_DRAFT_v1_a_v2.md` — 17 de 20 artículos de v1 sin equivalente directo en v2 (¿redirigir a ficha de producto, al hub, o escribir el artículo en v2 primero?).
+- Crear `/privacidad` en v2 (v1 la tiene, posible requisito de Amazon Associates).
+- Definir timing y ejecutar el cambio de DNS (decisión de negocio, no técnica).
+
+**No bloquean nada, se resuelven a su ritmo:**
+- Afiliados e imágenes reales (hoy placeholders en las 50 filas) — o seguir así más tiempo.
+- Elegir proveedor de email (SendGrid vs Mailgun) para el newsletter ya scaffoldeado.
+- Alcance y aprobación del scraper de precios real (único ítem del alcance original de producto, decisión #7, que sigue 100% sin construir).
 - ¿Se suma GA4 además de Cloudflare Analytics?
-- Redirects v1→v2 y duplicación de `resena-baccarat-rouge-540` siguen sin resolver (decisiones de contenido/SEO, no técnicas).
+- Credenciales de Cloudflare (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ZONE_ID`) para reemplazar el placeholder "sin datos" del dashboard admin de 2.0.
+- ¿Se reactiva Cowork o sigue en stand-by?
+- Duplicación de `resena-baccarat-rouge-540` (.html de v1 + .md nuevo) sin resolver.
 - ¿Sigue en pausa el arranque de Sprint 2 de OVL (documentar las 10 Skills) o se retoma?
 
 ---
