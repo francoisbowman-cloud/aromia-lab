@@ -14,7 +14,7 @@ export async function getPerfumes(): Promise<Perfume[]> {
   return res.json();
 }
 
-export async function subscribe(email: string, fuente: "home" | "quiz"): Promise<boolean> {
+export async function subscribe(email: string, fuente: "home" | "quiz" | "club"): Promise<boolean> {
   const res = await fetch(`${API_BASE_URL}/api/subscribers`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

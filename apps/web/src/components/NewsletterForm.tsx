@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { subscribe } from "@/lib/api";
 
-export function NewsletterForm({ fuente }: { fuente: "home" | "quiz" }) {
+export function NewsletterForm({
+  fuente,
+  mensajeExito = "Listo — te avisamos cuando haya bajadas de precio y contenido nuevo.",
+}: {
+  fuente: "home" | "quiz" | "club";
+  mensajeExito?: string;
+}) {
   const [email, setEmail] = useState("");
   const [estado, setEstado] = useState<"idle" | "enviando" | "ok" | "error">("idle");
 
@@ -16,11 +22,7 @@ export function NewsletterForm({ fuente }: { fuente: "home" | "quiz" }) {
   }
 
   if (estado === "ok") {
-    return (
-      <p className="font-sans text-sm text-ink">
-        Listo — te avisamos cuando haya bajadas de precio y contenido nuevo.
-      </p>
-    );
+    return <p className="font-sans text-sm text-ink">{mensajeExito}</p>;
   }
 
   return (

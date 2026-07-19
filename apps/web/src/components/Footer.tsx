@@ -22,6 +22,11 @@ export default function Footer() {
             </Link>
           </li>
           <li>
+            <Link href="/club" className="hover:text-ink">
+              Club
+            </Link>
+          </li>
+          <li>
             <Link href="/privacidad" className="hover:text-ink">
               Privacidad
             </Link>

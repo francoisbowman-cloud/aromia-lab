@@ -39,9 +39,9 @@ const nextConfig = {
       // Artículos de Academia (contenido migrado 18/07) — ahora con equivalente directo
       { source: "/piramide-olfativa-explicada.html", destination: "/articulos/academia-piramide-olfativa", permanent: true },
       { source: "/academia.html", destination: "/articulos", permanent: true },
+      { source: "/club.html", destination: "/club", permanent: true },
 
       // Sin redirect todavía (pendiente de decisión/contenido — ver ESTADO-aromia.md):
-      // /club.html — sin equivalente en v2, se recrea más adelante
       // /catalogo.html?p=ID — deep-links por ID numérico, sin mapeo a slug
     ];
   },

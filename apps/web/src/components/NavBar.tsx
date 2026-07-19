@@ -8,6 +8,7 @@ const links = [
   { href: "/perfumes", label: "Perfumes" },
   { href: "/articulos", label: "Magazine" },
   { href: "/quiz", label: "Quiz" },
+  { href: "/club", label: "Club" },
 ];
 
 export default function NavBar() {

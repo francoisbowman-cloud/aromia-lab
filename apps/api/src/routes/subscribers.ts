@@ -6,6 +6,7 @@ import { sendWelcomeEmail } from "../lib/email";
 export const subscribersRouter = Router();
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FUENTES_VALIDAS = ["home", "quiz", "club"];
 
 subscribersRouter.post(
   "/",
@@ -22,7 +23,7 @@ subscribersRouter.post(
       `INSERT INTO subscribers (email, fuente) VALUES ($1, $2)
        ON CONFLICT (email) DO NOTHING
        RETURNING id`,
-      [normalizedEmail, fuente === "quiz" ? "quiz" : "home"],
+      [normalizedEmail, FUENTES_VALIDAS.includes(fuente ?? "") ? fuente : "home"],
     );
 
     if (result.rowCount) {
