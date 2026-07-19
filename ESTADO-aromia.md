@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 18 de julio de 2026 — por: Code (cierre de club.html, Academia, scaffold de scraper Fase 2; reconciliación de instantáneas paralelas de Cowork/Chat)
+Última actualización: 18 de julio de 2026 — por: Chat (reconciliación final, verificación independiente, protocolo de coordinación multi-sesión)
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -9,7 +9,7 @@ Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-com
 Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amazon, con Notino/Druni/Sephora en evaluación). Corre en dos versiones en paralelo:
 
 - **Aromia 1.0** — sitio estático HTML, rama `main`, **en producción real** (aromialab.com), afiliados activos generando ingresos.
-- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/2.0`. **Actualizado 18/07: el staging de Railway ya tiene todo el trabajo del panel admin, ficha de producto, home/perfumes/quiz y Magazine — verificado en producción real (`web-production-71f88.up.railway.app`), no solo local.** Todavía sirve desde el subdominio de Railway, no desde `aromialab.com` — el corte de dominio sigue siendo una decisión de Brey (ver sección 11).
+- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/v2.0`. **Actualizado 18/07: el staging de Railway ya tiene todo el trabajo del panel admin, ficha de producto, home/perfumes/quiz y Magazine — verificado en producción real (`web-production-71f88.up.railway.app`), no solo local.** Todavía sirve desde el subdominio de Railway, no desde `aromialab.com` — el corte de dominio sigue siendo una decisión de Brey (ver sección 11).
 
 ---
 
@@ -46,7 +46,7 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 21 | ChatGPT Plus se usa para diseño UI/UX de 2.0, una sección a la vez, siempre con un párrafo explícito de límite de alcance en el brief ("trabaja únicamente con esto, no propongas cambios de arquitectura") — sin ese párrafo tiende a expandirse (pasó con el Panel Admin) | Brey |
 | 22 | ChatGPT solo diseña, nunca decide mecánica interna/arquitectura — eso lo resuelve el equipo (Brey + Code + Claude) | Brey |
 | 23 | Regla de revisión: siempre comparar el HTML/código real entregado contra la especificación escrita, porque las capturas que muestra ChatGPT en el chat a veces no coinciden con el archivo final exportado | Brey |
-| 24 | Nueva arquitectura de ramas: se agrega `design/ui-ux` (sale desde `feature/2.0`, no desde `main`). Orden de merge: `design/ui-ux` → `feature/2.0` → `main` | Code |
+| 24 | Nueva arquitectura de ramas: se agrega `design/ui-ux` (sale desde `feature/v2.0`, no desde `main`). Orden de merge: `design/ui-ux` → `feature/v2.0` → `main` | Code |
 | 25 | Cloudflare Web Analytics instalado en Aromia 1.0 (token real entregado a Code) | Brey / Code |
 | 26 | Imagen de portada editorial generada con IA para Erba Pura, integrada en "Anatomía de una fragancia" — prueba piloto puntual en un solo producto | Brey |
 | 27 | 4 piezas de diseño de 2.0 completadas (mockups + specs, revisadas y aprobadas) y entregadas a Code para implementar: Panel de Administración, Página de Producto, Catálogo, Magazine | Brey (diseño) → Code (implementación) |
@@ -82,6 +82,10 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 57 | Nueva feature (no arrancada todavía): **decants** (muestras/fracciones de perfume). Ubicación: bloque secundario en `/perfumes/[slug]`, debajo de la tabla de precios de retailers — no en nav, no como filtro de catálogo. Piloto en 5-8 perfumes de nicho caros, no los 33. Investigación de casas de decants con afiliados delegada a Cowork. Cuando el research esté aprobado, Code debe confirmar si conviene reusar la tabla `retailers` (migración `003`) con un campo que distinga `frasco_completo` vs `decant`, en vez de crear una tabla nueva — decisión técnica pendiente, no asumida | Brey |
 | 58 | Research de decants entregado (vía Chat/Cowork, sesión paralela sin acceso directo al repo): 3 casas evaluadas — **Scent Split**, **Scent Decant**, **Scentbird** — con cobertura del piloto de 8 perfumes y datos de comisión/cookie marcados como verificados o no según la fuente. Sin recomendación forzada, Brey decide. Pendiente puntual antes de dar por buena la cobertura de Scentbird: confirmar si "Delina" y "Delina Exclusif" son el mismo producto en el catálogo de Aromia. Bloqueado por decisión #57 — no se implementa hasta aprobación de Brey | Cowork/Chat (propuesta) |
 | 59 | Reconciliación de documentación: durante la sesión del 18/07 circularon varias copias paralelas de `ESTADO-aromia.md` generadas fuera de este repo (por Cowork y por Chat, cada uno sin ver el trabajo del otro ni el de Code), con numeración de decisiones distinta entre sí y desactualizada respecto al repo real. Todas describían Academia/scraper/club.html como "pendiente de subir" cuando ya estaban commiteados y deployados. El plan de "renombrar `index_v2.html` a `index.html`" (decisión relacionada a ratings de Amazon en 1.0) quedó superado: Code detectó que `index.html` no tiene datos embebidos desde el redesign del 13/07 (los datos viven en `catalogo.html`) y aplicó ahí los campos correctos — ver `CHANGELOG-1.0.md`, commit `f7a9db2` en `main`. Es posible que exista un segundo set de artículos de Academia (`ACADEM_1.MD`–`4.MD`) de una sesión de Cowork en paralelo — redundante con lo ya sembrado por Code (decisión #55), sin acción necesaria salvo que Brey quiera comparar calidad de contenido. Este documento (`ESTADO-aromia.md`, en `feature/v2.0`) sigue siendo la copia canónica — decisión #34 | Code |
+| 60 | Chat verificó de forma independiente (no tomó la afirmación por cierta) el hallazgo central de la decisión #59: confirmado contra el HTML real de `main` que `catalogo.html` tiene 31 campos `amzRating` y `index.html` tiene 0 — el hallazgo de Code es correcto, no es otra afirmación falsa como las que circularon en las sesiones paralelas ese mismo día | Chat |
+| 61 | Conflicto sin resolver, señalado por Code: el scaffold del scraper ya deployado (decisión #56) apunta a **Douglas + Primor** vía Awin, pero la investigación de afiliados más reciente de Cowork (documento entregado a Chat, no visto por Code al construir el scaffold) recomienda **Douglas + Perfumes Club** para la Fase 1 y no menciona Primor en ningún lado. Recomendación de Chat, no decisión: mantener Douglas + Primor tal como ya está construido y deployado, y sumar Perfumes Club como ampliación en vez de descartar trabajo ya hecho — pero es de Brey confirmar, no se asume | Code (hallazgo) / Chat (recomendación, sin confirmar) |
+| 62 | Corrección repetida: `feature/2.0` volvió a aparecer en vez de `feature/v2.0` en este documento (ya se había corregido antes, decisión #57 de una sesión anterior) — se perdió porque una sesión de Cowork reconstruyó el documento desde una copia vieja sin la corrección. Vuelto a corregir. Evidencia directa del problema de coordinación resuelto en la decisión #63 | Chat |
+| 63 | **Protocolo de coordinación multi-sesión sobre la carpeta local compartida** (`C:\Users\user\Claude\Projects\aromia-lab`), tras confirmarse que Code y Cowork ya trabajan sobre el mismo working tree: (1) Chat **no tiene ni puede tener acceso** a esa carpeta — corre en sandbox aislado, sigue trabajando por lectura pública de GitHub y por archivos subidos al chat; (2) **una sola sesión de Cowork/Code a la vez sobre el repo compartido** — no abrir sesiones paralelas de Cowork que puedan reconciliar el mismo archivo sin verse entre sí (causa raíz del caos del 18/07); (3) **git commit/push queda exclusivo de Code** — Cowork puede leer/escribir archivos en la carpeta, pero no debe commitear ni pushear por su cuenta, para evitar commits divergentes de sesiones que no se vieron entre sí; (4) toda sesión que reporte algo como "pendiente" o "faltante" debe **verificarlo con un comando real contra el repo** (`git status`, `git log`, leer el archivo) antes de reportarlo — no inferir ni asumir, como ya se exigía en el protocolo de investigación de Cowork (documentos `RESEAR_1.MD`/`RECOME_1.MD`) | Brey / Chat |
 
 ---
 
@@ -101,11 +105,11 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 ```
 main (producción viva — Aromia 1.0, NO TOCAR directo)
   ↑
-feature/2.0 (monorepo Next.js — Aromia 2.0, rama de trabajo de Code)
+feature/v2.0 (monorepo Next.js — Aromia 2.0, rama de trabajo de Code)
   ↑
-design/ui-ux (rama de diseño — sale DESDE feature/2.0, no desde main)
+design/ui-ux (rama de diseño — sale DESDE feature/v2.0, no desde main)
 ```
-Orden de merge: `design/ui-ux` → `feature/2.0` → `main`.
+Orden de merge: `design/ui-ux` → `feature/v2.0` → `main`.
 
 GitHub = dónde vive el código (ambas versiones, mismo repo, ramas distintas). Railway = dónde corre 2.0 (staging hoy, producción eventualmente). GitHub Pages solo sirve HTML estático, por eso 1.0 no necesita Railway.
 
@@ -128,7 +132,7 @@ GitHub = dónde vive el código (ambas versiones, mismo repo, ramas distintas). 
   tenía marcado como pendiente por desactualización, no porque faltara
   hacerlo — verificado el 17/07 revisando el código real de `main`.
 
-### Aromia 2.0 (`feature/2.0`)
+### Aromia 2.0 (`feature/v2.0`)
 
 **✅ Deployado y verificado en producción real desde el 18/07** —
 `web-production-71f88.up.railway.app` / `api-production-fe2f.up.railway.app`,
