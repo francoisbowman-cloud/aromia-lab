@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 18 de julio de 2026 — por: Code (plan de convergencia completo, deployado)
+Última actualización: 18 de julio de 2026 — por: Code (cierre de club.html, Academia, scaffold de scraper Fase 2; reconciliación de instantáneas paralelas de Cowork/Chat)
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -25,8 +25,9 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 **No:**
 - Venta directa de perfumes (no carrito, no pagos, no checkout) — Aromia es curación + afiliados.
 - Automatización de generación de imágenes (n8n/API) hasta que Aromia genere ingresos reales.
-- Cowork está **en stand-by**, no reactivado.
-- El Magazine público (`/articulos/`) no se construye todavía — requiere parsear los 11 `.md` de `articles/` desde cero, fuera de alcance del batch del 17/07 (ver decisión #33).
+- Cowork activo con tareas puntuales y alcance acotado (decisiones #55, #57-58) — no es coordinación abierta, no tiene push directo al repo.
+- Decants (decisión #57): no arranca todavía, bloqueado hasta que Brey apruebe el research (decisión #58).
+- El Magazine público (`/articulos/`) ya está construido — lo único fuera de alcance es el hojeo interactivo + descarga PDF del mockup original `/magazine`.
 
 ---
 
@@ -75,6 +76,12 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 51 | Scraper de precios: Brey pidió acotar alcance (retailers, frecuencia) — **todavía sin definir**, sigue pendiente | Brey |
 | 52 | Cowork se reactiva — coordinación pendiente, no ocurrió todavía en este repo | Brey |
 | 53 | GA4 sí, además de Cloudflare Analytics cuando esté disponible | Brey |
+| 54 | `/club.html` se recrea ahora — versión simple de v1 (página "Próximamente" + lista de espera), reusando el mecanismo de captura de email ya construido en 2.0. Tarea directa de Code, no de Cowork. **Cerrada 18/07**: `/club` nueva, redirect `/club.html → /club` (308) activo, migración `009` aplicada, suscripción con `fuente='club'` probada de punta a punta en producción y limpiada | Brey → Code |
+| 55 | Academia: contenido de `academia.html` (v1) migrado a 4 artículos `.md` nuevos en 2.0, escritos directamente por Code (sin sesión de Cowork disponible en ese momento) a partir del mismo brief que se le habría dado a Cowork — límite de alcance explícito respetado (sin cambios de arquitectura/schema). `tipo: guia_educativa` mapeado a `categoria: "academia"`, que ya existía en el CHECK de `articles` — sin migración necesaria. Commiteado, sembrado en Postgres de producción, redirects `/academia.html` y `/piramide-olfativa-explicada.html` activos y verificados (200 en las 4 rutas nuevas) | Code |
+| 56 | Scraper de precios, Fase 2 — scaffold técnico armado y deployado (no-op sin credenciales): integración de feed Awin (CSV), matcher de producto→perfume por marca+similitud de texto, job de sync con upsert seguro (no pisa filas cargadas a mano), ruta admin para trigger manual, cron diario gateado por variables de entorno. Configurado para **Douglas + Primor** vía Awin. Migración `008` (columnas `fuente`/`sincronizado_en` + índice parcial en `retailers`) aplicada a producción. Falta que Brey se dé de alta como afiliado en Awin — Code no puede crear esa cuenta (acción prohibida de autonomía) | Code |
+| 57 | Nueva feature (no arrancada todavía): **decants** (muestras/fracciones de perfume). Ubicación: bloque secundario en `/perfumes/[slug]`, debajo de la tabla de precios de retailers — no en nav, no como filtro de catálogo. Piloto en 5-8 perfumes de nicho caros, no los 33. Investigación de casas de decants con afiliados delegada a Cowork. Cuando el research esté aprobado, Code debe confirmar si conviene reusar la tabla `retailers` (migración `003`) con un campo que distinga `frasco_completo` vs `decant`, en vez de crear una tabla nueva — decisión técnica pendiente, no asumida | Brey |
+| 58 | Research de decants entregado (vía Chat/Cowork, sesión paralela sin acceso directo al repo): 3 casas evaluadas — **Scent Split**, **Scent Decant**, **Scentbird** — con cobertura del piloto de 8 perfumes y datos de comisión/cookie marcados como verificados o no según la fuente. Sin recomendación forzada, Brey decide. Pendiente puntual antes de dar por buena la cobertura de Scentbird: confirmar si "Delina" y "Delina Exclusif" son el mismo producto en el catálogo de Aromia. Bloqueado por decisión #57 — no se implementa hasta aprobación de Brey | Cowork/Chat (propuesta) |
+| 59 | Reconciliación de documentación: durante la sesión del 18/07 circularon varias copias paralelas de `ESTADO-aromia.md` generadas fuera de este repo (por Cowork y por Chat, cada uno sin ver el trabajo del otro ni el de Code), con numeración de decisiones distinta entre sí y desactualizada respecto al repo real. Todas describían Academia/scraper/club.html como "pendiente de subir" cuando ya estaban commiteados y deployados. El plan de "renombrar `index_v2.html` a `index.html`" (decisión relacionada a ratings de Amazon en 1.0) quedó superado: Code detectó que `index.html` no tiene datos embebidos desde el redesign del 13/07 (los datos viven en `catalogo.html`) y aplicó ahí los campos correctos — ver `CHANGELOG-1.0.md`, commit `f7a9db2` en `main`. Es posible que exista un segundo set de artículos de Academia (`ACADEM_1.MD`–`4.MD`) de una sesión de Cowork en paralelo — redundante con lo ya sembrado por Code (decisión #55), sin acción necesaria salvo que Brey quiera comparar calidad de contenido. Este documento (`ESTADO-aromia.md`, en `feature/v2.0`) sigue siendo la copia canónica — decisión #34 | Code |
 
 ---
 
@@ -138,8 +145,11 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
    - `/quiz` — las 6 preguntas y 7 perfiles de `COPY/quiz-questions.md` funcionando de verdad, con resultado compartible en `/quiz/resultado/[perfil]` (meta tags OG por perfil) + captura de newsletter.
 5. **Magazine público** (`/articulos`) — reusa la misma tabla `articles` del admin (antes no tenía ninguna ruta pública). Los 11 `.md` de `articles/` sembrados ahí; cualquier artículo nuevo publicado desde el admin aparece automáticamente. Mockup original `/magazine` (hojeo + PDF) **no se construyó** — decisión de alcance, no de producto.
 6. **Bug de datos corregido** (decisión #31): perfumes en borrador ya no se filtran públicamente.
-7. **Scaffold de newsletter**: tabla `subscribers` + captura funcional en home y resultado del quiz. Sin envío real todavía (pendiente elegir proveedor, sección 13).
+7. **Scaffold de newsletter**: tabla `subscribers` + captura funcional en home, resultado del quiz y `/club`. Envío real vía SendGrid (decisión #50), falta que Brey pase las credenciales.
 8. **SEO técnico**: `sitemap.xml`/`robots.txt` reales, dinámicos.
+9. **`/club`** (decisión #54) — página "Próximamente" + lista de espera, redirect `/club.html` activo.
+10. **4 artículos de Academia** (decisión #55) — sembrados, redirects `/academia.html` y `/piramide-olfativa-explicada.html` activos.
+11. **Scraper de precios, Fase 2** (decisión #56) — scaffold Awin (Douglas + Primor) deployado como no-op, a la espera de que Brey se dé de alta en Awin.
 
 **Roadmap futuro — "Visión Panel v2"** (no bloquea nada, sin cambios): Service Accounts múltiples, módulo de Assets, Comparador con motor de reglas propio, multi-retailer automático, CMS modular tipo Notion, modelo de "entidades".
 
@@ -197,13 +207,14 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 
 El plan de convergencia (decisiones #35-37) **ya se ejecutó y deployó** —
 2.0 está en producción real en el subdominio de Railway. La ronda de Pista B
-del 18/07 cerró redirects, `/privacidad`, GA4 y SendGrid (decisiones #41-53).
-Lo que queda, ninguno bloquea el estado actual del sitio:
+del 18/07 cerró redirects, `/privacidad`, GA4, SendGrid, `/club.html`,
+Academia y el scaffold del scraper Fase 2 (decisiones #41-56). Lo que queda:
 
-1. Acotar alcance del **scraper de precios** (retailers, frecuencia) — único ítem de producto original (decisión #7) sin construir.
-2. Coordinar la **reactivación de Cowork** (decisión #52).
-3. **Corte de dominio** (`aromialab.com` de v1/GitHub Pages a v2/Railway) — la decisión de negocio más grande que queda, se evalúa después de lo anterior (decisión #49).
-4. Dar seguimiento a los pendientes de la sección 13.
+1. **Brey** — revisar y aprobar (o ajustar) el research de decants (decisión #58); confirmar si "Delina"/"Delina Exclusif" son el mismo producto.
+2. **Brey** — darse de alta como afiliado en Awin para activar el scraper de Douglas/Primor (decisión #56); pasar credenciales de SendGrid y GA4.
+3. Una vez aprobado el research de decants: **Code** confirma diseño técnico (reusar `retailers` con campo `tipo`, o tabla nueva) antes de implementar (decisión #57).
+4. **Corte de dominio** (`aromialab.com` de v1/GitHub Pages a v2/Railway) — la decisión de negocio más grande que queda, se evalúa después de lo anterior (decisión #49).
+5. Dar seguimiento a los pendientes de la sección 13.
 
 ---
 
@@ -229,19 +240,17 @@ Lo que queda, ninguno bloquea el estado actual del sitio:
 ## 13. Pendientes / preguntas abiertas
 
 **Bloquean el corte de dominio a `aromialab.com`:**
-- ~~Confirmar/ajustar `REDIRECTS_DRAFT_v1_a_v2.md`~~ — **cerrado 18/07** (decisión #42), 24 redirects activados en `apps/web/next.config.mjs`.
+- ~~Confirmar/ajustar `REDIRECTS_DRAFT_v1_a_v2.md`~~ — **cerrado 18/07** (decisión #42), 24+ redirects activados en `apps/web/next.config.mjs`, incluidos `/academia.html` y `/club.html`.
 - ~~Crear `/privacidad` en v2~~ — **cerrado 18/07** (decisión #47).
 - Definir timing y ejecutar el cambio de DNS (decisión de negocio, no técnica) — se evalúa después de cerrar el resto de la Pista B (decisión #49).
-- `/academia.html` sigue sin redirect — falta escribir contenido de esa categoría primero (decisión #45).
-- `/club.html` sin redirect — se recrea más adelante (decisión #44).
 
 **No bloquean nada, se resuelven a su ritmo:**
 - Afiliados e imágenes reales (hoy placeholders en las 50 filas) — o seguir así más tiempo.
 - ~~Elegir proveedor de email~~ — **cerrado 18/07**: SendGrid, integrado y activo detrás de `SENDGRID_API_KEY`/`SENDGRID_FROM_EMAIL` (decisión #50) — falta que Brey genere y pase esas credenciales.
-- Alcance y aprobación del scraper de precios real (único ítem del alcance original de producto, decisión #7, que sigue 100% sin construir) — Brey pidió acotarlo, todavía sin definir (decisión #51).
+- ~~Alcance del scraper de precios~~ — **scaffold técnico cerrado 18/07** (decisión #56): Douglas + Primor vía Awin, deployado como no-op. Falta que Brey se dé de alta como afiliado en Awin para activarlo. Universo de retailers ampliado investigado (Perfumes Club, FragranceX, FragranceNet) queda como input para una fase posterior, sin decidir todavía.
 - ~~¿Se suma GA4?~~ — **cerrado 18/07**: sí, integrado y activo detrás de `NEXT_PUBLIC_GA_ID` (decisión #48/#53) — falta que Brey cree la property de GA4 y pase el Measurement ID.
 - Credenciales de Cloudflare (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ZONE_ID`): sin sentido pedirlas todavía — `aromialab.com` no está agregado como zona en Cloudflare (usa nameservers del registrador), ver decisión #48.
-- Coordinar la reactivación de Cowork (decisión #52) — confirmado que se reactiva, falta la coordinación real.
+- **Decants** (decisión #57-58): research entregado (Scent Split, Scent Decant, Scentbird), pendiente de aprobación de Brey antes de que Code diseñe/implemente nada.
 - Duplicación de `resena-baccarat-rouge-540` (.html de v1 + .md nuevo) sin resolver.
 - ¿Sigue en pausa el arranque de Sprint 2 de OVL (documentar las 10 Skills) o se retoma? — sin pedido explícito de Brey, sigue en stand-by.
 
