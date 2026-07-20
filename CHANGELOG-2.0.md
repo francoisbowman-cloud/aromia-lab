@@ -312,3 +312,32 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   a mano — era uno de los bloqueantes documentados para el corte de
   dominio (decisión #49 de `ESTADO-aromia.md`), que sigue sin
   ejecutarse hasta confirmación explícita de Brey en el chat.
+
+## 2026-07-19/20 — Code
+- **Corte de dominio ejecutado**: `aromialab.com` y `www.aromialab.com`
+  apuntan a Railway/2.0 (dominios custom agregados al servicio `web`,
+  DNS actualizado por Brey en Namecheap, certificados TLS válidos).
+  GitHub Pages/v1 queda fuera de la ruta de ese dominio. Verificado:
+  rutas principales en 200, redirects v1→v2 funcionando en el dominio
+  real (`/catalogo.html` → 308 → `/perfumes`).
+- Bug encontrado post-corte y corregido: `sitemap.xml`/`robots.txt`
+  caían a `http://localhost:3000` porque `NEXT_PUBLIC_SITE_URL` nunca
+  llegaba al build de Railway (var `NEXT_PUBLIC_` sin build-arg en el
+  Dockerfile — mismo patrón que el bug ya conocido de
+  `NEXT_PUBLIC_API_URL`). Corregido: build-arg agregado, variable
+  seteada en Railway, redeploy verificado.
+- `imagen_url`: completadas 24/50 con foto real de producto extraída
+  de `m.media-amazon.com` (misma convención de v1, documentada en
+  `docs/CURSO-PERSONAL-BREY.md` y en la herramienta manual
+  `admin/imagenes.html`) para los perfumes con ASIN confirmado.
+  Scraping directo con `curl` está bloqueado por la detección de bots
+  de Amazon (no se intentó sortear); se usó el Browser pane (sesión de
+  navegador real) para extraer `hiRes` del bloque de imágenes de cada
+  página de producto, igual que haría un humano copiando la URL a
+  mano. Aplicado a Postgres de producción y a ambas copias del CSV.
+  Quedan 26/50 sin imagen real — no tienen equivalente de producto en
+  Amazon (mismo set que ya usa fallback de búsqueda en
+  `link_afiliado`); las imágenes generadas por IA en
+  `OVL_Prompt_50` no se usan para estas miniaturas por decisión de
+  producto (esas son para otro uso, ver `ESTADO-aromia.md`) — fuente
+  para esas 26 sigue sin definir, pendiente de Brey.
