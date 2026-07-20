@@ -297,3 +297,18 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   cuentas. Una vez con las credenciales, hay que validar la URL exacta
   del datafeed de Awin y el formato real del feed de Tradedoubler contra
   cuentas reales antes de dejar correr el cron en serio.
+
+## 2026-07-18 (3) — Code
+- `link_afiliado`: completados los 50/50 perfumes en Postgres de
+  producción y en `PERFUMES_INITIAL_50.csv` (raíz + `apps/api/data/`,
+  se mantienen idénticos). Auditoría contra `catalogo.html` de v1
+  (rama `main`) identificó 24 perfumes con ASIN real (link directo
+  `amazon.com/dp/{ASIN}?tag=aromialab-20`) y 26 sin equivalente en v1
+  o sin ASIN identificado (Santal 33 incluido), a los que se les generó
+  un link de búsqueda `amazon.com/s?k={nombre}+{marca}&tag=aromialab-20`
+  — mismo patrón de fallback que ya usaba v1. Verificado con query
+  directa: 0 filas en placeholder, 24 con `/dp/`, 26 con `/s?k=`.
+- Con esto, `link_afiliado` deja de depender de que Brey busque nada
+  a mano — era uno de los bloqueantes documentados para el corte de
+  dominio (decisión #49 de `ESTADO-aromia.md`), que sigue sin
+  ejecutarse hasta confirmación explícita de Brey en el chat.
