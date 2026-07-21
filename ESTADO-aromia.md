@@ -93,6 +93,7 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 68 | `.gitattributes` agregado en ambas ramas (`main` y `feature/v2.0`) para fijar line endings a LF, evitando diffs espurios entre sesiones en Windows | Code |
 | 69 | Fuente de imagen para los 26 perfumes sin foto real de Amazon: **enfoque mixto** — Code intenta Notino/Douglas/FragranceX perfume por perfume (mismos retailers ya investigados para el scraper de precios); los que tampoco aparezcan ahí quedan en placeholder sin insistir más. No se usan las imágenes de `OVL_Prompt_50` (son para otro uso, editorial) | Brey |
 | 70 | Ejecutado 21/07: de los 26 pendientes, **14 resueltos** (11 vía Notino, 3 vía Douglas) y **12 siguen en placeholder** (Le Labo x2, Frederic Malle x2, Creed x2, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, Tom Ford "Fucking Beautiful") — houses de nicho o marcas de lujo restringidas en retailers de descuento, sin ficha en ninguno de los 3 sitios en el primer intento. Aplicado a Postgres de producción (verificado en el dominio real) y a ambas copias del CSV | Code |
+| 71 | **No quedan perfumes sin imagen real en el catálogo**: los 12 sin foto de la decisión #70 se eliminaron del catálogo (fila de `perfumes` en Postgres de producción + CSV), no solo se dejaron en placeholder. `retailers` asociados cayeron en cascada (FK `ON DELETE CASCADE`, migración `003`). Catálogo pasa de 50 a **38 perfumes**. Verificado sin referencias rotas (redirects, quiz) antes de borrar | Brey |
 
 ---
 
@@ -162,7 +163,7 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 10. **4 artículos de Academia** (decisión #55) — sembrados, redirects `/academia.html` y `/piramide-olfativa-explicada.html` activos.
 11. **Scraper de precios, Fase 2** (decisión #56) — scaffold Awin (Douglas + Primor) deployado como no-op, a la espera de que Brey se dé de alta en Awin.
 12. **Corte de dominio real** (decisión #64) — `aromialab.com`/`www.aromialab.com` en Railway, DNS de Namecheap actualizado, TLS válido. Fix de `NEXT_PUBLIC_SITE_URL` (decisión #65).
-13. **Catálogo de afiliados/imágenes** (decisiones #66-67) — `link_afiliado` 50/50 completo (24 con ASIN directo, 26 con fallback de búsqueda). `imagen_url` 24/50 con foto real de Amazon; 26/50 sin imagen real, fuente pendiente de definir con Brey (sección 13).
+13. **Catálogo de afiliados/imágenes** (decisiones #66-67, #70-71) — el catálogo quedó en **38 perfumes**, todos con foto real de producto (24 de Amazon + 14 de Notino/Douglas). Los 12 restantes sin foto real (houses de nicho o marcas restringidas) se eliminaron del catálogo en vez de quedar en placeholder — decisión de Brey.
 
 **Roadmap futuro — "Visión Panel v2"** (no bloquea nada, sin cambios): Service Accounts múltiples, módulo de Assets, Comparador con motor de reglas propio, multi-retailer automático, CMS modular tipo Notion, modelo de "entidades".
 
@@ -183,11 +184,11 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 
 ## 7. Contenido y catálogo
 
-- `PERFUMES_INITIAL_50.csv` — fuente real de datos (50 perfumes, notas, familia, precio, género, etc.) — ya sembrados en Postgres local y en el staging de Railway.
-- `PROMPTS-CATALOGO-50.md` — 50 prompts de imagen editorial generados desde el CSV, para pegar en ChatGPT Plus uno a la vez (método manual, no automatizado, costo cero hasta ingresos reales)
+- `PERFUMES_INITIAL_50.csv` — nombre del archivo sin cambiar por compatibilidad, pero **el catálogo real tiene 38 perfumes**, no 50 (decisión #71: se eliminaron los 12 sin foto real) — sembrados en Postgres de producción.
+- `PROMPTS-CATALOGO-50.md` — 50 prompts de imagen editorial generados desde el CSV original, para pegar en ChatGPT Plus uno a la vez (método manual, no automatizado, costo cero hasta ingresos reales) — incluye prompts de los 12 perfumes ya eliminados del catálogo, sin actualizar todavía.
 - Solo Erba Pura tiene imagen ya generada e integrada en 1.0 como prueba piloto
-- `link_afiliado`: **50/50 completo** (decisión #66) — 24 con ASIN directo de Amazon, 26 con link de búsqueda de fallback (sin equivalente confirmado en Amazon).
-- `imagen_url`: **38/50 con foto real** — 24 de Amazon (decisión #67) + 14 de Notino/Douglas (decisión #70). Quedan **12/50 en placeholder** (sección 13).
+- `link_afiliado`: **38/38 completo**, todos con ASIN real de Amazon o de Notino/Douglas — ya no quedan fallbacks de búsqueda sin foto real detrás (decisiones #66, #70-71).
+- `imagen_url`: **38/38 con foto real** (decisión #71) — cero perfumes en placeholder.
 
 ---
 
@@ -259,7 +260,7 @@ Aromia 2.0 en producción. Lo que queda:
 
 **No bloquean nada, se resuelven a su ritmo:**
 - ~~`link_afiliado` real~~ — **cerrado 18/07** (decisión #66): 50/50, 24 con ASIN directo, 26 con fallback de búsqueda.
-- **Fuente de imagen para los 26/50 perfumes sin foto real** — **cerrado 21/07** (decisiones #69-70): 14 resueltos vía Notino/Douglas, 12 siguen en placeholder (Le Labo, Frederic Malle, Creed, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, un SKU de Tom Ford) — sin ficha en Notino/Douglas/FragranceX en el primer intento. No se insiste más salvo que Brey pida otra fuente.
+- **Fuente de imagen para los 26/50 perfumes sin foto real** — **cerrado 21/07** (decisiones #69-71): 14 resueltos vía Notino/Douglas; los 12 restantes (Le Labo, Frederic Malle, Creed, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, un SKU de Tom Ford) sin ficha en Notino/Douglas/FragranceX se **eliminaron del catálogo** por decisión de Brey, en vez de quedar en placeholder. Catálogo final: 38 perfumes, todos con foto real.
 - ~~Elegir proveedor de email~~ — **cerrado 18/07**: SendGrid, integrado y activo detrás de `SENDGRID_API_KEY`/`SENDGRID_FROM_EMAIL` (decisión #50) — falta que Brey genere y pase esas credenciales.
 - ~~Alcance del scraper de precios~~ — **scaffold técnico cerrado 18/07** (decisión #56): Douglas + Primor vía Awin, deployado como no-op. Falta que Brey se dé de alta como afiliado en Awin para activarlo. Universo de retailers ampliado investigado (Perfumes Club, FragranceX, FragranceNet) queda como input para una fase posterior, sin decidir todavía.
 - ~~¿Se suma GA4?~~ — **cerrado 18/07**: sí, integrado y activo detrás de `NEXT_PUBLIC_GA_ID` (decisión #48/#53) — falta que Brey cree la property de GA4 y pase el Measurement ID.

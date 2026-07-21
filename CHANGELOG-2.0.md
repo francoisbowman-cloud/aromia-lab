@@ -360,3 +360,13 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   Dior Maison), sin ficha de producto en ninguno de los 3 sitios en el
   primer intento de búsqueda. Sin insistir más por instrucción explícita
   de Brey — se resuelve más adelante si aparece otra fuente.
+- **Decisión de Brey**: no quedan perfumes sin imagen real en el catálogo.
+  Los 12 sin foto (arriba) se **eliminaron** del catálogo — no solo del
+  CSV, también de la fila `perfumes` en Postgres de producción (`retailers`
+  asociados cayeron en cascada por el FK `ON DELETE CASCADE` de la
+  migración `003`). Catálogo pasa de 50 a **38 perfumes**. Verificado:
+  `GET /api/perfumes/santal-33` → 404, `GET /api/perfumes` → 38 filas,
+  en el dominio real. Sin referencias rotas: ningún redirect de
+  `next.config.mjs` ni el matching del quiz apuntaba a esos 12 slugs
+  (el único hit, `/resena-santal-33.html`, redirige a un artículo del
+  magazine independiente de la fila de catálogo, no se toca).
