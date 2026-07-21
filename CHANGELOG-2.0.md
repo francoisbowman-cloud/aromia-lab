@@ -341,3 +341,22 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   `OVL_Prompt_50` no se usan para estas miniaturas por decisión de
   producto (esas son para otro uso, ver `ESTADO-aromia.md`) — fuente
   para esas 26 sigue sin definir, pendiente de Brey.
+
+## 2026-07-21 — Code
+- Fuente de imagen para los 26/50 perfumes sin foto de Amazon: **decidido
+  por Brey** (enfoque mixto) — Notino primero, Douglas si no hay match,
+  FragranceX como último intento, un solo intento por sitio y sin insistir
+  con variantes de búsqueda si no aparece.
+- `imagen_url`: completados **14 de los 26** con foto real de producto
+  (11 vía Notino, 3 vía Douglas — CDN `cdn.notinoimg.com` y
+  `media.douglas.de/medias`, mismo método de extracción vía Browser pane
+  que con Amazon). Aplicado a Postgres de producción (verificado vía
+  `GET /api/perfumes/ck-one` en el dominio real) y a ambas copias del CSV.
+  Quedan **12/50 en placeholder** (Santal 33, Tobacco Vanille, Portrait
+  of a Lady, Green Irish Tweed, Coco Mademoiselle EDP, A*Men, Kirke,
+  Musc Ravageur, Le Labo Another 13, Bombe Extreme, Fucking Beautiful,
+  Ambre Nuit) — house niche (Le Labo, Frederic Malle, Creed, Aesop) o
+  marca de lujo restringida en estos retailers de descuento (Chanel,
+  Dior Maison), sin ficha de producto en ninguno de los 3 sitios en el
+  primer intento de búsqueda. Sin insistir más por instrucción explícita
+  de Brey — se resuelve más adelante si aparece otra fuente.

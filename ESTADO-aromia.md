@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 18 de julio de 2026 — por: Chat (reconciliación final, verificación independiente, protocolo de coordinación multi-sesión)
+Última actualización: 21 de julio de 2026 — por: Code (corte de dominio real ejecutado, catálogo de afiliados/imágenes avanzado)
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -8,8 +8,8 @@ Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-com
 
 Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amazon, con Notino/Druni/Sephora en evaluación). Corre en dos versiones en paralelo:
 
-- **Aromia 1.0** — sitio estático HTML, rama `main`, **en producción real** (aromialab.com), afiliados activos generando ingresos.
-- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/v2.0`. **Actualizado 18/07: el staging de Railway ya tiene todo el trabajo del panel admin, ficha de producto, home/perfumes/quiz y Magazine — verificado en producción real (`web-production-71f88.up.railway.app`), no solo local.** Todavía sirve desde el subdominio de Railway, no desde `aromialab.com` — el corte de dominio sigue siendo una decisión de Brey (ver sección 11).
+- **Aromia 1.0** — sitio estático HTML, rama `main`. **Dejó de ser el sitio en vivo el 19-20/07** (ver decisión #64) — sigue existiendo en GitHub Pages pero `aromialab.com` ya no apunta ahí.
+- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/v2.0`. **Es el sitio en producción real desde el 19-20/07**: corte de dominio ejecutado, `aromialab.com` y `www.aromialab.com` apuntan a Railway (`web-production-71f88.up.railway.app` detrás del dominio custom), DNS a cargo de Brey en Namecheap, certificados TLS válidos.
 
 ---
 
@@ -86,6 +86,13 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 61 | Conflicto sin resolver, señalado por Code: el scaffold del scraper ya deployado (decisión #56) apunta a **Douglas + Primor** vía Awin, pero la investigación de afiliados más reciente de Cowork (documento entregado a Chat, no visto por Code al construir el scaffold) recomienda **Douglas + Perfumes Club** para la Fase 1 y no menciona Primor en ningún lado. Recomendación de Chat, no decisión: mantener Douglas + Primor tal como ya está construido y deployado, y sumar Perfumes Club como ampliación en vez de descartar trabajo ya hecho — pero es de Brey confirmar, no se asume | Code (hallazgo) / Chat (recomendación, sin confirmar) |
 | 62 | Corrección repetida: `feature/2.0` volvió a aparecer en vez de `feature/v2.0` en este documento (ya se había corregido antes, decisión #57 de una sesión anterior) — se perdió porque una sesión de Cowork reconstruyó el documento desde una copia vieja sin la corrección. Vuelto a corregir. Evidencia directa del problema de coordinación resuelto en la decisión #63 | Chat |
 | 63 | **Protocolo de coordinación multi-sesión sobre la carpeta local compartida** (`C:\Users\user\Claude\Projects\aromia-lab`), tras confirmarse que Code y Cowork ya trabajan sobre el mismo working tree: (1) Chat **no tiene ni puede tener acceso** a esa carpeta — corre en sandbox aislado, sigue trabajando por lectura pública de GitHub y por archivos subidos al chat; (2) **una sola sesión de Cowork/Code a la vez sobre el repo compartido** — no abrir sesiones paralelas de Cowork que puedan reconciliar el mismo archivo sin verse entre sí (causa raíz del caos del 18/07); (3) **git commit/push queda exclusivo de Code** — Cowork puede leer/escribir archivos en la carpeta, pero no debe commitear ni pushear por su cuenta, para evitar commits divergentes de sesiones que no se vieron entre sí; (4) toda sesión que reporte algo como "pendiente" o "faltante" debe **verificarlo con un comando real contra el repo** (`git status`, `git log`, leer el archivo) antes de reportarlo — no inferir ni asumir, como ya se exigía en el protocolo de investigación de Cowork (documentos `RESEAR_1.MD`/`RECOME_1.MD`) | Brey / Chat |
+| 64 | **Corte de dominio real ejecutado** (`aromialab.com`/`www.aromialab.com` de GitHub Pages/v1 a Railway/v2): dominios custom agregados al servicio `web` de Railway, DNS actualizado por Brey en Namecheap, certificados TLS válidos. Ya no queda pendiente la decisión #49 — 2.0 es el sitio en vivo | Brey (DNS) / Code (Railway) |
+| 65 | Bug post-corte corregido: `sitemap.xml`/`robots.txt` caían a `http://localhost:3000` porque `NEXT_PUBLIC_SITE_URL` nunca llegaba al build de Railway (variable `NEXT_PUBLIC_` sin build-arg en el Dockerfile, mismo patrón que el bug ya conocido de `NEXT_PUBLIC_API_URL`) | Code |
+| 66 | `link_afiliado` completado 50/50 en Postgres de producción y en el CSV (raíz + `apps/api/data/`): 24 perfumes con ASIN real de Amazon (link directo `/dp/{ASIN}`), 26 sin equivalente confirmado en Amazon, con link de búsqueda de fallback (mismo patrón que ya usaba v1) | Code |
+| 67 | `imagen_url`: 24/50 con foto real de producto extraída de `m.media-amazon.com` (vía Browser pane — `curl` directo bloqueado por detección de bots de Amazon). Quedan 26/50 sin imagen real por no tener equivalente confirmado en Amazon (mismo set que la decisión #66). Las imágenes de IA de `OVL_Prompt_50` **no se usan** para estas miniaturas de catálogo — son para otro uso (editorial). Fuente para esas 26 sigue sin definir — ver sección 13 | Code |
+| 68 | `.gitattributes` agregado en ambas ramas (`main` y `feature/v2.0`) para fijar line endings a LF, evitando diffs espurios entre sesiones en Windows | Code |
+| 69 | Fuente de imagen para los 26 perfumes sin foto real de Amazon: **enfoque mixto** — Code intenta Notino/Douglas/FragranceX perfume por perfume (mismos retailers ya investigados para el scraper de precios); los que tampoco aparezcan ahí quedan en placeholder sin insistir más. No se usan las imágenes de `OVL_Prompt_50` (son para otro uso, editorial) | Brey |
+| 70 | Ejecutado 21/07: de los 26 pendientes, **14 resueltos** (11 vía Notino, 3 vía Douglas) y **12 siguen en placeholder** (Le Labo x2, Frederic Malle x2, Creed x2, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, Tom Ford "Fucking Beautiful") — houses de nicho o marcas de lujo restringidas en retailers de descuento, sin ficha en ninguno de los 3 sitios en el primer intento. Aplicado a Postgres de producción (verificado en el dominio real) y a ambas copias del CSV | Code |
 
 ---
 
@@ -154,6 +161,8 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 9. **`/club`** (decisión #54) — página "Próximamente" + lista de espera, redirect `/club.html` activo.
 10. **4 artículos de Academia** (decisión #55) — sembrados, redirects `/academia.html` y `/piramide-olfativa-explicada.html` activos.
 11. **Scraper de precios, Fase 2** (decisión #56) — scaffold Awin (Douglas + Primor) deployado como no-op, a la espera de que Brey se dé de alta en Awin.
+12. **Corte de dominio real** (decisión #64) — `aromialab.com`/`www.aromialab.com` en Railway, DNS de Namecheap actualizado, TLS válido. Fix de `NEXT_PUBLIC_SITE_URL` (decisión #65).
+13. **Catálogo de afiliados/imágenes** (decisiones #66-67) — `link_afiliado` 50/50 completo (24 con ASIN directo, 26 con fallback de búsqueda). `imagen_url` 24/50 con foto real de Amazon; 26/50 sin imagen real, fuente pendiente de definir con Brey (sección 13).
 
 **Roadmap futuro — "Visión Panel v2"** (no bloquea nada, sin cambios): Service Accounts múltiples, módulo de Assets, Comparador con motor de reglas propio, multi-retailer automático, CMS modular tipo Notion, modelo de "entidades".
 
@@ -177,7 +186,8 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 - `PERFUMES_INITIAL_50.csv` — fuente real de datos (50 perfumes, notas, familia, precio, género, etc.) — ya sembrados en Postgres local y en el staging de Railway.
 - `PROMPTS-CATALOGO-50.md` — 50 prompts de imagen editorial generados desde el CSV, para pegar en ChatGPT Plus uno a la vez (método manual, no automatizado, costo cero hasta ingresos reales)
 - Solo Erba Pura tiene imagen ya generada e integrada en 1.0 como prueba piloto
-- `link_afiliado` e `imagen_url` siguen siendo **placeholders** en las 50 filas — no son datos de producción todavía.
+- `link_afiliado`: **50/50 completo** (decisión #66) — 24 con ASIN directo de Amazon, 26 con link de búsqueda de fallback (sin equivalente confirmado en Amazon).
+- `imagen_url`: **38/50 con foto real** — 24 de Amazon (decisión #67) + 14 de Notino/Douglas (decisión #70). Quedan **12/50 en placeholder** (sección 13).
 
 ---
 
@@ -209,15 +219,14 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 
 ## 11. Próximo paso
 
-El plan de convergencia (decisiones #35-37) **ya se ejecutó y deployó** —
-2.0 está en producción real en el subdominio de Railway. La ronda de Pista B
-del 18/07 cerró redirects, `/privacidad`, GA4, SendGrid, `/club.html`,
-Academia y el scaffold del scraper Fase 2 (decisiones #41-56). Lo que queda:
+El plan de convergencia (decisiones #35-37) **ya se ejecutó y deployó**, y el
+**corte de dominio real ya ocurrió** (decisión #64) — `aromialab.com` es hoy
+Aromia 2.0 en producción. Lo que queda:
 
-1. **Brey** — revisar y aprobar (o ajustar) el research de decants (decisión #58); confirmar si "Delina"/"Delina Exclusif" son el mismo producto.
-2. **Brey** — darse de alta como afiliado en Awin para activar el scraper de Douglas/Primor (decisión #56); pasar credenciales de SendGrid y GA4.
-3. Una vez aprobado el research de decants: **Code** confirma diseño técnico (reusar `retailers` con campo `tipo`, o tabla nueva) antes de implementar (decisión #57).
-4. **Corte de dominio** (`aromialab.com` de v1/GitHub Pages a v2/Railway) — la decisión de negocio más grande que queda, se evalúa después de lo anterior (decisión #49).
+1. **Brey/Code** — definir fuente de imagen real para los 26 perfumes sin equivalente en Amazon (decisión #67, ver sección 13).
+2. **Brey** — revisar y aprobar (o ajustar) el research de decants (decisión #58); confirmar si "Delina"/"Delina Exclusif" son el mismo producto.
+3. **Brey** — darse de alta como afiliado en Awin para activar el scraper de Douglas/Primor (decisión #56); pasar credenciales de SendGrid y GA4.
+4. Una vez aprobado el research de decants: **Code** confirma diseño técnico (reusar `retailers` con campo `tipo`, o tabla nueva) antes de implementar (decisión #57).
 5. Dar seguimiento a los pendientes de la sección 13.
 
 ---
@@ -243,13 +252,14 @@ Academia y el scaffold del scraper Fase 2 (decisiones #41-56). Lo que queda:
 
 ## 13. Pendientes / preguntas abiertas
 
-**Bloquean el corte de dominio a `aromialab.com`:**
+**Corte de dominio — ya cerrado:**
 - ~~Confirmar/ajustar `REDIRECTS_DRAFT_v1_a_v2.md`~~ — **cerrado 18/07** (decisión #42), 24+ redirects activados en `apps/web/next.config.mjs`, incluidos `/academia.html` y `/club.html`.
 - ~~Crear `/privacidad` en v2~~ — **cerrado 18/07** (decisión #47).
-- Definir timing y ejecutar el cambio de DNS (decisión de negocio, no técnica) — se evalúa después de cerrar el resto de la Pista B (decisión #49).
+- ~~Definir timing y ejecutar el cambio de DNS~~ — **cerrado 19-20/07** (decisión #64): `aromialab.com`/`www.aromialab.com` en Railway, TLS válido.
 
 **No bloquean nada, se resuelven a su ritmo:**
-- Afiliados e imágenes reales (hoy placeholders en las 50 filas) — o seguir así más tiempo.
+- ~~`link_afiliado` real~~ — **cerrado 18/07** (decisión #66): 50/50, 24 con ASIN directo, 26 con fallback de búsqueda.
+- **Fuente de imagen para los 26/50 perfumes sin foto real** — **cerrado 21/07** (decisiones #69-70): 14 resueltos vía Notino/Douglas, 12 siguen en placeholder (Le Labo, Frederic Malle, Creed, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, un SKU de Tom Ford) — sin ficha en Notino/Douglas/FragranceX en el primer intento. No se insiste más salvo que Brey pida otra fuente.
 - ~~Elegir proveedor de email~~ — **cerrado 18/07**: SendGrid, integrado y activo detrás de `SENDGRID_API_KEY`/`SENDGRID_FROM_EMAIL` (decisión #50) — falta que Brey genere y pase esas credenciales.
 - ~~Alcance del scraper de precios~~ — **scaffold técnico cerrado 18/07** (decisión #56): Douglas + Primor vía Awin, deployado como no-op. Falta que Brey se dé de alta como afiliado en Awin para activarlo. Universo de retailers ampliado investigado (Perfumes Club, FragranceX, FragranceNet) queda como input para una fase posterior, sin decidir todavía.
 - ~~¿Se suma GA4?~~ — **cerrado 18/07**: sí, integrado y activo detrás de `NEXT_PUBLIC_GA_ID` (decisión #48/#53) — falta que Brey cree la property de GA4 y pase el Measurement ID.
