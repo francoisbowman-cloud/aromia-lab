@@ -414,3 +414,26 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   navegación del lector con paginado real de un artículo de producción,
   Escape cierra el lector, vista de impresión con CSS de impresión
   compilado y aplicado, layout mobile sin overflow horizontal (375px).
+
+## 2026-07-21 (3) — Code
+- **`/magazine` reemplaza a `/articulos`**, decisión de Brey que cierra
+  la coexistencia sin resolver de la entrega anterior (decisión #72 de
+  `ESTADO-aromia.md`). `/articulos` se dio de baja como ruta propia:
+  `app/articulos/` y `components/article/ArticleCard.tsx` eliminados
+  (sin uso restante, confirmado por grep antes de borrar).
+- `next.config.mjs`: nuevos redirects `/articulos` → `/magazine` y
+  `/articulos/:slug` → `/magazine/:slug` (308, para no romper enlaces
+  externos/guardados); todos los redirects de v1 que apuntaban a
+  `/articulos/...` (Baccarat Rouge 540, Santal 33, las 3 comparativas,
+  Academia, los 8 artículos de v1 sin equivalente) actualizados a
+  `/magazine/...` directamente, en vez de encadenar dos redirects.
+- `NavBar`/`Footer` (link "Magazine") y `sitemap.ts` actualizados de
+  `/articulos` a `/magazine`.
+- El endpoint de API `GET /api/articulos` **no cambió** — es backend,
+  no ruta de Next.js; `/magazine` sigue consumiéndolo tal cual.
+- Verificado en navegador real: `/articulos` y
+  `/articulos/academia-piramide-olfativa` redirigen (308) a sus
+  equivalentes en `/magazine`; los 3 links "Magazine" del sitio
+  (header desktop, menú mobile, footer) apuntan a `/magazine`;
+  `sitemap.xml` lista `/magazine` y `/magazine/[slug]`, no
+  `/articulos`.

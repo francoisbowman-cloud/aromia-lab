@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/perfumes`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/quiz`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/articulos`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${SITE_URL}/magazine`, changeFrequency: "daily", priority: 0.8 },
   ];
 
   const paginasPerfumes: MetadataRoute.Sitemap = perfumes.map((p) => ({
@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const paginasArticulos: MetadataRoute.Sitemap = articulos.map((a) => ({
-    url: `${SITE_URL}/articulos/${a.slug}`,
+    url: `${SITE_URL}/magazine/${a.slug}`,
     lastModified: a.publicado_en,
     changeFrequency: "monthly",
     priority: 0.5,

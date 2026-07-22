@@ -12,7 +12,7 @@ export default function Footer() {
             </Link>
           </li>
           <li>
-            <Link href="/articulos" className="hover:text-ink">
+            <Link href="/magazine" className="hover:text-ink">
               Magazine
             </Link>
           </li>
