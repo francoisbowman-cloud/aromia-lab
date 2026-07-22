@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Magazine — Aromia",
-  description: "Reseñas, guías, academia y análisis de perfumería.",
+  description: "Reseñas, guías y análisis de perfumería.",
 };
 
 export default async function MagazinePage() {

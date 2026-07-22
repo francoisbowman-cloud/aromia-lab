@@ -10,13 +10,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const estaticas: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
-    { url: `${SITE_URL}/perfumes`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/catalogo`, changeFrequency: "daily", priority: 0.9 },
     { url: `${SITE_URL}/quiz`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/magazine`, changeFrequency: "daily", priority: 0.8 },
   ];
 
   const paginasPerfumes: MetadataRoute.Sitemap = perfumes.map((p) => ({
-    url: `${SITE_URL}/perfumes/${p.slug}`,
+    url: `${SITE_URL}/catalogo/${p.slug}`,
     changeFrequency: "weekly",
     priority: 0.6,
   }));

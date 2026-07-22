@@ -27,18 +27,20 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
 
   return (
     <Link
-      href={`/perfumes/${perfume.slug}`}
+      href={`/catalogo/${perfume.slug}`}
       className="group flex flex-col overflow-hidden rounded-card border border-line bg-surface transition hover:shadow-lux"
     >
       <div className="relative h-56 overflow-hidden bg-soft">
         {showImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={perfume.imagen_url}
-            alt={`${perfume.nombre} de ${perfume.marca}`}
-            className="absolute inset-0 h-full w-full object-cover transition group-hover:scale-105"
-            onError={() => setImgError(true)}
-          />
+          <div className="absolute inset-0 p-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={perfume.imagen_url}
+              alt={`${perfume.nombre} de ${perfume.marca}`}
+              className="h-full w-full object-contain transition group-hover:scale-105"
+              onError={() => setImgError(true)}
+            />
+          </div>
         ) : (
           <ImagePlaceholder alt={`${perfume.nombre} — imagen no disponible`} />
         )}

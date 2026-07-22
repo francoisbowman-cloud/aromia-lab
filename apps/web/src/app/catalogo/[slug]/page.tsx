@@ -5,8 +5,9 @@ import { PriceTable } from "@/components/perfume/PriceTable";
 import { OlfactiveRadar } from "@/components/perfume/OlfactiveRadar";
 import { SkinEvolution } from "@/components/perfume/SkinEvolution";
 import { CommunityReviews } from "@/components/perfume/CommunityReviews";
+import { EditorialMood } from "@/components/perfume/EditorialMood";
 
-export default async function PerfumeDetailPage({
+export default async function CatalogoDetailPage({
   params,
 }: {
   params: { slug: string };
@@ -32,6 +33,7 @@ export default async function PerfumeDetailPage({
         notasCorazon={perfume.notas_corazon}
         notasFondo={perfume.notas_fondo}
       />
+      <EditorialMood seed={perfume.slug} nombre={perfume.nombre} />
       <CommunityReviews
         ratingPromedio={perfume.rating_promedio}
         resenaSintetizada={perfume.resena_sintetizada}

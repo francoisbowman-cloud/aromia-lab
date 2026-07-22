@@ -7,13 +7,18 @@ export default function Footer() {
         <span className="font-display text-base tracking-[.06em] text-ink">AROMIA</span>
         <ul className="flex gap-6">
           <li>
-            <Link href="/perfumes" className="hover:text-ink">
-              Perfumes
+            <Link href="/catalogo" className="hover:text-ink">
+              Catálogo
             </Link>
           </li>
           <li>
             <Link href="/magazine" className="hover:text-ink">
               Magazine
+            </Link>
+          </li>
+          <li>
+            <Link href="/academia" className="hover:text-ink">
+              Academia
             </Link>
           </li>
           <li>

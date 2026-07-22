@@ -24,7 +24,7 @@ export default async function Home() {
         </p>
         <div className="flex flex-wrap gap-4">
           <Link
-            href="/perfumes"
+            href="/catalogo"
             className="rounded-full bg-gold-contrast px-6 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white transition hover:brightness-105"
           >
             Ver catálogo
@@ -42,7 +42,7 @@ export default async function Home() {
         <section>
           <div className="flex items-baseline justify-between">
             <h2 className="font-display text-2xl font-semibold text-ink">Destacados</h2>
-            <Link href="/perfumes" className="font-sans text-sm text-muted hover:text-ink">
+            <Link href="/catalogo" className="font-sans text-sm text-muted hover:text-ink">
               Ver todo el catálogo →
             </Link>
           </div>

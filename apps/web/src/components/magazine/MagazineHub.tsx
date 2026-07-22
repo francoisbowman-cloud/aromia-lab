@@ -53,7 +53,6 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
                   <MagazineSecondaryStory
                     key={article.slug}
                     article={article}
-                    index={i}
                     isFirst={i === 0}
                   />
                 ))}

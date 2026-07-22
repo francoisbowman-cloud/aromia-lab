@@ -21,7 +21,7 @@ interface ArticleDetail extends ArticleListItem {
   url_canonica: string | null;
 }
 
-const CATEGORIAS = ["resena", "guia", "analisis", "academia", "tendencias"];
+const CATEGORIAS = ["resena", "guia", "analisis", "tendencias"];
 
 export default function AdminMagazinePage() {
   const [items, setItems] = useState<ArticleListItem[] | null>(null);

@@ -3,17 +3,17 @@ import { PerfumesCatalog } from "@/components/perfume/PerfumesCatalog";
 
 export const dynamic = "force-dynamic";
 
-export default async function PerfumesPage() {
+export default async function CatalogoPage() {
   const perfumes = await getPerfumes();
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 p-6 lg:p-10">
       <div>
         <p className="font-sans text-[11px] uppercase tracking-[.24em] text-gold-contrast">
-          Catálogo
+          Aromia
         </p>
-        <h1 className="mt-2 font-display text-[40px] font-semibold leading-[0.98] text-ink">
-          Perfumes
+        <h1 className="mt-2 font-display text-[40px] font-semibold leading-[0.98] text-ink lg:text-[56px]">
+          Catálogo
         </h1>
       </div>
 

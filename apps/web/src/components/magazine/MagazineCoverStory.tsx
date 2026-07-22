@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Article } from "@/lib/types";
 import { CATEGORIA_LABEL } from "@/lib/magazineCategories";
+import { pickEditorialImage } from "@/lib/editorialImages";
 
 export function MagazineCoverStory({
   article,
@@ -14,6 +15,7 @@ export function MagazineCoverStory({
 }) {
   const [imgError, setImgError] = useState(false);
   const showImage = Boolean(article.imagen_portada_url) && !imgError;
+  const fallback = pickEditorialImage(article.slug);
 
   return (
     <Link
@@ -21,20 +23,13 @@ export function MagazineCoverStory({
       href={`/magazine/${article.slug}`}
       className="group relative block min-h-[560px] overflow-hidden lg:min-h-[680px] xl:min-h-[720px]"
     >
-      {showImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={article.imagen_portada_url!}
-          alt=""
-          onError={() => setImgError(true)}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      ) : (
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(115deg,#c89b55_0%,#734f2b_34%,#1f1711_100%)]"
-        />
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={showImage ? article.imagen_portada_url! : fallback.src}
+        alt={showImage ? "" : fallback.alt}
+        onError={() => setImgError(true)}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent p-7 text-white md:p-10 lg:p-14">
         <p className="font-sans text-[11px] uppercase tracking-[.18em] text-[#e0c591]">
           {CATEGORIA_LABEL[article.categoria]}
