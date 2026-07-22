@@ -58,6 +58,43 @@ body {
   }
 }
 
+/* Aromia Magazine — vista de impresión/PDF (spec aromia-magazine-especificacion.md).
+   Fondo blanco y texto casi negro sin importar el tema del sitio; tamaños en pt y
+   reglas de paginación solo tienen efecto real dentro de @media print. */
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 17mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .printable-article h2 {
+    font-size: 26pt;
+    line-height: 1.05;
+    break-after: avoid;
+  }
+
+  .printable-article p {
+    font-size: 12pt;
+    line-height: 1.65;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .printable-article blockquote {
+    font-size: 19pt;
+    line-height: 1.35;
+  }
+
+  .printable-article > section {
+    break-inside: avoid-page;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

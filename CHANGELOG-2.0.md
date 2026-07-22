@@ -370,3 +370,47 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   `next.config.mjs` ni el matching del quiz apuntaba a esos 12 slugs
   (el único hit, `/resena-santal-33.html`, redirige a un artículo del
   magazine independiente de la fila de catálogo, no se toca).
+
+## 2026-07-21 (2) — Code
+- **`/magazine` (hub) y `/magazine/[slug]` (lectura) implementados** a
+  partir de mockup + especificación entregados por Brey
+  (`aromia-magazine-mockup.html`, `aromia-magazine-especificacion.md`).
+  Reutiliza la tabla `articles` y el endpoint público `/api/articulos`
+  ya existentes (mismo contenido que `/articulos`, que sigue existiendo
+  sin cambios — la especificación no pidió reemplazarlo ni redirigirlo,
+  quedó como coexistencia sin resolver, ver `ESTADO-aromia.md`).
+- Nuevo: migración `010_add_articles_autor.sql` (columna `autor`,
+  nullable) — aplicada a producción. Campo agregado al editor
+  `/admin/magazine` y al whitelist de `PATCH /api/admin/articles/:id`.
+- Nuevo: `MagazineHub` (cliente) con sub-nav sticky con blur, portada
+  grande + hasta 3 artículos secundarios en columna lateral, filtrado
+  por categoría **sin recarga de página** (estado de React, no query
+  params) y desplazamiento de foco al primer artículo filtrado al
+  cambiar de categoría, como pide la especificación. Estado vacío
+  ("No hay artículos disponibles en esta categoría.") sin ilustración
+  ni CTA, tal como se pidió.
+- Nuevo: `PageFlipReader` (dependencia nueva `react-pageflip`, cargada
+  con `dynamic(..., { ssr: false })`) — overlay a pantalla completa,
+  controles de flecha/teclado/Escape, `flippingTime` reducido a 1ms si
+  el usuario tiene `prefers-reduced-motion`. El contenido HTML plano de
+  Tiptap (sin marcadores de página en el CMS) se pagina con un
+  presupuesto de caracteres por página (`lib/paginateArticle.ts`) —
+  estructura estática, no genera texto durante la animación.
+- Nuevo: vista de impresión en ruta propia `/magazine/[slug]/imprimir`
+  (en vez de un toggle de pantalla dentro de la misma página, como
+  hacía el mockup) — `PrintableArticle` es HTML semántico server-rendered
+  (sin canvas), visible en pantalla como preview A4 y con reglas
+  `@page`/`orphans`/`widows`/`break-after`/`break-inside` reales solo
+  bajo `@media print`. El botón "Imprimir / Guardar PDF" solo llama
+  `window.print()` — no genera el contenido impreso vía JS.
+- Corregido: `NavBar`/`Footer` (compartidos por todo el sitio) ahora
+  llevan `print:hidden` — antes se imprimían junto con cualquier página,
+  no solo con el magazine.
+- Fuera de alcance, confirmado contra la especificación antes de
+  implementar: sin buscador, sin paginación del hub, sin comentarios,
+  sin recomendaciones, sin perfiles ni favoritos.
+- Verificado en navegador real (no solo TypeScript/lint): filtrado de
+  categorías sin recarga, foco al primer artículo filtrado, apertura y
+  navegación del lector con paginado real de un artículo de producción,
+  Escape cierra el lector, vista de impresión con CSS de impresión
+  compilado y aplicado, layout mobile sin overflow horizontal (375px).

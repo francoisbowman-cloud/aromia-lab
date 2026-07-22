@@ -94,6 +94,7 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 69 | Fuente de imagen para los 26 perfumes sin foto real de Amazon: **enfoque mixto** — Code intenta Notino/Douglas/FragranceX perfume por perfume (mismos retailers ya investigados para el scraper de precios); los que tampoco aparezcan ahí quedan en placeholder sin insistir más. No se usan las imágenes de `OVL_Prompt_50` (son para otro uso, editorial) | Brey |
 | 70 | Ejecutado 21/07: de los 26 pendientes, **14 resueltos** (11 vía Notino, 3 vía Douglas) y **12 siguen en placeholder** (Le Labo x2, Frederic Malle x2, Creed x2, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, Tom Ford "Fucking Beautiful") — houses de nicho o marcas de lujo restringidas en retailers de descuento, sin ficha en ninguno de los 3 sitios en el primer intento. Aplicado a Postgres de producción (verificado en el dominio real) y a ambas copias del CSV | Code |
 | 71 | **No quedan perfumes sin imagen real en el catálogo**: los 12 sin foto de la decisión #70 se eliminaron del catálogo (fila de `perfumes` en Postgres de producción + CSV), no solo se dejaron en placeholder. `retailers` asociados cayeron en cascada (FK `ON DELETE CASCADE`, migración `003`). Catálogo pasa de 50 a **38 perfumes**. Verificado sin referencias rotas (redirects, quiz) antes de borrar | Brey |
+| 72 | El mockup original de `/magazine` (hojeo interactivo + descarga PDF), marcado como "no construido — decisión de alcance" en la decisión #33, **se construyó** el 21/07 a partir de mockup + especificación entregados por Brey (`aromia-magazine-mockup.html`, `aromia-magazine-especificacion.md`). Reutiliza la misma tabla `articles` que ya usaba `/articulos` — **`/articulos` no se tocó ni se redirigió**, la especificación no lo pidió; queda una coexistencia sin resolver entre ambas rutas públicas de magazine (ver sección 13) | Brey (spec) / Code (implementación) |
 
 ---
 
@@ -155,7 +156,7 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
    - `/` — hero + destacados reales + banner al quiz + captura de newsletter.
    - `/perfumes` — listado con tarjetas y filtros (texto, género, familia, precio, nicho/comercial). Decisión #35: **versión final**, no se retoma el mockup `/catalogo` (scroll infinito + "Perfume del mes").
    - `/quiz` — las 6 preguntas y 7 perfiles de `COPY/quiz-questions.md` funcionando de verdad, con resultado compartible en `/quiz/resultado/[perfil]` (meta tags OG por perfil) + captura de newsletter.
-5. **Magazine público** (`/articulos`) — reusa la misma tabla `articles` del admin (antes no tenía ninguna ruta pública). Los 11 `.md` de `articles/` sembrados ahí; cualquier artículo nuevo publicado desde el admin aparece automáticamente. Mockup original `/magazine` (hojeo + PDF) **no se construyó** — decisión de alcance, no de producto.
+5. **Magazine público** — dos rutas coexisten (decisión #72, sin resolver, ver sección 13): `/articulos` (grilla simple, en vivo desde el 18/07) y `/magazine` (nuevo, 21/07, fiel al mockup: sub-nav sticky, portada + secundarios, filtrado por categoría sin recarga, lector con hojeo vía `react-pageflip` y vista de impresión/PDF en `/magazine/[slug]/imprimir`). Ambas reusan la misma tabla `articles`; cualquier artículo publicado desde el admin aparece en las dos.
 6. **Bug de datos corregido** (decisión #31): perfumes en borrador ya no se filtran públicamente.
 7. **Scaffold de newsletter**: tabla `subscribers` + captura funcional en home, resultado del quiz y `/club`. Envío real vía SendGrid (decisión #50), falta que Brey pase las credenciales.
 8. **SEO técnico**: `sitemap.xml`/`robots.txt` reales, dinámicos.
@@ -224,7 +225,7 @@ El plan de convergencia (decisiones #35-37) **ya se ejecutó y deployó**, y el
 **corte de dominio real ya ocurrió** (decisión #64) — `aromialab.com` es hoy
 Aromia 2.0 en producción. Lo que queda:
 
-1. **Brey/Code** — definir fuente de imagen real para los 26 perfumes sin equivalente en Amazon (decisión #67, ver sección 13).
+1. **Brey** — decidir qué pasa entre `/articulos` y `/magazine` (decisión #72, ambas en vivo con el mismo contenido hoy): ¿reemplazo con redirect, conviven, o se da de baja una?
 2. **Brey** — revisar y aprobar (o ajustar) el research de decants (decisión #58); confirmar si "Delina"/"Delina Exclusif" son el mismo producto.
 3. **Brey** — darse de alta como afiliado en Awin para activar el scraper de Douglas/Primor (decisión #56); pasar credenciales de SendGrid y GA4.
 4. Una vez aprobado el research de decants: **Code** confirma diseño técnico (reusar `retailers` con campo `tipo`, o tabla nueva) antes de implementar (decisión #57).
@@ -268,6 +269,7 @@ Aromia 2.0 en producción. Lo que queda:
 - **Decants** (decisión #57-58): research entregado (Scent Split, Scent Decant, Scentbird), pendiente de aprobación de Brey antes de que Code diseñe/implemente nada.
 - Duplicación de `resena-baccarat-rouge-540` (.html de v1 + .md nuevo) sin resolver.
 - ¿Sigue en pausa el arranque de Sprint 2 de OVL (documentar las 10 Skills) o se retoma? — sin pedido explícito de Brey, sigue en stand-by.
+- **Coexistencia `/articulos` vs `/magazine`** (decisión #72): ambas rutas públicas sirven el mismo contenido (`articles`) con presentaciones distintas — `/articulos` es la grilla simple ya en producción desde el 18/07, `/magazine` es la nueva implementación fiel al mockup/spec del 21/07 (con hojeo y PDF). El nav global (`NavBar`/`Footer`) todavía apunta a `/articulos` bajo la etiqueta "Magazine" — no se tocó, la especificación del 21/07 no pidió reemplazar ni redirigir nada. Pendiente que Brey decida: ¿queda `/magazine` como reemplazo definitivo (con redirect desde `/articulos`), conviven ambas, o se da de baja una?
 
 ---
 

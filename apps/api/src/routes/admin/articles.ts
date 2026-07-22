@@ -83,7 +83,7 @@ adminArticlesRouter.patch(
   asyncHandler(async (req, res) => {
     const b = req.body;
     const fields = [
-      "titulo", "categoria", "estado", "contenido_html", "meta_title",
+      "titulo", "categoria", "estado", "contenido_html", "autor", "meta_title",
       "meta_description", "url_canonica", "keyword_objetivo",
     ];
 

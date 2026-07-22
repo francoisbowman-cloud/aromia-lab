@@ -15,6 +15,7 @@ interface ArticleListItem {
 
 interface ArticleDetail extends ArticleListItem {
   contenido_html: string;
+  autor: string | null;
   meta_title: string | null;
   meta_description: string | null;
   url_canonica: string | null;
@@ -158,7 +159,7 @@ export default function AdminMagazinePage() {
             </p>
           ) : (
             <div>
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
                 <div>
                   <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Título
@@ -166,6 +167,16 @@ export default function AdminMagazinePage() {
                   <input
                     value={article.titulo}
                     onChange={(e) => setArticle({ ...article, titulo: e.target.value })}
+                    className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
+                  />
+                </div>
+                <div>
+                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                    Autor
+                  </label>
+                  <input
+                    value={article.autor ?? ""}
+                    onChange={(e) => setArticle({ ...article, autor: e.target.value })}
                     className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                   />
                 </div>

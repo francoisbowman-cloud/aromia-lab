@@ -15,7 +15,7 @@ export default function NavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b border-line bg-surface">
+    <header className="border-b border-line bg-surface print:hidden">
       <nav className="mx-auto flex max-w-5xl items-center justify-between p-4 lg:px-10">
         <Link href="/" className="font-display text-lg tracking-[.08em] text-ink">
           AROMIA

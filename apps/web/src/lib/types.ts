@@ -46,6 +46,7 @@ export interface Article {
   categoria: "resena" | "guia" | "analisis" | "academia" | "tendencias";
   contenido_html?: string;
   imagen_portada_url: string | null;
+  autor?: string | null;
   meta_title?: string | null;
   meta_description: string | null;
   perfumes_relacionados: number[];
