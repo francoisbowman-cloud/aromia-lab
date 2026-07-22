@@ -1,9 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+
+/** Promedia los píxeles del borde de la imagen para que el fondo de la tarjeta
+ * adopte el mismo color que el fondo de la foto (blanco, crema, etc.), en vez
+ * de un beige fijo que choca quando la foto no es exactamente ese tono. */
+function sampleEdgeColor(img: HTMLImageElement): string | null {
+  try {
+    const canvas = document.createElement("canvas");
+    const size = 24;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    ctx.drawImage(img, 0, 0, size, size);
+
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let count = 0;
+    const edgePixels = [
+      ...Array.from({ length: size }, (_, x) => [x, 0]),
+      ...Array.from({ length: size }, (_, x) => [x, size - 1]),
+      ...Array.from({ length: size }, (_, y) => [0, y]),
+      ...Array.from({ length: size }, (_, y) => [size - 1, y]),
+    ];
+    for (const [x, y] of edgePixels) {
+      const data = ctx.getImageData(x, y, 1, 1).data;
+      r += data[0];
+      g += data[1];
+      b += data[2];
+      count++;
+    }
+    return `rgb(${Math.round(r / count)}, ${Math.round(g / count)}, ${Math.round(b / count)})`;
+  } catch {
+    // getImageData puede fallar por CORS si el host de la imagen no envía
+    // cabeceras permisivas; en ese caso mantenemos el fondo por defecto.
+    return null;
+  }
+}
 
 export function PerfumeCardSkeleton() {
   return (
@@ -23,21 +61,39 @@ export function PerfumeCardSkeleton() {
 
 export function PerfumeCard({ perfume }: { perfume: Perfume }) {
   const [imgError, setImgError] = useState(false);
+  const [bgColor, setBgColor] = useState<string | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const showImage = Boolean(perfume.imagen_url) && !imgError;
+
+  useEffect(() => {
+    // Las imágenes ya en caché están "complete" antes de que React ate el
+    // listener de onLoad, así que ese evento nunca dispara para ellas.
+    if (imgRef.current?.complete) {
+      setBgColor(sampleEdgeColor(imgRef.current));
+    }
+  }, [perfume.imagen_url]);
 
   return (
     <Link
       href={`/catalogo/${perfume.slug}`}
       className="group flex flex-col overflow-hidden rounded-card border border-line bg-surface transition hover:shadow-lux"
     >
-      <div className="relative h-56 overflow-hidden bg-soft">
+      <div
+        className="relative h-56 overflow-hidden bg-soft"
+        style={bgColor ? { backgroundColor: bgColor } : undefined}
+      >
         {showImage ? (
           <div className="absolute inset-0 p-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
+              ref={imgRef}
               src={perfume.imagen_url}
               alt={`${perfume.nombre} de ${perfume.marca}`}
+              crossOrigin="anonymous"
               className="h-full w-full object-contain transition group-hover:scale-105"
+              onLoad={() => {
+                if (imgRef.current) setBgColor(sampleEdgeColor(imgRef.current));
+              }}
               onError={() => setImgError(true)}
             />
           </div>
