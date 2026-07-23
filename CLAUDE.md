@@ -34,7 +34,10 @@ Dos versiones conviven en ramas distintas:
 ## Stack
 
 - **Frontend**: Next.js 14 (App Router) + TypeScript + Tailwind CSS —
-  `apps/web`
+  `apps/web`. Capa de componentes base: **shadcn/ui** (adoptado 21-22/07
+  durante la auditoría QA, ver `CHANGELOG-2.0.md`) — componentes se
+  generan con su CLI y quedan como código propio en
+  `apps/web/src/components/ui/`, no como dependencia de node_modules.
 - **Backend**: Node.js + Express + TypeScript — `apps/api`
 - **Base de datos**: PostgreSQL
 - **Cache/colas**: Redis (sin uso real todavía, solo conexión verificada
