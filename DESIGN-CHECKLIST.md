@@ -39,9 +39,14 @@ Auditar contra esta lista, no contra "las pantallas que se recuerdan".
 - [ ] shadcn/ui como base: todo componente nuevo (tarjeta, botón,
       badge) se construye o migra sobre shadcn/ui, no sobre un sistema
       propio paralelo.
-- [ ] Miniaturas de producto: fix de raíz con `object-fit: contain` en
-      el componente base, no parche por tarjeta individual — verificar
-      que ninguna miniatura quede cortada en ninguna de las 38 fichas.
+- [x] **Miniaturas de producto (actualizado 23/07):** recorte real vía
+      detección de bounding-box en canvas (comparando el contenido
+      contra el color de fondo de la foto), no un simple ajuste de
+      `object-fit: contain`. Implementado de raíz en el componente
+      compartido `PerfumeCard.tsx`, cubre Home/Catálogo/resultado del
+      Quiz a la vez. Verificar que ninguna miniatura quede cortada ni
+      escalada con el margen blanco que trae cada proveedor
+      (Amazon/Notino/Douglas) en ninguna de las 38 fichas.
 - [ ] Contraste texto-sobre-imagen: toda sección con foto de fondo
       (hero, Magazine, Academia) usa tratamiento para texto claro o
       scrim suficiente — nunca texto por defecto sin verificar.
