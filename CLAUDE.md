@@ -5,6 +5,11 @@ Memoria operativa técnica para trabajar en este repo. Las decisiones de
 (raíz del repo desde el 17/07 — antes se manejaba fuera, en Descargas) — no
 se duplican acá.
 
+Antes de cerrar cualquier tarea de diseño/frontend, correr el checklist
+de `DESIGN-CHECKLIST.md` (raíz del repo, entregado por Brey el 23/07) —
+cobertura completa de pantallas, tokens, shadcn/ui, assets, links de
+afiliado y verificación en vivo (Railway + aromialab.com, no solo local).
+
 No se encontró un borrador de `CLAUDE.md` de Cowork en el repo al momento
 de este Sprint 1 — este documento se escribió desde cero con lo técnico
 real implementado en el scaffolding. Cowork trabajó en paralelo sin acceso

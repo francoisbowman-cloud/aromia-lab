@@ -118,6 +118,20 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
     if (json.imagen_url) setImagenUrl(json.imagen_url);
   }
 
+  async function handleImageUrlSave(url: string) {
+    const res = await fetch(`/api/admin/perfumes/${params.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imagen_url: url }),
+    });
+    if (!res.ok) {
+      setSaveError(true);
+      return;
+    }
+    setImagenUrl(url);
+    setSaved(true);
+  }
+
   async function handleAddRetailer() {
     if (!newRetailer.nombre || !newRetailer.precio || !newRetailer.link_afiliado) return;
     setAddingRetailer(true);
@@ -460,7 +474,11 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
         </div>
 
         <aside>
-          <ImageUpload currentUrl={imagenUrl} onUpload={handleImageUpload} />
+          <ImageUpload
+            currentUrl={imagenUrl}
+            onUpload={handleImageUpload}
+            onUrlSave={handleImageUrlSave}
+          />
         </aside>
       </div>
     </form>

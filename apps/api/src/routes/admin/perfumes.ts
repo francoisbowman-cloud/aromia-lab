@@ -127,7 +127,7 @@ adminPerfumesRouter.patch(
     const fields = [
       "nombre", "marca", "genero", "familia_olfativa", "notas_salida", "notas_corazon",
       "notas_fondo", "precio_referencia", "moneda", "categoria_precio", "descripcion_corta",
-      "estado", "longevidad", "estela", "proyeccion", "resena_sintetizada",
+      "estado", "longevidad", "estela", "proyeccion", "resena_sintetizada", "imagen_url",
     ];
 
     const updates: string[] = [];
