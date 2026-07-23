@@ -437,3 +437,96 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   (header desktop, menú mobile, footer) apuntan a `/magazine`;
   `sitemap.xml` lista `/magazine` y `/magazine/[slug]`, no
   `/articulos`.
+
+## 2026-07-22 — Claude
+- **Restauración de Academia + rename Catálogo** (commit `846151c`):
+  - `/academia` vuelve como página propia (historia, pirámide, familias,
+    concentraciones, ingredientes con modal), migrada de v1. "Academia"
+    se retira como categoría/tab del Magazine; los 4 artículos legacy
+    taggeados así redirigen a `/academia` (sin duplicar contenido).
+  - `/perfumes` pasa a `/catalogo`, con redirect permanente de la ruta
+    vieja (mismo patrón que `/articulos`→`/magazine`).
+  - `PerfumeCard`: `object-contain` en vez de `object-cover` — corrige
+    miniaturas recortadas del catálogo.
+  - Mockups editoriales de `OVL_Prompt_50` (`Downloads/OVL_Prompt_50`,
+    prompts + imágenes ya generadas por Brey) incorporados como pool de
+    imágenes narrativas en `apps/web/public/editorial/` — usadas en la
+    sección "atmósfera" de la ficha de producto, el hero de Academia y
+    el fallback de portada del Magazine. Nunca como foto de catálogo.
+  - Verificados los 38 `link_afiliado` del CSV vía Browser pane (tag
+    `aromialab-20` presente en los 38, 24 `/dp/` resuelven a producto
+    real, 14 `/s?k=` a resultados no vacíos). Un solo hallazgo real:
+    `le-male` (ASIN `B0733677R6`) apunta hoy a la flanker "Le Male
+    Aviator", no al Le Male clásico que describe el CSV — **no
+    corregido, pendiente** (no se adivinó un ASIN de reemplazo sin
+    verificar).
+- **Fix de producción — imágenes rotas + "Ver oferta" muerto** (commit
+  `fcf6e52` + fix directo en Postgres, sin commit porque es dato, no
+  código):
+  - `apps/web/Dockerfile` nunca copiaba `public/` a la imagen final —
+    bug latente desde siempre, recién visible al agregar contenido real
+    a `public/editorial/`. Causaba 404 en producción. Corregido.
+  - `PerfumeCard`: fondo de la tarjeta ahora se muestrea del color de
+    borde de cada foto (canvas, con fallback para imágenes cacheadas
+    que no disparan `onLoad`) en vez de un beige fijo que chocaba con
+    fotos de fondo blanco/gris/otro color.
+  - **Bug real encontrado en producción, no introducido esta sesión**:
+    los 38 registros de `retailers` tenían el link placeholder
+    `https://afiliado.placeholder/{slug}` sin reemplazar desde que se
+    sembraron (18/07) — el botón "Ver oferta" nunca funcionó en todo el
+    catálogo. Corregido directo en la Postgres de producción (Brey
+    ejecutó el `UPDATE` vía el editor SQL del dashboard de Railway,
+    Claude no tiene permiso de escritura directa a prod) copiando
+    `retailers.link_afiliado` desde `perfumes.link_afiliado` (ya
+    verificado bueno). Verificado post-fix vía API pública: los 38
+    ahora resuelven al link real de Amazon.
+- **Auditoría + QA de las 5 pantallas + shadcn/ui** (commit `8d305e9`):
+  pedido explícito de Brey de pausar trabajo de diseño teórico/sistema
+  universal y enfocarse en que el sitio se vea profesional, sea
+  coherente, responsivo y no se rompa. Auditoría real (no solo lista)
+  de Magazine, Academia, Producto, Catálogo, Admin Panel, con
+  correcciones aplicadas en el mismo pase, priorizadas: rompe
+  experiencia → responsive → nav/interacciones → consistencia visual.
+  - **shadcn/ui adoptado** sobre el Tailwind existente —
+    `components/ui/{button,input,select,card,badge,skeleton}.tsx` +
+    `components.json` + `lib/utils.ts` (`cn()`). Los tokens semánticos
+    de shadcn (`primary`, `border`, `ring`, `card`, etc., en
+    `tailwind.config.ts`/`globals.css`) son alias sobre la paleta
+    dorada real (`--gold-contrast`, `--gold`, `--line`, `--surface`) —
+    no se agregó ningún color nuevo.
+  - Roto/funcional corregido: sidebar admin fija de 240px sin colapsar
+    (panel inusable en mobile, ahora es drawer); "Agregar perfume"
+    apuntaba a una ruta 404 en 2 pantallas (`/admin/perfumes/nuevo`
+    construido — el backend ya soportaba el `POST`); `HeroHeader`
+    seguía con `object-cover` (mismo bug de `PerfumeCard`, no se había
+    tocado); "Guardar borrador" en el editor de Magazine pisaba en
+    silencio el `estado` elegido; formularios admin sin chequeo de
+    `res.ok` (guardado fallido mostraba éxito); retailers del perfume
+    sin acción de borrado (backend ya la tenía, faltaba exponerla en
+    la API de Next y en la UI).
+  - Responsive corregido: `Footer` (6 links en `flex` sin wrap)
+    desbordaba el viewport en mobile — confirmado con
+    `scrollWidth > clientWidth` vía JS, no a ojo; timeline/tabla de
+    concentraciones de Academia con columnas fijas en px que apretaban
+    en pantallas chicas; vista de impresión con tamaños mm/pt fijos
+    sobredimensionados en preview mobile (la impresión real en A4 no
+    cambió); lector page-flip sin tope de altura en viewports bajos.
+  - Duplicación real encontrada y corregida: los 4 artículos categoría
+    "academia" (absorbidos por `/academia` el 22/07 con redirects)
+    seguían apareciendo como tarjetas en el feed del Magazine — ahora
+    se filtran en `magazine/page.tsx`. 4 páginas de error casi
+    idénticas consolidadas en un `ErrorState` compartido.
+  - **No verificado visualmente**: el panel admin requiere
+    `ADMIN_PASSWORD`, no disponible en el entorno local de esta sesión
+    — se verificó que compila, tipa, lintea, y que todas las rutas
+    responden (redirect a login si no hay sesión), pero no hubo
+    confirmación visual del drawer mobile ni de los formularios
+    logueado.
+- Estado del repo al cierre de esta sesión (confirmado contra
+  `origin/feature/v2.0`, no supuesto): `846151c` **ya está pusheado y
+  en producción** (Brey lo subió a mitad de sesión). `fcf6e52` y
+  `8d305e9` — el fix del Dockerfile/imágenes rotas y toda la auditoría
+  de QA + shadcn/ui — **siguen solo locales, 2 commits por delante de
+  origin, sin pushear**. El fix del `retailers.link_afiliado` en
+  Postgres de producción es independiente del git (dato, no código) y
+  ya está aplicado y verificado en vivo.
