@@ -23,6 +23,28 @@
      temas a propósito: un botón con texto blanco necesita el mismo
      piso de oscuridad sin importar el tema. */
   --gold-contrast: #866526;
+
+  /* Tokens semánticos de shadcn/ui, mapeados a la paleta de Aromia de
+     arriba — no son colores nuevos, son alias para que los componentes
+     base (Button, Input, Card, etc.) hereden el sistema editorial
+     existente en vez de traer su propia paleta. */
+  --radius: 0.65rem;
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--gold-contrast);
+  --primary-foreground: #ffffff;
+  --secondary: var(--soft);
+  --secondary-foreground: var(--text);
+  --muted-foreground: var(--muted);
+  --accent: var(--soft);
+  --accent-foreground: var(--text);
+  --destructive: #b4443c;
+  --destructive-foreground: #ffffff;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--gold);
 }
 
 [data-theme="dark"] {
@@ -37,6 +59,20 @@
 
   --background: #0a0a0a;
   --foreground: #ededed;
+
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--gold-contrast);
+  --secondary: var(--soft);
+  --secondary-foreground: var(--text);
+  --muted-foreground: var(--muted);
+  --accent: var(--soft);
+  --accent-foreground: var(--text);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--gold);
 }
 
 html {

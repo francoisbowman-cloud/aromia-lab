@@ -11,19 +11,19 @@ export function PrintableArticle({ article }: { article: Article }) {
   });
 
   return (
-    <div className="printable-article mx-auto my-6 min-h-[297mm] w-[210mm] max-w-full bg-white p-[22mm_20mm] text-[#18140f] shadow-[0_18px_60px_rgba(0,0,0,.16)]">
+    <div className="printable-article mx-auto my-6 min-h-[297mm] w-[210mm] max-w-full bg-white p-6 text-[#18140f] shadow-[0_18px_60px_rgba(0,0,0,.16)] sm:p-[22mm_20mm]">
       <section
-        className="flex min-h-[242mm] flex-col justify-end border-b border-[#b68a44] pb-[20mm]"
+        className="flex min-h-[242mm] flex-col justify-end border-b border-[#b68a44] pb-8 sm:pb-[20mm]"
         style={{ breakAfter: "always" }}
       >
         <p className="font-sans text-[10pt] uppercase tracking-[.14em] text-[#8d7144]">
           AROMIA · MAGAZINE · {CATEGORIA_LABEL[article.categoria].toUpperCase()}
         </p>
-        <h1 className="mt-auto max-w-[150mm] font-display text-[48pt] leading-[.97] tracking-[-.02em]">
+        <h1 className="mt-auto max-w-full font-display text-[28pt] leading-[.97] tracking-[-.02em] sm:max-w-[150mm] sm:text-[48pt]">
           {article.titulo}
         </h1>
         {article.meta_description ? (
-          <p className="mt-8 max-w-[135mm] font-display text-[17pt] leading-8 text-[#675d52]">
+          <p className="mt-8 max-w-full font-display text-[13pt] leading-7 text-[#675d52] sm:max-w-[135mm] sm:text-[17pt] sm:leading-8">
             {article.meta_description}
           </p>
         ) : null}
@@ -33,7 +33,7 @@ export function PrintableArticle({ article }: { article: Article }) {
         </div>
       </section>
 
-      <article className="font-display text-[12pt] leading-[1.65]">
+      <article className="font-display text-[11pt] leading-[1.65] sm:text-[12pt]">
         {blocks.map((block, i) => (
           <section key={i} dangerouslySetInnerHTML={{ __html: block.html }} />
         ))}

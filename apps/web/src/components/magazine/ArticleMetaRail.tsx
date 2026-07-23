@@ -39,7 +39,7 @@ export function ArticleMetaRail({
         <button
           type="button"
           onClick={onOpenReader}
-          className="inline-flex min-h-[48px] items-center justify-center bg-gold px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-[#17130f] transition hover:-translate-y-px"
+          className="inline-flex min-h-[48px] items-center justify-center bg-gold px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-ink transition hover:-translate-y-px"
         >
           Iniciar lectura
         </button>

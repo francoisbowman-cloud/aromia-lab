@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { IngredientesGrid } from "@/components/academia/IngredientesGrid";
 import { pickEditorialImage } from "@/lib/editorialImages";
+import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Academia — Aromia",
@@ -151,7 +152,7 @@ export default function AcademiaPage() {
           {timeline.map((item) => (
             <div
               key={item.anio}
-              className="grid grid-cols-[90px_1fr] gap-6 border-b border-line py-6 last:border-none"
+              className="grid grid-cols-1 gap-2 border-b border-line py-6 last:border-none sm:grid-cols-[90px_1fr] sm:gap-6"
             >
               <div className="font-display text-2xl leading-none text-gold-contrast">{item.anio}</div>
               <div>
@@ -229,7 +230,7 @@ export default function AcademiaPage() {
           {concentraciones.map((c) => (
             <div
               key={c.nombre}
-              className="grid grid-cols-[140px_1fr_70px] items-center gap-4 border-b border-line py-4 last:border-none"
+              className="grid grid-cols-1 gap-2 border-b border-line py-4 last:border-none sm:grid-cols-[120px_1fr_60px] sm:items-center sm:gap-4"
             >
               <span className="font-display text-lg text-ink">{c.nombre}</span>
               <span className="relative h-2 overflow-hidden rounded-full bg-gold/20">
@@ -238,7 +239,7 @@ export default function AcademiaPage() {
                   style={{ width: c.ancho }}
                 />
               </span>
-              <span className="text-right font-sans text-xs text-muted">{c.pct}</span>
+              <span className="font-sans text-xs text-muted sm:text-right">{c.pct}</span>
             </div>
           ))}
         </div>
@@ -263,12 +264,9 @@ export default function AcademiaPage() {
         <p className="mx-auto mt-3 max-w-md font-sans text-sm text-paper/70">
           Volvé al comparador y usá los filtros con criterio de experto.
         </p>
-        <Link
-          href="/catalogo"
-          className="mt-6 inline-block rounded-full bg-gold-contrast px-8 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white transition hover:brightness-105"
-        >
-          Ir al catálogo →
-        </Link>
+        <Button asChild size="lg" className="mt-6">
+          <Link href="/catalogo">Ir al catálogo →</Link>
+        </Button>
       </section>
     </main>
   );

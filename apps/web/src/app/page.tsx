@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPerfumes } from "@/lib/api";
 import { PerfumeCard } from "@/components/perfume/PerfumeCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -23,18 +24,12 @@ export default async function Home() {
           elijas con criterio, no al azar.
         </p>
         <div className="flex flex-wrap gap-4">
-          <Link
-            href="/catalogo"
-            className="rounded-full bg-gold-contrast px-6 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white transition hover:brightness-105"
-          >
-            Ver catálogo
-          </Link>
-          <Link
-            href="/quiz"
-            className="rounded-full border border-line px-6 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-ink transition hover:border-gold"
-          >
-            Hacer el quiz
-          </Link>
+          <Button asChild>
+            <Link href="/catalogo">Ver catálogo</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/quiz">Hacer el quiz</Link>
+          </Button>
         </div>
       </section>
 
@@ -65,12 +60,9 @@ export default async function Home() {
           Responde 6 preguntas y te mostramos los perfumes que mejor se adaptan a tu
           estilo y presupuesto.
         </p>
-        <Link
-          href="/quiz"
-          className="mt-6 inline-block rounded-full bg-gold-contrast px-8 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white transition hover:brightness-105"
-        >
-          Empezar el quiz
-        </Link>
+        <Button asChild size="lg" className="mt-6">
+          <Link href="/quiz">Empezar el quiz</Link>
+        </Button>
       </section>
 
       <section className="mx-auto flex max-w-lg flex-col items-center gap-3 text-center">

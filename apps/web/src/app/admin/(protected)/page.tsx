@@ -30,11 +30,16 @@ function timeAgo(iso: string): string {
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/dashboard")
-      .then((r) => r.json())
-      .then(setData);
+      .then((r) => {
+        if (!r.ok) throw new Error("dashboard fetch failed");
+        return r.json();
+      })
+      .then(setData)
+      .catch(() => setError(true));
   }, []);
 
   return (
@@ -42,7 +47,11 @@ export default function AdminDashboardPage() {
       <h1 className="font-display text-2xl text-admin-text">Dashboard</h1>
       <p className="mt-1 font-sans text-sm text-admin-muted">Resumen general de Aromia 2.0</p>
 
-      {!data ? (
+      {error ? (
+        <div className="mt-6 rounded-admin-card border border-admin-border bg-admin-surface p-6 text-center font-sans text-sm text-admin-muted">
+          No se pudo cargar el dashboard. Recargá la página para reintentar.
+        </div>
+      ) : !data ? (
         <div className="mt-6 grid grid-cols-2 gap-3.5 md:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <div key={i} className="h-24 animate-pulse rounded-admin-card bg-admin-surface" />

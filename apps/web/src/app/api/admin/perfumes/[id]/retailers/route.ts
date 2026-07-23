@@ -9,3 +9,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     body,
   });
 }
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const retailerId = req.nextUrl.searchParams.get("retailerId");
+  return proxyToAdminApi(`/perfumes/${params.id}/retailers/${retailerId}`, {
+    method: "DELETE",
+  });
+}

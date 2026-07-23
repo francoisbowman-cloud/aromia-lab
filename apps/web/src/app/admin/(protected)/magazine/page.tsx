@@ -29,6 +29,7 @@ export default function AdminMagazinePage() {
   const [article, setArticle] = useState<ArticleDetail | null>(null);
   const [seoOpen, setSeoOpen] = useState(false);
   const [saving, setSaving] = useState<"idle" | "guardando" | "publicando">("idle");
+  const [saveError, setSaveError] = useState(false);
 
   const loadList = useCallback(async () => {
     const res = await fetch("/api/admin/articles");
@@ -64,15 +65,20 @@ export default function AdminMagazinePage() {
   async function saveArticle(patch: Partial<ArticleDetail>, mode: "guardando" | "publicando") {
     if (!article) return;
     setSaving(mode);
+    setSaveError(false);
     const res = await fetch(`/api/admin/articles/${article.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(patch),
     });
+    setSaving("idle");
+    if (!res.ok) {
+      setSaveError(true);
+      return;
+    }
     const updated = await res.json();
     setArticle(updated);
     await loadList();
-    setSaving("idle");
   }
 
   return (
@@ -88,15 +94,20 @@ export default function AdminMagazinePage() {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => saveArticle({ ...article, estado: "borrador" }, "guardando")}
+              onClick={() => saveArticle(article, "guardando")}
               className="rounded border border-admin-border px-4 py-2 font-sans text-sm"
             >
-              {saving === "guardando" ? "Guardando…" : "Guardar borrador"}
+              {saving === "guardando" ? "Guardando…" : "Guardar"}
             </button>
             <button
               type="button"
               onClick={() => saveArticle({ ...article, estado: "publicado" }, "publicando")}
               disabled={!article.titulo || !article.contenido_html}
+              title={
+                !article.titulo || !article.contenido_html
+                  ? "Completá título y contenido para poder publicar"
+                  : undefined
+              }
               className="rounded bg-gold-contrast px-4 py-2 font-sans text-sm font-semibold text-white disabled:opacity-50"
             >
               {saving === "publicando" ? "Publicando…" : "Publicar"}
@@ -104,6 +115,12 @@ export default function AdminMagazinePage() {
           </div>
         ) : null}
       </div>
+
+      {saveError ? (
+        <p className="mt-3 font-sans text-sm text-destructive">
+          No se pudo guardar el artículo. Reintentá.
+        </p>
+      ) : null}
 
       <div className="mt-6 grid grid-cols-1 gap-3.5 lg:grid-cols-[250px_1fr]">
         <aside className="rounded-admin-card border border-admin-border bg-admin-surface p-3">

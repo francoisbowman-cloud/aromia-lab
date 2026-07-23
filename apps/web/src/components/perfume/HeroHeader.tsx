@@ -29,13 +29,15 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
     <section className="grid min-h-[460px] overflow-hidden rounded-card border border-line bg-surface shadow-lux lg:min-h-[720px] lg:grid-cols-[1.08fr_.92fr]">
       <div className="relative min-h-[460px] overflow-hidden bg-soft lg:min-h-full">
         {showImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={perfume.imagen_url}
-            alt={`${perfume.nombre} de ${perfume.marca}`}
-            className="absolute inset-0 h-full w-full object-cover"
-            onError={() => setImgError(true)}
-          />
+          <div className="absolute inset-0 p-10 lg:p-14">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={perfume.imagen_url}
+              alt={`${perfume.nombre} de ${perfume.marca}`}
+              className="h-full w-full object-contain"
+              onError={() => setImgError(true)}
+            />
+          </div>
         ) : (
           <ImagePlaceholder alt={`${perfume.nombre} — imagen no disponible`} />
         )}

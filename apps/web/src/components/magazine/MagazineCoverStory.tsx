@@ -31,7 +31,7 @@ export function MagazineCoverStory({
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent p-7 text-white md:p-10 lg:p-14">
-        <p className="font-sans text-[11px] uppercase tracking-[.18em] text-[#e0c591]">
+        <p className="font-sans text-[11px] uppercase tracking-[.18em] text-gold-dark">
           {CATEGORIA_LABEL[article.categoria]}
         </p>
         <h2 className="mt-5 max-w-[940px] font-display text-[clamp(42px,6vw,88px)] leading-[.93] tracking-[-.035em]">
@@ -42,7 +42,7 @@ export function MagazineCoverStory({
             {article.meta_description}
           </p>
         ) : null}
-        <span className="mt-8 inline-block border-b border-[#c8a86b] pb-2 font-sans text-[12px] uppercase tracking-[.14em] transition-all group-hover:pr-4">
+        <span className="mt-8 inline-block border-b border-gold-dark pb-2 font-sans text-[12px] uppercase tracking-[.14em] transition-all group-hover:pr-4">
           Leer artículo →
         </span>
       </div>

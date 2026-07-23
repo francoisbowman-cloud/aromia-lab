@@ -39,6 +39,9 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const [retailerError, setRetailerError] = useState(false);
+  const [addingRetailer, setAddingRetailer] = useState(false);
   const [slug, setSlug] = useState("");
   const [imagenUrl, setImagenUrl] = useState<string>();
   const [notasSalida, setNotasSalida] = useState<string[]>([]);
@@ -81,7 +84,8 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
   async function onSubmit(values: FormValues) {
     setSaving(true);
     setSaved(false);
-    await fetch(`/api/admin/perfumes/${params.id}`, {
+    setSaveError(false);
+    const res = await fetch(`/api/admin/perfumes/${params.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -96,6 +100,10 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
       }),
     });
     setSaving(false);
+    if (!res.ok) {
+      setSaveError(true);
+      return;
+    }
     setSaved(true);
   }
 
@@ -112,18 +120,43 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
 
   async function handleAddRetailer() {
     if (!newRetailer.nombre || !newRetailer.precio || !newRetailer.link_afiliado) return;
+    setAddingRetailer(true);
+    setRetailerError(false);
     const res = await fetch(`/api/admin/perfumes/${params.id}/retailers`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...newRetailer, precio: Number(newRetailer.precio) }),
     });
+    setAddingRetailer(false);
+    if (!res.ok) {
+      setRetailerError(true);
+      return;
+    }
     const created = await res.json();
     setRetailers((prev) => [...prev, created]);
     setNewRetailer({ nombre: "", precio: "", moneda: "USD", link_afiliado: "" });
   }
 
+  async function handleRemoveRetailer(retailerId: number) {
+    setRetailerError(false);
+    const res = await fetch(
+      `/api/admin/perfumes/${params.id}/retailers?retailerId=${retailerId}`,
+      { method: "DELETE" },
+    );
+    if (!res.ok) {
+      setRetailerError(true);
+      return;
+    }
+    setRetailers((prev) => prev.filter((r) => r.id !== retailerId));
+  }
+
   if (loading) {
-    return <div className="animate-pulse font-sans text-sm text-admin-muted">Cargando…</div>;
+    return (
+      <div className="grid gap-4">
+        <div className="h-8 w-48 animate-pulse rounded bg-admin-surface" />
+        <div className="h-64 animate-pulse rounded-admin-card bg-admin-surface" />
+      </div>
+    );
   }
 
   return (
@@ -141,6 +174,9 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
         </div>
         <div className="flex items-center gap-3">
           {saved ? <span className="font-sans text-xs text-admin-success-text">Guardado ✓</span> : null}
+          {saveError ? (
+            <span className="font-sans text-xs text-destructive">No se pudo guardar. Reintentá.</span>
+          ) : null}
           <button
             type="button"
             onClick={() => router.push("/admin/catalogo")}
@@ -302,19 +338,37 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
           {tab === "Ofertas" && (
             <div>
               <h3 className="font-sans text-sm font-semibold text-admin-text">Retailers</h3>
-              <div className="mt-3 divide-y divide-admin-border">
-                {retailers.map((r) => (
-                  <div key={r.id} className="flex items-center justify-between py-3 font-sans text-sm">
-                    <div>
-                      <p className="font-medium">{r.nombre}</p>
-                      <p className="text-xs text-admin-muted">{r.link_afiliado}</p>
+              {retailers.length === 0 ? (
+                <p className="mt-3 font-sans text-sm text-admin-muted">Todavía no hay retailers cargados.</p>
+              ) : (
+                <div className="mt-3 divide-y divide-admin-border">
+                  {retailers.map((r) => (
+                    <div key={r.id} className="flex items-center justify-between gap-3 py-3 font-sans text-sm">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium">{r.nombre}</p>
+                        <p className="truncate text-xs text-admin-muted">{r.link_afiliado}</p>
+                      </div>
+                      <p className="shrink-0">
+                        {Number(r.precio).toLocaleString("es-AR")} {r.moneda}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveRetailer(r.id)}
+                        aria-label={`Quitar retailer ${r.nombre}`}
+                        className="shrink-0 rounded px-2 py-1 text-admin-muted hover:bg-admin-bg hover:text-destructive"
+                      >
+                        ✕
+                      </button>
                     </div>
-                    <p>
-                      {Number(r.precio).toLocaleString("es-AR")} {r.moneda}
-                    </p>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
+
+              {retailerError ? (
+                <p className="mt-3 font-sans text-xs text-destructive">
+                  No se pudo completar la acción sobre retailers. Reintentá.
+                </p>
+              ) : null}
 
               <div className="mt-4 grid grid-cols-1 gap-2 rounded border border-dashed border-admin-border p-3 md:grid-cols-4">
                 <input
@@ -339,9 +393,10 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
                 <button
                   type="button"
                   onClick={handleAddRetailer}
-                  className="rounded bg-gold-contrast px-3 py-1.5 font-sans text-xs font-semibold text-white"
+                  disabled={addingRetailer}
+                  className="rounded bg-gold-contrast px-3 py-1.5 font-sans text-xs font-semibold text-white disabled:opacity-50"
                 >
-                  + Agregar
+                  {addingRetailer ? "Agregando…" : "+ Agregar"}
                 </button>
               </div>
             </div>

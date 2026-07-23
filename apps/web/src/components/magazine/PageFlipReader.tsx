@@ -50,7 +50,7 @@ export function PageFlipReader({
         Cerrar ✕
       </button>
 
-      <div className="relative w-[min(1080px,94vw)]">
+      <div className="relative max-h-[calc(100dvh-3rem)] w-[min(1080px,94vw)] overflow-hidden">
         <HTMLFlipBook
           ref={bookRef}
           startPage={0}

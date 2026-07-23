@@ -79,6 +79,20 @@ export default function AdminCatalogoPage() {
             <option value="borrador">Borrador</option>
           </select>
         </div>
+        <div className="flex items-end">
+          <button
+            type="button"
+            onClick={() => {
+              setPage(1);
+              setQ("");
+              setEstado("");
+            }}
+            disabled={!q && !estado}
+            className="w-full rounded border border-admin-border px-4 py-2 font-sans text-sm text-admin-muted transition hover:text-admin-text disabled:cursor-not-allowed disabled:opacity-40 md:w-auto"
+          >
+            Limpiar filtros
+          </button>
+        </div>
       </div>
 
       <div className="mt-4">
@@ -110,7 +124,16 @@ export default function AdminCatalogoPage() {
                 {data.items.map((p) => (
                   <tr key={p.id} className="border-b border-admin-border last:border-0">
                     <td className="px-4 py-3">
-                      <div className="h-9 w-9 rounded bg-admin-bg" />
+                      {p.imagen_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={p.imagen_url}
+                          alt=""
+                          className="h-9 w-9 rounded border border-admin-border bg-admin-bg object-contain"
+                        />
+                      ) : (
+                        <div className="h-9 w-9 rounded bg-admin-bg" />
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <p className="font-medium text-admin-text">{p.nombre}</p>

@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="mt-16 border-t border-line bg-surface print:hidden">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-3 p-8 text-center font-sans text-sm text-muted lg:flex-row lg:justify-between lg:text-left">
         <span className="font-display text-base tracking-[.06em] text-ink">AROMIA</span>
-        <ul className="flex gap-6">
+        <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
           <li>
             <Link href="/catalogo" className="hover:text-ink">
               Catálogo

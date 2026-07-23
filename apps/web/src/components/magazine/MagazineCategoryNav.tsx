@@ -19,6 +19,7 @@ export function MagazineCategoryNav({
               key={tab.key}
               type="button"
               onClick={() => onSelect(tab.key)}
+              aria-current={active ? "true" : undefined}
               className={`relative shrink-0 pb-[13px] font-sans text-[12px] uppercase tracking-[.11em] transition-colors duration-150 ${
                 active ? "text-ink" : "text-muted hover:text-ink"
               }`}

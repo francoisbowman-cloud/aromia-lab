@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import type { Perfume } from "@/lib/types";
 import { PerfumeCard } from "./PerfumeCard";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 
 const GENEROS = ["masculino", "femenino", "unisex"] as const;
 const CATEGORIAS_PRECIO = ["económico", "medio", "premium", "lujo"] as const;
@@ -32,58 +34,47 @@ export function PerfumesCatalog({ perfumes }: { perfumes: Perfume[] }) {
     });
   }, [perfumes, q, genero, familia, categoriaPrecio, nichoOComercial]);
 
-  const selectClass =
-    "rounded border border-line bg-surface px-3 py-2 font-sans text-sm text-ink outline-none focus:border-gold";
-
   return (
     <div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <input
+        <Input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar por nombre o marca…"
-          className={`${selectClass} lg:col-span-2`}
+          className="lg:col-span-2"
         />
-        <select value={genero} onChange={(e) => setGenero(e.target.value)} className={selectClass}>
+        <Select value={genero} onChange={(e) => setGenero(e.target.value)}>
           <option value="">Género</option>
           {GENEROS.map((g) => (
             <option key={g} value={g} className="capitalize">
               {g}
             </option>
           ))}
-        </select>
-        <select value={familia} onChange={(e) => setFamilia(e.target.value)} className={selectClass}>
+        </Select>
+        <Select value={familia} onChange={(e) => setFamilia(e.target.value)}>
           <option value="">Familia olfativa</option>
           {familias.map((f) => (
             <option key={f} value={f}>
               {f}
             </option>
           ))}
-        </select>
-        <select
-          value={categoriaPrecio}
-          onChange={(e) => setCategoriaPrecio(e.target.value)}
-          className={selectClass}
-        >
+        </Select>
+        <Select value={categoriaPrecio} onChange={(e) => setCategoriaPrecio(e.target.value)}>
           <option value="">Categoría de precio</option>
           {CATEGORIAS_PRECIO.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>
           ))}
-        </select>
-        <select
-          value={nichoOComercial}
-          onChange={(e) => setNichoOComercial(e.target.value)}
-          className={selectClass}
-        >
+        </Select>
+        <Select value={nichoOComercial} onChange={(e) => setNichoOComercial(e.target.value)}>
           <option value="">Nicho / Comercial</option>
           {NICHO_O_COMERCIAL.map((n) => (
             <option key={n} value={n}>
               {n}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       {filtrados.length === 0 ? (

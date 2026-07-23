@@ -24,6 +24,35 @@ const config: Config = {
           dark: "#C8A86B",
           contrast: "var(--gold-contrast)",
         },
+        // Tokens semánticos de shadcn/ui — alias sobre la paleta de arriba,
+        // usados por los componentes base en components/ui/*.
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
+        },
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
         admin: {
           bg: "#F6F4EF",
           surface: "#FFFFFF",

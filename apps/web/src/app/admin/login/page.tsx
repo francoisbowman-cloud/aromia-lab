@@ -52,7 +52,7 @@ export default function AdminLoginPage() {
         />
 
         {error ? (
-          <p className="mt-3 font-sans text-sm text-admin-danger">{error}</p>
+          <p className="mt-3 font-sans text-sm text-destructive">{error}</p>
         ) : null}
 
         <button

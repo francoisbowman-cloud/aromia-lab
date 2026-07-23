@@ -20,7 +20,15 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
   const cover = filtered[0];
   const secondary = filtered.slice(1, 4);
 
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    // Solo mueve el foco cuando el usuario cambia de categoría, no en el
+    // montaje inicial (si no, el foco salta a la portada apenas se carga
+    // la página, sin que el usuario haya interactuado con nada).
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     coverRef.current?.focus();
   }, [activeKey]);
 

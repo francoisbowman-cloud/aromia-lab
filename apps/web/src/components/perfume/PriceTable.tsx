@@ -1,4 +1,5 @@
 import type { Retailer } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 export function PriceTableSkeleton() {
   return (
@@ -43,14 +44,11 @@ export function PriceTable({ retailers }: { retailers: Retailer[] }) {
                 currency: r.moneda,
               })}
             </p>
-            <a
-              href={r.link_afiliado}
-              target="_blank"
-              rel="sponsored noopener"
-              className="flex min-h-[48px] w-full items-center justify-center rounded-full bg-gold-contrast px-6 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white transition hover:brightness-105"
-            >
-              Ver oferta
-            </a>
+            <Button asChild className="w-full">
+              <a href={r.link_afiliado} target="_blank" rel="sponsored noopener">
+                Ver oferta
+              </a>
+            </Button>
           </li>
         ))}
       </ul>
