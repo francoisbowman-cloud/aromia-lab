@@ -33,7 +33,7 @@ export default async function CatalogoDetailPage({
         notasCorazon={perfume.notas_corazon}
         notasFondo={perfume.notas_fondo}
       />
-      <EditorialMood seed={perfume.slug} nombre={perfume.nombre} />
+      <EditorialMood slug={perfume.slug} nombre={perfume.nombre} />
       <CommunityReviews
         ratingPromedio={perfume.rating_promedio}
         resenaSintetizada={perfume.resena_sintetizada}

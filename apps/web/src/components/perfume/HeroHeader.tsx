@@ -27,7 +27,7 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
 
   return (
     <section className="grid min-h-[460px] overflow-hidden rounded-card border border-line bg-surface shadow-lux lg:min-h-[720px] lg:grid-cols-[1.08fr_.92fr]">
-      <div className="relative min-h-[460px] overflow-hidden bg-soft lg:min-h-full">
+      <div className="relative min-h-[460px] overflow-hidden bg-surface lg:min-h-full">
         {showImage ? (
           <div className="absolute inset-0 p-10 lg:p-14">
             {/* eslint-disable-next-line @next/next/no-img-element */}
