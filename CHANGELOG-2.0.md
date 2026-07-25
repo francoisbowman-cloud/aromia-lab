@@ -530,3 +530,64 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   origin, sin pushear**. El fix del `retailers.link_afiliado` en
   Postgres de producción es independiente del git (dato, no código) y
   ya está aplicado y verificado en vivo.
+
+## 2026-07-24 — Chat
+
+- Corregido: ASIN de Le Male (`link_afiliado`) apuntaba a la flanker
+  "Le Male Aviator" en vez del clásico — reemplazado por el ASIN
+  correcto en ambas copias del CSV (raíz + `apps/api/data/`) y en la
+  fila real de `retailers` en Postgres de producción (commit
+  `967d4e5`).
+- Corregido: `imagen_url` de Wood Sage & Sea Salt apuntaba a una URL de
+  Douglas muerta (mostraba placeholder en el catálogo) — reemplazada
+  por una foto real de Amazon, verificada cargando en el sitio en vivo.
+- Nuevo: autocrop real de miniaturas de producto en `PerfumeCard.tsx` —
+  reemplaza `object-contain`/`object-cover` (dejaban márgenes blancos
+  desiguales heredados de cada retailer) por un análisis de píxeles vía
+  `<canvas>` que detecta el bounding box del contenido real y lo
+  reescala/posiciona con `background-size`/`background-position` para
+  llenar la tarjeta de forma consistente en todo el catálogo. Recalcula
+  con `ResizeObserver` en resize (commit `459dd6a`).
+- Nuevo: el admin puede fijar `imagen_url` pegando una URL externa
+  directamente (`ImageUpload.tsx` + `PATCH /api/admin/perfumes/:id`
+  ahora acepta ese campo), no solo por upload de archivo — evita el bug
+  real encontrado esta sesión donde el upload guardaba una ruta
+  relativa (`/uploads/...`) que el frontend nunca prefija con el origen
+  de la API, y quedaba rota en producción (commit `459dd6a`).
+- **Fix de pareo OVL** (bug real, no cosmético): el banner de "atmósfera
+  editorial" en la ficha de producto (`EditorialMood.tsx`) elegía la
+  imagen narrativa por hash del slug, mostrando en producción el frasco
+  de **otro perfume** — ej. cualquier perfume podía terminar mostrando
+  el mockup generado para Aventus o para Bleu de Chanel. Reemplazado por
+  un mapeo real 1:1 slug→imagen (`OVL_IMAGES` en `editorialImages.ts`),
+  verificado visualmente contra los 50 prompts originales de
+  `PROMPTS-CATALOGO-50_1.md` (3 pasadas cruzadas, conflictos resueltos
+  por hash de archivo o inspección directa, no por adivinanza). El pool
+  de 8 imágenes genéricas (`EDITORIAL_IMAGES`/`pickEditorialImage`) se
+  mantiene intacto para portadas de Magazine/Academia, donde no
+  representan un producto puntual y el hash no causa el mismo bug.
+  Resultado: **34/38 perfumes activos** con su mockup verificado; los 4
+  restantes (Molecule 01, Flowerbomb, Terre d'Hermes, Erba Pura) sin
+  match de alta confianza muestran un placeholder neutro en vez de
+  arriesgar un frasco incorrecto — regla explícita del ticket. 34 JPGs
+  nuevos en `apps/web/public/ovl/` (convertidos de los PNG originales de
+  `OVL_Prompt_50`, comprimidos a calidad 78 para que el push a GitHub no
+  fallara por payload — el intento inicial con PNG sin comprimir daba
+  timeout HTTP 408 repetido). Commits `5e2095b` y `80fdb0d`.
+- Corregido en el mismo fix: fondo de la imagen hero de producto
+  (`HeroHeader.tsx`) de `bg-soft` a `bg-surface`, para que coincida con
+  el resto de la ficha (commit `5e2095b`).
+- Verificado en vivo en `aromialab.com` (desktop y mobile, incógnito):
+  autocrop de tarjetas, foto real de Wood Sage & Sea Salt, y el mockup
+  narrativo correcto en varios perfumes recién pareados (ej. Versace
+  Pour Homme sirviendo `/ovl/versace-pour-homme.jpg`, no una imagen
+  ajena).
+- Abierto, sin resolver: `CommunityReviews.tsx` usa un rating +
+  reseña sintetizada cargados a mano desde el admin
+  (`resena_sintetizada`), no datos reales de reseñas de Amazon como
+  describe el ticket original — señalado a Brey, sin decidir
+  unilateralmente si eso es aceptable o si hace falta scraping real.
+- Pendiente del ticket, sin empezar: galería de miniaturas adicionales
+  en la ficha de producto (regla de solo-fondo-blanco en el grid de
+  Catálogo vs. galería más rica —lifestyle, infografías— permitida en
+  la ficha individual).

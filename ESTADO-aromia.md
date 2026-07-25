@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 21 de julio de 2026 — por: Code (corte de dominio real ejecutado, catálogo de afiliados/imágenes avanzado)
+Última actualización: 25 de julio de 2026 — por: Chat (fix de ASIN de Le Male, autocrop de miniaturas, fix de pareo OVL en la ficha de producto)
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -96,6 +96,11 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 71 | **No quedan perfumes sin imagen real en el catálogo**: los 12 sin foto de la decisión #70 se eliminaron del catálogo (fila de `perfumes` en Postgres de producción + CSV), no solo se dejaron en placeholder. `retailers` asociados cayeron en cascada (FK `ON DELETE CASCADE`, migración `003`). Catálogo pasa de 50 a **38 perfumes**. Verificado sin referencias rotas (redirects, quiz) antes de borrar | Brey |
 | 72 | El mockup original de `/magazine` (hojeo interactivo + descarga PDF), marcado como "no construido — decisión de alcance" en la decisión #33, **se construyó** el 21/07 a partir de mockup + especificación entregados por Brey (`aromia-magazine-mockup.html`, `aromia-magazine-especificacion.md`). Reutiliza la misma tabla `articles` que ya usaba `/articulos` — **`/articulos` no se tocó ni se redirigió**, la especificación no lo pidió; queda una coexistencia sin resolver entre ambas rutas públicas de magazine (ver sección 13) | Brey (spec) / Code (implementación) |
 | 73 | **`/magazine` reemplaza a `/articulos`** — cierra la coexistencia de la decisión #72. `/articulos` se da de baja como ruta propia (código eliminado) y pasa a redirect 308 (`/articulos` → `/magazine`, `/articulos/:slug` → `/magazine/:slug`); todos los redirects de v1 que apuntaban a `/articulos/...` se actualizaron a `/magazine/...` directo. `NavBar`/`Footer`/`sitemap.ts` actualizados | Brey |
+| 74 | Fix de dato: `link_afiliado` de Le Male apuntaba al ASIN de la flanker "Le Male Aviator", no al clásico — corregido en Postgres de producción y ambas copias del CSV | Chat |
+| 75 | Fix de bug real (no cosmético): el banner "atmósfera editorial" de la ficha de producto (`EditorialMood.tsx`) elegía la imagen narrativa OVL por hash del slug, mostrando en producción el mockup de **otro perfume** — reemplazado por mapeo real 1:1 verificado contra los 50 prompts originales. **34/38 perfumes activos** con mockup propio confirmado; los 4 sin match de alta confianza (Molecule 01, Flowerbomb, Terre d'Hermes, Erba Pura) muestran placeholder neutro en vez de un frasco incorrecto — regla explícita del ticket, no hay excepción por perfume | Chat |
+| 76 | Autocrop real de miniaturas de producto (`PerfumeCard.tsx`) vía análisis de píxeles en `<canvas>` (bounding box de contenido real + `background-size`/`background-position`), reemplazando `object-contain`/`object-cover` que dejaban márgenes blancos desiguales heredados de cada retailer. Aplica a Home, Catálogo y resultado de Quiz | Chat |
+| 77 | Admin puede fijar `imagen_url` pegando una URL externa directa, no solo por upload de archivo — corrige un bug real donde el upload guardaba una ruta relativa (`/uploads/...`) sin prefijo de origen de API, quedando rota en producción | Chat |
+| 78 | Abierto, sin decidir: `CommunityReviews.tsx` usa rating + reseña cargados a mano por el admin, no datos reales de reseñas de Amazon como pide el ticket de ficha de producto — señalado a Brey, no resuelto unilateralmente | Chat (hallazgo) |
 
 ---
 
@@ -189,8 +194,9 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 - `PERFUMES_INITIAL_50.csv` — nombre del archivo sin cambiar por compatibilidad, pero **el catálogo real tiene 38 perfumes**, no 50 (decisión #71: se eliminaron los 12 sin foto real) — sembrados en Postgres de producción.
 - `PROMPTS-CATALOGO-50.md` — 50 prompts de imagen editorial generados desde el CSV original, para pegar en ChatGPT Plus uno a la vez (método manual, no automatizado, costo cero hasta ingresos reales) — incluye prompts de los 12 perfumes ya eliminados del catálogo, sin actualizar todavía.
 - Solo Erba Pura tiene imagen ya generada e integrada en 1.0 como prueba piloto
-- `link_afiliado`: **38/38 completo**, todos con ASIN real de Amazon o de Notino/Douglas — ya no quedan fallbacks de búsqueda sin foto real detrás (decisiones #66, #70-71).
-- `imagen_url`: **38/38 con foto real** (decisión #71) — cero perfumes en placeholder.
+- `link_afiliado`: **38/38 completo**, todos con ASIN real de Amazon o de Notino/Douglas — ya no quedan fallbacks de búsqueda sin foto real detrás (decisiones #66, #70-71). ASIN de Le Male corregido el 24/07 (decisión #74, apuntaba a la flanker Aviator).
+- `imagen_url`: **38/38 con foto real** (decisión #71) — cero perfumes en placeholder. Wood Sage & Sea Salt corregido el 24/07 (URL de Douglas muerta, reemplazada por foto de Amazon).
+- **Mockups narrativos OVL en la ficha de producto**: **34/38 perfumes activos** con mockup propio verificado 1:1 (decisión #75); 4 sin match de alta confianza quedan con placeholder neutro (Molecule 01, Flowerbomb, Terre d'Hermes, Erba Pura).
 
 ---
 
@@ -270,6 +276,8 @@ Aromia 2.0 en producción. Lo que queda:
 - Duplicación de `resena-baccarat-rouge-540` (.html de v1 + .md nuevo) sin resolver.
 - ¿Sigue en pausa el arranque de Sprint 2 de OVL (documentar las 10 Skills) o se retoma? — sin pedido explícito de Brey, sigue en stand-by.
 - ~~Coexistencia `/articulos` vs `/magazine`~~ — **cerrado 21/07** (decisión #73): `/magazine` reemplaza a `/articulos`, que queda como redirect 308.
+- **Ticket ficha de producto (24/07), sección pendiente**: galería de miniaturas adicionales — regla de solo-fondo-blanco en el grid de Catálogo vs. galería más rica (lifestyle, infografías) permitida en la ficha individual del perfume. Sin empezar.
+- **Reseñas de comunidad real** (decisión #78): `CommunityReviews.tsx` usa rating + texto cargados a mano por el admin; el ticket original pide datos reales de Amazon. Necesita que Brey confirme si el enfoque actual alcanza o si hace falta scraping real de reseñas.
 
 ---
 
