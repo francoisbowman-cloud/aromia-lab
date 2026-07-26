@@ -29,12 +29,13 @@ export function pickEditorialImage(seed: string): EditorialImage {
 }
 
 /**
- * Mockups narrativos (set OVL_Prompt_50) pareados 1:1 contra el perfume real
- * para el que fueron generados — verificado visualmente contra los ingredientes
- * descritos en cada prompt (fruta/flor de primer plano, notas de fondo), no
- * asignado por hash. Solo se listan los pares confirmados con alta confianza;
- * el resto de los perfumes no tiene mockup verificado todavía — mostrar un
- * frasco incorrecto es peor que no mostrar nada (ver ticket OVL, 23/07).
+ * Mockups narrativos (set OVL_Prompt_50 + 4 reemplazos entregados el 25/07)
+ * pareados 1:1 contra el perfume real, no asignados por hash. **38/38
+ * perfumes activos cubiertos** desde el 25/07 — los últimos 4 (Molecule 01,
+ * Terre d'Hermès, Erba Pura, Flowerbomb) no tenían match confiable en el set
+ * original de 50 prompts y se resolvieron aparte, con el mismo tratamiento
+ * visual (fondo removido + degradé `--stone`→`--gold-300` + sombra) que los
+ * otros 34. Ver ticket OVL, 23-25/07.
  */
 const OVL_IMAGES: Record<string, EditorialImage> = {
   "bleu-de-chanel-edp": { src: "/ovl/bleu-de-chanel-edp.jpg", alt: "Atmósfera editorial de Bleu de Chanel EDP" },
@@ -71,6 +72,10 @@ const OVL_IMAGES: Record<string, EditorialImage> = {
   "eros": { src: "/ovl/eros.jpg", alt: "Atmósfera editorial de Eros" },
   "good-girl-gone-bad": { src: "/ovl/good-girl-gone-bad.jpg", alt: "Atmósfera editorial de Good Girl Gone Bad" },
   "versace-pour-homme": { src: "/ovl/versace-pour-homme.jpg", alt: "Atmósfera editorial de Versace Pour Homme" },
+  "molecule-01": { src: "/ovl/molecule-01.jpg", alt: "Atmósfera editorial de Molecule 01" },
+  "terre-d-hermes-edt": { src: "/ovl/terre-d-hermes-edt.jpg", alt: "Atmósfera editorial de Terre d'Hermes EDT" },
+  "erba-pura": { src: "/ovl/erba-pura.jpg", alt: "Atmósfera editorial de Erba Pura" },
+  "flowerbomb": { src: "/ovl/flowerbomb.jpg", alt: "Atmósfera editorial de Flowerbomb" },
 };
 
 /** Devuelve el mockup narrativo del perfume, o null si todavía no tiene uno

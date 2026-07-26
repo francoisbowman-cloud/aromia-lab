@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 25 de julio de 2026 — por: Chat (fix de ASIN de Le Male, autocrop de miniaturas, fix de pareo OVL en la ficha de producto)
+Última actualización: 25 de julio de 2026 — por: Chat (auditoría visual completa del catálogo, cierre del pareo OVL a 38/38, 2 bugs reales de imagen corregidos en producción)
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -101,6 +101,9 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 76 | Autocrop real de miniaturas de producto (`PerfumeCard.tsx`) vía análisis de píxeles en `<canvas>` (bounding box de contenido real + `background-size`/`background-position`), reemplazando `object-contain`/`object-cover` que dejaban márgenes blancos desiguales heredados de cada retailer. Aplica a Home, Catálogo y resultado de Quiz | Chat |
 | 77 | Admin puede fijar `imagen_url` pegando una URL externa directa, no solo por upload de archivo — corrige un bug real donde el upload guardaba una ruta relativa (`/uploads/...`) sin prefijo de origen de API, quedando rota en producción | Chat |
 | 78 | Abierto, sin decidir: `CommunityReviews.tsx` usa rating + reseña cargados a mano por el admin, no datos reales de reseñas de Amazon como pide el ticket de ficha de producto — señalado a Brey, no resuelto unilateralmente | Chat (hallazgo) |
+| 79 | **Auditoría visual completa** de los 38 perfumes activos contra `Aromia_Visual_Identification_Catalog_Detailed.pdf` (36/38 tienen ficha en el PDF): 25/36 ✅, 9/36 ⚠️ (imprecisiones de la ficha de referencia, no bugs), **2/36 ❌ bugs reales**: Le Male (foto y ASIN seguían apuntando al flanker "Aviator" — el fix del 24/07 solo había tocado el CSV, nunca la base de producción) y La Vie Est Belle (foto era del envase de recarga, no del frasco de venta). Ambos corregidos directo en Postgres de producción vía la API admin, verificados contra la página real de Amazon/Notino antes de aplicar | Chat |
+| 80 | **Pareo OVL cerrado a 38/38 perfumes activos** — los 4 que quedaban en placeholder neutro (Molecule 01, Terre d'Hermès, Erba Pura, Flowerbomb) se resolvieron por una vía separada de Brey (foto real con fondo removido, compuesta sobre el mismo degradé que los otros 34), verificados contra el producto real e integrados a `apps/web/public/ovl/` | Brey (mockups) / Chat (integración) |
+| 81 | Pendiente, sin aplicar todavía: Brey decidió que el fondo de ambientación de los mockups OVL debería pasar de degradé fijo (`--stone`→`--gold-300`) a blanco sólido (tema claro) / negro sólido (tema oscuro) — no se tocó el set actual (38 imágenes), queda como criterio para una futura regeneración si se decide unificar todo el set | Brey |
 
 ---
 
@@ -196,7 +199,8 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 - Solo Erba Pura tiene imagen ya generada e integrada en 1.0 como prueba piloto
 - `link_afiliado`: **38/38 completo**, todos con ASIN real de Amazon o de Notino/Douglas — ya no quedan fallbacks de búsqueda sin foto real detrás (decisiones #66, #70-71). ASIN de Le Male corregido el 24/07 (decisión #74, apuntaba a la flanker Aviator).
 - `imagen_url`: **38/38 con foto real** (decisión #71) — cero perfumes en placeholder. Wood Sage & Sea Salt corregido el 24/07 (URL de Douglas muerta, reemplazada por foto de Amazon).
-- **Mockups narrativos OVL en la ficha de producto**: **34/38 perfumes activos** con mockup propio verificado 1:1 (decisión #75); 4 sin match de alta confianza quedan con placeholder neutro (Molecule 01, Flowerbomb, Terre d'Hermes, Erba Pura).
+- **Mockups narrativos OVL en la ficha de producto**: **38/38 perfumes activos** con mockup propio verificado 1:1 (decisiones #75, #80) — cerrado el 25/07, ya no quedan placeholders.
+- **Auditoría visual del catálogo real** (decisión #79): 2 bugs de imagen confirmados y corregidos en producción (Le Male, La Vie Est Belle).
 
 ---
 
@@ -278,6 +282,9 @@ Aromia 2.0 en producción. Lo que queda:
 - ~~Coexistencia `/articulos` vs `/magazine`~~ — **cerrado 21/07** (decisión #73): `/magazine` reemplaza a `/articulos`, que queda como redirect 308.
 - **Ticket ficha de producto (24/07), sección pendiente**: galería de miniaturas adicionales — regla de solo-fondo-blanco en el grid de Catálogo vs. galería más rica (lifestyle, infografías) permitida en la ficha individual del perfume. Sin empezar.
 - **Reseñas de comunidad real** (decisión #78): `CommunityReviews.tsx` usa rating + texto cargados a mano por el admin; el ticket original pide datos reales de Amazon. Necesita que Brey confirme si el enfoque actual alcanza o si hace falta scraping real de reseñas.
+- **Desactivar "Imprimir PDF" en Magazine** (ticket 25/07): ocultar el botón/entrada sin borrar la funcionalidad de base. Sin empezar.
+- **Fondo de mockups OVL a blanco/negro sólido según tema** (decisión #81): sin aplicar al set actual de 38 imágenes, pendiente de decidir si se resuelve como asset duplicado (light/dark) o vía CSS con fondo transparente.
+- Los 9 casos ⚠️ de la auditoría visual (decisión #79) no requieren acción de código — son imprecisiones de la ficha de referencia del PDF (color/metal descrito distinto al real, o foto de caja en vez de frasco), señalados para que el equipo de contenido los revise si quiere corregir la ficha de referencia misma.
 
 ---
 

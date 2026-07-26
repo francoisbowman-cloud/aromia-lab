@@ -591,3 +591,47 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   en la ficha de producto (regla de solo-fondo-blanco en el grid de
   Catálogo vs. galería más rica —lifestyle, infografías— permitida en
   la ficha individual).
+
+## 2026-07-25 — Chat
+
+- **Auditoría visual completa contra `Aromia_Visual_Identification_Catalog_Detailed.pdf`**:
+  de los 38 perfumes activos, 36 tienen ficha de referencia en el PDF (Erba
+  Pura y Terre d'Hermes quedan fuera de su alcance, no están documentados
+  ahí). Resultado: **25/36 ✅ coinciden**, **9/36 ⚠️ duda razonable**
+  (mayormente descripción de referencia imprecisa en un detalle de color/metal
+  — ej. Herod descrito como marrón siendo gris antracita real — o foto de
+  caja en vez de frasco, no bugs de imagen mal asociada), **2/36 ❌ bugs
+  reales confirmados y corregidos en producción**:
+  - **Le Male**: la foto (`imagen_url`) y el ASIN de afiliado
+    (`retailers.link_afiliado`) seguían apuntando al flanker "Le Male
+    Aviator / Gaultier Airlines" (envase dice literalmente "AVIATOR") — el
+    fix del 24/07 solo había tocado el CSV, nunca se aplicó a la base de
+    producción. Corregido ahora directo en Postgres de producción vía
+    `PATCH /api/admin/perfumes/18` y `/18/retailers/13`: `imagen_url` →
+    foto real del torso rayado clásico, `link_afiliado` → ASIN
+    `B001BAG38G` verificado contra la página real de Amazon.
+  - **La Vie Est Belle**: la foto mostraba el envase de **recarga**
+    (botella cilíndrica con bomba dispensadora "OFF/ON"), no el frasco de
+    venta minorista (forma facetada + lazo gris). Corregido vía `PATCH
+    /api/admin/perfumes/9` con una foto real del frasco (Notino), ya que
+    el listado vigente de Amazon para este producto ya no ofrece fotos del
+    frasco clásico (solo flankers y formatos de viaje/recarga).
+  - Auditoría ejecutada con 3 agentes en paralelo (uno por tercio del
+    catálogo), cada uno descargando la foto real y comparándola contra la
+    ficha de referencia; los 2 hallazgos ❌ se re-verificaron manualmente
+    antes de aplicar cualquier cambio a producción.
+- **Cierre del pareo OVL — 38/38 perfumes activos**: los 4 mockups que
+  habían quedado en placeholder neutro (Molecule 01, Terre d'Hermès, Erba
+  Pura, Flowerbomb, sin match confiable en el set original de 50 prompts)
+  se resolvieron por una vía separada — foto real del frasco con fondo
+  removido, compuesta sobre el mismo degradé `--stone`→`--gold-300` que ya
+  usan los otros 34 — y se integraron a `apps/web/public/ovl/` +
+  `editorialImages.ts` (`OVL_IMAGES`). Verificados uno por uno contra el
+  producto real antes de integrar.
+- Pendiente, según lo señalado en el ticket que acompañó los 4 mockups:
+  Brey decidió que el fondo de ambientación de los mockups OVL debería
+  pasar de degradé fijo a **blanco sólido (tema claro) / negro sólido
+  (tema oscuro)** — no aplicado a este set (ni a los 34 previos), queda
+  como criterio para una futura regeneración si se decide unificar.
+- Sin empezar: galería de miniaturas adicionales de Amazon (sección 4 del
+  ticket), desactivar "Imprimir PDF" en Magazine.
