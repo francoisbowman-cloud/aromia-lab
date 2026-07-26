@@ -72,6 +72,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "Times New Roman", "serif"],
         sans: ["var(--font-body)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        plex: ["var(--font-plex)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       borderRadius: {
         card: "28px",

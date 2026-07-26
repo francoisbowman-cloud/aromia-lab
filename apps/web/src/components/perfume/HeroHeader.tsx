@@ -7,10 +7,10 @@ import { ImagePlaceholder } from "./ImagePlaceholder";
 export function HeroHeaderSkeleton() {
   return (
     <section
-      className="grid min-h-[460px] overflow-hidden rounded-card border border-line bg-surface shadow-lux lg:min-h-[720px] lg:grid-cols-[1.08fr_.92fr]"
+      className="grid overflow-hidden rounded-card border border-line bg-surface shadow-lux lg:grid-cols-[1.08fr_.92fr]"
       aria-busy="true"
     >
-      <div className="min-h-[460px] animate-pulse bg-soft lg:min-h-full" />
+      <div className="aspect-[4/5] animate-pulse bg-soft" />
       <div className="flex flex-col justify-center gap-4 p-8 lg:p-12">
         <div className="h-3 w-24 animate-pulse rounded bg-soft" />
         <div className="h-10 w-3/4 animate-pulse rounded bg-soft" />
@@ -26,8 +26,8 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
   const showImage = Boolean(perfume.imagen_url) && !imgError;
 
   return (
-    <section className="grid min-h-[460px] overflow-hidden rounded-card border border-line bg-surface shadow-lux lg:min-h-[720px] lg:grid-cols-[1.08fr_.92fr]">
-      <div className="relative min-h-[460px] overflow-hidden bg-surface lg:min-h-full">
+    <section className="grid overflow-hidden rounded-card border border-line bg-surface shadow-lux lg:grid-cols-[1.08fr_.92fr]">
+      <div className="relative aspect-[4/5] overflow-hidden bg-surface">
         {showImage ? (
           <div className="absolute inset-0 p-10 lg:p-14">
             {/* eslint-disable-next-line @next/next/no-img-element */}

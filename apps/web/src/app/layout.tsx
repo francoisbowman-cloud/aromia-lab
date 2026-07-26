@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Archivo, Cormorant_Garamond, IBM_Plex_Sans } from "next/font/google";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
@@ -19,12 +19,24 @@ const geistMono = localFont({
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   variable: "--font-display",
 });
-const jost = Jost({
+// Reemplaza a Jost (ver GUIA-VISUAL-aromia.md) — fuente de nav/labels/botones
+// y cuerpo de texto en ambas variantes del ticket de adaptación visual.
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+});
+// Cuerpo de texto largo en la variante oscura (Grafito) del ticket — se
+// expone como familia separada (`font-plex`) en vez de reemplazar Archivo,
+// para no forzar una reescritura masiva de párrafos fuera del alcance del
+// ticket (ver sección 6 del ticket original).
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
-  variable: "--font-body",
+  variable: "--font-plex",
 });
 
 export const metadata: Metadata = {
@@ -53,7 +65,7 @@ export default function RootLayout({
         <GoogleAnalytics />
       </head>
       <body
-        className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} ${jost.variable} antialiased`}
+        className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} ${archivo.variable} ${ibmPlexSans.variable} antialiased`}
       >
         <NavBar />
         <div className="flex-1">{children}</div>

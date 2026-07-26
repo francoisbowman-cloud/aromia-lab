@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
   { href: "/", label: "Inicio" },
@@ -22,32 +23,8 @@ export default function NavBar() {
           AROMIA
         </Link>
 
-        <ul className="hidden gap-8 font-sans text-sm sm:flex">
-          {links.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  className={
-                    active
-                      ? "text-gold-contrast"
-                      : "text-muted transition hover:text-ink"
-                  }
-                >
-                  {link.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <details className="sm:hidden">
-          <summary className="cursor-pointer list-none font-sans text-sm text-ink">
-            Menú
-          </summary>
-          <ul className="absolute left-0 right-0 z-10 mt-4 flex flex-col gap-1 border-b border-line bg-surface px-4 pb-4 font-sans text-sm">
+        <div className="hidden items-center gap-2 sm:flex">
+          <ul className="flex gap-6 font-sans text-sm">
             {links.map((link) => {
               const active = pathname === link.href;
               return (
@@ -55,7 +32,10 @@ export default function NavBar() {
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    className={`block py-2 ${active ? "text-gold-contrast" : "text-muted"}`}
+                    className={
+                      "nav-link " +
+                      (active ? "text-gold-contrast" : "text-muted transition hover:text-ink")
+                    }
                   >
                     {link.label}
                   </Link>
@@ -63,7 +43,33 @@ export default function NavBar() {
               );
             })}
           </ul>
-        </details>
+          <ThemeToggle className="ml-2" />
+        </div>
+
+        <div className="flex items-center gap-1 sm:hidden">
+          <ThemeToggle />
+          <details className="relative">
+            <summary className="nav-link cursor-pointer list-none font-sans text-sm text-ink">
+              Menú
+            </summary>
+            <ul className="absolute right-0 z-10 mt-2 flex w-48 flex-col gap-1 rounded-card border border-line bg-surface p-2 font-sans text-sm shadow-lux">
+              {links.map((link) => {
+                const active = pathname === link.href;
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      aria-current={active ? "page" : undefined}
+                      className={`nav-link block ${active ? "text-gold-contrast" : "text-muted"}`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </details>
+        </div>
       </nav>
     </header>
   );

@@ -635,3 +635,41 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   como criterio para una futura regeneración si se decide unificar.
 - Sin empezar: galería de miniaturas adicionales de Amazon (sección 4 del
   ticket), desactivar "Imprimir PDF" en Magazine.
+
+## 2026-07-26 — Chat
+
+- **Ticket "Adaptar variante visual de Aromia a producción"** (prototipo
+  `Aromia_Layton_variantes_visuales.zip`, Grafito = dark / Ivorio = light,
+  ver decisión #82 de `ESTADO-aromia.md`):
+  - **Toggle de tema real**: `ThemeToggle.tsx` (nuevo), botón sol/luna en
+    `NavBar` (desktop y mobile), persistido en `localStorage` (`aromia_theme`)
+    y aplicado vía `data-theme` en `<html>`. La infraestructura de tokens
+    `[data-theme="dark"]`/CSS vars ya existía en `globals.css`/`tailwind.config.ts`
+    de una sesión previa, pero sin ningún componente que la accionara en
+    runtime — solo el script anti-flash del `<head>`. No se instaló
+    `next-themes`, se completó el patrón manual ya existente.
+  - **Reglas de imagen**: `object-contain` + `aspect-ratio` fijo por rol
+    (catálogo 1:1 en `PerfumeCard.tsx`, hero de ficha 4:5 en `HeroHeader.tsx`,
+    banner editorial 16:10 en `EditorialMood.tsx`, que además pasó de
+    `object-cover` a `object-contain` — el mockup OVL ya no se recorta).
+    `HeroHeader`/`PerfumeCard` dejan de depender de `min-h`/altura fija y
+    usan `aspect-ratio` explícito, sin tocar la lógica de autocrop por
+    bounding box de `PerfumeCard.tsx` (decisión #76), que ya cumplía la
+    regla de "nunca recortar el frasco".
+  - **Sistema de nav de 3 niveles**: clase `.nav-link` nueva en `globals.css`
+    (subrayado animado en hover + `focus-visible` con outline dorado + área
+    de toque mínima), reemplaza el `hover:text-ink` suelto de `NavBar.tsx`
+    y `Footer.tsx` — antes sin ningún estado de foco visible, bloqueante de
+    accesibilidad de teclado. CTAs primario/secundario (`Button` de shadcn)
+    sin cambios, ya cumplían el patrón.
+  - **Tipografía**: `Archivo` (nueva, vía `next/font/google`) reemplaza a
+    `Jost` como `--font-body`/`font-sans`. `IBM Plex Sans` (nueva) se cargó
+    como familia adicional (`--font-plex`/`font-plex`) pero no se aplicó de
+    forma masiva a párrafos existentes — marcado como detalle de próxima
+    iteración en el ticket original, no bloqueante. `Cormorant Garamond`
+    (`--font-display`) sin cambios.
+  - Nuevo `GUIA-VISUAL-aromia.md` en la raíz del repo — tokens, reglas de
+    imagen, sistema de 3 niveles y checklist de coherencia entre vistas,
+    para no repetir este razonamiento en la próxima tarea de diseño.
+  - Verificado en `npx tsc --noEmit` y navegador local (toggle, catálogo,
+    ficha de producto, nav desktop/mobile) antes de dar por cerrado.

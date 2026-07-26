@@ -133,7 +133,7 @@ export function PerfumeCardSkeleton() {
       className="overflow-hidden rounded-card border border-line bg-surface"
       aria-busy="true"
     >
-      <div className="h-56 animate-pulse bg-soft" />
+      <div className="aspect-square animate-pulse bg-soft" />
       <div className="flex flex-col gap-2 p-5">
         <div className="h-3 w-20 animate-pulse rounded bg-soft" />
         <div className="h-5 w-3/4 animate-pulse rounded bg-soft" />
@@ -193,7 +193,7 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
     >
       <div
         ref={frameRef}
-        className="relative h-56 overflow-hidden bg-soft"
+        className="relative aspect-square overflow-hidden bg-soft"
         style={bgColor ? { backgroundColor: bgColor } : undefined}
       >
         {showImage ? (
