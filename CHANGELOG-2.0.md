@@ -673,3 +673,36 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
     para no repetir este razonamiento en la próxima tarea de diseño.
   - Verificado en `npx tsc --noEmit` y navegador local (toggle, catálogo,
     ficha de producto, nav desktop/mobile) antes de dar por cerrado.
+- **Corrección al punto anterior** (decisión #83 de `ESTADO-aromia.md`): el
+  pase inicial solo tocó el sistema transversal, no el layout real de las
+  pantallas — Brey lo señaló con una captura de la Home, que seguía siendo
+  de una columna sin imagen. Alcance confirmado con Brey: "todo el sitio".
+  - **Home** (`app/page.tsx`) reescrita: hero de dos columnas (texto +
+    escena editorial `object-cover` con imagen determinística vía
+    `pickEditorialImage("home-hero")`), sección "Reseñas destacadas" (3
+    perfumes, prioriza los que tienen `rating_promedio` real — nuevo prop
+    `variant="featured"` en `PerfumeCard.tsx` que muestra rating en vez de
+    precio, vía `RatingStars.tsx` nuevo, compartido), chips de familia
+    olfativa que linkean a `/catalogo?familia=X`, banner de Magazine con el
+    último artículo real (antes no había banner de Magazine en Home),
+    banner de Club. Quiz CTA y newsletter existentes, sin tocar.
+  - **Catálogo**: `catalogo/page.tsx` ahora lee `searchParams.familia` y lo
+    pasa como `initialFamilia` a `PerfumesCatalog.tsx`, que agrega una fila
+    de chips de familia (estilo prototipo) arriba de los filtros
+    existentes — completa el link de Home, sin romper los filtros de
+    select/input ya construidos (género, precio, nicho/comercial, texto).
+  - **Quiz**: `QuizFlow.tsx` — opciones en grid de 2 columnas (antes lista
+    vertical de 1 columna) + `focus-visible` explícito, sin tocar la
+    lógica de puntaje/matching.
+  - **Ficha de producto, Magazine, Academia**: revisadas, no reescritas —
+    ya usaban el sistema de diseño/tokens de sesiones previas de forma
+    consistente (hero, price table, radar, notas, editorial mood en la
+    ficha; cover story + secondary stories en Magazine; timeline/familias/
+    concentraciones en Academia). Solo recibieron las reglas de imagen ya
+    aplicadas en el punto anterior.
+  - Verificado en `npx tsc --noEmit` y navegador local: aspect-ratio del
+    hero de Home (502×628 = 4:5 exacto), flujo completo chip→catálogo
+    filtrado (`/catalogo?familia=acuatico%20aromatico` deja solo el
+    perfume de esa familia), ficha de producto y quiz sin errores de
+    consola más allá del warning de hidratación preexistente de
+    `data-theme` (ya documentado, no es una regresión de este cambio).

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+import { RatingStars } from "@/components/RatingStars";
 
 type CropResult = {
   bgColor: string;
@@ -143,7 +144,16 @@ export function PerfumeCardSkeleton() {
   );
 }
 
-export function PerfumeCard({ perfume }: { perfume: Perfume }) {
+export function PerfumeCard({
+  perfume,
+  variant = "catalog",
+}: {
+  perfume: Perfume;
+  /** "catalog" (default) muestra precio — grid de /catalogo. "featured" muestra
+   * rating en vez de precio — sección "Reseñas destacadas" de Home, donde el
+   * prototipo no lista precio. */
+  variant?: "catalog" | "featured";
+}) {
   const [imgError, setImgError] = useState(false);
   const [bgColor, setBgColor] = useState<string | null>(null);
   const [crop, setCrop] = useState<{ backgroundSize: string; backgroundPosition: string } | null>(
@@ -241,12 +251,16 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
           {perfume.nombre}
         </h3>
         <p className="font-sans text-sm text-muted">{perfume.marca}</p>
-        <p className="mt-auto pt-3 font-display text-base text-ink">
-          {Number(perfume.precio_referencia).toLocaleString("es-AR", {
-            style: "currency",
-            currency: perfume.moneda,
-          })}
-        </p>
+        {variant === "featured" && perfume.rating_promedio ? (
+          <RatingStars rating={perfume.rating_promedio} className="mt-auto pt-3" />
+        ) : (
+          <p className="mt-auto pt-3 font-display text-base text-ink">
+            {Number(perfume.precio_referencia).toLocaleString("es-AR", {
+              style: "currency",
+              currency: perfume.moneda,
+            })}
+          </p>
+        )}
       </div>
     </Link>
   );

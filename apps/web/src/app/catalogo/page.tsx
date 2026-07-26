@@ -3,7 +3,11 @@ import { PerfumesCatalog } from "@/components/perfume/PerfumesCatalog";
 
 export const dynamic = "force-dynamic";
 
-export default async function CatalogoPage() {
+export default async function CatalogoPage({
+  searchParams,
+}: {
+  searchParams: { familia?: string };
+}) {
   const perfumes = await getPerfumes();
 
   return (
@@ -20,7 +24,7 @@ export default async function CatalogoPage() {
       {perfumes.length === 0 ? (
         <p className="font-sans text-sm text-muted">Todavía no hay perfumes cargados.</p>
       ) : (
-        <PerfumesCatalog perfumes={perfumes} />
+        <PerfumesCatalog perfumes={perfumes} initialFamilia={searchParams.familia} />
       )}
     </main>
   );

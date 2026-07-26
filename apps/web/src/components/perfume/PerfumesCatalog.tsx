@@ -10,10 +10,18 @@ const GENEROS = ["masculino", "femenino", "unisex"] as const;
 const CATEGORIAS_PRECIO = ["económico", "medio", "premium", "lujo"] as const;
 const NICHO_O_COMERCIAL = ["nicho", "comercial"] as const;
 
-export function PerfumesCatalog({ perfumes }: { perfumes: Perfume[] }) {
+export function PerfumesCatalog({
+  perfumes,
+  initialFamilia,
+}: {
+  perfumes: Perfume[];
+  /** Prefiltra por familia olfativa al llegar desde un link con `?familia=`
+   * (ej. los chips de Home) — sigue siendo editable desde el select. */
+  initialFamilia?: string;
+}) {
   const [q, setQ] = useState("");
   const [genero, setGenero] = useState("");
-  const [familia, setFamilia] = useState("");
+  const [familia, setFamilia] = useState(initialFamilia ?? "");
   const [categoriaPrecio, setCategoriaPrecio] = useState("");
   const [nichoOComercial, setNichoOComercial] = useState("");
 
@@ -36,6 +44,34 @@ export function PerfumesCatalog({ perfumes }: { perfumes: Perfume[] }) {
 
   return (
     <div>
+      <div className="mb-6 flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={() => setFamilia("")}
+          className={
+            familia === ""
+              ? "rounded-full bg-gold-contrast px-5 py-2 font-sans text-[12px] font-semibold uppercase tracking-[.06em] text-primary-foreground"
+              : "rounded-full border border-line px-5 py-2 font-sans text-[12px] uppercase tracking-[.06em] text-ink transition hover:border-gold"
+          }
+        >
+          Todos
+        </button>
+        {familias.map((f) => (
+          <button
+            key={f}
+            type="button"
+            onClick={() => setFamilia(f)}
+            className={
+              familia === f
+                ? "rounded-full bg-gold-contrast px-5 py-2 font-sans text-[12px] font-semibold uppercase tracking-[.06em] text-primary-foreground"
+                : "rounded-full border border-line px-5 py-2 font-sans text-[12px] uppercase tracking-[.06em] text-ink transition hover:border-gold"
+            }
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <Input
           value={q}

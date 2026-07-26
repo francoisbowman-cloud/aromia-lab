@@ -43,13 +43,13 @@ export function QuizFlow() {
         {pregunta.pregunta}
       </h2>
 
-      <div className="mt-8 flex flex-col gap-3">
+      <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {pregunta.opciones.map((opcion) => (
           <button
             key={opcion.letra}
             type="button"
             onClick={() => elegir(opcion.puntos)}
-            className="rounded-table border border-line bg-surface p-4 text-left font-sans text-sm text-ink transition hover:border-gold hover:bg-soft"
+            className="rounded-table border border-line bg-surface p-5 text-left font-sans text-sm text-ink transition hover:border-gold hover:bg-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {opcion.texto}
           </button>
