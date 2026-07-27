@@ -18,11 +18,7 @@ export function MagazineCoverStory({
   const fallback = pickEditorialImage(article.slug);
 
   return (
-    <Link
-      ref={linkRef}
-      href={`/magazine/${article.slug}`}
-      className="group relative block min-h-[560px] overflow-hidden lg:min-h-[680px] xl:min-h-[720px]"
-    >
+    <div className="relative aspect-[4/5] overflow-hidden rounded-card border border-line lg:aspect-auto lg:h-full lg:min-h-[480px]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={showImage ? article.imagen_portada_url! : fallback.src}
@@ -30,34 +26,33 @@ export function MagazineCoverStory({
         onError={() => setImgError(true)}
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent p-7 text-white md:p-10 lg:p-14">
-        <p className="font-sans text-[11px] uppercase tracking-[.18em] text-gold-dark">
+      {/* Tarjeta de reseña superpuesta (variante 1B) — la foto queda de fondo,
+          el teaser del artículo va en una tarjeta sólida abajo, no como
+          texto flotando sobre un degradé. */}
+      <Link
+        ref={linkRef}
+        href={`/magazine/${article.slug}`}
+        className="group absolute inset-x-4 bottom-4 block rounded-card bg-surface p-5 shadow-lux transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:inset-x-6 md:bottom-6 md:p-7"
+      >
+        <p className="font-sans text-[10px] uppercase tracking-[.18em] text-gold-contrast">
           {CATEGORIA_LABEL[article.categoria]}
         </p>
-        <h2 className="mt-5 max-w-[940px] font-display text-[clamp(42px,6vw,88px)] leading-[.93] tracking-[-.035em]">
+        <h2 className="mt-2 font-display text-xl leading-tight text-ink md:text-2xl">
           {article.titulo}
         </h2>
-        {article.meta_description ? (
-          <p className="mt-6 max-w-[650px] text-[15px] leading-7 text-white/80 md:text-[17px]">
-            {article.meta_description}
-          </p>
-        ) : null}
-        <span className="mt-8 inline-block border-b border-gold-dark pb-2 font-sans text-[12px] uppercase tracking-[.14em] transition-all group-hover:pr-4">
+        <span className="mt-3 inline-block font-sans text-[11px] uppercase tracking-[.1em] text-muted transition-colors group-hover:text-ink">
           Leer artículo →
         </span>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 
 export function MagazineCoverStorySkeleton() {
   return (
-    <div className="min-h-[560px] animate-pulse bg-soft lg:min-h-[680px] xl:min-h-[720px]" aria-busy="true">
-      <div className="flex h-full flex-col justify-end gap-3 p-10 lg:p-14">
-        <div className="h-10 w-2/3 rounded bg-line/60" />
-        <div className="h-10 w-1/2 rounded bg-line/60" />
-        <div className="h-10 w-1/3 rounded bg-line/60" />
-      </div>
-    </div>
+    <div
+      className="aspect-[4/5] animate-pulse rounded-card bg-soft lg:aspect-auto lg:h-full lg:min-h-[480px]"
+      aria-busy="true"
+    />
   );
 }

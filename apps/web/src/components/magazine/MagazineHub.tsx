@@ -37,15 +37,6 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
       <MagazineCategoryNav activeKey={activeKey} onSelect={setActiveKey} />
 
       <section className="mx-auto max-w-[1440px] px-6 pb-20 pt-12 lg:px-10 lg:pt-14">
-        <div className="mb-8 flex items-end justify-between">
-          <h1 className="font-display text-[clamp(38px,5vw,72px)] leading-none text-ink">
-            Magazine
-          </h1>
-          <span className="hidden font-sans text-[11px] uppercase tracking-[.16em] text-muted md:block">
-            Aromia Magazine
-          </span>
-        </div>
-
         {!cover ? (
           <div className="flex min-h-[360px] items-center justify-center">
             <p className="font-sans text-[15px] text-muted">
@@ -53,17 +44,38 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.85fr)_minmax(310px,.65fr)] lg:gap-8">
-            <MagazineCoverStory article={cover} linkRef={coverRef} />
+          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[.75fr_1fr_.55fr] lg:gap-10">
+            <div className="flex flex-col gap-5 lg:pt-2">
+              <p className="font-sans text-[11px] uppercase tracking-[.2em] text-gold-contrast">
+                El Magazine
+              </p>
+              <h1 className="font-display text-[clamp(34px,4vw,48px)] leading-[1.08] text-ink">
+                Reseñas, guías y academia de perfumería.
+              </h1>
+              <p className="max-w-sm font-sans text-[15px] leading-7 text-muted">
+                Contenido editorial para entender el mundo de la perfumería antes de elegir tu
+                próxima fragancia — sin ruido, sin humo.
+              </p>
+            </div>
+
+            <div className="lg:h-full">
+              <MagazineCoverStory article={cover} linkRef={coverRef} />
+            </div>
+
             {secondary.length > 0 ? (
-              <aside className="grid gap-5 lg:gap-6">
-                {secondary.map((article, i) => (
-                  <MagazineSecondaryStory
-                    key={article.slug}
-                    article={article}
-                    isFirst={i === 0}
-                  />
-                ))}
+              <aside>
+                <p className="mb-5 font-sans text-[11px] uppercase tracking-[.14em] text-muted">
+                  Últimas historias
+                </p>
+                <div className="flex flex-col gap-4">
+                  {secondary.map((article, i) => (
+                    <MagazineSecondaryStory
+                      key={article.slug}
+                      article={article}
+                      isFirst={i === 0}
+                    />
+                  ))}
+                </div>
               </aside>
             ) : null}
           </div>

@@ -706,3 +706,39 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
     perfume de esa familia), ficha de producto y quiz sin errores de
     consola más allá del warning de hidratación preexistente de
     `data-theme` (ya documentado, no es una regresión de este cambio).
+- **Fix real: banner editorial de ficha de producto sin barras negras**
+  (decisión #84 de `ESTADO-aromia.md`) — `EditorialMood.tsx` ahora usa una
+  copia desenfocada y agrandada (`object-cover` + `blur-2xl`) de la misma
+  imagen OVL como fondo del marco 16:10, en vez de dejar el color de
+  fondo plano cuando la imagen no calzaba nativamente (ej. Acqua di Gio
+  EDT). La imagen nítida de encima sigue en `object-contain`, sin recorte.
+- **Importados dos proyectos de Claude Design** (decisión #85) para
+  Magazine y el bloque de rendimiento/pirámide de la ficha de producto:
+  - **Magazine**: Brey eligió la variante **1B** tras revisar un artifact
+    comparativo con la 1A. `MagazineHub.tsx` pasa de "hero de portada +
+    aside" a un layout de 3 columnas: bloque de marca fijo (copy
+    editorial genérico, no depende de datos), foto de portada con tarjeta
+    de reseña superpuesta (`MagazineCoverStory.tsx`, antes título flotando
+    sobre degradé), y lista compacta de "últimas historias"
+    (`MagazineSecondaryStory.tsx`, miniaturas 56px en vez de columnas al
+    40%). Datos reales de `getArticulos()` en todos los casos, el diseño
+    solo aportó estructura/spacing.
+  - **Ficha de producto**: no había una página "Lab" separada en el
+    diseño entregado — el contenido está en la sección "El Estudio · Lab
+    Aromia" de `Aromia.dc.html`. `OlfactiveRadar.tsx` (Recharts, gráfico
+    triangular) **eliminado**, reemplazado por `PerformanceBars.tsx`
+    (barras horizontales animadas de Longevidad/Estela/Proyección).
+    `SkinEvolution.tsx` reescrito al patrón "pirámide" del diseño: bandas
+    clicleables de ancho creciente (salida 45% → corazón 72% → fondo
+    100%), con descripción educativa genérica + notas reales por nivel,
+    en vez de 3 tarjetas de hover independientes.
+  - **Omitido a propósito, no por olvido**: el radar de 6 ejes "carácter
+    del aroma" del diseño (Especiado/Amaderado/Cálido/Floral/Cítrico/
+    Dulce) y la barra "Precio-valor" usan valores hardcodeados en el
+    diseño original que no existen como campo real en la base de Aromia
+    — implementarlos habría significado inventar datos por perfume, así
+    que se dejaron afuera en vez de fabricarlos.
+  - Verificado en `npx tsc --noEmit` y navegador local: interactividad de
+    la pirámide (clic en "Salida" cambia descripción/notas
+    correctamente), fallback "Aún sin datos de desempeño" cuando no hay
+    longevidad/estela/proyección, layout y datos reales del Magazine 1B.

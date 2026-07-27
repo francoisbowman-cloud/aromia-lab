@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getPerfumeBySlug } from "@/lib/api";
 import { HeroHeader } from "@/components/perfume/HeroHeader";
 import { PriceTable } from "@/components/perfume/PriceTable";
-import { OlfactiveRadar } from "@/components/perfume/OlfactiveRadar";
+import { PerformanceBars } from "@/components/perfume/PerformanceBars";
 import { SkinEvolution } from "@/components/perfume/SkinEvolution";
 import { CommunityReviews } from "@/components/perfume/CommunityReviews";
 import { EditorialMood } from "@/components/perfume/EditorialMood";
@@ -23,7 +23,7 @@ export default async function CatalogoDetailPage({
     >
       <HeroHeader perfume={perfume} />
       <PriceTable retailers={perfume.retailers ?? []} />
-      <OlfactiveRadar
+      <PerformanceBars
         longevidad={perfume.longevidad}
         estela={perfume.estela}
         proyeccion={perfume.proyeccion}
