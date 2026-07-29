@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { readingTimeMinutes } from "@/lib/readingTime";
 import type { Article } from "@/lib/types";
 
@@ -43,12 +42,6 @@ export function ArticleMetaRail({
         >
           Iniciar lectura
         </button>
-        <Link
-          href={`/magazine/${article.slug}/imprimir`}
-          className="inline-flex min-h-[48px] items-center justify-center border border-line px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-ink transition hover:-translate-y-px"
-        >
-          Descargar / PDF
-        </Link>
       </div>
     </aside>
   );

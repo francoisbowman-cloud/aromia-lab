@@ -742,3 +742,27 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
     la pirámide (clic en "Salida" cambia descripción/notas
     correctamente), fallback "Aún sin datos de desempeño" cuando no hay
     longevidad/estela/proyección, layout y datos reales del Magazine 1B.
+
+## 2026-07-28 — Chat
+
+- **Desactivado "Imprimir PDF" del Magazine** (pendiente del ticket
+  25/07, único ítem de la lista de pendientes resoluble sin depender de
+  una decisión de Brey): removido el link "Descargar / PDF" de
+  `ArticleMetaRail.tsx` (único punto de entrada a `/magazine/[slug]/imprimir`
+  en toda la UI, confirmado por grep antes de tocar nada) — la ruta y el
+  botón "Imprimir / Guardar PDF" dentro de `PrintToolbar.tsx` siguen
+  intactos y funcionales si se navega directo a la URL, tal como pedía el
+  ticket ("ocultar sin borrar la funcionalidad de base"). Verificado en
+  navegador local: la ficha del artículo ya no muestra el botón, la ruta
+  `/imprimir` sigue sirviendo el contenido completo. `npx tsc --noEmit` y
+  `npx next lint` limpios.
+- Revisado el resto de la lista de pendientes de la sección 13 de
+  `ESTADO-aromia.md` para ver qué más se podía resolver sin Brey: todo lo
+  demás depende de una decisión, credencial o asset que solo Brey puede
+  dar — decants (aprobación), scraper (alta en Awin), SendGrid/GA4
+  (credenciales), reseñas reales de Amazon en `CommunityReviews.tsx`
+  (decisión de alcance), galería de miniaturas adicionales (no hay
+  fotos lifestyle/infografía reales para usar), fondo de mockups OVL a
+  blanco/negro sólido (regeneración de asset, sin decidir CSS vs.
+  duplicado), duplicación de `resena-baccarat-rouge-540` (decisión de
+  contenido/SEO). Sin cambios en ninguno de esos.
