@@ -15,6 +15,7 @@ interface FormValues {
   precio_referencia: number;
   moneda: string;
   categoria_precio: string;
+  nicho_o_comercial: string;
   descripcion_corta: string;
   estado: string;
 }
@@ -47,6 +48,7 @@ export default function AdminPerfumeNuevoPage() {
         ...values,
         slug: slugify(values.nombre, values.marca),
         precio_referencia: Number(values.precio_referencia),
+        nicho_o_comercial: values.nicho_o_comercial === "" ? null : values.nicho_o_comercial,
       }),
     });
     setSaving(false);
@@ -147,6 +149,16 @@ export default function AdminPerfumeNuevoPage() {
                 <option value="medio">Medio</option>
                 <option value="premium">Premium</option>
                 <option value="lujo">Lujo</option>
+              </Select>
+            </div>
+            <div>
+              <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                Nicho o comercial
+              </label>
+              <Select {...register("nicho_o_comercial")} className="mt-1.5" defaultValue="">
+                <option value="">Sin especificar</option>
+                <option value="nicho">Nicho</option>
+                <option value="comercial">Comercial</option>
               </Select>
             </div>
           </div>

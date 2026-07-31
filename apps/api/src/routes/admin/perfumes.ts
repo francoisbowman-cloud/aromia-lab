@@ -103,15 +103,16 @@ adminPerfumesRouter.post(
     const { rows } = await pool.query(
       `INSERT INTO perfumes (
         slug, nombre, marca, genero, familia_olfativa, notas_salida, notas_corazon, notas_fondo,
-        precio_referencia, moneda, categoria_precio, imagen_url, link_afiliado, descripcion_corta, estado
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+        precio_referencia, moneda, categoria_precio, imagen_url, link_afiliado, descripcion_corta, estado,
+        nicho_o_comercial
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
       RETURNING *`,
       [
         b.slug, b.nombre, b.marca, b.genero, b.familia_olfativa,
         b.notas_salida ?? [], b.notas_corazon ?? [], b.notas_fondo ?? [],
         b.precio_referencia, b.moneda, b.categoria_precio,
         b.imagen_url ?? "", b.link_afiliado ?? "", b.descripcion_corta ?? null,
-        b.estado ?? "borrador",
+        b.estado ?? "borrador", b.nicho_o_comercial ?? null,
       ],
     );
     await logActivity(`Se creó el perfume "${rows[0].nombre}"`);
@@ -128,6 +129,7 @@ adminPerfumesRouter.patch(
       "nombre", "marca", "genero", "familia_olfativa", "notas_salida", "notas_corazon",
       "notas_fondo", "precio_referencia", "moneda", "categoria_precio", "descripcion_corta",
       "estado", "longevidad", "estela", "proyeccion", "resena_sintetizada", "imagen_url",
+      "nicho_o_comercial",
     ];
 
     const updates: string[] = [];

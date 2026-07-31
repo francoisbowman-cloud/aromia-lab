@@ -14,6 +14,7 @@ interface FormValues {
   precio_referencia: number;
   moneda: string;
   categoria_precio: string;
+  nicho_o_comercial: string;
   descripcion_corta: string;
   estado: string;
   longevidad: number | "";
@@ -70,6 +71,7 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
           precio_referencia: Number(p.precio_referencia),
           moneda: p.moneda,
           categoria_precio: p.categoria_precio,
+          nicho_o_comercial: p.nicho_o_comercial ?? "",
           descripcion_corta: p.descripcion_corta ?? "",
           estado: p.estado,
           longevidad: p.longevidad ?? "",
@@ -91,6 +93,7 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
       body: JSON.stringify({
         ...values,
         precio_referencia: Number(values.precio_referencia),
+        nicho_o_comercial: values.nicho_o_comercial === "" ? null : values.nicho_o_comercial,
         longevidad: values.longevidad === "" ? null : Number(values.longevidad),
         estela: values.estela === "" ? null : Number(values.estela),
         proyeccion: values.proyeccion === "" ? null : Number(values.proyeccion),
@@ -319,6 +322,19 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
                     <option value="medio">Medio</option>
                     <option value="premium">Premium</option>
                     <option value="lujo">Lujo</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                    Nicho o comercial
+                  </label>
+                  <select
+                    {...register("nicho_o_comercial")}
+                    className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
+                  >
+                    <option value="">Sin especificar</option>
+                    <option value="nicho">Nicho</option>
+                    <option value="comercial">Comercial</option>
                   </select>
                 </div>
               </div>

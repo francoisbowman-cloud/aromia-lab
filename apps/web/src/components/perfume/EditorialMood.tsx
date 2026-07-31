@@ -19,21 +19,11 @@ export function EditorialMood({ slug, nombre }: { slug: string; nombre: string }
     <section className="relative overflow-hidden rounded-card border border-line bg-surface">
       {/* aspect-ratio 16:10 + object-contain: la escena OVL nunca se recorta
           (ver GUIA-VISUAL-aromia.md, regla de imagen). Cuando la imagen no es
-          nativamente 16:10 (la mayoría de los mockups OVL), en vez de dejar
-          barras sólidas de --surface, el remanente lo llena una copia
-          desenfocada y agrandada de la MISMA imagen a modo de fondo — esa
-          copia sí puede recortarse (`object-cover`), es puramente decorativa;
-          la imagen nítida de encima nunca se toca. Mismo patrón que Spotify/
-          Apple Music para portadas que no calzan en el marco. */}
+          nativamente 16:10 (la mayoría de los mockups OVL), el remanente se
+          rellena con --surface plano — blanco sólido en tema claro, negro
+          sólido en tema oscuro (decisión #81 de ESTADO-aromia.md), sin
+          necesidad de regenerar el asset. */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image.src}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-2xl"
-        />
-        <div className="absolute inset-0 bg-surface/35" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={image.src}
