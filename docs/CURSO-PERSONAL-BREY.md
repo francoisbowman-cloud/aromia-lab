@@ -33,6 +33,9 @@
 12. [Entornos: staging vs. producción](#12-entornos-staging-vs-producción)
 13. [Deploy](#13-deploy)
 
+**Bloque 7 — Monetización**
+14. [Redes de afiliados: el caso de Awin](#14-redes-de-afiliados-el-caso-de-awin)
+
 ⏳ Por clasificar:
 - [Recorte de imágenes en CSS: `object-fit` y `object-position`, vs. estandarizar assets](#recorte-de-imágenes-en-css-object-fit-y-object-position-vs-estandarizar-assets)
 
@@ -255,6 +258,24 @@
 **Se relaciona con:** es la culminación de todo lo anterior — depende de #11 (Docker, para empaquetar) y #12 (saber a qué entorno se está desplegando).
 
 **Fecha y contexto:** 15 jul 2026 — Claude, tarea inmediata de Code según el timeline acordado.
+
+---
+
+## Bloque 7 — Monetización
+
+### 14. Redes de afiliados: el caso de Awin
+
+**En una frase:** una red de afiliados es un intermediario entre Aromia (que recomienda productos) y las tiendas (Douglas, Primor) que los venden: genera los links con tracking, registra qué visitante compró qué gracias a un link nuestro, y paga la comisión — sin que Aromia tenga que negociar un acuerdo separado con cada tienda.
+
+**Analogía:** es como una agencia de corretaje inmobiliario que trabaja con muchas propiedades a la vez. En vez de que Aromia negocie una comisión distinta con Douglas, con Primor y con cada tienda nueva, se da de alta una sola vez en Awin (la agencia), y desde ahí accede a todas las tiendas que ya trabajan con esa red bajo condiciones ya fijadas.
+
+**¿Dónde aparece en nuestros proyectos?** El "scraper de precios" de Aromia 2.0 (`apps/api/src/scraper/`) ya tiene el código listo para consultar el feed de productos de Awin (un CSV con precios y disponibilidad actualizados) y comparar cada fila contra el catálogo real de perfumes, para mantener los precios de Douglas y Primor al día automáticamente. Hoy ese código está deployado pero inactivo ("no-op") porque falta el paso de Brey: crear la cuenta de afiliado en Awin y pasar el token de API (`AWIN_API_TOKEN`) — sin eso, no hay credencial con la que consultar el feed.
+
+**Por qué importa:** sin una red de afiliados, cada link de "comprar en Douglas" en Aromia sería solo un link común, sin forma de que Douglas sepa que la venta vino de Aromia — y por lo tanto, sin comisión. Awin es la pieza que convierte "recomendamos este perfume" en "generamos ingresos cuando alguien lo compra por nuestro link". Amazon funciona parecido pero con su propio programa directo (Amazon Associates), sin pasar por Awin — por eso el catálogo ya tiene `link_afiliado` de Amazon funcionando, mientras que Douglas/Primor siguen esperando este paso.
+
+**Se relaciona con:** depende de [[10-variables-de-entorno]] (el token de Awin se guarda como variable de entorno, igual que cualquier otra credencial) y de [[1-frontend-vs-backend-y-qué-es-una-api]] (Awin expone su feed de productos como una API que el backend de Aromia consulta).
+
+**Fecha y contexto:** 31 jul 2026 — Claude, al retomar el trabajo y explicarle a Brey qué es Awin antes de decidir los próximos pasos (ver decisión #56 y #61 de `ESTADO-aromia.md`).
 
 ---
 

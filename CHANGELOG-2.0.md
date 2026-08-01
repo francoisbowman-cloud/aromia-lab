@@ -942,3 +942,22 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   `apps/web/public/perfumes/cutouts/<slug>.png` + mapeo en código, mismo
   patrón que `editorialImages.ts` (decisión #75), sin migración de base
   de datos.
+
+## 2026-07-31 — Claude (Chat)
+
+- **Scraper de precios activado en producción** (cierra el bloqueo
+  pendiente desde la decisión #56): Brey se dio de alta en Awin
+  (cuenta Affiliate Partner / Media & Editorial Sites, región Spain) y
+  aplicó a los programas de **Douglas** (Advertiser ID `9357`) y
+  **Primor** (Advertiser ID `25464`), ambos en estado "Pending" de
+  aprobación. Con el token de API generado por Brey, se setearon las 3
+  variables (`AWIN_API_TOKEN`, `AWIN_MERCHANT_ID_DOUGLAS=9357`,
+  `AWIN_MERCHANT_ID_PRIMOR=25464`) directo en el servicio `api` de
+  Railway vía `railway variables --service api --set ...` (CLI ya
+  autenticado en la sesión). El set disparó el redeploy automático
+  esperado de Railway; logs post-deploy confirman
+  `Sync de precios: cron diario registrado (06:00)` — antes de esto,
+  sin credenciales, el scraper no registraba el cron (no-op real, no
+  solo documentado). Pendiente: hasta que Douglas/Primor aprueben la
+  aplicación de Brey, el feed de Awin probablemente no devuelva datos
+  reales todavía — a confirmar en corridas futuras del cron.
