@@ -75,7 +75,11 @@ const config: Config = {
         plex: ["var(--font-plex)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       borderRadius: {
-        card: "28px",
+        // Sistema "Aromia Lujo" (dc.html importado 01/08): radio casi recto
+        // y deliberadamente sobrio en tarjetas/paneles — reemplaza el 28px
+        // anterior. Píldoras/chips/botones circulares siguen en rounded-full
+        // (999px), sin cambios.
+        card: "2px",
         table: "16px",
         "admin-card": "14px",
       },

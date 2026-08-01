@@ -7,15 +7,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans text-[12px] font-semibold uppercase tracking-[.08em] transition disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-card font-sans text-[12px] font-semibold uppercase tracking-[.08em] transition disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:brightness-105",
-        outline: "border border-line bg-transparent text-ink hover:border-gold",
-        ghost: "text-muted hover:text-ink",
+        // Secundario queda en píldora (999px) — distinción intencional del
+        // sistema "Aromia Lujo": primario recto, secundario redondeado.
+        outline: "rounded-full border border-line bg-transparent text-ink hover:border-gold",
+        ghost: "rounded-full text-muted hover:text-ink",
         destructive: "bg-destructive text-destructive-foreground hover:brightness-105",
-        link: "normal-case tracking-normal text-gold-contrast underline-offset-4 hover:underline",
+        link: "rounded-none normal-case tracking-normal text-gold-contrast underline-offset-4 hover:underline",
       },
       size: {
         default: "min-h-[48px] px-6",

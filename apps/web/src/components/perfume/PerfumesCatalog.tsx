@@ -5,65 +5,11 @@ import type { Perfume } from "@/lib/types";
 import { PerfumeCard } from "./PerfumeCard";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { CATEGORIAS_PRINCIPALES, categoriaDe } from "@/lib/olfactiveCategories";
 
 const GENEROS = ["masculino", "femenino", "unisex"] as const;
 const CATEGORIAS_PRECIO = ["económico", "medio", "premium", "lujo"] as const;
 const NICHO_O_COMERCIAL = ["nicho", "comercial"] as const;
-
-/**
- * Accesos rápidos del catálogo: agrupa las ~27 combinaciones reales de
- * `familia_olfativa` en categorías principales, para no mostrar una pill
- * por cada combinación exacta. El select "Familia olfativa" más abajo
- * sigue siendo granular — esto solo afecta los chips de arriba.
- */
-const CATEGORIAS_PRINCIPALES: { label: string; familias: string[] }[] = [
-  {
-    label: "Floral",
-    familias: [
-      "floral",
-      "floral afrutado",
-      "floral afrutado gourmand",
-      "floral almizclado",
-      "floral amaderado",
-      "floral aromatico",
-      "floral chipre",
-      "floral oriental",
-    ],
-  },
-  {
-    label: "Amaderados",
-    familias: [
-      "amaderado",
-      "amaderado acuatico",
-      "amaderado aromatico",
-      "amaderado especiado",
-      "almizclado amaderado",
-    ],
-  },
-  { label: "Cítricos", familias: ["afrutado citrico", "citrico fresco"] },
-  { label: "Acuáticos", familias: ["acuatico aromatico"] },
-  {
-    label: "Afrutados",
-    familias: ["afrutado amaderado", "afrutado verde", "aromatico afrutado"],
-  },
-  { label: "Fougère", familias: ["aromatico fougere"] },
-  { label: "Frescos", familias: ["aromatico fresco"] },
-  {
-    label: "Árabes",
-    familias: [
-      "ambarado especiado",
-      "ambarado floral",
-      "oriental especiado",
-      "oriental gourmand",
-      "almizclado mineral",
-    ],
-  },
-];
-
-function categoriaDe(familiaOlfativa: string): string | null {
-  const encontrada = CATEGORIAS_PRINCIPALES.find((c) => c.familias.includes(familiaOlfativa));
-  return encontrada?.label ?? null;
-}
 
 export function PerfumesCatalog({
   perfumes,

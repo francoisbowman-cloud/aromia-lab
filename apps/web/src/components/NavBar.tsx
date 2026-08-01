@@ -17,7 +17,7 @@ export default function NavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b border-line bg-surface print:hidden">
+    <header className="sticky top-0 z-40 border-b border-line bg-surface/85 backdrop-blur-md print:hidden print:static">
       <nav className="mx-auto flex max-w-5xl items-center justify-between p-4 lg:px-10">
         <Link href="/" className="font-display text-lg tracking-[.08em] text-ink">
           AROMIA
@@ -33,8 +33,7 @@ export default function NavBar() {
                     href={link.href}
                     aria-current={active ? "page" : undefined}
                     className={
-                      "nav-link " +
-                      (active ? "text-gold-contrast" : "text-muted transition hover:text-ink")
+                      "nav-link " + (active ? "text-ink" : "text-muted transition hover:text-ink")
                     }
                   >
                     {link.label}
@@ -60,7 +59,7 @@ export default function NavBar() {
                     <Link
                       href={link.href}
                       aria-current={active ? "page" : undefined}
-                      className={`nav-link block ${active ? "text-gold-contrast" : "text-muted"}`}
+                      className={`nav-link block ${active ? "text-ink" : "text-muted"}`}
                     >
                       {link.label}
                     </Link>

@@ -961,3 +961,43 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   solo documentado). Pendiente: hasta que Douglas/Primor aprueben la
   aplicación de Brey, el feed de Awin probablemente no devuelva datos
   reales todavía — a confirmar en corridas futuras del cron.
+
+## 2026-08-01 — Claude (Chat)
+
+- **Sistema de diseño "Aromia Lujo" adoptado** (decisión #95 de
+  `ESTADO-aromia.md`): Brey entregó `Design System Aromia Lujo.zip`
+  (exportes `.dc.html` de Claude Design, versión light "Maison Blanc" +
+  dark "Noir Absolu") pidiendo adaptarlo al sitio real. Tokens de color
+  de `globals.css` ajustados 1:1 al export en ambos temas; radio de
+  tarjetas/paneles (`rounded-card`) pasa de `28px` a `2px` — recto,
+  deliberadamente sobrio, criterio explícito del sistema importado;
+  botones/píldoras/chips circulares siguen en `999px`. `NavBar` pasa a
+  sticky con `backdrop-blur`; `Footer` reescrito de una fila de links a
+  layout de 4 columnas (marca, Ecosistema, Comunidad, Valores). Alcance
+  de esta pasada: Home, Catálogo, Nav, Footer, botones — ficha de
+  producto/Magazine/Academia/Admin quedan para una pasada futura.
+- **Tres ajustes puntuales sobre Home y tarjetas de catálogo** (decisión
+  #96), pedidos por Brey con capturas después de ver el sistema nuevo en
+  producción:
+  - "Reseñas destacadas" de Home: grid fijo de 3 → carrusel
+    (`FeaturedCarousel.tsx`, scroll-snap nativo + botones prev/next, sin
+    librería nueva), hasta 9 perfumes.
+  - Panel del hero: antes una foto editorial genérica (`editorialImages.ts`,
+    sin relación con el perfume real de la tarjeta "Elección del editor"
+    de al lado) → `HeroEditorPick.tsx`, que rota cada 6s entre 5 perfumes
+    reales mostrando siempre su **foto real de producto** (`imagen_url`),
+    nunca un mockup de IA, sincronizada 1:1 con nombre/marca/precio de la
+    tarjeta.
+  - Fondo de tarjetas de producto: lógica de recorte por `<canvas>`
+    extraída de `PerfumeCard.tsx` a un hook compartido
+    (`useProductImageCrop.ts`, reusado por el hero), cambiando el relleno
+    de color plano a un viñeteado radial suave — corrige el caso señalado
+    por Brey (Herod, Idole EDP y similares: foto de botella angosta deja
+    mucho margen a los costados tras el recorte y el marco se veía
+    "vacío"). Distinto de la decisión #93 (recortes con fondo transparente
+    vía OMNI, sin empezar): esto es CSS sobre el color ya detectado, no un
+    asset nuevo.
+- `npx tsc --noEmit` y `npx next lint` limpios sobre `apps/web` antes del
+  push. Verificado en preview local (`/`, `/catalogo`): hero rota entre
+  perfumes reales con foto sincronizada, carrusel funcional, `frameBackground`
+  con `radial-gradient(...)` confirmado sobre Herod e Idole EDP.
