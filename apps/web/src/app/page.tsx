@@ -74,11 +74,6 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col">
-      <div className="bg-ink px-4 py-2 text-center font-sans text-[11.5px] leading-relaxed text-paper/75">
-        Aromia contiene enlaces de afiliado · podemos ganar comisión por compras cualificadas, sin
-        coste extra para ti.
-      </div>
-
       {/* Hero — dos columnas: texto + escena editorial (ver GUIA-VISUAL-aromia.md) */}
       <section className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 p-6 py-14 lg:grid-cols-2 lg:gap-16 lg:p-10 lg:py-24">
         <div className="flex flex-col items-start gap-5">
@@ -195,18 +190,36 @@ export default async function Home() {
               </Link>
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3.5 sm:grid-cols-4 lg:grid-cols-8">
-              {categoriasConResultados.map((cat) => (
-                <Link
-                  key={cat.label}
-                  href={`/catalogo?familia=${encodeURIComponent(cat.familias[0])}`}
-                  className="group relative flex aspect-square items-end overflow-hidden rounded-card transition duration-300 hover:-translate-y-1"
-                  style={{ background: cat.gradient }}
-                >
-                  <span className="relative z-[1] p-3 font-sans text-[11px] uppercase tracking-[.12em] text-white [text-shadow:0_2px_8px_rgba(0,0,0,.35)]">
-                    {cat.label}
-                  </span>
-                </Link>
-              ))}
+              {categoriasConResultados.map((cat) => {
+                // Foto real de un perfume de la familia (no solo el degradé de
+                // marca) para que el tile sea "fiel" a la esencia que
+                // representa, no una mancha de color abstracta.
+                const representante = perfumes.find(
+                  (p) => cat.familias.includes(p.familia_olfativa) && p.imagen_url,
+                );
+                return (
+                  <Link
+                    key={cat.label}
+                    href={`/catalogo?familia=${encodeURIComponent(cat.familias[0])}`}
+                    className="group relative flex aspect-square items-end overflow-hidden rounded-card transition duration-300 hover:-translate-y-1"
+                    style={{ background: cat.gradient }}
+                  >
+                    {representante ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={representante.imagen_url}
+                        alt=""
+                        aria-hidden="true"
+                        className="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-luminosity transition duration-300 group-hover:scale-105"
+                      />
+                    ) : null}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                    <span className="relative z-[1] p-3 font-sans text-[11px] uppercase tracking-[.12em] text-white [text-shadow:0_2px_8px_rgba(0,0,0,.35)]">
+                      {cat.label}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </section>
         ) : null}

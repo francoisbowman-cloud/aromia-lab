@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { IngredientesGrid } from "@/components/academia/IngredientesGrid";
 import { pickEditorialImage } from "@/lib/editorialImages";
 import { Button } from "@/components/ui/button";
 
@@ -123,7 +122,6 @@ export default function AcademiaPage() {
               ["#piramide", "La pirámide"],
               ["#familias", "Familias olfativas"],
               ["#concentraciones", "Concentraciones"],
-              ["#ingredientes", "Los ingredientes"],
             ].map(([href, label]) => (
               <a
                 key={href}
@@ -245,19 +243,11 @@ export default function AcademiaPage() {
         </div>
       </section>
 
-      <section id="ingredientes" className="scroll-mt-20 border-t border-line pt-16">
-        <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-[11px] uppercase tracking-[.24em] text-gold-contrast">Materia prima</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">
-            Los ingredientes, uno a uno
-          </h2>
-          <p className="mt-3 font-sans text-sm text-muted">
-            Toca un ingrediente para descubrir su origen, su familia olfativa y en qué perfumes
-            del catálogo aparece.
-          </p>
-        </div>
-        <IngredientesGrid />
-      </section>
+      {/* Sección "Materia prima" oculta hasta nuevo aviso (2026-08-01, pedido
+          de Brey) — las fotos de IngredientesGrid son stock de Unsplash mal
+          curado (una mostraba un tren en vez del ingrediente), no fotografía
+          fiel. No se borró el componente ni sus datos, solo se dejó de
+          renderizar el section. */}
 
       <section className="rounded-card bg-ink px-8 py-16 text-center text-paper">
         <h2 className="font-display text-3xl font-semibold lg:text-4xl">¿Ya sabés qué buscás?</h2>
