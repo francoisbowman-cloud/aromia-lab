@@ -5,6 +5,9 @@
   "estimatedCostPerMillionInputTokensUsd": 2.0,
   "estimatedCostPerMillionOutputTokensUsd": 8.0,
   "_costNote": "OpenAI no reporta coste en dólares en la respuesta de la API — solo tokens de uso (input/output). El coste en USD que este script calcula es una ESTIMACIÓN local basada en las tarifas de arriba, configurables acá. Si la API expone un campo de coste explícito en el futuro, el script lo prioriza sobre la estimación (ver 'Registrar uso de tokens y coste' en scripts/audit-image-pilot.mjs).",
+  "maxRetriesPerPerfume": 2,
+  "retryBackoffMs": 1500,
+  "minConfidenceToAccept": 0.5,
   "nonNegotiableRules": [
     "frasco completo, sin recortes agresivos",
     "fondo uniforme",

@@ -240,7 +240,7 @@ function estimateCostUsd(usage) {
   );
 }
 
-async function callOpenAi({ systemPrompt, userPrompt, catalogDataUri, ovlDataUri }) {
+async function callOpenAiOnce({ systemPrompt, userPrompt, catalogDataUri, ovlDataUri }) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error("OPENAI_API_KEY no está seteada en el entorno.");
@@ -297,6 +297,61 @@ function extractStructuredOutput(response) {
   throw new Error("No se pudo extraer salida estructurada de la respuesta de la API.");
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Confirma que la respuesta menciona explícitamente el nombre del perfume —
+ * guarda mínima contra confusión de variante (ej. Sauvage EDP vs. Elixir),
+ * sumada al chequeo de confianza declarada por el modelo.
+ */
+function variantAppearsVerified(perfume, structured) {
+  const blob = [structured.classification_reason, ...structured.specific_answers.map((a) => a.answer)]
+    .join(" ")
+    .toLowerCase();
+  return blob.includes(perfume.name.toLowerCase());
+}
+
+const TRACKED_OFFICIAL_FILES = [
+  OFFICIAL_INVENTORY_CSV,
+  join(REPO_ROOT, "apps", "api", "data", "PERFUMES_INITIAL_50.csv"),
+  join(REPO_ROOT, "PERFUMES_INITIAL_50.csv"),
+];
+
+function assertSafeToWrite(path) {
+  if (TRACKED_OFFICIAL_FILES.includes(path)) {
+    throw new Error(`Riesgo de escritura sobre archivo oficial detenido: ${path}`);
+  }
+}
+
+/** Llama a la API con reintentos (config.maxRetriesPerPerfume, backoff config.retryBackoffMs).
+ * Si tras agotar los reintentos la respuesta sigue siendo inválida (error de red,
+ * error de la API, o no cumple schemas/image-audit.schema.json), propaga el error
+ * — el llamador lo trata como motivo de detención total del piloto. */
+async function callOpenAiWithRetries(perfume, args) {
+  const maxRetries = config.maxRetriesPerPerfume ?? 2;
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await callOpenAiOnce(args);
+      const structured = extractStructuredOutput(response);
+      const valid = validateAudit(structured);
+      if (!valid) {
+        throw new Error(`Salida no cumple schemas/image-audit.schema.json: ${JSON.stringify(validateAudit.errors)}`);
+      }
+      return { response, structured, attempts: attempt + 1 };
+    } catch (e) {
+      lastError = e;
+      if (attempt < maxRetries) {
+        warn(`  Intento ${attempt + 1}/${maxRetries + 1} falló para ${perfume.slug}: ${e.message} — reintentando en ${config.retryBackoffMs}ms.`);
+        await sleep(config.retryBackoffMs ?? 1500);
+      }
+    }
+  }
+  throw new Error(`Agotados ${maxRetries + 1} intentos para ${perfume.slug}: ${lastError.message}`);
+}
+
 async function runLive() {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -308,6 +363,24 @@ async function runLive() {
     process.exit(1);
   }
 
+  // Preflight: si falta cualquier prerrequisito (OVL o URL) para cualquiera
+  // de los 5, se detiene TODO el piloto antes de gastar un solo dólar — no
+  // se procesan parcialmente los que sí están OK.
+  log("Preflight (mismo chequeo que --dry-run) antes de gastar crédito...");
+  for (const perfume of config.perfumes) {
+    const ovl = checkOvlFile(perfume);
+    if (!ovl.ok) {
+      fail(`Preflight falló: falta el mockup OVL de ${perfume.slug} (${ovl.abs}). Piloto detenido, ninguna llamada realizada.`);
+      process.exit(1);
+    }
+    const url = await checkUrlReachable(perfume.catalogImageUrl);
+    if (!url.ok) {
+      fail(`Preflight falló: URL de catálogo no alcanzable para ${perfume.slug} (${perfume.catalogImageUrl}, status ${url.status ?? "sin respuesta"}). Piloto detenido, ninguna llamada realizada.`);
+      process.exit(1);
+    }
+  }
+  log("Preflight OK — 5/5 OVL presentes, 5/5 URLs alcanzables.\n");
+
   mkdirSync(REPORTS_DIR, { recursive: true });
   const tmpSessionDir = join(tmpdir(), `aromia-image-audit-${randomUUID()}`);
   mkdirSync(tmpSessionDir, { recursive: true });
@@ -316,11 +389,23 @@ async function runLive() {
   let runningTokens = { input: 0, output: 0 };
   const results = [];
   const failures = [];
+  let haltReason = null;
+
+  // Coste estimado de un solo perfume (conservador, basado en el primero
+  // exitoso) usado para decidir si conviene ni siquiera intentar el
+  // siguiente — evita pasarse del límite "a mitad de una llamada".
+  let estCostPerCall = null;
 
   try {
     for (const perfume of config.perfumes) {
       if (runningCostUsd >= spendLimitUsd) {
-        warn(`Límite de gasto ($${spendLimitUsd.toFixed(2)}) alcanzado — se detiene antes de procesar ${perfume.slug}.`);
+        haltReason = `Límite de gasto ($${spendLimitUsd.toFixed(2)}) alcanzado antes de procesar ${perfume.slug}.`;
+        warn(haltReason);
+        break;
+      }
+      if (estCostPerCall !== null && runningCostUsd + estCostPerCall > spendLimitUsd) {
+        haltReason = `El próximo llamado excedería el límite de gasto ($${spendLimitUsd.toFixed(2)}) — detenido antes de ${perfume.slug} para no pasarse.`;
+        warn(haltReason);
         break;
       }
 
@@ -333,44 +418,60 @@ async function runLive() {
         const catalogDataUri = await toDataUri(catalogImg.bytes, catalogImg.contentType);
         const ovlDataUri = await toDataUri(ovlBytes, "image/jpeg");
 
-        const response = await callOpenAi({
+        const { response, structured, attempts } = await callOpenAiWithRetries(perfume, {
           systemPrompt: buildSystemPrompt(),
           userPrompt: buildUserPrompt(perfume),
           catalogDataUri,
           ovlDataUri,
         });
 
-        const structured = extractStructuredOutput(response);
-        const valid = validateAudit(structured);
-        if (!valid) {
-          throw new Error(`Salida no cumple el schema: ${JSON.stringify(validateAudit.errors)}`);
+        if ((structured.confidence ?? 0) < (config.minConfidenceToAccept ?? 0.5)) {
+          haltReason = `Confianza reportada por el modelo (${structured.confidence}) por debajo del mínimo aceptable (${config.minConfidenceToAccept}) para ${perfume.slug} — no puede verificarse con suficiente certeza. Piloto detenido.`;
+          fail(haltReason);
+          break;
+        }
+        if (!variantAppearsVerified(perfume, structured)) {
+          haltReason = `No se pudo verificar que la respuesta identifique explícitamente "${perfume.name}" (riesgo de confusión de variante) — piloto detenido para revisión humana.`;
+          fail(haltReason);
+          break;
         }
 
         const usage = response.usage ?? null;
         const costUsd = estimateCostUsd(usage);
-        if (typeof costUsd === "number") runningCostUsd += costUsd;
+        if (typeof costUsd === "number") {
+          runningCostUsd += costUsd;
+          estCostPerCall = estCostPerCall === null ? costUsd : Math.max(estCostPerCall, costUsd);
+        }
         if (usage) {
           runningTokens.input += usage.input_tokens ?? 0;
           runningTokens.output += usage.output_tokens ?? 0;
         }
 
+        const trafficLight = { A: "verde", B: "amarillo", C: "amarillo", D: "rojo", E: "amarillo" }[structured.classification] ?? "amarillo";
+
         const record = {
           perfume_slug: perfume.slug,
           model,
           timestamp: new Date().toISOString(),
+          attempts,
           catalog_image_url: perfume.catalogImageUrl,
           ovl_relative_path: perfume.ovlRelativePath,
           response_id: response.id ?? null,
           usage,
           estimated_cost_usd: costUsd,
+          traffic_light: trafficLight,
           result: structured,
         };
-        writeFileSync(join(REPORTS_DIR, `${perfume.slug}.json`), JSON.stringify(record, null, 2));
+        const outPath = join(REPORTS_DIR, `${perfume.slug}.json`);
+        assertSafeToWrite(outPath);
+        writeFileSync(outPath, JSON.stringify(record, null, 2));
         results.push(record);
-        log(`  OK — clasificación ${structured.classification}, coste estimado $${(costUsd ?? 0).toFixed(4)}`);
+        log(`  OK (intento ${attempts}) — clasificación ${structured.classification} (${trafficLight}), confianza ${structured.confidence}, coste estimado $${(costUsd ?? 0).toFixed(4)}`);
       } catch (e) {
-        fail(`  Error procesando ${perfume.slug}: ${e.message}`);
+        haltReason = `Respuesta inválida tras reintentos para ${perfume.slug}: ${e.message}. Piloto detenido.`;
+        fail(`  ${haltReason}`);
         failures.push({ slug: perfume.slug, error: e.message });
+        break;
       }
     }
   } finally {
@@ -385,15 +486,21 @@ async function runLive() {
     running_tokens: runningTokens,
     perfumes_processed: results.length,
     perfumes_failed: failures.length,
+    halted_early: haltReason !== null,
+    halt_reason: haltReason,
     failures,
     classifications: Object.fromEntries(results.map((r) => [r.perfume_slug, r.result.classification])),
+    traffic_lights: Object.fromEntries(results.map((r) => [r.perfume_slug, r.traffic_light])),
   };
-  writeFileSync(join(REPORTS_DIR, "_summary.json"), JSON.stringify(summary, null, 2));
+  const summaryPath = join(REPORTS_DIR, "_summary.json");
+  assertSafeToWrite(summaryPath);
+  writeFileSync(summaryPath, JSON.stringify(summary, null, 2));
 
   writeProposalCsv(results);
 
   log("");
   log(`Resumen: ${results.length}/5 procesados, ${failures.length} fallidos, coste estimado total $${runningCostUsd.toFixed(4)} de $${spendLimitUsd.toFixed(2)}.`);
+  if (haltReason) log(`Detenido antes de completar los 5: ${haltReason}`);
   log(`data/image-inventory.csv (oficial) NO fue modificado. Propuesta en data/image-inventory.audit-proposal.csv.`);
 }
 
