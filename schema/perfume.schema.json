@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aromia-lab.com/schema/perfume.schema.json",
+  "title": "Perfume",
+  "description": "Columnas esperadas para la tabla `perfumes` en PostgreSQL. Referencia para el CSV de 50 perfumes (Cowork) y para las migraciones de Code.",
+  "type": "object",
+  "required": [
+    "slug",
+    "nombre",
+    "marca",
+    "genero",
+    "familia_olfativa",
+    "notas_salida",
+    "notas_corazon",
+    "notas_fondo",
+    "precio_referencia",
+    "moneda",
+    "categoria_precio",
+    "imagen_url",
+    "link_afiliado"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "PK autogenerada por Postgres (SERIAL / IDENTITY). No lo incluye el CSV de Cowork."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Identificador único para la URL, ej. 'bleu-de-chanel-edp'. Debe ser estable una vez publicado."
+    },
+    "nombre": {
+      "type": "string",
+      "description": "Nombre comercial del perfume, ej. 'Bleu de Chanel'."
+    },
+    "marca": {
+      "type": "string",
+      "description": "Marca / casa perfumista, ej. 'Chanel'."
+    },
+    "genero": {
+      "type": "string",
+      "enum": ["masculino", "femenino", "unisex"],
+      "description": "Segmento de género tal como lo comunica la marca."
+    },
+    "familia_olfativa": {
+      "type": "string",
+      "description": "Familia olfativa principal, ej. 'amaderada-aromática', 'oriental-especiada', 'floral-frutal'."
+    },
+    "concentracion": {
+      "type": "string",
+      "enum": ["EDT", "EDP", "Parfum", "EDC", "Elixir"],
+      "description": "Concentración/tipo de fragancia. Opcional si el nombre ya la incluye."
+    },
+    "notas_salida": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Notas de salida (top notes)."
+    },
+    "notas_corazon": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Notas de corazón (heart/middle notes)."
+    },
+    "notas_fondo": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Notas de fondo (base notes)."
+    },
+    "temporada_recomendada": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["primavera", "verano", "otoño", "invierno"]
+      },
+      "description": "Opcional. Estaciones recomendadas de uso, para filtros y recos."
+    },
+    "ocasion": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Opcional. Ocasiones sugeridas, ej. 'oficina', 'noche', 'diario'."
+    },
+    "precio_referencia": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Precio de referencia relevado (no es venta directa, es informativo/comparativo)."
+    },
+    "moneda": {
+      "type": "string",
+      "description": "Código de moneda del precio de referencia, ej. 'ARS', 'USD'."
+    },
+    "categoria_precio": {
+      "type": "string",
+      "enum": ["económico", "medio", "premium", "lujo"],
+      "description": "Categoría de precio derivada, usada para filtros rápidos en el comparador."
+    },
+    "nicho_o_comercial": {
+      "type": "string",
+      "enum": ["nicho", "comercial"],
+      "description": "Tipo de mercado del perfume (independiente del precio) — usado para filtros en el frontend, ej. quiz y catálogo. Sumado 2026-07-16 tras decisión de producto confirmando su uso."
+    },
+    "imagen_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL de la imagen principal del producto (sin fondo, catálogo)."
+    },
+    "link_afiliado": {
+      "type": "string",
+      "format": "uri",
+      "description": "Link de afiliado (Amazon u otro) al producto. Sin venta directa — solo referral."
+    },
+    "tienda": {
+      "type": "string",
+      "description": "Opcional. Nombre de la tienda de origen del link de afiliado, ej. 'Amazon'."
+    },
+    "rating_promedio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Opcional. Rating promedio si se releva de la fuente del link de afiliado."
+    },
+    "descripcion_corta": {
+      "type": "string",
+      "description": "Opcional. 1-2 líneas para tarjetas de listado."
+    },
+    "articulo_relacionado_slug": {
+      "type": "string",
+      "description": "Opcional. Slug del artículo/reseña relacionado en /articles, si existe."
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true,
+      "description": "Si el perfume debe mostrarse en el sitio (soft-delete / pausas)."
+    },
+    "creado_en": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp de creación, gestionado por Postgres (DEFAULT now())."
+    },
+    "actualizado_en": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp de última actualización, gestionado por Postgres."
+    }
+  },
+  "notes": {
+    "csv_para_cowork": "Para el CSV de 50 perfumes, usar una columna por cada campo (excepto id/creado_en/actualizado_en, que los genera la base). Los campos array (notas_salida, notas_corazon, notas_fondo, temporada_recomendada, ocasion) van como texto separado por ';' dentro de la celda, ej. 'bergamota;pomelo;pimienta rosa'."
+  }
+}
