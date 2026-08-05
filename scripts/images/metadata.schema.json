@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aromialab.com/schema/image-metadata.schema.json",
+  "title": "Aromia — metadata.json de imagen de perfume",
+  "description": "Contrato para apps/web/public/images/perfumes/{slug}/metadata.json. Mismo espíritu que schema/perfume.schema.json (contrato documentado, validado por scripts/images/validate-metadata.mjs, no por un ORM). Un archivo metadata.json describe TODAS las imágenes (catalog + editorial) de un mismo perfume.",
+  "type": "object",
+  "required": ["slug", "perfume", "marca", "images"],
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Debe coincidir con perfumes.slug en Postgres y con el nombre de la carpeta contenedora.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "perfume": {
+      "type": "string",
+      "description": "Nombre del perfume tal como aparece en perfumes.nombre."
+    },
+    "marca": {
+      "type": "string"
+    },
+    "images": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/imageEntry" }
+    }
+  },
+  "definitions": {
+    "imageEntry": {
+      "type": "object",
+      "required": [
+        "role",
+        "fuente",
+        "procedencia",
+        "licencia",
+        "derivados",
+        "estado",
+        "fecha",
+        "aprobacion"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "catalog-primary",
+            "catalog-secondary",
+            "editorial-hero",
+            "article-inline",
+            "social",
+            "ingredient",
+            "brand",
+            "placeholder"
+          ],
+          "description": "Mismo vocabulario que data/image-inventory.csv y la sección 8 del manual operativo."
+        },
+        "fuente": {
+          "type": "object",
+          "required": ["tipo"],
+          "additionalProperties": false,
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "enum": ["retailer-hotlink", "retailer-downloaded", "design-original", "chatgpt-generated", "omni-processed", "unknown"]
+            },
+            "source_url": {
+              "type": ["string", "null"],
+              "format": "uri",
+              "description": "URL de origen si aplica (hotlink de retailer, o URL de referencia del original)."
+            },
+            "reference_url": {
+              "type": ["string", "null"],
+              "format": "uri",
+              "description": "Ficha oficial del producto usada para verificar fidelidad (auditoría ChatGPT)."
+            }
+          }
+        },
+        "procedencia": {
+          "type": "string",
+          "description": "Registro humano de dónde salió esta imagen y quién la procesó. No inventar — usar 'unknown' si no se puede determinar."
+        },
+        "licencia": {
+          "type": "string",
+          "enum": [
+            "official-brand",
+            "affiliate-approved",
+            "licensed",
+            "generated",
+            "unknown",
+            "replace-required"
+          ]
+        },
+        "original": {
+          "type": "object",
+          "description": "Metadata del original — el archivo en sí NO vive en Git (ver docs/images/IMAGE-ARCHITECTURE.md sección 3-4).",
+          "additionalProperties": false,
+          "properties": {
+            "hash_sha256": { "type": ["string", "null"] },
+            "width": { "type": ["integer", "null"] },
+            "height": { "type": ["integer", "null"] },
+            "formato": { "type": ["string", "null"] }
+          }
+        },
+        "derivados": {
+          "type": "array",
+          "description": "Archivos que SÍ viven en Git, exactamente los servidos en producción.",
+          "items": {
+            "type": "object",
+            "required": ["archivo", "ancho", "alto", "formato", "peso_kb"],
+            "additionalProperties": false,
+            "properties": {
+              "archivo": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+--(catalog|editorial)--v[0-9]{2}--.+\\.(webp|avif|png)$"
+              },
+              "ancho": { "type": "integer", "minimum": 1 },
+              "alto": { "type": "integer", "minimum": 1 },
+              "formato": { "type": "string", "enum": ["webp", "avif", "png"] },
+              "peso_kb": { "type": "number", "minimum": 0 },
+              "hash_sha256": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "alt": {
+          "type": "string",
+          "description": "Texto alternativo real a usar en el <img alt=...>. Obligatorio antes de publicar, puede ir null mientras está en proceso."
+        },
+        "estado": {
+          "type": "string",
+          "enum": ["not-started", "sourced", "processing", "pending-review", "approved", "published", "rejected"]
+        },
+        "fecha": {
+          "type": "string",
+          "format": "date",
+          "description": "Fecha de la última actualización de esta entrada, YYYY-MM-DD."
+        },
+        "aprobacion": {
+          "type": "object",
+          "required": ["clasificacion"],
+          "additionalProperties": false,
+          "properties": {
+            "clasificacion": {
+              "type": ["string", "null"],
+              "enum": ["A", "B", "C", "D", "E", null],
+              "description": "Clasificación A-E de la auditoría ChatGPT (ver delegations/CHATGPT-VISUAL-AUDIT-BRIEF.md). null si todavía no se auditó."
+            },
+            "auditado_por": { "type": ["string", "null"] },
+            "aprobado_por": {
+              "type": ["string", "null"],
+              "description": "Solo Brey aprueba publicación final (checklist del manual operativo, sección 13)."
+            }
+          }
+        },
+        "notes": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}
