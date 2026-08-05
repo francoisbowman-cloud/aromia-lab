@@ -1,0 +1,14 @@
+{
+  "name": "aromia-lab-tooling",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tooling de raíz del repo, fuera de apps/web y apps/api (que se buildean cada una desde su propio Dockerfile con root directory propio en Railway — este package.json no las afecta). Hoy solo contiene el piloto de auditoría de imágenes de la Fase 2.",
+  "type": "module",
+  "scripts": {
+    "images:audit-pilot": "node scripts/audit-image-pilot.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}

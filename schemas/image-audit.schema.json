@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aromialab.com/schemas/image-audit.schema.json",
+  "title": "ImageAuditResult",
+  "description": "Salida estructurada obligatoria de la auditoría visual vía OpenAI API (Fase 2, piloto de 5 perfumes). Refleja exactamente la clasificación A-E, las 13 evaluaciones y las preguntas específicas de delegations/FASE-2-CHATGPT-PILOTO-5-PERFUMES.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "perfume_slug",
+    "perfume_name",
+    "brand",
+    "classification",
+    "classification_reason",
+    "evaluations",
+    "specific_answers",
+    "confidence",
+    "recommendation"
+  ],
+  "properties": {
+    "perfume_slug": { "type": "string" },
+    "perfume_name": { "type": "string" },
+    "brand": { "type": "string" },
+    "classification": {
+      "type": "string",
+      "enum": ["A", "B", "C", "D", "E"],
+      "description": "A=publicable, B=corregible, C=referencia, D=sustituir, E=editorial."
+    },
+    "classification_reason": {
+      "type": "string",
+      "description": "Justificación de la clasificación, citando explícitamente si frasco/tapa/etiqueta/logotipo/color/proporciones coinciden con la referencia real."
+    },
+    "evaluations": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["point", "label", "finding"],
+        "properties": {
+          "point": { "type": "integer", "minimum": 1, "maximum": 13 },
+          "label": { "type": "string" },
+          "finding": { "type": "string" }
+        }
+      }
+    },
+    "specific_answers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question", "answer"],
+        "properties": {
+          "question": { "type": "string" },
+          "answer": { "type": "string" }
+        }
+      }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confianza propia del modelo en su evaluación, 0-1."
+    },
+    "recommendation": {
+      "type": "string",
+      "description": "Recomendación operativa breve (ej. 'usar tal cual', 'recortar y volver a evaluar', 'buscar otra fuente')."
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Riesgos puntuales detectados fuera de los 13 puntos fijos (opcional)."
+    }
+  }
+}

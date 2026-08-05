@@ -1,0 +1,105 @@
+{
+  "_source": "delegations/FASE-2-CHATGPT-PILOTO-5-PERFUMES.md — criterios transcritos textualmente, no reinterpretados. Cualquier cambio de criterio debe hacerse primero en ese archivo.",
+  "model": "gpt-4.1",
+  "spendLimitUsd": 2.0,
+  "estimatedCostPerMillionInputTokensUsd": 2.0,
+  "estimatedCostPerMillionOutputTokensUsd": 8.0,
+  "_costNote": "OpenAI no reporta coste en dólares en la respuesta de la API — solo tokens de uso (input/output). El coste en USD que este script calcula es una ESTIMACIÓN local basada en las tarifas de arriba, configurables acá. Si la API expone un campo de coste explícito en el futuro, el script lo prioriza sobre la estimación (ver 'Registrar uso de tokens y coste' en scripts/audit-image-pilot.mjs).",
+  "nonNegotiableRules": [
+    "frasco completo, sin recortes agresivos",
+    "fondo uniforme",
+    "proporción constante",
+    "iluminación suave",
+    "sombra controlada",
+    "sin ingredientes sueltos en la composición",
+    "sin logos de retailers visibles",
+    "sin decoraciones ajenas al producto"
+  ],
+  "thirteenEvaluations": [
+    "Fidelidad del frasco",
+    "Tapa",
+    "Etiqueta",
+    "Logotipo",
+    "Texto (nombre del producto, legible y correcto)",
+    "Proporciones",
+    "Color",
+    "Recorte",
+    "Iluminación",
+    "Fondo",
+    "Artefactos (compresión, halos, bordes raros)",
+    "Coherencia con el resto del catálogo de Aromia",
+    "Apariencia artificial / riesgo de parecer generada por IA"
+  ],
+  "classification": {
+    "A": "publicable",
+    "B": "corregible",
+    "C": "referencia",
+    "D": "sustituir",
+    "E": "editorial"
+  },
+  "nonNegotiableApprovalRule": "No apruebes (A o B) si el frasco, tapa, etiqueta, logotipo, color o proporciones no coinciden con la referencia real. Ante la duda entre B y D por un problema de fidelidad (no solo técnico), la clasificación correcta es D, no B.",
+  "imageRole": "catalog-primary",
+  "roleFunctionDescription": "catalog-primary (tarjeta de catálogo + imagen principal de ficha de producto)",
+  "perfumes": [
+    {
+      "slug": "aventus",
+      "name": "Aventus",
+      "brand": "Creed",
+      "catalogImageUrl": "https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg",
+      "ovlRelativePath": "apps/web/public/ovl/aventus.jpg",
+      "knownIssue": "ninguno confirmado en el historial — auditoría en blanco.",
+      "specificQuestions": [
+        "¿La foto actual de Amazon es apta tal cual para catálogo, o necesita corrección técnica (recorte/fondo/iluminación) antes de publicarse?",
+        "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume, o señalarías algo a cambiar?"
+      ]
+    },
+    {
+      "slug": "baccarat-rouge-540-edp",
+      "name": "Baccarat Rouge 540 EDP",
+      "brand": "Maison Francis Kurkdjian",
+      "catalogImageUrl": "https://m.media-amazon.com/images/I/71xVLhLWrvL._SL1500_.jpg",
+      "ovlRelativePath": "apps/web/public/ovl/baccarat-rouge-540-edp.jpg",
+      "knownIssue": "ninguno confirmado en el historial.",
+      "specificQuestions": [
+        "El frasco de Baccarat Rouge 540 tiene un color ámbar/rojizo distintivo y una tapa dorada facetada muy específica de la marca — ¿la foto reproduce ese color con fidelidad o hay desviación de tono (por ejemplo por compresión o balance de blancos del retailer)?",
+        "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume?"
+      ]
+    },
+    {
+      "slug": "sauvage-edp",
+      "name": "Sauvage EDP",
+      "brand": "Dior",
+      "catalogImageUrl": "https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg",
+      "ovlRelativePath": "apps/web/public/ovl/sauvage-edp.jpg",
+      "knownIssue": "ninguno confirmado. Existe otro perfume en el catálogo, sauvage-elixir — no es este, no confundir.",
+      "specificQuestions": [
+        "Confirmá explícitamente que la imagen corresponde a \"Sauvage EDP\" (frasco azul con tapa plateada facetada) y no a otra variante de la línea Sauvage (Elixir, Parfum, EDT) — es un error de confusión de variante conocido en este tipo de catálogos.",
+        "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume?"
+      ]
+    },
+    {
+      "slug": "black-opium-edp",
+      "name": "Black Opium EDP",
+      "brand": "Yves Saint Laurent",
+      "catalogImageUrl": "https://m.media-amazon.com/images/I/71w9icubQlL._SL1500_.jpg",
+      "ovlRelativePath": "apps/web/public/ovl/black-opium-edp.jpg",
+      "knownIssue": "ninguno confirmado en el historial.",
+      "specificQuestions": [
+        "El frasco de Black Opium es negro con detalles dorados y una silueta muy reconocible — ¿el fondo/iluminación de la foto generan suficiente contraste para que el frasco se distinga bien en una tarjeta de catálogo, o se \"come\" el contorno contra el fondo?",
+        "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume?"
+      ]
+    },
+    {
+      "slug": "erba-pura",
+      "name": "Erba Pura",
+      "brand": "Xerjoff",
+      "catalogImageUrl": "https://m.media-amazon.com/images/I/51h-KPGkCWL._SL1500_.jpg",
+      "ovlRelativePath": "apps/web/public/ovl/erba-pura.jpg",
+      "knownIssue": "hubo, en algún momento del sitio v1 (hoy solo en el tag legacy-static-v1-final, no en main), una imagen editorial de Erba Pura generada con IA como prueba piloto puntual — no verificado todavía si es el mismo archivo que el mockup OVL actual. No se está reintroduciendo esa pieza en este piloto; se menciona solo para que la auditoría tenga contexto si detecta algo raro en el mockup.",
+      "specificQuestions": [
+        "Evaluá especialmente el punto 13 (apariencia artificial) en el mockup editorial adjunto — hay antecedente de una pieza de este perfume generada con IA en una versión anterior del sitio, y hace falta confirmar si el mockup actual muestra algún indicio de ese origen o es fotografía/render legítimo del producto real.",
+        "¿La foto de catálogo de Amazon es apta tal cual, o necesita corrección técnica antes de publicarse?"
+      ]
+    }
+  ]
+}
