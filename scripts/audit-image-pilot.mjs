@@ -24,6 +24,8 @@ import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import { parse as parseCsv } from "csv-parse/sync";
+import { stringify as stringifyCsv } from "csv-stringify/sync";
 
 const SCRIPTS_DIR = fileURLToPath(new URL(".", import.meta.url));
 const REPO_ROOT = join(SCRIPTS_DIR, "..");
@@ -301,16 +303,30 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function normalizeText(s) {
+  return s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
+
 /**
- * Confirma que la respuesta menciona explícitamente el nombre del perfume —
- * guarda mínima contra confusión de variante (ej. Sauvage EDP vs. Elixir),
- * sumada al chequeo de confianza declarada por el modelo.
+ * Confirma que la respuesta menciona explícitamente el perfume correcto —
+ * guarda mínima contra confusión de variante (ej. Sauvage EDP vs. Elixir).
+ * Busca en TODO el texto de la respuesta (no solo dos campos), y exige
+ * marca + al menos una palabra significativa del nombre (no exige el string
+ * exacto completo, porque el modelo puede omitir "EDP" o reordenar palabras
+ * sin que eso sea, por sí mismo, una confusión de variante real).
  */
 function variantAppearsVerified(perfume, structured) {
-  const blob = [structured.classification_reason, ...structured.specific_answers.map((a) => a.answer)]
-    .join(" ")
-    .toLowerCase();
-  return blob.includes(perfume.name.toLowerCase());
+  const blob = normalizeText(JSON.stringify(structured));
+  const brand = normalizeText(perfume.brand);
+  const nameWords = normalizeText(perfume.name)
+    .split(/\s+/)
+    .filter((w) => w.length > 3 && !["edp", "edt"].includes(w));
+  const brandOk = blob.includes(brand);
+  const nameOk = nameWords.some((w) => blob.includes(w));
+  return brandOk && nameOk;
 }
 
 const TRACKED_OFFICIAL_FILES = [
@@ -425,17 +441,11 @@ async function runLive() {
           ovlDataUri,
         });
 
-        if ((structured.confidence ?? 0) < (config.minConfidenceToAccept ?? 0.5)) {
-          haltReason = `Confianza reportada por el modelo (${structured.confidence}) por debajo del mínimo aceptable (${config.minConfidenceToAccept}) para ${perfume.slug} — no puede verificarse con suficiente certeza. Piloto detenido.`;
-          fail(haltReason);
-          break;
-        }
-        if (!variantAppearsVerified(perfume, structured)) {
-          haltReason = `No se pudo verificar que la respuesta identifique explícitamente "${perfume.name}" (riesgo de confusión de variante) — piloto detenido para revisión humana.`;
-          fail(haltReason);
-          break;
-        }
-
+        // Coste/uso y guardado del reporte SIEMPRE ocurren primero — la
+        // llamada ya se pagó, perderla sería no "registrar uso de tokens y
+        // coste por cada solicitud" tal como se exige. Los chequeos de
+        // confianza/variante deciden si el PILOTO sigue al próximo perfume,
+        // no si este resultado se guarda.
         const usage = response.usage ?? null;
         const costUsd = estimateCostUsd(usage);
         if (typeof costUsd === "number") {
@@ -449,6 +459,9 @@ async function runLive() {
 
         const trafficLight = { A: "verde", B: "amarillo", C: "amarillo", D: "rojo", E: "amarillo" }[structured.classification] ?? "amarillo";
 
+        const lowConfidence = (structured.confidence ?? 0) < (config.minConfidenceToAccept ?? 0.5);
+        const variantVerified = variantAppearsVerified(perfume, structured);
+
         const record = {
           perfume_slug: perfume.slug,
           model,
@@ -460,6 +473,12 @@ async function runLive() {
           usage,
           estimated_cost_usd: costUsd,
           traffic_light: trafficLight,
+          requires_human_review: lowConfidence || !variantVerified,
+          review_reason: !variantVerified
+            ? "variant_unverified"
+            : lowConfidence
+              ? "low_confidence"
+              : null,
           result: structured,
         };
         const outPath = join(REPORTS_DIR, `${perfume.slug}.json`);
@@ -467,6 +486,17 @@ async function runLive() {
         writeFileSync(outPath, JSON.stringify(record, null, 2));
         results.push(record);
         log(`  OK (intento ${attempts}) — clasificación ${structured.classification} (${trafficLight}), confianza ${structured.confidence}, coste estimado $${(costUsd ?? 0).toFixed(4)}`);
+
+        if (lowConfidence) {
+          haltReason = `Confianza reportada por el modelo (${structured.confidence}) por debajo del mínimo aceptable (${config.minConfidenceToAccept}) para ${perfume.slug} — no puede verificarse con suficiente certeza. Piloto detenido (resultado de ${perfume.slug} SÍ quedó guardado, marcado para revisión).`;
+          fail(haltReason);
+          break;
+        }
+        if (!variantVerified) {
+          haltReason = `No se pudo verificar automáticamente que la respuesta identifique "${perfume.brand} ${perfume.name}" — piloto detenido para revisión humana (resultado de ${perfume.slug} SÍ quedó guardado, marcado para revisión).`;
+          fail(haltReason);
+          break;
+        }
       } catch (e) {
         haltReason = `Respuesta inválida tras reintentos para ${perfume.slug}: ${e.message}. Piloto detenido.`;
         fail(`  ${haltReason}`);
@@ -509,33 +539,29 @@ function writeProposalCsv(results) {
     warn("No se encontró data/image-inventory.csv — no se generó propuesta de inventario.");
     return;
   }
-  const header = readFileSync(OFFICIAL_INVENTORY_CSV, "utf-8").split("\n")[0];
-  const columns = header.split(",");
-  const visualQualityIdx = columns.indexOf("visual_quality");
-  const notesIdx = columns.indexOf("notes");
-  const slugIdx = columns.indexOf("perfume_slug");
-  const roleIdx = columns.indexOf("image_role");
-
-  const lines = [header];
-  const rows = readFileSync(OFFICIAL_INVENTORY_CSV, "utf-8").split("\n").slice(1).filter(Boolean);
+  // RFC 4180 real (csv-parse/csv-stringify), no split(",") — varias filas del
+  // inventario oficial tienen comas dentro de `notes` entre comillas
+  // (ej. "Hotlink directo..., misma imagen usada..."); un split ingenuo
+  // corrompe esas filas, exactamente el error que CLAUDE.md ya advierte
+  // para PERFUMES_INITIAL_50.csv.
+  const raw = readFileSync(OFFICIAL_INVENTORY_CSV, "utf-8");
+  const records = parseCsv(raw, { columns: true, skip_empty_lines: true });
 
   const classificationToQuality = { A: "high", B: "medium", C: "medium", D: "low", E: "high" };
 
-  for (const row of rows) {
-    const cells = row.split(",");
-    const slug = cells[slugIdx];
-    const role = cells[roleIdx];
-    const match = results.find((r) => r.perfume_slug === slug);
-    if (match && role === config.imageRole) {
+  for (const record of records) {
+    const match = results.find((r) => r.perfume_slug === record.perfume_slug);
+    if (match && record.image_role === config.imageRole) {
       const cls = match.result.classification;
-      cells[visualQualityIdx] = classificationToQuality[cls] ?? cells[visualQualityIdx];
-      const note = `Auditoría ChatGPT (API), piloto Fase 2, ${match.timestamp.slice(0, 10)}, clasificación ${cls}: ${match.result.recommendation}`;
-      cells[notesIdx] = `"${note.replace(/"/g, "'")}"`;
+      record.visual_quality = classificationToQuality[cls] ?? record.visual_quality;
+      const reviewSuffix = match.requires_human_review ? ` [REQUIERE REVISIÓN HUMANA: ${match.review_reason}]` : "";
+      record.notes = `Auditoría ChatGPT (API), piloto Fase 2, ${match.timestamp.slice(0, 10)}, clasificación ${cls}: ${match.result.recommendation}${reviewSuffix}`;
     }
-    lines.push(cells.join(","));
   }
 
-  writeFileSync(PROPOSAL_INVENTORY_CSV, lines.join("\n"));
+  const columns = Object.keys(records[0]);
+  const output = stringifyCsv(records, { header: true, columns });
+  writeFileSync(PROPOSAL_INVENTORY_CSV, output);
   log(`Propuesta escrita en data/image-inventory.audit-proposal.csv (${results.length} fila(s) actualizada(s), archivo oficial intacto).`);
 }
 

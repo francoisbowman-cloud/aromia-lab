@@ -1,0 +1,112 @@
+{
+  "perfume_slug": "erba-pura",
+  "model": "gpt-4.1",
+  "timestamp": "2026-08-05T19:24:58.958Z",
+  "attempts": 1,
+  "catalog_image_url": "https://m.media-amazon.com/images/I/51h-KPGkCWL._SL1500_.jpg",
+  "ovl_relative_path": "apps/web/public/ovl/erba-pura.jpg",
+  "response_id": "resp_0de456858388da4d006a738e0395b08192a7c2a239a862d159",
+  "usage": {
+    "input_tokens": 2618,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 1047,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3665
+  },
+  "estimated_cost_usd": 0.013611999999999999,
+  "traffic_light": "verde",
+  "requires_human_review": false,
+  "review_reason": null,
+  "result": {
+    "perfume_slug": "erba-pura",
+    "perfume_name": "Erba Pura",
+    "brand": "Xerjoff",
+    "classification": "A",
+    "classification_reason": "La imagen de catálogo de Amazon presenta el frasco de Erba Pura completo, bien iluminado, con fondo blanco uniforme, sin recortes agresivos y con el aspecto y proporciones fieles a la referencia real. La tapa es correcta y reconocible como la original, la etiqueta y el logotipo son nítidos y legibles, el color del vidrio y los detalles dorados son consistentes con el producto real. No hay artefactos relevantes de compresión ni bordes problemáticos. La imagen mantiene coherencia con los estándares del catálogo Aromia y no exhibe ningún rasgo artificial, ni riesgo de parecer generada por IA. ",
+    "evaluations": [
+      {
+        "point": 1,
+        "label": "Fidelidad del frasco",
+        "finding": "Frasco fiel al original Xerjoff Erba Pura en forma, color y detalles."
+      },
+      {
+        "point": 2,
+        "label": "Tapa",
+        "finding": "Tapa dorada característica, correctamente representada según referencia."
+      },
+      {
+        "point": 3,
+        "label": "Etiqueta",
+        "finding": "Etiqueta dorada visible, con detalles exactos y bien ubicada."
+      },
+      {
+        "point": 4,
+        "label": "Logotipo",
+        "finding": "Logotipo \"X\" dorado en la placa frontal es fiel y claramente legible."
+      },
+      {
+        "point": 5,
+        "label": "Texto",
+        "finding": "\"ERBA PURA\" y \"XERJOFF\" están correctamente escritos y fácilmente legibles."
+      },
+      {
+        "point": 6,
+        "label": "Proporciones",
+        "finding": "Proporciones del frasco exactas, no distorsionadas."
+      },
+      {
+        "point": 7,
+        "label": "Color",
+        "finding": "Turquesa del frasco y dorado brillan naturales; coinciden con la referencia real."
+      },
+      {
+        "point": 8,
+        "label": "Recorte",
+        "finding": "Frasco completo, sin recortes agresivos, perfectamente centrado."
+      },
+      {
+        "point": 9,
+        "label": "Iluminación",
+        "finding": "Iluminación suave y uniforme, sin brillos excesivos ni sombras duras."
+      },
+      {
+        "point": 10,
+        "label": "Fondo",
+        "finding": "Fondo blanco puro, uniforme, sin textura ni degradados."
+      },
+      {
+        "point": 11,
+        "label": "Artefactos",
+        "finding": "Sin artefactos notables, bordes limpios, sin halos ni arte digital."
+      },
+      {
+        "point": 12,
+        "label": "Coherencia con catálogo Aromia",
+        "finding": "Imagen consistente con el resto del catálogo en proporciones, calidad y estilo."
+      },
+      {
+        "point": 13,
+        "label": "Apariencia artificial / riesgo IA",
+        "finding": "No hay señales de generación artificial; imagen fotográfica legítima."
+      }
+    ],
+    "specific_answers": [
+      {
+        "question": "1. Evaluá especialmente el punto 13 (apariencia artificial) en el mockup editorial adjunto — hay antecedente de una pieza de este perfume generada con IA en una versión anterior del sitio, y hace falta confirmar si el mockup actual muestra algún indicio de ese origen o es fotografía/render legítimo del producto real.",
+        "answer": "El mockup editorial adjunto muestra la caja de Erba Pura, con líneas y diseño gráficos que podrían pertenecer tanto a un render digital profesional como a una fotografía retocada. No se detectan artefactos claros de IA ni deformidades típicas de herramientas generativas (ej. letras alteradas, bordes blandos, sombras contradictorias). El arte y los textos se aprecian correctos. No hay fundamentos visuales sólidos para afirmar origen IA en esta pieza específica, aunque persiste una leve ambigüedad por el estilo muy 'limpio', pero nada que justifique exclusión por riesgo de artificialidad en contextos editoriales."
+      },
+      {
+        "question": "2. ¿La foto de catálogo de Amazon es apta tal cual, o necesita corrección técnica antes de publicarse?",
+        "answer": "La foto de catálogo de Amazon es apta tal cual para publicarse. Cumple los requisitos técnicos, de fidelidad visual y de presentación sin necesidad de modificaciones."
+      }
+    ],
+    "confidence": 0.98,
+    "recommendation": "Usar tal cual.",
+    "risk_flags": []
+  }
+}

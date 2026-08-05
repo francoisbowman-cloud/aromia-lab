@@ -1,0 +1,115 @@
+{
+  "perfume_slug": "black-opium-edp",
+  "model": "gpt-4.1",
+  "timestamp": "2026-08-05T19:24:49.897Z",
+  "attempts": 1,
+  "catalog_image_url": "https://m.media-amazon.com/images/I/71w9icubQlL._SL1500_.jpg",
+  "ovl_relative_path": "apps/web/public/ovl/black-opium-edp.jpg",
+  "response_id": "resp_027496d65d4e95d7006a738df88310819c98487b4c4f7547d2",
+  "usage": {
+    "input_tokens": 2533,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 1173,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3706
+  },
+  "estimated_cost_usd": 0.014450000000000001,
+  "traffic_light": "rojo",
+  "requires_human_review": false,
+  "review_reason": null,
+  "result": {
+    "perfume_slug": "black-opium-edp",
+    "perfume_name": "Black Opium EDP",
+    "brand": "Yves Saint Laurent",
+    "classification": "D",
+    "classification_reason": "Aunque el frasco, la tapa, la etiqueta, el logotipo y el color son auténticos y coinciden con la referencia real de Black Opium EDP (Yves Saint Laurent), la imagen no cumple los requisitos fundamentales de catálogo de Aromia: el frasco no está completo (está parcialmente fuera del encuadre por debajo) y la caja del perfume aparece en la composición, lo cual no es aceptable para hero de catálogo (solo el frasco debe aparecer, sin caja ni decoraciones ajenas). Además, la sombra controlada y el fondo uniforme no están logrados plenamente, ya que la caja introduce un elemento ajeno y rompe la homogeneidad visual. La iluminación y proporciones son aceptables, pero el recorte (debajo) resulta demasiado agresivo para la función de catálogo.",
+    "evaluations": [
+      {
+        "point": 1,
+        "label": "Fidelidad del frasco",
+        "finding": "El frasco es auténtico y corresponde fielmente al modelo Black Opium EDP, con forma y materiales correctos."
+      },
+      {
+        "point": 2,
+        "label": "Tapa",
+        "finding": "La tapa es la original, forma y color correctos."
+      },
+      {
+        "point": 3,
+        "label": "Etiqueta",
+        "finding": "La etiqueta circular está presente, es legible y tiene el diseño adecuado."
+      },
+      {
+        "point": 4,
+        "label": "Logotipo",
+        "finding": "El logotipo está correctamente aplicado tanto en el frasco como en la tapa y la caja."
+      },
+      {
+        "point": 5,
+        "label": "Texto (nombre del producto, legible y correcto)",
+        "finding": "El texto ‘Black Opium’ es claro, legible y emplea la tipografía correcta."
+      },
+      {
+        "point": 6,
+        "label": "Proporciones",
+        "finding": "Las proporciones del frasco se mantienen fieles a la referencia original."
+      },
+      {
+        "point": 7,
+        "label": "Color",
+        "finding": "La paleta de colores está acorde a la referencia: negro, detalles dorados/rosados en la etiqueta."
+      },
+      {
+        "point": 8,
+        "label": "Recorte",
+        "finding": "El recorte inferior corta parte de la base del frasco, lo que resulta impropio para una ficha de catálogo (el frasco debe estar completo)."
+      },
+      {
+        "point": 9,
+        "label": "Iluminación",
+        "finding": "La iluminación sobre el frasco es adecuada, resalta la textura, aunque hay un leve reflejo en la tapa."
+      },
+      {
+        "point": 10,
+        "label": "Fondo",
+        "finding": "El fondo es blanco y uniforme, pero la presencia de la caja rompe la homogeneidad requerida para catálogo."
+      },
+      {
+        "point": 11,
+        "label": "Artefactos (compresión, halos, bordes raros)",
+        "finding": "No se detectan artefactos o problemas de compresión significativos."
+      },
+      {
+        "point": 12,
+        "label": "Coherencia con el resto del catálogo de Aromia",
+        "finding": "La imagen no es coherente con la línea hero de catálogo de Aromia, ya que incluye la caja y el recorte inferior es demasiado agresivo para el estándar de la plataforma."
+      },
+      {
+        "point": 13,
+        "label": "Apariencia artificial / riesgo de parecer generada por IA",
+        "finding": "No hay indicios de generación artificial ni efectos que sugieran riesgo de IA."
+      }
+    ],
+    "specific_answers": [
+      {
+        "question": "El frasco de Black Opium es negro con detalles dorados y una silueta muy reconocible — ¿el fondo/iluminación de la foto generan suficiente contraste para que el frasco se distinga bien en una tarjeta de catálogo, o se \"come\" el contorno contra el fondo?",
+        "answer": "El contraste es adecuado entre el frasco y el fondo blanco, permitiendo que se destaque la silueta fácilmente. La textura y los detalles dorados se aprecian, y el contorno no se pierde contra el fondo. Sin embargo, el recorte inferior afecta la percepción volumétrica del frasco."
+      },
+      {
+        "question": "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume?",
+        "answer": "Sí, el mockup editorial OVL es coherente y apropiado para un hero editorial: utiliza ingredientes visualmente asociados a la fragancia, una iluminación cálida y envolvente y una composición que refuerza el storytelling olfativo y visual de Black Opium."
+      }
+    ],
+    "confidence": 0.97,
+    "recommendation": "Buscar o producir una imagen donde el frasco esté completo y sin la caja (solo el frasco sobre fondo blanco uniforme), para cumplir el estándar de catálogo Aromia.",
+    "risk_flags": [
+      "Recorte agresivo del frasco",
+      "Caja presente en la composición"
+    ]
+  }
+}

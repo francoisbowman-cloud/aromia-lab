@@ -14,7 +14,8 @@
     "evaluations",
     "specific_answers",
     "confidence",
-    "recommendation"
+    "recommendation",
+    "risk_flags"
   ],
   "properties": {
     "perfume_slug": { "type": "string" },

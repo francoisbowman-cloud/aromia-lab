@@ -1,0 +1,115 @@
+{
+  "perfume_slug": "aventus",
+  "model": "gpt-4.1",
+  "timestamp": "2026-08-05T19:23:49.939Z",
+  "attempts": 1,
+  "catalog_image_url": "https://m.media-amazon.com/images/I/71nY6hb7uuL._SL1500_.jpg",
+  "ovl_relative_path": "apps/web/public/ovl/aventus.jpg",
+  "response_id": "resp_0433b060e36ff3ed006a738db281a081a198406a582a95940e",
+  "usage": {
+    "input_tokens": 2509,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 2176
+    },
+    "output_tokens": 912,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3421
+  },
+  "estimated_cost_usd": 0.012314,
+  "traffic_light": "rojo",
+  "requires_human_review": false,
+  "review_reason": null,
+  "result": {
+    "perfume_slug": "aventus",
+    "perfume_name": "Aventus",
+    "brand": "Creed",
+    "classification": "D",
+    "classification_reason": "El frasco no coincide exactamente con la referencia real: la versión auténtica de Creed Aventus presenta una placa metálica en relieve (en vez de una etiqueta plana blanca) y el grabado del caballero es distinto. La tapa es similar y tiene la forma adecuada, pero el frasco presentado en la imagen de catálogo tiene una interpretación simplificada que no corresponde a la edición auténtica más representativa ni a la estándar. El logotipo, proporciones y el color están razonablemente correctos, pero la etiqueta y detalle del frasco lo hacen no apto para publicarse como catálogo principal.",
+    "evaluations": [
+      {
+        "point": 1,
+        "label": "Fidelidad del frasco",
+        "finding": "Frasco simplificado sin placa metálica, que es característica esencial de Aventus original."
+      },
+      {
+        "point": 2,
+        "label": "Tapa",
+        "finding": "Forma y color correctos."
+      },
+      {
+        "point": 3,
+        "label": "Etiqueta",
+        "finding": "Etiqueta de papel blanca en la imagen, no corresponde: debería ser una placa metálica."
+      },
+      {
+        "point": 4,
+        "label": "Logotipo",
+        "finding": "Logotipo correcto, bien posicionado y legible."
+      },
+      {
+        "point": 5,
+        "label": "Texto (nombre del producto, legible y correcto)",
+        "finding": "Nombre (Aventus) es correcto y legible."
+      },
+      {
+        "point": 6,
+        "label": "Proporciones",
+        "finding": "Proporciones del frasco parecen aceptables; forma global reconocible."
+      },
+      {
+        "point": 7,
+        "label": "Color",
+        "finding": "Colores correctos para Aventus (negro y plateado predominando, fondo blanco)."
+      },
+      {
+        "point": 8,
+        "label": "Recorte",
+        "finding": "Frasco completo, sin recortes agresivos."
+      },
+      {
+        "point": 9,
+        "label": "Iluminación",
+        "finding": "Iluminación limpia y suave, bien balanceada."
+      },
+      {
+        "point": 10,
+        "label": "Fondo",
+        "finding": "Fondo blanco uniforme, correcto para catálogo."
+      },
+      {
+        "point": 11,
+        "label": "Artefactos",
+        "finding": "Sin artefactos notables, imagen nítida."
+      },
+      {
+        "point": 12,
+        "label": "Coherencia con el resto del catálogo de Aromia",
+        "finding": "En estándar visual sí, pero el frasco no es fiel a la referencia y eso rompe la coherencia de producto auténtico."
+      },
+      {
+        "point": 13,
+        "label": "Apariencia artificial / riesgo de parecer generada por IA",
+        "finding": "No se detecta apariencia artificial o de IA relevante para rechazo inmediato."
+      }
+    ],
+    "specific_answers": [
+      {
+        "question": "¿La foto actual de Amazon es apta tal cual para catálogo, o necesita corrección técnica (recorte/fondo/iluminación) antes de publicarse?",
+        "answer": "A pesar de que la imagen es técnicamente correcta (recorte, fondo, iluminación), no es apta tal cual para catálogo ya que el frasco no es fiel al real; debe sustituirse por una foto del producto original con la placa metálica distintiva."
+      },
+      {
+        "question": "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume, o señalarías algo a cambiar?",
+        "answer": "El mockup editorial OVL es sumamente coherente: fondo atmosférico, ingredientes integrados, iluminación cálida y frasco realista con la placa metálica auténtica. Recomendable sin cambios de estilo mayores."
+      }
+    ],
+    "confidence": 0.98,
+    "recommendation": "Buscar otra fuente: sustituir por foto auténtica del frasco Aventus con placa metálica.",
+    "risk_flags": [
+      "Riesgo de confusión producto real vs. 'mockup' por ausencia de placa metálica",
+      "No corresponde al estándar visual de la marca para catálogo"
+    ]
+  }
+}
