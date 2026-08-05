@@ -3,294 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Light Blue de Dolce & Gabbana: la Sicilia embotellada — Aromia Magazine</title>
-<meta name="description" content="Manzana, limón siciliano y una base de cedro y almizcle. Reseña de Light Blue: pirámide olfativa, historia mediterránea y por qué sigue siendo un clásico del verano.">
+<title>Light Blue de Dolce & Gabbana: el cítrico floral que define el verano mediterráneo — Aromia Lab</title>
+<meta name="description" content="Reseña · Diseñador masivo">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0;}
-  :root{
-    --bg:#F7F1E7;--surface:#FFFFFF;--surface2:#EFE6D5;--ink:#1E1810;--muted:#7C7160;
-    --line:rgba(30,24,16,.10);--gold:#B68A44;--gold-soft:rgba(182,138,68,.14);
-    --fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;--rad:2px;
-  }
-  html[data-mode="dark"]{
-    --bg:#0D0A07;--surface:#161109;--surface2:#1C1610;--ink:#F3EAD9;--muted:#A89A83;
-    --line:rgba(255,255,255,.08);--gold-soft:rgba(200,168,107,.16);--gold:#C8A86B;
-  }
-  body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;
-    -webkit-font-smoothing:antialiased;transition:background .5s ease,color .5s ease}
-  a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
-  button{font:inherit}
-
-  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-    background:color-mix(in srgb, var(--bg) 84%, transparent);border-bottom:1px solid var(--line)}
-  .nav-inner{max-width:1320px;margin:0 auto;padding:15px 30px;display:flex;align-items:center;gap:26px}
-  .brand{font-family:var(--fdisp);font-weight:700;font-size:23px;letter-spacing:.34em;color:var(--ink);padding-left:.34em}
-  nav.links{display:flex;gap:26px;margin-left:14px;flex:1;flex-wrap:wrap}
-  nav.links a{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .25s}
-  nav.links a:hover, nav.links a.current{color:var(--ink)}
-  .icon-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--muted);
-    background:transparent;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:14px;
-    transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .25s,color .25s;margin-left:auto}
-  .icon-btn:hover{border-color:var(--gold);color:var(--ink);transform:rotate(-14deg) scale(1.08)}
-
-  /* ---------- ARTICLE HERO ---------- */
-  .art-hero{max-width:820px;margin:0 auto;padding:60px 30px 0;text-align:center}
-  .kicker{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
-  .art-hero h1{font-family:var(--fdisp);font-weight:600;font-size:clamp(34px,4.6vw,54px);line-height:1.08;margin:0 0 20px}
-  .art-hero .subtitle{font-family:var(--fdisp);font-style:italic;font-weight:400;font-size:19px;line-height:1.5;
-    color:var(--muted);max-width:600px;margin:0 auto 30px}
-  .art-meta{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:44px}
-  .art-meta .av{width:36px;height:36px;border-radius:50%;background:var(--gold-soft);color:var(--gold);
-    display:flex;align-items:center;justify-content:center;font-family:var(--fdisp);font-weight:600;font-size:13px}
-  .art-meta .who{font-size:11.5px;color:var(--muted);text-align:left;line-height:1.5}
-  .art-meta .who b{color:var(--ink);font-weight:500}
-
-  .hero-figure{max-width:1120px;margin:0 auto;padding:0 30px 60px}
-  .hero-figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--rad)}
-
-  /* ---------- CUERPO EDITORIAL ---------- */
-  .art-body{max-width:680px;margin:0 auto;padding:0 30px 10px}
-  .art-body p{font-size:17px;line-height:1.85;color:var(--ink);margin:0 0 26px}
-  .art-body p.lede::first-letter{font-family:var(--fdisp);font-size:64px;font-weight:600;color:var(--gold);
-    float:left;line-height:.8;padding:6px 10px 0 0}
-  .art-body h2{font-family:var(--fdisp);font-weight:600;font-size:clamp(24px,2.8vw,30px);margin:52px 0 20px}
-
-  /* ---------- INGREDIENT SPOTLIGHT ---------- */
-  .spotlight{max-width:680px;margin:0 auto;padding:0 30px}
-  .spotlight-box{background:var(--surface2);border-radius:var(--rad);padding:34px 36px;margin:20px 0 40px}
-  .spotlight-box .sp-kicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-  .spotlight-box h3{font-family:var(--fdisp);font-weight:600;font-size:22px;margin:0 0 12px}
-  .spotlight-box p{font-size:14.5px;line-height:1.75;color:var(--muted);margin:0 0 18px}
-  .chip-row{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{font-size:12px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 13px}
-
-  /* ---------- INTERESTING FACTS ---------- */
-  .facts{max-width:680px;margin:0 auto 44px;padding:0 30px}
-  .facts-box{border:1px solid var(--line);border-radius:var(--rad);padding:30px 34px}
-  .facts-box .f-kicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-  .facts-box ul{margin:0;padding:0;list-style:none}
-  .facts-box li{font-size:14.5px;line-height:1.6;color:var(--ink);padding:12px 0;border-top:1px solid var(--line)}
-  .facts-box li:first-child{border-top:none;padding-top:0}
-  .facts-box li b{color:var(--gold);font-family:var(--fdisp);font-size:17px;margin-right:8px}
-
-  /* ---------- VISUAL BREAK + CITA ---------- */
-  .visual-break{position:relative;max-width:1120px;margin:20px auto 60px;padding:0 30px}
-  .vb-img{aspect-ratio:21/9;border-radius:var(--rad);overflow:hidden;background:var(--surface2)}
-  .vb-img img{width:100%;height:100%;object-fit:cover}
-  .vb-quote{max-width:640px;margin:-46px auto 0;position:relative;background:var(--surface);
-    padding:30px 40px;text-align:center;border:1px solid var(--line)}
-  .vb-quote p{font-family:var(--fdisp);font-style:italic;font-weight:400;font-size:23px;line-height:1.4;margin:0}
-
-  /* ---------- RETRATO OLFATIVO (radar reutilizado del catálogo) ---------- */
-  .portrait-wrap{max-width:680px;margin:0 auto 50px;padding:0 30px;text-align:center}
-  .radar-caption{font-size:13px;color:var(--muted);margin-top:16px}
-
-  /* ---------- RECOMENDACIONES ---------- */
-  .reco-wrap{max-width:820px;margin:0 auto 60px;padding:0 30px}
-  .reco-wrap h2{font-family:var(--fdisp);font-weight:600;font-size:24px;text-align:center;margin:0 0 26px}
-  .reco-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-  @media(max-width:560px){.reco-grid{grid-template-columns:1fr}}
-  .reco-card{display:block;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;transition:.25s}
-  .reco-card:hover{border-color:var(--gold)}
-  .reco-card img{aspect-ratio:4/3;width:100%;object-fit:cover}
-  .reco-card .rc-body{padding:16px 18px}
-  .reco-card .rc-kicker{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
-  .reco-card h4{font-family:var(--fdisp);font-weight:600;font-size:16px;margin:0}
-
-  /* ---------- CTA + COMUNIDAD ---------- */
-  .cta-wrap{max-width:680px;margin:0 auto 60px;padding:0 30px}
-  .cta-box{background:var(--ink);color:var(--bg);border-radius:var(--rad);padding:36px 40px;text-align:center}
-  .cta-box .price{font-family:var(--fdisp);font-weight:600;font-size:32px;margin-bottom:6px}
-  .cta-box .sub{font-size:12px;color:color-mix(in srgb, var(--bg) 65%, transparent);margin-bottom:22px}
-  .cta-btn{display:inline-block;background:var(--gold);color:#fff;font-size:12px;letter-spacing:.1em;
-    text-transform:uppercase;padding:14px 32px;border-radius:999px}
-  .cta-rating{margin-top:20px;font-size:11.5px;color:color-mix(in srgb, var(--bg) 70%, transparent)}
-  .cta-rating b{color:var(--bg)}
-  .affiliate-note{font-size:11px;color:var(--muted);text-align:center;max-width:520px;margin:16px auto 0}
-
-  /* ---------- NEWSLETTER (al final del artículo) ---------- */
-  .nl-wrap{max-width:600px;margin:0 auto 70px;padding:0 30px;text-align:center}
-  .nl-wrap .cl-h{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-  .nl-wrap h3{font-family:var(--fdisp);font-weight:500;font-size:22px;margin:0 0 8px}
-  .nl-wrap p{font-size:13.5px;color:var(--muted);margin:0 0 18px}
-  .nl-row{display:flex;max-width:380px;margin:0 auto}
-  .nl-row input{flex:1;font-family:var(--fbody);font-size:13px;padding:12px 14px;background:transparent;
-    border:1px solid var(--line);color:var(--ink);outline:none}
-  .nl-row button{font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:12px 20px;
-    background:var(--gold);color:#fff;border:none;cursor:pointer}
-
-  footer{border-top:1px solid var(--line);background:var(--bg)}
-  .footer-bottom-inner{max-width:1320px;margin:0 auto;padding:24px 30px;display:flex;justify-content:space-between;
-    flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:#F6F2EA;color:#15120D;font-family:'Jost',system-ui,sans-serif;font-weight:300;
+  -webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#B08D4C;text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 30px 100px}
+header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(246,242,234,.88);border-bottom:1px solid rgba(21,18,13,.12)}
+.nav-inner{max-width:1240px;margin:0 auto;padding:15px 30px;display:flex;align-items:center;gap:26px}
+.brand{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:23px;letter-spacing:.34em;
+  color:#15120D;text-decoration:none;padding-left:.34em}
+.back-top{margin-left:auto;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E675B;
+  border:1px solid rgba(21,18,13,.12);border-radius:999px;padding:8px 16px}
+.back-top:hover{border-color:#B08D4C;color:#15120D}
+.article-hero{padding:60px 30px 20px;max-width:760px;margin:0 auto}
+.kicker{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:#B08D4C;margin-bottom:16px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(32px,4.2vw,50px);line-height:1.08;margin:0 0 18px}
+.meta{font-size:13px;color:#6E675B;margin-bottom:36px;padding-bottom:30px;border-bottom:1px solid rgba(21,18,13,.12)}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:26px;margin:44px 0 14px}
+p{font-size:16px;color:#3a352c;margin:0 0 18px}
+.pullquote{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:22px;color:#15120D;
+  border-left:3px solid #B08D4C;padding:6px 0 6px 22px;margin:30px 0}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.chip{font-size:12.5px;color:#15120D;background:rgba(176,141,76,.13);border:1px solid rgba(21,18,13,.12);border-radius:999px;padding:7px 13px}
+.cta-box{background:#FFFFFF;border:1px solid rgba(21,18,13,.12);border-radius:2px;padding:24px 26px;margin:36px 0}
+.cta-box a{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid #B08D4C;padding-bottom:2px}
+.back{display:inline-block;margin-top:50px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  border-bottom:1px solid #B08D4C;padding-bottom:4px}
+.affiliate-note{font-size:11.5px;color:#6E675B;line-height:1.6;margin:26px 0;display:flex;gap:8px}
 </style>
 </head>
 <body>
-
 <header class="nav">
   <div class="nav-inner">
-    <a href="../index.html#top" class="brand">AROMIA</a>
-    <nav class="links">
-      <a href="../magazine.html" class="current">Magazine</a>
-      <a href="../catalogo.html">Catálogo</a>
-      <a href="../lab.html">Lab</a>
-      <a href="../academia.html">Academia</a>
-      <a href="../club.html">Club</a>
-    </nav>
-    <button class="icon-btn" id="modeToggle" type="button" aria-label="Cambiar modo">&#9789;</button>
+    <a href="index.html" class="brand">AROMIA</a>
+    <a href="magazine.html" class="back-top">← Magazine</a>
   </div>
 </header>
-
-<div class="art-hero">
+<div class="article-hero">
   <div class="kicker">Reseña · Diseñador masivo</div>
-  <h1>Light Blue: veinte años vendiendo la idea del verano en Sicilia</h1>
-  <p class="subtitle">Olivier Cresp y Honorine Blanc construyeron una fórmula tan asociada al Mediterráneo que la propia campaña publicitaria, filmada en Capri, se volvió parte de la identidad del perfume.</p>
-  <div class="art-meta">
-    <div class="av">A</div>
-    <div class="who"><b>Equipo Aromia</b><br>4 min de lectura · 16 jul 2026</div>
-  </div>
+  <h1>Light Blue de Dolce & Gabbana: el cítrico floral que define el verano mediterráneo</h1>
+  <div class="meta">Publicado el 10 de julio de 2026 · 5 min de lectura</div>
 </div>
+<div class="wrap">
 
-<div class="hero-figure">
-  <img src="https://m.media-amazon.com/images/I/41KgNYHnLFL._SL1500_.jpg" alt="Light Blue de Dolce & Gabbana">
+<p>Lanzado en 2001, Light Blue capturó algo muy específico: la sensación de la costa italiana en verano. Manzana y limón siciliano en la apertura, bambú y jazmín en el corazón, cedro y almizcle en el fondo — ligero de principio a fin.</p>
+<h2>El perfume que no pesa</h2>
+<p>Con solo 5 horas de longevidad y proyección/estela moderadas (3/5), Light Blue es honestamente uno de los perfumes menos "duraderos" de nuestro catálogo — pero esa ligereza es exactamente su punto fuerte en clima cálido.</p>
+<div class="pullquote">"No todos los perfumes necesitan durar 10 horas: algunos están diseñados para sentirse frescos, no para dejar huella."</div>
+<h2>Ideal para</h2>
+<p>Días de playa, oficinas con aire acondicionado fuerte, o cualquier ocasión donde preferís una presencia sutil en vez de una estela marcada.</p>
+<div class="chip-row"><span class="chip">Manzana</span><span class="chip">Limón siciliano</span><span class="chip">Bambú</span><span class="chip">Almizcle</span></div>
+<h2>Precio accesible</h2>
+<p>A 68 $ en Amazon.com por 100 ml, es de las opciones más económicas del catálogo, ideal para quien recién empieza a explorar cítricos florales.</p>
+<div class="cta-box"><a href="https://www.amazon.com/dp/B0F6NVR4BX" target="_blank" rel="sponsored noopener">Ver Light Blue en Amazon →</a></div>
+
+<div class="affiliate-note">ⓘ <span>Aromia participa en el Programa de Afiliados de Amazon. Al comprar a través de enlaces de este artículo podemos recibir una comisión, sin coste adicional para ti.</span></div>
+<a href="magazine.html" class="back">← Volver al Magazine</a>
 </div>
-
-<div class="art-body">
-  <p class="lede">Pocos perfumes están tan ligados a una imagen específica como Light Blue: Capri, la costa amalfitana, un verano interminable. Desde su lanzamiento en 2001, Dolce & Gabbana construyó no solo una fragancia sino una fantasía mediterránea completa — y la fórmula, ligera y cítrica, respalda esa idea en cada rociada.</p>
-
-  <p>A diferencia de fragancias más complejas de este catálogo, Light Blue no busca profundidad ni longevidad extrema. Busca capturar una sensación específica y efímera —la frescura de una mañana de verano frente al mar— y en eso, dos décadas después, sigue siendo una referencia dentro de los cítricos florales.</p>
-
-  <h2>Una fórmula pensada para desvanecerse con gracia</h2>
-  <p>La salida combina manzana y limón siciliano, jugosa y directa. El corazón de bambú y jazmín aporta un toque verde-floral discreto, y el fondo de cedro y almizcle cierra la fórmula sin agregar peso. Es, deliberadamente, uno de los perfiles más ligeros del catálogo: no está diseñado para durar diez horas, sino para sentirse fresco durante las que dura.</p>
-</div>
-
-<div class="spotlight">
-  <div class="spotlight-box">
-    <div class="sp-kicker">Ingrediente destacado</div>
-    <h3>Limón siciliano</h3>
-    <p>El limón siciliano es reconocido en perfumería por tener un perfil más dulce y menos ácido que otras variedades de cítricos, gracias al clima volcánico de la isla. En Light Blue no se usa como una nota cítrica genérica: es el ingrediente que le da identidad geográfica específica a la fórmula, y es la razón por la que la campaña publicitaria eligió Capri como escenario, no cualquier costa mediterránea.</p>
-    <div class="chip-row">
-      <span class="chip">Manzana</span>
-      <span class="chip">Limón siciliano</span>
-      <span class="chip">Bambú</span>
-      <span class="chip">Jazmín</span>
-      <span class="chip">Cedro</span>
-      <span class="chip">Almizcle</span>
-    </div>
-  </div>
-</div>
-
-<div class="facts">
-  <div class="facts-box">
-    <div class="f-kicker">Datos que quizás no sabías</div>
-    <ul>
-      <li><b>01</b>La campaña publicitaria original, protagonizada por Naomi Campbell y luego por distintas parejas de celebridades a lo largo de los años, mantuvo siempre la misma locación: la costa de Capri.</li>
-      <li><b>02</b>Es uno de los pocos "mega-éxitos" de perfumería femenina masiva que logró mantenerse relevante más de veinte años sin una reformulación radical de su pirámide original.</li>
-      <li><b>03</b>El nombre y el color del frasco (azul claro) hacen referencia directa al mar Mediterráneo, no a ninguna nota olfativa específica de la fórmula.</li>
-    </ul>
-  </div>
-</div>
-
-<div class="visual-break">
-  <div class="vb-img"><img src="https://images.unsplash.com/photo-1605185189315-fc269c231e41?auto=format&fit=crop&w=1400&q=75" alt=""></div>
-  <div class="vb-quote"><p>No pretende ser el perfume más sofisticado del catálogo. Pretende ser el que te recuerda unas vacaciones que tal vez ni siquiera tomaste.</p></div>
-</div>
-
-<div class="art-body">
-  <h2>Por qué los cítricos florales rinden menos tiempo</h2>
-  <p>Los perfumes de esta familia priorizan moléculas pequeñas y volátiles —cítricos, notas verdes— por sobre fijadores pesados, lo que resulta en una longevidad naturalmente más corta que los orientales o amaderados. No es un defecto de calidad: es una decisión de diseño que prioriza una sensación de frescura constante por sobre la persistencia, algo que muchos usuarios de climas cálidos prefieren activamente.</p>
-</div>
-
-<div class="portrait-wrap">
-  <div id="radarHost"></div>
-  <div class="radar-caption">Cítrico floral ligero — la longevidad más baja del grupo, por diseño: prioriza frescura inmediata sobre persistencia.</div>
-</div>
-
-<div class="reco-wrap">
-  <h2>Si te gusta este, prueba también</h2>
-  <div class="reco-grid">
-    <a class="reco-card" href="../catalogo.html?p=13">
-      <img src="https://m.media-amazon.com/images/I/51DpfV3dkVL._SL1500_.jpg" alt="Acqua di Giò">
-      <div class="rc-body"><div class="rc-kicker">Giorgio Armani · Diseñador masivo</div><h4>Acqua di Giò</h4></div>
-    </a>
-    <a class="reco-card" href="../catalogo.html?p=12">
-      <img src="https://m.media-amazon.com/images/I/41tz3PhoH9L._SL1000_.jpg" alt="Bleu de Chanel">
-      <div class="rc-body"><div class="rc-kicker">Chanel · Diseñador masivo</div><h4>Bleu de Chanel</h4></div>
-    </a>
-  </div>
-</div>
-
-<div class="cta-wrap">
-  <div class="cta-box">
-    <div class="price">$68</div>
-    <div class="sub">Eau de Toilette · 100 ml</div>
-    <a class="cta-btn" href="https://www.amazon.com/dp/B0F6NVR4BX" target="_blank" rel="sponsored noopener">Ver en Amazon</a>
-  </div>
-  <div class="affiliate-note">Aromia participa en el Programa de Afiliados de Amazon. Al comprar a través de este enlace podemos recibir una comisión, sin coste adicional para ti.</div>
-</div>
-
-<div class="nl-wrap">
-  <div class="cl-h">La Carta de Aromia</div>
-  <h3>¿Te gustó esta reseña?</h3>
-  <p>Recibe el resumen semanal del Magazine — reseñas, guías y lanzamientos del Lab. Sin ruido, sin spam.</p>
-  <div class="nl-row"><input placeholder="Tu email"><button>Suscribirme</button></div>
-</div>
-
-<footer>
-  <div class="footer-bottom-inner">
-    <span>&copy; 2026 Aromia. El Magazine crece cada semana.</span>
-    <a href="../magazine.html">Volver al Magazine</a>
-  </div>
-</footer>
-
-<script>
-(function(){
-  var mode = localStorage.getItem('aromia_mode') || 'light';
-  document.documentElement.setAttribute('data-mode', mode);
-  var modeBtn = document.getElementById('modeToggle');
-  modeBtn.textContent = mode === 'light' ? '\u262e' : '\u2600';
-  modeBtn.addEventListener('click', function(){
-    mode = mode === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-mode', mode);
-    modeBtn.textContent = mode === 'light' ? '\u262e' : '\u2600';
-    try{ localStorage.setItem('aromia_mode', mode); }catch(e){}
-  });
-
-  // Radar SVG reutilizado del sistema de catalogo.html (mismos 3 ejes reales)
-  function buildRadarSvg(axes){
-    var cx=110, cy=100, r=76;
-    var angle = function(i){ return -Math.PI/2 + i*(2*Math.PI/3); };
-    var pt = function(i, rad){ var a=angle(i); return [cx+Math.cos(a)*rad, cy+Math.sin(a)*rad]; };
-    var ring = function(frac){ return [0,1,2].map(function(i){ return pt(i, r*frac).join(','); }).join(' '); };
-    var dataPts = [0,1,2].map(function(i){ return pt(i, r*axes[i].val).join(','); }).join(' ');
-    var labels = [0,1,2].map(function(i){
-      var lp = pt(i, r+22);
-      return '<text x="'+lp[0]+'" y="'+lp[1]+'" text-anchor="middle" dominant-baseline="middle" style="font-family:var(--fbody);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;fill:var(--muted)">'+axes[i].label+'</text>';
-    }).join('');
-    var spokes = [0,1,2].map(function(i){ var p2=pt(i,r); return '<line x1="'+cx+'" y1="'+cy+'" x2="'+p2[0]+'" y2="'+p2[1]+'" stroke="var(--line)" stroke-width="1"/>'; }).join('');
-    return '<svg viewBox="0 0 220 210" style="width:100%;max-width:260px;display:block;margin:0 auto">' +
-      '<polygon points="'+ring(1)+'" fill="none" stroke="var(--line)"/>' +
-      '<polygon points="'+ring(.66)+'" fill="none" stroke="var(--line)"/>' +
-      '<polygon points="'+ring(.33)+'" fill="none" stroke="var(--line)"/>' +
-      spokes +
-      '<polygon points="'+dataPts+'" fill="var(--gold-soft)" stroke="var(--gold)" stroke-width="2"/>' +
-      labels + '</svg>';
-  }
-  document.getElementById('radarHost').innerHTML = buildRadarSvg([
-    {label:'Longevidad', val: 5/12},
-    {label:'Estela', val: 3/5},
-    {label:'Proyección', val: 3/5}
-  ]);
-})();
-</script>
-
-<!-- Cloudflare Web Analytics -->
-<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4379e7acaad24abca8d75dd9c81ca7f2"}'></script>
-<!-- End Cloudflare Web Analytics -->
 </body>
 </html>

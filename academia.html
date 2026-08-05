@@ -15,12 +15,12 @@
   ::selection{background:rgba(176,141,76,.22);}
   :root{
     --bg:#F6F2EA;--surface:#FFFFFF;--surface2:#FBF7F0;--ink:#15120D;--muted:#6E675B;
-    --line:rgba(21,18,13,.12);--gold:#B68A44;--gold-soft:rgba(182,138,68,.14);
+    --line:rgba(21,18,13,.12);--gold:#B08D4C;--gold-soft:rgba(176,141,76,.13);
     --fdisp:'Cormorant Garamond',Georgia,serif;--fbody:'Jost',system-ui,sans-serif;--rad:2px;
   }
   html[data-mode="dark"]{
     --bg:#0E0C0A;--surface:#17120D;--surface2:#1C1610;--ink:#F2EBDD;--muted:#A39A88;
-    --line:rgba(242,235,221,.13);--gold-soft:rgba(200,168,107,.16);--gold:#C8A86B;
+    --line:rgba(242,235,221,.13);--gold-soft:rgba(201,164,92,.16);--gold:#C9A45C;
   }
   body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--fbody);font-weight:300;
     -webkit-font-smoothing:antialiased;transition:background .5s ease,color .5s ease;overflow-x:hidden}
@@ -59,12 +59,7 @@
   .fade-in{animation-fill-mode:forwards}
   .fade-in.fade-in-done{animation:none;transform:none}
 
-  .ah-hero{padding:70px 30px 50px;text-align:center;position:relative;overflow:hidden;
-    background-image:radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--bg) 82%, transparent), var(--bg) 70%), url('assets/hero-light.webp');
-    background-size:cover;background-position:center 30%}
-  html[data-mode="dark"] .ah-hero{
-    background-image:radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--bg) 84%, transparent), var(--bg) 70%), url('assets/hero-dark.webp');
-  }
+  .ah-hero{padding:70px 30px 50px;text-align:center}
   .ah-hero .eyebrow{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px}
   .ah-hero .eyebrow .dash{width:34px;height:1px;background:var(--gold)}
   .ah-hero .eyebrow span{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
@@ -177,8 +172,6 @@
     <a href="index.html#top" class="brand">AROMIA</a>
     <nav class="links">
       <a href="magazine.html">Magazine</a>
-      <a href="catalogo.html">Catálogo</a>
-      <a href="lab.html">Lab</a>
       <a href="academia.html" class="current">Academia</a>
       <a href="club.html">Club</a>
     </nav>
@@ -304,7 +297,7 @@
 <section class="ah-cta">
   <h2>¿Ya sabés qué buscás?</h2>
   <p>Volvé al comparador y usá los filtros con criterio de experto.</p>
-  <a href="catalogo.html">Ir al comparador<span>→</span></a>
+  <a href="index.html#tienda">Ir al comparador<span>→</span></a>
 </section>
 
 <footer>
@@ -341,16 +334,16 @@
   });
 
   var ingredientes = [
-    {name:"Bergamota", familia:"Cítrica", img:"assets/ing-bergamota.webp",
+    {name:"Bergamota", familia:"Cítrica", img:"https://images.unsplash.com/photo-1611574474484-05a53a3c9d5d?auto=format&fit=crop&w=700&q=70",
       desc:"Cítrico italiano de aroma fresco y ligeramente amargo. Es la nota de salida más usada de la perfumería moderna — abre casi cualquier fragancia con un destello luminoso antes de dar paso al resto de la pirámide.",
       usos:"Bleu de Chanel, Terre d'Hermès, Erba Pura"},
-    {name:"Cardamomo", familia:"Especiada", img:"https://images.unsplash.com/photo-1642255521852-7e7c742ac58f?auto=format&fit=crop&w=700&q=70",
+    {name:"Cardamomo", familia:"Especiada", img:"https://images.unsplash.com/photo-1599909366516-bcb37a3a8d5f?auto=format&fit=crop&w=700&q=70",
       desc:"Especia cálida y ligeramente mentolada. Aporta un toque especiado sofisticado sin la agresividad de la pimienta, muy usada para dar carácter a las notas de salida masculinas.",
       usos:"Sauvage, Layton, Le Male"},
-    {name:"Jengibre", familia:"Especiada", img:"https://images.unsplash.com/photo-1630623093145-f606591c2546?auto=format&fit=crop&w=700&q=70",
+    {name:"Jengibre", familia:"Especiada", img:"https://images.unsplash.com/photo-1615485500704-8e990f9900f9?auto=format&fit=crop&w=700&q=70",
       desc:"Picante, cítrico y vibrante. Se usa en pequeñas dosis para dar energía y frescura especiada a la salida, sin dominar el resto de la composición.",
       usos:"Invictus, Y Eau de Parfum"},
-    {name:"Ylang Ylang", familia:"Floral", img:"assets/ing-ylangylang.webp",
+    {name:"Ylang Ylang", familia:"Floral", img:"https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=700&q=70",
       desc:"Flor tropical de aroma cremoso, casi narcótico. Junto al jazmín, es uno de los pilares del acuerdo floral blanco que define a Chanel N°5 y sus herederos.",
       usos:"Flowerbomb, La Vie Est Belle"},
     {name:"Rosa", familia:"Floral", img:"https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=700&q=70",
@@ -359,10 +352,10 @@
     {name:"Café", familia:"Gourmand", img:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=700&q=70",
       desc:"Nota tostada y amarga que ancla composiciones dulces, evitando que se vuelvan empalagosas. Un recurso relativamente reciente en perfumería fina.",
       usos:"Black Opium"},
-    {name:"Vetiver", familia:"Amaderada", img:"assets/ing-vetiver.webp",
+    {name:"Vetiver", familia:"Amaderada", img:"https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=700&q=70",
       desc:"Raíz de aroma terroso, ahumado y ligeramente amargo. Es una de las materias primas más versátiles: puede ser fresca (vetiver verde) o densa y ahumada según cómo se destile.",
       usos:"Terre d'Hermès, Invictus, Boss Bottled"},
-    {name:"Ámbar", familia:"Amberada", img:"https://images.unsplash.com/photo-1631624406592-f599694e6b2c?auto=format&fit=crop&w=700&q=70",
+    {name:"Ámbar", familia:"Amberada", img:"https://images.unsplash.com/photo-1610375461369-d613b564f4c4?auto=format&fit=crop&w=700&q=70",
       desc:"Más que un ingrediente único, es un acuerdo — labdanum, vainilla y resinas que recrean el aroma fósil del ámbar real. Da calidez, densidad y una estela inconfundible.",
       usos:"Baccarat Rouge 540, Erba Pura, Olympéa"},
   ];
@@ -396,8 +389,5 @@
 })();
 </script>
 
-<!-- Cloudflare Web Analytics -->
-<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4379e7acaad24abca8d75dd9c81ca7f2"}'></script>
-<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
