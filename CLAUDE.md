@@ -26,15 +26,32 @@ lo que existía en ese momento (número de rutas, si corría `next dev`,
 etc.) — para el estado de producto y decisiones, `ESTADO-aromia.md` es
 la fuente real y se mantiene al día.**
 
-Dos versiones conviven en ramas distintas:
+**Actualizado 2026-08-04/05 — consolidación de ramas ejecutada.** Ya no
+hay dos ramas conviviendo. `main` es hoy la **única fuente de verdad**,
+protegida en GitHub (PR obligatorio, checks de CI obligatorios, sin
+force-push, sin borrado — ver "CI/CD y deploy" abajo), y es exactamente
+el monorepo Next.js 14 + Express dentro de `apps/` (lo que antes vivía en
+`feature/v2.0`). Railway (`web` + `api`) despliega desde `main`.
 
-- **`main`** — v1, sitio estático (HTML/CSS/JS), antes en GitHub Pages.
-  **Dejó de ser el sitio en vivo el 19-20/07** (corte de dominio real,
-  ver `ESTADO-aromia.md` decisión #64) — sigue existiendo en el repo pero
-  `aromialab.com` ya no apunta ahí. Sigue sin tocarse desde `feature/v2.0`.
-- **`feature/v2.0`** — v2.0, **es el sitio en producción real** desde el
-  19-20/07 en `aromialab.com` (Railway, auto-deploy en cada push a esta
-  rama). Monorepo Next.js 14 + Express dentro de `apps/`.
+`feature/v2.0` se borró (su contenido pasó a `main` en un único commit,
+sin merge convencional — [PR #1](https://github.com/francoisbowman-cloud/aromia-lab/pull/1),
+verificado con diff vacío contra el árbol anterior). El sitio v1 estático
+que antes vivía en `main` (ya sin tráfico real desde el corte de dominio
+del 19-20/07, ver `ESTADO-aromia.md` decisión #64) quedó preservado para
+siempre en el tag `legacy-static-v1-final`, no en una rama activa —
+recuperable con `git checkout legacy-static-v1-final` si hace falta
+consultar el HTML viejo, pero no es código que se siga tocando. El commit
+de producción justo antes de la consolidación quedó taggeado en
+`production-before-main-consolidation-2026-08-04` como punto de
+rollback. Detalle completo de la operación (motivo, comandos, validación
+en vivo) en `CHANGELOG-2.0.md`, entrada 2026-08-05.
+
+Las ramas `Chatgpt-aromia`, `design/ui-ux` y las de `autopublish/*`
+(agente de Cowork para publicar en el Magazine) también se borraron a
+pedido explícito de Brey — no quedaba trabajo exclusivo sin mergear en
+ninguna. Si Cowork necesita volver a publicar vía `autopublish/*`, esa
+rama se recrea desde `main` en el momento, ya no es una rama persistente
+del repo (regla general del proyecto, no solo para esta herramienta).
 
 ## Stack
 
@@ -71,7 +88,7 @@ arranque, para no cargar dependencias sin uso.
 **Actualizado 21/07** — refleja las rutas reales, no solo las de Sprint 1:
 
 ```
-/                       # v1 (main) — ya no es el sitio en vivo, no tocar
+/                       # main — única rama, única fuente de verdad
 ├── apps/
 │   ├── web/            # Next.js 14, App Router
 │   │   └── src/
@@ -209,20 +226,29 @@ desde la migración `002`).
 
 ## CI/CD y deploy
 
-`.github/workflows/v2-ci.yml` corre en cada push/PR a `feature/v2.0`:
-lint + typecheck + build de `apps/web`, lint + typecheck de `apps/api`.
+`.github/workflows/v2-ci.yml` corre en cada push/PR a `main` (actualizado
+2026-08-05 — antes apuntaba a `feature/v2.0`, que ya no existe): lint +
+typecheck + build de `apps/web`, lint + typecheck de `apps/api`.
 
-**Deploy real (actualizado 21/07):** Railway (proyecto `aromia-lab-v2`)
-auto-deploya en cada push a `feature/v2.0` — no hace falta accionarlo a
-mano, y no está condicionado a que el CI de GitHub pase (son pipelines
-independientes). Dos servicios (`web`, `api`) + `Postgres-TdTp` + Redis.
-Dominio real (`aromialab.com`/`www.aromialab.com`) apunta a `web` desde
-el corte de dominio del 19-20/07. Cada app tiene su propio `Dockerfile`;
-variables `NEXT_PUBLIC_*` de `apps/web` deben pasarse como build-arg del
-Dockerfile además de env var de Railway, porque Next.js las inlinea en
-build-time, no en runtime (bug real que costó dos rondas de deploy, ver
-`CHANGELOG-2.0.md` 18/07 y 19-20/07 — mismo patrón se repite si se
-agrega una `NEXT_PUBLIC_*` nueva sin tocar el Dockerfile).
+**Deploy real (actualizado 2026-08-05):** Railway (proyecto
+`aromia-lab-v2`) auto-deploya en cada push a **`main`** — no hace falta
+accionarlo a mano, y no está condicionado a que el CI de GitHub pase (son
+pipelines independientes). Dos servicios (`web`, `api`) + `Postgres-TdTp`
++ Redis. Dominio real (`aromialab.com`/`www.aromialab.com`) apunta a
+`web` desde el corte de dominio del 19-20/07. Cada app tiene su propio
+`Dockerfile`; variables `NEXT_PUBLIC_*` de `apps/web` deben pasarse como
+build-arg del Dockerfile además de env var de Railway, porque Next.js las
+inlinea en build-time, no en runtime (bug real que costó dos rondas de
+deploy, ver `CHANGELOG-2.0.md` 18/07 y 19-20/07 — mismo patrón se repite
+si se agrega una `NEXT_PUBLIC_*` nueva sin tocar el Dockerfile).
+
+**`main` está protegida en GitHub** (desde 2026-08-05): PR obligatorio
+(incluso para el dueño del repo, `enforce_admins` activo), los dos checks
+de CI como status check obligatorio, sin force-push, sin borrado de la
+rama, resolución de conversaciones obligatoria antes de mergear, y
+borrado automático de la rama de feature al mergear un PR. Cualquier
+cambio, por chico que sea, entra por rama temporal + PR — no hay push
+directo a `main`.
 
 ## Convenciones de código
 
@@ -292,8 +318,14 @@ Notas para el parser:
 
 #### Estado real en staging (actualizado 2026-07-16, Code)
 
+**Nota histórica** — esta sección describe el momento en que `feature/v2.0`
+todavía era staging, antes del corte de dominio del 19-20/07 y de la
+consolidación a `main` del 2026-08-05 (ver "Qué es este repo" arriba).
+Dejada como registro, no como estado actual.
+
 Los 50 perfumes ya están sembrados en el Postgres del staging de Railway
-(proyecto `aromia-lab-v2`, rama `feature/v2.0` — ver `CHANGELOG-2.0.md`),
+(proyecto `aromia-lab-v2`, rama `feature/v2.0` en ese momento — ver
+`CHANGELOG-2.0.md`),
 vía `apps/api/src/db/seed.ts` (usa `csv-parse`, RFC 4180 real). Verificado
 navegando `/perfumes` y `/perfumes/santal-33` con datos reales.
 
