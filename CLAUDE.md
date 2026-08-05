@@ -5,6 +5,14 @@ Memoria operativa técnica para trabajar en este repo. Las decisiones de
 (raíz del repo desde el 17/07 — antes se manejaba fuera, en Descargas) — no
 se duplican acá.
 
+**Documento rector de coordinación multi-agente (Code/Cowork/ChatGPT):**
+[`docs/operations/AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md`](docs/operations/AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md)
+(entregado por Brey el 4/08, incorporado al repo el 5/08 tras verificar
+hash MD5 contra el original). Define responsabilidades por herramienta,
+reglas de ramas/Git, fases del sistema de imágenes y checklist de merge.
+No se duplica su contenido acá — ante cualquier duda de a quién le toca
+qué tarea o cómo se organiza una fase de trabajo, es la fuente que manda.
+
 Antes de cerrar cualquier tarea de diseño/frontend, correr el checklist
 de `DESIGN-CHECKLIST.md` (raíz del repo, entregado por Brey el 23/07) —
 cobertura completa de pantallas, tokens, shadcn/ui, assets, links de

@@ -1,0 +1,24 @@
+{
+  "name": "@aromia/image-scripts",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Scripts de validación/optimización del sistema de imágenes de Aromia (Fase 1). No forma parte del build de apps/web ni apps/api.",
+  "type": "module",
+  "scripts": {
+    "validate-metadata": "node validate-metadata.mjs",
+    "validate-names": "node validate-names.mjs",
+    "validate-aspect-ratio": "node validate-aspect-ratio.mjs",
+    "check-missing": "node check-missing.mjs",
+    "find-duplicates": "node find-duplicates.mjs",
+    "validate-weight": "node validate-weight.mjs",
+    "find-external-urls": "node find-external-urls.mjs",
+    "report": "node report.mjs",
+    "optimize": "node optimize.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "csv-parse": "^7.0.1",
+    "sharp": "^0.35.3"
+  }
+}
