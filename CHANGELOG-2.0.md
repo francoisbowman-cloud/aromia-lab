@@ -1025,3 +1025,96 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
 2. Mensaje posterior de Brey: **desestimó esa reserva** ("elimina los demás... solo deja Main") y pidió borrar todo lo restante. Ejecutado: `Chatgpt-aromia`, `design/ui-ux`, `backup/production-2026-08-04`, `autopublish/2026-07-18`, `autopublish/2026-07-20`, `autopublish/2026-07-23`, `autopublish/2026-07-29` borradas de origin y localmente. Repo queda con una sola rama: `main`. Los tags de respaldo (`production-before-main-consolidation-2026-08-04`, `legacy-static-v1-final`) no se tocaron — siguen siendo el punto de rollback si hiciera falta.
 
 **Estado final:** `main` en `c167934`, único branch del repo, protegido, sirviendo producción real en `aromialab.com` vía Railway. Documentación actualizada en la misma sesión: este changelog, `ESTADO-aromia.md` (decisión #97 + secciones 1, 5, 6) y `CLAUDE.md` ("Qué es este repo", CI/CD, estructura de carpetas).
+
+## 2026-08-05 — Code (Claude Code) — Fase 1 del sistema de imágenes
+
+**Fundación del sistema de imágenes de Aromia**, a partir de la sección
+correspondiente de `AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md`.
+Restricciones explícitas de Brey respetadas: no se procesó ninguno de los 50
+perfumes, no se generó ninguna imagen, no se reemplazó nada en producción, no
+hubo migración masiva ni cambio de diseño público.
+
+- Manual operativo incorporado íntegro a
+  `docs/operations/AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md`,
+  verificado por hash MD5 contra el original entregado por Brey — enlazado
+  como documento rector desde `CLAUDE.md`.
+- Auditoría del estado actual: `docs/images/CURRENT-STATE-AUDIT.md` (10
+  secciones: config de `next/image`, componentes que renderizan imágenes,
+  dónde vive el dato hoy, catálogo real verificado en vivo, hotlinking
+  externo, cobertura de mockups editoriales OVL, recorte/color de fondo,
+  caminos de carga del admin, imágenes rotas conocidas, riesgos).
+- `data/image-inventory.csv`: 100 filas (50 `catalog-primary` + 50
+  `editorial-hero`), 20 columnas, generado con datos reales de
+  `GET /api/perfumes` en producción — no con el CSV desactualizado.
+- Arquitectura de activos (`docs/images/IMAGE-ARCHITECTURE.md`): estructura
+  de carpetas, convención de nombre
+  `{slug}--{rol}--v{NN}--{ancho}x{alto}.{formato}`, presupuestos de peso por
+  rol.
+- `schemas/` propio para metadatos de imagen: JSON Schema (no Zod, para
+  seguir la misma convención que `schema/perfume.schema.json`) validado con
+  `ajv`/`ajv-formats`.
+- Paquete aislado `scripts/images/` (`@aromia/image-scripts`, `sharp` +
+  `ajv` + `csv-parse`), separado de `apps/web`/`apps/api` para no inflar sus
+  builds Docker — scripts de validación de solo lectura
+  (`validate-metadata`, `validate-names`, `validate-aspect-ratio`,
+  `check-missing`, `find-duplicates`, `validate-weight`,
+  `find-external-urls`, `report`) más `optimize.mjs`, el único que escribe
+  archivos (sin carpeta de salida por defecto, nunca sobrescribe sin
+  `--force`). Todos probados de punta a punta contra el estado real del
+  repo y una imagen de prueba real descargada de Amazon. CVE alto detectado
+  en `sharp <0.35.0` vía `npm audit`, corregido actualizando a `^0.35.3`
+  antes de cerrar la fase.
+- Briefs de delegación completos para Cowork
+  (`delegations/COWORK-IMAGE-INVENTORY-BRIEF.md`) y ChatGPT
+  (`delegations/CHATGPT-VISUAL-AUDIT-BRIEF.md`), sobre las 50 filas del
+  catálogo completo — sin disparar todavía.
+- `docs/images/PILOT-PLAN.md`: plan detallado por perfume para un piloto de
+  5 (Aventus, Baccarat Rouge 540 EDP, Sauvage EDP, Black Opium EDP, Erba
+  Pura), con datos reales verificados — preparado, sin ejecutar.
+- Mergeado a `main` vía squash en
+  [PR #4](https://github.com/francoisbowman-cloud/aromia-lab/pull/4)
+  (`80a6d05`, título `feat(images): fundación del sistema de imágenes`). CI
+  verde, Railway confirmado desplegando ese commit en `web` y `api`, sitio
+  verificado en vivo, rama `feat/image-pipeline-foundation` borrada
+  automáticamente por `delete_branch_on_merge`.
+- Cierre de estado documentado en `ESTADO-aromia.md` (decisión #98) vía
+  [PR #5](https://github.com/francoisbowman-cloud/aromia-lab/pull/5)
+  (`docs: cerrar Fase 1 del sistema de imágenes`, squash, `9b68f7a`). `main`
+  confirmado como única rama remota tras ambos merges.
+
+## 2026-08-05 — Code (Claude Code) — Fase 2, piloto de 5 perfumes (en curso)
+
+Trabajo en rama local `assets/image-pilot-01` (sin push todavía). Misión:
+piloto visual controlado de los mismos 5 perfumes de `PILOT-PLAN.md`, sin
+tocar los otros 45, sin cambios masivos, sin modificar producción antes de
+auditoría + aprobación visual + preview.
+
+- Paquetes de delegación acotados al piloto (commit `6d5a2b6`):
+  `delegations/FASE-2-COWORK-PILOTO-5-PERFUMES.md` y
+  `delegations/FASE-2-CHATGPT-PILOTO-5-PERFUMES.md` — mismo formato y
+  criterios de los briefs de Fase 1, alcance reducido a 5 filas en vez de
+  50.
+- **Automatización de la auditoría visual vía OpenAI API** (commit
+  `944ac65`), para no depender de que Brey copie/pegue manualmente 5
+  imágenes y 5 resultados: `config/image-audit-pilot.json` (criterios
+  transcritos sin reinterpretar desde el brief), `schemas/image-audit.schema.json`
+  (salida estructurada, validada con `ajv`), `scripts/audit-image-pilot.mjs`
+  (`npm run images:audit-pilot -- --dry-run|--limit-usd=N`), runbook en
+  `docs/images/API-AUDIT-RUNBOOK.md`. Nuevo `package.json` en la raíz del
+  repo (antes no existía) — aislado, no afecta los Dockerfiles de
+  `apps/web`/`apps/api` (cada uno tiene su propio root directory en
+  Railway).
+- Invariantes de seguridad del script: `OPENAI_API_KEY` solo desde
+  `process.env` (nunca impresa/guardada), nunca escribe
+  `data/image-inventory.csv` (genera una propuesta aparte,
+  `data/image-inventory.audit-proposal.csv`), nunca invoca `optimize.mjs`,
+  límite de gasto configurable revisado antes de cada llamada, imágenes
+  temporales fuera del repo borradas al terminar.
+- Modo seco verificado y aprobado por Brey antes de cualquier llamada real:
+  5/5 mockups OVL presentes, 5/5 URLs de catálogo alcanzables, 5 solicitudes
+  independientes previstas, ninguna llamada a la API, inventario oficial
+  intacto.
+- Pendiente al cierre de esta entrada: primera ejecución real con límite de
+  gasto de $0.50 USD, aprobada por Brey pero corrida en el mismo tramo de
+  trabajo — ver entrada siguiente si ya se ejecutó, o `reports/image-audits/`
+  en el repo para el resultado más reciente.
