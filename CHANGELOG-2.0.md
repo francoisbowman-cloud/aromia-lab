@@ -1,6 +1,6 @@
 # Changelog — Aromia 2.0
 
-Registro corto de cada entrega al repo en `feature/v2.0` y ramas derivadas. Una entrada por deploy: fecha + qué se subió + quién. Ver `CHANGELOG-1.0.md` (en `main`) para el registro del sitio estático v1.
+Registro corto de cada entrega al repo. Una entrada por deploy: fecha + qué se subió + quién. **Desde el 2026-08-05, todo el trabajo entra por `main`** (única rama del repo, ver `ESTADO-aromia.md` decisión #97) — antes de esa fecha, las entradas de abajo se referían a `feature/v2.0` y ramas derivadas, que ya no existen. `CHANGELOG-1.0.md` (el registro del sitio estático v1) sigue existiendo en el repo pero ya no en una rama propia — el v1 quedó preservado en el tag `legacy-static-v1-final`.
 
 ## 2026-07-15/16 — Code
 - Nuevo: staging de Aromia 2.0 en Railway, en vivo — proyecto `aromia-lab-v2`:
@@ -1001,3 +1001,27 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
   push. Verificado en preview local (`/`, `/catalogo`): hero rota entre
   perfumes reales con foto sincronizada, carrusel funcional, `frameBackground`
   con `radial-gradient(...)` confirmado sobre Herod e Idole EDP.
+
+## 2026-08-05 — Code (Claude Code)
+
+**Consolidación de ramas — `main` pasa a ser la única rama del repo y la única fuente de verdad** (decisión #97 de `ESTADO-aromia.md`), ejecutada a partir de `AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md` entregado por Brey el 4/08.
+
+**Punto de partida real, auditado antes de tocar nada** (el manual asumía que había que "convertir `main` en la fuente de verdad" dando por hecho que Railway ya desplegaba de ahí — no era así): Railway (confirmado vía `railway status --json`, no solo por lectura del repo) servía producción real — `web` y `api`, dominio `aromialab.com` — desde `feature/v2.0` @ `c2e13e6`. `main` seguía siendo el v1 estático, sin tráfico real desde el corte de dominio del 19-20/07 (decisión #64). Diff entre ambas ramas: 281 archivos, dos árboles de proyecto distintos, no una simple divergencia de commits.
+
+**Respaldo antes de cualquier cambio:**
+- Tag `production-before-main-consolidation-2026-08-04` → `c2e13e6` (commit real en producción).
+- Tag `legacy-static-v1-final` → `d73b251` (último estado del `main` v1 estático).
+- Rama `backup/production-2026-08-04` → `c2e13e6` (borrada más tarde el mismo día, ver abajo — quedaron los tags como respaldo permanente).
+
+**Consolidación:**
+- Rama `chore/consolidate-production-into-main`: un único commit sobre `main` que reemplaza su árbol completo por el de `feature/v2.0` (`git rm -rf` + `git checkout feature/v2.0 -- .`), verificado con `git diff` vacío contra `feature/v2.0` antes de commitear — no es un merge convencional, no mezcla archivos de ambas versiones. Mergeado a `main` en [PR #1](https://github.com/francoisbowman-cloud/aromia-lab/pull/1).
+- Bloqueo de infraestructura encontrado y documentado: el `git push` de esa rama falló 4 veces seguidas con `HTTP 408` desde este entorno (subida a ~35KB/s, GitHub corta por timeout antes de completar un pack de 23MB) — mismo patrón que el bloqueo de proxy ya registrado en `autopublish/2026-07-18` y `2026-07-20`. Resuelto pusheando la misma rama desde la máquina de Brey (subida a ~96MB/s, sin el límite de este entorno).
+- Railway reconfigurado (`railway service source connect --branch main`) para los servicios `web` y `api`, antes en `feature/v2.0`. Validado en vivo en `aromialab.com` antes de borrar nada: home, catálogo (filtros + 50 fragancias), ficha de perfume (`/perfumes/1-million`), Magazine, Academia, Quiz, `sitemap.xml`, `robots.txt`, `/health` de la API (Postgres + Redis OK), sin errores de consola.
+- `.github/workflows/v2-ci.yml` corregido ([PR #2](https://github.com/francoisbowman-cloud/aromia-lab/pull/2)): seguía filtrado a `push`/`pull_request` sobre `feature/v2.0`, que iba a dejar de existir — sin este fix, ningún check hubiera vuelto a correr sobre `main`. Ambos checks (`web`, `api`) verificados en verde sobre `main` antes de exigirlos como obligatorios.
+- Protección de rama aplicada a `main` vía API de GitHub: PR obligatorio (`enforce_admins` activo — ni el dueño del repo puede pushear directo), los dos checks de CI como status check obligatorio con `strict: true`, sin force-push, sin borrado, resolución de conversaciones obligatoria, borrado automático de rama de feature al mergear (`delete_branch_on_merge` a nivel repo).
+
+**Limpieza de ramas, en dos pasos (cambio de alcance explícito de Brey):**
+1. Primera autorización: borrar solo `feature/v2.0` (ya no la usaba Railway) y la rama temporal de consolidación; dejar sin tocar `Chatgpt-aromia`, `design/ui-ux` y los cuatro `autopublish/*` — Brey aclaró que `autopublish/*` es un agente de Cowork para publicar en el Magazine, no ramas obsoletas.
+2. Mensaje posterior de Brey: **desestimó esa reserva** ("elimina los demás... solo deja Main") y pidió borrar todo lo restante. Ejecutado: `Chatgpt-aromia`, `design/ui-ux`, `backup/production-2026-08-04`, `autopublish/2026-07-18`, `autopublish/2026-07-20`, `autopublish/2026-07-23`, `autopublish/2026-07-29` borradas de origin y localmente. Repo queda con una sola rama: `main`. Los tags de respaldo (`production-before-main-consolidation-2026-08-04`, `legacy-static-v1-final`) no se tocaron — siguen siendo el punto de rollback si hiciera falta.
+
+**Estado final:** `main` en `c167934`, único branch del repo, protegido, sirviendo producción real en `aromialab.com` vía Railway. Documentación actualizada en la misma sesión: este changelog, `ESTADO-aromia.md` (decisión #97 + secciones 1, 5, 6) y `CLAUDE.md` ("Qué es este repo", CI/CD, estructura de carpetas).

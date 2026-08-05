@@ -1,15 +1,15 @@
 # Estado del proyecto: Aromia
-Última actualización: 1 de agosto de 2026 — por: Claude (Chat). Adoptado el sistema de diseño "Aromia Lujo" entregado por Design (`.zip` con versión light/dark) sobre Home, Catálogo, Nav y Footer — decisión #95. Sobre esa base: "Reseñas destacadas" de Home pasa de grid fijo a carrusel con scroll-snap, el panel del hero pasa de foto editorial genérica a un pick dinámico que rota entre fotos reales de producto (nunca mockup de IA) sincronizado con la tarjeta "Elección del editor", y el fondo de las tarjetas de catálogo con fotos angostas (Herod, Idole EDP y similares) pasa de franja plana a viñeteado radial para que no se vean "vacías" — decisión #96. Actualización previa (31/07) por Claude/Chat: scraper de precios Douglas/Primor activado en producción — decisión #94.
+Última actualización: 5 de agosto de 2026 — por: Code (Claude Code). **`main` es ahora la única rama del repo y la única fuente de verdad** — se consolidó el contenido real de producción (antes en `feature/v2.0`) dentro de `main`, Railway pasó a desplegar desde `main`, y se borraron todas las demás ramas (`feature/v2.0`, `Chatgpt-aromia`, `design/ui-ux`, `autopublish/*`) a pedido explícito de Brey — decisión #97. Actualización previa (1 de agosto) por Claude (Chat): sistema de diseño "Aromia Lujo" adoptado — decisión #95 — y tres ajustes puntuales de Home/catálogo sobre esa base — decisión #96.
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
 
 ## 1. Objetivo del proyecto
 
-Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amazon, con Notino/Druni/Sephora en evaluación). Corre en dos versiones en paralelo:
+Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amazon, con Notino/Druni/Sephora en evaluación). **Desde el 2026-08-05, una sola versión activa, en una sola rama (`main`)** — ver decisión #97:
 
-- **Aromia 1.0** — sitio estático HTML, rama `main`. **Dejó de ser el sitio en vivo el 19-20/07** (ver decisión #64) — sigue existiendo en GitHub Pages pero `aromialab.com` ya no apunta ahí.
-- **Aromia 2.0** — reconstrucción completa en Next.js 14 + Express + Postgres + Redis, rama `feature/v2.0`. **Es el sitio en producción real desde el 19-20/07**: corte de dominio ejecutado, `aromialab.com` y `www.aromialab.com` apuntan a Railway (`web-production-71f88.up.railway.app` detrás del dominio custom), DNS a cargo de Brey en Namecheap, certificados TLS válidos.
+- **Aromia 2.0** — Next.js 14 + Express + Postgres + Redis, ahora en `main`. **Es el sitio en producción real**, desde el corte de dominio del 19-20/07 y, desde el 2026-08-05, también la rama que despliega Railway: `aromialab.com` y `www.aromialab.com` apuntan a Railway (`web-production-71f88.up.railway.app` detrás del dominio custom), DNS a cargo de Brey en Namecheap, certificados TLS válidos.
+- **Aromia 1.0** — el viejo sitio estático HTML ya no vive en una rama activa. **Dejó de ser el sitio en vivo el 19-20/07** (ver decisión #64) y su último estado quedó preservado en el tag `legacy-static-v1-final` (ya no en `main`, que ahora es 2.0) — consultable con `git checkout legacy-static-v1-final`, no es código que se siga tocando.
 
 ---
 
@@ -119,6 +119,7 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 94 | **Scraper de precios activado en producción — cierra el bloqueo de las decisiones #56/#61**: Brey creó su cuenta de Awin (Affiliate Partner / Media & Editorial Sites, región Spain) y aplicó a Douglas (Advertiser ID `9357`) y Primor (Advertiser ID `25464`), ambos "Pending" de aprobación de cada marca. `AWIN_API_TOKEN` + los dos Merchant ID se setearon en el servicio `api` de Railway (`railway variables --service api --set`), redeploy confirmado, log post-deploy muestra el cron diario de sync (06:00) registrándose por primera vez — antes era no-op real sin credenciales. Falta ver si el feed de Awin ya devuelve datos reales antes de que Douglas/Primor aprueben la aplicación | Brey (alta en Awin) / Chat (config Railway) |
 | 95 | **Sistema de diseño "Aromia Lujo" adoptado** — Brey entregó `Design System Aromia Lujo.zip` (exportes `.dc.html` de Claude Design, versión light "Maison Blanc" + dark "Noir Absolu" sobre la misma pareja tipográfica Cormorant Garamond/Jost) con el pedido de adaptarlo al sitio en producción. Tokens de color ajustados 1:1 a los valores del export (`--bg`/`--soft`/`--text`/`--muted`/`--line`/`--gold` en `globals.css`, ambos temas); `--radius-card` pasa de `28px` a `2px` (recto, deliberadamente sobrio — criterio explícito del sistema importado) en tarjetas/paneles, los botones/píldoras/chips circulares siguen en `999px` sin cambios; `NavBar` pasa a sticky + vidrio esmerilado (`backdrop-blur`); `Footer` reescrito a layout de 4 columnas (marca, Ecosistema, Comunidad, Valores) reemplazando la fila única de links anterior. Alcance de esta pasada: Home, Catálogo, Nav, Footer y el sistema de botones — ficha de producto, Magazine, Academia y Admin sin tocar todavía (quedan en el sistema de diseño anterior hasta una pasada futura, sin fecha) | Brey (diseño) / Chat (implementación) |
 | 96 | **Tres ajustes puntuales de Brey sobre Home y las tarjetas de catálogo, con capturas de referencia, tras la adopción de la decisión #95**: (1) "Reseñas destacadas" pasa de grid fijo de 3 tarjetas a un carrusel (`FeaturedCarousel.tsx`, scroll-snap nativo + botones prev/next, sin librería externa) mostrando hasta 9 perfumes en vez de 3. (2) El panel del hero (antes una foto editorial genérica de `editorialImages.ts`, sin relación real con el perfume mostrado en la tarjeta "Elección del editor" de al lado) pasa a ser dinámico: `HeroEditorPick.tsx` rota cada 6s entre 5 perfumes reales, mostrando siempre la **foto real de producto** (`imagen_url`, Amazon/Notino/Douglas) sincronizada 1:1 con nombre/marca/precio de la tarjeta — nunca un mockup de IA, pedido explícito de Brey. (3) Fondo de tarjetas de producto: extraída la lógica de recorte por canvas a un hook compartido (`useProductImageCrop.ts`, usado ahora por `PerfumeCard` y por el hero) y cambiado el relleno de color plano a un viñeteado radial suave — corrige el caso señalado por Brey con capturas (Herod, Idole EDP) donde una foto de botella angosta deja mucho margen a los costados tras el recorte y el marco se ve "vacío" alrededor. **Distinto de la decisión #93** (recortes con fondo transparente vía OMNI, sin empezar todavía): esto es un ajuste de CSS sobre el color ya detectado, no un asset nuevo | Brey (pedido, con capturas) / Chat (implementación) |
+| 97 | **Consolidación de ramas ejecutada (2026-08-05), a partir de `AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md` entregado por Brey**: `main` pasa a ser la única rama del repo y la única fuente de verdad. Auditado primero (sin tocar nada) que Railway ya servía producción real desde `feature/v2.0` @ `c2e13e6`, no desde `main` (que seguía siendo el v1 estático, sin tráfico desde el corte de dominio del 19-20/07) — contradecía la premisa del manual de que había que "convertir main en la fuente de verdad" asumiendo que ya lo era. Ejecutado con respaldo primero: tags `production-before-main-consolidation-2026-08-04` (→ `c2e13e6`) y `legacy-static-v1-final` (→ el `main` v1 anterior). El contenido de `feature/v2.0` se volcó a `main` en un único commit (no merge convencional — `git rm -rf` + checkout del árbol de `feature/v2.0`, verificado con diff vacío) vía [PR #1](https://github.com/francoisbowman-cloud/aromia-lab/pull/1). Railway (`web`+`api`) reconfigurado para desplegar desde `main`, validado en vivo en `aromialab.com` (home, catálogo, ficha, Magazine, Academia, Quiz, sitemap, robots, `/health` de la API) antes de borrar nada. `.github/workflows/v2-ci.yml` corregido para correr sobre `main` (seguía apuntando a `feature/v2.0`, que iba a desaparecer — sin este fix ningún check hubiera corrido nunca en `main`). `main` protegida en GitHub: PR obligatorio (incluso para el admin), checks de CI obligatorios, sin force-push, sin borrado, resolución de conversaciones obligatoria, borrado automático de rama al mergear. **Limpieza de ramas en dos pasos**: primero Brey aprobó borrar solo `feature/v2.0` (ya no la usaba Railway) y dejar `Chatgpt-aromia`/`design/ui-ux`/`autopublish/*` sin tocar, aclarando que `autopublish/*` es un agente de Cowork para publicar en el Magazine; después, en un mensaje posterior, Brey **desestimó esa reserva** y pidió borrar todas las ramas restantes, dejando el repo con una sola rama (`main`). Detalle completo (comandos, validación, hallazgo de un bloqueo de red al pushear un pack grande desde este entorno, resuelto pusheando desde la máquina de Brey) en `CHANGELOG-2.0.md`, entrada 2026-08-05 | Brey (manual + autorización) / Code (ejecución) |
 
 ---
 
@@ -135,23 +136,31 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 
 ## 5. Arquitectura de ramas
 
-```
-main (producción viva — Aromia 1.0, NO TOCAR directo)
-  ↑
-feature/v2.0 (monorepo Next.js — Aromia 2.0, rama de trabajo de Code)
-  ↑
-design/ui-ux (rama de diseño — sale DESDE feature/v2.0, no desde main)
-```
-Orden de merge: `design/ui-ux` → `feature/v2.0` → `main`.
+**Reescrita 2026-08-05 tras la consolidación (decisión #97) — una sola rama:**
 
-GitHub = dónde vive el código (ambas versiones, mismo repo, ramas distintas). Railway = dónde corre 2.0 (staging hoy, producción eventualmente). GitHub Pages solo sirve HTML estático, por eso 1.0 no necesita Railway.
+```
+main (única rama del repo, protegida — PR obligatorio, checks obligatorios,
+      sin force-push, sin borrado — es el monorepo Next.js/Express, Aromia 2.0)
+```
+
+Toda rama nueva (de trabajo, de Cowork como `autopublish/*`, de diseño) nace
+desde `main`, es temporal, y se borra después de mergear o descartarse — no
+hay ramas persistentes con nombre de herramienta o de versión. Railway
+despliega automáticamente en cada push a `main`. El estado final del v1
+estático (antes en `main`) quedó en el tag `legacy-static-v1-final`, no en
+una rama.
+
+**Arquitectura anterior (histórico, ya no vigente):** `main` (v1
+estático) ← `feature/v2.0` (monorepo Next.js, rama de trabajo) ←
+`design/ui-ux` (diseño, salía desde `feature/v2.0`). GitHub Pages servía
+1.0, Railway servía 2.0 en `feature/v2.0`.
 
 ---
 
 ## 6. Estado actual por versión
 
-### Aromia 1.0 (`main`)
-**Hecho:**
+### Aromia 1.0 (histórico — tag `legacy-static-v1-final`, ya no vive en una rama)
+**Hecho (antes del corte de dominio del 19-20/07; el código ya no está en `main`, ver decisión #97):**
 - Cloudflare Web Analytics instalado
 - Imagen editorial IA en Erba Pura (prueba piloto)
 - `CHANGELOG-1.0.md` con entrada del 15 jul confirmada por Code
@@ -165,12 +174,13 @@ GitHub = dónde vive el código (ambas versiones, mismo repo, ramas distintas). 
   tenía marcado como pendiente por desactualización, no porque faltara
   hacerlo — verificado el 17/07 revisando el código real de `main`.
 
-### Aromia 2.0 (`feature/v2.0`)
+### Aromia 2.0 (`main`, desde el 2026-08-05 — antes `feature/v2.0`, ver decisión #97)
 
 **✅ Deployado y verificado en producción real desde el 18/07** —
 `web-production-71f88.up.railway.app` / `api-production-fe2f.up.railway.app`,
-no solo local. Railway auto-deploya en cada push a `feature/v2.0`
-(confirmado — no hace falta accionarlo a mano).
+no solo local. Railway auto-deploya en cada push a **`main`** (antes
+`feature/v2.0`, consolidado el 2026-08-05 — confirmado, no hace falta
+accionarlo a mano).
 
 **Hecho (verificado en producción, no solo local):**
 1. **Panel de Administración** (`/admin`) — Dashboard con KPIs reales y actividad reciente (el placeholder "Por Cowork" del mockup ya se reemplazó por actores reales: `Brey`/`Sistema`), Catálogo con búsqueda/filtros/paginación + CRUD completo de perfumes (imagen, retailers, reseña sintetizada, SEO), Magazine con editor Tiptap (crear/guardar borrador/publicar). Auth por contraseña compartida — **contraseña de producción regenerada el 18/07, pedila a Code si la necesitás.**
@@ -192,6 +202,7 @@ no solo local. Railway auto-deploya en cada push a `feature/v2.0`
 14. **Expansión a ~500 perfumes en curso** (decisiones #87-89) — **catálogo real: 50 perfumes** desde el 30/07 (12 nuevos publicados de Lote 01+02, todos Dior, con ASIN/precio/foto real verificados). Quedan 17 lotes (~404 candidatos) por procesar; ver sección 13 para el detalle de lo pendiente/bloqueado.
 15. **Accesos rápidos del Catálogo reducidos a 8 categorías principales + Árabes** (decisión #90).
 16. **Sistema de diseño "Aromia Lujo" adoptado en Home/Catálogo/Nav/Footer** (decisión #95); sobre esa base, carrusel en "Reseñas destacadas", hero dinámico con foto real de producto y fondo de tarjeta corregido en fotos angostas (decisión #96).
+17. **Consolidación de ramas** (decisión #97) — `main` es ahora la única rama y la que despliega Railway; repo queda con una sola rama activa, protegida.
 
 **Roadmap futuro — "Visión Panel v2"** (no bloquea nada, sin cambios): Service Accounts múltiples, módulo de Assets, Comparador con motor de reglas propio, multi-retailer automático, CMS modular tipo Notion, modelo de "entidades".
 
