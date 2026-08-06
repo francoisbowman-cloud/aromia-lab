@@ -38,6 +38,7 @@ export function TagInput({
                 type="button"
                 onClick={() => onChange(value.filter((t) => t !== tag))}
                 aria-label={`Quitar ${tag}`}
+                className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
               >
                 ×
               </button>
@@ -55,7 +56,8 @@ export function TagInput({
           }}
           onBlur={addTag}
           placeholder="Agregar nota…"
-          className="mt-2 w-full border-0 bg-transparent font-sans text-sm outline-none"
+          aria-label={label}
+          className="mt-2 w-full rounded border-0 bg-transparent font-sans text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
         />
       </div>
     </div>

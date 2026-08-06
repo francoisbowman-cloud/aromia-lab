@@ -30,10 +30,11 @@ export function NewsletterForm({
       <input
         type="email"
         required
+        aria-label="Correo electrónico"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="tu@email.com"
-        className="flex-1 rounded-full border border-line bg-surface px-5 py-3 font-sans text-sm text-ink outline-none focus:border-gold"
+        className="flex-1 rounded-full border border-line bg-surface px-5 py-3 font-sans text-sm text-ink outline-none focus:border-gold focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       />
       <button
         type="submit"
