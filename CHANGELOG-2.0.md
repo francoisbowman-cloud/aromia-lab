@@ -1281,3 +1281,33 @@ automatizado era lazy-loading nativo esperando un scroll real, no un
 bug.
 
 Commit `7226d5e` en `assets/image-pilot-01` / [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6).
+
+## 2026-08-06 (4) — Code (Claude Code) — tercer ítem del backlog: foco visible y accessible names
+
+Categoría "accesibilidad" del roadmap general — criterio objetivo
+(WCAG), no requiere decisión de producto. El sitio ya tenía el patrón
+correcto establecido (`focus-visible:ring-2 focus-visible:ring-ring
+focus-visible:ring-offset-2`) en botones, links del Magazine, opciones
+del quiz y el toggle de tema, pero todos los `<input>`/`<select>` de
+texto lo tenían inconsistente o ausente — encontrado auditando
+`outline-none` en todo `apps/web/src` (16 archivos revisados):
+
+- `ui/input.tsx`, `ui/select.tsx` (base shadcn/ui), `NewsletterForm.tsx`,
+  `admin/ImageUpload.tsx`: solo `focus:border-gold` (cambio de borde
+  1px) — insuficiente como único indicador (WCAG 2.4.7).
+- `admin/TagInput.tsx`: `outline-none` sin ningún reemplazo — foco
+  totalmente invisible en el input de notas y en el botón "×" de tag.
+- `admin/login/page.tsx`: **el campo de contraseña del login de admin**
+  sin foco visible, `<label>` sin asociar (`htmlFor`/`id`), error de
+  login sin `role="alert"`.
+
+Mismo patrón ya probado en el sitio, aplicado a los 6 archivos. Sumado
+`aria-label` donde el único texto disponible era un placeholder (email
+del newsletter, tags, URL externa del admin).
+
+Verificado con navegación real por teclado (Tab, no `.focus()`
+programático — `:focus-visible` no dispara igual): `document.activeElement`
+sobre `#admin-password` confirma `matches(':focus-visible') === true` y
+un box-shadow de anillo real. tsc/eslint limpios.
+
+Commit `a2f3ff8` en `assets/image-pilot-01` / [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) — última vez que se suma un tema nuevo a esta rama; el próximo ítem del backlog abre rama propia.
