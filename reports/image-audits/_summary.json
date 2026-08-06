@@ -25,5 +25,37 @@
     "sauvage-edp": "rojo",
     "black-opium-edp": "rojo",
     "erba-pura": "verde"
+  },
+  "operational_review_v2": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "note": "Capa operativa agregada tras corrida real — no modifica classifications/traffic_lights originales de arriba (esos siguen reflejando la salida cruda de la API). requires_human_review y traffic_light acá son la fuente operativa vigente.",
+    "requires_human_review": {
+      "aventus": false,
+      "baccarat-rouge-540-edp": true,
+      "sauvage-edp": true,
+      "black-opium-edp": false,
+      "erba-pura": false
+    },
+    "review_reasons": {
+      "aventus": [],
+      "baccarat-rouge-540-edp": [
+        "variant_term_mismatch:extrait_vs_expected_edp",
+        "approved_classification_with_persisting_variant_doubt"
+      ],
+      "sauvage-edp": [
+        "variant_term_mismatch:edt,elixir_vs_expected_edp"
+      ],
+      "black-opium-edp": [],
+      "erba-pura": []
+    },
+    "traffic_light": {
+      "aventus": "rojo",
+      "baccarat-rouge-540-edp": "amarillo",
+      "sauvage-edp": "rojo",
+      "black-opium-edp": "rojo",
+      "erba-pura": "verde"
+    },
+    "cowork_report": null,
+    "cowork_report_note": "pendiente — no consolidar hasta recibir el informe real de Cowork (Paso 2 del plan)."
   }
 }

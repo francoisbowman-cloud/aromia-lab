@@ -111,5 +111,27 @@
       "Confusión grave de variante EDT/EDP",
       "Riesgo legal de catalogar el producto incorrecto"
     ]
+  },
+  "operational_review": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "generated_at_note": "capa de decisión operativa v2 — no reemplaza result ni los campos originales de la corrida real",
+    "expected_variant_code": "edp",
+    "mentioned_variant_codes": [
+      "edt",
+      "edp",
+      "elixir"
+    ],
+    "incompatible_variant_codes": [
+      "edt",
+      "elixir"
+    ],
+    "variant_term_mismatch": true,
+    "explicit_doubt_phrase": false,
+    "approved_classification_with_variant_doubt": false,
+    "requires_human_review": true,
+    "review_reasons": [
+      "variant_term_mismatch:edt,elixir_vs_expected_edp"
+    ],
+    "traffic_light": "rojo"
   }
 }

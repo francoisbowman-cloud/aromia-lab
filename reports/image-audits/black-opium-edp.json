@@ -111,5 +111,20 @@
       "Recorte agresivo del frasco",
       "Caja presente en la composición"
     ]
+  },
+  "operational_review": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "generated_at_note": "capa de decisión operativa v2 — no reemplaza result ni los campos originales de la corrida real",
+    "expected_variant_code": "edp",
+    "mentioned_variant_codes": [
+      "edp"
+    ],
+    "incompatible_variant_codes": [],
+    "variant_term_mismatch": false,
+    "explicit_doubt_phrase": false,
+    "approved_classification_with_variant_doubt": false,
+    "requires_human_review": false,
+    "review_reasons": [],
+    "traffic_light": "rojo"
   }
 }

@@ -108,5 +108,25 @@
     "confidence": 0.98,
     "recommendation": "Usar tal cual",
     "risk_flags": []
+  },
+  "operational_review": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "generated_at_note": "capa de decisión operativa v2 — no reemplaza result ni los campos originales de la corrida real",
+    "expected_variant_code": "edp",
+    "mentioned_variant_codes": [
+      "extrait"
+    ],
+    "incompatible_variant_codes": [
+      "extrait"
+    ],
+    "variant_term_mismatch": true,
+    "explicit_doubt_phrase": false,
+    "approved_classification_with_variant_doubt": true,
+    "requires_human_review": true,
+    "review_reasons": [
+      "variant_term_mismatch:extrait_vs_expected_edp",
+      "approved_classification_with_persisting_variant_doubt"
+    ],
+    "traffic_light": "amarillo"
   }
 }
