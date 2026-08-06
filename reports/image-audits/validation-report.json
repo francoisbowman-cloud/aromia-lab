@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T13:54:32.567Z",
-  "generated_by": "inline validation (Paso 6 de consolidación Fase 2)",
+  "generated_at": "2026-08-06T14:37:41.481Z",
+  "generated_by": "inline validation (continuación autónoma tras corrección de Sauvage EDP)",
   "schema_validation": {
     "aventus": {
       "schema_valid": true,
@@ -28,6 +28,11 @@
     "proposal_rows": 100,
     "row_count_match": true,
     "source_url_and_slug_mismatches": 0
+  },
+  "visual_inspection_findings": {
+    "sauvage-edp": "CONTRADICCIÓN CRÍTICA confirmada y corregida: imagen es Sauvage EDT, no EDP. Resolución humana v1 (2026-08-05) revertida por Brey (2026-08-06).",
+    "aventus": "Confirmado: etiqueta de papel plana, no placa metálica. Sin contradicciones.",
+    "black-opium-edp": "Hipótesis de recorte simple DESCARTADA tras prueba real (sharp): base del frasco fuera del encuadre fuente. Requiere fuente nueva, no reprocesamiento."
   },
   "all_ok": true
 }

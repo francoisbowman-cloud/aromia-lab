@@ -43,27 +43,43 @@ function loadJson(path) {
 const config = loadJson(CONFIG_PATH);
 const summary = loadJson(SUMMARY_PATH);
 
-// Resolución humana de Sauvage EDP (Brey, 2026-08-05): verificó personalmente
-// que imagen y link corresponden a Sauvage EDP. Esto es un dato aportado por
-// el usuario en la conversación, no inferido — se registra tal cual, sin
-// volver a llamar a la API, y prevalece sobre la duda automática de las dos
-// auditorías (ChatGPT + Cowork) para el campo de variante específicamente.
+// Resolución humana de Sauvage EDP — HISTORIAL (se conserva completo por
+// trazabilidad de auditoría, no se borra la versión anterior):
+//
+//   v1 (Brey, 2026-08-05): "verificó personalmente que tanto la imagen como
+//   el enlace de origen corresponden a Sauvage EDP" — esta resolución quedó
+//   SUPERADA. Al inspeccionar el archivo real (descarga directa de
+//   catalogImageUrl, 2026-08-06) la caja dice textualmente "EAU DE
+//   TOILETTE — Vaporisateur Spray" en toda su superficie visible; no
+//   aparece "Eau de Parfum" en ningún lugar de la imagen. Contradicción
+//   confirmada por tres lecturas independientes (ChatGPT vía API, Cowork,
+//   e inspección visual directa) — reportada a Brey, que la resolvió v2.
+//
+//   v2 (Brey, 2026-08-06): "Es un EDT, ajústalo." — confirma que la
+//   IMAGEN es de la variante equivocada (Sauvage EDT), no del producto de
+//   catálogo (Sauvage EDP). Esta es la resolución vigente.
 const SAUVAGE_HUMAN_VERIFICATION = {
   resolved: true,
   resolution_type: "human_verification",
   resolved_by: "Brey",
   recorded_at: new Date().toISOString(),
   statement:
-    "Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.",
+    "Brey confirmó (2026-08-06) que la imagen actual es de Sauvage EDT, no de Sauvage EDP — la imagen está mal, no el nombre de catálogo. Corrige la resolución anterior del 2026-08-05, que daba la imagen por correcta.",
+  superseded_previous_resolution: {
+    statement_v1: "Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.",
+    recorded_at_v1: "2026-08-05",
+    superseded_reason: "Inspección visual directa del archivo (2026-08-06) mostró la caja con el texto 'EAU DE TOILETTE' — contradice v1. Reportado a Brey, quien corrigió la resolución.",
+  },
+  identity_confirmed_as: "sauvage-edt-wrong-image",
   deferred_exception: false,
   blocks_pilot: false,
   blocks_final_sauvage_change: false,
   overrides: [
-    "operational_review.requires_human_review (motivo variant_term_mismatch) queda resuelto para el campo de IDENTIDAD del producto — no se reabre sin nueva evidencia.",
-    "cowork license_status=unknown por el mismo motivo de variante queda resuelto para identidad — Cowork no cambió su CSV, esta resolución es una capa de consolidación, no una edición del archivo de Cowork.",
+    "operational_review.requires_human_review (motivo variant_term_mismatch) queda resuelto: la duda de variante era real — la imagen SÍ es EDT.",
+    "cowork license_status=unknown por el mismo motivo de variante queda resuelto: license_status debe mantenerse en unknown/rechazado hasta reemplazar la fuente, no aprobarse.",
   ],
   note:
-    "La verificación humana resuelve la duda de IDENTIDAD (¿es Sauvage EDP?). No resuelve por sí sola los motivos TÉCNICOS independientes que ya llevaron a clasificación D (caja visible en el encuadre, recorte agresivo, contraste) — esos siguen vigentes y separados de la duda de variante.",
+    "La imagen debe SUSTITUIRSE por una fuente real de Sauvage EDP (no alcanza con recortar la actual — el producto fotografiado es la variante equivocada). Mismo tipo de tratamiento que Aventus: sourcing de fuente nueva, no reprocesamiento de la existente.",
 };
 
 // Resolución humana de Baccarat Rouge 540 EDP (Brey, 2026-08-06): confirma
@@ -155,21 +171,20 @@ function buildDecision(perfumeCfg, report, coworkRow) {
 
   if (slug === "sauvage-edp") {
     humanResolution = SAUVAGE_HUMAN_VERIFICATION;
-    // La verificación humana resuelve la duda de IDENTIDAD, no los motivos
-    // técnicos independientes (caja visible, recorte agresivo, contraste)
-    // que ya sostenían la clasificación D — por eso la acción propuesta
-    // sigue siendo reprocesar/sustituir la FUENTE de la foto, igual
-    // naturaleza técnica que Black Opium, ya no por duda de producto.
-    operationalStatus = "human_verified_identity_technical_issues_remain";
-    proposedAction = "sustituir_o_reprocesar_fuente";
+    // Corrección 2026-08-06: la imagen actual ES Sauvage EDT (confirmado por
+    // Brey tras inspección directa), no una duda de identidad resuelta a
+    // favor de EDP como se había registrado el 2026-08-05. La acción deja
+    // de ser "reprocesar/recortar la fuente actual" (eso no arregla un
+    // producto equivocado) y pasa a ser "sustituir por fuente nueva",
+    // mismo tratamiento que Aventus.
+    operationalStatus = "human_confirmed_wrong_variant_image";
+    proposedAction = "sustituir";
     approvalCondition =
-      "Identidad de producto ya confirmada por Brey (no requiere más verificación). Falta: nueva fuente fotográfica o reprocesamiento que muestre solo el frasco (sin caja), fondo uniforme, sin recorte agresivo, antes de aprobar como catalog-primary.";
+      "No aprobar como catalog-primary con la fuente actual bajo ninguna circunstancia — es una foto de Sauvage EDT, variante distinta a la del catálogo (Sauvage EDP). Requiere una fuente fotográfica nueva y verificada de Sauvage EDP (caja debe decir 'Eau de Parfum'), sin caja en el encuadre, fondo uniforme, sin recorte agresivo.";
     reasonSummary =
-      "Verificación humana (Brey, 2026-08-05) confirma que imagen y enlace corresponden a Sauvage EDP — la duda de variante EDT/EDP detectada por ambas auditorías queda resuelta como excepción no bloqueante. La clasificación D original se mantiene por motivos técnicos ajenos a la variante (caja visible en el encuadre, recorte agresivo, contraste), no por duda de identidad.";
-    // Conflicto de variante queda marcado como resuelto, no eliminado del
-    // registro (transparencia de auditoría) — se anota el resultado.
+      "Brey confirmó (2026-08-06), tras inspección visual directa del archivo, que la imagen es de Sauvage EDT — corrige la resolución del 2026-08-05 que había dado la imagen por correcta. Las tres auditorías (ChatGPT, Cowork, inspección directa) coincidían en la señal de alerta; la duda quedó resuelta a favor de 'la imagen está mal', no de 'el nombre de catálogo está mal'.";
     conflicts.push(
-      "RESUELTO por verificación humana (Brey, 2026-08-05): la ambigüedad EDT/EDP detectada automáticamente por ambas auditorías (ChatGPT vía API y Cowork) no aplica — el producto es Sauvage EDP, confirmado."
+      "RESUELTO por verificación humana (Brey, 2026-08-06), CORRIGIENDO una resolución humana previa (2026-08-05) que había cerrado el mismo conflicto en sentido contrario: la imagen es confirmada Sauvage EDT, no EDP. Las tres auditorías (ChatGPT, Cowork, inspección visual directa) tenían razón en marcar la duda."
     );
   } else if (slug === "baccarat-rouge-540-edp") {
     humanResolution = BACCARAT_HUMAN_VERIFICATION;
