@@ -1174,3 +1174,60 @@ autorizó la ejecución real (`npm run images:audit-pilot -- --limit-usd=0.50`).
 - Pendiente: resultado real de Cowork (Paso 2 del plan de Fase 2, todavía
   no recibido); consolidación de ambos resultados; propuesta de
   tratamiento con aprobación explícita antes de procesar ninguna imagen.
+
+## 2026-08-06 — Code (Claude Code) — Fase 2, cierre
+
+- Resultado real de Cowork recibido e incorporado como parte oficial de
+  la fase: 4/5 `catalog-primary` (Aventus, Baccarat Rouge 540, Black
+  Opium, Erba Pura) evaluados `affiliate-approved` — fondo blanco de
+  estudio, botella completa, sin watermark. Sauvage EDP quedó en
+  `license_status: unknown` con el mismo hallazgo que la auditoría
+  ChatGPT: la etiqueta dice "Eau de Toilette", no "Eau de Parfum".
+  Consolidado (junto con `operational_review` y la auditoría ChatGPT) en
+  `reports/image-audits/consolidated-pilot.{json,md}`.
+- **Baccarat Rouge 540 EDP** — verificación humana (Brey) cierra el
+  conflicto EDP/Extrait que ambas auditorías habían mencionado de forma
+  independiente sin poder resolverlo: la variante es correctamente EDP.
+  Cerrado como "conservar", ya no provisional.
+- **Sauvage EDP → Sauvage EDT** — resolución final tras tres correcciones
+  sucesivas en la misma sesión, documentadas en
+  `SAUVAGE_HUMAN_VERIFICATION.resolution_history` dentro de
+  `scripts/consolidate-image-audit-pilot.mjs`:
+  1. Brey verificó inicialmente que imagen y enlace correspondían a
+     Sauvage EDP (2026-08-05) — dado por correcto.
+  2. Inspección visual directa del archivo real (descarga a scratchpad
+     de sesión, no a producción) mostró la caja con el texto "EAU DE
+     TOILETTE" en toda su superficie — contradice (1). Reportado a Brey.
+  3. Brey confirmó "Es un EDT, ajústalo" (2026-08-06) — la imagen SIEMPRE
+     fue correcta, el nombre de catálogo era el que estaba mal. Se
+     intentó sourcing de una foto EDP real en Amazon como alternativa (2
+     búsquedas, 1 candidato rechazado por decir "Parfum" en vez de "Eau
+     de Parfum" — evidencia en
+     `reports/image-audits/treatment-evidence/`), pero horas después,
+     con la instrucción de cierre de Fase 2, Brey decidió corregir el
+     **nombre** en vez de sustituir la imagen: "Sauvage EDP" → "Sauvage
+     EDT" en `PERFUMES_INITIAL_50.csv` (raíz y `apps/api/data/`),
+     `data/image-inventory.csv` (`perfume_name` + `license_status` →
+     `affiliate-approved`), `config/image-audit-pilot.json` y
+     `apps/web/src/lib/editorialImages.ts` (alt text). Slug
+     (`sauvage-edp`), `image_url`, enlace de afiliado de Amazon e
+     historial de auditoría (`reports/image-audits/sauvage-edp.json`,
+     `result` y `operational_review` originales) se conservan intactos
+     — la corrección vive en una capa de consolidación separada, no
+     sobrescribe los datos crudos de la auditoría.
+- **Aventus y Black Opium EDP** — defectos visuales confirmados por
+  inspección directa (etiqueta de papel plana vs. placa metálica en
+  Aventus; base del frasco fuera del encuadre fuente en Black Opium, ni
+  siquiera recortable — probado con `sharp`), pero por instrucción
+  explícita quedan **diferidos, sin bloquear el avance general**: se
+  conservan imagen y enlace de Amazon actuales, sin sourcing de fuente
+  nueva. Documentado en `reports/image-audits/treatment-plan.{json,md}`
+  para una ronda de pulido visual futura.
+- Validación final: 5/5 schemas de auditoría válidos, 100/100 filas de
+  `data/image-inventory.csv` consistentes contra la propuesta, CSVs de
+  raíz y `apps/api/data/` sincronizados byte a byte. Detalle en
+  `reports/image-audits/validation-report.json`.
+- Cero llamadas nuevas a la API en todo este cierre (costo total del
+  piloto se mantiene en $0.06891 de $0.50 autorizados).
+  `scripts/images/optimize.mjs` no se invocó. Ningún `image_url` fue
+  modificado en ningún perfume.

@@ -1,26 +1,26 @@
 #!/usr/bin/env node
-// Fase 2 — tratamiento visual (Paso 3/5 del plan de consolidación).
+// Fase 2 — tratamiento visual, CIERRE (2026-08-06).
 //
-// Genera una ESPECIFICACIÓN de tratamiento por perfume para los 3 casos
-// "sustituir" (Aventus, Sauvage EDP, Black Opium EDP — los tres terminaron
-// necesitando fuente nueva, no solo reprocesamiento; ver blocked_reason).
+// Estado final por perfume, por instrucción explícita de Brey al cerrar
+// Fase 2:
+//   - Sauvage EDP → RESUELTO. No fue un problema de imagen: el nombre de
+//     catálogo estaba mal ("Sauvage EDP" en vez de "Sauvage EDT"). Se
+//     corrigió el nombre (ver PERFUMES_INITIAL_50.csv, apps/api/data/
+//     PERFUMES_INITIAL_50.csv, data/image-inventory.csv). Imagen, enlace
+//     de Amazon, slug e image_url se conservan sin cambios.
+//   - Aventus y Black Opium EDP → DIFERIDO, NO BLOQUEANTE. El defecto
+//     visual de cada uno sigue confirmado (ver evidencia en
+//     reports/image-audits/treatment-evidence/), pero por instrucción
+//     explícita no se busca fuente nueva, no se descargan más
+//     candidatos, y no bloquean el avance general del roadmap. Quedan
+//     documentados para una ronda de pulido visual futura.
+//   - Baccarat Rouge 540 EDP y Erba Pura → cerrados sin cambios (ya
+//     reflejado en consolidated-pilot.json).
 //
-// Para llegar a esa conclusión SÍ se descargó, en esta corrida, la imagen
-// actual de catálogo de cada uno de los 3 (a la carpeta temporal de
-// scratchpad de la sesión) para inspección visual directa, y se probó un
-// recorte real con sharp sobre Black Opium — evidencia guardada en
-// reports/image-audits/treatment-evidence/. Eso descartó la hipótesis de
-// "alcanza con recortar" para Black Opium, y confirmó una contradicción
-// crítica en Sauvage EDP (imagen real es EDT, no EDP — reportada y
-// corregida por Brey, 2026-08-06).
+// Este script NO genera binarios de reemplazo, NO invoca
+// scripts/images/optimize.mjs y NO modifica ningún image_url.
 //
-// Este script NO genera binarios de reemplazo definitivos, NO invoca
-// scripts/images/optimize.mjs y NO modifica ningún image_url — eso
-// requiere una fuente fotográfica NUEVA confirmada (sourcing en sitios
-// externos), que no se hizo en este paso.
-//
-// Entrada: config/image-audit-pilot.json + reports/image-audits/<slug>.json
-// (result + operational_review) + reports/image-audits/consolidated-pilot.json.
+// Entrada: reports/image-audits/consolidated-pilot.json.
 // Salida: reports/image-audits/treatment-plan.json y .md.
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -42,48 +42,33 @@ const consolidated = loadJson(CONSOLIDATED_JSON);
 
 const TREATMENTS = {
   aventus: {
+    status: "deferred_non_blocking",
     defect: "Confirmado por inspección visual directa del archivo (2026-08-06): la etiqueta del frasco fotografiado es un rectángulo blanco plano impreso, no la placa metálica grabada con el jinete que lleva el frasco real de Creed Aventus. Es un defecto de fidelidad de marca, no técnico.",
-    strategy: "sourcing_new_photo",
-    requirements: [
+    evidence: "reports/image-audits/treatment-evidence/aventus-current-flat-label-confirmed.jpg",
+    closure_note: "Por instrucción de Brey (cierre de Fase 2, 2026-08-06): se conserva la imagen y el enlace de Amazon actuales. No se busca fuente nueva ni se descargan más candidatos. No bloquea el avance del roadmap general — queda para una ronda de pulido visual futura.",
+    requirements_if_revisited: [
       "Frasco con placa metálica grabada visible (no etiqueta de papel plana)",
       "Fondo blanco uniforme, sin logos de retailer",
       "Botella completa, sin recortes agresivos",
-      "Proporción y color consistentes con la referencia real de Creed",
-    ],
-    readiness: "blocked_pending_source",
-    blocked_reason: "No hay una URL de fuente candidata verificada todavía (evidencia del defecto actual: reports/image-audits/treatment-evidence/aventus-current-flat-label-confirmed.jpg). Requiere localizar en un retailer autorizado (o banco de assets con licencia) una foto donde la placa metálica sea visible, y confirmar visualmente contra la referencia real antes de proponerla — no se hizo en este paso por ser una decisión de fidelidad de marca de alto riesgo si se elige mal (mismo tipo de error ya detectado en Sauvage EDP).",
-  },
-  "sauvage-edp": {
-    defect: "La imagen actual es de Sauvage EAU DE TOILETTE (confirmado por inspección visual directa del archivo el 2026-08-06 — la caja dice textualmente 'EAU DE TOILETTE — Vaporisateur Spray', no 'Eau de Parfum'), pero el catálogo declara el producto como Sauvage EDP. No es un problema de encuadre: es la variante equivocada. Confirmado por Brey el 2026-08-06, corrigiendo una resolución humana previa del 2026-08-05 que había dado la imagen por correcta.",
-    strategy: "sourcing_new_photo",
-    requirements: [
-      "Caja/etiqueta debe decir explícitamente 'Eau de Parfum', no 'Eau de Toilette'",
-      "Solo el frasco, sin la caja en el encuadre",
-      "Fondo blanco uniforme",
-      "Frasco completo, sin recorte agresivo",
-    ],
-    readiness: "blocked_pending_source",
-    blocked_reason: "Se intentó sourcing real en Amazon (búsquedas 'Dior Sauvage Eau de Parfum' y '...100ml') — Dior Sauvage tiene 4 concentraciones (EDT, EDP, Parfum, Elixir) con cajas visualmente muy similares, y ninguna búsqueda produjo todavía un listado de un solo frasco cuya caja diga inequívocamente 'Eau de Parfum' (no solo 'Parfum', no 'Toilette', no 'Extrait'). Primer candidato descartado por evidencia visual directa: reports/image-audits/treatment-evidence/sauvage-edp-candidate1-REJECTED-is-parfum-not-edp.jpg (caja dice 'SAUVAGE PARFUM', variante distinta a EDP). Dado el error ya cometido una vez con esta misma variante (imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg), se prefirió detener el sourcing automático antes que arriesgar una tercera equivocación de variante, y reportarlo para pedir un enlace de fuente ya vetado.",
-    sourcing_attempts: [
-      {
-        candidate_url: "https://m.media-amazon.com/images/I/51lWPKOtYUL._SL1500_.jpg",
-        source_listing: "https://www.amazon.com/Sauvage-Parfum-Spray-Christian-Dior/dp/B081QZH8CL",
-        verdict: "rejected",
-        reason: "Caja dice 'SAUVAGE PARFUM' (concentración 'Parfum', no 'Eau de Parfum') — variante distinta a la esperada.",
-      },
     ],
   },
   "black-opium-edp": {
-    defect: "La variante (EDP) está confirmada correcta — la caja dice 'Eau de Parfum', coincide con el catálogo. PERO se intentó un recorte de prueba (sharp, extrayendo toda la franja derecha del archivo 1500x1500 sin límite de altura) y la base del frasco sigue sin verse completa: la imagen fuente tiene la botella cortada por abajo en el original, no es solo un problema de encuadre/selección — no hay pixeles de la base para recuperar recortando.",
-    strategy: "sourcing_new_photo",
-    requirements: [
-      "Frasco completo, incluida la base, dentro del encuadre original (no recuperable por recorte de la fuente actual)",
+    status: "deferred_non_blocking",
+    defect: "La variante (EDP) está confirmada correcta — la caja dice 'Eau de Parfum', coincide con el catálogo. Un recorte de prueba (sharp, franja derecha completa del archivo 1500x1500) mostró que la base del frasco queda fuera del encuadre fuente — no es solo la caja tapando, y no es recuperable recortando.",
+    evidence: "reports/image-audits/treatment-evidence/black-opium-edp-crop-attempt-base-cutoff.jpg",
+    closure_note: "Por instrucción de Brey (cierre de Fase 2, 2026-08-06): se conserva la imagen y el enlace de Amazon actuales. No se busca fuente nueva ni se descargan más candidatos. No bloquea el avance del roadmap general — queda para una ronda de pulido visual futura.",
+    requirements_if_revisited: [
+      "Frasco completo, incluida la base, dentro del encuadre original",
       "Sin caja en el encuadre",
       "Fondo blanco uniforme",
-      "Mantener identidad confirmada: Black Opium EDP (YSL) — no cambiar variante",
     ],
-    readiness: "blocked_pending_source",
-    blocked_reason: "Se descartó la hipótesis de recorte tras probarla directamente (evidencia: reports/image-audits/treatment-evidence/black-opium-edp-crop-attempt-base-cutoff.jpg): la base del frasco está fuera del encuadre en el archivo fuente, no solo detrás de la caja. Requiere una fuente fotográfica nueva con el frasco completo.",
+  },
+  "sauvage-edp": {
+    status: "resolved_catalog_name_corrected",
+    defect: "RESUELTO (ya no es un defecto de imagen). La imagen siempre fue Sauvage EDT — el nombre de catálogo 'Sauvage EDP' era el que estaba mal.",
+    evidence: "reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg (imagen original, ahora consistente con el nombre corregido)",
+    closure_note: "Nombre de catálogo corregido a 'Sauvage EDT' (Brey, 2026-08-06) en PERFUMES_INITIAL_50.csv (raíz + apps/api/data/), data/image-inventory.csv y config/image-audit-pilot.json. Imagen, enlace de Amazon, slug (sauvage-edp) e image_url sin cambios. Intento de sourcing de una fuente EDP real (2 búsquedas en Amazon, 1 candidato rechazado por ser 'Parfum' y no 'Eau de Parfum' — reports/image-audits/treatment-evidence/sauvage-edp-candidate1-REJECTED-is-parfum-not-edp.jpg) queda sin efecto: ya no hace falta reemplazar la imagen.",
+    requirements_if_revisited: [],
   },
 };
 
@@ -98,52 +83,46 @@ function buildPlan() {
       perfume_name: decision?.perfume_name ?? slug,
       brand: decision?.brand ?? null,
       proposed_action: decision?.proposed_action ?? null,
+      status: treatment.status,
       defect: treatment.defect,
-      strategy: treatment.strategy,
-      requirements: treatment.requirements,
-      readiness: treatment.readiness,
-      blocked_reason: treatment.blocked_reason,
-      sourcing_attempts: treatment.sourcing_attempts ?? [],
-      source_image_inspected_visually: true,
+      evidence: treatment.evidence,
+      closure_note: treatment.closure_note,
+      requirements_if_revisited: treatment.requirements_if_revisited,
       no_optimize_invoked: true,
       no_image_url_modified: true,
-      no_official_inventory_modified: true,
+      no_official_inventory_modified_beyond_sauvage_rename: true,
     });
   }
 
   return {
     generated_at: timestamp,
     generated_by: "scripts/prepare-image-treatment-plan.mjs",
-    scope: "Especificación de tratamiento (qué se necesita), no generación de archivos binarios de reemplazo — ver blocked_reason por perfume.",
+    scope: "Cierre de Fase 2 (2026-08-06): estado final por perfume — resuelto (Sauvage) o diferido no bloqueante (Aventus, Black Opium).",
     entries,
   };
 }
 
 function buildMarkdown(plan) {
   const lines = [];
-  lines.push("# Piloto de auditoría de imágenes — Fase 2 — Plan de tratamiento visual");
+  lines.push("# Piloto de auditoría de imágenes — Fase 2 — Cierre");
   lines.push("");
   lines.push(`Generado: ${plan.generated_at}`);
   lines.push("");
   lines.push(
-    "Este plan especifica QUÉ necesita cada imagen para pasar a `affiliate-approved` / catalog-primary aprobado. No incluye archivos binarios de reemplazo — sourcing de fuente nueva y/o reprocesamiento (crop) requieren inspección visual directa del archivo o navegación de sitios externos, no ejecutadas en este paso. Ningún `image_url` fue modificado, ninguna imagen fue descargada, `scripts/images/optimize.mjs` no fue invocado."
+    "Estado final de los 3 perfumes con imperfecciones visuales detectadas. Sauvage EDP quedó resuelto renombrando el producto (no la imagen). Aventus y Black Opium quedan diferidos, sin bloquear el avance general, por instrucción explícita. Ningún `image_url` fue modificado en esta corrida; el único cambio al inventario oficial es el renombre de Sauvage. `scripts/images/optimize.mjs` no fue invocado."
   );
   lines.push("");
   for (const e of plan.entries) {
     lines.push(`## ${e.perfume_name} (\`${e.perfume_slug}\`) — ${e.brand}`);
     lines.push("");
+    lines.push(`- **Estado:** ${e.status}`);
     lines.push(`- **Acción propuesta:** ${e.proposed_action}`);
     lines.push(`- **Defecto:** ${e.defect}`);
-    lines.push(`- **Estrategia:** ${e.strategy}`);
-    lines.push("- **Requisitos:**");
-    for (const r of e.requirements) lines.push(`  - ${r}`);
-    lines.push(`- **Estado:** ${e.readiness}`);
-    lines.push(`- **Bloqueo:** ${e.blocked_reason}`);
-    if (e.sourcing_attempts.length) {
-      lines.push("- **Intentos de sourcing:**");
-      for (const a of e.sourcing_attempts) {
-        lines.push(`  - \`${a.candidate_url}\` (${a.source_listing}) → **${a.verdict}**: ${a.reason}`);
-      }
+    lines.push(`- **Evidencia:** ${e.evidence}`);
+    lines.push(`- **Nota de cierre:** ${e.closure_note}`);
+    if (e.requirements_if_revisited.length) {
+      lines.push("- **Si se revisita en el futuro, requisitos:**");
+      for (const r of e.requirements_if_revisited) lines.push(`  - ${r}`);
     }
     lines.push("");
   }

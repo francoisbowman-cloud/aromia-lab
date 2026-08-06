@@ -70,7 +70,9 @@
     },
     {
       "slug": "sauvage-edp",
-      "name": "Sauvage EDP",
+      "name": "Sauvage EDT",
+      "name_at_pilot_time": "Sauvage EDP",
+      "name_correction_note": "RESUELTO (Brey, 2026-08-06): el producto de catálogo se renombró de 'Sauvage EDP' a 'Sauvage EDT' — la imagen era correcta desde el inicio, el nombre de catálogo estaba mal. El slug 'sauvage-edp' se conserva sin cambios para no romper rutas/SEO. Ver reports/image-audits/consolidated-pilot.json para la resolución completa.",
       "brand": "Dior",
       "catalogImageUrl": "https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg",
       "ovlRelativePath": "apps/web/public/ovl/sauvage-edp.jpg",

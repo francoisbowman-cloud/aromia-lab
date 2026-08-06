@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06T14:14:37.196Z",
+  "generated_at": "2026-08-06T17:06:20.957Z",
   "generated_by": "scripts/consolidate-image-audit-pilot.mjs",
   "inputs": {
     "individual_reports": [
@@ -40,14 +40,14 @@
         "visual_quality": "high",
         "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1500x1500px). Fondo blanco de estudio, botella completa Creed Aventus sin cortes, alta nitidez, sin watermark de retailer. Sin hallazgos."
       },
-      "operational_status": "no_review_required",
-      "proposed_action": "sustituir",
+      "operational_status": "deferred_non_blocking",
+      "proposed_action": "conservar_temporalmente",
       "confidence_level": 0.98,
       "conflicts": [
         "Cowork aprobó la imagen (affiliate-approved, criterios de licencia/dimensiones/técnico) pero ChatGPT la clasificó D (criterios de fidelidad de marca y/o reglas no negociables de encuadre de catálogo Aromia) — evaluaron dimensiones distintas del mismo activo, no es un desacuerdo directo pero sí requiere decisión humana sobre cuál criterio prevalece."
       ],
-      "approval_condition": "No aprobar como catalog-primary hasta conseguir una fuente fotográfica con la placa metálica grabada auténtica (la imagen actual muestra una etiqueta de papel plana, no la placa real de Creed Aventus).",
-      "reason_summary": "ChatGPT detectó que la etiqueta no coincide con el diseño real del frasco (placa metálica vs. etiqueta de papel) — un defecto de fidelidad de marca que Cowork no evaluó (su brief cubre licencia/dimensiones/calidad técnica, no fidelidad de diseño frente a la referencia real).",
+      "approval_condition": "Instrucción de cierre de Fase 2 (Brey, 2026-08-06): conservar la imagen y el enlace de Amazon actuales por ahora, sin buscar fuente nueva ni bloquear el avance general. El defecto de fidelidad de marca (etiqueta de papel plana vs. placa metálica grabada real de Creed Aventus) queda documentado como imperfección visual conocida, pendiente para una ronda de pulido visual futura.",
+      "reason_summary": "ChatGPT detectó que la etiqueta no coincide con el diseño real del frasco — un defecto de fidelidad de marca que Cowork no evaluó (su brief cubre licencia/dimensiones/calidad técnica, no fidelidad de diseño). Por instrucción explícita, no se prioriza en este cierre de fase.",
       "human_resolution": null
     },
     {
@@ -85,7 +85,7 @@
         "resolved": true,
         "resolution_type": "human_verification",
         "resolved_by": "Brey",
-        "recorded_at": "2026-08-06T14:14:37.195Z",
+        "recorded_at": "2026-08-06T17:06:20.956Z",
         "statement": "Brey confirmó que Baccarat Rouge 540 EDP es correcta — el conflicto EDP/Extrait queda cerrado.",
         "deferred_exception": false,
         "blocks_pilot": false,
@@ -98,7 +98,7 @@
     },
     {
       "perfume_slug": "sauvage-edp",
-      "perfume_name": "Sauvage EDP",
+      "perfume_name": "Sauvage EDT",
       "brand": "Dior",
       "visual_classification": {
         "source": "chatgpt_api_pilot_run_2026-08-05",
@@ -110,43 +110,61 @@
       },
       "cowork_result": {
         "source": "cowork_summary_relayed_in_chat_2026-08-05_reflected_in_data_image-inventory.csv_uncommitted",
-        "license_status": "unknown",
+        "license_status": "affiliate-approved",
         "original_width": "1000",
         "original_height": "1000",
         "background_type": "white-studio",
         "product_crop": "full-bottle",
         "visual_quality": "high",
-        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1000x1000px). Fondo blanco de estudio, botella completa junto a su caja, alta nitidez, sin watermark de retailer visible. HALLAZGO: la etiqueta de la caja/frasco dice 'EAU DE TOILETTE', no 'Eau de Parfum' — el nombre de catálogo es 'Sauvage EDP'. No pude confirmar si esto es un error de foto (imagen de EDT usada para un producto EDP) o si el nombre de catálogo es incorrecto/genérico. license_status queda en unknown hasta que Code/Brey confirme cuál de los dos está mal antes de aprobar la fuente."
+        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1000x1000px). Fondo blanco de estudio, botella completa junto a su caja, alta nitidez, sin watermark de retailer visible. RESUELTO (Brey, 2026-08-06): la etiqueta de la caja/frasco dice 'EAU DE TOILETTE' porque el producto ES Sauvage EDT — el nombre de catálogo se corrigió de 'Sauvage EDP' a 'Sauvage EDT' (era el nombre el que estaba mal, no la imagen). license_status pasa a affiliate-approved: identidad y variante ahora coinciden. slug, image_url y enlace de Amazon se conservan sin cambios."
       },
-      "operational_status": "human_confirmed_wrong_variant_image",
-      "proposed_action": "sustituir",
+      "operational_status": "human_resolved_catalog_name_corrected",
+      "proposed_action": "conservar",
       "confidence_level": 1,
       "conflicts": [
+        "Cowork aprobó la imagen (affiliate-approved, criterios de licencia/dimensiones/técnico) pero ChatGPT la clasificó D (criterios de fidelidad de marca y/o reglas no negociables de encuadre de catálogo Aromia) — evaluaron dimensiones distintas del mismo activo, no es un desacuerdo directo pero sí requiere decisión humana sobre cuál criterio prevalece.",
         "Ambigüedad de variante: el texto de la propia respuesta del modelo menciona 'edt, elixir' junto al frasco/caja, mientras el nombre de catálogo declara 'edp'.",
-        "RESUELTO por verificación humana (Brey, 2026-08-06), CORRIGIENDO una resolución humana previa (2026-08-05) que había cerrado el mismo conflicto en sentido contrario: la imagen es confirmada Sauvage EDT, no EDP. Las tres auditorías (ChatGPT, Cowork, inspección visual directa) tenían razón en marcar la duda."
+        "RESUELTO (Brey, 2026-08-06): la ambigüedad EDT/EDP detectada por las tres lecturas (ChatGPT, Cowork, inspección visual directa) se cierra corrigiendo el nombre de catálogo a 'Sauvage EDT', no sustituyendo la imagen. Historial completo de las 3 versiones de esta resolución en human_resolution.resolution_history."
       ],
-      "approval_condition": "No aprobar como catalog-primary con la fuente actual bajo ninguna circunstancia — es una foto de Sauvage EDT, variante distinta a la del catálogo (Sauvage EDP). Requiere una fuente fotográfica nueva y verificada de Sauvage EDP (caja debe decir 'Eau de Parfum'), sin caja en el encuadre, fondo uniforme, sin recorte agresivo.",
-      "reason_summary": "Brey confirmó (2026-08-06), tras inspección visual directa del archivo, que la imagen es de Sauvage EDT — corrige la resolución del 2026-08-05 que había dado la imagen por correcta. Las tres auditorías (ChatGPT, Cowork, inspección directa) coincidían en la señal de alerta; la duda quedó resuelta a favor de 'la imagen está mal', no de 'el nombre de catálogo está mal'.",
+      "approval_condition": "Ya aprobado con el nombre corregido — usar tal cual (imagen, enlace y slug sin cambios). Pendiente no bloqueante: la caja aparece en el encuadre (mismo tipo de imperfección visual que Black Opium) — queda para una ronda de pulido visual futura, no bloquea el catálogo.",
+      "reason_summary": "El nombre de catálogo 'Sauvage EDP' era incorrecto — se corrigió a 'Sauvage EDT' (Brey, 2026-08-06). La clasificación D original de ChatGPT se originó en parte en esa expectativa de variante equivocada; con el nombre corregido, identidad e imagen coinciden. Imagen, enlace de Amazon, slug e image_url se conservan sin cambios.",
       "human_resolution": {
         "resolved": true,
         "resolution_type": "human_verification",
         "resolved_by": "Brey",
-        "recorded_at": "2026-08-06T14:14:37.193Z",
-        "statement": "Brey confirmó (2026-08-06) que la imagen actual es de Sauvage EDT, no de Sauvage EDP — la imagen está mal, no el nombre de catálogo. Corrige la resolución anterior del 2026-08-05, que daba la imagen por correcta.",
-        "superseded_previous_resolution": {
-          "statement_v1": "Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.",
-          "recorded_at_v1": "2026-08-05",
-          "superseded_reason": "Inspección visual directa del archivo (2026-08-06) mostró la caja con el texto 'EAU DE TOILETTE' — contradice v1. Reportado a Brey, quien corrigió la resolución."
-        },
-        "identity_confirmed_as": "sauvage-edt-wrong-image",
+        "recorded_at": "2026-08-06T17:06:20.955Z",
+        "statement": "Brey resolvió (2026-08-06) renombrar el producto de catálogo de 'Sauvage EDP' a 'Sauvage EDT' — la imagen, el enlace de Amazon, el slug ('sauvage-edp', sin cambios por rutas/SEO) y el image_url se conservan intactos. La clasificación D original de ChatGPT se originó en una expectativa de variante incorrecta (se esperaba EDP); con el nombre corregido, identidad e imagen coinciden.",
+        "resolution_history": [
+          {
+            "version": "v1",
+            "recorded_at": "2026-08-05",
+            "statement": "Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.",
+            "status": "superseded",
+            "superseded_reason": "Inspección visual directa del archivo (2026-08-06) mostró la caja con el texto 'EAU DE TOILETTE' — contradice v1."
+          },
+          {
+            "version": "v2",
+            "recorded_at": "2026-08-06",
+            "statement": "Es un EDT, ajústalo. (Confirma que la imagen es Sauvage EDT, variante equivocada frente al nombre de catálogo 'Sauvage EDP' vigente en ese momento.)",
+            "status": "superseded",
+            "superseded_reason": "Reemplazada horas después por la instrucción de cierre de Fase 2: en vez de sustituir la imagen, se corrige el nombre de catálogo."
+          },
+          {
+            "version": "v3",
+            "recorded_at": "2026-08-06",
+            "statement": "Renombrar el producto de 'Sauvage EDP' a 'Sauvage EDT'. Conservar imagen, enlace, slug e image_url.",
+            "status": "vigente"
+          }
+        ],
+        "identity_confirmed_as": "sauvage-edt-catalog-name-corrected",
         "deferred_exception": false,
         "blocks_pilot": false,
         "blocks_final_sauvage_change": false,
         "overrides": [
-          "operational_review.requires_human_review (motivo variant_term_mismatch) queda resuelto: la duda de variante era real — la imagen SÍ es EDT.",
-          "cowork license_status=unknown por el mismo motivo de variante queda resuelto: license_status debe mantenerse en unknown/rechazado hasta reemplazar la fuente, no aprobarse."
+          "operational_review.requires_human_review (motivo variant_term_mismatch) queda resuelto: la duda de variante era real, pero se resuelve corrigiendo el nombre de catálogo, no sustituyendo la imagen.",
+          "cowork license_status=unknown queda resuelto a favor de affiliate-approved: con el nombre corregido, identidad e imagen coinciden."
         ],
-        "note": "La imagen debe SUSTITUIRSE por una fuente real de Sauvage EDP (no alcanza con recortar la actual — el producto fotografiado es la variante equivocada). Mismo tipo de tratamiento que Aventus: sourcing de fuente nueva, no reprocesamiento de la existente."
+        "note": "La clasificación D original de ChatGPT (caja visible, recorte, Y duda de variante) se originó parcialmente en una expectativa de variante incorrecta. Los motivos técnicos independientes (caja en el encuadre) siguen siendo una imperfección visual conocida, pero por instrucción explícita no bloquean el avance general — Sauvage EDT queda 'conservar' con esa mejora pendiente para una ronda de pulido visual futura, no crítica."
       }
     },
     {
@@ -171,14 +189,14 @@
         "visual_quality": "high",
         "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1500x1500px). Fondo blanco de estudio, botella completa junto a su caja, etiqueta confirma 'Eau de Parfum' (coincide con nombre de catálogo), alta nitidez, sin watermark de retailer. Sin hallazgos."
       },
-      "operational_status": "no_review_required",
-      "proposed_action": "sustituir_o_reprocesar",
+      "operational_status": "deferred_non_blocking",
+      "proposed_action": "conservar_temporalmente",
       "confidence_level": 0.97,
       "conflicts": [
         "Cowork aprobó la imagen (affiliate-approved, criterios de licencia/dimensiones/técnico) pero ChatGPT la clasificó D (criterios de fidelidad de marca y/o reglas no negociables de encuadre de catálogo Aromia) — evaluaron dimensiones distintas del mismo activo, no es un desacuerdo directo pero sí requiere decisión humana sobre cuál criterio prevalece."
       ],
-      "approval_condition": "Sustituir por, o reprocesar hacia, una fuente donde aparezca solo el frasco completo (sin caja, sin recorte agresivo), sobre fondo uniforme — regla no negociable de catálogo Aromia.",
-      "reason_summary": "El frasco es auténtico y la variante coincide (Cowork confirma 'Eau de Parfum' en la etiqueta), pero la composición viola dos reglas no negociables de catálogo Aromia: la caja aparece en el encuadre y el frasco está parcialmente recortado. Cowork aprobó por no evaluar esas reglas específicas de Aromia.",
+      "approval_condition": "Instrucción de cierre de Fase 2 (Brey, 2026-08-06): conservar la imagen y el enlace de Amazon actuales por ahora, sin buscar fuente nueva ni bloquear el avance general. La composición (caja visible en el encuadre) sigue violando una regla no negociable de catálogo Aromia, pero queda documentada como imperfección visual conocida, pendiente para una ronda de pulido futura.",
+      "reason_summary": "El frasco es auténtico y la variante coincide (Cowork confirma 'Eau de Parfum' en la etiqueta). La composición viola una regla no negociable de catálogo (caja visible), pero por instrucción explícita no se prioriza en este cierre de fase.",
       "human_resolution": null
     },
     {

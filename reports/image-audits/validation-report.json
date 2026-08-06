@@ -1,38 +1,37 @@
 {
-  "generated_at": "2026-08-06T14:37:41.481Z",
-  "generated_by": "inline validation (continuación autónoma tras corrección de Sauvage EDP)",
+  "generated_at": "2026-08-06T17:07:13.147Z",
+  "generated_by": "cierre de Fase 2 — validación final tras rename Sauvage EDP -> EDT",
   "schema_validation": {
     "aventus": {
-      "schema_valid": true,
-      "errors": []
+      "schema_valid": true
     },
     "baccarat-rouge-540-edp": {
-      "schema_valid": true,
-      "errors": []
+      "schema_valid": true
     },
     "sauvage-edp": {
-      "schema_valid": true,
-      "errors": []
+      "schema_valid": true
     },
     "black-opium-edp": {
-      "schema_valid": true,
-      "errors": []
+      "schema_valid": true
     },
     "erba-pura": {
-      "schema_valid": true,
-      "errors": []
+      "schema_valid": true
     }
   },
   "inventory_csv_integrity": {
     "official_rows": 100,
     "proposal_rows": 100,
-    "row_count_match": true,
-    "source_url_and_slug_mismatches": 0
+    "row_count_and_key_mismatches": 0
   },
-  "visual_inspection_findings": {
-    "sauvage-edp": "CONTRADICCIÓN CRÍTICA confirmada y corregida: imagen es Sauvage EDT, no EDP. Resolución humana v1 (2026-08-05) revertida por Brey (2026-08-06).",
-    "aventus": "Confirmado: etiqueta de papel plana, no placa metálica. Sin contradicciones.",
-    "black-opium-edp": "Hipótesis de recorte simple DESCARTADA tras prueba real (sharp): base del frasco fuera del encuadre fuente. Requiere fuente nueva, no reprocesamiento."
+  "perfumes_csv_sync": {
+    "root_and_api_identical": true
+  },
+  "sauvage_rename": {
+    "root_csv_nombre": "Sauvage EDT",
+    "api_csv_nombre": "Sauvage EDT",
+    "image_url_unchanged": true,
+    "affiliate_link_unchanged": true,
+    "slug_unchanged": true
   },
   "all_ok": true
 }
