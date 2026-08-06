@@ -1231,3 +1231,25 @@ autorizó la ejecución real (`npm run images:audit-pilot -- --limit-usd=0.50`).
   piloto se mantiene en $0.06891 de $0.50 autorizados).
   `scripts/images/optimize.mjs` no se invocó. Ningún `image_url` fue
   modificado en ningún perfume.
+
+## 2026-08-06 (2) — Code (Claude Code) — primer ítem del backlog general: CSV de catálogo desincronizado
+
+Arranque de la continuación autónoma post-Fase-2, ordenando el backlog de
+`docs/images/CURRENT-STATE-AUDIT.md` por severidad y ejecutando el primer
+riesgo "Medio" sin dependencias externas: `PERFUMES_INITIAL_50.csv` (raíz
+y `apps/api/data/`) tenía 38 filas, no las 50 reales de producción desde
+la expansión Dior del 30/07 (decisión #89) — riesgo real de reseed
+destructivo si alguien lo usaba sin saber que estaba desactualizado.
+
+`scripts/sync-perfumes-csv-from-production.mjs` (nuevo) regenera ambas
+copias desde `GET https://api-production-fe2f.up.railway.app/api/perfumes`
+(público, solo lectura) — 50/50 filas, 0 inválidas contra
+`schema/perfume.schema.json`, raíz y `apps/api/data/` byte-idénticos.
+Incluye la corrección de nombre de Sauvage EDT (decisión #99) como
+excepción explícita, para no revertirla al sincronizar desde producción
+(que todavía tiene el nombre viejo hasta que se aplique el rename ahí).
+
+Commit `e6b45d8` en `assets/image-pilot-01` (agregado a
+[PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) por
+practicidad de merge — mismo archivo que el rename de Sauvage, tema
+distinto). Sin llamadas de escritura a la API, sin `image_url` modificado.
