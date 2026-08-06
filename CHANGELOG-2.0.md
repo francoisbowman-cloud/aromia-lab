@@ -1253,3 +1253,31 @@ Commit `e6b45d8` en `assets/image-pilot-01` (agregado a
 [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) por
 practicidad de merge — mismo archivo que el rename de Sauvage, tema
 distinto). Sin llamadas de escritura a la API, sin `image_url` modificado.
+
+## 2026-08-06 (3) — Code (Claude Code) — segundo ítem del backlog: `next/image` en `EditorialMood`
+
+Segundo riesgo del backlog de `docs/images/CURRENT-STATE-AUDIT.md`
+("sin optimización, `next/image` no usado" — Medio), cerrado
+**parcialmente y a propósito**. Al leer `PerfumeCard.tsx`/
+`HeroEditorPick.tsx` para planear la migración completa, se descubrió
+que su imagen visible real no es un `<img>` sino un `div` con
+`background-image`, alimentado por un análisis de canvas
+(`useProductImageCrop.ts`) que recorta el margen blanco y detecta el
+color de fondo — arquitectura deliberada (ya documentada como tal en el
+propio audit), no un descuido. Migrar esos dos componentes a
+`next/image` exige rediseñar ese sistema de recorte — eso es una
+decisión de producto nueva, no un swap mecánico, y no se ejecuta sin
+aprobación.
+
+Se migró en cambio `EditorialMood.tsx` (`Image` con `fill` +
+`object-contain`), el único caso limpio: imágenes locales
+(`public/ovl/*.jpg`), sin recorte por canvas ni CORS. Verificado en vivo
+contra `apps/web` con `NEXT_PUBLIC_API_URL` apuntando a producción:
+`tsc`/`eslint` limpios, `/_next/image?url=%2Fovl%2Faventus.jpg...`
+responde 200 con bytes reales (168KB), sin errores de consola;
+confirmado que la imagen carga correctamente forzando `loading="eager"`
+en el elemento (640×800 real) — el "no carga" inicial visto en el pane
+automatizado era lazy-loading nativo esperando un scroll real, no un
+bug.
+
+Commit `7226d5e` en `assets/image-pilot-01` / [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6).

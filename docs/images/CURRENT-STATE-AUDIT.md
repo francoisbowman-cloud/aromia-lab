@@ -166,7 +166,7 @@ Sage & Sea Salt tuvo una URL de Douglas muerta, corregida el 24/07
 | Riesgo | Severidad | Nota |
 |---|---|---|
 | 100% hotlinking, cero copia local de respaldo | Alto | Cualquier retailer puede romper una imagen sin aviso |
-| Sin optimización (`next/image` no usado) | Medio | Peso/formato tal cual lo entrega cada retailer |
+| Sin optimización (`next/image` no usado) | Medio | **Parcialmente cerrado 2026-08-06** — `EditorialMood.tsx` (imágenes locales `/ovl/*.jpg`, sin recorte por canvas) migrado a `next/image`, verificado en vivo. `PerfumeCard`/`HeroEditorPick` (imágenes de retailer, 90% del tráfico de imágenes del sitio) quedan **deliberadamente sin migrar**: su imagen visible real es un `div` con `background-image` alimentado por un análisis de canvas (recorte de fondo blanco + color, `useProductImageCrop.ts`) — migrar exige rediseñar ese sistema, es una decisión de producto pendiente, no un swap mecánico. |
 | Procedencia/licencia sin verificar (50/50) | Medio-Alto | Uso de fotos de producto de terceros sin registro de términos |
 | ~~CSV desincronizado con producción (38 vs. 50 filas)~~ | ~~Medio~~ | **Cerrado 2026-08-06** — `scripts/sync-perfumes-csv-from-production.mjs` regeneró ambas copias (raíz + `apps/api/data/`) desde `GET /api/perfumes` real (50/50 filas, validado contra `schema/perfume.schema.json`). No es un fix de una sola vez: cualquier alta/edición futura hecha solo vía admin (Postgres) volverá a desincronizar el CSV si no se re-corre el script antes de un reseed. |
 | 12/50 perfumes sin mockup editorial OVL | Bajo | Comportamiento de fallback ya existe y es correcto (texto, no imagen rota) |
