@@ -39,9 +39,21 @@ const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-plex",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Aromia",
   description: "Comparador y recomendador de perfumes",
+  openGraph: {
+    siteName: "Aromia",
+    title: "Aromia",
+    description: "Comparador y recomendador de perfumes",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 const THEME_INIT_SCRIPT = `

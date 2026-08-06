@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { QuizFlow } from "@/components/quiz/QuizFlow";
+
+export const metadata: Metadata = {
+  title: "¿Qué perfume eres? — Aromia",
+  description: "Respondé el quiz de matching y descubrí qué perfumes van con vos.",
+  alternates: { canonical: "/quiz" },
+};
 
 export default function QuizPage() {
   return (
