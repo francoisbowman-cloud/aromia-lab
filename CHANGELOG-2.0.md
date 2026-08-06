@@ -1118,3 +1118,59 @@ auditoría + aprobación visual + preview.
   gasto de $0.50 USD, aprobada por Brey pero corrida en el mismo tramo de
   trabajo — ver entrada siguiente si ya se ejecutó, o `reports/image-audits/`
   en el repo para el resultado más reciente.
+
+## 2026-08-05 — Code (Claude Code) — Fase 2, primera ejecución real del piloto (commit local `8a6a2db`)
+
+Sigue en `assets/image-pilot-01`, sin push. Brey aprobó el modo seco y
+autorizó la ejecución real (`npm run images:audit-pilot -- --limit-usd=0.50`).
+
+- **Resultado: 5/5 perfumes procesados, coste estimado $0.06891** de $0.50
+  (12,743 tokens de entrada + 5,428 de salida, modelo `gpt-4.1`).
+  Clasificaciones: Aventus **D** (sustituir — la foto usa etiqueta
+  impresa, la referencia real lleva placa metálica grabada), Baccarat
+  Rouge 540 EDP **A** (usar tal cual), Sauvage EDP **D** (sustituir — la
+  caja de la foto dice "Eau de Toilette", no EDP: confusión de variante
+  real detectada por el propio modelo), Black Opium EDP **D** (sustituir
+  — frasco recortado + caja en la composición), Erba Pura **A** (usar tal
+  cual). Resultados completos en `reports/image-audits/*.json` y
+  `_summary.json`; propuesta de inventario (no el oficial) en
+  `data/image-inventory.audit-proposal.csv`.
+- **Duda abierta, no resuelta automáticamente:** el texto de la respuesta
+  para Baccarat Rouge 540 EDP la describe en un punto como "Extrait de
+  Parfum" (variante real distinta a la Eau de Parfum que etiqueta el
+  catálogo) — no disparó el chequeo automático porque marca + nombre sí
+  aparecen en la respuesta. Confirmar la variante real del frasco
+  fotografiado antes de aprobar el tratamiento "usar tal cual".
+- **Dos bugs reales encontrados y corregidos en el camino** (dos intentos
+  previos a este resultado, ninguno tocó el inventario oficial):
+  1. La API de OpenAI en modo `strict` exige que `required` liste *todas*
+     las propiedades del schema — faltaba `risk_flags`; la solicitud se
+     rechazaba con 400 antes de generar nada (coste $0, primer intento).
+     Fix en `schemas/image-audit.schema.json`.
+  2. `writeProposalCsv()` hacía `split(",")` ingenuo sobre
+     `data/image-inventory.csv`, que tiene comas dentro de campos `notes`
+     entrecomillados — corrompía esas filas. Mismo error que este mismo
+     documento ya advierte para `PERFUMES_INITIAL_50.csv` (ver sección
+     "Contenido — Sprint 1"). Reemplazado por `csv-parse`/`csv-stringify`
+     (RFC 4180 real) — nuevas dependencias en el `package.json` de raíz.
+     Verificado: la propuesta final tiene 100 filas, 20 columnas,
+     exactamente 5 cambiadas, el resto byte-idéntico al oficial.
+  3. La heurística de verificación de variante comparaba el nombre
+     completo del perfume como substring exacto contra solo dos campos de
+     texto de la respuesta — dio un falso positivo con Baccarat Rouge 540
+     EDP en el segundo intento (el modelo no repitió "EDP" en esos dos
+     campos), deteniendo el piloto después de procesar solo Aventus. Se
+     corrigió para normalizar acentos/mayúsculas y buscar marca + palabra
+     significativa del nombre en toda la respuesta. Ese mismo intento
+     también reveló que el coste/resultado de una llamada ya pagada se
+     descartaba si el piloto se detenía justo después — corregido para
+     que el registro se guarde siempre, incluso si el piloto se detiene a
+     continuación.
+- Confirmado al cierre: `data/image-inventory.csv` (oficial),
+  `PERFUMES_INITIAL_50.csv` (raíz y `apps/api/data/`) intactos;
+  `scripts/images/optimize.mjs` no se invocó; sin push al remoto;
+  `OPENAI_API_KEY` usada solo desde variable de entorno en el momento de
+  la llamada, nunca impresa/guardada/logueada.
+- Pendiente: resultado real de Cowork (Paso 2 del plan de Fase 2, todavía
+  no recibido); consolidación de ambos resultados; propuesta de
+  tratamiento con aprobación explícita antes de procesar ninguna imagen.
