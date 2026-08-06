@@ -1025,3 +1025,31 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
 2. Mensaje posterior de Brey: **desestimó esa reserva** ("elimina los demás... solo deja Main") y pidió borrar todo lo restante. Ejecutado: `Chatgpt-aromia`, `design/ui-ux`, `backup/production-2026-08-04`, `autopublish/2026-07-18`, `autopublish/2026-07-20`, `autopublish/2026-07-23`, `autopublish/2026-07-29` borradas de origin y localmente. Repo queda con una sola rama: `main`. Los tags de respaldo (`production-before-main-consolidation-2026-08-04`, `legacy-static-v1-final`) no se tocaron — siguen siendo el punto de rollback si hiciera falta.
 
 **Estado final:** `main` en `c167934`, único branch del repo, protegido, sirviendo producción real en `aromialab.com` vía Railway. Documentación actualizada en la misma sesión: este changelog, `ESTADO-aromia.md` (decisión #97 + secciones 1, 5, 6) y `CLAUDE.md` ("Qué es este repo", CI/CD, estructura de carpetas).
+
+## 2026-08-06 — Code (Claude Code) — SEO técnico: metadata por producto + JSON-LD
+
+Continuación autónoma del backlog general (rama nueva `seo/technical-audit-01`,
+sin mezclar con el trabajo de imágenes que sigue en `assets/image-pilot-01`
+sin fusionar). Categoría "SEO técnico" — criterio objetivo, sin decisión
+de producto pendiente.
+
+Hallazgo: las 50 fichas de producto (`/catalogo/[slug]`) y el listado
+(`/catalogo`) no tenían `generateMetadata`/`metadata` propio — heredaban
+el título genérico del layout raíz ("Aromia") pese a estar las 50
+indexadas en `sitemap.ts` (priority 0.6). Cualquier link de producto
+compartido en redes mostraba el mismo texto genérico sin importar el
+perfume.
+
+Agregado: `generateMetadata` con título/descripción/OG/Twitter Card real
+por perfume + canonical + JSON-LD `Product` (schema.org, `brand`/`offers`
+reales, deliberadamente sin `aggregateRating` porque no hay conteo real
+de reseñas todavía). Metadata estática en `/catalogo` y `/quiz`.
+`metadataBase` en el layout raíz (antes ausente — necesario para que Next
+resuelva URLs de imagen OG relativas a absolutas).
+
+Verificado en vivo (dev server contra API de producción): título de
+pestaña, meta OG, canonical y el JSON-LD parseado confirman datos reales
+del perfume. tsc/eslint limpios, sin errores de consola.
+
+[PR #7](https://github.com/francoisbowman-cloud/aromia-lab/pull/7), sin
+fusionar todavía.
