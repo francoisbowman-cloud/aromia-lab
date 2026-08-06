@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06T14:36:49.453Z",
+  "generated_at": "2026-08-06T15:05:34.615Z",
   "generated_by": "scripts/prepare-image-treatment-plan.mjs",
   "scope": "Especificación de tratamiento (qué se necesita), no generación de archivos binarios de reemplazo — ver blocked_reason por perfume.",
   "entries": [
@@ -18,6 +18,7 @@
       ],
       "readiness": "blocked_pending_source",
       "blocked_reason": "No hay una URL de fuente candidata verificada todavía (evidencia del defecto actual: reports/image-audits/treatment-evidence/aventus-current-flat-label-confirmed.jpg). Requiere localizar en un retailer autorizado (o banco de assets con licencia) una foto donde la placa metálica sea visible, y confirmar visualmente contra la referencia real antes de proponerla — no se hizo en este paso por ser una decisión de fidelidad de marca de alto riesgo si se elige mal (mismo tipo de error ya detectado en Sauvage EDP).",
+      "sourcing_attempts": [],
       "source_image_inspected_visually": true,
       "no_optimize_invoked": true,
       "no_image_url_modified": true,
@@ -37,7 +38,15 @@
         "Frasco completo, sin recorte agresivo"
       ],
       "readiness": "blocked_pending_source",
-      "blocked_reason": "Requiere localizar en un retailer autorizado una foto de Sauvage EDP (no EDT) y confirmar visualmente el texto 'Eau de Parfum' en la caja/etiqueta antes de proponerla — no se hizo en este paso, dado el error ya cometido una vez con esta misma variante (evidencia de la imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg).",
+      "blocked_reason": "Se intentó sourcing real en Amazon (búsquedas 'Dior Sauvage Eau de Parfum' y '...100ml') — Dior Sauvage tiene 4 concentraciones (EDT, EDP, Parfum, Elixir) con cajas visualmente muy similares, y ninguna búsqueda produjo todavía un listado de un solo frasco cuya caja diga inequívocamente 'Eau de Parfum' (no solo 'Parfum', no 'Toilette', no 'Extrait'). Primer candidato descartado por evidencia visual directa: reports/image-audits/treatment-evidence/sauvage-edp-candidate1-REJECTED-is-parfum-not-edp.jpg (caja dice 'SAUVAGE PARFUM', variante distinta a EDP). Dado el error ya cometido una vez con esta misma variante (imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg), se prefirió detener el sourcing automático antes que arriesgar una tercera equivocación de variante, y reportarlo para pedir un enlace de fuente ya vetado.",
+      "sourcing_attempts": [
+        {
+          "candidate_url": "https://m.media-amazon.com/images/I/51lWPKOtYUL._SL1500_.jpg",
+          "source_listing": "https://www.amazon.com/Sauvage-Parfum-Spray-Christian-Dior/dp/B081QZH8CL",
+          "verdict": "rejected",
+          "reason": "Caja dice 'SAUVAGE PARFUM' (concentración 'Parfum', no 'Eau de Parfum') — variante distinta a la esperada."
+        }
+      ],
       "source_image_inspected_visually": true,
       "no_optimize_invoked": true,
       "no_image_url_modified": true,
@@ -58,6 +67,7 @@
       ],
       "readiness": "blocked_pending_source",
       "blocked_reason": "Se descartó la hipótesis de recorte tras probarla directamente (evidencia: reports/image-audits/treatment-evidence/black-opium-edp-crop-attempt-base-cutoff.jpg): la base del frasco está fuera del encuadre en el archivo fuente, no solo detrás de la caja. Requiere una fuente fotográfica nueva con el frasco completo.",
+      "sourcing_attempts": [],
       "source_image_inspected_visually": true,
       "no_optimize_invoked": true,
       "no_image_url_modified": true,

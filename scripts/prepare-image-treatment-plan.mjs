@@ -63,7 +63,15 @@ const TREATMENTS = {
       "Frasco completo, sin recorte agresivo",
     ],
     readiness: "blocked_pending_source",
-    blocked_reason: "Requiere localizar en un retailer autorizado una foto de Sauvage EDP (no EDT) y confirmar visualmente el texto 'Eau de Parfum' en la caja/etiqueta antes de proponerla — no se hizo en este paso, dado el error ya cometido una vez con esta misma variante (evidencia de la imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg).",
+    blocked_reason: "Se intentó sourcing real en Amazon (búsquedas 'Dior Sauvage Eau de Parfum' y '...100ml') — Dior Sauvage tiene 4 concentraciones (EDT, EDP, Parfum, Elixir) con cajas visualmente muy similares, y ninguna búsqueda produjo todavía un listado de un solo frasco cuya caja diga inequívocamente 'Eau de Parfum' (no solo 'Parfum', no 'Toilette', no 'Extrait'). Primer candidato descartado por evidencia visual directa: reports/image-audits/treatment-evidence/sauvage-edp-candidate1-REJECTED-is-parfum-not-edp.jpg (caja dice 'SAUVAGE PARFUM', variante distinta a EDP). Dado el error ya cometido una vez con esta misma variante (imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg), se prefirió detener el sourcing automático antes que arriesgar una tercera equivocación de variante, y reportarlo para pedir un enlace de fuente ya vetado.",
+    sourcing_attempts: [
+      {
+        candidate_url: "https://m.media-amazon.com/images/I/51lWPKOtYUL._SL1500_.jpg",
+        source_listing: "https://www.amazon.com/Sauvage-Parfum-Spray-Christian-Dior/dp/B081QZH8CL",
+        verdict: "rejected",
+        reason: "Caja dice 'SAUVAGE PARFUM' (concentración 'Parfum', no 'Eau de Parfum') — variante distinta a la esperada.",
+      },
+    ],
   },
   "black-opium-edp": {
     defect: "La variante (EDP) está confirmada correcta — la caja dice 'Eau de Parfum', coincide con el catálogo. PERO se intentó un recorte de prueba (sharp, extrayendo toda la franja derecha del archivo 1500x1500 sin límite de altura) y la base del frasco sigue sin verse completa: la imagen fuente tiene la botella cortada por abajo en el original, no es solo un problema de encuadre/selección — no hay pixeles de la base para recuperar recortando.",
@@ -95,6 +103,7 @@ function buildPlan() {
       requirements: treatment.requirements,
       readiness: treatment.readiness,
       blocked_reason: treatment.blocked_reason,
+      sourcing_attempts: treatment.sourcing_attempts ?? [],
       source_image_inspected_visually: true,
       no_optimize_invoked: true,
       no_image_url_modified: true,
@@ -130,6 +139,12 @@ function buildMarkdown(plan) {
     for (const r of e.requirements) lines.push(`  - ${r}`);
     lines.push(`- **Estado:** ${e.readiness}`);
     lines.push(`- **Bloqueo:** ${e.blocked_reason}`);
+    if (e.sourcing_attempts.length) {
+      lines.push("- **Intentos de sourcing:**");
+      for (const a of e.sourcing_attempts) {
+        lines.push(`  - \`${a.candidate_url}\` (${a.source_listing}) → **${a.verdict}**: ${a.reason}`);
+      }
+    }
     lines.push("");
   }
   return lines.join("\n");

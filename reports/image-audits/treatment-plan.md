@@ -1,6 +1,6 @@
 # Piloto de auditoría de imágenes — Fase 2 — Plan de tratamiento visual
 
-Generado: 2026-08-06T14:36:49.453Z
+Generado: 2026-08-06T15:05:34.615Z
 
 Este plan especifica QUÉ necesita cada imagen para pasar a `affiliate-approved` / catalog-primary aprobado. No incluye archivos binarios de reemplazo — sourcing de fuente nueva y/o reprocesamiento (crop) requieren inspección visual directa del archivo o navegación de sitios externos, no ejecutadas en este paso. Ningún `image_url` fue modificado, ninguna imagen fue descargada, `scripts/images/optimize.mjs` no fue invocado.
 
@@ -28,7 +28,9 @@ Este plan especifica QUÉ necesita cada imagen para pasar a `affiliate-approved`
   - Fondo blanco uniforme
   - Frasco completo, sin recorte agresivo
 - **Estado:** blocked_pending_source
-- **Bloqueo:** Requiere localizar en un retailer autorizado una foto de Sauvage EDP (no EDT) y confirmar visualmente el texto 'Eau de Parfum' en la caja/etiqueta antes de proponerla — no se hizo en este paso, dado el error ya cometido una vez con esta misma variante (evidencia de la imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg).
+- **Bloqueo:** Se intentó sourcing real en Amazon (búsquedas 'Dior Sauvage Eau de Parfum' y '...100ml') — Dior Sauvage tiene 4 concentraciones (EDT, EDP, Parfum, Elixir) con cajas visualmente muy similares, y ninguna búsqueda produjo todavía un listado de un solo frasco cuya caja diga inequívocamente 'Eau de Parfum' (no solo 'Parfum', no 'Toilette', no 'Extrait'). Primer candidato descartado por evidencia visual directa: reports/image-audits/treatment-evidence/sauvage-edp-candidate1-REJECTED-is-parfum-not-edp.jpg (caja dice 'SAUVAGE PARFUM', variante distinta a EDP). Dado el error ya cometido una vez con esta misma variante (imagen actual, EDT: reports/image-audits/treatment-evidence/sauvage-edp-contradiction-eau-de-toilette.jpg), se prefirió detener el sourcing automático antes que arriesgar una tercera equivocación de variante, y reportarlo para pedir un enlace de fuente ya vetado.
+- **Intentos de sourcing:**
+  - `https://m.media-amazon.com/images/I/51lWPKOtYUL._SL1500_.jpg` (https://www.amazon.com/Sauvage-Parfum-Spray-Christian-Dior/dp/B081QZH8CL) → **rejected**: Caja dice 'SAUVAGE PARFUM' (concentración 'Parfum', no 'Eau de Parfum') — variante distinta a la esperada.
 
 ## Black Opium EDP (`black-opium-edp`) — Yves Saint Laurent
 
