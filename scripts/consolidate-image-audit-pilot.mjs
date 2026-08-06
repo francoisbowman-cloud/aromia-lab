@@ -66,6 +66,26 @@ const SAUVAGE_HUMAN_VERIFICATION = {
     "La verificación humana resuelve la duda de IDENTIDAD (¿es Sauvage EDP?). No resuelve por sí sola los motivos TÉCNICOS independientes que ya llevaron a clasificación D (caja visible en el encuadre, recorte agresivo, contraste) — esos siguen vigentes y separados de la duda de variante.",
 };
 
+// Resolución humana de Baccarat Rouge 540 EDP (Brey, 2026-08-06): confirma
+// que la variante es correctamente EDP — cierra el conflicto EDP/Extrait que
+// ambas auditorías (ChatGPT y Cowork) habían mencionado de forma
+// independiente sin poder resolverlo. Deja de ser "provisional".
+const BACCARAT_HUMAN_VERIFICATION = {
+  resolved: true,
+  resolution_type: "human_verification",
+  resolved_by: "Brey",
+  recorded_at: new Date().toISOString(),
+  statement: "Brey confirmó que Baccarat Rouge 540 EDP es correcta — el conflicto EDP/Extrait queda cerrado.",
+  deferred_exception: false,
+  blocks_pilot: false,
+  blocks_final_change: false,
+  overrides: [
+    "operational_review.requires_human_review (motivo variant_term_mismatch: extrait_vs_expected_edp) queda resuelto para IDENTIDAD — no se reabre sin nueva evidencia.",
+  ],
+  note:
+    "La verificación humana resuelve la duda de variante. La clasificación visual A y la recomendación 'usar tal cual' ya no son provisionales — quedan cerradas como conservar.",
+};
+
 function parseCoworkRow(slug) {
   if (!existsSync(OFFICIAL_INVENTORY_CSV)) return null;
   const raw = readFileSync(OFFICIAL_INVENTORY_CSV, "utf-8");
@@ -88,7 +108,7 @@ function parseCoworkRow(slug) {
 // no se fija acá.
 const PROPOSED_ACTION = {
   aventus: "sustituir",
-  "baccarat-rouge-540-edp": "conservar_provisional",
+  "baccarat-rouge-540-edp": "conservar",
   "black-opium-edp": "sustituir_o_reprocesar",
   "erba-pura": "conservar",
 };
@@ -131,10 +151,10 @@ function buildDecision(perfumeCfg, report, coworkRow) {
   let proposedAction = PROPOSED_ACTION[slug] ?? null;
   let approvalCondition = null;
   let reasonSummary = null;
-  let sauvageResolution = null;
+  let humanResolution = null;
 
   if (slug === "sauvage-edp") {
-    sauvageResolution = SAUVAGE_HUMAN_VERIFICATION;
+    humanResolution = SAUVAGE_HUMAN_VERIFICATION;
     // La verificación humana resuelve la duda de IDENTIDAD, no los motivos
     // técnicos independientes (caja visible, recorte agresivo, contraste)
     // que ya sostenían la clasificación D — por eso la acción propuesta
@@ -152,10 +172,14 @@ function buildDecision(perfumeCfg, report, coworkRow) {
       "RESUELTO por verificación humana (Brey, 2026-08-05): la ambigüedad EDT/EDP detectada automáticamente por ambas auditorías (ChatGPT vía API y Cowork) no aplica — el producto es Sauvage EDP, confirmado."
     );
   } else if (slug === "baccarat-rouge-540-edp") {
-    approvalCondition =
-      "Confirmar contra fuente oficial (empaque real / retailer autorizado) si el frasco fotografiado es Eau de Parfum o Extrait de Parfum antes de aprobación final para catálogo — dos auditorías independientes (ChatGPT y Cowork) citan 'Extrait de Parfum' en la caja mostrada, mientras el catálogo declara 'EDP'.";
+    humanResolution = BACCARAT_HUMAN_VERIFICATION;
+    operationalStatus = "human_verified_no_issues_remain";
+    approvalCondition = "Ya aprobado — usar tal cual, sin cambios pendientes.";
     reasonSummary =
-      "Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta), pero se conserva PROVISIONALMENTE — persiste una duda de variante no resuelta (EDP vs. Extrait de Parfum) mencionada de forma independiente por ambas auditorías.";
+      "Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta). El conflicto de variante EDP/Extrait que ambas auditorías mencionaron de forma independiente queda CERRADO por verificación humana (Brey, 2026-08-06) — ya no es provisional.";
+    conflicts.push(
+      "RESUELTO por verificación humana (Brey, 2026-08-06): la ambigüedad EDP/Extrait detectada por ambas auditorías (ChatGPT vía API y Cowork) no aplica — la variante es correctamente EDP, confirmado."
+    );
   } else if (slug === "aventus") {
     approvalCondition =
       "No aprobar como catalog-primary hasta conseguir una fuente fotográfica con la placa metálica grabada auténtica (la imagen actual muestra una etiqueta de papel plana, no la placa real de Creed Aventus).";
@@ -202,7 +226,7 @@ function buildDecision(perfumeCfg, report, coworkRow) {
     conflicts,
     approval_condition: approvalCondition,
     reason_summary: reasonSummary,
-    sauvage_human_resolution: sauvageResolution,
+    human_resolution: humanResolution,
   };
 }
 
@@ -286,13 +310,12 @@ function buildMarkdown(consolidated) {
     } else {
       lines.push("- **Conflictos:** ninguno.");
     }
-    if (d.sauvage_human_resolution) {
-      lines.push("- **Resolución humana (Sauvage EDP):**");
-      lines.push(`  - ${d.sauvage_human_resolution.statement}`);
-      lines.push(`  - deferred_exception: ${d.sauvage_human_resolution.deferred_exception}`);
-      lines.push(`  - blocks_pilot: ${d.sauvage_human_resolution.blocks_pilot}`);
-      lines.push(`  - blocks_final_sauvage_change: ${d.sauvage_human_resolution.blocks_final_sauvage_change}`);
-      lines.push(`  - ${d.sauvage_human_resolution.note}`);
+    if (d.human_resolution) {
+      lines.push(`- **Resolución humana (${d.perfume_name}):**`);
+      lines.push(`  - ${d.human_resolution.statement}`);
+      lines.push(`  - deferred_exception: ${d.human_resolution.deferred_exception}`);
+      lines.push(`  - blocks_pilot: ${d.human_resolution.blocks_pilot}`);
+      lines.push(`  - ${d.human_resolution.note}`);
     }
     lines.push("");
   }
@@ -321,8 +344,8 @@ function writeProposalCsv(decisions) {
     ].join(", ");
 
     record.notes = `${record.notes} ${consolidatedNote}.`;
-    if (decision.perfume_slug === "sauvage-edp") {
-      record.notes += " RESOLUCIÓN HUMANA (Brey, 2026-08-05): identidad Sauvage EDP confirmada, deferred_exception=false, blocks_pilot=false, blocks_final_sauvage_change=false.";
+    if (decision.human_resolution) {
+      record.notes += ` RESOLUCIÓN HUMANA (${decision.human_resolution.resolved_by}): ${decision.human_resolution.statement} deferred_exception=${decision.human_resolution.deferred_exception}, blocks_pilot=${decision.human_resolution.blocks_pilot}.`;
     }
   }
 

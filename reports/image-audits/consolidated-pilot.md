@@ -1,6 +1,6 @@
 # Piloto de auditoría de imágenes — Fase 2 — Consolidación (Paso 5)
 
-Generado: 2026-08-06T03:55:42.988Z
+Generado: 2026-08-06T13:51:51.799Z
 
 Este documento consolida, sin alterar ninguno de los resultados originales, tres fuentes: la auditoría vía API de ChatGPT (corrida real 2026-08-05), la capa `operational_review` de reconciliación local, y el resumen real de Cowork. Ninguna llamada nueva a la API fue realizada para generar este documento.
 
@@ -22,13 +22,19 @@ Este documento consolida, sin alterar ninguno de los resultados originales, tres
 
 - **Clasificación visual (ChatGPT):** A (semáforo original verde, semáforo operativo amarillo), confianza 0.98. Recomendación original: "Usar tal cual".
 - **Resultado Cowork:** license_status=`affiliate-approved`, 1200x1500px, fondo white-studio, calidad visual high.
-- **Estado operativo:** requires_human_review
-- **Acción propuesta:** conservar_provisional
+- **Estado operativo:** human_verified_no_issues_remain
+- **Acción propuesta:** conservar
 - **Nivel de confianza:** 0.98
-- **Condición de aprobación:** Confirmar contra fuente oficial (empaque real / retailer autorizado) si el frasco fotografiado es Eau de Parfum o Extrait de Parfum antes de aprobación final para catálogo — dos auditorías independientes (ChatGPT y Cowork) citan 'Extrait de Parfum' en la caja mostrada, mientras el catálogo declara 'EDP'.
-- **Motivo resumido:** Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta), pero se conserva PROVISIONALMENTE — persiste una duda de variante no resuelta (EDP vs. Extrait de Parfum) mencionada de forma independiente por ambas auditorías.
+- **Condición de aprobación:** Ya aprobado — usar tal cual, sin cambios pendientes.
+- **Motivo resumido:** Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta). El conflicto de variante EDP/Extrait que ambas auditorías mencionaron de forma independiente queda CERRADO por verificación humana (Brey, 2026-08-06) — ya no es provisional.
 - **Conflictos:**
   - Ambigüedad de variante: el texto de la propia respuesta del modelo menciona 'extrait' junto al frasco/caja, mientras el nombre de catálogo declara 'edp'.
+  - RESUELTO por verificación humana (Brey, 2026-08-06): la ambigüedad EDP/Extrait detectada por ambas auditorías (ChatGPT vía API y Cowork) no aplica — la variante es correctamente EDP, confirmado.
+- **Resolución humana (Baccarat Rouge 540 EDP):**
+  - Brey confirmó que Baccarat Rouge 540 EDP es correcta — el conflicto EDP/Extrait queda cerrado.
+  - deferred_exception: false
+  - blocks_pilot: false
+  - La verificación humana resuelve la duda de variante. La clasificación visual A y la recomendación 'usar tal cual' ya no son provisionales — quedan cerradas como conservar.
 
 ## Sauvage EDP (`sauvage-edp`) — Dior
 
@@ -46,7 +52,6 @@ Este documento consolida, sin alterar ninguno de los resultados originales, tres
   - Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.
   - deferred_exception: false
   - blocks_pilot: false
-  - blocks_final_sauvage_change: false
   - La verificación humana resuelve la duda de IDENTIDAD (¿es Sauvage EDP?). No resuelve por sí sola los motivos TÉCNICOS independientes que ya llevaron a clasificación D (caja visible en el encuadre, recorte agresivo, contraste) — esos siguen vigentes y separados de la duda de variante.
 
 ## Black Opium EDP (`black-opium-edp`) — Yves Saint Laurent

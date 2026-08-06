@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-08-06T13:54:32.567Z",
+  "generated_by": "inline validation (Paso 6 de consolidación Fase 2)",
+  "schema_validation": {
+    "aventus": {
+      "schema_valid": true,
+      "errors": []
+    },
+    "baccarat-rouge-540-edp": {
+      "schema_valid": true,
+      "errors": []
+    },
+    "sauvage-edp": {
+      "schema_valid": true,
+      "errors": []
+    },
+    "black-opium-edp": {
+      "schema_valid": true,
+      "errors": []
+    },
+    "erba-pura": {
+      "schema_valid": true,
+      "errors": []
+    }
+  },
+  "inventory_csv_integrity": {
+    "official_rows": 100,
+    "proposal_rows": 100,
+    "row_count_match": true,
+    "source_url_and_slug_mismatches": 0
+  },
+  "all_ok": true
+}

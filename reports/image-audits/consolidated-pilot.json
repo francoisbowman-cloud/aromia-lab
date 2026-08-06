@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06T03:55:42.988Z",
+  "generated_at": "2026-08-06T13:51:51.799Z",
   "generated_by": "scripts/consolidate-image-audit-pilot.mjs",
   "inputs": {
     "individual_reports": [
@@ -48,7 +48,7 @@
       ],
       "approval_condition": "No aprobar como catalog-primary hasta conseguir una fuente fotográfica con la placa metálica grabada auténtica (la imagen actual muestra una etiqueta de papel plana, no la placa real de Creed Aventus).",
       "reason_summary": "ChatGPT detectó que la etiqueta no coincide con el diseño real del frasco (placa metálica vs. etiqueta de papel) — un defecto de fidelidad de marca que Cowork no evaluó (su brief cubre licencia/dimensiones/calidad técnica, no fidelidad de diseño frente a la referencia real).",
-      "sauvage_human_resolution": null
+      "human_resolution": null
     },
     {
       "perfume_slug": "baccarat-rouge-540-edp",
@@ -72,15 +72,29 @@
         "visual_quality": "high",
         "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1200x1500px). Fondo blanco de estudio, botella completa junto a su caja (Maison Francis Kurkdjian, Extrait de Parfum), alta nitidez, sin watermark de retailer. Sin hallazgos."
       },
-      "operational_status": "requires_human_review",
-      "proposed_action": "conservar_provisional",
+      "operational_status": "human_verified_no_issues_remain",
+      "proposed_action": "conservar",
       "confidence_level": 0.98,
       "conflicts": [
-        "Ambigüedad de variante: el texto de la propia respuesta del modelo menciona 'extrait' junto al frasco/caja, mientras el nombre de catálogo declara 'edp'."
+        "Ambigüedad de variante: el texto de la propia respuesta del modelo menciona 'extrait' junto al frasco/caja, mientras el nombre de catálogo declara 'edp'.",
+        "RESUELTO por verificación humana (Brey, 2026-08-06): la ambigüedad EDP/Extrait detectada por ambas auditorías (ChatGPT vía API y Cowork) no aplica — la variante es correctamente EDP, confirmado."
       ],
-      "approval_condition": "Confirmar contra fuente oficial (empaque real / retailer autorizado) si el frasco fotografiado es Eau de Parfum o Extrait de Parfum antes de aprobación final para catálogo — dos auditorías independientes (ChatGPT y Cowork) citan 'Extrait de Parfum' en la caja mostrada, mientras el catálogo declara 'EDP'.",
-      "reason_summary": "Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta), pero se conserva PROVISIONALMENTE — persiste una duda de variante no resuelta (EDP vs. Extrait de Parfum) mencionada de forma independiente por ambas auditorías.",
-      "sauvage_human_resolution": null
+      "approval_condition": "Ya aprobado — usar tal cual, sin cambios pendientes.",
+      "reason_summary": "Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta). El conflicto de variante EDP/Extrait que ambas auditorías mencionaron de forma independiente queda CERRADO por verificación humana (Brey, 2026-08-06) — ya no es provisional.",
+      "human_resolution": {
+        "resolved": true,
+        "resolution_type": "human_verification",
+        "resolved_by": "Brey",
+        "recorded_at": "2026-08-06T13:51:51.798Z",
+        "statement": "Brey confirmó que Baccarat Rouge 540 EDP es correcta — el conflicto EDP/Extrait queda cerrado.",
+        "deferred_exception": false,
+        "blocks_pilot": false,
+        "blocks_final_change": false,
+        "overrides": [
+          "operational_review.requires_human_review (motivo variant_term_mismatch: extrait_vs_expected_edp) queda resuelto para IDENTIDAD — no se reabre sin nueva evidencia."
+        ],
+        "note": "La verificación humana resuelve la duda de variante. La clasificación visual A y la recomendación 'usar tal cual' ya no son provisionales — quedan cerradas como conservar."
+      }
     },
     {
       "perfume_slug": "sauvage-edp",
@@ -113,11 +127,11 @@
       ],
       "approval_condition": "Identidad de producto ya confirmada por Brey (no requiere más verificación). Falta: nueva fuente fotográfica o reprocesamiento que muestre solo el frasco (sin caja), fondo uniforme, sin recorte agresivo, antes de aprobar como catalog-primary.",
       "reason_summary": "Verificación humana (Brey, 2026-08-05) confirma que imagen y enlace corresponden a Sauvage EDP — la duda de variante EDT/EDP detectada por ambas auditorías queda resuelta como excepción no bloqueante. La clasificación D original se mantiene por motivos técnicos ajenos a la variante (caja visible en el encuadre, recorte agresivo, contraste), no por duda de identidad.",
-      "sauvage_human_resolution": {
+      "human_resolution": {
         "resolved": true,
         "resolution_type": "human_verification",
         "resolved_by": "Brey",
-        "recorded_at": "2026-08-06T03:55:42.986Z",
+        "recorded_at": "2026-08-06T13:51:51.783Z",
         "statement": "Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.",
         "deferred_exception": false,
         "blocks_pilot": false,
@@ -159,7 +173,7 @@
       ],
       "approval_condition": "Sustituir por, o reprocesar hacia, una fuente donde aparezca solo el frasco completo (sin caja, sin recorte agresivo), sobre fondo uniforme — regla no negociable de catálogo Aromia.",
       "reason_summary": "El frasco es auténtico y la variante coincide (Cowork confirma 'Eau de Parfum' en la etiqueta), pero la composición viola dos reglas no negociables de catálogo Aromia: la caja aparece en el encuadre y el frasco está parcialmente recortado. Cowork aprobó por no evaluar esas reglas específicas de Aromia.",
-      "sauvage_human_resolution": null
+      "human_resolution": null
     },
     {
       "perfume_slug": "erba-pura",
@@ -189,7 +203,7 @@
       "conflicts": [],
       "approval_condition": "Ya aprobado — usar tal cual, sin cambios pendientes.",
       "reason_summary": "Ambas auditorías (ChatGPT y Cowork) coinciden en alta fidelidad y calidad técnica, sin hallazgos de identidad, variante ni composición.",
-      "sauvage_human_resolution": null
+      "human_resolution": null
     }
   ]
 }

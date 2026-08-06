@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-08-06T13:53:10.881Z",
+  "generated_by": "scripts/prepare-image-treatment-plan.mjs",
+  "scope": "Especificación de tratamiento (qué se necesita), no generación de archivos binarios de reemplazo — ver blocked_reason por perfume.",
+  "entries": [
+    {
+      "perfume_slug": "aventus",
+      "perfume_name": "Aventus",
+      "brand": "Creed",
+      "proposed_action": "sustituir",
+      "defect": "La etiqueta del frasco fotografiado es de papel plano; el frasco real de Creed Aventus lleva una placa metálica grabada con el caballero. Es un defecto de fidelidad de marca, no técnico.",
+      "strategy": "sourcing_new_photo",
+      "requirements": [
+        "Frasco con placa metálica grabada visible (no etiqueta de papel)",
+        "Fondo blanco uniforme, sin logos de retailer",
+        "Botella completa, sin recortes agresivos",
+        "Proporción y color consistentes con la referencia real de Creed"
+      ],
+      "readiness": "blocked_pending_source",
+      "blocked_reason": "No hay una URL de fuente candidata verificada todavía. Requiere localizar en un retailer autorizado (o banco de assets con licencia) una foto donde la placa metálica sea visible, y confirmar visualmente contra la referencia real antes de proponerla — no se hizo en este paso por ser una decisión de fidelidad de marca de alto riesgo si se elige mal.",
+      "no_file_downloaded": true,
+      "no_optimize_invoked": true,
+      "no_image_url_modified": true
+    },
+    {
+      "perfume_slug": "sauvage-edp",
+      "perfume_name": "Sauvage EDP",
+      "brand": "Dior",
+      "proposed_action": "sustituir_o_reprocesar_fuente",
+      "defect": "La caja del perfume aparece en el encuadre y el recorte no aísla el frasco — viola las reglas no negociables de catálogo Aromia (solo frasco, fondo uniforme, sin recorte agresivo). La identidad del producto (Sauvage EDP) ya está confirmada por verificación humana; el problema es puramente técnico de encuadre.",
+      "strategy": "reprocess_or_source_new_photo",
+      "requirements": [
+        "Solo el frasco, sin la caja en el encuadre",
+        "Fondo blanco uniforme",
+        "Frasco completo, sin recorte agresivo",
+        "Mantener identidad confirmada: Sauvage EDP (Dior) — no cambiar variante"
+      ],
+      "readiness": "blocked_pending_source_or_crop_confirmation",
+      "blocked_reason": "Si el frasco es aislable de la caja recortando la imagen actual, este caso podría resolverse con un reprocesamiento simple (crop) en vez de una fuente nueva — pero eso requiere inspeccionar visualmente el archivo real (no solo la descripción textual del modelo) para confirmar que el frasco completo queda dentro del área recortable. No se descargó la imagen para esa inspección en este paso.",
+      "no_file_downloaded": true,
+      "no_optimize_invoked": true,
+      "no_image_url_modified": true
+    },
+    {
+      "perfume_slug": "black-opium-edp",
+      "perfume_name": "Black Opium EDP",
+      "brand": "Yves Saint Laurent",
+      "proposed_action": "sustituir_o_reprocesar",
+      "defect": "La caja aparece en el encuadre y el frasco está parcialmente fuera de cuadro (recorte agresivo por debajo). La variante (EDP) está confirmada correcta por Cowork.",
+      "strategy": "reprocess_or_source_new_photo",
+      "requirements": [
+        "Solo el frasco, sin la caja en el encuadre",
+        "Frasco completo (no cortado por debajo)",
+        "Fondo blanco uniforme",
+        "Mantener identidad confirmada: Black Opium EDP (YSL) — no cambiar variante"
+      ],
+      "readiness": "blocked_pending_source_or_crop_confirmation",
+      "blocked_reason": "Mismo caso que Sauvage EDP: podría resolverse con reprocesamiento (crop) si el frasco completo está contenido en la imagen fuente, pero eso requiere inspección visual directa del archivo, no hecha en este paso.",
+      "no_file_downloaded": true,
+      "no_optimize_invoked": true,
+      "no_image_url_modified": true
+    }
+  ]
+}
