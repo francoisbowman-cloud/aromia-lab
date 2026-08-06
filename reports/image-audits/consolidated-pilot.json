@@ -1,0 +1,195 @@
+{
+  "generated_at": "2026-08-06T03:55:42.988Z",
+  "generated_by": "scripts/consolidate-image-audit-pilot.mjs",
+  "inputs": {
+    "individual_reports": [
+      "reports/image-audits/aventus.json",
+      "reports/image-audits/baccarat-rouge-540-edp.json",
+      "reports/image-audits/sauvage-edp.json",
+      "reports/image-audits/black-opium-edp.json",
+      "reports/image-audits/erba-pura.json"
+    ],
+    "summary": "reports/image-audits/_summary.json",
+    "operational_review_layer": "operational_review (dentro de cada reporte individual)",
+    "cowork_source": "data/image-inventory.csv (working tree actual, editado por Cowork sin commit — leído tal cual, no modificado por este script)",
+    "sauvage_resolution_source": "instrucción textual de Brey en el chat, 2026-08-05"
+  },
+  "no_new_api_calls": true,
+  "official_inventory_untouched": true,
+  "official_inventory_applied_to_production": false,
+  "decisions": [
+    {
+      "perfume_slug": "aventus",
+      "perfume_name": "Aventus",
+      "brand": "Creed",
+      "visual_classification": {
+        "source": "chatgpt_api_pilot_run_2026-08-05",
+        "classification": "D",
+        "traffic_light_original": "rojo",
+        "traffic_light_operational": "rojo",
+        "confidence": 0.98,
+        "recommendation": "Buscar otra fuente: sustituir por foto auténtica del frasco Aventus con placa metálica."
+      },
+      "cowork_result": {
+        "source": "cowork_summary_relayed_in_chat_2026-08-05_reflected_in_data_image-inventory.csv_uncommitted",
+        "license_status": "affiliate-approved",
+        "original_width": "1500",
+        "original_height": "1500",
+        "background_type": "white-studio",
+        "product_crop": "full-bottle",
+        "visual_quality": "high",
+        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1500x1500px). Fondo blanco de estudio, botella completa Creed Aventus sin cortes, alta nitidez, sin watermark de retailer. Sin hallazgos."
+      },
+      "operational_status": "no_review_required",
+      "proposed_action": "sustituir",
+      "confidence_level": 0.98,
+      "conflicts": [
+        "Cowork aprobó la imagen (affiliate-approved, criterios de licencia/dimensiones/técnico) pero ChatGPT la clasificó D (criterios de fidelidad de marca y/o reglas no negociables de encuadre de catálogo Aromia) — evaluaron dimensiones distintas del mismo activo, no es un desacuerdo directo pero sí requiere decisión humana sobre cuál criterio prevalece."
+      ],
+      "approval_condition": "No aprobar como catalog-primary hasta conseguir una fuente fotográfica con la placa metálica grabada auténtica (la imagen actual muestra una etiqueta de papel plana, no la placa real de Creed Aventus).",
+      "reason_summary": "ChatGPT detectó que la etiqueta no coincide con el diseño real del frasco (placa metálica vs. etiqueta de papel) — un defecto de fidelidad de marca que Cowork no evaluó (su brief cubre licencia/dimensiones/calidad técnica, no fidelidad de diseño frente a la referencia real).",
+      "sauvage_human_resolution": null
+    },
+    {
+      "perfume_slug": "baccarat-rouge-540-edp",
+      "perfume_name": "Baccarat Rouge 540 EDP",
+      "brand": "Maison Francis Kurkdjian",
+      "visual_classification": {
+        "source": "chatgpt_api_pilot_run_2026-08-05",
+        "classification": "A",
+        "traffic_light_original": "verde",
+        "traffic_light_operational": "amarillo",
+        "confidence": 0.98,
+        "recommendation": "Usar tal cual"
+      },
+      "cowork_result": {
+        "source": "cowork_summary_relayed_in_chat_2026-08-05_reflected_in_data_image-inventory.csv_uncommitted",
+        "license_status": "affiliate-approved",
+        "original_width": "1200",
+        "original_height": "1500",
+        "background_type": "white-studio",
+        "product_crop": "full-bottle",
+        "visual_quality": "high",
+        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1200x1500px). Fondo blanco de estudio, botella completa junto a su caja (Maison Francis Kurkdjian, Extrait de Parfum), alta nitidez, sin watermark de retailer. Sin hallazgos."
+      },
+      "operational_status": "requires_human_review",
+      "proposed_action": "conservar_provisional",
+      "confidence_level": 0.98,
+      "conflicts": [
+        "Ambigüedad de variante: el texto de la propia respuesta del modelo menciona 'extrait' junto al frasco/caja, mientras el nombre de catálogo declara 'edp'."
+      ],
+      "approval_condition": "Confirmar contra fuente oficial (empaque real / retailer autorizado) si el frasco fotografiado es Eau de Parfum o Extrait de Parfum antes de aprobación final para catálogo — dos auditorías independientes (ChatGPT y Cowork) citan 'Extrait de Parfum' en la caja mostrada, mientras el catálogo declara 'EDP'.",
+      "reason_summary": "Clasificación visual A (alta fidelidad de frasco/tapa/etiqueta), pero se conserva PROVISIONALMENTE — persiste una duda de variante no resuelta (EDP vs. Extrait de Parfum) mencionada de forma independiente por ambas auditorías.",
+      "sauvage_human_resolution": null
+    },
+    {
+      "perfume_slug": "sauvage-edp",
+      "perfume_name": "Sauvage EDP",
+      "brand": "Dior",
+      "visual_classification": {
+        "source": "chatgpt_api_pilot_run_2026-08-05",
+        "classification": "D",
+        "traffic_light_original": "rojo",
+        "traffic_light_operational": "rojo",
+        "confidence": 1,
+        "recommendation": "Buscar otra fuente fotográfica de Sauvage EDP (no EDT), con fondo uniforme y sin elementos adicionales."
+      },
+      "cowork_result": {
+        "source": "cowork_summary_relayed_in_chat_2026-08-05_reflected_in_data_image-inventory.csv_uncommitted",
+        "license_status": "unknown",
+        "original_width": "1000",
+        "original_height": "1000",
+        "background_type": "white-studio",
+        "product_crop": "full-bottle",
+        "visual_quality": "high",
+        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1000x1000px). Fondo blanco de estudio, botella completa junto a su caja, alta nitidez, sin watermark de retailer visible. HALLAZGO: la etiqueta de la caja/frasco dice 'EAU DE TOILETTE', no 'Eau de Parfum' — el nombre de catálogo es 'Sauvage EDP'. No pude confirmar si esto es un error de foto (imagen de EDT usada para un producto EDP) o si el nombre de catálogo es incorrecto/genérico. license_status queda en unknown hasta que Code/Brey confirme cuál de los dos está mal antes de aprobar la fuente."
+      },
+      "operational_status": "human_verified_identity_technical_issues_remain",
+      "proposed_action": "sustituir_o_reprocesar_fuente",
+      "confidence_level": 1,
+      "conflicts": [
+        "Ambigüedad de variante: el texto de la propia respuesta del modelo menciona 'edt, elixir' junto al frasco/caja, mientras el nombre de catálogo declara 'edp'.",
+        "RESUELTO por verificación humana (Brey, 2026-08-05): la ambigüedad EDT/EDP detectada automáticamente por ambas auditorías (ChatGPT vía API y Cowork) no aplica — el producto es Sauvage EDP, confirmado."
+      ],
+      "approval_condition": "Identidad de producto ya confirmada por Brey (no requiere más verificación). Falta: nueva fuente fotográfica o reprocesamiento que muestre solo el frasco (sin caja), fondo uniforme, sin recorte agresivo, antes de aprobar como catalog-primary.",
+      "reason_summary": "Verificación humana (Brey, 2026-08-05) confirma que imagen y enlace corresponden a Sauvage EDP — la duda de variante EDT/EDP detectada por ambas auditorías queda resuelta como excepción no bloqueante. La clasificación D original se mantiene por motivos técnicos ajenos a la variante (caja visible en el encuadre, recorte agresivo, contraste), no por duda de identidad.",
+      "sauvage_human_resolution": {
+        "resolved": true,
+        "resolution_type": "human_verification",
+        "resolved_by": "Brey",
+        "recorded_at": "2026-08-06T03:55:42.986Z",
+        "statement": "Brey verificó personalmente que tanto la imagen como el enlace de origen corresponden a Sauvage EDP.",
+        "deferred_exception": false,
+        "blocks_pilot": false,
+        "blocks_final_sauvage_change": false,
+        "overrides": [
+          "operational_review.requires_human_review (motivo variant_term_mismatch) queda resuelto para el campo de IDENTIDAD del producto — no se reabre sin nueva evidencia.",
+          "cowork license_status=unknown por el mismo motivo de variante queda resuelto para identidad — Cowork no cambió su CSV, esta resolución es una capa de consolidación, no una edición del archivo de Cowork."
+        ],
+        "note": "La verificación humana resuelve la duda de IDENTIDAD (¿es Sauvage EDP?). No resuelve por sí sola los motivos TÉCNICOS independientes que ya llevaron a clasificación D (caja visible en el encuadre, recorte agresivo, contraste) — esos siguen vigentes y separados de la duda de variante."
+      }
+    },
+    {
+      "perfume_slug": "black-opium-edp",
+      "perfume_name": "Black Opium EDP",
+      "brand": "Yves Saint Laurent",
+      "visual_classification": {
+        "source": "chatgpt_api_pilot_run_2026-08-05",
+        "classification": "D",
+        "traffic_light_original": "rojo",
+        "traffic_light_operational": "rojo",
+        "confidence": 0.97,
+        "recommendation": "Buscar o producir una imagen donde el frasco esté completo y sin la caja (solo el frasco sobre fondo blanco uniforme), para cumplir el estándar de catálogo Aromia."
+      },
+      "cowork_result": {
+        "source": "cowork_summary_relayed_in_chat_2026-08-05_reflected_in_data_image-inventory.csv_uncommitted",
+        "license_status": "affiliate-approved",
+        "original_width": "1500",
+        "original_height": "1500",
+        "background_type": "white-studio",
+        "product_crop": "full-bottle",
+        "visual_quality": "high",
+        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1500x1500px). Fondo blanco de estudio, botella completa junto a su caja, etiqueta confirma 'Eau de Parfum' (coincide con nombre de catálogo), alta nitidez, sin watermark de retailer. Sin hallazgos."
+      },
+      "operational_status": "no_review_required",
+      "proposed_action": "sustituir_o_reprocesar",
+      "confidence_level": 0.97,
+      "conflicts": [
+        "Cowork aprobó la imagen (affiliate-approved, criterios de licencia/dimensiones/técnico) pero ChatGPT la clasificó D (criterios de fidelidad de marca y/o reglas no negociables de encuadre de catálogo Aromia) — evaluaron dimensiones distintas del mismo activo, no es un desacuerdo directo pero sí requiere decisión humana sobre cuál criterio prevalece."
+      ],
+      "approval_condition": "Sustituir por, o reprocesar hacia, una fuente donde aparezca solo el frasco completo (sin caja, sin recorte agresivo), sobre fondo uniforme — regla no negociable de catálogo Aromia.",
+      "reason_summary": "El frasco es auténtico y la variante coincide (Cowork confirma 'Eau de Parfum' en la etiqueta), pero la composición viola dos reglas no negociables de catálogo Aromia: la caja aparece en el encuadre y el frasco está parcialmente recortado. Cowork aprobó por no evaluar esas reglas específicas de Aromia.",
+      "sauvage_human_resolution": null
+    },
+    {
+      "perfume_slug": "erba-pura",
+      "perfume_name": "Erba Pura",
+      "brand": "Xerjoff",
+      "visual_classification": {
+        "source": "chatgpt_api_pilot_run_2026-08-05",
+        "classification": "A",
+        "traffic_light_original": "verde",
+        "traffic_light_operational": "verde",
+        "confidence": 0.98,
+        "recommendation": "Usar tal cual."
+      },
+      "cowork_result": {
+        "source": "cowork_summary_relayed_in_chat_2026-08-05_reflected_in_data_image-inventory.csv_uncommitted",
+        "license_status": "affiliate-approved",
+        "original_width": "1500",
+        "original_height": "1500",
+        "background_type": "white-studio",
+        "product_crop": "full-bottle",
+        "visual_quality": "high",
+        "notes": "Hotlink directo desde m.media-amazon.com, misma imagen usada en catálogo y ficha de producto (campo imagen_url, GET /api/perfumes). Verificado en vivo 2026-08-05. Piloto Fase 2 — revisión 2026-08-05: imagen verificada en vivo (1500x1500px). Fondo blanco de estudio, botella completa Xerjoff Erba Pura sin cortes, alta nitidez, sin watermark de retailer. No verificado en esta pasada si corresponde a la misma pieza de IA histórica mencionada en decisión #26 de ESTADO-aromia.md (fuera de alcance de este brief). Sin otros hallazgos."
+      },
+      "operational_status": "no_review_required",
+      "proposed_action": "conservar",
+      "confidence_level": 0.98,
+      "conflicts": [],
+      "approval_condition": "Ya aprobado — usar tal cual, sin cambios pendientes.",
+      "reason_summary": "Ambas auditorías (ChatGPT y Cowork) coinciden en alta fidelidad y calidad técnica, sin hallazgos de identidad, variante ni composición.",
+      "sauvage_human_resolution": null
+    }
+  ]
+}
