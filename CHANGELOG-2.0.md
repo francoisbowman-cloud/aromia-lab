@@ -1048,3 +1048,30 @@ preguntas → perfil `fresco-clasico`). tsc/eslint limpios.
 
 [PR #11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11),
 sin fusionar todavía.
+
+## 2026-08-07 (2) — Code (Claude Code) — pruebas/documentación: primer test runner del repo
+
+Continuación autónoma del backlog general, misma rama
+`analytics/conversion-audit-01` (bundled a propósito: `analytics.test.ts`
+depende de `analytics.ts`, que solo existe ahí todavía). Auditoría:
+`apps/web` y `apps/api` no tenían ni un solo test — cero framework
+configurado, cero archivo `*.test.*` en todo el repo fuera de
+`scripts/catalog/` (que sí tiene 37 tests con `node:test`, ver PR #10).
+
+Se agrega Vitest (zero-config para TS + alias `@/*`) y dos suites,
+acotadas a lógica pura ya existente (sin DB, sin red, sin DOM real):
+
+- `quizData.test.ts`: `getDominantTag` (desempates), `getProfileBySlug`,
+  `getRecommendationsForProfile` (filtrado por familia/nicho, split
+  aspiracionales/accesibles sin superposición, casos vacíos) + un test
+  de integridad de datos que detecta un tag mal tipeado en `puntos`
+  (bug silencioso real: el scoring lo ignoraría sin error visible).
+- `analytics.test.ts`: `trackEvent` no explota sin `window` (SSR) ni
+  sin `gtag` (sin GA_ID), llama a gtag con los argumentos correctos
+  cuando existe.
+
+19/19 tests verdes, tsc/eslint limpios, `next build` completo sin
+errores (confirma que los tests no interfieren con el build de
+producción).
+
+Commit `3cebb9f` / [PR #11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11).
