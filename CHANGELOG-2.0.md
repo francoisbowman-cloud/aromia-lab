@@ -1025,3 +1025,32 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
 2. Mensaje posterior de Brey: **desestimó esa reserva** ("elimina los demás... solo deja Main") y pidió borrar todo lo restante. Ejecutado: `Chatgpt-aromia`, `design/ui-ux`, `backup/production-2026-08-04`, `autopublish/2026-07-18`, `autopublish/2026-07-20`, `autopublish/2026-07-23`, `autopublish/2026-07-29` borradas de origin y localmente. Repo queda con una sola rama: `main`. Los tags de respaldo (`production-before-main-consolidation-2026-08-04`, `legacy-static-v1-final`) no se tocaron — siguen siendo el punto de rollback si hiciera falta.
 
 **Estado final:** `main` en `c167934`, único branch del repo, protegido, sirviendo producción real en `aromialab.com` vía Railway. Documentación actualizada en la misma sesión: este changelog, `ESTADO-aromia.md` (decisión #97 + secciones 1, 5, 6) y `CLAUDE.md` ("Qué es este repo", CI/CD, estructura de carpetas).
+
+## 2026-08-06 — Code (Claude Code) — rendimiento: preconnect + limpieza de deps
+
+Continuación autónoma del backlog general (rama nueva `perf/technical-audit-01`).
+Categoría "rendimiento" — auditado con `next build` real, no solo lectura
+de código: el First Load JS de las páginas de cliente ya es liviano
+(87-111 kB compartido), sin rutas infladas salvo `/admin/magazine`
+(Tiptap, admin-only, fuera de alcance).
+
+`recharts` en `package.json` sin un solo import real en todo
+`apps/web/src` — confirmado comparando `next build` antes/después de
+sacarlo: mismos tamaños de bundle exactos (nunca se importaba, 0 bytes
+de diferencia). Es limpieza de dependencias/instalación, no una ganancia
+de runtime — se documenta la distinción para no sobrevender el cambio.
+
+Cambio con impacto real: `<link rel="preconnect">` para los 3 dominios
+de retailer de donde se hotlinkean las 50 fotos de catálogo
+(`m.media-amazon.com`, `cdn.notinoimg.com`, `media.douglas.de` — ver
+`docs/images/CURRENT-STATE-AUDIT.md` sección 5), adelanta DNS+TLS antes
+de que el navegador descubra la URL de la imagen a pedir. No toca el
+hotlinking en sí — esa arquitectura de recorte por canvas sigue siendo
+una decisión de producto pendiente (ver PR #6). Sumado
+`poweredByHeader: false`.
+
+Verificado en vivo: preconnects en el DOM, header `X-Powered-By`
+ausente, `next build`/`tsc` limpios, sin errores de consola.
+
+[PR #8](https://github.com/francoisbowman-cloud/aromia-lab/pull/8), sin
+fusionar todavía.
