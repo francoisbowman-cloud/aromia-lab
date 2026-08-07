@@ -1025,3 +1025,26 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
 2. Mensaje posterior de Brey: **desestimó esa reserva** ("elimina los demás... solo deja Main") y pidió borrar todo lo restante. Ejecutado: `Chatgpt-aromia`, `design/ui-ux`, `backup/production-2026-08-04`, `autopublish/2026-07-18`, `autopublish/2026-07-20`, `autopublish/2026-07-23`, `autopublish/2026-07-29` borradas de origin y localmente. Repo queda con una sola rama: `main`. Los tags de respaldo (`production-before-main-consolidation-2026-08-04`, `legacy-static-v1-final`) no se tocaron — siguen siendo el punto de rollback si hiciera falta.
 
 **Estado final:** `main` en `c167934`, único branch del repo, protegido, sirviendo producción real en `aromialab.com` vía Railway. Documentación actualizada en la misma sesión: este changelog, `ESTADO-aromia.md` (decisión #97 + secciones 1, 5, 6) y `CLAUDE.md` ("Qué es este repo", CI/CD, estructura de carpetas).
+
+## 2026-08-07 — Code (Claude Code) — analítica/conversión: eventos GA4 en los 3 puntos de conversión
+
+Continuación autónoma del backlog general (rama nueva
+`analytics/conversion-audit-01`). Auditoría: GA4 estaba instalado pero
+solo mandaba el pageview automático — cero eventos custom en todo el
+sitio. Para un sitio de afiliados, la conversión real (clic en "Ver
+oferta") estaba completamente sin medir.
+
+`lib/analytics.ts` (nuevo, `trackEvent`) + 3 eventos en los 3 puntos de
+conversión reales: `affiliate_click` (`PriceTable.tsx`, con
+retailer/precio/slug del perfume — el componente pasa a "use client"),
+`newsletter_signup` (`NewsletterForm.tsx`, con `fuente` para atribución),
+`quiz_completed` (`QuizFlow.tsx`, con el perfil resultante).
+
+Verificado en vivo con `window.gtag` mockeado y `fetch` interceptado
+para simular el POST de newsletter sin crear un suscriptor real en
+producción — los 3 eventos disparan con los parámetros correctos
+(confirmado con datos reales de Aventus y un quiz completo de 6
+preguntas → perfil `fresco-clasico`). tsc/eslint limpios.
+
+[PR #11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11),
+sin fusionar todavía.
