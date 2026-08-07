@@ -20,6 +20,9 @@ import {
   LIST_FIELDS,
   GENDER_ENUM,
   SEASON_ENUM,
+  PRICE_SEGMENT_ALIASES,
+  isPendingSentinel,
+  PENDING_IS_VALID_VALUE_FIELDS,
   STAGING_DIR,
   REPORTS_DIR,
   PIPELINE_VERSION,
@@ -64,6 +67,12 @@ export function normalizeBatch(filePath) {
       const raw = rawRow[key] ?? "";
 
       if (LIST_FIELDS.includes(key)) {
+        if (isPendingSentinel(raw)) {
+          // sentinel de 'no verificado' de Cowork en una celda de lista — []
+          // vacío, no una lista con el string literal 'pending' adentro.
+          out[key] = "";
+          continue;
+        }
         const items = splitList(raw);
         let list = items.map((i) => collapseWhitespace(i).value);
         const before = list.length;
@@ -81,10 +90,19 @@ export function normalizeBatch(filePath) {
         continue;
       }
 
+      if (isPendingSentinel(raw) && !PENDING_IS_VALID_VALUE_FIELDS.includes(key)) {
+        // El sentinel 'pending' de Cowork no es texto real — no debe pasar
+        // por trim/capitalización como si lo fuera (bug real encontrado en
+        // el batch-001: 'pending' se recapitalizaba a 'Pending' en campos
+        // como perfumer/country, ensuciando el CSV normalizado sin razón).
+        out[key] = String(raw).trim().toLowerCase();
+        continue;
+      }
+
       if (key === "concentration") {
         const { value, changed, unknown } = normalizeConcentration(raw);
         if (changed) fieldChanges.push({ field: key, from: raw, to: value, reason: "alias de concentración conocido normalizado a forma canónica" });
-        if (unknown) fieldChanges.push({ field: key, from: raw, to: value, reason: "concentración no reconocida — conservada sin cambios, quedará como error en la próxima validación" });
+        if (unknown) fieldChanges.push({ field: key, from: raw, to: value, reason: "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #H), quedará como warning en la próxima validación" });
         out[key] = value;
         continue;
       }
@@ -93,6 +111,22 @@ export function normalizeBatch(filePath) {
         const trimmed = String(raw ?? "").trim().toLowerCase();
         const value = GENDER_ENUM.includes(trimmed) ? trimmed : String(raw ?? "").trim();
         if (value !== raw) fieldChanges.push({ field: key, from: raw, to: value, reason: "trim + lowercase" });
+        out[key] = value;
+        continue;
+      }
+
+      if (key === "price_segment") {
+        const trimmed = String(raw ?? "").trim().toLowerCase();
+        const aliased = PRICE_SEGMENT_ALIASES[trimmed];
+        const value = aliased ?? String(raw ?? "").trim();
+        if (value !== raw) {
+          fieldChanges.push({
+            field: key,
+            from: raw,
+            to: value,
+            reason: aliased ? "alias sin tilde normalizado a la forma canónica de Aromia" : "trim",
+          });
+        }
         out[key] = value;
         continue;
       }

@@ -11,7 +11,8 @@
     "diff": "node diff.mjs",
     "prepare-import": "node prepare-import.mjs",
     "import": "node import.mjs",
-    "test": "node --test tests/",
+    "calibrate": "node calibrate.mjs",
+    "test": "node --test --test-concurrency=1 tests/",
     "posttest": "node tests/cleanup-artifacts.mjs"
   },
   "dependencies": {

@@ -1,0 +1,232 @@
+{
+  "batch": "batch-001",
+  "generatedAt": "2026-08-07T20:25:44.730Z",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "fatal": false,
+  "masterExists": true,
+  "totalRows": 25,
+  "counts": {
+    "NEW": 13,
+    "UNCHANGED": 0,
+    "UPDATED": 0,
+    "CONFLICT": 2,
+    "REJECTED": 10
+  },
+  "rows": [
+    {
+      "row": 2,
+      "id": "1",
+      "slug": "chanel-no5-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 3,
+      "id": "2",
+      "slug": "tobacco-vanille-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 4,
+      "id": "3",
+      "slug": "santal-33-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 5,
+      "id": "4",
+      "slug": "shalimar-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 6,
+      "id": "5",
+      "slug": "eros-parfum",
+      "status": "CONFLICT",
+      "reason": "Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar",
+      "source": "current_catalog_possible_match",
+      "candidates": [
+        {
+          "slug": "eros",
+          "nombre": "Eros",
+          "marca": "Versace"
+        }
+      ]
+    },
+    {
+      "row": 7,
+      "id": "6",
+      "slug": "paradoxe-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 8,
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 9,
+      "id": "8",
+      "slug": "naxos-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 10,
+      "id": "9",
+      "slug": "side-effect-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 11,
+      "id": "10",
+      "slug": "212-vip-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 12,
+      "id": "11",
+      "slug": "explorer-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 13,
+      "id": "12",
+      "slug": "scandal-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 14,
+      "id": "13",
+      "slug": "the-one-for-men-edt",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 15,
+      "id": "14",
+      "slug": "interlude-woman-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 16,
+      "id": "15",
+      "slug": "vibrant-leather-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 17,
+      "id": "16",
+      "slug": "cloud-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 18,
+      "id": "17",
+      "slug": "gypsy-water-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 19,
+      "id": "18",
+      "slug": "percival-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 20,
+      "id": "19",
+      "slug": "ani-extrait",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 21,
+      "id": "20",
+      "slug": "cedrat-boise-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 22,
+      "id": "21",
+      "slug": "born-in-roma-uomo-edt",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 23,
+      "id": "22",
+      "slug": "terre-d-hermes-parfum",
+      "status": "CONFLICT",
+      "reason": "Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar",
+      "source": "current_catalog_possible_match",
+      "candidates": [
+        {
+          "slug": "terre-d-hermes-edt",
+          "nombre": "Terre d'Hermes EDT",
+          "marca": "Hermes"
+        }
+      ]
+    },
+    {
+      "row": 24,
+      "id": "23",
+      "slug": "vanilla-28-edp",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    },
+    {
+      "row": 25,
+      "id": "24",
+      "slug": "elysium-pour-homme-parfum-cologne",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 26,
+      "id": "25",
+      "slug": "replica-jazz-club-edt",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    }
+  ]
+}

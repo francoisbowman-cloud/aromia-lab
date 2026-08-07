@@ -1,0 +1,64 @@
+{
+  "batch": "batch-001",
+  "sourceFile": "catalog/imports/batch-001.csv",
+  "outputFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-07T20:25:44.669Z",
+  "totalRows": 25,
+  "rowsChanged": 4,
+  "changes": [
+    {
+      "row": 16,
+      "id": "15",
+      "slug": "vibrant-leather-edp",
+      "fields": [
+        {
+          "field": "price_segment",
+          "from": "economico",
+          "to": "económico",
+          "reason": "alias sin tilde normalizado a la forma canónica de Aromia"
+        }
+      ]
+    },
+    {
+      "row": 17,
+      "id": "16",
+      "slug": "cloud-edp",
+      "fields": [
+        {
+          "field": "price_segment",
+          "from": "economico",
+          "to": "económico",
+          "reason": "alias sin tilde normalizado a la forma canónica de Aromia"
+        }
+      ]
+    },
+    {
+      "row": 20,
+      "id": "19",
+      "slug": "ani-extrait",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Extrait de Parfum",
+          "to": "Extrait",
+          "reason": "alias de concentración conocido normalizado a forma canónica"
+        }
+      ]
+    },
+    {
+      "row": 25,
+      "id": "24",
+      "slug": "elysium-pour-homme-parfum-cologne",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Parfum Cologne",
+          "to": "Parfum Cologne",
+          "reason": "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #H), quedará como warning en la próxima validación"
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "title": "CatalogBatchRow",
   "description": "Schema de una fila de batch entregado por Cowork (Fase 3 — Catalog Data Pipeline & Expansion 500). NO es el schema de la tabla `perfumes` de Postgres (ver schema/perfume.schema.json) — es el contrato de entrada del pipeline de importación. Ver catalog/schemas/SCHEMA_COMPARISON.md para el mapeo entre ambos y las incompatibilidades detectadas.",
   "type": "object",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": [
     "id",
     "brand",
@@ -15,7 +15,6 @@
     "top_notes",
     "heart_notes",
     "base_notes",
-    "image_url",
     "source_url",
     "status"
   ],
@@ -34,13 +33,13 @@
     "name": { "type": "string", "minLength": 1 },
     "concentration": {
       "type": "string",
-      "enum": ["EDC", "EDT", "EDP", "Parfum", "Extrait", "Elixir"],
-      "description": "Unión del enum actual de Aromia (EDT/EDP/Parfum/EDC) con Extrait/Elixir, que pide explícitamente el brief de Fase 3. Ver SCHEMA_COMPARISON.md #1."
+      "minLength": 1,
+      "description": "NO es un enum cerrado (corregido tras revisar el batch-001 real — casas de nicho/ultra-lujo usan nomenclatura propia, ej. Roja Parfums 'Parfum Cologne', que no encaja en EDT/EDP/Parfum/Extrait/Elixir/EDC sin perder precisión ni información real). validate.mjs sigue marcando como warning (no error) cualquier valor fuera del set canónico conocido — ver lib.mjs#CONCENTRATION_ENUM y SCHEMA_COMPARISON.md #H."
     },
     "gender": {
       "type": "string",
-      "enum": ["male", "female", "unisex"],
-      "description": "Mapea a `genero` de Aromia (masculino/femenino/unisex) en la capa de importación. Ver SCHEMA_COMPARISON.md #2."
+      "enum": ["masculino", "femenino", "unisex"],
+      "description": "El batch-001 real de Cowork entrega directamente los valores en español de Aromia (masculino/femenino/unisex), no en inglés como se había asumido antes de ver datos reales. Ver SCHEMA_COMPARISON.md #B (corregido)."
     },
     "family": {
       "type": "string",
@@ -59,10 +58,11 @@
     "top_notes": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "En el CSV viaja como texto separado por ';' (misma convención que Aromia). El parser lo expande a array."
+      "minItems": 1,
+      "description": "En el CSV viaja como texto separado por ';' (misma convención que Aromia). El parser lo expande a array. minItems:1 agregado tras el batch-001 real — sin esto, un array vacío pasaba silenciosamente aunque el campo esté en REQUIRED_FIELDS (bug real, ver SCHEMA_COMPARISON.md #G)."
     },
-    "heart_notes": { "type": "array", "items": { "type": "string" } },
-    "base_notes": { "type": "array", "items": { "type": "string" } },
+    "heart_notes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "base_notes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
     "accords": { "type": "array", "items": { "type": "string" } },
     "season": {
       "type": "array",
@@ -85,8 +85,8 @@
     },
     "price_segment": {
       "type": ["string", "null"],
-      "enum": ["budget", "mid", "premium", "luxury", null],
-      "description": "Mapea a `categoria_precio` (económico/medio/premium/lujo). No incluye precio numérico — Cowork no lo pide en esta fase (ver brief, no hay precio_referencia/moneda en el schema propuesto). Ver SCHEMA_COMPARISON.md #4."
+      "enum": ["económico", "medio", "premium", "lujo", null],
+      "description": "Igual que gender: el batch-001 real entrega directamente los valores de `categoria_precio` de Aromia en español, no en inglés. No incluye precio numérico — Cowork no lo pide en esta fase. 'economico' sin tilde (variante real observada) se normaliza a 'económico' en normalize.mjs. Ver SCHEMA_COMPARISON.md #F (corregido)."
     },
     "amazon_url": {
       "type": ["string", "null"],
@@ -98,13 +98,14 @@
       "description": "URL de la fuente de datos (no necesariamente de venta). Requerido para trazabilidad de sourcing."
     },
     "image_url": {
-      "type": "string",
-      "description": "Puede ser URL http(s) o una ruta relativa dentro de apps/web/public/images/perfumes (convención del sistema de imágenes, Fase 1). validate.mjs acepta ambas formas — ver lib.mjs#isValidImageRef."
+      "type": ["string", "null"],
+      "description": "Puede ser URL http(s) o una ruta relativa dentro de apps/web/public/images/perfumes (convención del sistema de imágenes, Fase 1). validate.mjs acepta ambas formas — ver lib.mjs#isValidImageRef. NO es obligatorio (corregido tras el batch-001 real: 25/25 filas pending, por diseño — 'no generar imágenes en esta fase' ya estaba en el brief original de Fase 3, este schema lo tenía mal como required)."
     },
     "image_source": { "type": ["string", "null"] },
     "affiliate_status": {
       "type": ["string", "null"],
-      "enum": ["pending", "active", "inactive", "broken", null]
+      "enum": ["pending", "active", "inactive", "broken", "no-applicable", null],
+      "description": "'no-applicable' agregado tras el batch-001 real (25/25 filas) — estado legítimo cuando todavía no hay ningún link de afiliado que auditar (amazon_url pending)."
     },
     "source_verified": {
       "type": ["boolean", "null"]
@@ -115,7 +116,8 @@
     },
     "visual_quality": {
       "type": ["string", "null"],
-      "enum": ["low", "medium", "high", null]
+      "enum": ["low", "medium", "high", "not-audited", null],
+      "description": "'not-audited' agregado tras el batch-001 real (25/25 filas) — no hay nada que auditar visualmente todavía porque image_url está pending en todo el batch (por diseño, no se generan/buscan imágenes en esta fase)."
     },
     "review_status": {
       "type": ["string", "null"],
@@ -128,11 +130,23 @@
       "enum": ["draft", "pending_review", "approved", "published", "rejected"],
       "description": "Estado editorial del registro dentro del pipeline. No confundir con `estado` (activo/pausado en producción, migración 004 de Aromia)."
     },
-    "created_at": { "type": ["string", "null"], "format": "date-time" },
-    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+    "notes": {
+      "type": ["string", "null"],
+      "description": "No estaba en el schema original de Code — el batch-001 real de Cowork lo agregó y lo usa para trazabilidad crítica (conflictos de precio sin resolver, reemplazos de producto inexistente, ambigüedades de fecha entre fuentes). Sumado al schema tras revisar el batch real — ver catalog/schemas/SCHEMA_COMPARISON.md #J."
+    },
+    "created_at": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z?)?$",
+      "description": "Acepta fecha simple ('2026-08-07', formato real que entrega Cowork) o timestamp ISO completo (el que genera normalize.mjs cuando falta). Antes exigía 'format: date-time' estricto — ver SCHEMA_COMPARISON.md #I."
+    },
+    "updated_at": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z?)?$"
+    }
   },
   "notes": {
     "csv": "Los campos array (top_notes, heart_notes, base_notes, accords, season, occasion) viajan en el CSV como texto separado por ';', igual que en PERFUMES_INITIAL_50.csv. created_at/updated_at son opcionales de entrada — si faltan, normalize.mjs los completa con la fecha de procesamiento del batch.",
-    "enums_asumidos": "longevity, sillage, price_segment, affiliate_status, data_confidence, visual_quality y review_status no estaban definidos con valores concretos en el brief de Fase 3 — Code asumió una escala razonable para poder validar. Cuando llegue el batch-001 real de Cowork, comparar contra estos enums y ajustar catalog.schema.json + SCHEMA_COMPARISON.md si no coinciden (no romper compatibilidad silenciosamente)."
+    "pending_sentinel": "Cowork usa el string literal 'pending' (no una celda vacía) para marcar un campo que investigó pero no pudo verificar con confianza, en vez de inventar el dato. El pipeline lo trata como equivalente a null/vacío en validate.mjs y normalize.mjs para TODOS los campos salvo los listados en lib.mjs#PENDING_IS_VALID_VALUE_FIELDS (hoy solo review_status, donde 'pending' es un valor de enum legítimo, no un sentinel de dato faltante). Ver catalog/schemas/SCHEMA_COMPARISON.md #K.",
+    "enums_asumidos_confirmados_2026-08-07": "Contra el batch-001 real (25 filas): gender y price_segment llegan en español (no inglés como se había asumido — corregido). affiliate_status y visual_quality necesitaron un valor nuevo cada uno ('no-applicable', 'not-audited' — agregados). concentration dejó de ser un enum cerrado (Roja Parfums 'Parfum Cologne' no encaja en ningún estándar). data_confidence y review_status coincidieron exactamente con lo asumido, sin cambios. season, occasion, longevity y sillage siguen SIN CONFIRMAR — 25/25 filas del batch-001 real llegaron pending en los cuatro, así que el enum asumido para longevity/sillage (ver arriba) todavía no fue puesto a prueba contra un valor real."
   }
 }

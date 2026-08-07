@@ -51,20 +51,45 @@ export const REQUIRED_FIELDS = [
   "top_notes",
   "heart_notes",
   "base_notes",
-  "image_url",
   "source_url",
   "status",
 ];
 
+/**
+ * Set canónico conocido. NO es un enum bloqueante en catalog.schema.json
+ * (ver batch-001 real: Roja Parfums usa 'Parfum Cologne') — un valor fuera
+ * de este set es solo WARNING en validate.mjs, nunca error.
+ */
 export const CONCENTRATION_ENUM = ["EDC", "EDT", "EDP", "Parfum", "Extrait", "Elixir"];
-export const GENDER_ENUM = ["male", "female", "unisex"];
+/** Confirmado contra el batch-001 real (25/25 filas) — Cowork entrega español directo, igual que `genero` en Aromia. */
+export const GENDER_ENUM = ["masculino", "femenino", "unisex"];
+/** Sin confirmar todavía: 25/25 filas del batch-001 real llegaron con season='pending'. */
 export const SEASON_ENUM = ["spring", "summer", "fall", "winter"];
 export const STATUS_ENUM = ["draft", "pending_review", "approved", "published", "rejected"];
 
-/** Ver SCHEMA_COMPARISON.md #B. Aplicado solo al generar la propuesta de importación. */
-export const GENDER_MAP = { male: "masculino", female: "femenino", unisex: "unisex" };
+/**
+ * Cowork ya entrega gender/season directo en el vocabulario de Aromia — no
+ * hace falta traducir. Se mantienen como identidad (documentadas, no
+ * eliminadas) por si algún batch futuro sí entrega inglés. Ver
+ * SCHEMA_COMPARISON.md #B (corregido tras el batch-001 real).
+ */
+export const GENDER_MAP = { masculino: "masculino", femenino: "femenino", unisex: "unisex" };
 export const SEASON_MAP = { spring: "primavera", summer: "verano", fall: "otoño", winter: "invierno" };
-export const PRICE_SEGMENT_MAP = { budget: "económico", mid: "medio", premium: "premium", luxury: "lujo" };
+/** Igual que GENDER_MAP: price_segment ya llega en español. Ver SCHEMA_COMPARISON.md #F (corregido). */
+export const PRICE_SEGMENT_MAP = { económico: "económico", medio: "medio", premium: "premium", lujo: "lujo" };
+
+/** Campos donde el string literal 'pending' es un VALOR DE ENUM legítimo, no el sentinel de dato-no-verificado. Ver SCHEMA_COMPARISON.md #K. */
+export const PENDING_IS_VALID_VALUE_FIELDS = ["review_status"];
+
+/** true si el valor crudo es el sentinel de 'no verificado' de Cowork (no una celda vacía). */
+export function isPendingSentinel(raw) {
+  return String(raw ?? "").trim().toLowerCase() === "pending";
+}
+
+/** Alias conocidos de price_segment -> forma canónica (con tilde) de Aromia. */
+export const PRICE_SEGMENT_ALIASES = {
+  economico: "económico",
+};
 
 /**
  * Sinónimos conocidos de concentración -> valor canónico de CONCENTRATION_ENUM.
@@ -107,8 +132,13 @@ export function titleCaseIfShouting(raw) {
   const trimmed = String(raw ?? "").trim();
   if (trimmed === "") return { value: trimmed, changed: false };
   const isAllLower = trimmed === trimmed.toLowerCase() && /[a-z]/.test(trimmed);
-  const isAllUpper = trimmed === trimmed.toUpperCase() && /[A-Z]/.test(trimmed) && trimmed.length > 3;
-  if (!isAllLower && !isAllUpper) return { value: trimmed, changed: false };
+  // No hay rama 'todo mayúsculas' a propósito — se probó contra el batch-001
+  // real y rompió un nombre de producto legítimo ('212 VIP' -> '212 Vip',
+  // VIP es un acrónimo real, no un error de captura). Sin una lista de
+  // acrónimos conocidos no hay forma determinista de distinguir 'DIOR
+  // SAUVAGE' (probable error de captura) de '212 VIP' (acrónimo real) — ante
+  // la duda, no tocar. Ver catalog/schemas/SCHEMA_COMPARISON.md #G.
+  if (!isAllLower) return { value: trimmed, changed: false };
   const titled = trimmed
     .toLowerCase()
     .replace(/(^|[\s'-])([a-zà-ÿ])/g, (_, sep, ch) => sep + ch.toUpperCase());
@@ -288,22 +318,33 @@ export function exactRowSignature(row) {
 export function parseRawRow(rawRow) {
   const out = {};
   for (const [key, value] of Object.entries(rawRow)) {
+    const isPending = isPendingSentinel(value) && !PENDING_IS_VALID_VALUE_FIELDS.includes(key);
+    const isRequired = REQUIRED_FIELDS.includes(key);
+
     if (LIST_FIELDS.includes(key)) {
-      out[key] = splitList(value);
+      out[key] = isPending ? [] : splitList(value);
       continue;
     }
     if (key === "launch_year") {
       const t = (value ?? "").trim();
-      out[key] = t === "" ? null : Number(t);
+      out[key] = t === "" || isPending ? null : Number(t);
       continue;
     }
     if (key === "source_verified") {
       const t = (value ?? "").trim().toLowerCase();
-      out[key] = t === "" ? null : ["true", "1", "yes", "si", "sí"].includes(t);
+      out[key] = t === "" || isPending ? null : ["true", "1", "yes", "si", "sí"].includes(t);
+      continue;
+    }
+    if (isPending) {
+      // 'pending' es el sentinel de Cowork para 'no verificado, no inventar'
+      // — se trata igual que una celda vacía. En campos requeridos se
+      // conserva como "" (no null) para que el mensaje de error de ajv sea
+      // el mismo 'must NOT have fewer than 1 characters' que ya usan las
+      // celdas realmente vacías, no un error de tipo distinto.
+      out[key] = isRequired ? "" : null;
       continue;
     }
     const t = value ?? "";
-    const isRequired = REQUIRED_FIELDS.includes(key);
     out[key] = t.trim() === "" && !isRequired ? null : t;
   }
   return out;

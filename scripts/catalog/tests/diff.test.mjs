@@ -18,7 +18,7 @@ const BATCH_HEADER =
 function batchRow(overrides = {}) {
   const base = {
     id: "cw-001", slug: "dior-sauvage-edt", brand: "Dior", name: "Sauvage", concentration: "EDT",
-    gender: "male", family: "amaderada-aromatica", subfamily: "", launch_year: "2015", perfumer: "",
+    gender: "masculino", family: "amaderada-aromatica", subfamily: "", launch_year: "2015", perfumer: "",
     country: "", description: "", topNotes: "bergamota", heartNotes: "geranio", baseNotes: "ambroxan",
     accords: "", season: "", occasion: "", longevity: "", sillage: "", price: "premium", amazon: "",
     source: "https://source.example/x", image: "https://img.example/x.jpg", imgSrc: "", affiliate: "",
@@ -97,10 +97,20 @@ test("catálogo actual con concentración embebida en 'nombre' (ej. 'Sauvage EDP
 });
 
 test("fila con error de validación -> REJECTED en el diff, no se propone", () => {
-  const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ concentration: "NOT-A-REAL-CONCENTRATION" })}\n`);
+  // concentration ya NO es un enum cerrado (ver catalog.schema.json — batch-001
+  // real trajo 'Parfum Cologne' de Roja Parfums), así que un valor libre ahí
+  // ya no dispara un error bloqueante. gender sigue siendo un enum cerrado
+  // (masculino/femenino/unisex) — sirve para forzar un error real.
+  const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ gender: "NOT-A-REAL-GENDER" })}\n`);
   const { report } = diffBatch(batch, { masterCsvPath: emptyMaster(), currentCsvPath: emptyCurrent() });
   assert.equal(report.rows[0].status, "REJECTED");
   assert.equal(report.rows[0].source, "validation");
+});
+
+test("concentración fuera del set canónico (ej. nomenclatura propia de una casa de nicho) -> NO bloquea, sigue siendo aprobable", () => {
+  const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ concentration: "Parfum Cologne" })}\n`);
+  const { report } = diffBatch(batch, { masterCsvPath: emptyMaster(), currentCsvPath: emptyCurrent() });
+  assert.equal(report.rows[0].status, "NEW");
 });
 
 test("CSV crudo mal formado -> fatal:true, no lanza excepción", () => {

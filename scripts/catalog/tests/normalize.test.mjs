@@ -62,7 +62,7 @@ test("concentración desconocida se conserva tal cual (no se inventa)", () => {
   const file = tmpCsv(`${HEADER}\n${row({ concentration: "mystery-juice" })}\n`);
   const { normalizedRows, trace } = normalizeBatch(file);
   assert.equal(normalizedRows[0].concentration, "mystery-juice");
-  assert.ok(trace.changes[0].fields.some((f) => f.reason.includes("no reconocida")));
+  assert.ok(trace.changes[0].fields.some((f) => f.reason.includes("fuera del set canónico")));
 });
 
 test("family/subfamily NO se title-casean (convención lowercase-hyphenated de Aromia)", () => {

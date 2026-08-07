@@ -15,6 +15,7 @@ import {
   duplicateKey,
   exactRowSignature,
   isValidImageRef,
+  CONCENTRATION_ENUM,
   REQUIRED_FIELDS,
   REPORTS_DIR,
   PIPELINE_VERSION,
@@ -115,6 +116,15 @@ export function validateBatch(filePath) {
         code: "invalid_image_url",
         field: "image_url",
         message: `image_url no es una URL http(s) válida ni una ruta de asset reconocida: '${typed.image_url}'`,
+      });
+    }
+
+    if (typed.concentration && !CONCENTRATION_ENUM.includes(typed.concentration)) {
+      issues.push({
+        severity: SEVERITY.WARNING,
+        code: "non_standard_concentration",
+        field: "concentration",
+        message: `'${typed.concentration}' no está en el set canónico conocido (${CONCENTRATION_ENUM.join("/")}) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #H), se conserva tal cual. Confirmar que no sea un error de tipeo.`,
       });
     }
 

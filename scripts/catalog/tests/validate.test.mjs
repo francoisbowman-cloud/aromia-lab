@@ -22,7 +22,7 @@ function row({
   brand = "Dior",
   name = "Sauvage",
   concentration = "EDT",
-  gender = "male",
+  gender = "masculino",
   family = "amaderada-aromatica",
   topNotes = "bergamota",
   heartNotes = "geranio",
