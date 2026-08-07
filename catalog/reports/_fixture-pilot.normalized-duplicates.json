@@ -1,0 +1,71 @@
+{
+  "batch": "_fixture-pilot.normalized",
+  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\_fixture-pilot.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-07T17:58:35.332Z",
+  "totalRows": 6,
+  "kept": 6,
+  "rejectedExactDuplicates": 0,
+  "needsReviewConflicts": 0,
+  "variantFamiliesDetected": 1,
+  "variantConflicts": [
+    {
+      "product": "nishane|ani",
+      "concentrations": [
+        "EDP",
+        "Extrait"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "row": 2,
+      "id": "fx-001",
+      "slug": "dior-sauvage-edt",
+      "duplicateKey": "dior|sauvage|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 3,
+      "id": "fx-002",
+      "slug": "yves-saint-laurent-black-opium-edp",
+      "duplicateKey": "yves saint laurent|black opium|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 4,
+      "id": "fx-003",
+      "slug": "nishane-ani-edp",
+      "duplicateKey": "nishane|ani|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 5,
+      "id": "fx-004",
+      "slug": "nishane-ani-extrait",
+      "duplicateKey": "nishane|ani|extrait",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 6,
+      "id": "fx-005",
+      "slug": "xerjoff-uden-edp",
+      "duplicateKey": "xerjoff|uden|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 7,
+      "id": "fx-006",
+      "slug": "marca-sin-datos-perfume-incompleto-edt",
+      "duplicateKey": "marca sin datos|perfume incompleto|edt",
+      "decision": "keep",
+      "reason": null
+    }
+  ]
+}

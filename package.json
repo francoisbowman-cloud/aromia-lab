@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "description": "Proxy de comandos de raíz. No es un workspace — apps/web y apps/api mantienen sus propios package.json, node_modules y builds independientes (ver .github/workflows/v2-ci.yml, que no toca este archivo). Solo delega a scripts/catalog (Fase 3, Catalog Data Pipeline & Expansion 500) para poder correr `npm run catalog:*` desde la raíz del repo, como pide el brief.",
+  "scripts": {
+    "catalog:validate": "node scripts/catalog/validate.mjs",
+    "catalog:normalize": "node scripts/catalog/normalize.mjs",
+    "catalog:dedupe": "node scripts/catalog/deduplicate.mjs",
+    "catalog:diff": "node scripts/catalog/diff.mjs",
+    "catalog:prepare": "node scripts/catalog/prepare-import.mjs",
+    "catalog:import": "node scripts/catalog/import.mjs",
+    "catalog:test": "npm --prefix scripts/catalog test"
+  }
+}

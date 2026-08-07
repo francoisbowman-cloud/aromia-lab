@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aromia-lab.com/schema/catalog-pipeline.schema.json",
+  "title": "CatalogBatchRow",
+  "description": "Schema de una fila de batch entregado por Cowork (Fase 3 — Catalog Data Pipeline & Expansion 500). NO es el schema de la tabla `perfumes` de Postgres (ver schema/perfume.schema.json) — es el contrato de entrada del pipeline de importación. Ver catalog/schemas/SCHEMA_COMPARISON.md para el mapeo entre ambos y las incompatibilidades detectadas.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "brand",
+    "name",
+    "concentration",
+    "gender",
+    "family",
+    "top_notes",
+    "heart_notes",
+    "base_notes",
+    "image_url",
+    "source_url",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ID del batch de Cowork (no la PK de Postgres). Único dentro del batch — se usa para trazabilidad, no como clave de deduplicación (ver brand+name+concentration)."
+    },
+    "slug": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "No es obligatorio en el batch crudo — si Cowork no lo entrega (null/vacío), normalize.mjs lo genera desde brand+name+concentration y nunca lo sobrescribe si ya viene informado. Si viene informado, debe ser válido (bloquea si no matchea el patrón — un slug con espacios o mayúsculas no se corrige en silencio, se rechaza)."
+    },
+    "brand": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "concentration": {
+      "type": "string",
+      "enum": ["EDC", "EDT", "EDP", "Parfum", "Extrait", "Elixir"],
+      "description": "Unión del enum actual de Aromia (EDT/EDP/Parfum/EDC) con Extrait/Elixir, que pide explícitamente el brief de Fase 3. Ver SCHEMA_COMPARISON.md #1."
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "unisex"],
+      "description": "Mapea a `genero` de Aromia (masculino/femenino/unisex) en la capa de importación. Ver SCHEMA_COMPARISON.md #2."
+    },
+    "family": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Mapea a `familia_olfativa`. Freeform en ambos schemas — no hay enum cerrado."
+    },
+    "subfamily": { "type": ["string", "null"] },
+    "launch_year": {
+      "type": ["integer", "null"],
+      "minimum": 1850,
+      "maximum": 2100
+    },
+    "perfumer": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "top_notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "En el CSV viaja como texto separado por ';' (misma convención que Aromia). El parser lo expande a array."
+    },
+    "heart_notes": { "type": "array", "items": { "type": "string" } },
+    "base_notes": { "type": "array", "items": { "type": "string" } },
+    "accords": { "type": "array", "items": { "type": "string" } },
+    "season": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["spring", "summer", "fall", "winter"]
+      },
+      "description": "Mapea a `temporada_recomendada` (primavera/verano/otoño/invierno)."
+    },
+    "occasion": { "type": "array", "items": { "type": "string" } },
+    "longevity": {
+      "type": ["string", "null"],
+      "enum": ["short", "moderate", "long", "very_long", null],
+      "description": "No existe en el schema actual de Aromia. Asunción de Code — ajustar si Cowork entrega otra escala (ej. numérica en horas). Ver SCHEMA_COMPARISON.md #3."
+    },
+    "sillage": {
+      "type": ["string", "null"],
+      "enum": ["light", "moderate", "strong", "very_strong", null],
+      "description": "Igual que longevity: no existe en Aromia hoy, asunción de Code a confirmar contra el batch real."
+    },
+    "price_segment": {
+      "type": ["string", "null"],
+      "enum": ["budget", "mid", "premium", "luxury", null],
+      "description": "Mapea a `categoria_precio` (económico/medio/premium/lujo). No incluye precio numérico — Cowork no lo pide en esta fase (ver brief, no hay precio_referencia/moneda en el schema propuesto). Ver SCHEMA_COMPARISON.md #4."
+    },
+    "amazon_url": {
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL de la fuente de datos (no necesariamente de venta). Requerido para trazabilidad de sourcing."
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Puede ser URL http(s) o una ruta relativa dentro de apps/web/public/images/perfumes (convención del sistema de imágenes, Fase 1). validate.mjs acepta ambas formas — ver lib.mjs#isValidImageRef."
+    },
+    "image_source": { "type": ["string", "null"] },
+    "affiliate_status": {
+      "type": ["string", "null"],
+      "enum": ["pending", "active", "inactive", "broken", null]
+    },
+    "source_verified": {
+      "type": ["boolean", "null"]
+    },
+    "data_confidence": {
+      "type": ["string", "null"],
+      "enum": ["low", "medium", "high", null]
+    },
+    "visual_quality": {
+      "type": ["string", "null"],
+      "enum": ["low", "medium", "high", null]
+    },
+    "review_status": {
+      "type": ["string", "null"],
+      "enum": ["pending", "needs_review", "approved", "rejected", null]
+    },
+    "seo_title": { "type": ["string", "null"] },
+    "seo_description": { "type": ["string", "null"] },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "pending_review", "approved", "published", "rejected"],
+      "description": "Estado editorial del registro dentro del pipeline. No confundir con `estado` (activo/pausado en producción, migración 004 de Aromia)."
+    },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  },
+  "notes": {
+    "csv": "Los campos array (top_notes, heart_notes, base_notes, accords, season, occasion) viajan en el CSV como texto separado por ';', igual que en PERFUMES_INITIAL_50.csv. created_at/updated_at son opcionales de entrada — si faltan, normalize.mjs los completa con la fecha de procesamiento del batch.",
+    "enums_asumidos": "longevity, sillage, price_segment, affiliate_status, data_confidence, visual_quality y review_status no estaban definidos con valores concretos en el brief de Fase 3 — Code asumió una escala razonable para poder validar. Cuando llegue el batch-001 real de Cowork, comparar contra estos enums y ajustar catalog.schema.json + SCHEMA_COMPARISON.md si no coinciden (no romper compatibilidad silenciosamente)."
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "batch": "_fixture-pilot",
+  "generatedAt": "2026-08-07T17:58:35.385Z",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "fatal": false,
+  "masterExists": true,
+  "totalRows": 6,
+  "counts": {
+    "NEW": 3,
+    "UNCHANGED": 0,
+    "UPDATED": 0,
+    "CONFLICT": 2,
+    "REJECTED": 1
+  },
+  "rows": [
+    {
+      "row": 2,
+      "id": "fx-001",
+      "slug": "dior-sauvage-edt",
+      "status": "CONFLICT",
+      "reason": "Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar",
+      "source": "current_catalog_possible_match",
+      "candidates": [
+        {
+          "slug": "sauvage-edp",
+          "nombre": "Sauvage EDP",
+          "marca": "Dior"
+        }
+      ]
+    },
+    {
+      "row": 3,
+      "id": "fx-002",
+      "slug": "yves-saint-laurent-black-opium-edp",
+      "status": "CONFLICT",
+      "reason": "Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar",
+      "source": "current_catalog_possible_match",
+      "candidates": [
+        {
+          "slug": "black-opium-edp",
+          "nombre": "Black Opium EDP",
+          "marca": "Yves Saint Laurent"
+        }
+      ]
+    },
+    {
+      "row": 4,
+      "id": "fx-003",
+      "slug": "nishane-ani-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 5,
+      "id": "fx-004",
+      "slug": "nishane-ani-extrait",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 6,
+      "id": "fx-005",
+      "slug": "xerjoff-uden-edp",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 7,
+      "id": "fx-006",
+      "slug": "marca-sin-datos-perfume-incompleto-edt",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
+      "source": "validation"
+    }
+  ]
+}
