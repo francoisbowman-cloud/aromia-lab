@@ -22,7 +22,11 @@ export default async function CatalogoDetailPage({
       aria-live="polite"
     >
       <HeroHeader perfume={perfume} />
-      <PriceTable retailers={perfume.retailers ?? []} />
+      <PriceTable
+        retailers={perfume.retailers ?? []}
+        perfumeSlug={perfume.slug}
+        perfumeNombre={perfume.nombre}
+      />
       <PerformanceBars
         longevidad={perfume.longevidad}
         estela={perfume.estela}
