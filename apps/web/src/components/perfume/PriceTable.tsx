@@ -52,6 +52,14 @@ export function PriceTable({ retailers }: { retailers: Retailer[] }) {
           </li>
         ))}
       </ul>
+      {/* Mismo disclosure que ya declara el footer (As an Amazon Associate...) —
+          acá se repite junto al enlace real, que es donde tiene que estar para
+          ser "clara y conspicua" (no alcanza con que viva solo en el footer). */}
+      <p className="border-t border-line bg-soft px-4 py-2.5 font-sans text-[11px] leading-relaxed text-muted">
+        Aromia participa en el Programa de Afiliados de Amazon y puede ganar una
+        comisión por compras realizadas a través de estos enlaces, sin costo
+        adicional para vos.
+      </p>
     </section>
   );
 }
