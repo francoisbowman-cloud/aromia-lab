@@ -1025,3 +1025,25 @@ scraper de precios), Brey los aprobó, Code los subió y los construyó.
 2. Mensaje posterior de Brey: **desestimó esa reserva** ("elimina los demás... solo deja Main") y pidió borrar todo lo restante. Ejecutado: `Chatgpt-aromia`, `design/ui-ux`, `backup/production-2026-08-04`, `autopublish/2026-07-18`, `autopublish/2026-07-20`, `autopublish/2026-07-23`, `autopublish/2026-07-29` borradas de origin y localmente. Repo queda con una sola rama: `main`. Los tags de respaldo (`production-before-main-consolidation-2026-08-04`, `legacy-static-v1-final`) no se tocaron — siguen siendo el punto de rollback si hiciera falta.
 
 **Estado final:** `main` en `c167934`, único branch del repo, protegido, sirviendo producción real en `aromialab.com` vía Railway. Documentación actualizada en la misma sesión: este changelog, `ESTADO-aromia.md` (decisión #97 + secciones 1, 5, 6) y `CLAUDE.md` ("Qué es este repo", CI/CD, estructura de carpetas).
+
+## 2026-08-07 (3) — Code (Claude Code) — estabilidad/arquitectura: global-error.tsx
+
+Continuación autónoma del backlog general (rama nueva
+`stability/global-error-boundary-01`). Había `error.tsx` en algunas
+rutas (`catalogo`, `catalogo/[slug]`, `magazine`, `magazine/[slug]`)
+pero ningún `global-error.tsx` en la raíz — un error en el layout raíz,
+o en cualquier ruta sin su propio `error.tsx` (home, quiz, academia,
+club, admin), caía en la pantalla de error genérica y sin estilo de
+Next.js.
+
+Agregado `app/global-error.tsx` con el mismo lenguaje visual del resto
+del sitio. Verificado en producción real (no solo por inspección): se
+creó temporalmente una ruta que fuerza un `throw` (`force-dynamic` para
+no romper el build estático), se corrió `next build` + `next start`
+(este mecanismo no se activa en `next dev`), se confirmó en el
+navegador que renderiza correctamente (status 500, mensaje y botón
+"Reintentar" esperados) — y se borró la ruta de prueba antes del
+commit, sin dejar rastro en el diff.
+
+[PR #12](https://github.com/francoisbowman-cloud/aromia-lab/pull/12),
+sin fusionar todavía.
