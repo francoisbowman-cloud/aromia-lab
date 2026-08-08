@@ -52,16 +52,24 @@ elimina — este documento es el mapeo, no un reemplazo.
 
 ## 2. Incompatibilidades y decisiones tomadas en Bloque A
 
-**#A — `concentration`/`concentracion`: enum ampliado, no reemplazado.**
-Aromia tenía `EDT | EDP | Parfum | EDC`. El brief pide distinguir explícitamente
-`Extrait` y `Elixir` como variantes propias (ver sección DEDUPLICACIÓN del
-brief: Sauvage EDT / EDP / Parfum / Elixir son productos distintos). Se amplía
-el enum en `catalog.schema.json` a `EDC | EDT | EDP | Parfum | Extrait |
-Elixir`. **Pendiente para Bloque C/E:** proponer la misma ampliación en
-`schema/perfume.schema.json` + una migración `011_extend_concentracion_enum.sql`
-antes de importar cualquier fila con `Extrait`/`Elixir` a producción — no se
-toca esa migración en esta fase (regla de seguridad del brief: no tocar
-Postgres sin aprobación).
+**#A — `concentration`/`concentracion`: dejó de ser un enum cerrado
+(actualizado en F3.6, corregido tras el batch-001 real).** Aromia tenía
+`EDT | EDP | Parfum | EDC`. El brief original de Fase 3 pedía distinguir
+explícitamente `Extrait` y `Elixir` como variantes propias (Sauvage EDT /
+EDP / Parfum / Elixir son productos distintos) — eso se resolvió primero
+ampliando el enum a `EDC | EDT | EDP | Parfum | Extrait | Elixir`. Pero el
+batch-001 real trajo `'Parfum Cologne'` (nomenclatura propia de Roja
+Parfums, casas de nicho/ultra-lujo) — ningún enum cerrado razonable la
+contempla sin perder información real. **Decisión final:** `concentration`
+es `string` libre en `catalog.schema.json` (sin `enum`); `validate.mjs`
+sigue marcando como `warning` (nunca `error`) cualquier valor fuera del
+set canónico conocido (`lib.mjs#CONCENTRATION_ENUM`), para que quede
+visible sin bloquear filas legítimas. **Pendiente para una fase futura:**
+proponer la ampliación equivalente en `schema/perfume.schema.json` + una
+migración `011_extend_concentracion_enum.sql` antes de importar cualquier
+fila con `Extrait`/`Elixir`/nomenclatura propia a producción — no se toca
+esa migración en esta fase (regla de seguridad: no tocar Postgres sin
+aprobación).
 
 **#B — Valores en inglés (`gender`, `season`) vs español (`genero`,
 `temporada_recomendada`).** Cowork entrega `male/female/unisex` y
@@ -138,6 +146,58 @@ frontend, ver CLAUDE.md raíz). El brief de Fase 3 no lo menciona. Queda
 como `null` en la propuesta de importación hasta que Cowork lo incorpore
 al batch o se decida derivarlo de otro campo (ninguna heurística automática
 implementada — evita asignarlo mal en 500 filas).
+
+**#J — `notes` no estaba en el schema original de Code (agregado en
+F3.5).** El batch-001 real de Cowork agregó una columna `notes` de texto
+libre no contemplada en el diseño original, usada para trazabilidad
+crítica real: conflictos de precio entre fuentes sin resolver, reemplazos
+de producto inexistente por uno verificado, ambigüedades de fecha entre
+fuentes. Se agregó formalmente a `catalog.schema.json` como campo opcional
+(`type: ["string","null"]`) — antes bloqueaba las 25 filas del batch por
+`additionalProperties: false` (ver bug de pipeline documentado en
+`catalog/reports/batch-001-real-summary.md`, sección histórica F3.5).
+
+**#K — el sentinel `pending` de Cowork (agregado en F3.5).** Cowork no
+deja celdas vacías cuando no puede verificar un dato — escribe el string
+literal `'pending'`, documentando que investigó pero no encontró una
+fuente confiable, en vez de inventar el valor. El pipeline lo trata como
+equivalente a `null`/vacío en `validate.mjs` y `normalize.mjs`
+(`lib.mjs#isPendingSentinel`) para todos los campos **salvo**
+`review_status`, donde `'pending'` es un valor de enum legítimo (el
+estado inicial real del flujo editorial), no un sentinel de dato faltante
+— ver `lib.mjs#PENDING_IS_VALID_VALUE_FIELDS`. Si `pending` cae en un
+campo `REQUIRED_FIELDS`, sigue bloqueando exactamente igual que una celda
+vacía (correcto — "no inventado" no es lo mismo que "no importa que
+falte").
+
+**#L — `source_url`: colección, no un valor único (agregado en F3.6).**
+El schema original asumía una URL de fuente por fila. El batch-001 real
+mostró un caso legítimo con dos fuentes citadas para el mismo dato
+(`vanilla-28-edp`, un reemplazo de producto que requirió verificación
+extra) — el schema anterior lo rechazaba por "no matchear format uri" al
+recibir dos URLs en una celda. Decisión de Brey (F3.6): "una entidad puede
+tener múltiples fuentes legítimas", generalizada como regla, no como
+excepción de una fila. `source_url` es ahora un `LIST_FIELD` como
+`top_notes`/`season` — separado por `;` en el CSV (misma convención,
+compatible), cada URL validada individualmente como URI. Sigue siendo
+`REQUIRED_FIELDS` (`minItems: 1` — al menos una fuente es obligatoria).
+
+**#M — variante de concentración vs. posible duplicado (regla general,
+F3.6).** El batch-001 real trajo dos casos (`eros-parfum`,
+`terre-d-hermes-parfum`) donde marca+nombre coincidían con un perfume ya
+publicado, pero con concentración distinta — productos legítimamente
+distintos, no duplicados. Decisión de Brey: "same brand + same normalized
+base fragrance name + distinct verified concentration = RELATED_VARIANT,
+not duplicate", generalizada sin listar marcas/slugs. Implementación
+(`lib.mjs#extractConcentrationFromName` + `diff.mjs`): se extrae la
+concentración embebida en `nombre` del catálogo actual si existe (ej.
+`'Terre d'Hermes EDT'` → `EDT`); si coincide con la concentración del
+batch → `POSSIBLE_DUPLICATE` (revisión); si difiere o no se puede
+determinar (ej. `'Eros'`, sin sufijo) → `RELATED_VARIANT` (aprobado). Ante
+la duda de si el catálogo legacy realmente tiene la misma concentración,
+la regla favorece `RELATED_VARIANT` — bloquear de más es peor que dejar
+pasar una variante legítima que un humano puede revisar después en el
+maestro. Ver `tests/f36-calibration-rules.test.mjs`.
 
 ## 3. Qué NO se resuelve en esta fase
 

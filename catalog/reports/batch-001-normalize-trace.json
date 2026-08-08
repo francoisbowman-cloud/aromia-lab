@@ -1,10 +1,10 @@
 {
   "batch": "batch-001",
-  "sourceFile": "catalog/imports/batch-001.csv",
+  "sourceFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\imports\\batch-001.csv",
   "outputFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001.normalized.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-07T20:25:44.669Z",
+  "generatedAt": "2026-08-08T01:16:46.899Z",
   "totalRows": 25,
   "rowsChanged": 4,
   "changes": [
@@ -56,7 +56,7 @@
           "field": "concentration",
           "from": "Parfum Cologne",
           "to": "Parfum Cologne",
-          "reason": "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #H), quedará como warning en la próxima validación"
+          "reason": "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación"
         }
       ]
     }

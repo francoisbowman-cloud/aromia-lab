@@ -58,9 +58,20 @@ export function prepareImport(rawFilePath) {
     const rowNumber = idx + 2;
     const status = statusByRow.get(rowNumber);
     if (status.status === "NEW" || status.status === "UPDATED") {
-      approvable.push({ ...row, diff_status: status.status, diff_reason: status.reason ?? "" });
+      approvable.push({
+        ...row,
+        diff_status: status.status,
+        diff_reason: status.reason ?? "",
+        catalog_relation: status.catalog_relation,
+        quality_status: status.quality_status,
+      });
     } else if (status.status === "REJECTED") {
-      rejected.push({ ...row, reject_reason: status.reason ?? "" });
+      rejected.push({
+        ...row,
+        reject_reason: status.reason ?? "",
+        catalog_relation: status.catalog_relation,
+        quality_status: status.quality_status,
+      });
     }
     // UNCHANGED y CONFLICT no se proponen para import: UNCHANGED no tiene nada
     // que hacer, CONFLICT requiere una decisión humana antes de proponerse.
@@ -68,14 +79,14 @@ export function prepareImport(rawFilePath) {
 
   let proposalPath = null;
   if (approvable.length > 0) {
-    const header = [...Object.keys(normalizedRows[0]), "diff_status", "diff_reason"];
+    const header = [...Object.keys(normalizedRows[0]), "diff_status", "diff_reason", "catalog_relation", "quality_status"];
     proposalPath = join(STAGING_DIR, `${batchName}.import-proposal.csv`);
     writeCsv(proposalPath, header, approvable);
   }
 
   let rejectedPath = null;
   if (rejected.length > 0) {
-    const header = [...Object.keys(normalizedRows[0]), "reject_reason"];
+    const header = [...Object.keys(normalizedRows[0]), "reject_reason", "catalog_relation", "quality_status"];
     rejectedPath = join(REJECTED_DIR, `${batchName}-rejected.csv`);
     writeCsv(rejectedPath, header, rejected);
   }
@@ -109,6 +120,13 @@ export function prepareImport(rawFilePath) {
     `- Campos obligatorios incompletos detectados: ${incompleteFieldIssues.length}`,
     `- Variantes de producto detectadas (misma marca+nombre, distinta concentración — no son conflicto, son productos legítimos): ${dedupeSummary.variantFamiliesDetected}`,
     `- URLs inválidas detectadas: ${invalidUrlIssues.length}`,
+    "",
+    "## Dos dimensiones (F3.6)",
+    "",
+    "`status` (arriba) es un valor derivado por compatibilidad — `catalog_relation` y `quality_status` son las dimensiones reales, independientes entre sí (ver README de scripts/catalog).",
+    "",
+    `- catalog_relation — NEW: ${diffReport.catalogRelationCounts.NEW} | EXISTING: ${diffReport.catalogRelationCounts.EXISTING} | RELATED_VARIANT: ${diffReport.catalogRelationCounts.RELATED_VARIANT} | POSSIBLE_DUPLICATE: ${diffReport.catalogRelationCounts.POSSIBLE_DUPLICATE}`,
+    `- quality_status — CATALOG_READY: ${diffReport.qualityStatusCounts.CATALOG_READY} | CATALOG_READY_WITH_PENDING: ${diffReport.qualityStatusCounts.CATALOG_READY_WITH_PENDING} | REVIEW_REQUIRED: ${diffReport.qualityStatusCounts.REVIEW_REQUIRED} | REJECTED: ${diffReport.qualityStatusCounts.REJECTED}`,
     "",
     "## Distribuciones",
     "",

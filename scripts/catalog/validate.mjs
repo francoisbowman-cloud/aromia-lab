@@ -124,7 +124,7 @@ export function validateBatch(filePath) {
         severity: SEVERITY.WARNING,
         code: "non_standard_concentration",
         field: "concentration",
-        message: `'${typed.concentration}' no está en el set canónico conocido (${CONCENTRATION_ENUM.join("/")}) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #H), se conserva tal cual. Confirmar que no sea un error de tipeo.`,
+        message: `'${typed.concentration}' no está en el set canónico conocido (${CONCENTRATION_ENUM.join("/")}) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo.`,
       });
     }
 

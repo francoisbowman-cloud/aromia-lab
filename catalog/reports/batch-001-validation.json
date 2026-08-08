@@ -1,9 +1,9 @@
 {
   "batch": "batch-001",
-  "file": "catalog/imports/batch-001.csv",
+  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\imports\\batch-001.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-07T20:25:44.636Z",
+  "generatedAt": "2026-08-08T01:16:46.891Z",
   "fatal": false,
   "header": [
     "id",
@@ -46,9 +46,9 @@
   "unexpectedColumns": [],
   "fileIssues": [],
   "totalRows": 25,
-  "okRows": 12,
+  "okRows": 13,
   "warningRows": 2,
-  "errorRows": 11,
+  "errorRows": 10,
   "rows": [
     {
       "row": 2,
@@ -297,7 +297,7 @@
           "severity": "warning",
           "code": "non_standard_concentration",
           "field": "concentration",
-          "message": "'Extrait de Parfum' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #H), se conserva tal cual. Confirmar que no sea un error de tipeo."
+          "message": "'Extrait de Parfum' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."
         }
       ]
     },
@@ -326,15 +326,8 @@
       "row": 24,
       "id": "23",
       "slug": "vanilla-28-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "source_url",
-          "message": "/source_url must match format \"uri\""
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 25,
@@ -346,7 +339,7 @@
           "severity": "warning",
           "code": "non_standard_concentration",
           "field": "concentration",
-          "message": "'Parfum Cologne' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #H), se conserva tal cual. Confirmar que no sea un error de tipeo."
+          "message": "'Parfum Cologne' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."
         }
       ]
     },

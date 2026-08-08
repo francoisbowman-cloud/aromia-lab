@@ -44,7 +44,7 @@ const TRIM_ONLY_FIELDS = [
   "subfamily",
   "description",
   "amazon_url",
-  "source_url",
+  // source_url ya NO va acá — es un LIST_FIELD desde F3.6 (colección de fuentes).
   "image_url",
   "image_source",
   "seo_title",
@@ -102,7 +102,7 @@ export function normalizeBatch(filePath) {
       if (key === "concentration") {
         const { value, changed, unknown } = normalizeConcentration(raw);
         if (changed) fieldChanges.push({ field: key, from: raw, to: value, reason: "alias de concentración conocido normalizado a forma canónica" });
-        if (unknown) fieldChanges.push({ field: key, from: raw, to: value, reason: "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #H), quedará como warning en la próxima validación" });
+        if (unknown) fieldChanges.push({ field: key, from: raw, to: value, reason: "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación" });
         out[key] = value;
         continue;
       }

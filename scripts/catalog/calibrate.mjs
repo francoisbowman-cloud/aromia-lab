@@ -1,43 +1,93 @@
 #!/usr/bin/env node
-// F3.5 — Auditoría de calibración contra un batch REAL de Cowork. No es
-// parte del flujo estándar de Bloque A-D (validate/normalize/dedupe/diff/
-// prepare-import) — es una capa de reporte adicional para el primer piloto
-// real, que produce CSVs de revisión humana además de los JSON habituales.
+// F3.5/F3.6 — Auditoría de calibración contra un batch real de Cowork. No es
+// parte del flujo estándar de Bloque A-D — es una capa de reporte adicional
+// que produce CSVs de revisión humana además de los JSON habituales.
 // No escribe a Postgres, no importa nada, no modifica el batch de entrada.
+//
+// F3.6: la categorización A-H se deriva de REGLAS GENERALES sobre
+// catalog_relation/quality_status/issues de validación — no hay ninguna
+// tabla de hallazgos por slug (ver KNOWN_FINDINGS eliminado en F3.6, la
+// versión anterior de este archivo no escala a Batch 002+). Los casos de
+// batch-001 (Ani, Vanilla, Eros, Terre d'Hermès) siguen cubiertos, pero
+// como consecuencia de las reglas generales, no como excepciones
+// hardcodeadas — ver tests/f36-calibration-rules.test.mjs.
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { diffBatch } from "./diff.mjs";
 import { readCsv, readJson, REPORTS_DIR, batchNameFromPath, log, isMainModule } from "./lib.mjs";
 
-// Clasificación curada a mano por Code tras revisar el batch-001 real fila
-// por fila (25 filas, revisión manual factible y más confiable que un
-// clasificador automático para un piloto de este tamaño). Para Batch 002+
-// (100 filas) esto necesita un enfoque programático — ver recomendación en
-// el summary.
-const KNOWN_FINDINGS = {
-  "santal-33-edp": { category: "F", note: "top/heart/base_notes pending — fuente no separó pirámide, se volcó a accords en su lugar (documentado por Cowork)." },
-  "armani-code-parfum": { category: "F", note: "family + top/heart/base_notes pending — sin fuente confiable en el snippet de búsqueda." },
-  "naxos-edp": {
-    category: "F",
-    note: "family pending. Además (categoría E, no bloqueante): CONFLICTO DE FECHA — Fragrantica indica 2015, ScentVerdict indica 2017; Cowork priorizó Fragrantica como fuente principal designada, señalado sin resolver del todo. launch_year sí tiene un valor, esto no afecta el REJECTED (que es por family).",
-  },
-  "side-effect-edp": { category: "F", note: "top/heart/base_notes pending — mismo patrón que Santal 33 (pirámide no separada por la fuente)." },
-  "explorer-edp": { category: "F", note: "family pending, data_confidence=low. Nota aclara que descartó explícitamente el precio de 'Explorer Extreme' (variante distinta) — buena disciplina, no hay error." },
-  "scandal-edp": { category: "F", note: "family pending." },
-  "the-one-for-men-edt": { category: "F", note: "family pending, data_confidence=low." },
-  "cloud-edp": { category: "F", note: "base_notes pending." },
-  "replica-jazz-club-edt": { category: "F", note: "family pending." },
-  "vanilla-28-edp": { category: "B", note: "source_url trae DOS URLs en una sola celda separadas por ';' — el schema exige una URI única. Es el reemplazo de 'Kayali Musk Rose 21' (inexistente) por 'Vanilla | 28' (real, verificado) documentado en notes.", requiresHumanDecision: true },
-  "eros-parfum": { category: "D", note: "Coincide por marca+nombre con 'eros' (EDT) ya publicado — Cowork documentó que es un producto distinto (Parfum, 2021 vs. 2012), pero el pipeline no puede verificar concentración contra PERFUMES_INITIAL_50.csv de forma confiable y correctamente pide revisión humana.", requiresHumanDecision: true },
-  "terre-d-hermes-parfum": { category: "D", note: "Coincide por marca+nombre con 'terre-d-hermes-edt' ya publicado — mismo patrón que Eros: Cowork documentó que es un producto distinto (Parfum 2009 vs. EDT 2006), pipeline pide revisión humana por la misma limitación de matching.", requiresHumanDecision: true },
-  "ani-extrait": { category: "E", note: "HALLAZGO GRAVE: precio en conflicto fuerte entre Selfridges ($100) y Luckyscent ($375) para el mismo tamaño — price_segment queda pending, NO resuelto arbitrariamente. Pipeline aprueba la fila como NEW en lo estructural, pero el precio sigue sin decidir.", requiresHumanDecision: true },
-  "elysium-pour-homme-parfum-cologne": { category: "B", note: "concentration='Parfum Cologne' (nomenclatura propia de Roja Parfums) — ya no bloquea (fix de esta sesión: concentration dejó de ser enum cerrado). Confirmado con warning no bloqueante, no error." },
-  "shalimar-edp": { category: "E", note: "Ambigüedad de fecha (1925 concepto original vs. 1990 lanzamiento de esta concentración EDP específica) — Cowork usó el año correspondiente a la concentración, señalado en notes. No bloquea." },
-  "interlude-woman-edp": { category: "H", note: "Nota informativa: par de línea con 'interlude-man' ya existente — correctamente NO detectado como conflicto (nombres distintos), confirma que el matching no genera falsos positivos en este caso." },
-};
+const CATEGORY = Object.freeze({
+  DATA_ERROR: "A",
+  CONTRACT_MISMATCH: "B",
+  NORMALIZATION_GAP: "C",
+  IDENTITY_AMBIGUITY: "D",
+  SOURCE_CONFLICT: "E",
+  EXPECTED_PENDING: "F",
+  PIPELINE_BUG: "G",
+  CATALOG_BASELINE_ISSUE: "H",
+});
 
-function buildValidationCsv(batchName, validationReport) {
-  const rows = validationReport.rows.map((r) => ({
+/**
+ * Categoriza UN issue de validación de nivel error, mirando el valor CRUDO
+ * original (antes de normalizar) del campo que falló. Regla general: si
+ * Cowork dejó el sentinel 'pending' a propósito, es F (disciplina
+ * correcta); si dejó la celda vacía sin marcarla, es A (posible descuido,
+ * no documentado como intencional).
+ */
+function categorizeValidationIssue(issue, rawRow) {
+  const field = issue.field;
+  const rawValue = field ? String(rawRow?.[field] ?? "").trim() : "";
+  if (rawValue.toLowerCase() === "pending") {
+    return { category: CATEGORY.EXPECTED_PENDING, note: `${field}: dejado 'pending' a propósito (Cowork no inventó el dato) — ${issue.message}` };
+  }
+  if (rawValue === "") {
+    return { category: CATEGORY.DATA_ERROR, note: `${field}: celda vacía sin marcar como pending — ${issue.message}` };
+  }
+  return { category: CATEGORY.DATA_ERROR, note: `${field}: valor presente pero inválido — ${issue.message}` };
+}
+
+function categorizeRow(diffRow, rawRow, validationRowByRow, dedupeDecisionByRow) {
+  const findings = [];
+
+  if (diffRow.quality_status === "REJECTED") {
+    const valRow = validationRowByRow.get(diffRow.row);
+    const errorIssues = (valRow?.issues ?? []).filter((i) => i.severity === "error");
+    if (errorIssues.length === 0) {
+      // rechazado por duplicado exacto dentro del batch, no por validación de campo
+      findings.push({ category: CATEGORY.IDENTITY_AMBIGUITY, note: diffRow.reason });
+    }
+    for (const issue of errorIssues) {
+      findings.push(categorizeValidationIssue(issue, rawRow));
+    }
+  } else if (diffRow.quality_status === "REVIEW_REQUIRED") {
+    if (diffRow.catalog_relation === "POSSIBLE_DUPLICATE") {
+      findings.push({ category: CATEGORY.IDENTITY_AMBIGUITY, note: diffRow.reason });
+    } else if (diffRow.source === "image_url_change_blocked") {
+      findings.push({ category: CATEGORY.CONTRACT_MISMATCH, note: diffRow.reason });
+    } else {
+      findings.push({ category: CATEGORY.IDENTITY_AMBIGUITY, note: diffRow.reason ?? "Requiere revisión — motivo no clasificado automáticamente." });
+    }
+  }
+
+  // warnings — no cambian quality_status, pero son hallazgos igual (B: enum abierto no contemplado)
+  const valRow = validationRowByRow.get(diffRow.row);
+  for (const issue of valRow?.issues ?? []) {
+    if (issue.severity === "warning" && issue.code === "non_standard_concentration") {
+      findings.push({ category: CATEGORY.CONTRACT_MISMATCH, note: issue.message });
+    }
+  }
+
+  // dedupe: conflicto dentro del propio batch (ya cubierto por quality_status arriba si aplica, pero puede coexistir con otros hallazgos)
+  const dedupe = dedupeDecisionByRow.get(diffRow.row);
+  if (dedupe?.decision === "needs_review_conflict" && diffRow.quality_status !== "REVIEW_REQUIRED") {
+    findings.push({ category: CATEGORY.IDENTITY_AMBIGUITY, note: dedupe.reason });
+  }
+
+  return findings;
+}
+
+function buildValidationCsv(validationReport) {
+  return validationReport.rows.map((r) => ({
     row: r.row,
     id: r.id ?? "",
     slug: r.slug ?? "",
@@ -46,7 +96,6 @@ function buildValidationCsv(batchName, validationReport) {
     warning_codes: r.issues.filter((i) => i.severity === "warning").map((i) => i.code).join(";"),
     issue_summary: r.issues.map((i) => `[${i.severity}] ${i.message}`).join(" | "),
   }));
-  return rows;
 }
 
 function buildDuplicatesCsv(dedupeSummary) {
@@ -64,56 +113,30 @@ function buildNormalizationCsv(trace) {
   const out = [];
   for (const change of trace.changes) {
     for (const f of change.fields) {
-      out.push({
-        row: change.row,
-        id: change.id ?? "",
-        slug: change.slug ?? "",
-        field: f.field,
-        from: f.from,
-        to: f.to,
-        reason: f.reason,
-      });
+      out.push({ row: change.row, id: change.id ?? "", slug: change.slug ?? "", field: f.field, from: f.from, to: f.to, reason: f.reason });
     }
   }
   return out;
 }
 
-function buildExceptionsCsv(diffReport, rawRows) {
-  const bySlug = new Map(rawRows.map((r) => [r.slug, r]));
+function buildExceptionsCsv(diffReport, rawRowsByRow, validationRowByRow, dedupeDecisionByRow) {
   const out = [];
-  for (const row of diffReport.rows) {
-    const slug = row.slug;
-    const known = KNOWN_FINDINGS[slug];
-    const isPipelineFlagged = row.status === "CONFLICT" || row.status === "REJECTED";
-    if (!isPipelineFlagged && !known) continue;
-    out.push({
-      row: row.row,
-      id: row.id ?? "",
-      slug: slug ?? "",
-      diff_status: row.status,
-      category: known?.category ?? (row.status === "REJECTED" ? "F" : row.status === "CONFLICT" ? "D" : ""),
-      requires_human_decision: known?.requiresHumanDecision ? "true" : "false",
-      data_confidence: bySlug.get(slug)?.data_confidence ?? "",
-      pipeline_reason: row.reason ?? "",
-      note: known?.note ?? "",
-    });
-  }
-  // filas con hallazgo curado pero que el pipeline no marcó CONFLICT/REJECTED (ej. shalimar-edp, elysium, interlude-woman)
-  for (const [slug, known] of Object.entries(KNOWN_FINDINGS)) {
-    if (out.some((r) => r.slug === slug)) continue;
-    const diffRow = diffReport.rows.find((r) => r.slug === slug);
-    if (!diffRow) continue; // ej. 'naxos-edp-date', clave sintética sin fila propia
-    out.push({
-      row: diffRow.row,
-      id: diffRow.id ?? "",
-      slug,
-      diff_status: diffRow.status,
-      category: known.category,
-      requires_human_decision: known.requiresHumanDecision ? "true" : "false",
-      data_confidence: bySlug.get(slug)?.data_confidence ?? "",
-      pipeline_reason: diffRow.reason ?? "",
-      note: known.note,
-    });
+  for (const diffRow of diffReport.rows) {
+    const findings = categorizeRow(diffRow, rawRowsByRow.get(diffRow.row), validationRowByRow, dedupeDecisionByRow);
+    if (findings.length === 0) continue; // CATALOG_READY(_WITH_PENDING) sin hallazgo -> no es una excepción
+    const requiresHumanDecision = diffRow.quality_status === "REVIEW_REQUIRED";
+    for (const finding of findings) {
+      out.push({
+        row: diffRow.row,
+        id: diffRow.id ?? "",
+        slug: diffRow.slug ?? "",
+        catalog_relation: diffRow.catalog_relation,
+        quality_status: diffRow.quality_status,
+        category: finding.category,
+        requires_human_decision: requiresHumanDecision ? "true" : "false",
+        note: finding.note,
+      });
+    }
   }
   out.sort((a, b) => a.row - b.row);
   return out;
@@ -129,19 +152,22 @@ function toCsv(rows) {
   return [header.join(","), ...rows.map((r) => header.map((h) => esc(r[h])).join(","))].join("\n") + "\n";
 }
 
-export function calibrate(rawFilePath) {
+export function calibrate(rawFilePath, opts = {}) {
   const batchName = batchNameFromPath(rawFilePath);
-  const result = diffBatch(rawFilePath);
+  const result = diffBatch(rawFilePath, opts);
   if (result.fatal) throw new Error(`calibrate: diffBatch fatal — ${result.report.fatalReason}`);
 
-  const { report: diffReport, validation, rawValidation, dedupeSummary, normalizedRows } = result;
+  const { report: diffReport, validation, dedupeSummary } = result;
   const trace = readJson(join(REPORTS_DIR, `${batchName}-normalize-trace.json`));
   const { rows: rawRows } = readCsv(rawFilePath);
+  const rawRowsByRow = new Map(rawRows.map((r, idx) => [idx + 2, r]));
+  const validationRowByRow = new Map(validation.report.rows.map((r) => [r.row, r]));
+  const dedupeDecisionByRow = new Map(dedupeSummary.decisions.map((d) => [d.row, d]));
 
-  const validationCsvRows = buildValidationCsv(batchName, validation.report);
+  const validationCsvRows = buildValidationCsv(validation.report);
   const duplicatesCsvRows = buildDuplicatesCsv(dedupeSummary);
   const normalizationCsvRows = buildNormalizationCsv(trace);
-  const exceptionsCsvRows = buildExceptionsCsv(diffReport, rawRows);
+  const exceptionsCsvRows = buildExceptionsCsv(diffReport, rawRowsByRow, validationRowByRow, dedupeDecisionByRow);
 
   const outPaths = {
     validation: join(REPORTS_DIR, `${batchName}-real-validation.csv`),
@@ -155,21 +181,18 @@ export function calibrate(rawFilePath) {
   writeFileSync(outPaths.exceptions, toCsv(exceptionsCsvRows), "utf-8");
 
   const categoryCounts = {};
-  for (const row of exceptionsCsvRows) {
-    categoryCounts[row.category] = (categoryCounts[row.category] || 0) + 1;
-  }
+  for (const row of exceptionsCsvRows) categoryCounts[row.category] = (categoryCounts[row.category] || 0) + 1;
+
+  const unresolvedPriceSegmentPending = rawRows.filter((r) => String(r.price_segment ?? "").trim().toLowerCase() === "pending").length;
 
   return {
     batchName,
     diffReport,
     validation,
-    rawValidation,
     dedupeSummary,
-    normalizedRows,
-    rawRows,
-    trace,
     exceptionsCsvRows,
     categoryCounts,
+    unresolvedPriceSegmentPending,
     outPaths,
   };
 }
@@ -182,7 +205,8 @@ function main() {
   }
   const result = calibrate(filePath);
   log(`Batch: ${result.batchName}`);
-  log(`Categorías (filas con hallazgo): ${JSON.stringify(result.categoryCounts)}`);
+  log(`Categorías (hallazgos): ${JSON.stringify(result.categoryCounts)}`);
+  log(`Filas con price_segment pending (proxy de posible conflicto de fuente sin resolver — no distingue de 'sin fuente'): ${result.unresolvedPriceSegmentPending}`);
   log(`CSVs escritos: ${Object.values(result.outPaths).join(", ")}`);
 }
 

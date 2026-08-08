@@ -33,6 +33,33 @@ batch crudo (catalog/imports/batch-XXX.csv)
 `diff.mjs` y `prepare-import.mjs` orquestan internamente todos los pasos
 anteriores — alcanza con darles el batch crudo.
 
+## Dos dimensiones de clasificación (F3.6)
+
+Cada fila del diff se clasifica en **dos ejes independientes**, no uno solo:
+
+- **`catalog_relation`** — identidad: `NEW` (no existe en ningún lado) |
+  `EXISTING` (ya está en `catalog/aromia-catalog-master.csv`) |
+  `RELATED_VARIANT` (misma marca + mismo nombre base, concentración
+  distinta o no verificable — ej. Sauvage EDT vs. EDP) |
+  `POSSIBLE_DUPLICATE` (misma marca+nombre+concentración confirmada, o
+  colisión de slug — necesita revisión humana).
+- **`quality_status`** — ¿está lista para publicarse? `CATALOG_READY` (sin
+  ningún campo pendiente) | `CATALOG_READY_WITH_PENDING` (aprobable, pero
+  con algún campo opcional/enrichment sin completar) | `REVIEW_REQUIRED`
+  (necesita una decisión humana — `POSSIBLE_DUPLICATE`, o el batch intenta
+  pisar un `image_url` ya presente en el maestro) | `REJECTED` (campos
+  críticos genuinamente inválidos o faltantes — nunca por un enum abierto,
+  un campo enrichment pending, o tener más de una fuente).
+
+`status` (`NEW`/`UNCHANGED`/`UPDATED`/`CONFLICT`/`REJECTED`) se conserva
+como valor **derivado** de ambas dimensiones — es lo que siguen leyendo
+`prepare-import.mjs`/`import.mjs` para decidir aprobación, no hizo falta
+reescribirlos. Ver `diff.mjs#deriveLegacyStatus`.
+
+`lib.mjs#ENRICHMENT_FIELDS` (`season`/`occasion`/`longevity`/`sillage`)
+nunca bajan de `CATALOG_READY_WITH_PENDING` ni fuerzan revisión por sí
+solos — se mantienen en el schema, no se eliminan, pero no bloquean.
+
 ## Comandos
 
 Desde `scripts/catalog/`:
@@ -45,7 +72,7 @@ npm run diff           -- <csv-crudo>    # corre validate+normalize+dedupe+diff
 npm run prepare-import -- <csv-crudo>    # corre todo + escribe la propuesta y el resumen
 npm run import         -- --approved [--dry-run] [proposal.csv]
 npm run calibrate      -- <csv-crudo>    # auditoría de calibración (CSVs de revisión humana), ver abajo
-npm test                                 # 54 tests con node:test, sin dependencias externas
+npm test                                 # 68 tests con node:test, sin dependencias externas
 ```
 
 O desde la raíz del repo (mismo comportamiento, paths relativos a la raíz):
@@ -78,12 +105,17 @@ npm run catalog:test
   `catalog/reports/_fixture-pilot-*`.
 - `catalog/imports/batch-001.csv` — el piloto **real** de 25 fragancias
   entregado por Cowork (F3.5, 2026-08-07), copiado íntegro desde
-  `handoff/cowork/phase-3/batch-001.csv` (hash SHA-256 verificado, ver
-  `catalog/reports/batch-001-real-summary.md`). Resultado: 13 NEW, 2
-  CONFLICT, 10 REJECTED, 4 excepciones que requieren decisión humana. La
-  revisión de este batch encontró y corrigió 5 bugs de pipeline y 8
-  incompatibilidades de contrato reales — todo documentado en el summary
-  y en `catalog/schemas/SCHEMA_COMPARISON.md`.
+  `handoff/cowork/phase-3/batch-001.csv` (hash SHA-256 verificado, sin
+  modificar en ningún momento — ver `catalog/reports/batch-001-real-summary.md`).
+  Corrido dos veces contra las mismas 25 filas: F3.5 encontró y corrigió 5
+  bugs de pipeline y 8 incompatibilidades de contrato, dejando 4
+  excepciones que necesitaban una decisión de Brey (conflicto de precio,
+  reemplazo de producto, dos posibles variantes). F3.6 aplicó esas
+  decisiones como reglas generales (no como excepciones de fila) —
+  resultado final: 16 `NEW`-equivalente aprobables, 9 `REJECTED`
+  (genuinamente incompletos en campos críticos), **0** excepciones que
+  requieran una decisión humana. Comparación BEFORE/AFTER completa en el
+  summary.
 
 ## Tests
 
@@ -91,7 +123,7 @@ npm run catalog:test
 npm test
 ```
 
-54 tests con el test runner nativo de Node (`node:test`), sin Jest ni otras
+68 tests con el test runner nativo de Node (`node:test`), sin Jest ni otras
 dependencias de testing. `--test-concurrency=1` es obligatorio (no solo
 una opción de estilo) — varios tests escriben a los directorios reales de
 `catalog/`, y correrlos en paralelo produce fallos intermitentes no
@@ -100,13 +132,18 @@ reproducibles (bug real encontrado y corregido en F3.5).
 Cubren: parseo de CSV mal formado, columnas faltantes/inesperadas, cada
 regla de `VALIDACIÓN OBLIGATORIA` del brief de Fase 3, normalización
 determinista (slugs, alias de concentración/price_segment, heurística de
-capitalización), no-fusión de variantes de concentración, las 5
-clasificaciones de `diff.mjs` (NEW/UNCHANGED/UPDATED/CONFLICT/REJECTED),
-los guards de seguridad de `import.mjs`, el sentinel `pending` de Cowork
-(`tests/real-batch-gaps.test.mjs`, agregado tras revisar el batch-001
-real) y el propio script de limpieza de artefactos de test
-(`tests/cleanup-artifacts.test.mjs`, agregado después de que un bug ahí
-borrara los reportes reales de batch-001 en esta misma sesión).
+capitalización), no-fusión de variantes de concentración, las
+clasificaciones de `diff.mjs` (legacy `status` + `catalog_relation` +
+`quality_status`), los guards de seguridad de `import.mjs`, el sentinel
+`pending` de Cowork (`tests/real-batch-gaps.test.mjs`), el propio script
+de limpieza de artefactos de test (`tests/cleanup-artifacts.test.mjs`,
+agregado después de que un bug ahí borrara los reportes reales de
+batch-001 en la sesión de F3.5) y las reglas generales de calibración de
+F3.6 — `source_url` como colección, `ENRICHMENT_FIELDS` no bloqueantes,
+`RELATED_VARIANT` vs. `POSSIBLE_DUPLICATE` por concentración
+(`tests/f36-calibration-rules.test.mjs`, incluye regresión contra el
+batch-001 real para los casos de Ani/Vanilla/Eros/Terre d'Hermès **sin**
+que la implementación dependa de esos slugs).
 
 `npm test` corre un `posttest` (`tests/cleanup-artifacts.mjs`) que borra
 los artefactos que los tests generan en los directorios reales de
@@ -124,17 +161,25 @@ con nombre `batch*`).
   ese CSV (por ediciones hechas directo en `/admin`), el diff no lo va a
   ver. Ver `lib.mjs#CURRENT_AROMIA_CSV`.
 - **El matching contra el catálogo actual es heurístico** (marca+nombre
-  normalizado, con un ajuste para el caso en que `nombre` incluye la
-  concentración como texto, ej. "Sauvage EDP") — no es una clave
-  garantizada. Puede haber falsos negativos (no detecta una coincidencia
-  real) tanto como falsos positivos (bloquea con CONFLICT algo que en
-  realidad es distinto) — por diseño, ante la duda el pipeline prefiere
-  marcar CONFLICT y pedir revisión humana antes que fusionar mal.
-- **`longevity`/`sillage`/`price_segment` usan enums asumidos por Code**
-  (no especificados en el brief) — ver
-  `catalog/schemas/catalog.schema.json` (`notes.enums_asumidos`) y
-  `catalog/schemas/SCHEMA_COMPARISON.md` #E. Revisar contra el batch-001
-  real en cuanto Cowork lo entregue.
+  base, con extracción de concentración embebida en `nombre` cuando existe
+  — ver `lib.mjs#extractConcentrationFromName` y SCHEMA_COMPARISON.md #M)
+  — no es una clave garantizada. Cuando el catálogo actual no menciona la
+  concentración en absoluto (ej. "Eros" sin sufijo), el pipeline no puede
+  confirmar si es la misma variante — por diseño, ante esa duda específica
+  prefiere `RELATED_VARIANT` (aprobar) antes que bloquear de más; solo
+  bloquea (`POSSIBLE_DUPLICATE`) cuando hay evidencia positiva de que la
+  concentración coincide.
+- **`longevity`/`sillage` siguen usando enums asumidos por Code**, sin
+  confirmar contra un valor real (25/25 filas del batch-001 llegaron
+  `pending` en ambos) — ver `catalog/schemas/catalog.schema.json`
+  (`notes.enums_asumidos_confirmados_2026-08-07`). `price_segment` y
+  `gender` sí quedaron confirmados y corregidos (español, no inglés).
+- **El proxy de "conflicto de fuente sin resolver" (`price_segment`
+  pending) no distingue "hay conflicto real entre fuentes" de "no se
+  encontró ninguna fuente confiable"** — decisión deliberada de no
+  construir un detector basado en texto libre de `notes` (frágil,
+  contradice "rules > per-row exceptions"). Ver SCHEMA_COMPARISON.md,
+  nota sobre categoría E en `calibrate.mjs`.
 - **REPORTS_DIR/STAGING_DIR/REJECTED_DIR no son inyectables** — ver nota
   de tests arriba. No es un problema funcional hoy, pero si el pipeline
   crece conviene exponerlos vía opción/env var como se hizo con

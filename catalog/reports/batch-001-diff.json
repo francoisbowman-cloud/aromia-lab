@@ -1,23 +1,37 @@
 {
   "batch": "batch-001",
-  "generatedAt": "2026-08-07T20:25:44.730Z",
+  "generatedAt": "2026-08-08T01:16:46.936Z",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
   "fatal": false,
   "masterExists": true,
   "totalRows": 25,
   "counts": {
-    "NEW": 13,
+    "NEW": 16,
     "UNCHANGED": 0,
     "UPDATED": 0,
-    "CONFLICT": 2,
-    "REJECTED": 10
+    "CONFLICT": 0,
+    "REJECTED": 9
+  },
+  "catalogRelationCounts": {
+    "NEW": 23,
+    "EXISTING": 0,
+    "RELATED_VARIANT": 2,
+    "POSSIBLE_DUPLICATE": 0
+  },
+  "qualityStatusCounts": {
+    "CATALOG_READY": 0,
+    "CATALOG_READY_WITH_PENDING": 16,
+    "REVIEW_REQUIRED": 0,
+    "REJECTED": 9
   },
   "rows": [
     {
       "row": 2,
       "id": "1",
       "slug": "chanel-no5-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -26,6 +40,8 @@
       "row": 3,
       "id": "2",
       "slug": "tobacco-vanille-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -34,14 +50,18 @@
       "row": 4,
       "id": "3",
       "slug": "santal-33-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 5,
       "id": "4",
       "slug": "shalimar-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -50,14 +70,17 @@
       "row": 6,
       "id": "5",
       "slug": "eros-parfum",
-      "status": "CONFLICT",
-      "reason": "Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar",
-      "source": "current_catalog_possible_match",
+      "catalog_relation": "RELATED_VARIANT",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": "Misma marca + mismo nombre base que 1 perfume(s) ya publicado(s), con concentración distinta o no confirmada en el catálogo actual (batch: 'Parfum') — variante relacionada, no duplicado (same brand + same normalized base name + distinct/unverified concentration = RELATED_VARIANT)",
+      "source": "current_catalog_distinct_concentration",
       "candidates": [
         {
           "slug": "eros",
           "nombre": "Eros",
-          "marca": "Versace"
+          "marca": "Versace",
+          "detectedConcentration": null
         }
       ]
     },
@@ -65,6 +88,8 @@
       "row": 7,
       "id": "6",
       "slug": "paradoxe-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -73,30 +98,38 @@
       "row": 8,
       "id": "7",
       "slug": "armani-code-parfum",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 9,
       "id": "8",
       "slug": "naxos-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 10,
       "id": "9",
       "slug": "side-effect-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 11,
       "id": "10",
       "slug": "212-vip-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -105,30 +138,38 @@
       "row": 12,
       "id": "11",
       "slug": "explorer-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 13,
       "id": "12",
       "slug": "scandal-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 14,
       "id": "13",
       "slug": "the-one-for-men-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 15,
       "id": "14",
       "slug": "interlude-woman-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -137,6 +178,8 @@
       "row": 16,
       "id": "15",
       "slug": "vibrant-leather-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -145,14 +188,18 @@
       "row": 17,
       "id": "16",
       "slug": "cloud-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     },
     {
       "row": 18,
       "id": "17",
       "slug": "gypsy-water-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -161,6 +208,8 @@
       "row": 19,
       "id": "18",
       "slug": "percival-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -169,6 +218,8 @@
       "row": 20,
       "id": "19",
       "slug": "ani-extrait",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -177,6 +228,8 @@
       "row": 21,
       "id": "20",
       "slug": "cedrat-boise-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -185,6 +238,8 @@
       "row": 22,
       "id": "21",
       "slug": "born-in-roma-uomo-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -193,14 +248,17 @@
       "row": 23,
       "id": "22",
       "slug": "terre-d-hermes-parfum",
-      "status": "CONFLICT",
-      "reason": "Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar",
-      "source": "current_catalog_possible_match",
+      "catalog_relation": "RELATED_VARIANT",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": "Misma marca + mismo nombre base que 1 perfume(s) ya publicado(s), con concentración distinta o no confirmada en el catálogo actual (batch: 'Parfum') — variante relacionada, no duplicado (same brand + same normalized base name + distinct/unverified concentration = RELATED_VARIANT)",
+      "source": "current_catalog_distinct_concentration",
       "candidates": [
         {
           "slug": "terre-d-hermes-edt",
           "nombre": "Terre d'Hermes EDT",
-          "marca": "Hermes"
+          "marca": "Hermes",
+          "detectedConcentration": "EDT"
         }
       ]
     },
@@ -208,14 +266,18 @@
       "row": 24,
       "id": "23",
       "slug": "vanilla-28-edp",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
     },
     {
       "row": 25,
       "id": "24",
       "slug": "elysium-pour-homme-parfum-cologne",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
       "reason": null,
       "source": null
@@ -224,9 +286,11 @@
       "row": 26,
       "id": "25",
       "slug": "replica-jazz-club-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
       "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes (ver reporte de validate.mjs)",
-      "source": "validation"
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
     }
   ]
 }

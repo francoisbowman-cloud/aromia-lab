@@ -34,7 +34,7 @@
     "concentration": {
       "type": "string",
       "minLength": 1,
-      "description": "NO es un enum cerrado (corregido tras revisar el batch-001 real — casas de nicho/ultra-lujo usan nomenclatura propia, ej. Roja Parfums 'Parfum Cologne', que no encaja en EDT/EDP/Parfum/Extrait/Elixir/EDC sin perder precisión ni información real). validate.mjs sigue marcando como warning (no error) cualquier valor fuera del set canónico conocido — ver lib.mjs#CONCENTRATION_ENUM y SCHEMA_COMPARISON.md #H."
+      "description": "NO es un enum cerrado (corregido tras revisar el batch-001 real — casas de nicho/ultra-lujo usan nomenclatura propia, ej. Roja Parfums 'Parfum Cologne', que no encaja en EDT/EDP/Parfum/Extrait/Elixir/EDC sin perder precisión ni información real). validate.mjs sigue marcando como warning (no error) cualquier valor fuera del set canónico conocido — ver lib.mjs#CONCENTRATION_ENUM y SCHEMA_COMPARISON.md #A."
     },
     "gender": {
       "type": "string",
@@ -93,9 +93,10 @@
       "format": "uri"
     },
     "source_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "URL de la fuente de datos (no necesariamente de venta). Requerido para trazabilidad de sourcing."
+      "type": "array",
+      "items": { "type": "string", "format": "uri" },
+      "minItems": 1,
+      "description": "F3.6 — colección de URLs de fuente (no necesariamente de venta), no un valor único. En el CSV viaja separado por ';', misma convención que top_notes/season. Una entidad puede tener más de una fuente legítima (ej. researcher + fuente oficial de precio) — antes era un string único y una fila con dos URLs en una celda se rechazaba por 'no matchear format uri' (caso real: vanilla-28-edp, batch-001). Ver SCHEMA_COMPARISON.md #L."
     },
     "image_url": {
       "type": ["string", "null"],

@@ -20,7 +20,7 @@ import {
   isMainModule,
 } from "./lib.mjs";
 
-const PROPOSAL_ONLY_COLUMNS = new Set(["diff_status", "diff_reason"]);
+const PROPOSAL_ONLY_COLUMNS = new Set(["diff_status", "diff_reason", "catalog_relation", "quality_status"]);
 
 function findLatestProposal() {
   if (!existsSync(STAGING_DIR)) return null;

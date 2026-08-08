@@ -72,28 +72,32 @@ test("mismo producto con image_url distinto -> CONFLICT, no se autoaprueba el ca
   assert.match(report.rows[0].reason, /image_url/);
 });
 
-test("slug ya usado por otro producto en master -> CONFLICT (slug_collision)", () => {
+test("slug ya usado por otro producto en master -> CONFLICT (slug_collision_master)", () => {
   const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ id: "cw-002", brand: "Chanel", name: "Bleu", topNotes: "citrico" })}\n`);
   const master = tmpFile("master.csv", `${BATCH_HEADER}\n${batchRow()}\n`); // mismo slug 'dior-sauvage-edt', producto distinto
   const { report } = diffBatch(batch, { masterCsvPath: master, currentCsvPath: emptyCurrent() });
   assert.equal(report.rows[0].status, "CONFLICT");
-  assert.equal(report.rows[0].source, "slug_collision");
+  assert.equal(report.rows[0].quality_status, "REVIEW_REQUIRED");
+  assert.equal(report.rows[0].source, "slug_collision_master");
 });
 
-test("coincidencia por marca+nombre en el catálogo actual de Aromia -> CONFLICT, no NEW", () => {
-  const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow()}\n`);
-  const current = tmpFile("current.csv", "slug,nombre,marca\nsauvage-dior-v1,Sauvage,Dior\n");
+test("F3.6 — mismo brand+nombre base en el catálogo actual PERO sin concentración verificable (ej. 'Eros' sin sufijo) -> RELATED_VARIANT, aprobado como NEW, no bloquea", () => {
+  const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ concentration: "Parfum" })}\n`);
+  const current = tmpFile("current.csv", "slug,nombre,marca\nsauvage-dior-v1,Sauvage,Dior\n"); // sin sufijo de concentración
   const { report } = diffBatch(batch, { masterCsvPath: emptyMaster(), currentCsvPath: current });
-  assert.equal(report.rows[0].status, "CONFLICT");
-  assert.equal(report.rows[0].source, "current_catalog_possible_match");
+  assert.equal(report.rows[0].catalog_relation, "RELATED_VARIANT");
+  assert.equal(report.rows[0].status, "NEW");
+  assert.ok(["CATALOG_READY", "CATALOG_READY_WITH_PENDING"].includes(report.rows[0].quality_status));
 });
 
-test("catálogo actual con concentración embebida en 'nombre' (ej. 'Sauvage EDP') igual matchea contra name/concentration separados de Cowork", () => {
+test("F3.6 — mismo brand+nombre base y MISMA concentración confirmada en el catálogo actual -> POSSIBLE_DUPLICATE, requiere revisión", () => {
   const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ concentration: "EDP" })}\n`);
-  const current = tmpFile("current.csv", "slug,nombre,marca\nsauvage-edp,Sauvage EDP,Dior\n");
+  const current = tmpFile("current.csv", "slug,nombre,marca\nsauvage-edp,Sauvage EDP,Dior\n"); // concentración embebida en nombre, MISMA que el batch
   const { report } = diffBatch(batch, { masterCsvPath: emptyMaster(), currentCsvPath: current });
+  assert.equal(report.rows[0].catalog_relation, "POSSIBLE_DUPLICATE");
+  assert.equal(report.rows[0].quality_status, "REVIEW_REQUIRED");
   assert.equal(report.rows[0].status, "CONFLICT");
-  assert.equal(report.rows[0].source, "current_catalog_possible_match");
+  assert.equal(report.rows[0].source, "current_catalog_same_concentration");
 });
 
 test("fila con error de validación -> REJECTED en el diff, no se propone", () => {
@@ -104,7 +108,8 @@ test("fila con error de validación -> REJECTED en el diff, no se propone", () =
   const batch = tmpFile("batch.csv", `${BATCH_HEADER}\n${batchRow({ gender: "NOT-A-REAL-GENDER" })}\n`);
   const { report } = diffBatch(batch, { masterCsvPath: emptyMaster(), currentCsvPath: emptyCurrent() });
   assert.equal(report.rows[0].status, "REJECTED");
-  assert.equal(report.rows[0].source, "validation");
+  assert.equal(report.rows[0].quality_status, "REJECTED");
+  assert.match(report.rows[0].reason, /errores de validación/);
 });
 
 test("concentración fuera del set canónico (ej. nomenclatura propia de una casa de nicho) -> NO bloquea, sigue siendo aprobable", () => {

@@ -39,7 +39,24 @@ export const LIST_FIELDS = [
   "accords",
   "season",
   "occasion",
+  // source_url: F3.6 — una entidad puede tener más de una fuente legítima
+  // (ver catalog/schemas/SCHEMA_COMPARISON.md #L). El CSV conserva el
+  // nombre de columna 'source_url' por compatibilidad, pero internamente
+  // es una colección igual que top_notes/season — ';' separa múltiples
+  // URLs, cada una validada como URI individualmente. No es una excepción
+  // de una fila puntual, es la representación general para cualquier
+  // batch con más de una fuente por registro.
+  "source_url",
 ];
+
+/**
+ * F3.6 — campos de enriquecimiento: pending/null acá NUNCA baja el
+ * quality_status por debajo de CATALOG_READY_WITH_PENDING, nunca fuerza
+ * REVIEW_REQUIRED ni REJECTED. No requieren una segunda pasada de
+ * investigación de Cowork en Fase 3. Se mantienen en el schema (no se
+ * eliminan) por si se completan más adelante.
+ */
+export const ENRICHMENT_FIELDS = ["season", "occasion", "longevity", "sillage"];
 
 export const REQUIRED_FIELDS = [
   "id",
@@ -54,6 +71,22 @@ export const REQUIRED_FIELDS = [
   "source_url",
   "status",
 ];
+
+/** F3.6 — dimensión de identidad: ¿qué relación tiene esta fila con lo ya existente? */
+export const CATALOG_RELATION = Object.freeze({
+  NEW: "NEW",
+  EXISTING: "EXISTING",
+  RELATED_VARIANT: "RELATED_VARIANT",
+  POSSIBLE_DUPLICATE: "POSSIBLE_DUPLICATE",
+});
+
+/** F3.6 — dimensión de calidad: ¿está lista para publicarse? Independiente de catalog_relation. */
+export const QUALITY_STATUS = Object.freeze({
+  CATALOG_READY: "CATALOG_READY",
+  CATALOG_READY_WITH_PENDING: "CATALOG_READY_WITH_PENDING",
+  REVIEW_REQUIRED: "REVIEW_REQUIRED",
+  REJECTED: "REJECTED",
+});
 
 /**
  * Set canónico conocido. NO es un enum bloqueante en catalog.schema.json
@@ -112,6 +145,29 @@ export const CONCENTRATION_ALIASES = {
   "pure perfume": "Extrait",
   "elixir": "Elixir",
 };
+
+/**
+ * F3.6 — el catálogo legacy de Aromia (PERFUMES_INITIAL_50.csv) a veces
+ * embebe la concentración en `nombre` (ej. 'Terre d'Hermes EDT') y a veces
+ * no la menciona en absoluto (ej. 'Eros', concentración real desconocida
+ * desde el nombre solo). Extrae ambas piezas de forma genérica — sin esto,
+ * no hay manera de distinguir 'entra una variante nueva de concentración
+ * distinta' de 'esto es un posible duplicado' sin listar marcas a mano.
+ * Devuelve concentration:null si no se pudo determinar (no se asume nada).
+ */
+export function extractConcentrationFromName(nombre) {
+  const suffixes = [...CONCENTRATION_ENUM, ...Object.keys(CONCENTRATION_ALIASES)];
+  const trimmed = String(nombre ?? "").trim();
+  for (const suffix of suffixes) {
+    const re = new RegExp(`\\s+${suffix}$`, "i");
+    if (re.test(trimmed)) {
+      const alias = CONCENTRATION_ALIASES[suffix.toLowerCase()];
+      const canonical = alias ?? (CONCENTRATION_ENUM.find((c) => c.toLowerCase() === suffix.toLowerCase()) ?? suffix);
+      return { baseName: trimmed.replace(re, "").trim(), concentration: canonical };
+    }
+  }
+  return { baseName: trimmed, concentration: null };
+}
 
 export function normalizeConcentration(raw) {
   const trimmed = String(raw ?? "").trim();

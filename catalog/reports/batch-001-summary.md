@@ -1,22 +1,29 @@
 # Resumen de batch — batch-001
 
-Generado: 2026-08-07T20:12:47.356Z
+Generado: 2026-08-08T01:09:54.122Z
 
 ## Totales
 
 - Total de filas: 25
-- Válidas (pasan validate.mjs, con o sin warnings): 15
-- Rechazadas: 10
-- Nuevas (NEW): 13
+- Válidas (pasan validate.mjs, con o sin warnings): 16
+- Rechazadas: 9
+- Nuevas (NEW): 16
 - Actualizaciones propuestas (UPDATED): 0
 - Sin cambios (UNCHANGED): 0
-- Conflictos (requieren revisión humana): 2
+- Conflictos (requieren revisión humana): 0
 - Duplicados exactos dentro del batch: 0
 - Conflictos de duplicado dentro del batch (misma brand+name+concentration, datos distintos): 0
 - Warnings de validación: 1
 - Campos obligatorios incompletos detectados: 6
 - Variantes de producto detectadas (misma marca+nombre, distinta concentración — no son conflicto, son productos legítimos): 0
-- URLs inválidas detectadas: 1
+- URLs inválidas detectadas: 0
+
+## Dos dimensiones (F3.6)
+
+`status` (arriba) es un valor derivado por compatibilidad — `catalog_relation` y `quality_status` son las dimensiones reales, independientes entre sí (ver README de scripts/catalog).
+
+- catalog_relation — NEW: 23 | EXISTING: 0 | RELATED_VARIANT: 2 | POSSIBLE_DUPLICATE: 0
+- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 16 | REVIEW_REQUIRED: 0 | REJECTED: 9
 
 ## Distribuciones
 
@@ -78,10 +85,7 @@ Generado: 2026-08-07T20:12:47.356Z
 
 ## Revisión por excepciones
 
-2 registro(s) requieren revisión humana:
-
-- Fila 6 (slug: eros-parfum, id: 5): Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar
-- Fila 23 (slug: terre-d-hermes-parfum, id: 22): Posible coincidencia por marca+nombre con 1 perfume(s) ya publicado(s) en Aromia (PERFUMES_INITIAL_50.csv no distingue concentración de forma confiable) — requiere revisión manual antes de importar
+Ningún registro requiere revisión humana en este batch.
 
 ## Archivos generados
 
