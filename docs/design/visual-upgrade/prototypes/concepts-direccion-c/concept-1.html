@@ -1,0 +1,217 @@
+<!-- ============================================================ -->
+<!-- CONCEPT 01 — EDITORIAL CINEMATIC -->
+<!-- ============================================================ -->
+<style>
+.c1 .aromia-nav{position:absolute;width:100%;background:transparent;border-bottom-color:transparent}
+.c1 .aromia-nav__links a{color:#f2ebdd}
+.c1-hero{
+  position:relative;min-height:100svh;display:flex;align-items:flex-end;
+  color:#f2ebdd;overflow:hidden
+}
+.c1-hero__scene{position:absolute;inset:0}
+.c1-hero__vignette{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.15) 46%,rgba(0,0,0,.5) 100%)}
+.c1-hero__bars{position:absolute;left:0;right:0;height:6.5vh;background:#050403}
+.c1-hero__bars.top{top:0}.c1-hero__bars.bottom{bottom:0}
+.c1-hero__content{position:relative;z-index:2;padding:0 clamp(20px,6vw,80px) 9vh;max-width:920px}
+.c1-hero__eyebrow{font-family:var(--ff-data);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#d8bd8c;margin-bottom:22px}
+.c1-hero__title{font-family:var(--ff-display);font-weight:600;font-size:clamp(46px,9vw,116px);line-height:.98;letter-spacing:-.01em;text-wrap:balance}
+.c1-hero__title em{font-style:italic;color:#d8bd8c;display:block}
+.c1-hero__sub{font-family:var(--ff-body);font-size:15.5px;color:rgba(242,235,221,.75);max-width:460px;margin-top:26px;line-height:1.6}
+.c1-hero__cta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap}
+.c1-hero__scroll{position:absolute;right:clamp(20px,6vw,80px);bottom:9vh;z-index:2;writing-mode:vertical-rl;font-family:var(--ff-data);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,235,221,.55);display:flex;align-items:center;gap:10px}
+.c1-hero__scroll::after{content:"";width:1px;height:52px;background:linear-gradient(#d8bd8c,transparent)}
+
+.c1-stats{display:flex;gap:clamp(28px,6vw,64px);flex-wrap:wrap;padding:26px clamp(20px,6vw,80px) 0}
+.c1-stats b{display:block;font-family:var(--ff-display);font-size:30px;font-weight:500;color:var(--gold-c)}
+.c1-stats span{font-family:var(--ff-data);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+.c1-film{padding-block:clamp(48px,8vw,88px)}
+.c1-film__head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:34px;gap:16px;flex-wrap:wrap}
+.c1-film__title{font-family:var(--ff-display);font-size:clamp(26px,3vw,38px);font-weight:600}
+.c1-film__strip{display:flex;gap:20px;overflow-x:auto;padding-bottom:14px;scroll-snap-type:x mandatory}
+.c1-film__frame{flex:0 0 auto;width:min(62vw,300px);scroll-snap-align:start}
+.c1-film__frame .ph{aspect-ratio:3/4;border-radius:2px}
+.c1-film__meta{margin-top:14px;display:flex;justify-content:space-between;gap:10px;font-family:var(--ff-body)}
+.c1-film__num{font-family:var(--ff-data);font-size:10px;color:var(--gold-c);letter-spacing:.1em}
+.c1-film__name{font-size:15px;font-weight:600;margin-top:4px}
+.c1-film__brand{font-size:12px;color:var(--muted)}
+.c1-film__price{font-family:var(--ff-data);font-size:13px;font-weight:600;white-space:nowrap}
+
+.c1-eco{color:#f2ebdd;position:relative;overflow:hidden}
+.c1-eco .ph{position:absolute;inset:0;opacity:.55}
+.c1-eco__inner{position:relative;z-index:1}
+.c1-eco__list{display:flex;flex-direction:column}
+.c1-eco__item{
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  padding:22px 0;border-top:1px solid rgba(242,235,221,.18);flex-wrap:wrap
+}
+.c1-eco__item:last-child{border-bottom:1px solid rgba(242,235,221,.18)}
+.c1-eco__name{font-family:var(--ff-display);font-weight:500;font-size:clamp(30px,6vw,58px);transition:color .3s,transform .3s}
+.c1-eco__item:hover .c1-eco__name{color:#d8bd8c;transform:translateX(10px)}
+.c1-eco__desc{font-family:var(--ff-body);font-size:13px;color:rgba(242,235,221,.62);max-width:280px;text-align:right}
+
+.c1-notes{padding-block:clamp(48px,8vw,88px)}
+.c1-notes__rail{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.c1-notes__chip{
+  padding:12px 22px;border:1px solid var(--line);border-radius:999px;font-family:var(--ff-display);
+  font-size:16px;font-style:italic;transition:all .3s
+}
+.c1-notes__chip:hover{border-color:var(--gold);background:var(--soft);transform:translateY(-2px)}
+
+.c1-mag{position:relative;min-height:78vh;display:flex;align-items:center;color:#f2ebdd;overflow:hidden}
+.c1-mag .ph__frame{opacity:.9}
+.c1-mag__overlay{position:absolute;inset:0;background:linear-gradient(100deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.28) 60%,transparent 100%)}
+.c1-mag__content{position:relative;z-index:1;max-width:560px;padding:0 clamp(20px,6vw,80px)}
+.c1-mag__kicker{font-family:var(--ff-data);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#d8bd8c;margin-bottom:18px}
+.c1-mag__title{font-family:var(--ff-display);font-size:clamp(28px,4vw,46px);font-weight:600;line-height:1.08}
+.c1-mag__cta{margin-top:26px}
+
+.c1-quiz{position:relative;min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#f2ebdd;overflow:hidden}
+.c1-quiz__overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,.35),rgba(0,0,0,.82))}
+.c1-quiz__content{position:relative;z-index:1;max-width:520px;padding:0 24px}
+.c1-quiz__title{font-family:var(--ff-display);font-size:clamp(30px,5vw,50px);font-weight:600}
+.c1-quiz__sub{margin-top:14px;color:rgba(242,235,221,.72);font-size:14.5px;line-height:1.6}
+.c1-quiz__cta{margin-top:30px}
+
+.c1-close{display:grid;grid-template-columns:1fr;gap:16px;padding-block:clamp(40px,7vw,72px)}
+@media(min-width:760px){.c1-close{grid-template-columns:1.1fr .9fr}}
+.c1-close__club{background:var(--ink);color:var(--paper)}
+.zone-dark .c1-close__club{background:#050403}
+.c1-close__club,.c1-close__news{border-radius:2px;padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;justify-content:center;gap:12px}
+.c1-close__news{border:1px solid var(--line)}
+.c1-close__club h3,.c1-close__news h3{font-family:var(--ff-display);font-size:24px;font-weight:600}
+.c1-close__club p,.c1-close__news p{font-size:13.5px;opacity:.75;line-height:1.5}
+.c1-form{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.c1-form input{flex:1;min-width:160px;padding:13px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:13px}
+</style>
+
+<section class="concept active" data-concept="1">
+  <div class="c1">
+    <nav class="aromia-nav zone-dark">
+      <div class="aromia-nav__logo">AROMIA</div>
+      <div class="aromia-nav__links">
+        <a href="#">Catálogo</a><a href="#">Magazine</a><a href="#">Quiz</a><a href="#">Academia</a><a href="#">Club</a>
+      </div>
+    </nav>
+
+    <header class="c1-hero zone-dark grain">
+      <div class="c1-hero__scene ph ph--scene-1"><div class="ph__frame"></div>
+        <div class="ph__caption"><b>Brief 01</b> Bottle Baccarat Rouge 540 en mármol negro húmedo, luz rasante lateral cálida 45°, negativo a la derecha para el título, sin fondo blanco</div>
+      </div>
+      <div class="c1-hero__vignette"></div>
+      <div class="c1-hero__bars top"></div><div class="c1-hero__bars bottom"></div>
+      <div class="c1-hero__content">
+        <p class="c1-hero__eyebrow">La autoridad editorial que además vende</p>
+        <h1 class="c1-hero__title">No fabricamos perfumes.<em>Revelamos identidades.</em></h1>
+        <p class="c1-hero__sub">Reseñas honestas, comparadas y sin ruido — para encontrar la fragancia que realmente te representa.</p>
+        <div class="c1-hero__cta">
+          <a class="btn btn--primary" href="#">Explorar catálogo</a>
+          <a class="btn btn--outline" style="border-color:rgba(242,235,221,.35);color:#f2ebdd" href="#">Hacer el quiz</a>
+        </div>
+      </div>
+      <div class="c1-hero__scroll">Desplázate</div>
+    </header>
+
+    <div class="zone-light">
+      <div class="container c1-stats rv">
+        <div><b>50</b><span>Fragancias comparadas</span></div>
+        <div><b>8</b><span>Familias olfativas</span></div>
+        <div><b>6</b><span>Filtros de búsqueda</span></div>
+      </div>
+
+      <section class="container c1-film">
+        <div class="c1-film__head rv">
+          <div>
+            <p class="eyebrow">Reseñas destacadas</p>
+            <h2 class="c1-film__title">Lo que está mirando la comunidad</h2>
+          </div>
+          <a class="btn btn--outline" href="#">Ver todo el catálogo →</a>
+        </div>
+        <div class="c1-film__strip rv">
+          <div class="c1-film__frame">
+            <div class="ph ph--scene-4"><div class="ph__frame"></div><div class="ph__caption" style="color:rgba(33,29,23,.55);background:none"><b style="color:var(--gold-c)">Brief 02</b></div></div>
+            <div class="c1-film__meta"><div><div class="c1-film__num">N°01</div><div class="c1-film__name">Baccarat Rouge 540 EDP</div><div class="c1-film__brand">Maison Francis Kurkdjian</div></div><div class="c1-film__price">US$ 325</div></div>
+          </div>
+          <div class="c1-film__frame">
+            <div class="ph ph--scene-4"><div class="ph__frame"></div></div>
+            <div class="c1-film__meta"><div><div class="c1-film__num">N°02</div><div class="c1-film__name">Aventus</div><div class="c1-film__brand">Creed</div></div><div class="c1-film__price">US$ 435</div></div>
+          </div>
+          <div class="c1-film__frame">
+            <div class="ph ph--scene-4"><div class="ph__frame"></div></div>
+            <div class="c1-film__meta"><div><div class="c1-film__num">N°03</div><div class="c1-film__name">Bleu de Chanel EDP</div><div class="c1-film__brand">Chanel</div></div><div class="c1-film__price">US$ 145</div></div>
+          </div>
+          <div class="c1-film__frame">
+            <div class="ph ph--scene-4"><div class="ph__frame"></div></div>
+            <div class="c1-film__meta"><div><div class="c1-film__num">N°04</div><div class="c1-film__name">Black Opium EDP</div><div class="c1-film__brand">Yves Saint Laurent</div></div><div class="c1-film__price">US$ 140</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="c1-eco zone-dark grain">
+      <div class="ph ph--scene-3"><div class="ph__frame"></div></div>
+      <div class="container c1-eco__inner section rv">
+        <p class="eyebrow" style="color:#d8bd8c">El ecosistema</p>
+        <div class="c1-eco__list" style="margin-top:20px">
+          <a class="c1-eco__item" href="#"><span class="c1-eco__name">Magazine</span><span class="c1-eco__desc">Historias, tendencias y entrevistas del mundo de la perfumería.</span></a>
+          <a class="c1-eco__item" href="#"><span class="c1-eco__name">Catálogo</span><span class="c1-eco__desc">Los mejores perfumes seleccionados y comparados para ti.</span></a>
+          <a class="c1-eco__item" href="#"><span class="c1-eco__name">Quiz</span><span class="c1-eco__desc">Responde 6 preguntas y encontrá el perfil que te representa.</span></a>
+          <a class="c1-eco__item" href="#"><span class="c1-eco__name">Academia</span><span class="c1-eco__desc">Aprendé a leer y elegir una fragancia con nuestras guías.</span></a>
+          <a class="c1-eco__item" href="#"><span class="c1-eco__name">Club</span><span class="c1-eco__desc">Comunidad, sorteos y beneficios para los amantes de Aromia.</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="zone-light">
+      <section class="container c1-notes rv">
+        <p class="eyebrow">Explora por notas</p>
+        <h2 class="c1-film__title" style="margin-top:8px">Encuentra tu esencia</h2>
+        <div class="c1-notes__rail">
+          <a class="c1-notes__chip" href="#">Floral</a><a class="c1-notes__chip" href="#">Amaderados</a>
+          <a class="c1-notes__chip" href="#">Cítricos</a><a class="c1-notes__chip" href="#">Acuáticos</a>
+          <a class="c1-notes__chip" href="#">Afrutados</a><a class="c1-notes__chip" href="#">Fougère</a>
+          <a class="c1-notes__chip" href="#">Frescos</a><a class="c1-notes__chip" href="#">Árabes</a>
+        </div>
+      </section>
+    </div>
+
+    <section class="c1-mag zone-dark grain rv">
+      <div class="ph ph--scene-1"><div class="ph__frame"></div>
+        <div class="ph__caption"><b>Brief 03</b> Retrato editorial de frasco Tobacco Vanille con humo/vapor sutil, fondo casi negro, composición 60/40 con espacio negativo a la izquierda</div>
+      </div>
+      <div class="c1-mag__overlay"></div>
+      <div class="c1-mag__content">
+        <p class="c1-mag__kicker">Magazine · Reseña</p>
+        <h2 class="c1-mag__title">Tobacco Vanille de Tom Ford: el gourmand masculino que abrió una categoría</h2>
+        <a class="btn btn--outline c1-mag__cta" style="border-color:rgba(242,235,221,.35);color:#f2ebdd" href="#">Leer Magazine →</a>
+      </div>
+    </section>
+
+    <section class="c1-quiz zone-dark grain rv">
+      <div class="ph ph--scene-3"><div class="ph__frame"></div></div>
+      <div class="c1-quiz__overlay"></div>
+      <div class="c1-quiz__content">
+        <p class="c1-mag__kicker" style="justify-content:center">Quiz de matching</p>
+        <h2 class="c1-quiz__title">¿No sabés por dónde empezar?</h2>
+        <p class="c1-quiz__sub">Respondé 6 preguntas y te mostramos los perfumes que mejor se adaptan a tu estilo y presupuesto.</p>
+        <a class="btn btn--primary c1-quiz__cta" href="#">Empezar el quiz</a>
+      </div>
+    </section>
+
+    <div class="zone-light">
+      <div class="container c1-close rv">
+        <div class="c1-close__club">
+          <h3>Sumate al Club Aromia</h3>
+          <p>Acceso anticipado a guías, drops y comparativas exclusivas.</p>
+          <a class="btn btn--primary" style="align-self:flex-start;margin-top:6px" href="#">Unirme</a>
+        </div>
+        <div class="c1-close__news">
+          <h3>La Carta de Aromia</h3>
+          <p>Dejá tu email y te avisamos cuando tu perfume favorito baje de precio.</p>
+          <form class="c1-form"><input type="email" placeholder="tu@email.com"><button class="btn btn--primary" type="button">Avísame</button></form>
+        </div>
+      </div>
+      <footer class="aromia-foot"><span>© Aromia — Editorial Cinematic</span><span>Concepto 01 de 03</span></footer>
+    </div>
+  </div>
+</section>

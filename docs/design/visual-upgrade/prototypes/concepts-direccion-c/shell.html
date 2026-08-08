@@ -1,0 +1,223 @@
+<title>Aromia — Dirección C: 3 conceptos comparables</title>
+<style id="aromia-fonts">/*__FONT_FACES__*/</style>
+<style>
+/* ============ RESET / BASE ============ */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p{margin:0}
+:focus-visible{outline:2px solid #c8a86b;outline-offset:3px}
+
+/* ============ SHARED TOKENS (Aromia real palette) ============ */
+:root{
+  --paper:#fbf8f3; --surface:#ffffff; --soft:#f5f0e6; --ink:#211d17;
+  --muted:#8a8172; --line:rgba(33,29,23,.12);
+  --gold:#a87f4a; --gold-2:#c8a86b; --gold-c:#866526;
+  --radius-card:2px; --radius-pill:999px;
+  --shadow-lux:0 22px 70px rgba(30,23,13,.16);
+  --ff-display:'Cormorant Garamond',Georgia,serif;
+  --ff-body:'Archivo',Inter,sans-serif;
+  --ff-data:'IBM Plex Sans',Inter,sans-serif;
+}
+.zone-dark{
+  --paper:#0e0c0a; --surface:#17120d; --soft:#1c1610; --ink:#f2ebdd;
+  --muted:#a39a88; --line:rgba(242,235,221,.16);
+  --gold:#c8a86b; --gold-2:#a87f4a; --gold-c:#d8bd8c;
+  --shadow-lux:0 30px 90px rgba(0,0,0,.55);
+}
+.zone-light{
+  --paper:#fbf8f3; --surface:#ffffff; --soft:#f5f0e6; --ink:#211d17;
+  --muted:#8a8172; --line:rgba(33,29,23,.12);
+  --gold:#a87f4a; --gold-2:#c8a86b; --gold-c:#866526;
+  --shadow-lux:0 22px 70px rgba(30,23,13,.16);
+}
+html{background:#0e0c0a}
+body{
+  font-family:var(--ff-body);
+  background:var(--paper); color:var(--ink);
+  transition:background .4s ease,color .4s ease;
+}
+.grain{position:relative}
+.grain::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.eyebrow{
+  font-family:var(--ff-data); font-size:11px; text-transform:uppercase;
+  letter-spacing:.24em; font-weight:600; color:var(--gold-c);
+}
+.btn{
+  display:inline-flex; align-items:center; gap:.5em; padding:14px 28px;
+  border-radius:var(--radius-pill); font-family:var(--ff-body); font-size:14px;
+  font-weight:600; letter-spacing:.02em; border:1px solid transparent; transition:all .35s cubic-bezier(.2,.7,.3,1);
+}
+.btn--primary{background:var(--gold-c);color:var(--paper)}
+.zone-dark .btn--primary{background:var(--gold-2);color:#17120d}
+.btn--primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(134,101,38,.35)}
+.btn--outline{border-color:var(--line);color:var(--ink)}
+.btn--outline:hover{border-color:var(--gold);transform:translateY(-2px)}
+
+/* ============ PHOTO PLACEHOLDER SYSTEM ============ */
+.ph{position:relative;overflow:hidden;background:var(--soft)}
+.ph__frame{position:absolute;inset:0}
+.ph__caption{
+  position:absolute;left:0;right:0;bottom:0;padding:10px 14px;
+  font-family:var(--ff-data);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.82);background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
+  display:flex;gap:8px;align-items:baseline
+}
+.ph__caption b{color:var(--gold-2);font-weight:700}
+.ph--scene-1 .ph__frame{background:
+  radial-gradient(ellipse 70% 55% at 62% 38%, rgba(200,168,107,.35), transparent 60%),
+  linear-gradient(155deg,#1c1610 0%,#0e0c0a 55%,#100b08 100%)}
+.ph--scene-1 .ph__frame::before{
+  content:"";position:absolute;left:56%;top:18%;width:22%;height:64%;
+  background:linear-gradient(180deg,rgba(242,235,221,.14),rgba(200,168,107,.06) 60%,transparent);
+  filter:blur(1px);border-radius:40% 40% 30% 30%/20% 20% 60% 60%;
+  box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.ph--scene-2 .ph__frame{background:
+  linear-gradient(100deg,#f5f0e6 0%,#e9e0cf 45%,#d9cba8 100%)}
+.ph--scene-2 .ph__frame::before{
+  content:"";position:absolute;right:12%;top:14%;width:32%;height:72%;
+  background:linear-gradient(200deg,rgba(33,29,23,.1),rgba(168,127,74,.28) 70%);
+  border-radius:6px;box-shadow:0 26px 50px rgba(33,29,23,.18)}
+.ph--scene-3 .ph__frame{background:
+  conic-gradient(from 210deg at 30% 30%, rgba(200,168,107,.4), rgba(14,12,10,0) 40%),
+  radial-gradient(circle at 75% 70%, rgba(168,127,74,.3), transparent 55%),
+  #100c09}
+.ph--scene-4{background:linear-gradient(120deg,#efe7d6,#f7f3ea)}
+.ph--scene-4 .ph__frame::before{
+  content:"";position:absolute;left:30%;top:20%;width:18%;height:60%;
+  background:linear-gradient(190deg,rgba(200,168,107,.5),rgba(33,29,23,.08));
+  border-radius:8px;box-shadow:0 18px 34px rgba(33,29,23,.14)}
+
+/* ============ SCROLL REVEAL ============ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1!important;transform:none!important;transition:none!important}
+  *{animation:none!important;transition:none!important}
+}
+
+/* ============ TOOLBAR (comparison chrome, not part of the concept) ============ */
+.toolbar{
+  position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  justify-content:space-between;padding:10px 18px;background:#0e0c0a;color:#f2ebdd;
+  font-family:var(--ff-data);border-bottom:1px solid rgba(242,235,221,.14)
+}
+.toolbar__tabs{display:flex;gap:6px;flex-wrap:wrap}
+.toolbar__tab{
+  padding:9px 16px;border-radius:999px;border:1px solid rgba(242,235,221,.22);
+  background:transparent;color:#cfc6b4;font-size:12.5px;letter-spacing:.02em;transition:all .25s
+}
+.toolbar__tab b{display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;font-weight:600}
+.toolbar__tab.active{background:#c8a86b;color:#17120d;border-color:#c8a86b}
+.toolbar__right{display:flex;gap:8px;align-items:center}
+.toolbar__device{
+  padding:8px 12px;border-radius:999px;border:1px solid rgba(242,235,221,.22);
+  background:transparent;color:#cfc6b4;font-size:12px
+}
+.toolbar__device.active{background:rgba(242,235,221,.14);color:#f2ebdd}
+.toolbar__note{font-size:11px;color:#8a8172;max-width:260px;line-height:1.4;display:none}
+@media(min-width:1100px){.toolbar__note{display:block}}
+
+/* ============ STAGE ============ */
+.stage{background:#0e0c0a}
+.viewport{margin:0 auto;transition:max-width .4s ease;width:100%}
+.viewport.mobile{max-width:400px;border-left:1px solid rgba(242,235,221,.18);border-right:1px solid rgba(242,235,221,.18)}
+.concept{display:none}
+.concept.active{display:block}
+
+/* shared nav across the 3 concepts — same component, adapts to zone tokens */
+.aromia-nav{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  padding:18px clamp(18px,4vw,48px);backdrop-filter:blur(14px);
+  background:color-mix(in srgb, var(--paper) 72%, transparent);
+  border-bottom:1px solid var(--line)
+}
+.aromia-nav__logo{font-family:var(--ff-display);font-size:21px;letter-spacing:.14em;font-weight:600}
+.aromia-nav__links{display:none;gap:26px;font-size:12.5px;letter-spacing:.03em;font-family:var(--ff-body)}
+@media(min-width:820px){.aromia-nav__links{display:flex}}
+.aromia-nav__links a{position:relative;padding:6px 1px;opacity:.85}
+.aromia-nav__links a:hover{opacity:1}
+.aromia-nav__links a::after{content:"";position:absolute;left:50%;right:50%;bottom:0;height:1px;background:var(--gold);transition:left .25s,right .25s}
+.aromia-nav__links a:hover::after{left:0;right:0}
+
+/* shared section rhythm helper */
+.container{max-width:1180px;margin:0 auto;padding-inline:clamp(18px,4vw,48px)}
+.section{padding-block:clamp(56px,9vw,120px)}
+
+/* shared footer strip */
+.aromia-foot{padding:40px clamp(18px,4vw,48px) 56px;font-family:var(--ff-data);font-size:11px;color:var(--muted);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/*__CONCEPT_STYLES__*/
+</style>
+
+<div class="toolbar">
+  <div class="toolbar__tabs" role="tablist" aria-label="Conceptos">
+    <button class="toolbar__tab active" data-concept="1"><b>01 · Dirección C</b>Editorial Cinematic</button>
+    <button class="toolbar__tab" data-concept="2"><b>02 · Dirección C</b>Modern Luxury Magazine</button>
+    <button class="toolbar__tab" data-concept="3"><b>03 · Dirección C</b>Sensory Digital Experience</button>
+  </div>
+  <div class="toolbar__right">
+    <span class="toolbar__note">Mismo contenido y objetivos de Home en los 3 — comparalos para elegir el lenguaje visual de Aromia. Los recuadros con etiqueta son placeholders de fotografía dirigida, no assets finales.</span>
+    <button class="toolbar__device active" data-device="desktop">Desktop</button>
+    <button class="toolbar__device" data-device="mobile">Mobile</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="viewport" id="viewport">
+    <!--__CONCEPT_MARKUP__-->
+  </div>
+</div>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.toolbar__tab');
+  var concepts = document.querySelectorAll('.concept');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      var n = t.getAttribute('data-concept');
+      concepts.forEach(function(c){c.classList.toggle('active', c.getAttribute('data-concept')===n)});
+      window.scrollTo({top:0,behavior:'instant' in window ? 'instant':'auto'});
+      observeReveals();
+    });
+  });
+  var devices = document.querySelectorAll('.toolbar__device');
+  var vp = document.getElementById('viewport');
+  devices.forEach(function(d){
+    d.addEventListener('click', function(){
+      devices.forEach(function(x){x.classList.remove('active')});
+      d.classList.add('active');
+      vp.classList.toggle('mobile', d.getAttribute('data-device')==='mobile');
+    });
+  });
+
+  var io;
+  function observeReveals(){
+    if(io) io.disconnect();
+    io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.18, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.concept.active .rv').forEach(function(el){ io.observe(el); });
+  }
+  observeReveals();
+
+  // subtle cursor-parallax for cinematic + sensory heroes
+  document.querySelectorAll('[data-parallax]').forEach(function(el){
+    el.addEventListener('mousemove', function(ev){
+      var r = el.getBoundingClientRect();
+      var x = (ev.clientX - r.left)/r.width - .5, y=(ev.clientY - r.top)/r.height - .5;
+      el.querySelectorAll('[data-depth]').forEach(function(layer){
+        var d = parseFloat(layer.getAttribute('data-depth'));
+        layer.style.transform = 'translate('+(x*d*24)+'px,'+(y*d*24)+'px)';
+      });
+    });
+  });
+})();
+</script>

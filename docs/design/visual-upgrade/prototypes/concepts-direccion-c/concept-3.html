@@ -1,0 +1,244 @@
+<!-- ============================================================ -->
+<!-- CONCEPT 03 — SENSORY DIGITAL EXPERIENCE -->
+<!-- ============================================================ -->
+<style>
+.c3 .aromia-nav{position:absolute;width:100%;background:transparent;border-bottom-color:transparent}
+.c3 .aromia-nav__links a{color:#f2ebdd}
+.c3-hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;color:#f2ebdd}
+.c3-hero__scene{position:absolute;inset:0}
+.c3-hero__glow{position:absolute;inset:-10%;background:radial-gradient(circle at 30% 30%,rgba(200,168,107,.28),transparent 55%),radial-gradient(circle at 75% 70%,rgba(168,127,74,.22),transparent 50%)}
+.c3-hero__content{position:relative;z-index:2;max-width:640px;padding:0 clamp(20px,6vw,80px);text-align:center;margin:0 auto}
+.c3-hero__eyebrow{font-family:var(--ff-data);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#d8bd8c}
+.c3-hero__title{font-family:var(--ff-display);font-weight:600;font-size:clamp(42px,7.6vw,88px);line-height:1;margin-top:20px;text-wrap:balance}
+.c3-hero__title em{font-style:italic;color:#d8bd8c;display:block}
+.c3-hero__sub{margin-top:22px;color:rgba(242,235,221,.72);font-size:15px;line-height:1.6}
+.c3-hero__cta{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.c3-chip{
+  position:absolute;padding:9px 16px;border-radius:999px;font-family:var(--ff-data);font-size:11px;
+  letter-spacing:.06em;color:#17120d;background:rgba(242,235,221,.92);backdrop-filter:blur(6px);
+  box-shadow:0 14px 30px rgba(0,0,0,.35);transition:transform .2s;white-space:nowrap
+}
+.c3-chip--1{top:16%;left:10%}.c3-chip--2{top:26%;right:10%}
+.c3-chip--3{bottom:20%;left:14%}.c3-chip--4{bottom:14%;right:12%}
+@media(max-width:700px){.c3-chip{font-size:9.5px;padding:7px 12px}.c3-chip--1{top:10%;left:6%}.c3-chip--2{top:16%;right:6%}.c3-chip--3{bottom:26%;left:8%}.c3-chip--4{bottom:12%;right:8%}}
+
+.c3-layers{padding-block:clamp(56px,9vw,110px);position:relative}
+.c3-layers__head{margin-bottom:36px}
+.c3-layers__title{font-family:var(--ff-display);font-size:clamp(26px,3.4vw,38px);font-weight:600}
+.c3-layers__grid{display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:820px){.c3-layers__grid{grid-template-columns:repeat(3,1fr)}}
+.c3-card{
+  position:relative;border-radius:6px;padding:1px;background:linear-gradient(160deg,var(--gold) 0%,transparent 40%);
+  transition:transform .4s cubic-bezier(.2,.7,.2,1)
+}
+.c3-card:hover{transform:translateY(-8px)}
+.c3-card__inner{
+  background:var(--surface);border-radius:5px;overflow:hidden;
+  box-shadow:var(--shadow-lux);position:relative
+}
+.c3-card:nth-child(2){margin-top:26px}
+.c3-card:nth-child(3){margin-top:-10px}
+.c3-card .ph{aspect-ratio:4/5}
+.c3-card__tag{
+  position:absolute;top:14px;left:14px;z-index:2;font-family:var(--ff-data);font-size:9.5px;
+  padding:6px 12px;border-radius:999px;background:rgba(23,18,13,.7);color:#f2ebdd;letter-spacing:.06em
+}
+.c3-card__body{padding:18px}
+.c3-card__name{font-family:var(--ff-body);font-weight:600;font-size:15px}
+.c3-card__brand{font-size:12px;color:var(--muted);margin-top:2px}
+.c3-card__meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.c3-card__price{font-family:var(--ff-data);font-size:13px;font-weight:600}
+.c3-card__pyramid{display:flex;gap:5px}
+.c3-card__pyramid span{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+.c3-orbit{position:relative;padding-block:clamp(60px,10vw,120px);overflow:hidden}
+.c3-orbit__bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,var(--soft),var(--paper) 70%);opacity:.7}
+.c3-orbit__inner{position:relative;z-index:1}
+.c3-orbit__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:34px}
+@media(min-width:760px){.c3-orbit__grid{grid-template-columns:repeat(5,1fr)}}
+.c3-orbit__tile{
+  border:1px solid var(--line);border-radius:8px;padding:22px 16px;text-align:center;background:var(--surface);
+  transition:transform .35s,box-shadow .35s
+}
+.c3-orbit__tile:nth-child(odd){transform:translateY(14px)}
+.c3-orbit__tile:hover{transform:translateY(-6px);box-shadow:var(--shadow-lux)}
+.c3-orbit__icon{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));margin:0 auto 12px}
+.c3-orbit__t{font-family:var(--ff-display);font-size:17px;font-weight:600}
+.c3-orbit__d{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+
+.c3-swatches{padding-block:clamp(50px,8vw,90px)}
+.c3-swatches__grid{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;margin-top:26px}
+.c3-swatch{flex:0 0 auto;width:150px;height:190px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:14px;color:#fff;font-family:var(--ff-data);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.c3-swatch:nth-child(odd){transform:translateY(10px)}
+.c3-swatch::before{content:"";position:absolute;inset:0;opacity:.9}
+.c3-swatch:nth-child(1)::before{background:linear-gradient(160deg,#caa14a,#7c5a2e)}
+.c3-swatch:nth-child(2)::before{background:linear-gradient(160deg,#8a9a7c,#3c4a34)}
+.c3-swatch:nth-child(3)::before{background:linear-gradient(160deg,#c98a63,#7a4630)}
+.c3-swatch:nth-child(4)::before{background:linear-gradient(160deg,#6f8fa8,#2c3e4d)}
+.c3-swatch:nth-child(5)::before{background:linear-gradient(160deg,#b98cc2,#5b3d63)}
+
+.c3-mag{position:relative;padding-block:clamp(60px,9vw,110px);color:#f2ebdd;overflow:hidden}
+.c3-mag__stack{position:relative;max-width:1180px;margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.c3-mag__grid{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:820px){.c3-mag__grid{grid-template-columns:1fr}}
+.c3-mag__pages{position:relative;height:clamp(300px,44vw,420px)}
+.c3-mag__page{position:absolute;inset:0;border-radius:6px;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.c3-mag__page:nth-child(1){transform:rotate(-3deg) translateX(-18px)}
+.c3-mag__page:nth-child(2){transform:rotate(2deg) translateX(14px)}
+.c3-mag__page:nth-child(3){transform:none;z-index:2}
+.c3-mag__text{position:relative;z-index:3;max-width:520px;margin-top:-40px}
+.c3-mag__kicker{font-family:var(--ff-data);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#d8bd8c}
+.c3-mag__title{font-family:var(--ff-display);font-size:clamp(26px,3.6vw,38px);font-weight:600;margin-top:14px;line-height:1.12}
+
+.c3-quiz{padding-block:clamp(56px,9vw,110px)}
+.c3-quiz__panel{border-radius:10px;background:linear-gradient(150deg,var(--soft),var(--surface));border:1px solid var(--line);padding:clamp(28px,5vw,56px);position:relative;overflow:hidden}
+.c3-quiz__grid{display:grid;grid-template-columns:1fr;gap:30px;position:relative;z-index:1}
+@media(min-width:820px){.c3-quiz__grid{grid-template-columns:1fr 1fr;align-items:center}}
+.c3-quiz__title{font-family:var(--ff-display);font-size:clamp(28px,4vw,40px);font-weight:600}
+.c3-quiz__tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.c3-quiz__tags span{padding:8px 14px;border-radius:999px;border:1px solid var(--line);font-family:var(--ff-data);font-size:11px;background:var(--surface)}
+
+.c3-close{padding-block:clamp(50px,8vw,90px)}
+.c3-close__grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){.c3-close__grid{grid-template-columns:1fr 1fr}}
+.c3-close__card{border-radius:8px;padding:clamp(26px,4vw,40px);display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line)}
+.c3-close__card h3{font-family:var(--ff-display);font-size:24px;font-weight:600}
+.c3-close__card p{font-size:13px;color:var(--muted);line-height:1.55}
+</style>
+
+<section class="concept" data-concept="3">
+  <div class="c3">
+    <nav class="aromia-nav zone-dark"><div class="aromia-nav__logo">AROMIA</div>
+      <div class="aromia-nav__links"><a href="#">Catálogo</a><a href="#">Magazine</a><a href="#">Quiz</a><a href="#">Academia</a><a href="#">Club</a></div>
+    </nav>
+
+    <header class="c3-hero zone-dark grain" data-parallax>
+      <div class="c3-hero__scene ph ph--scene-3"><div class="ph__frame"></div>
+        <div class="ph__caption"><b>Brief 01</b> Composición macro de ingredientes reales (ámbar, cuero, azahar) flotando con profundidad de campo, iluminación de estudio oscura, sin producto — solo materia prima</div>
+      </div>
+      <div class="c3-hero__glow" data-depth="1.4"></div>
+      <div class="c3-chip c3-chip--1" data-depth="1.8">Bergamota</div>
+      <div class="c3-chip c3-chip--2" data-depth="1.2">Ámbar gris</div>
+      <div class="c3-chip c3-chip--3" data-depth="2.1">Cuero</div>
+      <div class="c3-chip c3-chip--4" data-depth="1.5">Vainilla</div>
+      <div class="c3-hero__content" data-depth=".4">
+        <p class="c3-hero__eyebrow">La autoridad editorial que además vende</p>
+        <h1 class="c3-hero__title">No fabricamos perfumes.<em>Revelamos identidades.</em></h1>
+        <p class="c3-hero__sub">Reseñas honestas, comparadas y sin ruido — para encontrar la fragancia que realmente te representa.</p>
+        <div class="c3-hero__cta">
+          <a class="btn btn--primary" href="#">Explorar catálogo</a>
+          <a class="btn btn--outline" style="border-color:rgba(242,235,221,.35);color:#f2ebdd" href="#">Hacer el quiz</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="zone-light">
+      <section class="container c3-layers rv">
+        <div class="c3-layers__head">
+          <p class="eyebrow">Reseñas destacadas</p>
+          <h2 class="c3-layers__title">Lo que está mirando la comunidad</h2>
+        </div>
+        <div class="c3-layers__grid">
+          <div class="c3-card"><div class="c3-card__inner">
+            <span class="c3-card__tag">Nicho</span>
+            <div class="ph ph--scene-1"><div class="ph__frame"></div></div>
+            <div class="c3-card__body">
+              <div class="c3-card__name">Baccarat Rouge 540 EDP</div><div class="c3-card__brand">Maison Francis Kurkdjian</div>
+              <div class="c3-card__meta"><span class="c3-card__price">US$ 325</span><span class="c3-card__pyramid"><span></span><span></span><span></span></span></div>
+            </div>
+          </div></div>
+          <div class="c3-card"><div class="c3-card__inner">
+            <span class="c3-card__tag">Nicho</span>
+            <div class="ph ph--scene-2"><div class="ph__frame"></div></div>
+            <div class="c3-card__body">
+              <div class="c3-card__name">Aventus</div><div class="c3-card__brand">Creed</div>
+              <div class="c3-card__meta"><span class="c3-card__price">US$ 435</span><span class="c3-card__pyramid"><span></span><span></span><span></span></span></div>
+            </div>
+          </div></div>
+          <div class="c3-card"><div class="c3-card__inner">
+            <span class="c3-card__tag">Comercial</span>
+            <div class="ph ph--scene-4"><div class="ph__frame"></div></div>
+            <div class="c3-card__body">
+              <div class="c3-card__name">Bleu de Chanel EDP</div><div class="c3-card__brand">Chanel</div>
+              <div class="c3-card__meta"><span class="c3-card__price">US$ 145</span><span class="c3-card__pyramid"><span></span><span></span><span></span></span></div>
+            </div>
+          </div></div>
+        </div>
+      </section>
+
+      <section class="c3-orbit rv">
+        <div class="c3-orbit__bg"></div>
+        <div class="container c3-orbit__inner">
+          <p class="eyebrow">El ecosistema</p>
+          <div class="c3-orbit__grid">
+            <a class="c3-orbit__tile" href="#"><div class="c3-orbit__icon"></div><div class="c3-orbit__t">Magazine</div><div class="c3-orbit__d">Historias y tendencias.</div></a>
+            <a class="c3-orbit__tile" href="#"><div class="c3-orbit__icon"></div><div class="c3-orbit__t">Catálogo</div><div class="c3-orbit__d">Comparado y curado.</div></a>
+            <a class="c3-orbit__tile" href="#"><div class="c3-orbit__icon"></div><div class="c3-orbit__t">Quiz</div><div class="c3-orbit__d">Tu perfil olfativo.</div></a>
+            <a class="c3-orbit__tile" href="#"><div class="c3-orbit__icon"></div><div class="c3-orbit__t">Academia</div><div class="c3-orbit__d">Guías para elegir.</div></a>
+            <a class="c3-orbit__tile" href="#"><div class="c3-orbit__icon"></div><div class="c3-orbit__t">Club</div><div class="c3-orbit__d">Comunidad y sorteos.</div></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="container c3-swatches rv">
+        <p class="eyebrow">Explora por notas</p>
+        <h2 class="c3-layers__title" style="margin-top:8px">Encuentra tu esencia</h2>
+        <div class="c3-swatches__grid">
+          <div class="c3-swatch">Amaderados</div><div class="c3-swatch">Fougère</div>
+          <div class="c3-swatch">Afrutados</div><div class="c3-swatch">Acuáticos</div>
+          <div class="c3-swatch">Floral</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="c3-mag zone-dark grain rv">
+      <div class="c3-mag__stack">
+        <div class="c3-mag__pages">
+          <div class="c3-mag__page ph ph--scene-1" style="z-index:1"><div class="ph__frame"></div></div>
+          <div class="c3-mag__page ph ph--scene-2" style="z-index:1;opacity:.4"><div class="ph__frame"></div></div>
+          <div class="c3-mag__page ph ph--scene-1" style="z-index:2">
+            <div class="ph__frame"></div>
+            <div class="ph__caption"><b>Brief 02</b> Tobacco Vanille, plano cenital con textura de tabaco/vainilla suelta alrededor del frasco, profundidad marcada</div>
+          </div>
+        </div>
+        <div class="c3-mag__text">
+          <p class="c3-mag__kicker">Magazine · Capas de una reseña</p>
+          <h3 class="c3-mag__title">Tobacco Vanille de Tom Ford: el gourmand masculino que abrió una categoría</h3>
+          <a class="btn btn--outline" style="border-color:rgba(242,235,221,.35);color:#f2ebdd;margin-top:20px" href="#">Leer Magazine →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container c3-quiz rv">
+      <div class="c3-quiz__panel">
+        <div class="c3-quiz__grid">
+          <div>
+            <p class="eyebrow">Quiz de matching</p>
+            <h2 class="c3-quiz__title" style="margin-top:10px">Armá tu perfil olfativo</h2>
+            <p style="font-size:14px;color:var(--muted);margin-top:12px;line-height:1.6">6 preguntas. Cada respuesta suma a un perfil — mirá cómo se arma en tiempo real.</p>
+            <a class="btn btn--primary" href="#" style="margin-top:22px">Empezar el quiz</a>
+          </div>
+          <div class="c3-quiz__tags">
+            <span>Fresco</span><span>Amaderado</span><span>+ Cítrico</span><span>+ Especiado</span><span>= Fresco Clásico</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container c3-close rv">
+      <div class="c3-close__grid">
+        <div class="c3-close__card">
+          <h3>Sumate al Club Aromia</h3>
+          <p>Acceso anticipado a guías, drops y comparativas exclusivas.</p>
+          <a class="btn btn--primary" style="align-self:flex-start" href="#">Unirme</a>
+        </div>
+        <div class="c3-close__card">
+          <h3>La Carta de Aromia</h3>
+          <p>Dejá tu email y te avisamos cuando tu perfume favorito baje de precio.</p>
+          <form class="c1-form"><input type="email" placeholder="tu@email.com"><button class="btn btn--primary" type="button">Avísame</button></form>
+        </div>
+      </div>
+    </section>
+    <footer class="aromia-foot"><span>© Aromia — Sensory Digital Experience</span><span>Concepto 03 de 03</span></footer>
+  </div>
+</section>

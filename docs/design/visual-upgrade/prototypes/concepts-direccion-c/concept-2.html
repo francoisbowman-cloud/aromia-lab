@@ -1,0 +1,223 @@
+<!-- ============================================================ -->
+<!-- CONCEPT 02 — MODERN LUXURY MAGAZINE -->
+<!-- ============================================================ -->
+<style>
+.c2-mast{border-bottom:1px solid var(--line)}
+.c2-mast .aromia-nav{border-bottom:none}
+.c2-mast__strip{display:flex;justify-content:space-between;padding:8px clamp(20px,6vw,80px);font-family:var(--ff-data);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+
+.c2-hero{padding:clamp(30px,6vw,60px) clamp(20px,6vw,80px) 0}
+.c2-hero__grid{display:grid;grid-template-columns:1fr;gap:36px}
+@media(min-width:900px){.c2-hero__grid{grid-template-columns:1.15fr .85fr;align-items:end}}
+.c2-hero__kicker{font-family:var(--ff-data);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-c);display:flex;gap:10px;align-items:center}
+.c2-hero__kicker::before{content:"";width:26px;height:1px;background:var(--gold)}
+.c2-hero__title{font-family:var(--ff-display);font-weight:600;font-size:clamp(44px,7.2vw,92px);line-height:.96;margin-top:18px;text-wrap:balance}
+.c2-hero__title em{font-style:italic;color:var(--gold-c)}
+.c2-hero__sub{font-size:15px;color:var(--muted);max-width:420px;margin-top:22px;line-height:1.6}
+.c2-hero__cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.c2-hero__art{position:relative}
+.c2-hero__art .ph{aspect-ratio:4/5;border-radius:2px}
+.c2-hero__art figcaption{font-family:var(--ff-data);font-size:10px;color:var(--muted);margin-top:10px;letter-spacing:.04em}
+.c2-hero__index{margin-top:34px;border-top:1px solid var(--line);padding-top:18px;display:flex;gap:28px;flex-wrap:wrap}
+.c2-hero__index div b{font-family:var(--ff-display);font-size:24px;font-weight:500;color:var(--gold-c);display:block}
+.c2-hero__index div span{font-family:var(--ff-data);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.c2-spread{padding-block:clamp(60px,9vw,110px)}
+.c2-spread__grid{display:grid;grid-template-columns:1fr;gap:2px;background:var(--line)}
+@media(min-width:760px){.c2-spread__grid{grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(120px,auto)}}
+.c2-spread__cell{background:var(--paper);padding:26px}
+.c2-spread__cell--intro{grid-column:span 6}
+@media(min-width:760px){.c2-spread__cell--intro{grid-column:span 2}}
+.c2-spread__cell--intro p{font-family:var(--ff-display);font-size:19px;line-height:1.5}
+.c2-spread__cell--intro p::first-letter{font-size:56px;line-height:.8;float:left;padding:6px 8px 0 0;font-weight:600;color:var(--gold-c)}
+.c2-spread__cell--feature{grid-column:span 6}
+@media(min-width:760px){.c2-spread__cell--feature{grid-column:span 4;grid-row:span 2;padding:0}}
+.c2-spread__cell--feature .ph{height:100%;min-height:260px}
+.c2-spread__cell--prod{grid-column:span 3}
+@media(min-width:760px){.c2-spread__cell--prod{grid-column:span 2}}
+.c2-spread__cell--prod .ph{aspect-ratio:1/1;margin-bottom:12px}
+.c2-spread__num{font-family:var(--ff-data);font-size:9.5px;color:var(--gold-c);letter-spacing:.1em}
+.c2-spread__name{font-family:var(--ff-body);font-weight:600;font-size:14px;margin-top:4px}
+.c2-spread__brand{font-size:11.5px;color:var(--muted)}
+.c2-spread__price{font-family:var(--ff-data);font-size:12px;margin-top:6px}
+.c2-spread__ftitle{position:absolute;left:22px;bottom:20px;right:22px;color:#f2ebdd;font-family:var(--ff-display);font-size:clamp(20px,2.4vw,30px);font-weight:600;line-height:1.1}
+.c2-spread__feature-wrap{position:relative;height:100%}
+
+.c2-rubric{padding-block:clamp(48px,7vw,80px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.c2-rubric__row{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:760px){.c2-rubric__row{grid-template-columns:repeat(5,1fr)}}
+.c2-rubric__item{padding:26px 20px;border-top:1px solid var(--line);position:relative}
+@media(min-width:760px){.c2-rubric__item{border-top:none;border-left:1px solid var(--line)}.c2-rubric__item:first-child{border-left:none}}
+.c2-rubric__n{font-family:var(--ff-data);font-size:10px;color:var(--gold-c);letter-spacing:.14em}
+.c2-rubric__t{font-family:var(--ff-display);font-size:23px;font-weight:600;margin-top:10px}
+.c2-rubric__d{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+
+.c2-index{padding-block:clamp(50px,8vw,90px)}
+.c2-index__list{margin-top:26px;display:flex;flex-direction:column}
+.c2-index__row{display:flex;align-items:baseline;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.c2-index__label{font-family:var(--ff-display);font-size:20px;font-style:italic}
+.c2-index__leader{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-6px)}
+.c2-index__pg{font-family:var(--ff-data);font-size:11px;color:var(--muted)}
+
+.c2-magspread{padding-block:clamp(50px,8vw,90px)}
+.c2-magspread__grid{display:grid;grid-template-columns:1fr;gap:32px}
+@media(min-width:820px){.c2-magspread__grid{grid-template-columns:.9fr 1.1fr}}
+.c2-magspread__art .ph{aspect-ratio:4/5}
+.c2-magspread__cols{column-count:1;column-gap:28px}
+@media(min-width:640px){.c2-magspread__cols{column-count:2}}
+.c2-magspread__cols h3{font-family:var(--ff-display);font-size:30px;font-weight:600;line-height:1.1;column-span:all;margin-bottom:14px}
+.c2-magspread__cols p{font-size:13.5px;line-height:1.75;color:var(--muted);margin:0 0 14px}
+.c2-magspread__cols p:first-of-type::first-letter{font-size:44px;float:left;line-height:.8;padding:5px 6px 0 0;font-family:var(--ff-display);font-weight:600;color:var(--gold-c)}
+
+.c2-quiz{padding-block:clamp(50px,8vw,90px);background:var(--soft)}
+.c2-quiz__grid{display:grid;grid-template-columns:1fr;gap:30px;align-items:center}
+@media(min-width:820px){.c2-quiz__grid{grid-template-columns:.8fr 1.2fr}}
+.c2-quiz__badge{font-family:var(--ff-display);font-size:15px;font-style:italic;border:1px solid var(--line);border-radius:999px;padding:10px 18px;display:inline-flex;gap:8px;align-items:center;width:fit-content}
+.c2-quiz__title{font-family:var(--ff-display);font-size:clamp(28px,4vw,42px);font-weight:600;margin-top:16px}
+.c2-quiz__steps{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.c2-quiz__steps span{width:34px;height:3px;background:var(--line);border-radius:2px}
+.c2-quiz__steps span:first-child{background:var(--gold-c)}
+
+.c2-close{padding-block:clamp(50px,8vw,90px);border-top:1px solid var(--line)}
+.c2-close__grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){.c2-close__grid{grid-template-columns:1fr 1fr}}
+.c2-close__card{border:1px solid var(--line);padding:clamp(26px,4vw,40px);display:flex;flex-direction:column;gap:12px}
+.c2-close__card h3{font-family:var(--ff-display);font-size:24px;font-weight:600}
+.c2-close__card p{font-size:13px;color:var(--muted);line-height:1.55}
+</style>
+
+<section class="concept" data-concept="2">
+  <div class="c2 zone-light">
+    <div class="c2-mast">
+      <div class="c2-mast__strip"><span>Edición digital · N°12</span><span>Aromia — La revista que vende</span></div>
+      <nav class="aromia-nav" style="position:static"><div class="aromia-nav__logo">AROMIA</div>
+        <div class="aromia-nav__links"><a href="#">Catálogo</a><a href="#">Magazine</a><a href="#">Quiz</a><a href="#">Academia</a><a href="#">Club</a></div>
+      </nav>
+    </div>
+
+    <header class="c2-hero">
+      <div class="c2-hero__grid">
+        <div>
+          <p class="c2-hero__kicker">La autoridad editorial que además vende</p>
+          <h1 class="c2-hero__title">No fabricamos<br>perfumes.<br><em>Revelamos identidades.</em></h1>
+          <p class="c2-hero__sub">Reseñas honestas, comparadas y sin ruido — para encontrar la fragancia que realmente te representa.</p>
+          <div class="c2-hero__cta">
+            <a class="btn btn--primary" href="#">Explorar catálogo</a>
+            <a class="btn btn--outline" href="#">Hacer el quiz</a>
+          </div>
+          <div class="c2-hero__index rv">
+            <div><b>50</b><span>Fragancias</span></div>
+            <div><b>8</b><span>Familias</span></div>
+            <div><b>6</b><span>Filtros</span></div>
+          </div>
+        </div>
+        <figure class="c2-hero__art rv">
+          <div class="ph ph--scene-2"><div class="ph__frame"></div>
+            <div class="ph__caption" style="color:rgba(33,29,23,.6);background:none"><b style="color:var(--gold-c)">Brief 01</b> Aventus sobre superficie de mármol claro, luz cenital suave, crop editorial 4:5, aire arriba para masthead</div>
+          </div>
+          <figcaption>Portada — Aventus, Creed</figcaption>
+        </figure>
+      </div>
+    </header>
+
+    <section class="container c2-spread">
+      <div class="c2-spread__grid rv">
+        <div class="c2-spread__cell c2-spread__cell--intro">
+          <p class="eyebrow" style="margin-bottom:10px">Reseñas destacadas</p>
+          <p>Lo que está mirando la comunidad esta semana — comparado, medido y sin relleno de marketing.</p>
+        </div>
+        <div class="c2-spread__cell c2-spread__cell--feature">
+          <div class="c2-spread__feature-wrap">
+            <div class="ph ph--scene-1"><div class="ph__frame"></div></div>
+            <div class="c2-spread__ftitle">Baccarat Rouge 540 EDP<br><span style="font-size:13px;font-family:var(--ff-data);opacity:.8">Maison Francis Kurkdjian · US$ 325</span></div>
+          </div>
+        </div>
+        <div class="c2-spread__cell c2-spread__cell--prod">
+          <div class="ph ph--scene-4"><div class="ph__frame"></div></div>
+          <div class="c2-spread__num">N°02</div><div class="c2-spread__name">1 Million</div>
+          <div class="c2-spread__brand">Paco Rabanne</div><div class="c2-spread__price">US$ 105</div>
+        </div>
+        <div class="c2-spread__cell c2-spread__cell--prod">
+          <div class="ph ph--scene-4"><div class="ph__frame"></div></div>
+          <div class="c2-spread__num">N°03</div><div class="c2-spread__name">Angel EDP</div>
+          <div class="c2-spread__brand">Mugler</div><div class="c2-spread__price">US$ 120</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="c2-rubric rv">
+      <div class="container">
+        <p class="eyebrow">En esta edición</p>
+      </div>
+      <div class="container c2-rubric__row" style="margin-top:14px">
+        <a class="c2-rubric__item" href="#"><div class="c2-rubric__n">N°01</div><div class="c2-rubric__t">Magazine</div><div class="c2-rubric__d">Historias, tendencias y entrevistas del mundo de la perfumería.</div></a>
+        <a class="c2-rubric__item" href="#"><div class="c2-rubric__n">N°02</div><div class="c2-rubric__t">Catálogo</div><div class="c2-rubric__d">Los mejores perfumes seleccionados y comparados para ti.</div></a>
+        <a class="c2-rubric__item" href="#"><div class="c2-rubric__n">N°03</div><div class="c2-rubric__t">Quiz</div><div class="c2-rubric__d">6 preguntas, tu perfil olfativo.</div></a>
+        <a class="c2-rubric__item" href="#"><div class="c2-rubric__n">N°04</div><div class="c2-rubric__t">Academia</div><div class="c2-rubric__d">Guías para leer y elegir una fragancia.</div></a>
+        <a class="c2-rubric__item" href="#"><div class="c2-rubric__n">N°05</div><div class="c2-rubric__t">Club</div><div class="c2-rubric__d">Comunidad, sorteos y beneficios.</div></a>
+      </div>
+    </section>
+
+    <section class="container c2-index rv">
+      <p class="eyebrow">Explora por notas</p>
+      <h2 style="font-family:var(--ff-display);font-size:clamp(26px,3.4vw,38px);font-weight:600;margin-top:8px">Índice olfativo</h2>
+      <div class="c2-index__list">
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Floral</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Amaderados</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Cítricos</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Acuáticos</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Afrutados</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Fougère</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Frescos</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+        <a class="c2-index__row" href="#"><span class="c2-index__label">Árabes</span><span class="c2-index__leader"></span><span class="c2-index__pg">Ver catálogo</span></a>
+      </div>
+    </section>
+
+    <section class="container c2-magspread rv">
+      <p class="eyebrow" style="margin-bottom:16px">Magazine · Reseña</p>
+      <div class="c2-magspread__grid">
+        <figure class="c2-magspread__art">
+          <div class="ph ph--scene-1"><div class="ph__frame"></div>
+            <div class="ph__caption"><b>Brief 02</b> Tobacco Vanille en escena cálida de estudio, madera oscura y humo, plano detalle del cristal del frasco</div>
+          </div>
+        </figure>
+        <div class="c2-magspread__cols">
+          <h3>Tobacco Vanille de Tom Ford: el gourmand masculino que abrió una categoría</h3>
+          <p>Antes de Tobacco Vanille, "gourmand masculino" no era una frase que la industria usara con seriedad. Tom Ford la volvió una categoría entera.</p>
+          <p>Una dupla de tabaco y vainilla que sigue, más de una década después, siendo el punto de referencia obligado.</p>
+          <a class="btn btn--outline" href="#" style="margin-top:6px">Leer Magazine →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="c2-quiz rv">
+      <div class="container c2-quiz__grid">
+        <div>
+          <span class="c2-quiz__badge">✳ Quiz de matching</span>
+          <h2 class="c2-quiz__title">¿No sabés por dónde empezar?</h2>
+        </div>
+        <div>
+          <p style="font-size:14px;color:var(--muted);max-width:440px;line-height:1.6">Respondé 6 preguntas y te mostramos los perfumes que mejor se adaptan a tu estilo y presupuesto — sin vueltas, con resultado compartible.</p>
+          <div class="c2-quiz__steps"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <a class="btn btn--primary" href="#" style="margin-top:22px">Empezar el quiz</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container c2-close rv">
+      <div class="c2-close__grid">
+        <div class="c2-close__card">
+          <h3>Sumate al Club Aromia</h3>
+          <p>Acceso anticipado a guías, drops y comparativas exclusivas.</p>
+          <a class="btn btn--primary" style="align-self:flex-start" href="#">Unirme</a>
+        </div>
+        <div class="c2-close__card">
+          <h3>La Carta de Aromia</h3>
+          <p>Dejá tu email y te avisamos cuando tu perfume favorito baje de precio.</p>
+          <form class="c1-form"><input type="email" placeholder="tu@email.com"><button class="btn btn--primary" type="button">Avísame</button></form>
+        </div>
+      </div>
+    </section>
+    <footer class="aromia-foot"><span>© Aromia — Modern Luxury Magazine</span><span>Concepto 02 de 03</span></footer>
+  </div>
+</section>
