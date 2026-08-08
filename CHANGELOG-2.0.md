@@ -1123,3 +1123,32 @@ de consola.
 
 [PR #9](https://github.com/francoisbowman-cloud/aromia-lab/pull/9), sin
 fusionar todavía.
+
+## 2026-08-06 — Code (Claude Code) — rendimiento: preconnect + limpieza de deps
+
+Continuación autónoma del backlog general (rama nueva `perf/technical-audit-01`).
+Categoría "rendimiento" — auditado con `next build` real, no solo lectura
+de código: el First Load JS de las páginas de cliente ya es liviano
+(87-111 kB compartido), sin rutas infladas salvo `/admin/magazine`
+(Tiptap, admin-only, fuera de alcance).
+
+`recharts` en `package.json` sin un solo import real en todo
+`apps/web/src` — confirmado comparando `next build` antes/después de
+sacarlo: mismos tamaños de bundle exactos (nunca se importaba, 0 bytes
+de diferencia). Es limpieza de dependencias/instalación, no una ganancia
+de runtime — se documenta la distinción para no sobrevender el cambio.
+
+Cambio con impacto real: `<link rel="preconnect">` para los 3 dominios
+de retailer de donde se hotlinkean las 50 fotos de catálogo
+(`m.media-amazon.com`, `cdn.notinoimg.com`, `media.douglas.de` — ver
+`docs/images/CURRENT-STATE-AUDIT.md` sección 5), adelanta DNS+TLS antes
+de que el navegador descubra la URL de la imagen a pedir. No toca el
+hotlinking en sí — esa arquitectura de recorte por canvas sigue siendo
+una decisión de producto pendiente (ver PR #6). Sumado
+`poweredByHeader: false`.
+
+Verificado en vivo: preconnects en el DOM, header `X-Powered-By`
+ausente, `next build`/`tsc` limpios, sin errores de consola.
+
+[PR #8](https://github.com/francoisbowman-cloud/aromia-lab/pull/8), sin
+fusionar todavía.
