@@ -1152,3 +1152,31 @@ ausente, `next build`/`tsc` limpios, sin errores de consola.
 
 [PR #8](https://github.com/francoisbowman-cloud/aromia-lab/pull/8), sin
 fusionar todavía.
+
+## 2026-08-06 — Code (Claude Code) — SEO técnico: metadata por producto + JSON-LD
+
+Continuación autónoma del backlog general (rama nueva `seo/technical-audit-01`,
+sin mezclar con el trabajo de imágenes que sigue en `assets/image-pilot-01`
+sin fusionar). Categoría "SEO técnico" — criterio objetivo, sin decisión
+de producto pendiente.
+
+Hallazgo: las 50 fichas de producto (`/catalogo/[slug]`) y el listado
+(`/catalogo`) no tenían `generateMetadata`/`metadata` propio — heredaban
+el título genérico del layout raíz ("Aromia") pese a estar las 50
+indexadas en `sitemap.ts` (priority 0.6). Cualquier link de producto
+compartido en redes mostraba el mismo texto genérico sin importar el
+perfume.
+
+Agregado: `generateMetadata` con título/descripción/OG/Twitter Card real
+por perfume + canonical + JSON-LD `Product` (schema.org, `brand`/`offers`
+reales, deliberadamente sin `aggregateRating` porque no hay conteo real
+de reseñas todavía). Metadata estática en `/catalogo` y `/quiz`.
+`metadataBase` en el layout raíz (antes ausente — necesario para que Next
+resuelva URLs de imagen OG relativas a absolutas).
+
+Verificado en vivo (dev server contra API de producción): título de
+pestaña, meta OG, canonical y el JSON-LD parseado confirman datos reales
+del perfume. tsc/eslint limpios, sin errores de consola.
+
+[PR #7](https://github.com/francoisbowman-cloud/aromia-lab/pull/7), sin
+fusionar todavía.

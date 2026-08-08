@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { getPerfumes } from "@/lib/api";
 import { PerfumesCatalog } from "@/components/perfume/PerfumesCatalog";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Catálogo — Aromia",
+  description: "Comparador de perfumes: precios, notas y dónde comprar cada fragancia.",
+  alternates: { canonical: "/catalogo" },
+};
 
 export default async function CatalogoPage({
   searchParams,
