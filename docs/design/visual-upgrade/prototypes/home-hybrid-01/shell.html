@@ -1,0 +1,196 @@
+<title>Aromia Home — Hybrid 01 · Cinematic Editorial Index</title>
+<style id="aromia-fonts">/*__FONT_FACES__*/</style>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p{margin:0}
+:focus-visible{outline:2px solid #c8a86b;outline-offset:3px}
+
+:root{
+  --paper:#fbf8f3; --surface:#ffffff; --soft:#f5f0e6; --ink:#211d17;
+  --muted:#8a8172; --line:rgba(33,29,23,.12);
+  --gold:#a87f4a; --gold-2:#c8a86b; --gold-c:#866526;
+  --shadow-lux:0 22px 70px rgba(30,23,13,.16);
+  --ff-display:'Cormorant Garamond',Georgia,serif;
+  --ff-body:'Archivo',Inter,sans-serif;
+  --ff-data:'IBM Plex Sans',Inter,sans-serif;
+}
+/* Tema global — responde al toggle Light/Dark. Ivorio por defecto (igual que producción real). */
+:root[data-theme="dark"]{
+  --paper:#0e0c0a; --surface:#17120d; --soft:#1c1610; --ink:#f2ebdd;
+  --muted:#a39a88; --line:rgba(242,235,221,.16);
+  --gold:#c8a86b; --gold-2:#a87f4a; --gold-c:#d8bd8c;
+  --shadow-lux:0 30px 90px rgba(0,0,0,.55);
+}
+/* Superficies editoriales inmersivas (Hero, Product Reveal) — Grafito SIEMPRE,
+   deliberadamente ignoran el toggle global. Dirección de arte, no un bug. */
+.zone-dark{
+  --paper:#0e0c0a; --surface:#17120d; --soft:#1c1610; --ink:#f2ebdd;
+  --muted:#a39a88; --line:rgba(242,235,221,.16);
+  --gold:#c8a86b; --gold-2:#a87f4a; --gold-c:#d8bd8c;
+  --shadow-lux:0 30px 90px rgba(0,0,0,.55);
+}
+/* Momentos editoriales de gesto (Ecosistema, Magazine, Quiz) — siguen siendo
+   superficies oscuras por naturaleza fotográfica, pero SÍ responden al tema:
+   Grafito frío en Dark, Tinta cálida (el mismo --ink de Ivorio) en Light. */
+.zone-editorial{
+  --paper:#0e0c0a; --surface:#17120d; --soft:#1c1610; --ink:#f2ebdd;
+  --muted:#a39a88; --line:rgba(242,235,221,.16);
+  --gold:#c8a86b; --gold-2:#a87f4a; --gold-c:#d8bd8c;
+  --shadow-lux:0 30px 90px rgba(0,0,0,.55);
+}
+:root[data-theme="light"] .zone-editorial{
+  --paper:#fbf8f3; --surface:#ffffff; --soft:#f5f0e6; --ink:#211d17;
+  --muted:#8a8172; --line:rgba(33,29,23,.12);
+  --gold:#a87f4a; --gold-2:#c8a86b; --gold-c:#866526;
+  --shadow-lux:0 22px 70px rgba(30,23,13,.16);
+}
+html{background:var(--paper)}
+body{font-family:var(--ff-body);background:var(--paper);color:var(--ink);transition:background .4s ease,color .4s ease}
+.grain{position:relative}
+.grain::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.eyebrow{font-family:var(--ff-data);font-size:11px;text-transform:uppercase;letter-spacing:.24em;font-weight:600;color:var(--gold-c)}
+.btn{display:inline-flex;align-items:center;gap:.5em;padding:14px 28px;border-radius:999px;font-family:var(--ff-body);font-size:14px;font-weight:600;letter-spacing:.02em;border:1px solid transparent;transition:all .35s cubic-bezier(.2,.7,.3,1)}
+.btn--primary{background:var(--gold-c);color:var(--paper)}
+.zone-dark .btn--primary{background:var(--gold-2);color:#17120d}
+.btn--primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(134,101,38,.35)}
+.btn--outline{border-color:var(--line);color:var(--ink)}
+.btn--outline:hover{border-color:var(--gold);transform:translateY(-2px)}
+
+.ph{position:relative;overflow:hidden;background:var(--soft)}
+.ph__frame{position:absolute;inset:0}
+.ph__caption{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;font-family:var(--ff-data);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85);background:linear-gradient(to top,rgba(0,0,0,.6),transparent);display:flex;gap:8px;align-items:baseline}
+.ph__caption b{color:var(--gold-2);font-weight:700}
+/* ---- ph--scene-1 : bottle-in-scene (Destacados / Magazine / Dark Product Reveal base) ---- */
+.ph--scene-1 .ph__frame{background:radial-gradient(ellipse 70% 55% at 62% 38%, rgba(200,168,107,.35), transparent 60%),linear-gradient(155deg,#1c1610 0%,#0e0c0a 55%,#100b08 100%)}
+.ph--scene-1 .ph__frame::before{content:"";position:absolute;left:56%;top:18%;width:22%;height:64%;background:linear-gradient(180deg,rgba(242,235,221,.14),rgba(200,168,107,.06) 60%,transparent);filter:blur(1px);border-radius:40% 40% 30% 30%/20% 20% 60% 60%;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+/* Atelier Ivorio — misma composición, luz natural sobre travertino, no "marble oscuro aclarado" */
+:root[data-theme="light"] .ph--scene-1 .ph__frame{background:radial-gradient(ellipse 65% 50% at 60% 34%, rgba(224,168,84,.4), transparent 62%),linear-gradient(155deg,#f7f2e6 0%,#efe6d2 55%,#f2ebda 100%)}
+:root[data-theme="light"] .ph--scene-1 .ph__frame::before{background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(200,168,107,.16) 60%,transparent);box-shadow:0 26px 50px rgba(120,95,60,.2)}
+
+.ph--scene-2 .ph__frame{background:linear-gradient(100deg,#f5f0e6 0%,#e9e0cf 45%,#d9cba8 100%)}
+.ph--scene-2 .ph__frame::before{content:"";position:absolute;right:12%;top:14%;width:32%;height:72%;background:linear-gradient(200deg,rgba(33,29,23,.1),rgba(168,127,74,.28) 70%);border-radius:6px;box-shadow:0 26px 50px rgba(33,29,23,.18)}
+
+/* ---- ph--scene-3 : abstract glow (Ecosistema / Quiz) ---- */
+.ph--scene-3 .ph__frame{background:conic-gradient(from 210deg at 30% 30%, rgba(200,168,107,.4), rgba(14,12,10,0) 40%),radial-gradient(circle at 75% 70%, rgba(168,127,74,.3), transparent 55%),#100c09}
+:root[data-theme="light"] .ph--scene-3 .ph__frame{background:radial-gradient(ellipse 70% 60% at 30% 30%, rgba(224,168,84,.32), transparent 55%),radial-gradient(circle at 75% 70%, rgba(214,196,86,.26), transparent 55%),#f7f2e6}
+
+.ph--scene-4{background:linear-gradient(120deg,#efe7d6,#f7f3ea)}
+.ph--scene-4 .ph__frame::before{content:"";position:absolute;left:30%;top:20%;width:18%;height:60%;background:linear-gradient(190deg,rgba(200,168,107,.5),rgba(33,29,23,.08));border-radius:8px;box-shadow:0 18px 34px rgba(33,29,23,.14)}
+
+/* ---- ph--macro : composición de ingredientes reales (Hero) — Asset 01A/01B ---- */
+.ph--macro .ph__frame{background:
+  radial-gradient(circle at 20% 30%, rgba(196,181,84,.5), transparent 40%),
+  radial-gradient(circle at 78% 20%, rgba(200,168,107,.5), transparent 40%),
+  radial-gradient(circle at 13% 68%, rgba(122,70,48,.48), transparent 40%),
+  radial-gradient(circle at 80% 76%, rgba(233,220,192,.34), transparent 38%),
+  linear-gradient(160deg,#0e0c0a,#100b08)}
+.ph--macro .ph__frame::before{content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:screen;
+  background-image:radial-gradient(circle,rgba(242,235,221,.35) 1px,transparent 1.4px);background-size:22px 22px}
+/* Light — piedra clara/travertino, luz natural lateral, cuero cognac (no negro), ámbar a contraluz, glint de cristal */
+:root[data-theme="light"] .ph--macro .ph__frame{background:
+  radial-gradient(circle at 20% 30%, rgba(214,196,86,.55), transparent 42%),
+  radial-gradient(circle at 78% 20%, rgba(224,168,84,.62), transparent 40%),
+  radial-gradient(circle at 13% 68%, rgba(178,122,74,.5), transparent 42%),
+  radial-gradient(circle at 80% 76%, rgba(255,250,240,.75), transparent 38%),
+  radial-gradient(ellipse 60% 45% at 40% 22%, rgba(255,252,244,.65), transparent 60%),
+  linear-gradient(155deg,#f7f2e6 0%,#efe6d2 55%,#f2ebda 100%)}
+:root[data-theme="light"] .ph--macro .ph__frame::before{opacity:.22;mix-blend-mode:multiply;background-image:radial-gradient(circle,rgba(120,95,60,.4) 1px,transparent 1.4px)}
+:root[data-theme="light"] .ph--macro .ph__frame::after{content:"";position:absolute;inset:0;opacity:.5;background:linear-gradient(122deg,transparent 42%,rgba(255,255,255,.55) 49%,transparent 56%)}
+
+/* ---- ph--reveal : el mismo set del hero, ahora con el frasco (Product Reveal) — Asset 02A/02B ---- */
+.ph--reveal .ph__frame::before{content:"";position:absolute;left:50%;top:16%;width:20%;height:66%;border-radius:38% 38% 30% 30%/18% 18% 55% 55%;background:linear-gradient(180deg,rgba(242,235,221,.16),rgba(200,168,107,.08) 55%,transparent);box-shadow:0 40px 80px rgba(0,0,0,.55)}
+:root[data-theme="light"] .ph--reveal .ph__frame::before{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(200,168,107,.2) 55%,transparent);box-shadow:0 26px 50px rgba(120,95,60,.24)}
+
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1!important;transform:none!important;transition:none!important}*{animation:none!important;transition:none!important}}
+
+.toolbar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:10px 18px;background:#0e0c0a;color:#f2ebdd;font-family:var(--ff-data);border-bottom:1px solid rgba(242,235,221,.14)}
+.toolbar__label{font-size:12px;letter-spacing:.04em;color:#cfc6b4}
+.toolbar__label b{color:#f2ebdd;font-weight:700}
+.toolbar__right{display:flex;gap:8px;align-items:center}
+.toolbar__device{padding:8px 14px;border-radius:999px;border:1px solid rgba(242,235,221,.22);background:transparent;color:#cfc6b4;font-size:12px}
+.toolbar__device.active{background:rgba(242,235,221,.16);color:#f2ebdd;border-color:rgba(242,235,221,.4)}
+
+.stage{background:#0e0c0a}
+.viewport{margin:0 auto;transition:max-width .4s ease;width:100%}
+.viewport.mobile{max-width:400px;border-left:1px solid rgba(242,235,221,.18);border-right:1px solid rgba(242,235,221,.18)}
+
+.aromia-nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,4vw,48px);backdrop-filter:blur(14px);background:rgba(14,12,10,.72);border-bottom:1px solid var(--line)}
+:root[data-theme="light"] .aromia-nav{background:rgba(251,248,243,.72)}
+.aromia-nav__logo{font-family:var(--ff-display);font-size:21px;letter-spacing:.14em;font-weight:600}
+.aromia-nav__links{display:none;gap:26px;font-size:12.5px;letter-spacing:.03em;font-family:var(--ff-body)}
+@media(min-width:820px){.aromia-nav__links{display:flex}}
+.aromia-nav__links a{position:relative;padding:6px 1px;opacity:.85}
+.aromia-nav__links a:hover{opacity:1}
+.aromia-nav__links a::after{content:"";position:absolute;left:50%;right:50%;bottom:0;height:1px;background:var(--gold);transition:left .25s,right .25s}
+.aromia-nav__links a:hover::after{left:0;right:0}
+
+.container{max-width:1180px;margin:0 auto;padding-inline:clamp(18px,4vw,48px)}
+.section{padding-block:clamp(56px,9vw,120px)}
+.aromia-foot{padding:40px clamp(18px,4vw,48px) 56px;font-family:var(--ff-data);font-size:11px;color:var(--muted);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/*__HOME_STYLES__*/
+</style>
+
+<div class="toolbar">
+  <div class="toolbar__label"><b>Aromia Home — Hybrid 01</b> · Cinematic Editorial Index</div>
+  <div class="toolbar__right">
+    <button class="toolbar__device active" data-theme-btn="light">Light</button>
+    <button class="toolbar__device" data-theme-btn="dark">Dark</button>
+    <span style="width:1px;height:18px;background:rgba(242,235,221,.18);margin:0 2px"></span>
+    <button class="toolbar__device active" data-device="desktop">Desktop</button>
+    <button class="toolbar__device" data-device="mobile">Mobile</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="viewport" id="viewport">
+    <!--__HOME_MARKUP__-->
+  </div>
+</div>
+
+<script>
+(function(){
+  var devices = document.querySelectorAll('[data-device]');
+  var vp = document.getElementById('viewport');
+  devices.forEach(function(d){
+    d.addEventListener('click', function(){
+      devices.forEach(function(x){x.classList.remove('active')});
+      d.classList.add('active');
+      vp.classList.toggle('mobile', d.getAttribute('data-device')==='mobile');
+    });
+  });
+  var themeBtns = document.querySelectorAll('[data-theme-btn]');
+  themeBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      themeBtns.forEach(function(x){x.classList.remove('active')});
+      b.classList.add('active');
+      document.documentElement.setAttribute('data-theme', b.getAttribute('data-theme-btn'));
+    });
+  });
+  document.documentElement.setAttribute('data-theme','light');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.18, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  document.querySelectorAll('[data-parallax]').forEach(function(el){
+    el.addEventListener('mousemove', function(ev){
+      var r = el.getBoundingClientRect();
+      var x = (ev.clientX - r.left)/r.width - .5, y=(ev.clientY - r.top)/r.height - .5;
+      el.querySelectorAll('[data-depth]').forEach(function(layer){
+        var d = parseFloat(layer.getAttribute('data-depth'));
+        layer.style.transform = 'translate('+(x*d*24)+'px,'+(y*d*24)+'px)';
+      });
+    });
+  });
+})();
+</script>
