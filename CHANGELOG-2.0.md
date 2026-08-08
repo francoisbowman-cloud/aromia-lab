@@ -1091,3 +1091,35 @@ pedidas quedan cubiertas, cada una en su propia rama/PR sin fusionar
 
 Ningún cambio se fusionó a `main` ni se aplicó a producción — todo
 queda en ramas separadas, listo para revisión.
+
+## 2026-08-06 — Code (Claude Code) — confianza/legalidad: disclosure de afiliado
+
+Continuación autónoma del backlog general (rama nueva `trust-legal/audit-01`).
+Auditoría: la política de privacidad (`privacidad/page.tsx`) y el footer
+ya cubrían Amazon Affiliates, Google Analytics y localStorage con
+precisión razonable — no se tocaron.
+
+Hueco real encontrado: el disclosure de afiliado ("As an Amazon
+Associate, we earn from qualifying purchases") solo vivía en el footer,
+lejos del enlace real que genera la comisión
+(`PriceTable.tsx`, botón "Ver oferta", que ya usa correctamente
+`rel="sponsored noopener"`). Un disclosure "claro y conspicuo" tiene que
+estar cerca del enlace, no solo en un pie de página. Se agregó el mismo
+texto ya afirmado en el footer, ahora también junto a cada oferta — sin
+inventar contenido nuevo.
+
+**Fuera de alcance, flaggeado para decisión de Brey (no resuelto):**
+- La política de privacidad promete contacto "a través de los canales
+  indicados en el sitio", pero no hay ningún email/contacto real en
+  ningún lado del sitio — no se inventó uno.
+- Google Analytics se carga sin ningún banner/mecanismo de
+  consentimiento. Si el sitio recibe tráfico de la UE, es una exposición
+  real (ePrivacy/GDPR). Diseñar el mecanismo de consentimiento es una
+  decisión de producto/legal, no un fix mecánico.
+
+Verificado en vivo: el texto aparece renderizado debajo del botón "Ver
+oferta" en una ficha de producto real. tsc/eslint limpios, sin errores
+de consola.
+
+[PR #9](https://github.com/francoisbowman-cloud/aromia-lab/pull/9), sin
+fusionar todavía.
