@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // No expone la versión de Next en el header X-Powered-By.
+  poweredByHeader: false,
   async redirects() {
     return [
       // Páginas raíz de v1 con equivalente directo

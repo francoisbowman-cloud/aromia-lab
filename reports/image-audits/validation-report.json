@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-08-06T17:07:13.147Z",
+  "generated_by": "cierre de Fase 2 — validación final tras rename Sauvage EDP -> EDT",
+  "schema_validation": {
+    "aventus": {
+      "schema_valid": true
+    },
+    "baccarat-rouge-540-edp": {
+      "schema_valid": true
+    },
+    "sauvage-edp": {
+      "schema_valid": true
+    },
+    "black-opium-edp": {
+      "schema_valid": true
+    },
+    "erba-pura": {
+      "schema_valid": true
+    }
+  },
+  "inventory_csv_integrity": {
+    "official_rows": 100,
+    "proposal_rows": 100,
+    "row_count_and_key_mismatches": 0
+  },
+  "perfumes_csv_sync": {
+    "root_and_api_identical": true
+  },
+  "sauvage_rename": {
+    "root_csv_nombre": "Sauvage EDT",
+    "api_csv_nombre": "Sauvage EDT",
+    "image_url_unchanged": true,
+    "affiliate_link_unchanged": true,
+    "slug_unchanged": true
+  },
+  "all_ok": true
+}

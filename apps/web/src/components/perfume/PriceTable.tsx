@@ -1,5 +1,8 @@
+"use client";
+
 import type { Retailer } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 
 export function PriceTableSkeleton() {
   return (
@@ -17,7 +20,18 @@ export function PriceTableSkeleton() {
   );
 }
 
-export function PriceTable({ retailers }: { retailers: Retailer[] }) {
+export function PriceTable({
+  retailers,
+  perfumeSlug,
+  perfumeNombre,
+}: {
+  retailers: Retailer[];
+  /** Opcionales — sin ellos el evento igual se manda, solo con menos
+   * contexto (retailer/precio). Ninguna vista existente los pasa hoy
+   * salvo la ficha de producto. */
+  perfumeSlug?: string;
+  perfumeNombre?: string;
+}) {
   if (retailers.length === 0) {
     return (
       <section className="rounded-table border border-line bg-surface p-6 text-center font-sans text-sm text-muted">
@@ -45,13 +59,34 @@ export function PriceTable({ retailers }: { retailers: Retailer[] }) {
               })}
             </p>
             <Button asChild className="w-full">
-              <a href={r.link_afiliado} target="_blank" rel="sponsored noopener">
+              <a
+                href={r.link_afiliado}
+                target="_blank"
+                rel="sponsored noopener"
+                onClick={() =>
+                  trackEvent("affiliate_click", {
+                    retailer: r.nombre,
+                    price: r.precio,
+                    currency: r.moneda,
+                    perfume_slug: perfumeSlug,
+                    perfume_name: perfumeNombre,
+                  })
+                }
+              >
                 Ver oferta
               </a>
             </Button>
           </li>
         ))}
       </ul>
+      {/* Mismo disclosure que ya declara el footer (As an Amazon Associate...) —
+          acá se repite junto al enlace real, que es donde tiene que estar para
+          ser "clara y conspicua" (no alcanza con que viva solo en el footer). */}
+      <p className="border-t border-line bg-soft px-4 py-2.5 font-sans text-[11px] leading-relaxed text-muted">
+        Aromia participa en el Programa de Afiliados de Amazon y puede ganar una
+        comisión por compras realizadas a través de estos enlaces, sin costo
+        adicional para vos.
+      </p>
     </section>
   );
 }

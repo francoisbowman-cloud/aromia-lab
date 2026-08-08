@@ -39,9 +39,21 @@ const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-plex",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Aromia",
   description: "Comparador y recomendador de perfumes",
+  openGraph: {
+    siteName: "Aromia",
+    title: "Aromia",
+    description: "Comparador y recomendador de perfumes",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 const THEME_INIT_SCRIPT = `
@@ -61,6 +73,13 @@ export default function RootLayout({
   return (
     <html lang="es" data-theme="light">
       <head>
+        {/* Las 50 fotos de catálogo son hotlinks directos a estos 3 dominios
+            de retailer (ver docs/images/CURRENT-STATE-AUDIT.md, sección 5) —
+            preconectar adelanta DNS+TLS antes de que el navegador descubra
+            la URL de la imagen, sin cambiar nada del hotlinking en sí. */}
+        <link rel="preconnect" href="https://m.media-amazon.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.notinoimg.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://media.douglas.de" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <GoogleAnalytics />
       </head>

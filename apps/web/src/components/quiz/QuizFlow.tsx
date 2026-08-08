@@ -8,6 +8,7 @@ import {
   getDominantTag,
   type QuizTag,
 } from "@/lib/quizData";
+import { trackEvent } from "@/lib/analytics";
 
 export function QuizFlow() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export function QuizFlow() {
     if (esUltima) {
       const dominante = getDominantTag(nuevosScores);
       const perfil = QUIZ_PROFILES.find((p) => p.tag === dominante)!;
+      trackEvent("quiz_completed", { perfil: perfil.slug });
       router.push(`/quiz/resultado/${perfil.slug}`);
       return;
     }

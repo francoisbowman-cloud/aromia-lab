@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getEditorialImage } from "@/lib/editorialImages";
 
 export function EditorialMood({ slug, nombre }: { slug: string; nombre: string }) {
@@ -24,11 +25,12 @@ export function EditorialMood({ slug, nombre }: { slug: string; nombre: string }
           sólido en tema oscuro (decisión #81 de ESTADO-aromia.md), sin
           necesidad de regenerar el asset. */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={image.src}
           alt={image.alt}
-          className="absolute inset-0 h-full w-full object-contain"
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-contain"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
         <p className="absolute bottom-5 left-6 font-display text-lg italic text-white/90">

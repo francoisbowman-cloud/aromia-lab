@@ -1,0 +1,132 @@
+{
+  "perfume_slug": "baccarat-rouge-540-edp",
+  "model": "gpt-4.1",
+  "timestamp": "2026-08-05T19:24:14.878Z",
+  "attempts": 1,
+  "catalog_image_url": "https://m.media-amazon.com/images/I/71xVLhLWrvL._SL1500_.jpg",
+  "ovl_relative_path": "apps/web/public/ovl/baccarat-rouge-540-edp.jpg",
+  "response_id": "resp_0ad501247e3f013b006a738dd27e38819e85504d6987839db4",
+  "usage": {
+    "input_tokens": 2537,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 2176
+    },
+    "output_tokens": 1088,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3625
+  },
+  "estimated_cost_usd": 0.013778,
+  "traffic_light": "verde",
+  "requires_human_review": false,
+  "review_reason": null,
+  "result": {
+    "perfume_slug": "baccarat-rouge-540-edp",
+    "perfume_name": "Baccarat Rouge 540 EDP",
+    "brand": "Maison Francis Kurkdjian",
+    "classification": "A",
+    "classification_reason": "La imagen reproduce el frasco original de Baccarat Rouge 540 Extrait de Parfum con alta fidelidad: el frasco tiene la forma cúbica y facetada, el tono rojo profundo y ámbar característico, la tapa dorada facetada específica de la marca, y la etiqueta dorada con tipografía y logotipo acordes a la referencia real. El recorte incluye el frasco completo, no hay ingredientes ni elementos ajenos, fondo blanco uniforme, proporción y orientación correctas, iluminación equilibrada, y no se detectan artefactos notorios. Cumple los estándares técnicos y de fidelidad estrictos para la publicación en catálogo primario.",
+    "evaluations": [
+      {
+        "point": 1,
+        "label": "Fidelidad del frasco",
+        "finding": "Frasco reproduce de manera exacta la referencia real: forma cúbica/facetada, cristal grueso, color interior fiel."
+      },
+      {
+        "point": 2,
+        "label": "Tapa",
+        "finding": "Tapa dorada facetada, perfectamente representativa del diseño auténtico."
+      },
+      {
+        "point": 3,
+        "label": "Etiqueta",
+        "finding": "Etiqueta dorada central, con proporciones, color y tipografía correctos según referencia oficial."
+      },
+      {
+        "point": 4,
+        "label": "Logotipo",
+        "finding": "Logotipo y textos aparecen en la etiqueta en la posición, tamaño y estilo adecuados."
+      },
+      {
+        "point": 5,
+        "label": "Texto (nombre del producto, legible y correcto)",
+        "finding": "Nombre 'Baccarat Rouge 540' junto al resto de textos, perfectamente legible y sin errores."
+      },
+      {
+        "point": 6,
+        "label": "Proporciones",
+        "finding": "Proporciones exactas, sin distorsión perceptible del frasco respecto a la referencia."
+      },
+      {
+        "point": 7,
+        "label": "Color",
+        "finding": "Color del frasco y tapa fiel al original: rojo rubí profundo y dorado metálico intenso. Etiqueta también se muestra dorada auténtica, sin desviación notable."
+      },
+      {
+        "point": 8,
+        "label": "Recorte",
+        "finding": "Frasco entero incluido, margen adecuado, sin recortes agresivos ni partes ocultas."
+      },
+      {
+        "point": 9,
+        "label": "Iluminación",
+        "finding": "Iluminación suave, sin brillos excesivos ni sombras agresivas. Frasco y estuche bien expuestos."
+      },
+      {
+        "point": 10,
+        "label": "Fondo",
+        "finding": "Fondo blanco puro, uniforme, estándar de catálogo Aromia. Sin decoración de contexto."
+      },
+      {
+        "point": 11,
+        "label": "Artefactos (compresión, halos, bordes raros)",
+        "finding": "Sin artefactos notables de compresión, halos ni bordes digitales evidentes."
+      },
+      {
+        "point": 12,
+        "label": "Coherencia con el resto del catálogo de Aromia",
+        "finding": "Totalmente coherente con las imágenes principales de catálogo Aromia en estilo, fondo y presentación."
+      },
+      {
+        "point": 13,
+        "label": "Apariencia artificial / riesgo de parecer generada por IA",
+        "finding": "Imagen realista sin signos de generación artificial; detalles en vidrio y texto son naturales."
+      }
+    ],
+    "specific_answers": [
+      {
+        "question": "El frasco de Baccarat Rouge 540 tiene un color ámbar/rojizo distintivo y una tapa dorada facetada muy específica de la marca — ¿la foto reproduce ese color con fidelidad o hay desviación de tono (por ejemplo por compresión o balance de blancos del retailer)?",
+        "answer": "La foto reproduce el color ámbar/rojizo del frasco y el dorado de la tapa con alta fidelidad, sin desviaciones de tono perceptibles relacionadas con compresión ni con el balance de blancos; están alineados con la referencia oficial de la marca."
+      },
+      {
+        "question": "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume?",
+        "answer": "El mockup editorial OVL adjunto es estilísticamente relevante para hero editorial, ya que refleja lujo y atmósfera sofisticada, aunque el frasco mostrado no corresponde al diseño real de Baccarat Rouge 540 (forma y detalles difieren notablemente del producto original)."
+      }
+    ],
+    "confidence": 0.98,
+    "recommendation": "Usar tal cual",
+    "risk_flags": []
+  },
+  "operational_review": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "generated_at_note": "capa de decisión operativa v2 — no reemplaza result ni los campos originales de la corrida real",
+    "expected_variant_code": "edp",
+    "mentioned_variant_codes": [
+      "extrait"
+    ],
+    "incompatible_variant_codes": [
+      "extrait"
+    ],
+    "variant_term_mismatch": true,
+    "explicit_doubt_phrase": false,
+    "approved_classification_with_variant_doubt": true,
+    "requires_human_review": true,
+    "review_reasons": [
+      "variant_term_mismatch:extrait_vs_expected_edp",
+      "approved_classification_with_persisting_variant_doubt"
+    ],
+    "traffic_light": "amarillo"
+  }
+}

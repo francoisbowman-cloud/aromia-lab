@@ -1,0 +1,137 @@
+{
+  "perfume_slug": "sauvage-edp",
+  "model": "gpt-4.1",
+  "timestamp": "2026-08-05T19:24:30.097Z",
+  "attempts": 1,
+  "catalog_image_url": "https://m.media-amazon.com/images/I/51F8MEfiKgL._SL1000_.jpg",
+  "ovl_relative_path": "apps/web/public/ovl/sauvage-edp.jpg",
+  "response_id": "resp_0bfe4574664af16a006a738de5348481a0893260d3ba20b7fc",
+  "usage": {
+    "input_tokens": 2546,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 1208,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3754
+  },
+  "estimated_cost_usd": 0.014756000000000002,
+  "traffic_light": "rojo",
+  "requires_human_review": false,
+  "review_reason": null,
+  "result": {
+    "perfume_slug": "sauvage-edp",
+    "perfume_name": "Sauvage EDP",
+    "brand": "Dior",
+    "classification": "D",
+    "classification_reason": "La imagen presenta varios problemas críticos para una imagen de catálogo: el frasco no corresponde a la versión EDP sino a la EDT (según el texto y presentación), lo cual es una confusión común pero inaceptable; la caja indica claramente 'Eau de Toilette' (EDT), no 'Eau de Parfum' (EDP), y el diseño del texto/label concuerda con la EDT, no con la EDP. Además, la presencia de la caja viola el requerimiento de mostrar sólo el frasco con fondo uniforme. Aunque el frasco y la tapa son reconocibles como parte de la línea Sauvage de Dior, la referencia no se corresponde con la variante EDP. El fondo es blanco pero mantiene contraste brusco, y la sombra está poco controlada. El recorte es adecuado pero la composición general no cumple los estándares de catálogo Aromia.",
+    "evaluations": [
+      {
+        "point": 1,
+        "label": "Fidelidad del frasco",
+        "finding": "El frasco corresponde a la línea Sauvage pero específicamente a la EDT, no a la EDP solicitada. Error crítico de variante."
+      },
+      {
+        "point": 2,
+        "label": "Tapa",
+        "finding": "La tapa es coherente con Sauvage pero en línea con la EDT; la EDP puede tener detalles mínimos diferentes."
+      },
+      {
+        "point": 3,
+        "label": "Etiqueta",
+        "finding": "La etiqueta no muestra 'Eau de Parfum'; muestra 'Eau de Toilette'. No corresponde a la EDP. Error crítico para catálogo."
+      },
+      {
+        "point": 4,
+        "label": "Logotipo",
+        "finding": "El logotipo de Dior está bien posicionado, pero con el estilo y proporciones de la EDT."
+      },
+      {
+        "point": 5,
+        "label": "Texto (nombre del producto, legible y correcto)",
+        "finding": "El texto es legible, pero la denominación en el frasco y la caja es incorrecta para la variante (aparece EDT, no EDP)."
+      },
+      {
+        "point": 6,
+        "label": "Proporciones",
+        "finding": "Las proporciones se mantienen fieles, aunque la comparación es con la EDT, no la EDP."
+      },
+      {
+        "point": 7,
+        "label": "Color",
+        "finding": "El color azul degradado es correcto para Sauvage, pero específicamente el matiz y contraste se asocian a la EDT. Es aceptable para la referencia EDT pero no para EDP."
+      },
+      {
+        "point": 8,
+        "label": "Recorte",
+        "finding": "El frasco está completo y sin recortes agresivos, buena práctica técnica."
+      },
+      {
+        "point": 9,
+        "label": "Iluminación",
+        "finding": "La iluminación es clara pero genera reflejos y sombras poco controladas. No es la iluminación suave ideal de catálogo."
+      },
+      {
+        "point": 10,
+        "label": "Fondo",
+        "finding": "Fondo blanco pero con presencia de la caja y sombras intensas. No uniforme ni totalmente limpio."
+      },
+      {
+        "point": 11,
+        "label": "Artefactos (compresión, halos, bordes raros)",
+        "finding": "Ligera evidencia de compresión y bandas de color; calidad aceptable pero lejos de ideal para catálogo premium."
+      },
+      {
+        "point": 12,
+        "label": "Coherencia con el resto del catálogo de Aromia",
+        "finding": "No es coherente: presencia de fondo mixto, caja, y errores de variante, que comprometen la consistencia visual de la marca."
+      },
+      {
+        "point": 13,
+        "label": "Apariencia artificial / riesgo de parecer generada por IA",
+        "finding": "No aparenta ser generada por IA. Fotografía real, aunque de baja calidad comercial."
+      }
+    ],
+    "specific_answers": [
+      {
+        "question": "Confirmá explícitamente que la imagen corresponde a \"Sauvage EDP\" (frasco azul con tapa plateada facetada) y no a otra variante de la línea Sauvage (Elixir, Parfum, EDT) — es un error de confusión de variante conocido en este tipo de catálogos.",
+        "answer": "La imagen corresponde a Sauvage Eau de Toilette (EDT), no a Sauvage Eau de Parfum (EDP). Esto es evidente tanto en el texto de la caja como en el estilo gráfico de la etiqueta del frasco."
+      },
+      {
+        "question": "¿El mockup editorial OVL adjunto es coherente en estilo con lo que recomendarías para un hero editorial de este perfume?",
+        "answer": "Sí, el mockup editorial OVL es coherente en estilo para un hero editorial de Sauvage EDP: la escenografía natural, ingredientes, luz ambiente y composición premium son adecuados para la estética de Dior Sauvage."
+      }
+    ],
+    "confidence": 1,
+    "recommendation": "Buscar otra fuente fotográfica de Sauvage EDP (no EDT), con fondo uniforme y sin elementos adicionales.",
+    "risk_flags": [
+      "Confusión grave de variante EDT/EDP",
+      "Riesgo legal de catalogar el producto incorrecto"
+    ]
+  },
+  "operational_review": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "generated_at_note": "capa de decisión operativa v2 — no reemplaza result ni los campos originales de la corrida real",
+    "expected_variant_code": "edp",
+    "mentioned_variant_codes": [
+      "edt",
+      "edp",
+      "elixir"
+    ],
+    "incompatible_variant_codes": [
+      "edt",
+      "elixir"
+    ],
+    "variant_term_mismatch": true,
+    "explicit_doubt_phrase": false,
+    "approved_classification_with_variant_doubt": false,
+    "requires_human_review": true,
+    "review_reasons": [
+      "variant_term_mismatch:edt,elixir_vs_expected_edp"
+    ],
+    "traffic_light": "rojo"
+  }
+}

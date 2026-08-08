@@ -39,7 +39,7 @@ export function pickEditorialImage(seed: string): EditorialImage {
  */
 const OVL_IMAGES: Record<string, EditorialImage> = {
   "bleu-de-chanel-edp": { src: "/ovl/bleu-de-chanel-edp.jpg", alt: "Atmósfera editorial de Bleu de Chanel EDP" },
-  "sauvage-edp": { src: "/ovl/sauvage-edp.jpg", alt: "Atmósfera editorial de Sauvage EDP" },
+  "sauvage-edp": { src: "/ovl/sauvage-edp.jpg", alt: "Atmósfera editorial de Sauvage EDT" },
   "aventus": { src: "/ovl/aventus.jpg", alt: "Atmósfera editorial de Aventus" },
   "black-opium-edp": { src: "/ovl/black-opium-edp.jpg", alt: "Atmósfera editorial de Black Opium EDP" },
   "good-girl": { src: "/ovl/good-girl.jpg", alt: "Atmósfera editorial de Good Girl" },

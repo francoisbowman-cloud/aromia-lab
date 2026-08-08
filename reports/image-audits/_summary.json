@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-08-05T19:24:58.963Z",
+  "model": "gpt-4.1",
+  "spend_limit_usd": 0.5,
+  "running_cost_usd_estimate": 0.06891,
+  "running_tokens": {
+    "input": 12743,
+    "output": 5428
+  },
+  "perfumes_processed": 5,
+  "perfumes_failed": 0,
+  "halted_early": false,
+  "halt_reason": null,
+  "failures": [],
+  "classifications": {
+    "aventus": "D",
+    "baccarat-rouge-540-edp": "A",
+    "sauvage-edp": "D",
+    "black-opium-edp": "D",
+    "erba-pura": "A"
+  },
+  "traffic_lights": {
+    "aventus": "rojo",
+    "baccarat-rouge-540-edp": "verde",
+    "sauvage-edp": "rojo",
+    "black-opium-edp": "rojo",
+    "erba-pura": "verde"
+  },
+  "operational_review_v2": {
+    "generated_by": "scripts/reconcile-image-audit-review-flags.mjs",
+    "note": "Capa operativa agregada tras corrida real — no modifica classifications/traffic_lights originales de arriba (esos siguen reflejando la salida cruda de la API). requires_human_review y traffic_light acá son la fuente operativa vigente.",
+    "requires_human_review": {
+      "aventus": false,
+      "baccarat-rouge-540-edp": true,
+      "sauvage-edp": true,
+      "black-opium-edp": false,
+      "erba-pura": false
+    },
+    "review_reasons": {
+      "aventus": [],
+      "baccarat-rouge-540-edp": [
+        "variant_term_mismatch:extrait_vs_expected_edp",
+        "approved_classification_with_persisting_variant_doubt"
+      ],
+      "sauvage-edp": [
+        "variant_term_mismatch:edt,elixir_vs_expected_edp"
+      ],
+      "black-opium-edp": [],
+      "erba-pura": []
+    },
+    "traffic_light": {
+      "aventus": "rojo",
+      "baccarat-rouge-540-edp": "amarillo",
+      "sauvage-edp": "rojo",
+      "black-opium-edp": "rojo",
+      "erba-pura": "verde"
+    },
+    "cowork_report": null,
+    "cowork_report_note": "pendiente — no consolidar hasta recibir el informe real de Cowork (Paso 2 del plan)."
+  }
+}
