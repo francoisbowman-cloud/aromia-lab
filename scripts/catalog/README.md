@@ -10,6 +10,19 @@ base de datos importado en este paquete — es una garantía estructural, no
 solo un `if`. Ver `catalog/schemas/SCHEMA_COMPARISON.md` para el detalle
 de qué falta para conectar esto a producción en una fase futura.
 
+**Nombre de campo (F3.7):** el campo canónico es `middle_notes` (nombre
+de contrato vigente). `heart_notes` (nombre de `batch-001.csv` y del
+schema original) se acepta como alias legacy de INGESTA — cualquier CSV
+que traiga esa columna se renombra automáticamente al leerlo
+(`lib.mjs#applyLegacyColumnAliases`, aplicado dentro de `readCsv`), sin
+tocar el archivo original.
+
+`apply-remediation.mjs` (F3.7) integra un CSV de remediación de campos
+(entregado por Cowork tras un batch con filas `REJECTED`) contra el
+batch original, produciendo un CSV derivado con los parches aplicados.
+Es una herramienta de integración de un entregable puntual — no participa
+de `validate`/`normalize`/`diff`.
+
 ## Instalación
 
 ```bash
@@ -72,7 +85,7 @@ npm run diff           -- <csv-crudo>    # corre validate+normalize+dedupe+diff
 npm run prepare-import -- <csv-crudo>    # corre todo + escribe la propuesta y el resumen
 npm run import         -- --approved [--dry-run] [proposal.csv]
 npm run calibrate      -- <csv-crudo>    # auditoría de calibración (CSVs de revisión humana), ver abajo
-npm test                                 # 68 tests con node:test, sin dependencias externas
+npm test                                 # 77 tests con node:test, sin dependencias externas
 ```
 
 O desde la raíz del repo (mismo comportamiento, paths relativos a la raíz):
@@ -116,6 +129,14 @@ npm run catalog:test
   (genuinamente incompletos en campos críticos), **0** excepciones que
   requieran una decisión humana. Comparación BEFORE/AFTER completa en el
   summary.
+- **F3.7** — Cowork entregó una remediación dirigida sobre las 9 filas
+  `REJECTED` de Batch 001 (`apply-remediation.mjs` la integra, ver
+  `catalog/reports/batch-001-remediation-summary.md`): 7/9 rescatadas.
+  También llegó Batch 002 real (50 filas, `catalog/imports/batch-002.csv`,
+  ya con `middle_notes` como nombre de columna) — procesado con el mismo
+  pipeline sin ningún ajuste nuevo: 29 aprobables, 21 `REJECTED` (mismo
+  patrón de campos críticos pending, sin datos objetivamente incorrectos).
+  Ver `catalog/reports/batch-002-real-summary.md`.
 
 ## Tests
 
@@ -123,7 +144,7 @@ npm run catalog:test
 npm test
 ```
 
-68 tests con el test runner nativo de Node (`node:test`), sin Jest ni otras
+77 tests con el test runner nativo de Node (`node:test`), sin Jest ni otras
 dependencias de testing. `--test-concurrency=1` es obligatorio (no solo
 una opción de estilo) — varios tests escriben a los directorios reales de
 `catalog/`, y correrlos en paralelo produce fallos intermitentes no

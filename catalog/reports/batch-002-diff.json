@@ -1,0 +1,538 @@
+{
+  "batch": "batch-002",
+  "generatedAt": "2026-08-08T15:44:19.581Z",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "fatal": false,
+  "masterExists": true,
+  "totalRows": 50,
+  "counts": {
+    "NEW": 29,
+    "UNCHANGED": 0,
+    "UPDATED": 0,
+    "CONFLICT": 0,
+    "REJECTED": 21
+  },
+  "catalogRelationCounts": {
+    "NEW": 49,
+    "EXISTING": 0,
+    "RELATED_VARIANT": 1,
+    "POSSIBLE_DUPLICATE": 0
+  },
+  "qualityStatusCounts": {
+    "CATALOG_READY": 0,
+    "CATALOG_READY_WITH_PENDING": 29,
+    "REVIEW_REQUIRED": 0,
+    "REJECTED": 21
+  },
+  "rows": [
+    {
+      "row": 2,
+      "id": "1",
+      "slug": "opium-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 3,
+      "id": "2",
+      "slug": "poison-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 4,
+      "id": "3",
+      "slug": "alien-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 5,
+      "id": "4",
+      "slug": "linterdit-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 6,
+      "id": "5",
+      "slug": "for-her-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 7,
+      "id": "6",
+      "slug": "leau-dissey-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 8,
+      "id": "7",
+      "slug": "eternity-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 9,
+      "id": "8",
+      "slug": "burberry-her-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 10,
+      "id": "9",
+      "slug": "daisy-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 11,
+      "id": "10",
+      "slug": "spicebomb-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 12,
+      "id": "11",
+      "slug": "invictus-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 13,
+      "id": "12",
+      "slug": "wanted-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 14,
+      "id": "13",
+      "slug": "boss-bottled-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 15,
+      "id": "14",
+      "slug": "chloe-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 16,
+      "id": "15",
+      "slug": "tresor-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 17,
+      "id": "16",
+      "slug": "mon-guerlain-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 18,
+      "id": "17",
+      "slug": "beautiful-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 19,
+      "id": "18",
+      "slug": "philosykos-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 20,
+      "id": "19",
+      "slug": "do-son-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 21,
+      "id": "20",
+      "slug": "portrait-of-a-lady-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 22,
+      "id": "21",
+      "slug": "musc-ravageur-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 23,
+      "id": "22",
+      "slug": "ambre-sultan-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 24,
+      "id": "23",
+      "slug": "wonderwood-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 25,
+      "id": "24",
+      "slug": "colonia-edc",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 26,
+      "id": "25",
+      "slug": "halfeti-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 27,
+      "id": "26",
+      "slug": "no1-masculine-parfum",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 28,
+      "id": "27",
+      "slug": "more-than-words-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 29,
+      "id": "28",
+      "slug": "jubilation-xxv-man-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 30,
+      "id": "29",
+      "slug": "jubilation-25-woman-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 31,
+      "id": "30",
+      "slug": "angels-share-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 32,
+      "id": "31",
+      "slug": "straight-to-heaven-white-cristal-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 33,
+      "id": "32",
+      "slug": "eau-rose-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 34,
+      "id": "33",
+      "slug": "not-a-perfume-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 35,
+      "id": "34",
+      "slug": "rien-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 36,
+      "id": "35",
+      "slug": "taif-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 37,
+      "id": "36",
+      "slug": "bat-extrait",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 38,
+      "id": "37",
+      "slug": "bleu-de-chanel-parfum",
+      "catalog_relation": "RELATED_VARIANT",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": "current_catalog_distinct_concentration",
+      "candidates": [
+        {
+          "slug": "bleu-de-chanel-edp",
+          "nombre": "Bleu de Chanel EDP",
+          "marca": "Chanel",
+          "detectedConcentration": "EDP"
+        }
+      ]
+    },
+    {
+      "row": 39,
+      "id": "38",
+      "slug": "green-irish-tweed-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 40,
+      "id": "39",
+      "slug": "millesime-imperial-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 41,
+      "id": "40",
+      "slug": "habit-rouge-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
+      "source": null
+    },
+    {
+      "row": 42,
+      "id": "41",
+      "slug": "coco-mademoiselle-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 43,
+      "id": "42",
+      "slug": "luna-rossa-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 44,
+      "id": "43",
+      "slug": "signorina-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 45,
+      "id": "44",
+      "slug": "leau-dissey-pour-homme-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 46,
+      "id": "45",
+      "slug": "amen-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 47,
+      "id": "46",
+      "slug": "phantom-edt",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 48,
+      "id": "47",
+      "slug": "loewe-001-woman-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 49,
+      "id": "48",
+      "slug": "loewe-001-man-edp",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 50,
+      "id": "49",
+      "slug": "black-afgano-extrait",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    },
+    {
+      "row": 51,
+      "id": "50",
+      "slug": "new-york-signature-scent-pure-perfume",
+      "catalog_relation": "NEW",
+      "quality_status": "REJECTED",
+      "status": "REJECTED",
+      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "source": null
+    }
+  ]
+}

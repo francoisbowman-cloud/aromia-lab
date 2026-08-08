@@ -34,7 +34,12 @@ export const SCHEMA_VERSION = "2026-08-fase3-v1";
 
 export const LIST_FIELDS = [
   "top_notes",
-  "heart_notes",
+  // F3.7 — 'middle_notes' es el nombre de contrato vigente (batch-002.csv y
+  // el master consolidado de Cowork ya lo usan). 'heart_notes' (nombre de
+  // batch-001.csv y del schema original de Code) queda como alias legacy
+  // de INGESTA — ver LEGACY_COLUMN_ALIASES / applyLegacyColumnAliases más
+  // abajo. Internamente el pipeline solo conoce 'middle_notes'.
+  "middle_notes",
   "base_notes",
   "accords",
   "season",
@@ -66,7 +71,7 @@ export const REQUIRED_FIELDS = [
   "gender",
   "family",
   "top_notes",
-  "heart_notes",
+  "middle_notes",
   "base_notes",
   "source_url",
   "status",
@@ -281,6 +286,32 @@ export function isValidImageRef(value) {
  * todavía — eso es responsabilidad de normalize.mjs.
  * Lanza CsvParseError en CSV mal formado (no lo traga en silencio).
  */
+/**
+ * F3.7 — nombres de columna legacy -> nombre de contrato vigente. Se
+ * aplica en `readCsv` (no en un call site puntual) para que TODO lector
+ * de CSV del pipeline vea el nombre canónico sin tener que acordarse de
+ * llamar un wrapper — es inofensivo para CSVs que no tienen la columna
+ * legacy (el catálogo actual de Aromia, PERFUMES_INITIAL_50.csv, etc. no
+ * tienen ninguna de estas columnas, así que no se ven afectados).
+ */
+export const LEGACY_COLUMN_ALIASES = Object.freeze({ heart_notes: "middle_notes" });
+
+/** Si el header trae el nombre legacy y NO el canónico, renombra la columna en header y en cada fila. Si trae ambos, no toca nada (la legacy queda como columna extra, se ve como unexpectedColumns). */
+export function applyLegacyColumnAliases(header, rows) {
+  let newHeader = header;
+  let newRows = rows;
+  for (const [legacy, canonical] of Object.entries(LEGACY_COLUMN_ALIASES)) {
+    if (newHeader.includes(legacy) && !newHeader.includes(canonical)) {
+      newHeader = newHeader.map((h) => (h === legacy ? canonical : h));
+      newRows = newRows.map((row) => {
+        const { [legacy]: value, ...rest } = row;
+        return { ...rest, [canonical]: value };
+      });
+    }
+  }
+  return { header: newHeader, rows: newRows };
+}
+
 export function readCsv(path) {
   const raw = readFileSync(path, "utf-8");
   let records;
@@ -298,7 +329,7 @@ export function readCsv(path) {
     throw err;
   }
   const header = records.length > 0 ? Object.keys(records[0]) : [];
-  return { header, rows: records };
+  return applyLegacyColumnAliases(header, records);
 }
 
 export function writeCsv(path, header, rows) {

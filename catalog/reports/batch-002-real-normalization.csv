@@ -1,0 +1,4 @@
+row,id,slug,field,from,to,reason
+37,36,bat-extrait,concentration,Extrait de Parfum,Extrait,alias de concentración conocido normalizado a forma canónica
+50,49,black-afgano-extrait,concentration,Extrait de Parfum,Extrait,alias de concentración conocido normalizado a forma canónica
+51,50,new-york-signature-scent-pure-perfume,concentration,Pure Perfume 30%,Pure Perfume 30%,"concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación"

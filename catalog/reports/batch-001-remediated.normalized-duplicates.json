@@ -1,9 +1,9 @@
 {
-  "batch": "batch-001.normalized",
-  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001.normalized.csv",
+  "batch": "batch-001-remediated.normalized",
+  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001-remediated.normalized.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-08T15:52:46.931Z",
+  "generatedAt": "2026-08-08T15:44:17.991Z",
   "totalRows": 25,
   "kept": 25,
   "rejectedExactDuplicates": 0,

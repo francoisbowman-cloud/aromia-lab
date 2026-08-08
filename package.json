@@ -9,6 +9,7 @@
     "catalog:prepare": "node scripts/catalog/prepare-import.mjs",
     "catalog:import": "node scripts/catalog/import.mjs",
     "catalog:calibrate": "node scripts/catalog/calibrate.mjs",
+    "catalog:apply-remediation": "node scripts/catalog/apply-remediation.mjs",
     "catalog:test": "npm --prefix scripts/catalog test"
   }
 }

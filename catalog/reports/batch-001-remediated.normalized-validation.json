@@ -1,9 +1,9 @@
 {
-  "batch": "batch-001",
-  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\imports\\batch-001.csv",
+  "batch": "batch-001-remediated.normalized",
+  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001-remediated.normalized.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-08T15:52:46.889Z",
+  "generatedAt": "2026-08-08T15:44:17.963Z",
   "fatal": false,
   "header": [
     "id",
@@ -46,9 +46,9 @@
   "unexpectedColumns": [],
   "fileIssues": [],
   "totalRows": 25,
-  "okRows": 13,
-  "warningRows": 2,
-  "errorRows": 10,
+  "okRows": 22,
+  "warningRows": 1,
+  "errorRows": 2,
   "rows": [
     {
       "row": 2,
@@ -115,47 +115,15 @@
       "row": 8,
       "id": "7",
       "slug": "armani-code-parfum",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 9,
       "id": "8",
       "slug": "naxos-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 10,
@@ -194,43 +162,22 @@
       "row": 12,
       "id": "11",
       "slug": "explorer-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 13,
       "id": "12",
       "slug": "scandal-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 14,
       "id": "13",
       "slug": "the-one-for-men-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 15,
@@ -243,35 +190,15 @@
       "row": 16,
       "id": "15",
       "slug": "vibrant-leather-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "price_segment",
-          "message": "/price_segment must be equal to one of the allowed values"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 17,
       "id": "16",
       "slug": "cloud-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "price_segment",
-          "message": "/price_segment must be equal to one of the allowed values"
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 18,
@@ -291,15 +218,8 @@
       "row": 20,
       "id": "19",
       "slug": "ani-extrait",
-      "level": "warning",
-      "issues": [
-        {
-          "severity": "warning",
-          "code": "non_standard_concentration",
-          "field": "concentration",
-          "message": "'Extrait de Parfum' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."
-        }
-      ]
+      "level": "info",
+      "issues": []
     },
     {
       "row": 21,
@@ -347,15 +267,8 @@
       "row": 26,
       "id": "25",
       "slug": "replica-jazz-club-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "issues": []
     }
   ]
 }

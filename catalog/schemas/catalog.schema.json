@@ -13,7 +13,7 @@
     "gender",
     "family",
     "top_notes",
-    "heart_notes",
+    "middle_notes",
     "base_notes",
     "source_url",
     "status"
@@ -61,7 +61,12 @@
       "minItems": 1,
       "description": "En el CSV viaja como texto separado por ';' (misma convención que Aromia). El parser lo expande a array. minItems:1 agregado tras el batch-001 real — sin esto, un array vacío pasaba silenciosamente aunque el campo esté en REQUIRED_FIELDS (bug real, ver SCHEMA_COMPARISON.md #G)."
     },
-    "heart_notes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "middle_notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "F3.7 — nombre de contrato vigente (antes 'heart_notes', que era el nombre de batch-001.csv y del schema original de Code). 'heart_notes' se acepta como alias legacy de INGESTA — un CSV que traiga esa columna en vez de 'middle_notes' se renombra automáticamente al leerlo (lib.mjs#applyLegacyColumnAliases), sin tocar el CSV original. Ver SCHEMA_COMPARISON.md #N."
+    },
     "base_notes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
     "accords": { "type": "array", "items": { "type": "string" } },
     "season": {
@@ -146,7 +151,7 @@
     }
   },
   "notes": {
-    "csv": "Los campos array (top_notes, heart_notes, base_notes, accords, season, occasion) viajan en el CSV como texto separado por ';', igual que en PERFUMES_INITIAL_50.csv. created_at/updated_at son opcionales de entrada — si faltan, normalize.mjs los completa con la fecha de procesamiento del batch.",
+    "csv": "Los campos array (top_notes, middle_notes, base_notes, accords, season, occasion) viajan en el CSV como texto separado por ';', igual que en PERFUMES_INITIAL_50.csv. created_at/updated_at son opcionales de entrada — si faltan, normalize.mjs los completa con la fecha de procesamiento del batch.",
     "pending_sentinel": "Cowork usa el string literal 'pending' (no una celda vacía) para marcar un campo que investigó pero no pudo verificar con confianza, en vez de inventar el dato. El pipeline lo trata como equivalente a null/vacío en validate.mjs y normalize.mjs para TODOS los campos salvo los listados en lib.mjs#PENDING_IS_VALID_VALUE_FIELDS (hoy solo review_status, donde 'pending' es un valor de enum legítimo, no un sentinel de dato faltante). Ver catalog/schemas/SCHEMA_COMPARISON.md #K.",
     "enums_asumidos_confirmados_2026-08-07": "Contra el batch-001 real (25 filas): gender y price_segment llegan en español (no inglés como se había asumido — corregido). affiliate_status y visual_quality necesitaron un valor nuevo cada uno ('no-applicable', 'not-audited' — agregados). concentration dejó de ser un enum cerrado (Roja Parfums 'Parfum Cologne' no encaja en ningún estándar). data_confidence y review_status coincidieron exactamente con lo asumido, sin cambios. season, occasion, longevity y sillage siguen SIN CONFIRMAR — 25/25 filas del batch-001 real llegaron pending en los cuatro, así que el enum asumido para longevity/sillage (ver arriba) todavía no fue puesto a prueba contra un valor real."
   }

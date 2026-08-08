@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-08-08T15:44:17.334Z",
+  "appliedLog": [
+    {
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "field": "family",
+      "value": "Woody Aromatic",
+      "sourceType": "fragrantica-secondary",
+      "sourceUrl": "https://www.fragrantica.com/perfume/Giorgio-Armani/Armani-Code-Parfum-75126.html"
+    },
+    {
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "field": "top_notes",
+      "value": "Bergamot;Bergamot Leaf",
+      "sourceType": "fragrantica-secondary",
+      "sourceUrl": "https://www.fragrantica.com/perfume/Giorgio-Armani/Armani-Code-Parfum-75126.html"
+    },
+    {
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "field": "middle_notes",
+      "value": "Iris;Aldehydes;Clary Sage;Orris",
+      "sourceType": "fragrantica-secondary",
+      "sourceUrl": "https://www.fragrantica.com/perfume/Giorgio-Armani/Armani-Code-Parfum-75126.html"
+    },
+    {
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "field": "base_notes",
+      "value": "Tonka Bean;Cedar",
+      "sourceType": "fragrantica-secondary",
+      "sourceUrl": "https://www.fragrantica.com/perfume/Giorgio-Armani/Armani-Code-Parfum-75126.html"
+    },
+    {
+      "id": "8",
+      "slug": "naxos-edp",
+      "field": "family",
+      "value": "Aromatic, Spicy",
+      "sourceType": "official",
+      "sourceUrl": "https://www.xerjoff.com/en-us/products/naxos-eau-de-parfum"
+    },
+    {
+      "id": "9",
+      "slug": "side-effect-edp",
+      "field": "family",
+      "value": "Ambery, Spicy",
+      "sourceType": "official",
+      "sourceUrl": "https://us.initioparfums.com/products/side-effect-hair-perfume"
+    },
+    {
+      "id": "11",
+      "slug": "explorer-edp",
+      "field": "family",
+      "value": "Woody Aromatic",
+      "sourceType": "fragrantica-secondary+official-description",
+      "sourceUrl": "https://www.montblanc.com/en-us/fragrances/collection/explorer"
+    },
+    {
+      "id": "12",
+      "slug": "scandal-edp",
+      "field": "family",
+      "value": "Chypre",
+      "sourceType": "official",
+      "sourceUrl": "https://www.jeanpaulgaultier.com/us/en_US/p/range-scandal/scandal-eau-de-parfum-000000000065176518"
+    },
+    {
+      "id": "12",
+      "slug": "scandal-edp",
+      "field": "subfamily",
+      "value": "Gourmand",
+      "sourceType": "official",
+      "sourceUrl": "https://www.jeanpaulgaultier.com/us/en_US/p/range-scandal/scandal-eau-de-parfum-000000000065176518"
+    },
+    {
+      "id": "13",
+      "slug": "the-one-for-men-edt",
+      "field": "family",
+      "value": "Aromatic Woody",
+      "policy": "official-source-priority",
+      "reason": "Decisión A (F3.7): conflicto family entre dolcegabbana.com (oficial: 'Aromatic Woody notes', 3 notas sin nivel) y Fragrantica ('Woody Spicy', pirámide completa). Fuente oficial tiene prioridad para hechos estructurales — se aplica 'Aromatic Woody'. Fragrantica se conserva documentada en notes, no se descarta."
+    },
+    {
+      "id": "16",
+      "slug": "cloud-edp",
+      "field": "base_notes",
+      "value": "Cashmere",
+      "sourceType": "official",
+      "sourceUrl": "https://arianagrandefragrances.com/products/cloud"
+    },
+    {
+      "id": "25",
+      "slug": "replica-jazz-club-edt",
+      "field": "family",
+      "value": "Ambery",
+      "sourceType": "official",
+      "sourceUrl": "https://www.maisonmargiela-fragrances.us/fragrances/replica-eau-de-toilette/replica-jazz-club/MM008.html"
+    },
+    {
+      "id": "25",
+      "slug": "replica-jazz-club-edt",
+      "field": "subfamily",
+      "value": "Woody",
+      "sourceType": "official",
+      "sourceUrl": "https://www.maisonmargiela-fragrances.us/fragrances/replica-eau-de-toilette/replica-jazz-club/MM008.html"
+    }
+  ],
+  "notAppliedLog": [
+    {
+      "id": "3",
+      "slug": "santal-33-edp",
+      "fields": [
+        "family"
+      ],
+      "status": "factual-core-pending",
+      "reason": "valor nuevo vacío/pending — sin cambio real que aplicar"
+    },
+    {
+      "id": "3",
+      "slug": "santal-33-edp",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "preserved-as-flat-list",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    },
+    {
+      "id": "8",
+      "slug": "naxos-edp",
+      "fields": [
+        "subfamily"
+      ],
+      "status": "completed",
+      "reason": "valor nuevo vacío/pending — sin cambio real que aplicar"
+    },
+    {
+      "id": "8",
+      "slug": "naxos-edp",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "flagged-not-applied",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    },
+    {
+      "id": "9",
+      "slug": "side-effect-edp",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "preserved-as-flat-list",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    },
+    {
+      "id": "11",
+      "slug": "explorer-edp",
+      "fields": [
+        "subfamily"
+      ],
+      "status": "partial",
+      "reason": "valor nuevo vacío/pending — sin cambio real que aplicar"
+    },
+    {
+      "id": "11",
+      "slug": "explorer-edp",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "confirmed-no-change",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    },
+    {
+      "id": "12",
+      "slug": "scandal-edp",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "confirmed-partial",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    },
+    {
+      "id": "13",
+      "slug": "the-one-for-men-edt",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "confirmed-with-flagged-conflict",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    },
+    {
+      "id": "25",
+      "slug": "replica-jazz-club-edt",
+      "fields": [
+        "top_notes",
+        "middle_notes",
+        "base_notes"
+      ],
+      "status": "confirmed-no-change",
+      "reason": "status marca no-aplicar (dato ya confirmado o valor no es un dato real insertable)"
+    }
+  ]
+}

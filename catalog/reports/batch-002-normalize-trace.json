@@ -1,0 +1,51 @@
+{
+  "batch": "batch-002",
+  "sourceFile": "../../catalog/imports/batch-002.csv",
+  "outputFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-002.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-08T15:44:19.508Z",
+  "totalRows": 50,
+  "rowsChanged": 3,
+  "changes": [
+    {
+      "row": 37,
+      "id": "36",
+      "slug": "bat-extrait",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Extrait de Parfum",
+          "to": "Extrait",
+          "reason": "alias de concentración conocido normalizado a forma canónica"
+        }
+      ]
+    },
+    {
+      "row": 50,
+      "id": "49",
+      "slug": "black-afgano-extrait",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Extrait de Parfum",
+          "to": "Extrait",
+          "reason": "alias de concentración conocido normalizado a forma canónica"
+        }
+      ]
+    },
+    {
+      "row": 51,
+      "id": "50",
+      "slug": "new-york-signature-scent-pure-perfume",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Pure Perfume 30%",
+          "to": "Pure Perfume 30%",
+          "reason": "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación"
+        }
+      ]
+    }
+  ]
+}

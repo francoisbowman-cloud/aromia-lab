@@ -1,0 +1,415 @@
+{
+  "batch": "batch-002.normalized",
+  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-002.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-08T15:44:19.567Z",
+  "totalRows": 50,
+  "kept": 50,
+  "rejectedExactDuplicates": 0,
+  "needsReviewConflicts": 0,
+  "variantFamiliesDetected": 0,
+  "variantConflicts": [],
+  "decisions": [
+    {
+      "row": 2,
+      "id": "1",
+      "slug": "opium-edp",
+      "duplicateKey": "yves saint laurent|opium|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 3,
+      "id": "2",
+      "slug": "poison-edt",
+      "duplicateKey": "dior|poison|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 4,
+      "id": "3",
+      "slug": "alien-edp",
+      "duplicateKey": "thierry mugler|alien|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 5,
+      "id": "4",
+      "slug": "linterdit-edp",
+      "duplicateKey": "givenchy|l'interdit|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 6,
+      "id": "5",
+      "slug": "for-her-edp",
+      "duplicateKey": "narciso rodriguez|for her|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 7,
+      "id": "6",
+      "slug": "leau-dissey-edt",
+      "duplicateKey": "issey miyake|l'eau d'issey|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 8,
+      "id": "7",
+      "slug": "eternity-edp",
+      "duplicateKey": "calvin klein|eternity|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 9,
+      "id": "8",
+      "slug": "burberry-her-edp",
+      "duplicateKey": "burberry|her|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 10,
+      "id": "9",
+      "slug": "daisy-edt",
+      "duplicateKey": "marc jacobs|daisy|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 11,
+      "id": "10",
+      "slug": "spicebomb-edt",
+      "duplicateKey": "viktor & rolf|spicebomb|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 12,
+      "id": "11",
+      "slug": "invictus-edt",
+      "duplicateKey": "paco rabanne|invictus|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 13,
+      "id": "12",
+      "slug": "wanted-edt",
+      "duplicateKey": "azzaro|wanted|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 14,
+      "id": "13",
+      "slug": "boss-bottled-edt",
+      "duplicateKey": "hugo boss|boss bottled|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 15,
+      "id": "14",
+      "slug": "chloe-edp",
+      "duplicateKey": "chloe|chloe|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 16,
+      "id": "15",
+      "slug": "tresor-edp",
+      "duplicateKey": "lancome|tresor|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 17,
+      "id": "16",
+      "slug": "mon-guerlain-edp",
+      "duplicateKey": "guerlain|mon guerlain|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 18,
+      "id": "17",
+      "slug": "beautiful-edp",
+      "duplicateKey": "estee lauder|beautiful|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 19,
+      "id": "18",
+      "slug": "philosykos-edt",
+      "duplicateKey": "diptyque|philosykos|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 20,
+      "id": "19",
+      "slug": "do-son-edt",
+      "duplicateKey": "diptyque|do son|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 21,
+      "id": "20",
+      "slug": "portrait-of-a-lady-edp",
+      "duplicateKey": "frederic malle|portrait of a lady|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 22,
+      "id": "21",
+      "slug": "musc-ravageur-edp",
+      "duplicateKey": "frederic malle|musc ravageur|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 23,
+      "id": "22",
+      "slug": "ambre-sultan-edp",
+      "duplicateKey": "serge lutens|ambre sultan|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 24,
+      "id": "23",
+      "slug": "wonderwood-edp",
+      "duplicateKey": "comme des garcons|wonderwood|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 25,
+      "id": "24",
+      "slug": "colonia-edc",
+      "duplicateKey": "acqua di parma|colonia|edc",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 26,
+      "id": "25",
+      "slug": "halfeti-edp",
+      "duplicateKey": "penhaligon's|halfeti|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 27,
+      "id": "26",
+      "slug": "no1-masculine-parfum",
+      "duplicateKey": "clive christian|no. 1 masculine|parfum",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 28,
+      "id": "27",
+      "slug": "more-than-words-edp",
+      "duplicateKey": "xerjoff|more than words|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 29,
+      "id": "28",
+      "slug": "jubilation-xxv-man-edp",
+      "duplicateKey": "amouage|jubilation xxv man|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 30,
+      "id": "29",
+      "slug": "jubilation-25-woman-edp",
+      "duplicateKey": "amouage|jubilation 25 woman|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 31,
+      "id": "30",
+      "slug": "angels-share-edp",
+      "duplicateKey": "by kilian|angels' share|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 32,
+      "id": "31",
+      "slug": "straight-to-heaven-white-cristal-edp",
+      "duplicateKey": "by kilian|straight to heaven, white cristal|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 33,
+      "id": "32",
+      "slug": "eau-rose-edt",
+      "duplicateKey": "diptyque|eau rose|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 34,
+      "id": "33",
+      "slug": "not-a-perfume-edp",
+      "duplicateKey": "juliette has a gun|not a perfume|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 35,
+      "id": "34",
+      "slug": "rien-edp",
+      "duplicateKey": "etat libre d'orange|rien|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 36,
+      "id": "35",
+      "slug": "taif-edp",
+      "duplicateKey": "ormonde jayne|ta'if|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 37,
+      "id": "36",
+      "slug": "bat-extrait",
+      "duplicateKey": "zoologist perfumes|bat|extrait",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 38,
+      "id": "37",
+      "slug": "bleu-de-chanel-parfum",
+      "duplicateKey": "chanel|bleu de chanel|parfum",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 39,
+      "id": "38",
+      "slug": "green-irish-tweed-edp",
+      "duplicateKey": "creed|green irish tweed|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 40,
+      "id": "39",
+      "slug": "millesime-imperial-edp",
+      "duplicateKey": "creed|millesime imperial|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 41,
+      "id": "40",
+      "slug": "habit-rouge-edt",
+      "duplicateKey": "guerlain|habit rouge|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 42,
+      "id": "41",
+      "slug": "coco-mademoiselle-edp",
+      "duplicateKey": "chanel|coco mademoiselle|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 43,
+      "id": "42",
+      "slug": "luna-rossa-edt",
+      "duplicateKey": "prada|luna rossa|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 44,
+      "id": "43",
+      "slug": "signorina-edp",
+      "duplicateKey": "salvatore ferragamo|signorina|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 45,
+      "id": "44",
+      "slug": "leau-dissey-pour-homme-edt",
+      "duplicateKey": "issey miyake|l'eau d'issey pour homme|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 46,
+      "id": "45",
+      "slug": "amen-edt",
+      "duplicateKey": "mugler|a*men|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 47,
+      "id": "46",
+      "slug": "phantom-edt",
+      "duplicateKey": "rabanne|phantom|edt",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 48,
+      "id": "47",
+      "slug": "loewe-001-woman-edp",
+      "duplicateKey": "loewe|001 woman|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 49,
+      "id": "48",
+      "slug": "loewe-001-man-edp",
+      "duplicateKey": "loewe|001 man|edp",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 50,
+      "id": "49",
+      "slug": "black-afgano-extrait",
+      "duplicateKey": "nasomatto|black afgano|extrait",
+      "decision": "keep",
+      "reason": null
+    },
+    {
+      "row": 51,
+      "id": "50",
+      "slug": "new-york-signature-scent-pure-perfume",
+      "duplicateKey": "bond no. 9|new york signature scent|pure perfume 30%",
+      "decision": "keep",
+      "reason": null
+    }
+  ]
+}
