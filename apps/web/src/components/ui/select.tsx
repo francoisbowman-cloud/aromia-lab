@@ -10,7 +10,7 @@ const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HT
     return (
       <select
         className={cn(
-          "h-11 w-full rounded border border-input bg-surface px-3 py-2 font-sans text-sm text-ink outline-none transition focus:border-gold disabled:cursor-not-allowed disabled:opacity-50",
+          "h-11 w-full rounded border border-input bg-surface px-3 py-2 font-sans text-sm text-ink outline-none transition focus:border-gold focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         ref={ref}

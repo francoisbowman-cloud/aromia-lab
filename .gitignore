@@ -1,2 +1,9 @@
 .claude/
 .scratch/
+
+# Fase 2 — piloto de auditoría de imágenes vía OpenAI API
+/node_modules
+.env
+.env.*
+!.env.example
+reports/image-audits/*.tmp

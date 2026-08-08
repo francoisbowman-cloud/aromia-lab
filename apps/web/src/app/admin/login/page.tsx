@@ -40,25 +40,31 @@ export default function AdminLoginPage() {
         <h1 className="font-display text-2xl text-ink">AROMIA</h1>
         <p className="mt-1 font-sans text-sm text-muted">Panel de administración</p>
 
-        <label className="mt-6 block font-sans text-[11px] uppercase tracking-[.1em] text-muted">
+        <label
+          htmlFor="admin-password"
+          className="mt-6 block font-sans text-[11px] uppercase tracking-[.1em] text-muted"
+        >
           Contraseña
         </label>
         <input
+          id="admin-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-2 w-full rounded border border-line bg-surface px-3 py-2 font-sans text-sm text-ink outline-none focus:border-gold"
+          className="mt-2 w-full rounded border border-line bg-surface px-3 py-2 font-sans text-sm text-ink outline-none focus:border-gold focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           autoFocus
         />
 
         {error ? (
-          <p className="mt-3 font-sans text-sm text-destructive">{error}</p>
+          <p role="alert" className="mt-3 font-sans text-sm text-destructive">
+            {error}
+          </p>
         ) : null}
 
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full rounded-full bg-gold-contrast px-6 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white disabled:opacity-50"
+          className="mt-6 w-full rounded-full bg-gold-contrast px-6 py-3 font-sans text-[12px] font-semibold uppercase tracking-[.08em] text-white outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
         >
           {loading ? "Ingresando…" : "Ingresar"}
         </button>

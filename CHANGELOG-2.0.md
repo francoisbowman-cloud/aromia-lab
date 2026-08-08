@@ -1180,3 +1180,289 @@ del perfume. tsc/eslint limpios, sin errores de consola.
 
 [PR #7](https://github.com/francoisbowman-cloud/aromia-lab/pull/7), sin
 fusionar todavía.
+
+## 2026-08-05 — Code (Claude Code) — Fase 1 del sistema de imágenes
+
+**Fundación del sistema de imágenes de Aromia**, a partir de la sección
+correspondiente de `AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md`.
+Restricciones explícitas de Brey respetadas: no se procesó ninguno de los 50
+perfumes, no se generó ninguna imagen, no se reemplazó nada en producción, no
+hubo migración masiva ni cambio de diseño público.
+
+- Manual operativo incorporado íntegro a
+  `docs/operations/AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md`,
+  verificado por hash MD5 contra el original entregado por Brey — enlazado
+  como documento rector desde `CLAUDE.md`.
+- Auditoría del estado actual: `docs/images/CURRENT-STATE-AUDIT.md` (10
+  secciones: config de `next/image`, componentes que renderizan imágenes,
+  dónde vive el dato hoy, catálogo real verificado en vivo, hotlinking
+  externo, cobertura de mockups editoriales OVL, recorte/color de fondo,
+  caminos de carga del admin, imágenes rotas conocidas, riesgos).
+- `data/image-inventory.csv`: 100 filas (50 `catalog-primary` + 50
+  `editorial-hero`), 20 columnas, generado con datos reales de
+  `GET /api/perfumes` en producción — no con el CSV desactualizado.
+- Arquitectura de activos (`docs/images/IMAGE-ARCHITECTURE.md`): estructura
+  de carpetas, convención de nombre
+  `{slug}--{rol}--v{NN}--{ancho}x{alto}.{formato}`, presupuestos de peso por
+  rol.
+- `schemas/` propio para metadatos de imagen: JSON Schema (no Zod, para
+  seguir la misma convención que `schema/perfume.schema.json`) validado con
+  `ajv`/`ajv-formats`.
+- Paquete aislado `scripts/images/` (`@aromia/image-scripts`, `sharp` +
+  `ajv` + `csv-parse`), separado de `apps/web`/`apps/api` para no inflar sus
+  builds Docker — scripts de validación de solo lectura
+  (`validate-metadata`, `validate-names`, `validate-aspect-ratio`,
+  `check-missing`, `find-duplicates`, `validate-weight`,
+  `find-external-urls`, `report`) más `optimize.mjs`, el único que escribe
+  archivos (sin carpeta de salida por defecto, nunca sobrescribe sin
+  `--force`). Todos probados de punta a punta contra el estado real del
+  repo y una imagen de prueba real descargada de Amazon. CVE alto detectado
+  en `sharp <0.35.0` vía `npm audit`, corregido actualizando a `^0.35.3`
+  antes de cerrar la fase.
+- Briefs de delegación completos para Cowork
+  (`delegations/COWORK-IMAGE-INVENTORY-BRIEF.md`) y ChatGPT
+  (`delegations/CHATGPT-VISUAL-AUDIT-BRIEF.md`), sobre las 50 filas del
+  catálogo completo — sin disparar todavía.
+- `docs/images/PILOT-PLAN.md`: plan detallado por perfume para un piloto de
+  5 (Aventus, Baccarat Rouge 540 EDP, Sauvage EDP, Black Opium EDP, Erba
+  Pura), con datos reales verificados — preparado, sin ejecutar.
+- Mergeado a `main` vía squash en
+  [PR #4](https://github.com/francoisbowman-cloud/aromia-lab/pull/4)
+  (`80a6d05`, título `feat(images): fundación del sistema de imágenes`). CI
+  verde, Railway confirmado desplegando ese commit en `web` y `api`, sitio
+  verificado en vivo, rama `feat/image-pipeline-foundation` borrada
+  automáticamente por `delete_branch_on_merge`.
+- Cierre de estado documentado en `ESTADO-aromia.md` (decisión #98) vía
+  [PR #5](https://github.com/francoisbowman-cloud/aromia-lab/pull/5)
+  (`docs: cerrar Fase 1 del sistema de imágenes`, squash, `9b68f7a`). `main`
+  confirmado como única rama remota tras ambos merges.
+
+## 2026-08-05 — Code (Claude Code) — Fase 2, piloto de 5 perfumes (en curso)
+
+Trabajo en rama local `assets/image-pilot-01` (sin push todavía). Misión:
+piloto visual controlado de los mismos 5 perfumes de `PILOT-PLAN.md`, sin
+tocar los otros 45, sin cambios masivos, sin modificar producción antes de
+auditoría + aprobación visual + preview.
+
+- Paquetes de delegación acotados al piloto (commit `6d5a2b6`):
+  `delegations/FASE-2-COWORK-PILOTO-5-PERFUMES.md` y
+  `delegations/FASE-2-CHATGPT-PILOTO-5-PERFUMES.md` — mismo formato y
+  criterios de los briefs de Fase 1, alcance reducido a 5 filas en vez de
+  50.
+- **Automatización de la auditoría visual vía OpenAI API** (commit
+  `944ac65`), para no depender de que Brey copie/pegue manualmente 5
+  imágenes y 5 resultados: `config/image-audit-pilot.json` (criterios
+  transcritos sin reinterpretar desde el brief), `schemas/image-audit.schema.json`
+  (salida estructurada, validada con `ajv`), `scripts/audit-image-pilot.mjs`
+  (`npm run images:audit-pilot -- --dry-run|--limit-usd=N`), runbook en
+  `docs/images/API-AUDIT-RUNBOOK.md`. Nuevo `package.json` en la raíz del
+  repo (antes no existía) — aislado, no afecta los Dockerfiles de
+  `apps/web`/`apps/api` (cada uno tiene su propio root directory en
+  Railway).
+- Invariantes de seguridad del script: `OPENAI_API_KEY` solo desde
+  `process.env` (nunca impresa/guardada), nunca escribe
+  `data/image-inventory.csv` (genera una propuesta aparte,
+  `data/image-inventory.audit-proposal.csv`), nunca invoca `optimize.mjs`,
+  límite de gasto configurable revisado antes de cada llamada, imágenes
+  temporales fuera del repo borradas al terminar.
+- Modo seco verificado y aprobado por Brey antes de cualquier llamada real:
+  5/5 mockups OVL presentes, 5/5 URLs de catálogo alcanzables, 5 solicitudes
+  independientes previstas, ninguna llamada a la API, inventario oficial
+  intacto.
+- Pendiente al cierre de esta entrada: primera ejecución real con límite de
+  gasto de $0.50 USD, aprobada por Brey pero corrida en el mismo tramo de
+  trabajo — ver entrada siguiente si ya se ejecutó, o `reports/image-audits/`
+  en el repo para el resultado más reciente.
+
+## 2026-08-05 — Code (Claude Code) — Fase 2, primera ejecución real del piloto (commit local `8a6a2db`)
+
+Sigue en `assets/image-pilot-01`, sin push. Brey aprobó el modo seco y
+autorizó la ejecución real (`npm run images:audit-pilot -- --limit-usd=0.50`).
+
+- **Resultado: 5/5 perfumes procesados, coste estimado $0.06891** de $0.50
+  (12,743 tokens de entrada + 5,428 de salida, modelo `gpt-4.1`).
+  Clasificaciones: Aventus **D** (sustituir — la foto usa etiqueta
+  impresa, la referencia real lleva placa metálica grabada), Baccarat
+  Rouge 540 EDP **A** (usar tal cual), Sauvage EDP **D** (sustituir — la
+  caja de la foto dice "Eau de Toilette", no EDP: confusión de variante
+  real detectada por el propio modelo), Black Opium EDP **D** (sustituir
+  — frasco recortado + caja en la composición), Erba Pura **A** (usar tal
+  cual). Resultados completos en `reports/image-audits/*.json` y
+  `_summary.json`; propuesta de inventario (no el oficial) en
+  `data/image-inventory.audit-proposal.csv`.
+- **Duda abierta, no resuelta automáticamente:** el texto de la respuesta
+  para Baccarat Rouge 540 EDP la describe en un punto como "Extrait de
+  Parfum" (variante real distinta a la Eau de Parfum que etiqueta el
+  catálogo) — no disparó el chequeo automático porque marca + nombre sí
+  aparecen en la respuesta. Confirmar la variante real del frasco
+  fotografiado antes de aprobar el tratamiento "usar tal cual".
+- **Dos bugs reales encontrados y corregidos en el camino** (dos intentos
+  previos a este resultado, ninguno tocó el inventario oficial):
+  1. La API de OpenAI en modo `strict` exige que `required` liste *todas*
+     las propiedades del schema — faltaba `risk_flags`; la solicitud se
+     rechazaba con 400 antes de generar nada (coste $0, primer intento).
+     Fix en `schemas/image-audit.schema.json`.
+  2. `writeProposalCsv()` hacía `split(",")` ingenuo sobre
+     `data/image-inventory.csv`, que tiene comas dentro de campos `notes`
+     entrecomillados — corrompía esas filas. Mismo error que este mismo
+     documento ya advierte para `PERFUMES_INITIAL_50.csv` (ver sección
+     "Contenido — Sprint 1"). Reemplazado por `csv-parse`/`csv-stringify`
+     (RFC 4180 real) — nuevas dependencias en el `package.json` de raíz.
+     Verificado: la propuesta final tiene 100 filas, 20 columnas,
+     exactamente 5 cambiadas, el resto byte-idéntico al oficial.
+  3. La heurística de verificación de variante comparaba el nombre
+     completo del perfume como substring exacto contra solo dos campos de
+     texto de la respuesta — dio un falso positivo con Baccarat Rouge 540
+     EDP en el segundo intento (el modelo no repitió "EDP" en esos dos
+     campos), deteniendo el piloto después de procesar solo Aventus. Se
+     corrigió para normalizar acentos/mayúsculas y buscar marca + palabra
+     significativa del nombre en toda la respuesta. Ese mismo intento
+     también reveló que el coste/resultado de una llamada ya pagada se
+     descartaba si el piloto se detenía justo después — corregido para
+     que el registro se guarde siempre, incluso si el piloto se detiene a
+     continuación.
+- Confirmado al cierre: `data/image-inventory.csv` (oficial),
+  `PERFUMES_INITIAL_50.csv` (raíz y `apps/api/data/`) intactos;
+  `scripts/images/optimize.mjs` no se invocó; sin push al remoto;
+  `OPENAI_API_KEY` usada solo desde variable de entorno en el momento de
+  la llamada, nunca impresa/guardada/logueada.
+- Pendiente: resultado real de Cowork (Paso 2 del plan de Fase 2, todavía
+  no recibido); consolidación de ambos resultados; propuesta de
+  tratamiento con aprobación explícita antes de procesar ninguna imagen.
+
+## 2026-08-06 — Code (Claude Code) — Fase 2, cierre
+
+- Resultado real de Cowork recibido e incorporado como parte oficial de
+  la fase: 4/5 `catalog-primary` (Aventus, Baccarat Rouge 540, Black
+  Opium, Erba Pura) evaluados `affiliate-approved` — fondo blanco de
+  estudio, botella completa, sin watermark. Sauvage EDP quedó en
+  `license_status: unknown` con el mismo hallazgo que la auditoría
+  ChatGPT: la etiqueta dice "Eau de Toilette", no "Eau de Parfum".
+  Consolidado (junto con `operational_review` y la auditoría ChatGPT) en
+  `reports/image-audits/consolidated-pilot.{json,md}`.
+- **Baccarat Rouge 540 EDP** — verificación humana (Brey) cierra el
+  conflicto EDP/Extrait que ambas auditorías habían mencionado de forma
+  independiente sin poder resolverlo: la variante es correctamente EDP.
+  Cerrado como "conservar", ya no provisional.
+- **Sauvage EDP → Sauvage EDT** — resolución final tras tres correcciones
+  sucesivas en la misma sesión, documentadas en
+  `SAUVAGE_HUMAN_VERIFICATION.resolution_history` dentro de
+  `scripts/consolidate-image-audit-pilot.mjs`:
+  1. Brey verificó inicialmente que imagen y enlace correspondían a
+     Sauvage EDP (2026-08-05) — dado por correcto.
+  2. Inspección visual directa del archivo real (descarga a scratchpad
+     de sesión, no a producción) mostró la caja con el texto "EAU DE
+     TOILETTE" en toda su superficie — contradice (1). Reportado a Brey.
+  3. Brey confirmó "Es un EDT, ajústalo" (2026-08-06) — la imagen SIEMPRE
+     fue correcta, el nombre de catálogo era el que estaba mal. Se
+     intentó sourcing de una foto EDP real en Amazon como alternativa (2
+     búsquedas, 1 candidato rechazado por decir "Parfum" en vez de "Eau
+     de Parfum" — evidencia en
+     `reports/image-audits/treatment-evidence/`), pero horas después,
+     con la instrucción de cierre de Fase 2, Brey decidió corregir el
+     **nombre** en vez de sustituir la imagen: "Sauvage EDP" → "Sauvage
+     EDT" en `PERFUMES_INITIAL_50.csv` (raíz y `apps/api/data/`),
+     `data/image-inventory.csv` (`perfume_name` + `license_status` →
+     `affiliate-approved`), `config/image-audit-pilot.json` y
+     `apps/web/src/lib/editorialImages.ts` (alt text). Slug
+     (`sauvage-edp`), `image_url`, enlace de afiliado de Amazon e
+     historial de auditoría (`reports/image-audits/sauvage-edp.json`,
+     `result` y `operational_review` originales) se conservan intactos
+     — la corrección vive en una capa de consolidación separada, no
+     sobrescribe los datos crudos de la auditoría.
+- **Aventus y Black Opium EDP** — defectos visuales confirmados por
+  inspección directa (etiqueta de papel plana vs. placa metálica en
+  Aventus; base del frasco fuera del encuadre fuente en Black Opium, ni
+  siquiera recortable — probado con `sharp`), pero por instrucción
+  explícita quedan **diferidos, sin bloquear el avance general**: se
+  conservan imagen y enlace de Amazon actuales, sin sourcing de fuente
+  nueva. Documentado en `reports/image-audits/treatment-plan.{json,md}`
+  para una ronda de pulido visual futura.
+- Validación final: 5/5 schemas de auditoría válidos, 100/100 filas de
+  `data/image-inventory.csv` consistentes contra la propuesta, CSVs de
+  raíz y `apps/api/data/` sincronizados byte a byte. Detalle en
+  `reports/image-audits/validation-report.json`.
+- Cero llamadas nuevas a la API en todo este cierre (costo total del
+  piloto se mantiene en $0.06891 de $0.50 autorizados).
+  `scripts/images/optimize.mjs` no se invocó. Ningún `image_url` fue
+  modificado en ningún perfume.
+
+## 2026-08-06 (2) — Code (Claude Code) — primer ítem del backlog general: CSV de catálogo desincronizado
+
+Arranque de la continuación autónoma post-Fase-2, ordenando el backlog de
+`docs/images/CURRENT-STATE-AUDIT.md` por severidad y ejecutando el primer
+riesgo "Medio" sin dependencias externas: `PERFUMES_INITIAL_50.csv` (raíz
+y `apps/api/data/`) tenía 38 filas, no las 50 reales de producción desde
+la expansión Dior del 30/07 (decisión #89) — riesgo real de reseed
+destructivo si alguien lo usaba sin saber que estaba desactualizado.
+
+`scripts/sync-perfumes-csv-from-production.mjs` (nuevo) regenera ambas
+copias desde `GET https://api-production-fe2f.up.railway.app/api/perfumes`
+(público, solo lectura) — 50/50 filas, 0 inválidas contra
+`schema/perfume.schema.json`, raíz y `apps/api/data/` byte-idénticos.
+Incluye la corrección de nombre de Sauvage EDT (decisión #99) como
+excepción explícita, para no revertirla al sincronizar desde producción
+(que todavía tiene el nombre viejo hasta que se aplique el rename ahí).
+
+Commit `e6b45d8` en `assets/image-pilot-01` (agregado a
+[PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) por
+practicidad de merge — mismo archivo que el rename de Sauvage, tema
+distinto). Sin llamadas de escritura a la API, sin `image_url` modificado.
+
+## 2026-08-06 (3) — Code (Claude Code) — segundo ítem del backlog: `next/image` en `EditorialMood`
+
+Segundo riesgo del backlog de `docs/images/CURRENT-STATE-AUDIT.md`
+("sin optimización, `next/image` no usado" — Medio), cerrado
+**parcialmente y a propósito**. Al leer `PerfumeCard.tsx`/
+`HeroEditorPick.tsx` para planear la migración completa, se descubrió
+que su imagen visible real no es un `<img>` sino un `div` con
+`background-image`, alimentado por un análisis de canvas
+(`useProductImageCrop.ts`) que recorta el margen blanco y detecta el
+color de fondo — arquitectura deliberada (ya documentada como tal en el
+propio audit), no un descuido. Migrar esos dos componentes a
+`next/image` exige rediseñar ese sistema de recorte — eso es una
+decisión de producto nueva, no un swap mecánico, y no se ejecuta sin
+aprobación.
+
+Se migró en cambio `EditorialMood.tsx` (`Image` con `fill` +
+`object-contain`), el único caso limpio: imágenes locales
+(`public/ovl/*.jpg`), sin recorte por canvas ni CORS. Verificado en vivo
+contra `apps/web` con `NEXT_PUBLIC_API_URL` apuntando a producción:
+`tsc`/`eslint` limpios, `/_next/image?url=%2Fovl%2Faventus.jpg...`
+responde 200 con bytes reales (168KB), sin errores de consola;
+confirmado que la imagen carga correctamente forzando `loading="eager"`
+en el elemento (640×800 real) — el "no carga" inicial visto en el pane
+automatizado era lazy-loading nativo esperando un scroll real, no un
+bug.
+
+Commit `7226d5e` en `assets/image-pilot-01` / [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6).
+
+## 2026-08-06 (4) — Code (Claude Code) — tercer ítem del backlog: foco visible y accessible names
+
+Categoría "accesibilidad" del roadmap general — criterio objetivo
+(WCAG), no requiere decisión de producto. El sitio ya tenía el patrón
+correcto establecido (`focus-visible:ring-2 focus-visible:ring-ring
+focus-visible:ring-offset-2`) en botones, links del Magazine, opciones
+del quiz y el toggle de tema, pero todos los `<input>`/`<select>` de
+texto lo tenían inconsistente o ausente — encontrado auditando
+`outline-none` en todo `apps/web/src` (16 archivos revisados):
+
+- `ui/input.tsx`, `ui/select.tsx` (base shadcn/ui), `NewsletterForm.tsx`,
+  `admin/ImageUpload.tsx`: solo `focus:border-gold` (cambio de borde
+  1px) — insuficiente como único indicador (WCAG 2.4.7).
+- `admin/TagInput.tsx`: `outline-none` sin ningún reemplazo — foco
+  totalmente invisible en el input de notas y en el botón "×" de tag.
+- `admin/login/page.tsx`: **el campo de contraseña del login de admin**
+  sin foco visible, `<label>` sin asociar (`htmlFor`/`id`), error de
+  login sin `role="alert"`.
+
+Mismo patrón ya probado en el sitio, aplicado a los 6 archivos. Sumado
+`aria-label` donde el único texto disponible era un placeholder (email
+del newsletter, tags, URL externa del admin).
+
+Verificado con navegación real por teclado (Tab, no `.focus()`
+programático — `:focus-visible` no dispara igual): `document.activeElement`
+sobre `#admin-password` confirma `matches(':focus-visible') === true` y
+un box-shadow de anillo real. tsc/eslint limpios.
+
+Commit `a2f3ff8` en `assets/image-pilot-01` / [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) — última vez que se suma un tema nuevo a esta rama; el próximo ítem del backlog abre rama propia.

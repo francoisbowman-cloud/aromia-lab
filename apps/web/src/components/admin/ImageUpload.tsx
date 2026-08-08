@@ -78,9 +78,10 @@ export function ImageUpload({
           <input
             type="url"
             placeholder="https://…"
+            aria-label="URL externa de la imagen"
             value={urlDraft}
             onChange={(e) => setUrlDraft(e.target.value)}
-            className="min-w-0 flex-1 rounded border border-admin-border px-2 py-1.5 font-sans text-xs outline-none focus:border-gold"
+            className="min-w-0 flex-1 rounded border border-admin-border px-2 py-1.5 font-sans text-xs outline-none focus:border-gold focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
           <button
             type="button"
