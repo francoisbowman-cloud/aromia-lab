@@ -1047,3 +1047,47 @@ commit, sin dejar rastro en el diff.
 
 [PR #12](https://github.com/francoisbowman-cloud/aromia-lab/pull/12),
 sin fusionar todavía.
+
+## 2026-08-07 (4) — Code (Claude Code) — experiencia visual: loading.tsx en el resultado del quiz, cierre del backlog general
+
+Continuación autónoma del backlog general (rama nueva
+`visual/loading-states-01`), última categoría pendiente. `catalogo`,
+`catalogo/[slug]`, `magazine` y `magazine/[slug]` ya tenían
+`loading.tsx`; `quiz/resultado/[perfil]` — el momento de más inversión
+del usuario en el sitio, recién completó 6 preguntas — mostraba
+pantalla en blanco durante el fetch.
+
+Agregado reutilizando `PerfumeCardSkeleton` (mismo componente que
+`catalogo/loading.tsx`) en la estructura real de la página. Verificado
+en vivo renderizando el componente en una ruta temporal (Next no
+expone forma simple de forzar `loading.tsx` vía navegación normal;
+ruta borrada antes del commit): `aria-busy="true"`, 29 elementos con
+pulse, 6 tarjetas skeleton. Se descartó por separado un error de
+consola que resultó ser un digest obsoleto de una prueba anterior
+(confirmado contra los logs reales del dev server, todo 200).
+
+Deliberadamente NO se agregó `loading.tsx` a la home: 6+ secciones
+visualmente distintas, un skeleton fiel ahí es una tarea de diseño
+real (`DESIGN-CHECKLIST.md`), no un swap mecánico — riesgo de verse
+peor que no tener loading state si queda desalineado.
+
+[PR #13](https://github.com/francoisbowman-cloud/aromia-lab/pull/13),
+sin fusionar.
+
+**Cierre del backlog general de esta sesión** — las 8 categorías
+pedidas quedan cubiertas, cada una en su propia rama/PR sin fusionar
+(esperando revisión de Brey):
+
+| Categoría | PR | Estado |
+|---|---|---|
+| Estabilidad y arquitectura | [#12](https://github.com/francoisbowman-cloud/aromia-lab/pull/12) | `global-error.tsx` |
+| Experiencia visual | [#13](https://github.com/francoisbowman-cloud/aromia-lab/pull/13) | loading.tsx del quiz |
+| SEO técnico | [#7](https://github.com/francoisbowman-cloud/aromia-lab/pull/7) | metadata + JSON-LD por producto |
+| Rendimiento | [#8](https://github.com/francoisbowman-cloud/aromia-lab/pull/8) | preconnect + limpieza de deps |
+| Accesibilidad | [#6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) | foco visible + accessible names |
+| Confianza/legalidad | [#9](https://github.com/francoisbowman-cloud/aromia-lab/pull/9) | disclosure de afiliado |
+| Analítica/conversión | [#11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11) | 3 eventos GA4 reales |
+| Pruebas/documentación | [#11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11) | Vitest, 19 tests |
+
+Ningún cambio se fusionó a `main` ni se aplicó a producción — todo
+queda en ramas separadas, listo para revisión.
