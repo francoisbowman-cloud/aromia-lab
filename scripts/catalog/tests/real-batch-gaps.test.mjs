@@ -73,11 +73,17 @@ test("review_status='pending' es un valor de enum legítimo, NO se convierte a n
   assert.equal(typed.review_status, "pending");
 });
 
-test("top_notes vacío/pending en un campo requerido SÍ bloquea (minItems:1) — no pasa en silencio", () => {
+test("F3.7B — top_notes pending por sí solo YA NO bloquea si heart/base_notes tienen contenido (PARTIAL, no UNKNOWN)", () => {
   const file = tmpCsv(`${HEADER}\n${row({ topNotes: "pending" })}\n`);
   const { report } = validateBatch(file);
+  assert.equal(report.rows[0].level, "info");
+});
+
+test("F3.7B — sin NINGUNA nota (top/heart/base/accords todos vacíos) SÍ bloquea (estructura UNKNOWN)", () => {
+  const file = tmpCsv(`${HEADER}\n${row({ topNotes: "pending", heartNotes: "pending", baseNotes: "pending" })}\n`);
+  const { report } = validateBatch(file);
   assert.equal(report.rows[0].level, "error");
-  assert.ok(report.rows[0].issues.some((i) => i.field === "top_notes" || i.message.includes("top_notes")));
+  assert.ok(report.rows[0].issues.some((i) => i.code === "no_notes_information"));
 });
 
 test("gender/price_segment en español (masculino/femenino/unisex, económico/medio/premium/lujo) validan sin error", () => {

@@ -199,6 +199,46 @@ la regla favorece `RELATED_VARIANT` — bloquear de más es peor que dejar
 pasar una variante legítima que un humano puede revisar después en el
 maestro. Ver `tests/f36-calibration-rules.test.mjs`.
 
+**#N — `middle_notes` reemplaza a `heart_notes` como campo canónico
+(F3.7).** El contrato vigente (confirmado por `batch-002.csv` real y el
+master consolidado de Cowork) usa `middle_notes`; `heart_notes` era el
+nombre original de Code y de `batch-001.csv`. Se acepta como alias legacy
+de INGESTA — `lib.mjs#applyLegacyColumnAliases`, aplicado dentro de
+`readCsv`, renombra la columna automáticamente sin tocar el CSV original.
+
+**#O — `price_status` (nuevo, F3.7B).** No existía en ningún batch de
+Cowork. Se agregó al schema como campo opcional derivado
+(`lib.mjs#derivePriceStatus`): `verified` si `price_segment` tiene un
+valor real, `unverified` si no — nunca se infiere leyendo `notes` en
+prosa libre (instrucción explícita del brief). `source_conflict` y
+`not_applicable` solo se asignan si un batch futuro los entrega
+explícitos en una columna `price_status` propia; el pipeline nunca los
+adivina. Ver decisión 5 del brief F3.7B — evidencia de dos lotes
+(`price_segment` pending: 20% en Batch 001, 58% en Batch 002) respalda
+que esta distinción de tres/cuatro estados es necesaria a futuro, aunque
+en esta pasada solo se implementaron los dos estados derivables sin leer
+prosa.
+
+**#P — estructura de notas olfativas: PYRAMID/FLAT/PARTIAL/UNKNOWN
+(F3.7B).** `top_notes`/`middle_notes`/`base_notes` dejaron de exigirse
+individualmente (ya no tienen `minItems: 1` cada uno) — una marca puede
+legítimamente no separar la pirámide por niveles (confirmado en
+`santal-33-edp`, `side-effect-edp`, y 8 casos más de Batch 002). La
+validación real es compuesta (`lib.mjs#classifyNoteStructure`): bloquea
+(`no_notes_information`, error) únicamente si NINGÚN campo de notas tiene
+contenido — ni pirámide, ni parcial, ni lista plana en `accords`. Nunca
+se infiere top/middle/base a partir de `accords` (no se inventa una
+pirámide que la fuente no publicó).
+
+**#Q — `family` dejó de ser un campo requerido (F3.7B).** Sigue siendo
+valioso (jerarquía de fuente esperada: sitio oficial > fuente secundaria
+de confianza > pending) pero, si es el único campo factual pendiente y el
+resto de campos críticos está sano, ya no fuerza `REJECTED` —
+`quality_status` puede ser `CATALOG_READY_WITH_PENDING`. Impacto medido
+contra datos reales: de las 30 filas `REJECTED` originales entre Batch
+001 y Batch 002, 18 (60%) lo estaban únicamente por esta razón — ver
+`catalog/reports/f37b-rejection-classification.csv`.
+
 ## 3. Qué NO se resuelve en esta fase
 
 - No se crea la migración `011_extend_concentracion_enum.sql` (#A) — se

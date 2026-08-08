@@ -3,7 +3,7 @@
   "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001.normalized.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-08T15:52:46.931Z",
+  "generatedAt": "2026-08-08T20:25:03.580Z",
   "totalRows": 25,
   "kept": 25,
   "rejectedExactDuplicates": 0,

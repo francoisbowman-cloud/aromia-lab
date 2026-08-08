@@ -21,6 +21,7 @@ import {
   warn,
   fail,
   isMainModule,
+  computeYields,
 } from "./lib.mjs";
 import { writeFileSync } from "node:fs";
 
@@ -99,6 +100,7 @@ export function prepareImport(rawFilePath) {
     .filter((i) => i.code === "invalid_image_url" || (i.code === "schema_violation" && /format "uri"/.test(i.message)));
 
   const needsHumanReview = diffReport.rows.filter((r) => r.status === "CONFLICT");
+  const yields = computeYields(diffReport.qualityStatusCounts, diffReport.totalRows);
 
   const summaryLines = [
     `# Resumen de batch — ${batchName}`,
@@ -127,6 +129,11 @@ export function prepareImport(rawFilePath) {
     "",
     `- catalog_relation — NEW: ${diffReport.catalogRelationCounts.NEW} | EXISTING: ${diffReport.catalogRelationCounts.EXISTING} | RELATED_VARIANT: ${diffReport.catalogRelationCounts.RELATED_VARIANT} | POSSIBLE_DUPLICATE: ${diffReport.catalogRelationCounts.POSSIBLE_DUPLICATE}`,
     `- quality_status — CATALOG_READY: ${diffReport.qualityStatusCounts.CATALOG_READY} | CATALOG_READY_WITH_PENDING: ${diffReport.qualityStatusCounts.CATALOG_READY_WITH_PENDING} | REVIEW_REQUIRED: ${diffReport.qualityStatusCounts.REVIEW_REQUIRED} | REJECTED: ${diffReport.qualityStatusCounts.REJECTED}`,
+    "",
+    "## Automation yield (F3.7B — dos métricas separadas, nunca combinadas)",
+    "",
+    `- **Decision Automation Yield** (filas que NO requieren que un humano decida algo — todo lo que no es REVIEW_REQUIRED): ${(yields.decisionAutomationYield * 100).toFixed(1)}%`,
+    `- **Data Completion Yield** (filas CATALOG_READY o CATALOG_READY_WITH_PENDING — salieron listas para stage sin intervención): ${(yields.dataCompletionYield * 100).toFixed(1)}%`,
     "",
     "## Distribuciones",
     "",

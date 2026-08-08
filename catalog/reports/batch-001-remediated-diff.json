@@ -1,17 +1,17 @@
 {
   "batch": "batch-001-remediated",
-  "generatedAt": "2026-08-08T15:44:18.012Z",
+  "generatedAt": "2026-08-08T20:20:32.026Z",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
   "fatal": false,
   "masterExists": true,
   "totalRows": 25,
   "counts": {
-    "NEW": 23,
+    "NEW": 25,
     "UNCHANGED": 0,
     "UPDATED": 0,
     "CONFLICT": 0,
-    "REJECTED": 2
+    "REJECTED": 0
   },
   "catalogRelationCounts": {
     "NEW": 23,
@@ -21,9 +21,9 @@
   },
   "qualityStatusCounts": {
     "CATALOG_READY": 0,
-    "CATALOG_READY_WITH_PENDING": 23,
+    "CATALOG_READY_WITH_PENDING": 25,
     "REVIEW_REQUIRED": 0,
-    "REJECTED": 2
+    "REJECTED": 0
   },
   "rows": [
     {
@@ -51,9 +51,9 @@
       "id": "3",
       "slug": "santal-33-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -119,9 +119,9 @@
       "id": "9",
       "slug": "side-effect-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {

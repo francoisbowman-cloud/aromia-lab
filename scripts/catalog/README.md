@@ -73,6 +73,16 @@ reescribirlos. Ver `diff.mjs#deriveLegacyStatus`.
 nunca bajan de `CATALOG_READY_WITH_PENDING` ni fuerzan revisión por sí
 solos — se mantienen en el schema, no se eliminan, pero no bloquean.
 
+**F3.7B:** `family` tampoco es requerido — sigue siendo valioso pero no
+bloquea por sí solo. `top_notes`/`middle_notes`/`base_notes` dejaron de
+exigirse individualmente: `lib.mjs#classifyNoteStructure` los clasifica
+como `PYRAMID`/`FLAT`/`PARTIAL`/`UNKNOWN` (una marca puede legítimamente
+no separar por niveles) — solo `UNKNOWN` (ni pirámide, ni parcial, ni
+lista plana en `accords`) bloquea. Dos métricas de automatización
+separadas (`lib.mjs#computeYields`, nunca combinadas):
+`decisionAutomationYield` (filas que no requieren que un humano decida
+algo) y `dataCompletionYield` (filas listas para stage sin intervención).
+
 ## Comandos
 
 Desde `scripts/catalog/`:
@@ -85,7 +95,7 @@ npm run diff           -- <csv-crudo>    # corre validate+normalize+dedupe+diff
 npm run prepare-import -- <csv-crudo>    # corre todo + escribe la propuesta y el resumen
 npm run import         -- --approved [--dry-run] [proposal.csv]
 npm run calibrate      -- <csv-crudo>    # auditoría de calibración (CSVs de revisión humana), ver abajo
-npm test                                 # 77 tests con node:test, sin dependencias externas
+npm test                                 # 99 tests con node:test, sin dependencias externas
 ```
 
 O desde la raíz del repo (mismo comportamiento, paths relativos a la raíz):
@@ -137,6 +147,14 @@ npm run catalog:test
   pipeline sin ningún ajuste nuevo: 29 aprobables, 21 `REJECTED` (mismo
   patrón de campos críticos pending, sin datos objetivamente incorrectos).
   Ver `catalog/reports/batch-002-real-summary.md`.
+- **F3.7B** — clasificó los 30 `REJECTED` originales (9+21):
+  18 `MODEL_REQUIREMENT_GAP` (el schema era más rígido que la realidad —
+  resueltos por las reglas de `family` opcional + estructura de notas),
+  10 `SOURCE_DOES_NOT_PUBLISH` (confirmado que la marca no publica
+  pirámide), 2 `REAL_RESEARCH_GAP`. Tras implementar las reglas
+  generales, `REJECTED` bajó a 1/25 (Batch 001 crudo) y **0/50** (Batch
+  002) — Decision Automation Yield y Data Completion Yield: **100%** en
+  Batch 002. Ver `catalog/reports/f37b-completeness-calibration-summary.md`.
 
 ## Tests
 
@@ -144,7 +162,7 @@ npm run catalog:test
 npm test
 ```
 
-77 tests con el test runner nativo de Node (`node:test`), sin Jest ni otras
+99 tests con el test runner nativo de Node (`node:test`), sin Jest ni otras
 dependencias de testing. `--test-concurrency=1` es obligatorio (no solo
 una opción de estilo) — varios tests escriben a los directorios reales de
 `catalog/`, y correrlos en paralelo produce fallos intermitentes no

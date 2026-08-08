@@ -3,7 +3,7 @@
   "file": "../../catalog/imports/batch-002.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-08T15:44:19.451Z",
+  "generatedAt": "2026-08-08T20:20:33.041Z",
   "fatal": false,
   "header": [
     "id",
@@ -46,15 +46,16 @@
   "unexpectedColumns": [],
   "fileIssues": [],
   "totalRows": 50,
-  "okRows": 29,
-  "warningRows": 0,
-  "errorRows": 21,
+  "okRows": 47,
+  "warningRows": 3,
+  "errorRows": 0,
   "rows": [
     {
       "row": 2,
       "id": "1",
       "slug": "opium-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -62,6 +63,7 @@
       "id": "2",
       "slug": "poison-edt",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -69,6 +71,7 @@
       "id": "3",
       "slug": "alien-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -76,6 +79,7 @@
       "id": "4",
       "slug": "linterdit-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -83,6 +87,7 @@
       "id": "5",
       "slug": "for-her-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -90,6 +95,7 @@
       "id": "6",
       "slug": "leau-dissey-edt",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -97,6 +103,7 @@
       "id": "7",
       "slug": "eternity-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -104,27 +111,23 @@
       "id": "8",
       "slug": "burberry-her-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 10,
       "id": "9",
       "slug": "daisy-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 11,
       "id": "10",
       "slug": "spicebomb-edt",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -132,6 +135,7 @@
       "id": "11",
       "slug": "invictus-edt",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -139,53 +143,31 @@
       "id": "12",
       "slug": "wanted-edt",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 14,
       "id": "13",
       "slug": "boss-bottled-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 15,
       "id": "14",
       "slug": "chloe-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 16,
       "id": "15",
       "slug": "tresor-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -193,6 +175,7 @@
       "id": "16",
       "slug": "mon-guerlain-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -200,77 +183,31 @@
       "id": "17",
       "slug": "beautiful-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 19,
       "id": "18",
       "slug": "philosykos-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 20,
       "id": "19",
       "slug": "do-son-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 21,
       "id": "20",
       "slug": "portrait-of-a-lady-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -278,45 +215,23 @@
       "id": "21",
       "slug": "musc-ravageur-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 23,
       "id": "22",
       "slug": "ambre-sultan-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 24,
       "id": "23",
       "slug": "wonderwood-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -324,27 +239,23 @@
       "id": "24",
       "slug": "colonia-edc",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 26,
       "id": "25",
       "slug": "halfeti-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 27,
       "id": "26",
       "slug": "no1-masculine-parfum",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -352,6 +263,7 @@
       "id": "27",
       "slug": "more-than-words-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -359,6 +271,7 @@
       "id": "28",
       "slug": "jubilation-xxv-man-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -366,66 +279,39 @@
       "id": "29",
       "slug": "jubilation-25-woman-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 31,
       "id": "30",
       "slug": "angels-share-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 32,
       "id": "31",
       "slug": "straight-to-heaven-white-cristal-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 33,
       "id": "32",
       "slug": "eau-rose-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 34,
       "id": "33",
       "slug": "not-a-perfume-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -433,6 +319,7 @@
       "id": "34",
       "slug": "rien-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -440,20 +327,16 @@
       "id": "35",
       "slug": "taif-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 37,
       "id": "36",
       "slug": "bat-extrait",
-      "level": "error",
+      "level": "warning",
+      "noteStructure": "PYRAMID",
       "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
         {
           "severity": "warning",
           "code": "non_standard_concentration",
@@ -466,21 +349,16 @@
       "row": 38,
       "id": "37",
       "slug": "bleu-de-chanel-parfum",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 39,
       "id": "38",
       "slug": "green-irish-tweed-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -488,6 +366,7 @@
       "id": "39",
       "slug": "millesime-imperial-edp",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
@@ -495,180 +374,80 @@
       "id": "40",
       "slug": "habit-rouge-edt",
       "level": "info",
+      "noteStructure": "PYRAMID",
       "issues": []
     },
     {
       "row": 42,
       "id": "41",
       "slug": "coco-mademoiselle-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 43,
       "id": "42",
       "slug": "luna-rossa-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 44,
       "id": "43",
       "slug": "signorina-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 45,
       "id": "44",
       "slug": "leau-dissey-pour-homme-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 46,
       "id": "45",
       "slug": "amen-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 47,
       "id": "46",
       "slug": "phantom-edt",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
     },
     {
       "row": 48,
       "id": "47",
       "slug": "loewe-001-woman-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 49,
       "id": "48",
       "slug": "loewe-001-man-edp",
-      "level": "error",
-      "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "top_notes",
-          "message": "/top_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "middle_notes",
-          "message": "/middle_notes must NOT have fewer than 1 items"
-        },
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "base_notes",
-          "message": "/base_notes must NOT have fewer than 1 items"
-        }
-      ]
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
     },
     {
       "row": 50,
       "id": "49",
       "slug": "black-afgano-extrait",
-      "level": "error",
+      "level": "warning",
+      "noteStructure": "PYRAMID",
       "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
         {
           "severity": "warning",
           "code": "non_standard_concentration",
@@ -681,14 +460,9 @@
       "row": 51,
       "id": "50",
       "slug": "new-york-signature-scent-pure-perfume",
-      "level": "error",
+      "level": "warning",
+      "noteStructure": "PYRAMID",
       "issues": [
-        {
-          "severity": "error",
-          "code": "schema_violation",
-          "field": "family",
-          "message": "/family must NOT have fewer than 1 characters"
-        },
         {
           "severity": "warning",
           "code": "non_standard_concentration",

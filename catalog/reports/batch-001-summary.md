@@ -1,20 +1,20 @@
 # Resumen de batch — batch-001
 
-Generado: 2026-08-08T01:09:54.122Z
+Generado: 2026-08-08T20:20:31.379Z
 
 ## Totales
 
 - Total de filas: 25
-- Válidas (pasan validate.mjs, con o sin warnings): 16
-- Rechazadas: 9
-- Nuevas (NEW): 16
+- Válidas (pasan validate.mjs, con o sin warnings): 24
+- Rechazadas: 1
+- Nuevas (NEW): 24
 - Actualizaciones propuestas (UPDATED): 0
 - Sin cambios (UNCHANGED): 0
 - Conflictos (requieren revisión humana): 0
 - Duplicados exactos dentro del batch: 0
 - Conflictos de duplicado dentro del batch (misma brand+name+concentration, datos distintos): 0
 - Warnings de validación: 1
-- Campos obligatorios incompletos detectados: 6
+- Campos obligatorios incompletos detectados: 0
 - Variantes de producto detectadas (misma marca+nombre, distinta concentración — no son conflicto, son productos legítimos): 0
 - URLs inválidas detectadas: 0
 
@@ -23,7 +23,12 @@ Generado: 2026-08-08T01:09:54.122Z
 `status` (arriba) es un valor derivado por compatibilidad — `catalog_relation` y `quality_status` son las dimensiones reales, independientes entre sí (ver README de scripts/catalog).
 
 - catalog_relation — NEW: 23 | EXISTING: 0 | RELATED_VARIANT: 2 | POSSIBLE_DUPLICATE: 0
-- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 16 | REVIEW_REQUIRED: 0 | REJECTED: 9
+- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 24 | REVIEW_REQUIRED: 0 | REJECTED: 1
+
+## Automation yield (F3.7B — dos métricas separadas, nunca combinadas)
+
+- **Decision Automation Yield** (filas que NO requieren que un humano decida algo — todo lo que no es REVIEW_REQUIRED): 100.0%
+- **Data Completion Yield** (filas CATALOG_READY o CATALOG_READY_WITH_PENDING — salieron listas para stage sin intervención): 96.0%
 
 ## Distribuciones
 

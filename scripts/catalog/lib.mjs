@@ -63,19 +63,19 @@ export const LIST_FIELDS = [
  */
 export const ENRICHMENT_FIELDS = ["season", "occasion", "longevity", "sillage"];
 
-export const REQUIRED_FIELDS = [
-  "id",
-  "brand",
-  "name",
-  "concentration",
-  "gender",
-  "family",
-  "top_notes",
-  "middle_notes",
-  "base_notes",
-  "source_url",
-  "status",
-];
+/**
+ * F3.7B — 'family', 'top_notes', 'middle_notes' y 'base_notes' salieron
+ * de este set (estaban acá desde Bloque A). Family sigue siendo valioso
+ * pero no debe forzar REJECTED por sí solo si es el único factual
+ * pendiente (regla 3 del brief F3.7B) — queda como campo opcional, su
+ * ausencia contribuye a CATALOG_READY_WITH_PENDING, no a REJECTED. Los
+ * tres campos de notas dejaron de exigirse individualmente porque una
+ * marca puede legítimamente no publicar una pirámide por niveles (regla
+ * 2) — la validación real ahora es compuesta: ver
+ * lib.mjs#classifyNoteStructure + validate.mjs (bloquea solo si NINGÚN
+ * campo de notas, ni siquiera accords, tiene contenido — UNKNOWN).
+ */
+export const REQUIRED_FIELDS = ["id", "brand", "name", "concentration", "gender", "source_url", "status"];
 
 /** F3.6 — dimensión de identidad: ¿qué relación tiene esta fila con lo ya existente? */
 export const CATALOG_RELATION = Object.freeze({
@@ -92,6 +92,76 @@ export const QUALITY_STATUS = Object.freeze({
   REVIEW_REQUIRED: "REVIEW_REQUIRED",
   REJECTED: "REJECTED",
 });
+
+/**
+ * F3.7B — dos métricas de automatización, deliberadamente separadas
+ * (nunca se combinan en un solo número, ver brief F3.7B regla 4):
+ *   - decisionAutomationYield: filas que NO necesitan que un humano
+ *     DECIDA algo (POSSIBLE_DUPLICATE, colisión de slug, pisar un
+ *     image_url existente) — todo lo que NO es REVIEW_REQUIRED.
+ *   - dataCompletionYield: filas que salieron listas para stage sin
+ *     ninguna intervención — CATALOG_READY o CATALOG_READY_WITH_PENDING.
+ * Un REJECTED cuenta como "no requiere decisión" (no es ambigüedad, es
+ * falta de dato) pero NO cuenta como "completo" — por eso hacen falta
+ * las dos métricas, una sola las confundiría.
+ */
+export function computeYields(qualityStatusCounts, totalRows) {
+  if (totalRows === 0) return { decisionAutomationYield: null, dataCompletionYield: null };
+  const reviewRequired = qualityStatusCounts.REVIEW_REQUIRED ?? 0;
+  const complete = (qualityStatusCounts.CATALOG_READY ?? 0) + (qualityStatusCounts.CATALOG_READY_WITH_PENDING ?? 0);
+  return {
+    decisionAutomationYield: (totalRows - reviewRequired) / totalRows,
+    dataCompletionYield: complete / totalRows,
+  };
+}
+
+/**
+ * F3.7B (regla 2) — estructura real de notas olfativas publicada por la
+ * fuente. No todas las marcas separan top/middle/base — algunas publican
+ * una lista plana (va a `accords`), algunas solo un subconjunto, algunas
+ * nada verificable. Nunca se infiere top/middle/base a partir de
+ * `accords` (no se inventa la pirámide) — esta clasificación es
+ * puramente descriptiva de lo que la fuente realmente publicó.
+ */
+export const NOTE_STRUCTURE = Object.freeze({
+  PYRAMID: "PYRAMID", // top + middle + base, los tres con contenido
+  FLAT: "FLAT", // accords con contenido, ningún nivel de la pirámide
+  PARTIAL: "PARTIAL", // 1 o 2 de los 3 niveles, sin los otros
+  UNKNOWN: "UNKNOWN", // nada — ni pirámide, ni parcial, ni accords
+});
+
+/** Clasifica la fila YA TIPADA (parseRawRow) — top_notes/middle_notes/base_notes/accords como arrays. */
+export function classifyNoteStructure(typedRow) {
+  const top = (typedRow.top_notes ?? []).length > 0;
+  const middle = (typedRow.middle_notes ?? []).length > 0;
+  const base = (typedRow.base_notes ?? []).length > 0;
+  const accords = (typedRow.accords ?? []).length > 0;
+  const tierCount = [top, middle, base].filter(Boolean).length;
+  if (tierCount === 3) return NOTE_STRUCTURE.PYRAMID;
+  if (tierCount === 0) return accords ? NOTE_STRUCTURE.FLAT : NOTE_STRUCTURE.UNKNOWN;
+  return NOTE_STRUCTURE.PARTIAL;
+}
+
+/**
+ * F3.7B (regla 5) — estado de verificación del precio, independiente del
+ * valor de `price_segment` en sí. Deliberadamente NO se infiere leyendo
+ * `notes` en prosa libre (instrucción explícita del brief) — solo
+ * distingue determinísticamente 'hay un price_segment con valor real' de
+ * 'no hay ninguno'. `source_conflict` y `not_applicable` solo se asignan
+ * si Cowork los entrega explícitos en una columna `price_status` propia
+ * en un batch futuro — el pipeline nunca los infiere por su cuenta.
+ */
+export const PRICE_STATUS = Object.freeze({
+  VERIFIED: "verified",
+  UNVERIFIED: "unverified",
+  SOURCE_CONFLICT: "source_conflict",
+  NOT_APPLICABLE: "not_applicable",
+});
+
+/** Deriva price_status determinísticamente a partir de price_segment — nunca lee `notes`. */
+export function derivePriceStatus(priceSegment) {
+  return priceSegment ? PRICE_STATUS.VERIFIED : PRICE_STATUS.UNVERIFIED;
+}
 
 /**
  * Set canónico conocido. NO es un enum bloqueante en catalog.schema.json

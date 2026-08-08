@@ -4,10 +4,192 @@
   "outputFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001-remediated.normalized.csv",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
-  "generatedAt": "2026-08-08T15:44:17.886Z",
+  "generatedAt": "2026-08-08T20:20:31.935Z",
   "totalRows": 25,
-  "rowsChanged": 4,
+  "rowsChanged": 25,
   "changes": [
+    {
+      "row": 2,
+      "id": "1",
+      "slug": "chanel-no5-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 3,
+      "id": "2",
+      "slug": "tobacco-vanille-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 4,
+      "id": "3",
+      "slug": "santal-33-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 5,
+      "id": "4",
+      "slug": "shalimar-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 6,
+      "id": "5",
+      "slug": "eros-parfum",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 7,
+      "id": "6",
+      "slug": "paradoxe-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 8,
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 9,
+      "id": "8",
+      "slug": "naxos-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 10,
+      "id": "9",
+      "slug": "side-effect-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 11,
+      "id": "10",
+      "slug": "212-vip-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 12,
+      "id": "11",
+      "slug": "explorer-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 13,
+      "id": "12",
+      "slug": "scandal-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 14,
+      "id": "13",
+      "slug": "the-one-for-men-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 15,
+      "id": "14",
+      "slug": "interlude-woman-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
     {
       "row": 16,
       "id": "15",
@@ -18,6 +200,12 @@
           "from": "economico",
           "to": "económico",
           "reason": "alias sin tilde normalizado a la forma canónica de Aromia"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
         }
       ]
     },
@@ -31,6 +219,38 @@
           "from": "economico",
           "to": "económico",
           "reason": "alias sin tilde normalizado a la forma canónica de Aromia"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 18,
+      "id": "17",
+      "slug": "gypsy-water-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 19,
+      "id": "18",
+      "slug": "percival-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
         }
       ]
     },
@@ -44,6 +264,64 @@
           "from": "Extrait de Parfum",
           "to": "Extrait",
           "reason": "alias de concentración conocido normalizado a forma canónica"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 21,
+      "id": "20",
+      "slug": "cedrat-boise-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 22,
+      "id": "21",
+      "slug": "born-in-roma-uomo-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 23,
+      "id": "22",
+      "slug": "terre-d-hermes-parfum",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 24,
+      "id": "23",
+      "slug": "vanilla-28-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
         }
       ]
     },
@@ -57,6 +335,25 @@
           "from": "Parfum Cologne",
           "to": "Parfum Cologne",
           "reason": "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 26,
+      "id": "25",
+      "slug": "replica-jazz-club-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
         }
       ]
     }

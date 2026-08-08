@@ -16,6 +16,8 @@ import {
   exactRowSignature,
   isValidImageRef,
   CONCENTRATION_ENUM,
+  classifyNoteStructure,
+  NOTE_STRUCTURE,
   REQUIRED_FIELDS,
   REPORTS_DIR,
   PIPELINE_VERSION,
@@ -119,6 +121,16 @@ export function validateBatch(filePath) {
       });
     }
 
+    const noteStructure = classifyNoteStructure(typed);
+    if (noteStructure === NOTE_STRUCTURE.UNKNOWN) {
+      issues.push({
+        severity: SEVERITY.ERROR,
+        code: "no_notes_information",
+        field: "top_notes",
+        message: "Sin pirámide (top/middle/base), sin lista plana en accords — no hay ninguna información de notas olfativas verificable. No basta con que falte la pirámide (eso es FLAT/PARTIAL, no bloquea); acá no hay nada registrado.",
+      });
+    }
+
     if (typed.concentration && !CONCENTRATION_ENUM.includes(typed.concentration)) {
       issues.push({
         severity: SEVERITY.WARNING,
@@ -171,7 +183,7 @@ export function validateBatch(filePath) {
         ? SEVERITY.WARNING
         : SEVERITY.INFO;
 
-    return { row: rowNumber, id: typed.id ?? null, slug: typed.slug ?? null, level, issues };
+    return { row: rowNumber, id: typed.id ?? null, slug: typed.slug ?? null, level, noteStructure, issues };
   });
 
   const errorRows = rowResults.filter((r) => r.level === SEVERITY.ERROR).length;

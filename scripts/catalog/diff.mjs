@@ -27,6 +27,8 @@ import {
   normalizeForKey,
   extractConcentrationFromName,
   parseRawRow,
+  derivePriceStatus,
+  isPendingSentinel,
   MASTER_CSV,
   CURRENT_AROMIA_CSV,
   REPORTS_DIR,
@@ -51,7 +53,14 @@ function loadMasterIndex(path) {
   const { header, rows } = readCsv(path);
   const byKey = new Map();
   const bySlug = new Map();
-  for (const row of rows) {
+  for (const rawRow of rows) {
+    // price_status (F3.7B) es un campo derivado — una fila del maestro
+    // escrita antes de que existiera no lo tiene, y compararlo tal cual
+    // contra un batchRow que SÍ lo trae (recién derivado por
+    // normalize.mjs) generaría un UPDATED falso en cada fila. Se deriva
+    // acá también, igual que en normalize.mjs, para comparar parejo.
+    const priceSegmentValue = isPendingSentinel(rawRow.price_segment) ? null : rawRow.price_segment || null;
+    const row = rawRow.price_status ? rawRow : { ...rawRow, price_status: derivePriceStatus(priceSegmentValue) };
     byKey.set(duplicateKey(row), row);
     if (row.slug) bySlug.set(row.slug, row);
   }

@@ -1,29 +1,29 @@
 {
   "batch": "batch-001",
-  "generatedAt": "2026-08-08T15:52:46.938Z",
+  "generatedAt": "2026-08-08T20:25:03.587Z",
   "pipelineVersion": "0.1.0",
   "schemaVersion": "2026-08-fase3-v1",
   "fatal": false,
   "masterExists": true,
   "totalRows": 25,
   "counts": {
-    "NEW": 16,
+    "NEW": 24,
     "UNCHANGED": 0,
     "UPDATED": 0,
     "CONFLICT": 0,
-    "REJECTED": 9
+    "REJECTED": 1
   },
   "catalogRelationCounts": {
-    "NEW": 23,
+    "NEW": 25,
     "EXISTING": 0,
-    "RELATED_VARIANT": 2,
+    "RELATED_VARIANT": 0,
     "POSSIBLE_DUPLICATE": 0
   },
   "qualityStatusCounts": {
     "CATALOG_READY": 0,
-    "CATALOG_READY_WITH_PENDING": 16,
+    "CATALOG_READY_WITH_PENDING": 24,
     "REVIEW_REQUIRED": 0,
-    "REJECTED": 9
+    "REJECTED": 1
   },
   "rows": [
     {
@@ -51,9 +51,9 @@
       "id": "3",
       "slug": "santal-33-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -70,19 +70,11 @@
       "row": 6,
       "id": "5",
       "slug": "eros-parfum",
-      "catalog_relation": "RELATED_VARIANT",
+      "catalog_relation": "NEW",
       "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
-      "reason": "Misma marca + mismo nombre base que 1 perfume(s) ya publicado(s), con concentración distinta o no confirmada en el catálogo actual (batch: 'Parfum') — variante relacionada, no duplicado (same brand + same normalized base name + distinct/unverified concentration = RELATED_VARIANT)",
-      "source": "current_catalog_distinct_concentration",
-      "candidates": [
-        {
-          "slug": "eros",
-          "nombre": "Eros",
-          "marca": "Versace",
-          "detectedConcentration": null
-        }
-      ]
+      "reason": null,
+      "source": null
     },
     {
       "row": 7,
@@ -109,9 +101,9 @@
       "id": "8",
       "slug": "naxos-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -119,9 +111,9 @@
       "id": "9",
       "slug": "side-effect-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -139,9 +131,9 @@
       "id": "11",
       "slug": "explorer-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -149,9 +141,9 @@
       "id": "12",
       "slug": "scandal-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -159,9 +151,9 @@
       "id": "13",
       "slug": "the-one-for-men-edt",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -189,9 +181,9 @@
       "id": "16",
       "slug": "cloud-edp",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     },
     {
@@ -248,19 +240,11 @@
       "row": 23,
       "id": "22",
       "slug": "terre-d-hermes-parfum",
-      "catalog_relation": "RELATED_VARIANT",
+      "catalog_relation": "NEW",
       "quality_status": "CATALOG_READY_WITH_PENDING",
       "status": "NEW",
-      "reason": "Misma marca + mismo nombre base que 1 perfume(s) ya publicado(s), con concentración distinta o no confirmada en el catálogo actual (batch: 'Parfum') — variante relacionada, no duplicado (same brand + same normalized base name + distinct/unverified concentration = RELATED_VARIANT)",
-      "source": "current_catalog_distinct_concentration",
-      "candidates": [
-        {
-          "slug": "terre-d-hermes-edt",
-          "nombre": "Terre d'Hermes EDT",
-          "marca": "Hermes",
-          "detectedConcentration": "EDT"
-        }
-      ]
+      "reason": null,
+      "source": null
     },
     {
       "row": 24,
@@ -287,9 +271,9 @@
       "id": "25",
       "slug": "replica-jazz-club-edt",
       "catalog_relation": "NEW",
-      "quality_status": "REJECTED",
-      "status": "REJECTED",
-      "reason": "Fila con errores de validación bloqueantes en campos críticos (ver reporte de validate.mjs)",
+      "quality_status": "CATALOG_READY_WITH_PENDING",
+      "status": "NEW",
+      "reason": null,
       "source": null
     }
   ]

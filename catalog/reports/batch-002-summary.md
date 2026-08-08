@@ -1,20 +1,20 @@
 # Resumen de batch — batch-002
 
-Generado: 2026-08-08T15:44:18.935Z
+Generado: 2026-08-08T20:20:32.604Z
 
 ## Totales
 
 - Total de filas: 50
-- Válidas (pasan validate.mjs, con o sin warnings): 29
-- Rechazadas: 21
-- Nuevas (NEW): 29
+- Válidas (pasan validate.mjs, con o sin warnings): 50
+- Rechazadas: 0
+- Nuevas (NEW): 50
 - Actualizaciones propuestas (UPDATED): 0
 - Sin cambios (UNCHANGED): 0
 - Conflictos (requieren revisión humana): 0
 - Duplicados exactos dentro del batch: 0
 - Conflictos de duplicado dentro del batch (misma brand+name+concentration, datos distintos): 0
-- Warnings de validación: 0
-- Campos obligatorios incompletos detectados: 16
+- Warnings de validación: 1
+- Campos obligatorios incompletos detectados: 0
 - Variantes de producto detectadas (misma marca+nombre, distinta concentración — no son conflicto, son productos legítimos): 0
 - URLs inválidas detectadas: 0
 
@@ -23,7 +23,12 @@ Generado: 2026-08-08T15:44:18.935Z
 `status` (arriba) es un valor derivado por compatibilidad — `catalog_relation` y `quality_status` son las dimensiones reales, independientes entre sí (ver README de scripts/catalog).
 
 - catalog_relation — NEW: 49 | EXISTING: 0 | RELATED_VARIANT: 1 | POSSIBLE_DUPLICATE: 0
-- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 29 | REVIEW_REQUIRED: 0 | REJECTED: 21
+- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 50 | REVIEW_REQUIRED: 0 | REJECTED: 0
+
+## Automation yield (F3.7B — dos métricas separadas, nunca combinadas)
+
+- **Decision Automation Yield** (filas que NO requieren que un humano decida algo — todo lo que no es REVIEW_REQUIRED): 100.0%
+- **Data Completion Yield** (filas CATALOG_READY o CATALOG_READY_WITH_PENDING — salieron listas para stage sin intervención): 100.0%
 
 ## Distribuciones
 
@@ -106,7 +111,7 @@ Ningún registro requiere revisión humana en este batch.
 ## Archivos generados
 
 - Propuesta de importación: C:\Users\user\Claude\Projects\aromia-catalog-pipeline\catalog\staging\batch-002.import-proposal.csv
-- Rechazados: C:\Users\user\Claude\Projects\aromia-catalog-pipeline\catalog\rejected\batch-002-rejected.csv
+- Rechazados: (ninguna fila rechazada en este batch)
 - Diff completo: catalog/reports/batch-002-diff.json
 - Validación del batch crudo (informativa, antes de normalizar): catalog/reports/batch-002-validation.json
 - Validación autoritativa (post-normalización — decide REJECTED): catalog/reports/batch-002.normalized-validation.json

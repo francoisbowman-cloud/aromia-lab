@@ -23,6 +23,7 @@ import {
   PRICE_SEGMENT_ALIASES,
   isPendingSentinel,
   PENDING_IS_VALID_VALUE_FIELDS,
+  derivePriceStatus,
   STAGING_DIR,
   REPORTS_DIR,
   PIPELINE_VERSION,
@@ -183,6 +184,16 @@ export function normalizeBatch(filePath) {
       out.updated_at = out.created_at;
     }
 
+    // price_status (F3.7B): derivado determinísticamente de price_segment,
+    // nunca leyendo `notes`. Si Cowork ya lo entrega explícito en el CSV
+    // (batch futuro con columna propia), se respeta tal cual — no se pisa.
+    if (!out.price_status || out.price_status.trim() === "" || isPendingSentinel(out.price_status)) {
+      const priceSegmentValue = isPendingSentinel(out.price_segment) ? null : out.price_segment || null;
+      const derived = derivePriceStatus(priceSegmentValue);
+      fieldChanges.push({ field: "price_status", from: out.price_status ?? "", to: derived, reason: "derivado determinísticamente de price_segment (nunca se lee notes)" });
+      out.price_status = derived;
+    }
+
     if (fieldChanges.length > 0) {
       changes.push({ row: rowNumber, id: out.id || null, slug: out.slug, fields: fieldChanges });
     }
@@ -190,8 +201,9 @@ export function normalizeBatch(filePath) {
     return out;
   });
 
+  const outputHeader = header.includes("price_status") ? header : [...header, "price_status"];
   const outCsvPath = join(STAGING_DIR, `${batchName}.normalized.csv`);
-  writeCsv(outCsvPath, header, normalizedRows);
+  writeCsv(outCsvPath, outputHeader, normalizedRows);
 
   const trace = {
     batch: batchName,
@@ -207,7 +219,7 @@ export function normalizeBatch(filePath) {
   const tracePath = join(REPORTS_DIR, `${batchName}-normalize-trace.json`);
   writeJson(tracePath, trace);
 
-  return { outCsvPath, tracePath, trace, normalizedRows, header };
+  return { outCsvPath, tracePath, trace, normalizedRows, header: outputHeader };
 }
 
 function main() {

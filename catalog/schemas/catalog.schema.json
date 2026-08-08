@@ -5,19 +5,7 @@
   "description": "Schema de una fila de batch entregado por Cowork (Fase 3 — Catalog Data Pipeline & Expansion 500). NO es el schema de la tabla `perfumes` de Postgres (ver schema/perfume.schema.json) — es el contrato de entrada del pipeline de importación. Ver catalog/schemas/SCHEMA_COMPARISON.md para el mapeo entre ambos y las incompatibilidades detectadas.",
   "type": "object",
   "additionalProperties": true,
-  "required": [
-    "id",
-    "brand",
-    "name",
-    "concentration",
-    "gender",
-    "family",
-    "top_notes",
-    "middle_notes",
-    "base_notes",
-    "source_url",
-    "status"
-  ],
+  "required": ["id", "brand", "name", "concentration", "gender", "source_url", "status"],
   "properties": {
     "id": {
       "type": "string",
@@ -42,9 +30,8 @@
       "description": "El batch-001 real de Cowork entrega directamente los valores en español de Aromia (masculino/femenino/unisex), no en inglés como se había asumido antes de ver datos reales. Ver SCHEMA_COMPARISON.md #B (corregido)."
     },
     "family": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Mapea a `familia_olfativa`. Freeform en ambos schemas — no hay enum cerrado."
+      "type": ["string", "null"],
+      "description": "Mapea a `familia_olfativa`. Freeform en ambos schemas — no hay enum cerrado. F3.7B: dejó de ser obligatorio — sigue siendo valioso pero, si es el único campo factual pendiente y el resto de campos críticos (identidad, concentración, provenance) están sanos, no fuerza REJECTED por sí solo. Jerarquía de fuente esperada (no forzada por el schema, es guía para Cowork): 1) sitio oficial de marca, 2) fuente secundaria especializada de confianza, 3) pending. Nunca se inventa."
     },
     "subfamily": { "type": ["string", "null"] },
     "launch_year": {
@@ -58,17 +45,23 @@
     "top_notes": {
       "type": "array",
       "items": { "type": "string" },
-      "minItems": 1,
-      "description": "En el CSV viaja como texto separado por ';' (misma convención que Aromia). El parser lo expande a array. minItems:1 agregado tras el batch-001 real — sin esto, un array vacío pasaba silenciosamente aunque el campo esté en REQUIRED_FIELDS (bug real, ver SCHEMA_COMPARISON.md #G)."
+      "description": "En el CSV viaja como texto separado por ';' (misma convención que Aromia). El parser lo expande a array. F3.7B: ya NO tiene minItems:1 individual — una marca puede legítimamente no separar la pirámide por niveles. La validación real es compuesta, ver lib.mjs#classifyNoteStructure — bloquea (error) solo si NINGÚN campo de notas (ni top/middle/base ni accords) tiene contenido (estructura UNKNOWN)."
     },
     "middle_notes": {
       "type": "array",
       "items": { "type": "string" },
-      "minItems": 1,
-      "description": "F3.7 — nombre de contrato vigente (antes 'heart_notes', que era el nombre de batch-001.csv y del schema original de Code). 'heart_notes' se acepta como alias legacy de INGESTA — un CSV que traiga esa columna en vez de 'middle_notes' se renombra automáticamente al leerlo (lib.mjs#applyLegacyColumnAliases), sin tocar el CSV original. Ver SCHEMA_COMPARISON.md #N."
+      "description": "F3.7 — nombre de contrato vigente (antes 'heart_notes', que era el nombre de batch-001.csv y del schema original de Code). 'heart_notes' se acepta como alias legacy de INGESTA — un CSV que traiga esa columna en vez de 'middle_notes' se renombra automáticamente al leerlo (lib.mjs#applyLegacyColumnAliases), sin tocar el CSV original. Ver SCHEMA_COMPARISON.md #N. F3.7B: sin minItems:1 individual, ver top_notes."
     },
-    "base_notes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-    "accords": { "type": "array", "items": { "type": "string" } },
+    "base_notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "F3.7B: sin minItems:1 individual — ver top_notes."
+    },
+    "accords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Lista plana de notas cuando la fuente no separa top/middle/base — junto con top_notes/middle_notes/base_notes determina NOTE_STRUCTURE (PYRAMID/FLAT/PARTIAL/UNKNOWN, ver lib.mjs#classifyNoteStructure). Nunca se usa para inferir una pirámide que la fuente no publicó."
+    },
     "season": {
       "type": "array",
       "items": {
@@ -92,6 +85,11 @@
       "type": ["string", "null"],
       "enum": ["económico", "medio", "premium", "lujo", null],
       "description": "Igual que gender: el batch-001 real entrega directamente los valores de `categoria_precio` de Aromia en español, no en inglés. No incluye precio numérico — Cowork no lo pide en esta fase. 'economico' sin tilde (variante real observada) se normaliza a 'económico' en normalize.mjs. Ver SCHEMA_COMPARISON.md #F (corregido)."
+    },
+    "price_status": {
+      "type": ["string", "null"],
+      "enum": ["verified", "unverified", "source_conflict", "not_applicable", null],
+      "description": "F3.7B — independiente de `price_segment`. No estaba en el schema de Cowork; el pipeline lo deriva determinísticamente si no viene informado (lib.mjs#derivePriceStatus: 'verified' si price_segment tiene valor, 'unverified' si no — NUNCA se infiere leyendo `notes` en prosa). 'source_conflict' y 'not_applicable' solo se asignan si Cowork los entrega explícitos en esta columna en un batch futuro. Ver SCHEMA_COMPARISON.md #O."
     },
     "amazon_url": {
       "type": ["string", "null"],

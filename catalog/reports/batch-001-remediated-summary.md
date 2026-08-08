@@ -1,13 +1,13 @@
 # Resumen de batch — batch-001-remediated
 
-Generado: 2026-08-08T15:44:18.026Z
+Generado: 2026-08-08T20:20:32.034Z
 
 ## Totales
 
 - Total de filas: 25
-- Válidas (pasan validate.mjs, con o sin warnings): 23
-- Rechazadas: 2
-- Nuevas (NEW): 23
+- Válidas (pasan validate.mjs, con o sin warnings): 25
+- Rechazadas: 0
+- Nuevas (NEW): 25
 - Actualizaciones propuestas (UPDATED): 0
 - Sin cambios (UNCHANGED): 0
 - Conflictos (requieren revisión humana): 0
@@ -23,7 +23,12 @@ Generado: 2026-08-08T15:44:18.026Z
 `status` (arriba) es un valor derivado por compatibilidad — `catalog_relation` y `quality_status` son las dimensiones reales, independientes entre sí (ver README de scripts/catalog).
 
 - catalog_relation — NEW: 23 | EXISTING: 0 | RELATED_VARIANT: 2 | POSSIBLE_DUPLICATE: 0
-- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 23 | REVIEW_REQUIRED: 0 | REJECTED: 2
+- quality_status — CATALOG_READY: 0 | CATALOG_READY_WITH_PENDING: 25 | REVIEW_REQUIRED: 0 | REJECTED: 0
+
+## Automation yield (F3.7B — dos métricas separadas, nunca combinadas)
+
+- **Decision Automation Yield** (filas que NO requieren que un humano decida algo — todo lo que no es REVIEW_REQUIRED): 100.0%
+- **Data Completion Yield** (filas CATALOG_READY o CATALOG_READY_WITH_PENDING — salieron listas para stage sin intervención): 100.0%
 
 ## Distribuciones
 
@@ -90,7 +95,7 @@ Ningún registro requiere revisión humana en este batch.
 ## Archivos generados
 
 - Propuesta de importación: C:\Users\user\Claude\Projects\aromia-catalog-pipeline\catalog\staging\batch-001-remediated.import-proposal.csv
-- Rechazados: C:\Users\user\Claude\Projects\aromia-catalog-pipeline\catalog\rejected\batch-001-remediated-rejected.csv
+- Rechazados: (ninguna fila rechazada en este batch)
 - Diff completo: catalog/reports/batch-001-remediated-diff.json
 - Validación del batch crudo (informativa, antes de normalizar): catalog/reports/batch-001-remediated-validation.json
 - Validación autoritativa (post-normalización — decide REJECTED): catalog/reports/batch-001-remediated.normalized-validation.json
