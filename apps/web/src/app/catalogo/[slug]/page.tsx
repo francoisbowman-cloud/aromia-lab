@@ -94,7 +94,11 @@ export default async function CatalogoDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(perfume)) }}
       />
       <HeroHeader perfume={perfume} />
-      <PriceTable retailers={perfume.retailers ?? []} />
+      <PriceTable
+        retailers={perfume.retailers ?? []}
+        perfumeSlug={perfume.slug}
+        perfumeNombre={perfume.nombre}
+      />
       <PerformanceBars
         longevidad={perfume.longevidad}
         estela={perfume.estela}

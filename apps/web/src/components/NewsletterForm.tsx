@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { subscribe } from "@/lib/api";
+import { trackEvent } from "@/lib/analytics";
 
 export function NewsletterForm({
   fuente,
@@ -18,7 +19,10 @@ export function NewsletterForm({
     setEstado("enviando");
     const ok = await subscribe(email, fuente);
     setEstado(ok ? "ok" : "error");
-    if (ok) setEmail("");
+    if (ok) {
+      trackEvent("newsletter_signup", { fuente });
+      setEmail("");
+    }
   }
 
   if (estado === "ok") {

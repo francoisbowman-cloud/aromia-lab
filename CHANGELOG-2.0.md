@@ -1466,3 +1466,53 @@ sobre `#admin-password` confirma `matches(':focus-visible') === true` y
 un box-shadow de anillo real. tsc/eslint limpios.
 
 Commit `a2f3ff8` en `assets/image-pilot-01` / [PR #6](https://github.com/francoisbowman-cloud/aromia-lab/pull/6) — última vez que se suma un tema nuevo a esta rama; el próximo ítem del backlog abre rama propia.
+
+## 2026-08-07 — Code (Claude Code) — analítica/conversión: eventos GA4 en los 3 puntos de conversión
+
+Continuación autónoma del backlog general (rama nueva
+`analytics/conversion-audit-01`). Auditoría: GA4 estaba instalado pero
+solo mandaba el pageview automático — cero eventos custom en todo el
+sitio. Para un sitio de afiliados, la conversión real (clic en "Ver
+oferta") estaba completamente sin medir.
+
+`lib/analytics.ts` (nuevo, `trackEvent`) + 3 eventos en los 3 puntos de
+conversión reales: `affiliate_click` (`PriceTable.tsx`, con
+retailer/precio/slug del perfume — el componente pasa a "use client"),
+`newsletter_signup` (`NewsletterForm.tsx`, con `fuente` para atribución),
+`quiz_completed` (`QuizFlow.tsx`, con el perfil resultante).
+
+Verificado en vivo con `window.gtag` mockeado y `fetch` interceptado
+para simular el POST de newsletter sin crear un suscriptor real en
+producción — los 3 eventos disparan con los parámetros correctos
+(confirmado con datos reales de Aventus y un quiz completo de 6
+preguntas → perfil `fresco-clasico`). tsc/eslint limpios.
+
+[PR #11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11),
+sin fusionar todavía.
+
+## 2026-08-07 (2) — Code (Claude Code) — pruebas/documentación: primer test runner del repo
+
+Continuación autónoma del backlog general, misma rama
+`analytics/conversion-audit-01` (bundled a propósito: `analytics.test.ts`
+depende de `analytics.ts`, que solo existe ahí todavía). Auditoría:
+`apps/web` y `apps/api` no tenían ni un solo test — cero framework
+configurado, cero archivo `*.test.*` en todo el repo fuera de
+`scripts/catalog/` (que sí tiene 37 tests con `node:test`, ver PR #10).
+
+Se agrega Vitest (zero-config para TS + alias `@/*`) y dos suites,
+acotadas a lógica pura ya existente (sin DB, sin red, sin DOM real):
+
+- `quizData.test.ts`: `getDominantTag` (desempates), `getProfileBySlug`,
+  `getRecommendationsForProfile` (filtrado por familia/nicho, split
+  aspiracionales/accesibles sin superposición, casos vacíos) + un test
+  de integridad de datos que detecta un tag mal tipeado en `puntos`
+  (bug silencioso real: el scoring lo ignoraría sin error visible).
+- `analytics.test.ts`: `trackEvent` no explota sin `window` (SSR) ni
+  sin `gtag` (sin GA_ID), llama a gtag con los argumentos correctos
+  cuando existe.
+
+19/19 tests verdes, tsc/eslint limpios, `next build` completo sin
+errores (confirma que los tests no interfieren con el build de
+producción).
+
+Commit `3cebb9f` / [PR #11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11).
