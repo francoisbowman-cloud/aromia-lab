@@ -1516,3 +1516,76 @@ errores (confirma que los tests no interfieren con el build de
 producción).
 
 Commit `3cebb9f` / [PR #11](https://github.com/francoisbowman-cloud/aromia-lab/pull/11).
+
+## 2026-08-07/08 — Code (Claude Code) — Release Candidate del backlog: integración, merge, deploy y cierre del ciclo
+
+Los 7 PR del barrido autónomo de backlog (#6, #7, #8, #9, #11, #12,
+#13) se integraron en un solo release candidate antes de tocar `main`:
+worktree y rama exclusivos (`integration/aromia-release-candidate-01`,
+partiendo de `main` real), merge en orden de menor a mayor riesgo de
+conflicto (#12 → #13 → #9 → #8 → #7 → #6 → #11). Conflictos reales
+solo en `CHANGELOG-2.0.md` (documento append-only — se conservaron
+ambas entradas de cada par de PR en orden cronológico, sin descartar
+contenido) y en `apps/web/package-lock.json` al mergear #11 (resuelto
+regenerando el lockfile con `npm install` sobre el `package.json` ya
+fusionado). Ningún archivo de código de aplicación tuvo conflicto real
+pese a solaparse varios PR en `layout.tsx`, `NewsletterForm.tsx`,
+`PriceTable.tsx` y `catalogo/[slug]/page.tsx` — cada cambio vivía en
+una sección distinta del archivo.
+
+[PR #10](https://github.com/francoisbowman-cloud/aromia-lab/pull/10)
+(Fase 3, pipeline de catálogo) evaluado y **diferido a propósito**:
+sesión paralela de Code activa (el PR se siguió actualizando después de
+este cierre), y un dry-run de merge detectó un conflicto real add/add
+en el `package.json` de raíz frente a #6 (ambos agregaron su propio
+"package.json de tooling de raíz", scripts no superpuestos,
+reconciliable pero no resuelto unilateralmente).
+
+Verificación antes de abrir el RC: `tsc --noEmit` limpio en
+`apps/web`/`apps/api`, `next lint` sin warnings, Vitest 19/19, `next
+build` completo (22 rutas, First Load JS compartido ~87 kB, consistente
+con la limpieza de deps de #8), y smoke test visual local (`next
+start` apuntando a la API de producción real vía `NEXT_PUBLIC_API_URL`,
+solo lecturas GET) sin regresiones — confirmado que SEO por producto
+(#7), disclosure de afiliado junto al enlace real (#9) y preconnects
+(#8) conviven correctamente.
+
+[PR #15](https://github.com/francoisbowman-cloud/aromia-lab/pull/15)
+("Release Candidate — Integración backlog auditoría Aromia") abierto
+con el informe único de integración, marcado explícitamente "NO
+fusionar" hasta aprobación de Brey.
+
+**El merge de PR #15 a `main` (merge commit `9e5d6f5`) ocurrió fuera de
+esta sesión de Code** — confirmado al reabrir el hilo con Brey, sin que
+esta sesión ejecutara el merge. Railway auto-desplegó `web` y `api` en
+verde a los pocos segundos del push a `main`, sin tocar Postgres/Redis.
+Code verificó el deploy post-merge (logs de Railway limpios, ambos
+servicios `SUCCESS`) y corrió el mismo smoke test contra `aromialab.com`
+real: 11 rutas críticas + `/health` de la API en 200, metadata SEO por
+producto y disclosure de afiliado confirmados en vivo en
+`/catalogo/1-million`, sin errores de consola. Los 7 PR individuales
+quedaron auto-cerrados como `MERGED` por GitHub (mismos commits ya en
+`main`), y sus ramas se borraron solas (`delete_branch_on_merge`).
+
+**Como parte del mismo cierre, a pedido explícito de Brey**, se aplicó
+en la Postgres de producción real el rename pendiente desde la Fase 2
+(Sauvage EDP → Sauvage EDT, ver entrada 2026-08-06): `PATCH
+/api/admin/perfumes/2` con body exclusivo `{"nombre":"Sauvage EDT"}`
+(mecanismo administrativo existente — el endpoint solo actualiza
+campos presentes en el body —, token de `ADMIN_API_TOKEN` obtenido vía
+`railway variables`, sin tocar la base directamente ni exponer el
+token en la salida). Diff verificado antes/después campo por campo:
+solo cambiaron `nombre` y `actualizado_en` (automático del propio
+`UPDATE`) — slug (`sauvage-edp`, se conserva a propósito, sin migración
+de URL), `imagen_url`, `link_afiliado`, `precio_referencia`, notas y
+`retailers` (incluido su `link_afiliado` propio) idénticos. Verificado
+en `/api/perfumes/sauvage-edp`, `/catalogo/sauvage-edp` y `/catalogo`,
+los tres en producción real.
+
+El ciclo auditoría → integración → RC → merge → deploy → post-deploy
+queda **cerrado**. Pendientes que sobreviven, sin resolver en este
+cierre (decisiones de producto/legal o fuera de alcance, no fixes de
+código): consentimiento GDPR/GA4 (hallazgo de PR #9), `npm audit`
+(vulnerabilidades preexistentes — 7 high en `apps/web`, 3 en
+`apps/api` —, no introducidas por esta integración), reconciliación de
+`package.json` de raíz con PR #10 cuando esa sesión cierre su bloque.
