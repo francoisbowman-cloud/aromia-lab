@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { parse as parseCsv } from "csv-parse/sync";
 import { stringify as stringifyCsv } from "csv-stringify/sync";
 import { REPO_ROOT, isMainModule, normalizeConcentration } from "./lib.mjs";
-import { discoverOfficialUrls, fetchOfficialPage, tokenizeIdentity } from "./source-discovery.mjs";
+import { discoverOfficialUrls, fetchOfficialPage, tokenizeIdentity, sameRegistrableHost } from "./source-discovery.mjs";
 import { extractPageEvidence } from "./structured-extractor.mjs";
 import { publicationMetadata } from "./commerce-enrichment.mjs";
 
@@ -14,6 +14,11 @@ function writeCsv(path, rows) { mkdirSync(dirname(path), { recursive: true }); i
 function canonicalConcentration(value) { return normalizeConcentration(String(value ?? "")).value.toLowerCase(); }
 function fold(value) { return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
+function preferredOfficialUrls(candidate) {
+  const raw = String(candidate.source_url ?? "").split(";").map((s) => s.trim()).filter(Boolean);
+  return raw.filter((url) => candidate.official_domain && sameRegistrableHost(url, candidate.official_domain));
+}
+
 export function identityEvidence(candidate, evidence, pageUrl) {
   const identityText = fold(`${pageUrl} ${evidence.title} ${evidence.structured_product_name}`);
   const nameTokens = tokenizeIdentity(candidate);
@@ -23,7 +28,16 @@ export function identityEvidence(candidate, evidence, pageUrl) {
 }
 
 export async function harvestCandidate(candidate, options = {}) {
+  const preferred = preferredOfficialUrls(candidate).map((url) => ({ url, score: 1000, method: "verified_source_url" }));
   const discovered = await discoverOfficialUrls(candidate, options);
+  const discoveredUrls = discovered.status === "FOUND" ? discovered.urls : [];
+  const seen = new Set();
+  const urls = [...preferred, ...discoveredUrls].filter((hit) => {
+    if (seen.has(hit.url)) return false;
+    seen.add(hit.url);
+    return true;
+  });
+
   const base = {
     candidate_id: candidate.candidate_id, brand: candidate.brand, name: candidate.name,
     concentration: "", gender: "", family: "", launch_year: "", perfumer: "", country: "", description: "",
@@ -33,10 +47,10 @@ export async function harvestCandidate(candidate, options = {}) {
     image_url: "", image_source: "", amazon_url: "", affiliate_status: "pending", visual_quality: "not-audited",
     seo_title: "", seo_description: "",
   };
-  if (discovered.status !== "FOUND") return { ...base, harvest_status: discovered.status, discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "" };
+  if (!urls.length) return { ...base, harvest_status: discovered.status, discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "" };
 
   const errors = [];
-  for (const hit of discovered.urls) {
+  for (const hit of urls) {
     try {
       const page = await fetchOfficialPage(hit.url, candidate.official_domain, options);
       const evidence = extractPageEvidence(page.text, page.finalUrl);
@@ -68,6 +82,7 @@ export async function harvestCandidate(candidate, options = {}) {
         seo_title: publication.seo_title, seo_description: publication.seo_description,
         structured_product_name: evidence.structured_product_name, structured_brand: evidence.structured_brand,
         evidence_method: evidence.evidence_method, identity_token_coverage: identity.coverage.toFixed(2), discovery_score: hit.score,
+        discovery_method: hit.method || "discovery",
         discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "",
       };
     } catch (error) { errors.push(`${hit.url}:${error.message}`); }
