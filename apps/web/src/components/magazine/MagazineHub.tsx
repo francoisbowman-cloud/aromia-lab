@@ -19,68 +19,49 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
 
   const cover = filtered[0];
   const secondary = filtered.slice(1, 4);
-
   const isFirstRender = useRef(true);
+
   useEffect(() => {
-    // Solo mueve el foco cuando el usuario cambia de categoría, no en el
-    // montaje inicial (si no, el foco salta a la portada apenas se carga
-    // la página, sin que el usuario haya interactuado con nada).
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    if (isFirstRender.current) { isFirstRender.current = false; return; }
     coverRef.current?.focus();
   }, [activeKey]);
 
   return (
-    <>
-      <MagazineCategoryNav activeKey={activeKey} onSelect={setActiveKey} />
+    <div className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]">
+      <header className="mx-auto max-w-[1440px] px-6 pb-8 pt-10 lg:px-10 lg:pb-10 lg:pt-14">
+        <div className="flex items-center gap-4 border-b border-line pb-4 font-plex text-[9px] uppercase tracking-[.2em] text-muted"><span>Aromia Magazine</span><span className="h-px flex-1 bg-line"/><span>Journal de parfum</span></div>
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_.6fr] lg:items-end">
+          <div><p className="font-plex text-[9px] uppercase tracking-[.22em] text-gold-contrast">Editorial / historias 04</p><h1 className="mt-4 max-w-[11ch] font-display text-[52px] font-medium leading-[.9] tracking-[-.04em] text-ink lg:text-[86px]">Historias para oler con más contexto.</h1></div>
+          <p className="max-w-[42ch] font-sans text-[15px] leading-7 text-muted lg:justify-self-end">Reseñas, cultura, materias y guías. Un magazine que acompaña el descubrimiento sin separarlo del producto.</p>
+        </div>
+      </header>
 
-      <section className="mx-auto max-w-[1440px] px-6 pb-20 pt-12 lg:px-10 lg:pt-14">
+      <div className="border-y border-line bg-[#fffdf8] dark:bg-[#12100d]"><MagazineCategoryNav activeKey={activeKey} onSelect={setActiveKey} /></div>
+
+      <section className="mx-auto max-w-[1440px] px-6 pb-24 pt-10 lg:px-10 lg:pt-14">
         {!cover ? (
-          <div className="flex min-h-[360px] items-center justify-center">
-            <p className="font-sans text-[15px] text-muted">
-              No hay artículos disponibles en esta categoría.
-            </p>
-          </div>
+          <div className="flex min-h-[360px] items-center justify-center"><p className="font-sans text-[15px] text-muted">No hay artículos disponibles en esta categoría.</p></div>
         ) : (
-          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[.75fr_1fr_.55fr] lg:gap-10">
-            <div className="flex flex-col gap-5 lg:pt-2">
-              <p className="font-sans text-[11px] uppercase tracking-[.2em] text-gold-contrast">
-                El Magazine
-              </p>
-              <h1 className="font-display text-[clamp(34px,4vw,48px)] leading-[1.08] text-ink">
-                Reseñas, guías y academia de perfumería.
-              </h1>
-              <p className="max-w-sm font-sans text-[15px] leading-7 text-muted">
-                Contenido editorial para entender el mundo de la perfumería antes de elegir tu
-                próxima fragancia — sin ruido, sin humo.
-              </p>
-            </div>
-
-            <div className="lg:h-full">
+          <>
+            <div className="grid grid-cols-1 gap-8 border-b border-line pb-12 lg:grid-cols-[.72fr_1.28fr] lg:gap-12 lg:pb-16">
+              <div className="flex flex-col justify-between gap-10 lg:py-3">
+                <div><p className="font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">Cover story / edición actual</p><h2 className="mt-5 max-w-[10ch] font-display text-[40px] font-medium leading-[.95] text-ink lg:text-[58px]">El perfume también es cultura material.</h2><p className="mt-6 max-w-[40ch] font-sans text-sm leading-6 text-muted">La portada abre una conversación. El catálogo la convierte en una decisión informada.</p></div>
+                <div className="flex items-center gap-4 font-plex text-[9px] uppercase tracking-[.16em] text-muted"><span>Issue 01</span><span className="h-px flex-1 bg-line"/><span>{filtered.length} historias</span></div>
+              </div>
               <MagazineCoverStory article={cover} linkRef={coverRef} />
             </div>
 
             {secondary.length > 0 ? (
-              <aside>
-                <p className="mb-5 font-sans text-[11px] uppercase tracking-[.14em] text-muted">
-                  Últimas historias
-                </p>
-                <div className="flex flex-col gap-4">
-                  {secondary.map((article, i) => (
-                    <MagazineSecondaryStory
-                      key={article.slug}
-                      article={article}
-                      isFirst={i === 0}
-                    />
-                  ))}
+              <aside className="pt-12 lg:pt-16">
+                <div className="mb-8 flex items-center gap-4"><p className="font-plex text-[9px] uppercase tracking-[.18em] text-muted">Continuar leyendo</p><span className="h-px flex-1 bg-line"/></div>
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                  {secondary.map((article, i) => <MagazineSecondaryStory key={article.slug} article={article} isFirst={i === 0} />)}
                 </div>
               </aside>
             ) : null}
-          </div>
+          </>
         )}
       </section>
-    </>
+    </div>
   );
 }
