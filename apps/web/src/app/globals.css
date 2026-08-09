@@ -230,12 +230,12 @@ body {
 
 /* Home — Fase Visual & Conversion Upgrade, Hybrid 01 (docs/design/visual-upgrade).
    Escenas de fondo con placeholders dirigidos (gradientes, no fotografía real
-   todavía) para Hero/Product Reveal, Ecosistema/Quiz y Magazine. Cada una
+   todavía) para Hero, Product Reveal, Ecosistema/Quiz y Magazine. Cada una
    responde a [data-theme="dark"] igual que el resto del sistema — Atelier
-   Ivorio en claro, Maison Grafito en oscuro, misma lógica que --bg/--text.
-   Cuando entren assets reales, estas clases pasan a ser el fallback/loading
-   state en vez de la imagen final. */
+   Ivorio en claro, Maison Grafito en oscuro. Cuando entren assets reales,
+   estas clases permanecen como fallback/loading state. */
 @layer components {
+  /* H01 — Sensory Hero: ingredientes como materia, frasco no protagonista. */
   .aromia-scene-macro {
     background: radial-gradient(circle at 20% 30%, rgba(214, 196, 86, 0.55), transparent 42%),
       radial-gradient(circle at 78% 20%, rgba(224, 168, 84, 0.62), transparent 40%),
@@ -251,6 +251,24 @@ body {
       radial-gradient(circle at 13% 68%, rgba(122, 70, 48, 0.48), transparent 40%),
       radial-gradient(circle at 80% 76%, rgba(233, 220, 192, 0.34), transparent 38%),
       linear-gradient(160deg, #0e0c0a, #100b08);
+  }
+
+  /* H02 — Product Reveal: mismo universo, pero con el objeto concentrado
+     hacia el tercio derecho y el copy protegido a la izquierda. */
+  .aromia-scene-reveal {
+    background: radial-gradient(ellipse 24% 46% at 74% 54%, rgba(255, 255, 255, 0.78), transparent 68%),
+      radial-gradient(ellipse 34% 28% at 72% 66%, rgba(196, 137, 78, 0.34), transparent 70%),
+      radial-gradient(circle at 82% 28%, rgba(224, 168, 84, 0.46), transparent 33%),
+      radial-gradient(circle at 58% 74%, rgba(214, 196, 86, 0.3), transparent 38%),
+      linear-gradient(145deg, #f8f3e8 0%, #eee4d1 58%, #f4ecdf 100%);
+  }
+
+  [data-theme="dark"] .aromia-scene-reveal {
+    background: radial-gradient(ellipse 24% 46% at 74% 54%, rgba(242, 235, 221, 0.22), transparent 68%),
+      radial-gradient(ellipse 34% 28% at 72% 66%, rgba(124, 72, 45, 0.34), transparent 70%),
+      radial-gradient(circle at 82% 28%, rgba(200, 168, 107, 0.3), transparent 33%),
+      radial-gradient(circle at 58% 74%, rgba(168, 127, 74, 0.2), transparent 38%),
+      linear-gradient(145deg, #120e0b 0%, #0e0c0a 58%, #17110d 100%);
   }
 
   .aromia-scene-glow {
