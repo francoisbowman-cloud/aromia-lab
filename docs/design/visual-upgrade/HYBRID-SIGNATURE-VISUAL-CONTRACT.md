@@ -1,50 +1,58 @@
 # Aromia — Hybrid Signature Visual Contract v1
 
-Status: preview-ready implementation contract
-Mainline baseline: `main@e3d121d8f483a0f6b5bd783520525d44ce6e688e`
-Preview: `web-hybrid-signature-01-production.up.railway.app`
+Hybrid Signature is the production visual contract for Aromia across Home, Catalog, Product Detail and Magazine.
 
-## Thesis
-Aromia is one visual system with three synchronized modes: Editorial, Discovery and Commerce. It must never read as a generic luxury ecommerce template.
+## Baseline
 
-## Core visual grammar
-- Light: luminous ivory, warm paper, champagne/taupe, ink contrast, restrained gold.
-- Dark: graphite/brown-black, warm smoke, controlled gold; never plain black as a shortcut.
-- Display serif for narrative hierarchy; sans for utility; tracked micro-labels for navigation and editorial metadata.
-- Recurrent devices: fine rules, issue numbering, olfactive anchors, material transitions, object-led product photography.
-- Sections connect as chapters rather than isolated cards.
+- Current source baseline: `main@e3d121d8f483a0f6b5bd783520525d44ce6e688e`
+- Catalog/data contracts from main remain source of truth.
+- Hybrid Signature changes presentation and interaction without weakening nullable/pending catalog safeguards.
 
-## Catalog interaction contract
-A filter reached from Home must always have an obvious exit. Family filtering exposes three reset paths:
-1. explicit neutral option: `Todas las familias` / no filter;
-2. active removable chip with ×;
-3. global `Borrar filtros` action.
-Deep links from the Home olfactive index remain valid.
+## Core visual language
 
-## Product truth contract
-- Product imagery must represent the real catalog item; no invented bottle or borrowed logo.
-- Pending image, price or family data must render as pending rather than fabricated information.
-- Verified retailer offers remain the only commerce offers emitted in structured data.
+- One system across editorial, discovery and commerce.
+- Light mode: luminous ivory, parchment, warm stone, champagne and restrained gold.
+- Dark mode: graphite, warm black, reflected amber and controlled gold.
+- Typography: display serif for desire/authority, sans for readable product information, Plex micro-labels for editorial metadata.
+- Surfaces should feel like spreads, objects and chapters rather than generic UI cards.
+- Dividers, numbering, micro-labels and whitespace establish rhythm.
+- Motion remains subtle, native and reduced-motion aware.
 
-## Surface roles
-- Home = desire + curation + discovery.
-- Catalog = clarity + comparison without generic marketplace styling.
-- Product = conviction; object, anatomy, performance, story, commerce, community.
-- Magazine = editorial authority connected to discovery.
-- Quiz = olfactive consultation rather than generic form flow.
+## Home
 
-## Light / Dark
-Both themes keep identical information architecture and visual grammar. Light is Atelier Ivorio: natural illumination, warm stone, paper, crystal and air. Dark is Maison Grafito: depth, reflection, warm shadow and controlled highlights.
+- Hero is object-led and clean: no floating olfactive labels over headline/content.
+- Anonymous AI-style editorial backgrounds are not used as the hero protagonist.
+- The hero uses the real catalog product image when available, composed over controlled material/light fields.
+- Featured selection, ecosystem, olfactive index, reveal, Magazine, Quiz and Club share one visual cadence.
+- Abrupt section breaks are avoided; Light stays predominantly luminous.
 
-## Motion
-CSS, IntersectionObserver and native pointer motion are preferred. Respect `prefers-reduced-motion`. Motion should reinforce depth or chapter transitions, never decorate without purpose.
+## Catalog
 
-## Non-negotiables
-- No cold UI gray in Light.
-- No full-chapter black blocks as a default Light-mode contrast device.
-- No card grid as the universal layout primitive.
-- No fake pricing or product metadata.
-- No visual change that weakens routing, accessibility, responsive behavior or catalog data integrity.
+- Catalog is a premium discovery surface, not a utility grid.
+- Product imagery uses real catalog assets and preserves visible product identity when available.
+- Family filter always has a clear exit path:
+  - neutral `Todas las familias` option;
+  - removable active filter chip (`×`);
+  - global `Borrar filtros` action;
+  - empty-state reset.
+- Deep links from Home remain supported.
 
-## Technical gate
-The production-code commit rebased over current catalog main passed GitHub Actions API typecheck and Web lint + typecheck + production build, and the isolated Railway service completed successfully. Final approval remains visual QA in the preview; no production merge is implied.
+## Product Detail
+
+- Sequence: Identity → Object → Sensory anatomy → Performance → Story → Commerce → Community.
+- Product is treated as an editorial object, not a commodity tile.
+- Commercial information remains legible and truthful; pending price/image fields render safely.
+
+## Magazine
+
+- Magazine is part of the same Aromia system, not a visually separate microsite.
+- Cover-story hierarchy, editorial spread structure and category navigation reinforce authority.
+
+## Final gate
+
+- Hero overlap issue resolved by removing floating notes.
+- Generic anonymous hero backgrounds removed.
+- Real catalog product image is the visual object when available.
+- GitHub Actions final branch gate: API typecheck PASS; web npm ci/lint/typecheck/production build PASS.
+- Isolated Railway preview previously validated SUCCESS.
+- Final merge to production requires explicit authorization.
