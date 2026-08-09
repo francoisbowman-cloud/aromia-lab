@@ -16,18 +16,36 @@ import {
 const DEFAULT_LIMIT = 25;
 const PRICE_SEGMENTS = ["económico", "medio", "premium", "lujo"];
 const GENDERS = ["masculino", "femenino", "unisex"];
+const UNKNOWN_SENTINELS = new Set(["", "pending", "unknown", "n/a", "na", "null"]);
 
 const text = (value) => String(value ?? "").trim();
 const norm = (value) => normalizeForKey(text(value));
+const knownNorm = (value) => {
+  const normalized = norm(value);
+  return UNKNOWN_SENTINELS.has(normalized) ? "" : normalized;
+};
 
 export function identityFromRow(row) {
-  const rawName = row.name ?? row.nombre;
+  const rawName = text(row.name ?? row.nombre);
+  const explicitConcentration = text(row.concentration);
+
+  // Modern Fase 3 rows carry concentration in its own column, so the product
+  // name is authoritative and must not be parsed for suffix aliases. This is
+  // critical for legitimate names such as "Not a Perfume". Legacy Aromia rows
+  // do not have a concentration column, so only those use suffix extraction.
+  if (explicitConcentration) {
+    return {
+      brand: norm(row.brand ?? row.marca),
+      baseName: norm(rawName),
+      concentration: norm(explicitConcentration),
+    };
+  }
+
   const embedded = extractConcentrationFromName(rawName);
-  const concentration = text(row.concentration) || text(embedded.concentration);
   return {
     brand: norm(row.brand ?? row.marca),
     baseName: norm(embedded.baseName),
-    concentration: norm(concentration),
+    concentration: norm(embedded.concentration),
   };
 }
 
@@ -49,11 +67,11 @@ function increment(map, key) {
 export function buildCoverage(rows) {
   const coverage = { total: rows.length, brand: {}, family: {}, gender: {}, price_segment: {}, market_position: {} };
   for (const row of rows) {
-    increment(coverage.brand, norm(valueFor(row, "brand", "marca")));
-    increment(coverage.family, norm(valueFor(row, "family", "familia_olfativa")));
-    increment(coverage.gender, norm(valueFor(row, "gender", "genero")));
-    increment(coverage.price_segment, norm(valueFor(row, "price_segment", "categoria_precio")));
-    increment(coverage.market_position, norm(valueFor(row, "market_position", "nicho_o_comercial")));
+    increment(coverage.brand, knownNorm(valueFor(row, "brand", "marca")));
+    increment(coverage.family, knownNorm(valueFor(row, "family", "familia_olfativa")));
+    increment(coverage.gender, knownNorm(valueFor(row, "gender", "genero")));
+    increment(coverage.price_segment, knownNorm(valueFor(row, "price_segment", "categoria_precio")));
+    increment(coverage.market_position, knownNorm(valueFor(row, "market_position", "nicho_o_comercial")));
   }
   return coverage;
 }
@@ -75,7 +93,7 @@ export function assessProvenance(row) {
   const urls = splitList(row.source_url).filter(isValidUrl);
   const verifiedRaw = norm(row.source_verified);
   const verified = ["true", "1", "yes", "si", "sí"].includes(verifiedRaw);
-  const confidence = norm(row.data_confidence);
+  const confidence = knownNorm(row.data_confidence);
   let score = 0;
   if (urls.length >= 1) score += 10;
   if (urls.length >= 2) score += 3;
@@ -87,9 +105,9 @@ export function assessProvenance(row) {
 
 export function scoreCandidate(row, coverage, existingKeys = new Set(), existingProductFamilies = new Set()) {
   const identity = identityFromRow(row);
-  const family = norm(row.family);
-  const gender = norm(row.gender);
-  const price = norm(row.price_segment);
+  const family = knownNorm(row.family);
+  const gender = knownNorm(row.gender);
+  const price = knownNorm(row.price_segment);
   const key = candidateKey(row);
   const familyKey = productFamilyKey(row);
   const provenance = assessProvenance(row);
@@ -139,11 +157,11 @@ export function scoreCandidate(row, coverage, existingKeys = new Set(), existing
     brand: text(row.brand),
     name: text(row.name),
     concentration: text(row.concentration),
-    family: text(row.family) || null,
-    gender: text(row.gender) || null,
-    price_segment: text(row.price_segment) || null,
+    family: family ? text(row.family) : null,
+    gender: gender ? text(row.gender) : null,
+    price_segment: price ? text(row.price_segment) : null,
     source_url: text(row.source_url) || null,
-    data_confidence: text(row.data_confidence) || null,
+    data_confidence: knownNorm(row.data_confidence) ? text(row.data_confidence) : null,
     candidate_key: key,
     product_family_key: familyKey,
     score: Math.max(0, Math.min(100, Math.round(score))),
@@ -157,10 +175,10 @@ export function scoreCandidate(row, coverage, existingKeys = new Set(), existing
 
 function applySelectionToCoverage(coverage, candidate) {
   const next = structuredClone(coverage);
-  increment(next.brand, norm(candidate.brand));
-  increment(next.family, norm(candidate.family));
-  increment(next.gender, norm(candidate.gender));
-  increment(next.price_segment, norm(candidate.price_segment));
+  increment(next.brand, knownNorm(candidate.brand));
+  increment(next.family, knownNorm(candidate.family));
+  increment(next.gender, knownNorm(candidate.gender));
+  increment(next.price_segment, knownNorm(candidate.price_segment));
   next.total += 1;
   return next;
 }
@@ -229,7 +247,7 @@ export function runEngine({ pool, current = CURRENT_AROMIA_CSV, limit = DEFAULT_
   const poolName = basename(pool).replace(/\.csv$/i, "");
   const reportBase = `engine-${poolName}`;
   const report = {
-    engine_version: "0.1.0",
+    engine_version: "0.2.0",
     generated_at: new Date().toISOString(),
     current_catalog: current,
     candidate_pool: pool,
