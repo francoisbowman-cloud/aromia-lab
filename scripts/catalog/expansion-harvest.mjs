@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { parse as parseCsv } from "csv-parse/sync";
 import { stringify as stringifyCsv } from "csv-stringify/sync";
 import { REPO_ROOT, isMainModule, normalizeConcentration } from "./lib.mjs";
-import { discoverOfficialUrls, fetchOfficialPage } from "./source-discovery.mjs";
+import { discoverOfficialUrls, fetchOfficialPage, tokenizeIdentity } from "./source-discovery.mjs";
 import { extractPageEvidence } from "./structured-extractor.mjs";
 
 const DEFAULT_CONCURRENCY = 4;
@@ -11,6 +11,15 @@ const DEFAULT_CONCURRENCY = 4;
 function readCsv(path) { return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true, relax_column_count: true }); }
 function writeCsv(path, rows) { mkdirSync(dirname(path), { recursive: true }); if (!rows.length) { writeFileSync(path, "", "utf-8"); return; } writeFileSync(path, stringifyCsv(rows, { header: true }), "utf-8"); }
 function canonicalConcentration(value) { return normalizeConcentration(String(value ?? "")).value.toLowerCase(); }
+function fold(value) { return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+
+export function identityEvidence(candidate, evidence, pageUrl) {
+  const identityText = fold(`${pageUrl} ${evidence.title} ${evidence.structured_product_name}`);
+  const nameTokens = tokenizeIdentity(candidate);
+  const hits = nameTokens.filter((t) => identityText.includes(t));
+  const coverage = nameTokens.length ? hits.length / nameTokens.length : 0;
+  return { confirmed: nameTokens.length > 0 && coverage >= 0.6, coverage, hits, tokens: nameTokens };
+}
 
 export async function harvestCandidate(candidate, options = {}) {
   const discovered = await discoverOfficialUrls(candidate, options);
@@ -28,11 +37,8 @@ export async function harvestCandidate(candidate, options = {}) {
     try {
       const page = await fetchOfficialPage(hit.url, candidate.official_domain, options);
       const evidence = extractPageEvidence(page.text, page.finalUrl);
-      const identityText = `${evidence.title} ${evidence.structured_product_name}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-      const nameTokens = String(candidate.name ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 4);
-      const identityHits = nameTokens.filter((t) => identityText.includes(t)).length;
-      const identityConfirmed = nameTokens.length ? identityHits / nameTokens.length >= 0.5 : false;
-      if (!identityConfirmed) { errors.push(`identity_mismatch:${hit.url}`); continue; }
+      const identity = identityEvidence(candidate, evidence, page.finalUrl);
+      if (!identity.confirmed) { errors.push(`identity_mismatch:${identity.coverage.toFixed(2)}:${hit.url}`); continue; }
 
       const expectedConcentration = canonicalConcentration(candidate.concentration);
       const extractedConcentration = canonicalConcentration(evidence.concentration);
@@ -51,11 +57,12 @@ export async function harvestCandidate(candidate, options = {}) {
         top_notes: evidence.top_notes, middle_notes: evidence.middle_notes, base_notes: evidence.base_notes, accords: evidence.accords,
         notes_structure: evidence.notes_structure, page_title: evidence.title, page_description: evidence.description,
         structured_product_name: evidence.structured_product_name, structured_brand: evidence.structured_brand,
-        evidence_method: evidence.evidence_method, discovery_score: hit.score, discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "",
+        evidence_method: evidence.evidence_method, identity_token_coverage: identity.coverage.toFixed(2), discovery_score: hit.score,
+        discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "",
       };
     } catch (error) { errors.push(`${hit.url}:${error.message}`); }
   }
-  return { ...base, harvest_status: "FETCH_FAILED", discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: errors.join(" | ").slice(0, 1000) };
+  return { ...base, harvest_status: "FETCH_FAILED", discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: errors.join(" | ").slice(0, 1400) };
 }
 
 export async function mapConcurrent(items, limit, fn) {
