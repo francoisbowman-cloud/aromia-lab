@@ -12,6 +12,7 @@ const REQUIRED_MIGRATIONS = [
   "012f_assert_published_catalog_complete.sql",
   "013_catalog_audit_verified_metadata.sql",
   "014_assert_catalog_display_integrity.sql",
+  "015_amazon_catalog_commerce_gate.sql",
 ];
 
 async function applyCatalogCompleteness() {
@@ -19,19 +20,12 @@ async function applyCatalogCompleteness() {
   const available = new Set(readdirSync(migrationsDir).filter((file) => file.endsWith(".sql")));
   const missing = REQUIRED_MIGRATIONS.filter((file) => !available.has(file));
   if (missing.length > 0) throw new Error(`Missing catalog completeness migrations: ${missing.join(", ")}`);
-
   try {
     for (const file of REQUIRED_MIGRATIONS) {
       const sql = readFileSync(join(migrationsDir, file), "utf-8");
       await pool.query(sql);
       console.log(`[catalog-completeness] applied ${file}`);
     }
-  } finally {
-    await pool.end();
-  }
+  } finally { await pool.end(); }
 }
-
-applyCatalogCompleteness().catch((error) => {
-  console.error("CATALOG_COMPLETENESS_MIGRATION_FAILED", error);
-  process.exit(1);
-});
+applyCatalogCompleteness().catch((error) => { console.error("CATALOG_COMPLETENESS_MIGRATION_FAILED", error); process.exit(1); });
