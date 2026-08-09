@@ -5,14 +5,28 @@ const EYEBROW =
 
 /**
  * Product Reveal — la materia del hero se materializa en objeto. Mantiene
- * el mismo universo visual pero usa su propio placeholder H02: el frasco
- * entra en el tercio derecho y el copy conserva una zona segura a la izquierda.
+ * el mismo universo visual pero usa su propio H02: el frasco entra en el
+ * tercio derecho y el copy conserva una zona segura a la izquierda.
  */
 export function SensoryInterlude() {
   return (
     <section className="relative min-h-[72vh] overflow-hidden bg-[#f6efe3] dark:bg-[#100c09]">
-      <div aria-hidden="true" className="aromia-scene-reveal absolute inset-0" />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,239,227,.96)_0%,rgba(246,239,227,.78)_38%,rgba(246,239,227,.16)_69%,transparent_100%)] dark:bg-[linear-gradient(90deg,rgba(16,12,9,.94)_0%,rgba(16,12,9,.74)_38%,rgba(16,12,9,.14)_69%,transparent_100%)]" />
+      <div aria-hidden="true" className="aromia-scene-reveal absolute inset-0 overflow-hidden">
+        {/* Primera capa fotográfica real reutilizando masters editoriales ya
+            versionados por Aromia. El gradiente queda debajo como fallback;
+            H02 bespoke sigue siendo reemplazable sin reescribir el componente. */}
+        <img
+          src="/editorial/sunlit-warm.png"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-[.62] mix-blend-multiply dark:hidden"
+        />
+        <img
+          src="/editorial/cinematic-warm.png"
+          alt=""
+          className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-[.66] mix-blend-soft-light dark:block"
+        />
+      </div>
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,239,227,.97)_0%,rgba(246,239,227,.84)_40%,rgba(246,239,227,.24)_70%,transparent_100%)] dark:bg-[linear-gradient(90deg,rgba(16,12,9,.96)_0%,rgba(16,12,9,.82)_40%,rgba(16,12,9,.2)_70%,transparent_100%)]" />
 
       <div className="relative z-[1] mx-auto grid min-h-[72vh] w-full max-w-6xl grid-cols-1 items-end px-6 py-14 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:px-10 lg:py-20">
         <div>
