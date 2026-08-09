@@ -41,3 +41,12 @@ jobs:
         run: |
           test -s catalog/reports/engine-batch-002.json
           test -s catalog/reports/engine-batch-002-selection.csv
+      - name: Upload real gap report and selection queue
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog-engine-batch-002
+          path: |
+            catalog/reports/engine-batch-002.json
+            catalog/reports/engine-batch-002-selection.csv
+          if-no-files-found: error
+          retention-days: 14
