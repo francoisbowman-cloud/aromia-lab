@@ -3,18 +3,7 @@
 import { useEffect, useState } from "react";
 
 export function PerformanceBarsSkeleton() {
-  return (
-    <section className="rounded-card border border-line bg-surface p-7" aria-busy="true">
-      <div className="flex flex-col gap-5">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="flex flex-col gap-2">
-            <div className="h-3 w-24 animate-pulse rounded bg-soft" />
-            <div className="h-1.5 w-full animate-pulse rounded-full bg-soft" />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  return <section className="min-h-[260px] animate-pulse border-y border-line bg-soft" aria-busy="true" />;
 }
 
 const METRIC_LABELS: Record<string, string> = {
@@ -23,8 +12,6 @@ const METRIC_LABELS: Record<string, string> = {
   proyeccion: "Proyección",
 };
 
-// Descripciones genéricas de cada nivel (0-10) — texto educativo universal,
-// no dato inventado por perfume. Sin franja para 0 (sin dato).
 function nivelDescripcion(valor: number): string {
   if (valor >= 8) return "Muy alta";
   if (valor >= 6) return "Alta";
@@ -32,67 +19,42 @@ function nivelDescripcion(valor: number): string {
   return "Ligera";
 }
 
-export function PerformanceBars({
-  longevidad,
-  estela,
-  proyeccion,
-}: {
-  longevidad?: number;
-  estela?: number;
-  proyeccion?: number;
-}) {
+export function PerformanceBars({ longevidad, estela, proyeccion }: { longevidad?: number; estela?: number; proyeccion?: number }) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    // Un tick después del mount para que el navegador registre el ancho en
-    // 0 antes de animar — si se setea directo en el render inicial, el
-    // browser puede pintar ya con el ancho final y la transición no corre.
     const id = requestAnimationFrame(() => setReady(true));
     return () => cancelAnimationFrame(id);
   }, []);
 
-  const metrics = (
-    [
-      ["longevidad", longevidad],
-      ["estela", estela],
-      ["proyeccion", proyeccion],
-    ] as const
-  ).filter(([, valor]) => valor != null) as Array<[keyof typeof METRIC_LABELS, number]>;
+  const metrics = ([
+    ["longevidad", longevidad],
+    ["estela", estela],
+    ["proyeccion", proyeccion],
+  ] as const).filter(([, valor]) => valor != null) as Array<[keyof typeof METRIC_LABELS, number]>;
 
   if (metrics.length === 0) {
     return (
-      <section className="rounded-card border border-line bg-surface p-7 text-center">
-        <p className="font-sans text-[11px] uppercase tracking-[.2em] text-gold-contrast">
-          Rendimiento en piel
-        </p>
-        <p className="mt-3 font-sans text-sm text-muted">Aún sin datos de desempeño.</p>
+      <section className="border-y border-line py-10">
+        <p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Rendimiento en piel</p>
+        <p className="mt-4 font-display text-3xl italic text-muted">Datos de desempeño en preparación.</p>
       </section>
     );
   }
 
   return (
-    <section
-      className="rounded-card border border-line bg-surface p-7"
-      role="img"
-      aria-label={metrics
-        .map(([key, valor]) => `${METRIC_LABELS[key]}: ${valor} de 10`)
-        .join(", ")}
-    >
-      <p className="font-sans text-[11px] uppercase tracking-[.2em] text-gold-contrast">
-        Rendimiento en piel
-      </p>
-      <div className="mt-6 flex flex-col gap-5">
-        {metrics.map(([key, valor]) => (
-          <div key={key}>
-            <div className="mb-2 flex items-baseline justify-between">
-              <span className="font-sans text-sm text-ink">{METRIC_LABELS[key]}</span>
-              <span className="font-sans text-xs text-muted">{nivelDescripcion(valor)}</span>
+    <section role="img" aria-label={metrics.map(([key, valor]) => `${METRIC_LABELS[key]}: ${valor} de 10`).join(", ")}>
+      <div className="flex flex-col border-t border-line">
+        {metrics.map(([key, valor], index) => (
+          <div key={key} className="grid grid-cols-[40px_1fr] gap-4 border-b border-line py-6 sm:grid-cols-[44px_150px_1fr_auto] sm:items-center lg:py-7">
+            <span className="font-plex text-[9px] tracking-[.14em] text-gold-contrast">0{index + 1}</span>
+            <div>
+              <p className="font-display text-[25px] italic text-ink">{METRIC_LABELS[key]}</p>
+              <p className="mt-1 font-plex text-[8px] uppercase tracking-[.14em] text-muted">{nivelDescripcion(valor)}</p>
             </div>
-            <div className="relative h-1.5 overflow-hidden rounded-full bg-gold/15">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-gold-contrast to-gold transition-[width] duration-[1200ms] ease-out"
-                style={{ width: ready ? `${valor * 10}%` : "0%" }}
-              />
+            <div className="col-start-2 mt-2 h-px bg-line sm:col-start-auto sm:mt-0">
+              <div className="h-px bg-gold-contrast transition-[width] duration-[1200ms] ease-out" style={{ width: ready ? `${Math.min(valor, 10) * 10}%` : "0%" }} />
             </div>
+            <span className="col-start-2 font-display text-[30px] leading-none text-ink sm:col-start-auto">{valor.toFixed(1)}</span>
           </div>
         ))}
       </div>
