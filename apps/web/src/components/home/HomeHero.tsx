@@ -75,7 +75,7 @@ export function HomeHero() {
       />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(120,95,60,.18)_0%,transparent_46%,rgba(120,95,60,.05)_100%)] dark:bg-[linear-gradient(0deg,rgba(14,12,10,.52)_0%,transparent_44%,rgba(14,12,10,.2)_100%)]" />
 
-      <div className="absolute left-6 top-6 z-[2] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.18em] text-ink/55 lg:left-10 lg:top-8">
+      <div className="absolute left-6 top-6 z-[2] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.18em] text-[rgba(33,29,23,.55)] dark:text-[rgba(242,235,221,.58)] lg:left-10 lg:top-8">
         <span>Aromia</span>
         <span className="h-px w-7 bg-current opacity-40" />
         <span>Discovery / 01</span>
@@ -104,8 +104,8 @@ export function HomeHero() {
           <br />
           <em className="font-medium text-gold-contrast">Revelamos identidades.</em>
         </h1>
-        <div className="mt-6 flex max-w-[720px] flex-col gap-6 border-t border-ink/15 pt-5 sm:flex-row sm:items-end sm:justify-between dark:border-paper/15">
-          <p className="max-w-[430px] font-sans text-[15px] leading-relaxed text-ink/80">
+        <div className="mt-6 flex max-w-[720px] flex-col gap-6 border-t border-[rgba(33,29,23,.15)] pt-5 dark:border-[rgba(242,235,221,.16)] sm:flex-row sm:items-end sm:justify-between">
+          <p className="max-w-[430px] font-sans text-[15px] leading-relaxed text-[rgba(33,29,23,.8)] dark:text-[rgba(242,235,221,.8)]">
             Reseñas honestas, comparadas y sin ruido — para encontrar la fragancia que realmente te
             representa.
           </p>
