@@ -5,4 +5,4 @@ COPY . .
 
 RUN cd scripts/catalog && npm ci
 
-CMD ["sh", "-lc", "cd /repo/scripts/catalog && npm test && npm run expand && npm run harvest -- 100 && npm run enrich && npm run build-batch-003 && (npm run expansion-gate || true) && echo '--- HARVEST ---' && cat /repo/catalog/expansion/batch-003/harvest-report.json && echo '--- ENRICHMENT ---' && cat /repo/catalog/expansion/batch-003/enrichment-report.json && echo '--- EA4 ---' && cat /repo/catalog/expansion/batch-003/go-no-go.json"]
+CMD ["sh", "-lc", "cd /repo/scripts/catalog && npm test && npm run enrich-published-75 && echo '--- PUBLISHED 75 ENRICHMENT ---' && cat /repo/catalog/expansion/published-enrichment/published-75-enrichment-report.json && npm run expand && npm run harvest -- 100 && npm run enrich && npm run build-batch-003 && (npm run expansion-gate || true) && echo '--- HARVEST ---' && cat /repo/catalog/expansion/batch-003/harvest-report.json && echo '--- ENRICHMENT ---' && cat /repo/catalog/expansion/batch-003/enrichment-report.json && echo '--- EA4 ---' && cat /repo/catalog/expansion/batch-003/go-no-go.json"]
