@@ -24,13 +24,19 @@ test("confirmed source without published notes can still pass", () => {
 });
 
 test("missing provenance routes to REVIEW_REQUIRED", () => {
-  const row = evidenceToDraft({ candidate_id: "x3", brand: "Brand", name: "Gamma", concentration: "EDT", identity_confirmed: "true", official_source: "true", top_notes: "lemon", middle_notes: "sage", base_notes: "musk" });
+  const row = evidenceToDraft({ candidate_id: "x3", brand: "Brand", name: "Gamma", concentration: "EDT", gender: "unisex", identity_confirmed: "true", official_source: "true", top_notes: "lemon", middle_notes: "sage", base_notes: "musk" });
   assert.equal(row.quality_status, "REVIEW_REQUIRED");
   assert.equal(row.quality_reason, "missing_provenance");
 });
 
+test("critical metadata missing cannot be AUTO_READY", () => {
+  const row = evidenceToDraft({ candidate_id: "x5", brand: "Brand", name: "Epsilon", concentration: "EDP", source_url: "https://brand.example/epsilon", identity_confirmed: "true", official_source: "true", top_notes: "a", middle_notes: "b", base_notes: "c", launch_year: "2024", perfumer: "P", country: "France", family: "woody" });
+  assert.equal(row.quality_status, "REVIEW_REQUIRED");
+  assert.equal(row.quality_reason, "critical_metadata_missing:gender");
+});
+
 test("blocking conflict routes to BLOCKED", () => {
-  const { blocked } = routeEvidence([{ candidate_id: "x4", brand: "Brand", name: "Delta", concentration: "EDP", source_url: "https://x.example", identity_confirmed: "true", official_source: "true", top_notes: "a", middle_notes: "b", base_notes: "c", blocking_conflict: "true" }]);
+  const { blocked } = routeEvidence([{ candidate_id: "x4", brand: "Brand", name: "Delta", concentration: "EDP", gender: "unisex", source_url: "https://x.example", identity_confirmed: "true", official_source: "true", top_notes: "a", middle_notes: "b", base_notes: "c", blocking_conflict: "true" }]);
   assert.equal(blocked.length, 1);
   assert.equal(blocked[0].quality_reason, "blocking_conflict");
 });
