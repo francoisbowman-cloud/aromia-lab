@@ -1,23 +1,17 @@
+import type { Metadata } from "next";
 import { getArticulos } from "@/lib/api";
 import { MagazineHub } from "@/components/magazine/MagazineHub";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Magazine — Aromia",
-  description: "Reseñas, guías y análisis de perfumería.",
+export const metadata: Metadata = {
+  title: "Magazine de perfumería",
+  description: "Reseñas, guías, cultura y análisis de perfumes con una mirada editorial.",
+  alternates: { canonical: "/magazine" },
 };
 
 export default async function MagazinePage() {
   const articulos = await getArticulos();
-  // El contenido "academia" vive en /academia (absorbido el 22/07) — se
-  // filtra acá para que no queden tarjetas duplicadas que solo rebotan
-  // al lector a la misma página vía redirect.
   const articulosSinAcademia = articulos.filter((a) => a.categoria !== "academia");
-
-  return (
-    <main>
-      <MagazineHub articulos={articulosSinAcademia} />
-    </main>
-  );
+  return <main><MagazineHub articulos={articulosSinAcademia} /></main>;
 }
