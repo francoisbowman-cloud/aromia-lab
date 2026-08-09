@@ -61,7 +61,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
           <h2 className="max-w-[12ch] font-display text-[42px] font-medium leading-[.95] tracking-[-.03em] text-ink lg:text-[58px]">Dónde encontrarlo, sin romper la historia.</h2>
           <p className="max-w-[44ch] font-sans text-sm leading-6 text-muted lg:justify-self-end">Precios y enlaces se muestran como una capa de decisión, después de entender el objeto, su evolución y su carácter.</p>
         </div>
-        <PriceTable retailers={perfume.retailers ?? []} perfumeSlug={perfume.slug} perfumeNombre={perfume.nombre} />
+        <PriceTable retailers={perfume.retailers ?? []} directLink={perfume.link_afiliado} perfumeSlug={perfume.slug} perfumeNombre={perfume.nombre} />
       </section>
 
       <section className="border-t border-line bg-[#fffdf8] dark:bg-[#100d0a]">
