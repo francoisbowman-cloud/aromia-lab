@@ -19,7 +19,7 @@ export async function generateMetadata({
   const titulo = `${perfume.nombre} — ${perfume.marca} | Aromia`;
   const descripcion =
     perfume.descripcion_corta ??
-    `${perfume.nombre} de ${perfume.marca}: notas, precio de referencia y dónde comprarlo en Aromia.`;
+    `${perfume.nombre} de ${perfume.marca}: notas y análisis de la fragancia en Aromia.`;
 
   return {
     title: titulo,
@@ -40,28 +40,27 @@ export async function generateMetadata({
   };
 }
 
-/** Solo los campos verificables (nombre/marca/imagen/oferta) — sin
- * aggregateRating: rating_promedio hoy no tiene un conteo real de reseñas
- * detrás (ver CommunityReviews, "Aún no hay reseñas disponibles"), y
- * Google penaliza structured data de rating no verificable. Se suma
- * aggregateRating el día que haya reseñas reales con conteo. */
 function buildProductJsonLd(perfume: NonNullable<Awaited<ReturnType<typeof getPerfumeBySlug>>>) {
-  const offers =
-    perfume.retailers && perfume.retailers.length > 0
-      ? perfume.retailers.map((r) => ({
+  const retailerOffers = (perfume.retailers ?? [])
+    .filter((r) => Boolean(r.link_afiliado) && Boolean(r.moneda) && r.precio != null)
+    .map((r) => ({
+      "@type": "Offer",
+      url: r.link_afiliado,
+      priceCurrency: r.moneda,
+      price: r.precio,
+    }));
+
+  const referenceOffer =
+    perfume.link_afiliado && perfume.moneda && perfume.precio_referencia != null
+      ? [{
           "@type": "Offer",
-          url: r.link_afiliado,
-          priceCurrency: r.moneda,
-          price: r.precio,
-        }))
-      : [
-          {
-            "@type": "Offer",
-            url: perfume.link_afiliado,
-            priceCurrency: perfume.moneda,
-            price: perfume.precio_referencia,
-          },
-        ];
+          url: perfume.link_afiliado,
+          priceCurrency: perfume.moneda,
+          price: perfume.precio_referencia,
+        }]
+      : [];
+
+  const offers = retailerOffers.length > 0 ? retailerOffers : referenceOffer;
 
   return {
     "@context": "https://schema.org",
@@ -70,7 +69,7 @@ function buildProductJsonLd(perfume: NonNullable<Awaited<ReturnType<typeof getPe
     image: perfume.imagen_url ? [perfume.imagen_url] : undefined,
     description: perfume.descripcion_corta,
     brand: { "@type": "Brand", name: perfume.marca },
-    offers: offers.length === 1 ? offers[0] : offers,
+    offers: offers.length === 0 ? undefined : offers.length === 1 ? offers[0] : offers,
   };
 }
 

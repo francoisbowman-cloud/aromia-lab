@@ -8,10 +8,7 @@ import { useProductImageCrop } from "@/lib/useProductImageCrop";
 
 export function PerfumeCardSkeleton() {
   return (
-    <div
-      className="overflow-hidden rounded-card border border-line bg-surface"
-      aria-busy="true"
-    >
+    <div className="overflow-hidden rounded-card border border-line bg-surface" aria-busy="true">
       <div className="aspect-square animate-pulse bg-soft" />
       <div className="flex flex-col gap-2 p-5">
         <div className="h-3 w-20 animate-pulse rounded bg-soft" />
@@ -27,9 +24,6 @@ export function PerfumeCard({
   variant = "catalog",
 }: {
   perfume: Perfume;
-  /** "catalog" (default) muestra precio — grid de /catalogo. "featured" muestra
-   * rating en vez de precio — sección "Reseñas destacadas" de Home, donde el
-   * prototipo no lista precio. */
   variant?: "catalog" | "featured";
 }) {
   const {
@@ -41,8 +35,9 @@ export function PerfumeCard({
     imgError,
     handleLoad,
     handleError,
-  } = useProductImageCrop(perfume.imagen_url);
+  } = useProductImageCrop(perfume.imagen_url ?? undefined);
   const showImage = Boolean(perfume.imagen_url) && !imgError;
+  const hasReferencePrice = perfume.precio_referencia != null && Boolean(perfume.moneda);
 
   return (
     <Link
@@ -56,13 +51,10 @@ export function PerfumeCard({
       >
         {showImage ? (
           <>
-            {/* Oculta: solo sirve para detectar carga/error y analizar el
-                recorte — lo que se ve es el div con background-image de abajo,
-                que aplica el bounding box calculado por `useProductImageCrop`. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               ref={imgRef}
-              src={perfume.imagen_url}
+              src={perfume.imagen_url ?? ""}
               alt=""
               aria-hidden="true"
               crossOrigin="anonymous"
@@ -93,20 +85,20 @@ export function PerfumeCard({
 
       <div className="flex flex-1 flex-col gap-1 p-5">
         <p className="font-sans text-[11px] uppercase tracking-[.16em] text-gold-contrast">
-          {perfume.familia_olfativa}
+          {perfume.familia_olfativa || "Familia por confirmar"}
         </p>
-        <h3 className="font-display text-lg font-semibold leading-tight text-ink">
-          {perfume.nombre}
-        </h3>
+        <h3 className="font-display text-lg font-semibold leading-tight text-ink">{perfume.nombre}</h3>
         <p className="font-sans text-sm text-muted">{perfume.marca}</p>
         {variant === "featured" && perfume.rating_promedio ? (
           <RatingStars rating={perfume.rating_promedio} className="mt-auto pt-3" />
         ) : (
           <p className="mt-auto pt-3 font-display text-base text-ink">
-            {Number(perfume.precio_referencia).toLocaleString("es-AR", {
-              style: "currency",
-              currency: perfume.moneda,
-            })}
+            {hasReferencePrice
+              ? Number(perfume.precio_referencia).toLocaleString("es-AR", {
+                  style: "currency",
+                  currency: perfume.moneda!,
+                })
+              : "Precio por confirmar"}
           </p>
         )}
       </div>

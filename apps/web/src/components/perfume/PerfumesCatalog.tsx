@@ -28,12 +28,19 @@ export function PerfumesCatalog({
   const [nichoOComercial, setNichoOComercial] = useState("");
 
   const familias = useMemo(
-    () => Array.from(new Set(perfumes.map((p) => p.familia_olfativa))).sort(),
+    () => Array.from(
+      new Set(perfumes.map((p) => p.familia_olfativa).filter((f): f is string => Boolean(f))),
+    ).sort(),
     [perfumes],
   );
 
   const categoriasConResultados = useMemo(() => {
-    const presentes = new Set(perfumes.map((p) => categoriaDe(p.familia_olfativa)));
+    const presentes = new Set(
+      perfumes
+        .map((p) => p.familia_olfativa)
+        .filter((f): f is string => Boolean(f))
+        .map((f) => categoriaDe(f)),
+    );
     return CATEGORIAS_PRINCIPALES.filter((c) => presentes.has(c.label));
   }, [perfumes]);
 
@@ -43,7 +50,7 @@ export function PerfumesCatalog({
       if (texto && !`${p.nombre} ${p.marca}`.toLowerCase().includes(texto)) return false;
       if (genero && p.genero !== genero) return false;
       if (familia && p.familia_olfativa !== familia) return false;
-      if (categoria && categoriaDe(p.familia_olfativa) !== categoria) return false;
+      if (categoria && (!p.familia_olfativa || categoriaDe(p.familia_olfativa) !== categoria)) return false;
       if (categoriaPrecio && p.categoria_precio !== categoriaPrecio) return false;
       if (nichoOComercial && p.nicho_o_comercial !== nichoOComercial) return false;
       return true;

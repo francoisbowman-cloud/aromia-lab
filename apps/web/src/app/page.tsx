@@ -53,17 +53,13 @@ const ECOSISTEMA = [
 export default async function Home() {
   const [perfumes, articulos] = await Promise.all([getPerfumes(), getArticulos()]);
 
-  // Reseñas destacadas: prioriza perfumes con rating real (así se ve la
-  // estrella, no un placeholder) — si ninguno tiene todavía, cae a los
-  // primeros del catálogo igual que antes. El carrusel puede mostrar más
-  // que las 3 originales porque ahora hay scroll, no un grid fijo.
   const conRating = perfumes.filter((p) => p.rating_promedio);
   const destacados = (conRating.length >= 3 ? conRating : perfumes).slice(0, 9);
-  // El hero rota entre los primeros — misma fuente que el carrusel de abajo,
-  // para no introducir un segundo criterio de "destacado".
   const heroPicks = destacados.slice(0, 5);
 
-  const familiasPresentes = new Set(perfumes.map((p) => p.familia_olfativa));
+  const familiasPresentes = new Set(
+    perfumes.map((p) => p.familia_olfativa).filter((f): f is string => Boolean(f)),
+  );
   const categoriasConResultados = CATEGORIAS_PRINCIPALES.filter((c) =>
     c.familias.some((f) => familiasPresentes.has(f)),
   );
@@ -74,7 +70,6 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col">
-      {/* Hero — dos columnas: texto + escena editorial (ver GUIA-VISUAL-aromia.md) */}
       <section className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 p-6 py-14 lg:grid-cols-2 lg:gap-16 lg:p-10 lg:py-24">
         <div className="flex flex-col items-start gap-5">
           <p className={EYEBROW}>La autoridad editorial que además vende</p>
@@ -144,7 +139,6 @@ export default async function Home() {
           </section>
         ) : null}
 
-        {/* Ecosistema — 5 accesos directos a las secciones reales del sitio */}
         <section>
           <div className="mb-6 flex items-center gap-3">
             <p className={EYEBROW}>El Ecosistema</p>
@@ -191,11 +185,8 @@ export default async function Home() {
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3.5 sm:grid-cols-4 lg:grid-cols-8">
               {categoriasConResultados.map((cat) => {
-                // Foto real de un perfume de la familia (no solo el degradé de
-                // marca) para que el tile sea "fiel" a la esencia que
-                // representa, no una mancha de color abstracta.
                 const representante = perfumes.find(
-                  (p) => cat.familias.includes(p.familia_olfativa) && p.imagen_url,
+                  (p) => Boolean(p.familia_olfativa) && cat.familias.includes(p.familia_olfativa!) && Boolean(p.imagen_url),
                 );
                 return (
                   <Link
@@ -204,7 +195,7 @@ export default async function Home() {
                     className="group relative flex aspect-square items-end overflow-hidden rounded-card transition duration-300 hover:-translate-y-1"
                     style={{ background: cat.gradient }}
                   >
-                    {representante ? (
+                    {representante?.imagen_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={representante.imagen_url}
