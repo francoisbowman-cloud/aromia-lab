@@ -1,60 +1,94 @@
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 
-const EYEBROW = "font-sans text-[10px] uppercase tracking-[.28em] text-gold-contrast font-semibold";
-
 function formatPrice(perfume: Perfume) {
   if (perfume.precio_referencia == null || !perfume.moneda) return "Precio por verificar";
-  return Number(perfume.precio_referencia).toLocaleString("es-AR", { style: "currency", currency: perfume.moneda });
+  try {
+    return Number(perfume.precio_referencia).toLocaleString("es-DO", { style: "currency", currency: perfume.moneda, maximumFractionDigits: 0 });
+  } catch {
+    return `${Number(perfume.precio_referencia).toLocaleString("es-DO")} ${perfume.moneda}`;
+  }
 }
 
 export function EditorialSelection({ perfumes }: { perfumes: Perfume[] }) {
-  const [feature, ...rest] = perfumes;
+  const feature = perfumes[0];
   if (!feature) return null;
 
+  const notes = [...(feature.notas_salida ?? []), ...(feature.notas_corazon ?? []), ...(feature.notas_fondo ?? [])]
+    .filter((note, index, all) => Boolean(note) && all.indexOf(note) === index)
+    .slice(0, 4);
+  const intensity = Math.max(1, Math.min(5, Math.round(feature.proyeccion ?? feature.estela ?? feature.longevidad ?? 4)));
+
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 lg:px-10">
-      <div className="mb-10 grid grid-cols-1 gap-6 border-b border-line pb-6 lg:grid-cols-[1fr_auto] lg:items-end">
-        <div>
-          <p className={EYEBROW}>Selección Aromia · Edit 01</p>
-          <h2 className="mt-3 max-w-[11ch] font-display text-[40px] font-medium leading-[.94] tracking-[-.025em] text-ink lg:text-[58px]">Cuatro perfumes. Cuatro formas de ocupar una habitación.</h2>
-        </div>
-        <p className="max-w-[34ch] font-sans text-xs leading-5 text-muted lg:pb-1 lg:text-right">Una edición breve del catálogo real: escogida para comparar carácter, no popularidad.</p>
+    <section className="mx-auto w-full max-w-[1440px] px-6 lg:px-10 xl:px-14">
+      <div className="mb-8 flex items-center gap-4 border-b border-line pb-4">
+        <p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Editorial destacado</p>
+        <span className="h-px flex-1 bg-line" />
+        <span className="font-plex text-[9px] uppercase tracking-[.14em] text-muted">Objeto 01</span>
       </div>
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.35fr_.65fr] lg:gap-14">
-        <Link href={`/catalogo/${feature.slug}`} className="group block">
-          <div className="relative min-h-[480px] overflow-hidden bg-[radial-gradient(circle_at_54%_42%,#fffdf7_0%,#f1e7d7_54%,#e4d6c2_100%)] dark:bg-[radial-gradient(circle_at_54%_42%,#211a13_0%,#15100c_62%,#0e0b08_100%)] lg:min-h-[610px]">
-            <div className="absolute inset-x-5 top-5 z-[2] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.18em] text-muted"><span>01</span><span className="h-px w-10 bg-current opacity-40" /><span>Editor&apos;s object</span></div>
-            <span aria-hidden="true" className="absolute -right-4 top-8 font-display text-[130px] leading-none text-[rgba(182,138,68,.08)] lg:text-[220px] dark:text-[rgba(200,168,107,.06)]">01</span>
-            {feature.imagen_url ? (
-              // eslint-disable-next-line @next/next/no-img-element -- remote catalog asset
-              <img src={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} className="absolute inset-0 h-full w-full object-contain p-16 drop-shadow-[0_30px_28px_rgba(82,56,27,.14)] transition-transform duration-700 group-hover:scale-[1.025] sm:p-20 lg:p-24" />
-            ) : (
-              <div className="absolute inset-0 grid place-items-center font-plex text-[9px] uppercase tracking-[.16em] text-muted">Imagen editorial pendiente</div>
-            )}
-            <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[linear-gradient(0deg,#efe4d3_0%,rgba(239,228,211,.8)_42%,transparent_100%)] dark:bg-[linear-gradient(0deg,#14100c_0%,rgba(20,16,12,.82)_42%,transparent_100%)]" />
-            <div className="absolute inset-x-6 bottom-6 z-[2] flex items-end justify-between gap-5">
-              <div><p className="font-display text-[30px] font-semibold leading-none text-ink lg:text-[42px]">{feature.nombre}</p><p className="mt-2 font-plex text-[10px] uppercase tracking-[.14em] text-muted">{feature.marca}</p></div>
-              <div className="text-right"><p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Referencia</p><span className="mt-1 block font-plex text-xs text-ink">{formatPrice(feature)}</span></div>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-[.72fr_1.08fr_.72fr] lg:gap-0">
+        <div className="flex flex-col justify-center py-4 lg:pr-12">
+          <p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Selección Aromia</p>
+          <h2 className="mt-5 max-w-[12ch] font-display text-[38px] font-medium leading-[1.02] tracking-[-.02em] text-ink lg:text-[50px]">{feature.nombre}</h2>
+          <p className="mt-2 font-display text-[22px] text-muted">{feature.marca}</p>
+          <p className="mt-6 max-w-[38ch] font-sans text-sm leading-6 text-muted">
+            {feature.descripcion_corta ?? feature.resena_sintetizada ?? "Una selección editorial para comparar carácter, materia y presencia con el resto del catálogo Aromia."}
+          </p>
+          <Link href={`/catalogo/${feature.slug}`} className="mt-8 inline-flex w-fit min-h-11 items-center gap-7 border border-line bg-[#fffdf8] px-5 font-plex text-[9px] uppercase tracking-[.16em] text-ink transition hover:border-gold hover:text-gold-contrast dark:bg-[#15110d]">
+            Descubrir <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+
+        <Link href={`/catalogo/${feature.slug}`} className="group relative min-h-[440px] overflow-hidden border-line bg-[radial-gradient(circle_at_50%_45%,#fff_0%,#fbf6ed_52%,#efe2cf_100%)] lg:border-x dark:bg-[radial-gradient(circle_at_50%_45%,#201911_0%,#15100c_60%,#0e0c0a_100%)]">
+          <span aria-hidden="true" className="absolute inset-x-[18%] bottom-[8%] h-[11%] rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(100,65,30,.16),transparent_70%)] blur-xl dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,.5),transparent_70%)]" />
+          {feature.imagen_url ? (
+            // eslint-disable-next-line @next/next/no-img-element -- remote catalog asset
+            <img src={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} className="absolute inset-0 h-full w-full object-contain p-12 drop-shadow-[0_26px_26px_rgba(70,43,20,.18)] transition-transform duration-700 group-hover:scale-[1.018] sm:p-16 lg:p-20 dark:drop-shadow-[0_30px_30px_rgba(0,0,0,.5)]" />
+          ) : (
+            <div className="absolute inset-0 grid place-items-center font-plex text-[9px] uppercase tracking-[.16em] text-muted">Imagen pendiente</div>
+          )}
         </Link>
 
-        <div className="flex flex-col justify-between">
-          <div>
-            <p className="mb-5 font-display text-xl italic text-muted">The supporting cast</p>
-            <div className="flex flex-col border-t border-line">
-              {rest.slice(0, 3).map((perfume, index) => (
-                <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} className="group grid grid-cols-[32px_1fr] gap-x-4 border-b border-line py-6 sm:grid-cols-[32px_1fr_auto]">
-                  <span className="font-plex text-[9px] tracking-[.12em] text-gold-contrast">0{index + 2}</span>
-                  <span><span className="block font-display text-[24px] leading-none text-ink transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:text-gold-contrast">{perfume.nombre}</span><span className="mt-2 block font-plex text-[9px] uppercase tracking-[.12em] text-muted">{perfume.marca}</span></span>
-                  <span className="col-start-2 mt-3 font-plex text-[10px] text-muted sm:col-start-auto sm:mt-1">{formatPrice(perfume)}</span>
-                </Link>
-              ))}
+        <div className="flex flex-col justify-center py-4 lg:pl-12">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-7 border-b border-line pb-7">
+            <div>
+              <p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Familia olfativa</p>
+              <p className="mt-2 font-display text-lg text-ink">{feature.familia_olfativa ?? "Por verificar"}</p>
+            </div>
+            <div>
+              <p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Concentración</p>
+              <p className="mt-2 font-display text-lg text-ink">{feature.concentracion ?? "—"}</p>
             </div>
           </div>
-          <Link href="/catalogo" className="nav-link mt-10 self-start font-sans text-sm text-ink transition hover:text-gold-contrast">Abrir la edición completa →</Link>
+
+          <div className="border-b border-line py-7">
+            <div className="flex items-end justify-between gap-5">
+              <div>
+                <p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Intensidad</p>
+                <div className="mt-3 flex gap-2" aria-label={`Intensidad ${intensity} de 5`}>
+                  {[1, 2, 3, 4, 5].map((n) => <span key={n} className={`h-2.5 w-2.5 rounded-full border ${n <= intensity ? "border-gold bg-gold" : "border-line"}`} />)}
+                </div>
+              </div>
+              {feature.rating_promedio ? (
+                <div className="text-right"><p className="font-display text-3xl text-gold-contrast">{feature.rating_promedio.toFixed(1)}</p><p className="mt-1 font-plex text-[9px] uppercase tracking-[.12em] text-muted">Valoración</p></div>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="border-b border-line py-7">
+            <p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Notas principales</p>
+            <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4">
+              {notes.length > 0 ? notes.map((note, i) => (
+                <div key={note} className="flex items-center gap-3"><span className={`h-7 w-7 rounded-full border border-line ${i % 2 === 0 ? "bg-[#e9c46f]" : "bg-[#c6b497]"}`} aria-hidden="true"/><span className="font-sans text-xs text-ink">{note}</span></div>
+              )) : <span className="col-span-2 font-sans text-xs text-muted">Notas en verificación editorial.</span>}
+            </div>
+          </div>
+
+          <div className="flex items-end justify-between gap-5 pt-7">
+            <div><p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Precio de referencia</p><p className="mt-2 font-display text-[28px] text-ink">{formatPrice(feature)}</p></div>
+            <Link href={`/catalogo/${feature.slug}`} aria-label={`Ver ${feature.nombre}`} className="grid h-11 w-11 place-items-center rounded-full border border-line text-gold-contrast transition hover:border-gold hover:bg-soft">→</Link>
+          </div>
         </div>
       </div>
     </section>
