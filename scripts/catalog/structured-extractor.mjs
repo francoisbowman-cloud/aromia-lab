@@ -78,8 +78,6 @@ export function extractExplicitNotes(html) {
 }
 
 function concentrationFrom(text) {
-  // URLs are explicit product evidence too. Convert separators so paths such as
-  // /eau-de-parfum/ are read exactly like visible "Eau de Parfum" labels.
   const normalized = decodeURIComponent(String(text ?? "")).replace(/[_+\-/]+/g, " ");
   const patterns = [
     ["Extrait", /\b(extrait(?: de parfum)?|perfume extract)\b/i],
@@ -103,6 +101,18 @@ function audienceFromProduct(product) {
   return String(raw ?? "");
 }
 
+function genderFromExplicitAudience(value) {
+  const normalized = String(value ?? "").trim().toLowerCase();
+  if (!normalized) return "";
+  const men = /^(men|man|male|homme|hombre|uomo|masculin|masculino)$/.test(normalized);
+  const women = /^(women|woman|female|femme|mujer|donna|féminin|feminin|femenino)$/.test(normalized);
+  const unisex = /^(unisex|all genders|gender neutral|gender-neutral)$/.test(normalized);
+  if (unisex || (men && women)) return "unisex";
+  if (men) return "masculino";
+  if (women) return "femenino";
+  return "";
+}
+
 export function extractExplicitMetadata(html, url = "", product = null) {
   const text = stripHtml(html);
   const title = extractMeta(html, "og:title");
@@ -111,16 +121,16 @@ export function extractExplicitMetadata(html, url = "", product = null) {
   const jsonCategory = typeof product?.category === "string" ? product.category : "";
   const primary = `${url} ${title} ${description} ${jsonAudience} ${jsonCategory}`;
   const searchable = `${primary} ${text.slice(0, 12000)}`;
-  let gender = "";
-  const men = /\b(for|pour|para)\s+(men|him|homme|hombre|uomo)|\bmens?\s+(fragrance|perfume|parfum)|\bhomme\b|\bmasculin\b|\bmasculino\b|\buomo\b|\/men(?:\/|-|$)/i.test(searchable);
-  const women = /\b(for|pour|para)\s+(women|her|femme|mujer|donna)|\bwomens?\s+(fragrance|perfume|parfum)|\bfemme\b|\bféminin\b|\bfeminin\b|\bfemenino\b|\bdonna\b|\/women(?:\/|-|$)/i.test(searchable);
-  const unisex = /\bunisex\b|gender[- ]?neutral|sans genre|senza genere/i.test(searchable);
-  if (unisex || (men && women)) gender = "unisex";
-  else if (men) gender = "masculino";
-  else if (women) gender = "femenino";
+  let gender = genderFromExplicitAudience(jsonAudience);
+  if (!gender) {
+    const men = /\b(for|pour|para)\s+(men|him|homme|hombre|uomo)|\bmens?\s+(fragrance|perfume|parfum)|\bhomme\b|\bmasculin\b|\bmasculino\b|\buomo\b|\/men(?:\/|-|$)/i.test(searchable);
+    const women = /\b(for|pour|para)\s+(women|her|femme|mujer|donna)|\bwomens?\s+(fragrance|perfume|parfum)|\bfemme\b|\bféminin\b|\bfeminin\b|\bfemenino\b|\bdonna\b|\/women(?:\/|-|$)/i.test(searchable);
+    const unisex = /\bunisex\b|gender[- ]?neutral|sans genre|senza genere/i.test(searchable);
+    if (unisex || (men && women)) gender = "unisex";
+    else if (men) gender = "masculino";
+    else if (women) gender = "femenino";
+  }
 
-  // Product-scoped signals first; page body only as a fallback because related-product
-  // navigation frequently mentions other concentrations.
   const concentration = concentrationFrom(primary) || concentrationFrom(text.slice(0, 2500));
   const yearMatch = searchable.match(/\b(?:launched|introduced|created|released|since|lancé|lance|créé|cree|lanzado|creado|lanciato|creato)\s+(?:in|en|nel|in\s+the\s+year)?\s*((?:19|20)\d{2})\b/i);
   const launch_year = yearMatch?.[1] ?? "";
