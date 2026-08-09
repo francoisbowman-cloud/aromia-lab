@@ -28,10 +28,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 function buildProductJsonLd(perfume: NonNullable<Awaited<ReturnType<typeof getPerfumeBySlug>>>) {
-  const retailerOffers = (perfume.retailers ?? []).filter((r) => Boolean(r.link_afiliado) && Boolean(r.moneda) && r.precio != null).map((r) => ({ "@type": "Offer", url: r.link_afiliado, priceCurrency: r.moneda, price: r.precio }));
-  const referenceOffer = perfume.link_afiliado && perfume.moneda && perfume.precio_referencia != null ? [{ "@type": "Offer", url: catalogBuyUrl(perfume.slug), priceCurrency: perfume.moneda, price: perfume.precio_referencia }] : [];
-  const offers = retailerOffers.length > 0 ? retailerOffers : referenceOffer;
-  return { "@context": "https://schema.org", "@type": "Product", name: perfume.nombre, image: [catalogImageUrl(perfume.slug)], description: perfume.descripcion_corta, brand: { "@type": "Brand", name: perfume.marca }, offers: offers.length === 0 ? undefined : offers.length === 1 ? offers[0] : offers };
+  const offer = perfume.link_afiliado && perfume.moneda && perfume.precio_referencia != null
+    ? { "@type": "Offer", url: catalogBuyUrl(perfume.slug), priceCurrency: perfume.moneda, price: perfume.precio_referencia }
+    : undefined;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: perfume.nombre,
+    image: [catalogImageUrl(perfume.slug)],
+    description: perfume.descripcion_corta,
+    brand: { "@type": "Brand", name: perfume.marca },
+    offers: offer,
+  };
 }
 
 export default async function CatalogoDetailPage({ params }: { params: { slug: string } }) {
