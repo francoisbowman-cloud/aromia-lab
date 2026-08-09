@@ -1,0 +1,2 @@
+row,id,slug,catalog_relation,quality_status,category,requires_human_decision,note
+51,50,new-york-signature-scent-pure-perfume,NEW,CATALOG_READY_WITH_PENDING,B,false,"'Pure Perfume 30%' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."

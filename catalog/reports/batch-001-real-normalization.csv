@@ -1,0 +1,5 @@
+row,id,slug,field,from,to,reason
+16,15,vibrant-leather-edp,price_segment,economico,económico,alias sin tilde normalizado a la forma canónica de Aromia
+17,16,cloud-edp,price_segment,economico,económico,alias sin tilde normalizado a la forma canónica de Aromia
+20,19,ani-extrait,concentration,Extrait de Parfum,Extrait,alias de concentración conocido normalizado a forma canónica
+25,24,elysium-pour-homme-parfum-cologne,concentration,Parfum Cologne,Parfum Cologne,"concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación"

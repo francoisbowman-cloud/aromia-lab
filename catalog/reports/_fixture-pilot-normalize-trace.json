@@ -1,0 +1,132 @@
+{
+  "batch": "_fixture-pilot",
+  "sourceFile": "catalog/imports/_fixture-pilot.csv",
+  "outputFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\_fixture-pilot.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-07T17:58:35.302Z",
+  "totalRows": 6,
+  "rowsChanged": 6,
+  "changes": [
+    {
+      "row": 2,
+      "id": "fx-001",
+      "slug": "dior-sauvage-edt",
+      "fields": [
+        {
+          "field": "slug",
+          "from": "",
+          "to": "dior-sauvage-edt",
+          "reason": "slug ausente — generado desde brand+name+concentration"
+        },
+        {
+          "field": "created_at",
+          "from": "",
+          "to": "2026-08-07T17:58:35.297Z",
+          "reason": "created_at ausente — completado con timestamp de procesamiento del batch"
+        }
+      ]
+    },
+    {
+      "row": 3,
+      "id": "fx-002",
+      "slug": "yves-saint-laurent-black-opium-edp",
+      "fields": [
+        {
+          "field": "slug",
+          "from": "",
+          "to": "yves-saint-laurent-black-opium-edp",
+          "reason": "slug ausente — generado desde brand+name+concentration"
+        },
+        {
+          "field": "created_at",
+          "from": "",
+          "to": "2026-08-07T17:58:35.297Z",
+          "reason": "created_at ausente — completado con timestamp de procesamiento del batch"
+        }
+      ]
+    },
+    {
+      "row": 4,
+      "id": "fx-003",
+      "slug": "nishane-ani-edp",
+      "fields": [
+        {
+          "field": "slug",
+          "from": "",
+          "to": "nishane-ani-edp",
+          "reason": "slug ausente — generado desde brand+name+concentration"
+        },
+        {
+          "field": "created_at",
+          "from": "",
+          "to": "2026-08-07T17:58:35.298Z",
+          "reason": "created_at ausente — completado con timestamp de procesamiento del batch"
+        }
+      ]
+    },
+    {
+      "row": 5,
+      "id": "fx-004",
+      "slug": "nishane-ani-extrait",
+      "fields": [
+        {
+          "field": "slug",
+          "from": "",
+          "to": "nishane-ani-extrait",
+          "reason": "slug ausente — generado desde brand+name+concentration"
+        },
+        {
+          "field": "created_at",
+          "from": "",
+          "to": "2026-08-07T17:58:35.298Z",
+          "reason": "created_at ausente — completado con timestamp de procesamiento del batch"
+        }
+      ]
+    },
+    {
+      "row": 6,
+      "id": "fx-005",
+      "slug": "xerjoff-uden-edp",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "eau de parfum",
+          "to": "EDP",
+          "reason": "alias de concentración conocido normalizado a forma canónica"
+        },
+        {
+          "field": "slug",
+          "from": "",
+          "to": "xerjoff-uden-edp",
+          "reason": "slug ausente — generado desde brand+name+concentration"
+        },
+        {
+          "field": "created_at",
+          "from": "",
+          "to": "2026-08-07T17:58:35.298Z",
+          "reason": "created_at ausente — completado con timestamp de procesamiento del batch"
+        }
+      ]
+    },
+    {
+      "row": 7,
+      "id": "fx-006",
+      "slug": "marca-sin-datos-perfume-incompleto-edt",
+      "fields": [
+        {
+          "field": "slug",
+          "from": "",
+          "to": "marca-sin-datos-perfume-incompleto-edt",
+          "reason": "slug ausente — generado desde brand+name+concentration"
+        },
+        {
+          "field": "created_at",
+          "from": "",
+          "to": "2026-08-07T17:58:35.298Z",
+          "reason": "created_at ausente — completado con timestamp de procesamiento del batch"
+        }
+      ]
+    }
+  ]
+}

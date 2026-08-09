@@ -1,0 +1,680 @@
+{
+  "batch": "batch-002",
+  "sourceFile": "../../catalog/imports/batch-002.csv",
+  "outputFile": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-002.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-08T20:20:33.106Z",
+  "totalRows": 50,
+  "rowsChanged": 50,
+  "changes": [
+    {
+      "row": 2,
+      "id": "1",
+      "slug": "opium-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 3,
+      "id": "2",
+      "slug": "poison-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 4,
+      "id": "3",
+      "slug": "alien-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 5,
+      "id": "4",
+      "slug": "linterdit-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 6,
+      "id": "5",
+      "slug": "for-her-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 7,
+      "id": "6",
+      "slug": "leau-dissey-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 8,
+      "id": "7",
+      "slug": "eternity-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 9,
+      "id": "8",
+      "slug": "burberry-her-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 10,
+      "id": "9",
+      "slug": "daisy-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 11,
+      "id": "10",
+      "slug": "spicebomb-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 12,
+      "id": "11",
+      "slug": "invictus-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 13,
+      "id": "12",
+      "slug": "wanted-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 14,
+      "id": "13",
+      "slug": "boss-bottled-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 15,
+      "id": "14",
+      "slug": "chloe-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 16,
+      "id": "15",
+      "slug": "tresor-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 17,
+      "id": "16",
+      "slug": "mon-guerlain-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 18,
+      "id": "17",
+      "slug": "beautiful-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 19,
+      "id": "18",
+      "slug": "philosykos-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 20,
+      "id": "19",
+      "slug": "do-son-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 21,
+      "id": "20",
+      "slug": "portrait-of-a-lady-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 22,
+      "id": "21",
+      "slug": "musc-ravageur-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 23,
+      "id": "22",
+      "slug": "ambre-sultan-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 24,
+      "id": "23",
+      "slug": "wonderwood-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 25,
+      "id": "24",
+      "slug": "colonia-edc",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 26,
+      "id": "25",
+      "slug": "halfeti-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 27,
+      "id": "26",
+      "slug": "no1-masculine-parfum",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 28,
+      "id": "27",
+      "slug": "more-than-words-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 29,
+      "id": "28",
+      "slug": "jubilation-xxv-man-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 30,
+      "id": "29",
+      "slug": "jubilation-25-woman-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 31,
+      "id": "30",
+      "slug": "angels-share-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 32,
+      "id": "31",
+      "slug": "straight-to-heaven-white-cristal-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 33,
+      "id": "32",
+      "slug": "eau-rose-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 34,
+      "id": "33",
+      "slug": "not-a-perfume-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 35,
+      "id": "34",
+      "slug": "rien-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 36,
+      "id": "35",
+      "slug": "taif-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 37,
+      "id": "36",
+      "slug": "bat-extrait",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Extrait de Parfum",
+          "to": "Extrait",
+          "reason": "alias de concentración conocido normalizado a forma canónica"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 38,
+      "id": "37",
+      "slug": "bleu-de-chanel-parfum",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 39,
+      "id": "38",
+      "slug": "green-irish-tweed-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 40,
+      "id": "39",
+      "slug": "millesime-imperial-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 41,
+      "id": "40",
+      "slug": "habit-rouge-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 42,
+      "id": "41",
+      "slug": "coco-mademoiselle-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 43,
+      "id": "42",
+      "slug": "luna-rossa-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 44,
+      "id": "43",
+      "slug": "signorina-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 45,
+      "id": "44",
+      "slug": "leau-dissey-pour-homme-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 46,
+      "id": "45",
+      "slug": "amen-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 47,
+      "id": "46",
+      "slug": "phantom-edt",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 48,
+      "id": "47",
+      "slug": "loewe-001-woman-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 49,
+      "id": "48",
+      "slug": "loewe-001-man-edp",
+      "fields": [
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "unverified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 50,
+      "id": "49",
+      "slug": "black-afgano-extrait",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Extrait de Parfum",
+          "to": "Extrait",
+          "reason": "alias de concentración conocido normalizado a forma canónica"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    },
+    {
+      "row": 51,
+      "id": "50",
+      "slug": "new-york-signature-scent-pure-perfume",
+      "fields": [
+        {
+          "field": "concentration",
+          "from": "Pure Perfume 30%",
+          "to": "Pure Perfume 30%",
+          "reason": "concentración fuera del set canónico conocido — conservada tal cual (no es un enum cerrado, ver SCHEMA_COMPARISON.md #A), quedará como warning en la próxima validación"
+        },
+        {
+          "field": "price_status",
+          "from": "",
+          "to": "verified",
+          "reason": "derivado determinísticamente de price_segment (nunca se lee notes)"
+        }
+      ]
+    }
+  ]
+}

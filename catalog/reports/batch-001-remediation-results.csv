@@ -1,0 +1,10 @@
+slug,original_quality_status,new_catalog_relation,new_quality_status,new_status_legacy,rescued,fields_applied
+santal-33-edp,REJECTED,NEW,REJECTED,REJECTED,false,
+armani-code-parfum,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"family=""Woody Aromatic"" | top_notes=""Bergamot;Bergamot Leaf"" | middle_notes=""Iris;Aldehydes;Clary Sage;Orris"" | base_notes=""Tonka Bean;Cedar"""
+naxos-edp,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"family=""Aromatic, Spicy"""
+side-effect-edp,REJECTED,NEW,REJECTED,REJECTED,false,"family=""Ambery, Spicy"""
+explorer-edp,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"family=""Woody Aromatic"""
+scandal-edp,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"family=""Chypre"" | subfamily=""Gourmand"""
+the-one-for-men-edt,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"family=""Aromatic Woody"""
+cloud-edp,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"base_notes=""Cashmere"""
+replica-jazz-club-edt,REJECTED,NEW,CATALOG_READY_WITH_PENDING,NEW,true,"family=""Ambery"" | subfamily=""Woody"""

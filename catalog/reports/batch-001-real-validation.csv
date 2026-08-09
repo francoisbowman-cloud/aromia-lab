@@ -1,0 +1,26 @@
+row,id,slug,level,error_codes,warning_codes,issue_summary
+2,1,chanel-no5-edp,info,,,
+3,2,tobacco-vanille-edp,info,,,
+4,3,santal-33-edp,error,"schema_violation;schema_violation;schema_violation",,[error] /top_notes must NOT have fewer than 1 items | [error] /heart_notes must NOT have fewer than 1 items | [error] /base_notes must NOT have fewer than 1 items
+5,4,shalimar-edp,info,,,
+6,5,eros-parfum,info,,,
+7,6,paradoxe-edp,info,,,
+8,7,armani-code-parfum,error,"schema_violation;schema_violation;schema_violation;schema_violation",,[error] /family must NOT have fewer than 1 characters | [error] /top_notes must NOT have fewer than 1 items | [error] /heart_notes must NOT have fewer than 1 items | [error] /base_notes must NOT have fewer than 1 items
+9,8,naxos-edp,error,schema_violation,,[error] /family must NOT have fewer than 1 characters
+10,9,side-effect-edp,error,"schema_violation;schema_violation;schema_violation",,[error] /top_notes must NOT have fewer than 1 items | [error] /heart_notes must NOT have fewer than 1 items | [error] /base_notes must NOT have fewer than 1 items
+11,10,212-vip-edp,info,,,
+12,11,explorer-edp,error,schema_violation,,[error] /family must NOT have fewer than 1 characters
+13,12,scandal-edp,error,schema_violation,,[error] /family must NOT have fewer than 1 characters
+14,13,the-one-for-men-edt,error,schema_violation,,[error] /family must NOT have fewer than 1 characters
+15,14,interlude-woman-edp,info,,,
+16,15,vibrant-leather-edp,info,,,
+17,16,cloud-edp,error,schema_violation,,[error] /base_notes must NOT have fewer than 1 items
+18,17,gypsy-water-edp,info,,,
+19,18,percival-edp,info,,,
+20,19,ani-extrait,info,,,
+21,20,cedrat-boise-edp,info,,,
+22,21,born-in-roma-uomo-edt,info,,,
+23,22,terre-d-hermes-parfum,info,,,
+24,23,vanilla-28-edp,info,,,
+25,24,elysium-pour-homme-parfum-cologne,warning,,non_standard_concentration,"[warning] 'Parfum Cologne' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."
+26,25,replica-jazz-club-edt,error,schema_violation,,[error] /family must NOT have fewer than 1 characters

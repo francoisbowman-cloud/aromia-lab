@@ -1,0 +1,26 @@
+{
+  "name": "@aromia/catalog-scripts",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Pipeline y motor de expansión de catálogo de Aromia (Fase 3 — Catalog Data Pipeline & Expansion 500). No forma parte del build de apps/web ni apps/api. Nunca escribe a Postgres de producción.",
+  "type": "module",
+  "scripts": {
+    "validate": "node validate.mjs",
+    "normalize": "node normalize.mjs",
+    "dedupe": "node deduplicate.mjs",
+    "diff": "node diff.mjs",
+    "prepare-import": "node prepare-import.mjs",
+    "import": "node import.mjs",
+    "calibrate": "node calibrate.mjs",
+    "apply-remediation": "node apply-remediation.mjs",
+    "engine": "node engine.mjs",
+    "test": "node --test --test-concurrency=1 tests/",
+    "posttest": "node tests/cleanup-artifacts.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "csv-parse": "^5.5.6",
+    "csv-stringify": "^6.5.1"
+  }
+}

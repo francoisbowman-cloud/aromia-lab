@@ -1,11 +1,21 @@
 {
   "name": "aromia-lab-tooling",
   "private": true,
-  "version": "0.1.0",
-  "description": "Tooling de raíz del repo, fuera de apps/web y apps/api (que se buildean cada una desde su propio Dockerfile con root directory propio en Railway — este package.json no las afecta). Hoy solo contiene el piloto de auditoría de imágenes de la Fase 2.",
+  "version": "0.2.0",
+  "description": "Tooling de raíz del repo. Apps/web y apps/api conservan sus propios package.json y builds; este paquete solo expone utilidades operativas para imágenes y expansión de catálogo.",
   "type": "module",
   "scripts": {
-    "images:audit-pilot": "node scripts/audit-image-pilot.mjs"
+    "images:audit-pilot": "node scripts/audit-image-pilot.mjs",
+    "catalog:validate": "node scripts/catalog/validate.mjs",
+    "catalog:normalize": "node scripts/catalog/normalize.mjs",
+    "catalog:dedupe": "node scripts/catalog/deduplicate.mjs",
+    "catalog:diff": "node scripts/catalog/diff.mjs",
+    "catalog:prepare": "node scripts/catalog/prepare-import.mjs",
+    "catalog:import": "node scripts/catalog/import.mjs",
+    "catalog:calibrate": "node scripts/catalog/calibrate.mjs",
+    "catalog:apply-remediation": "node scripts/catalog/apply-remediation.mjs",
+    "catalog:engine": "node scripts/catalog/engine.mjs",
+    "catalog:test": "npm --prefix scripts/catalog test"
   },
   "dependencies": {
     "ajv": "^8.17.1",
