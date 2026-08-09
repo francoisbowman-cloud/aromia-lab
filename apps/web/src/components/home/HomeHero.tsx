@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -71,15 +72,21 @@ export function HomeHero() {
         {/* Provisional photographic masters already owned by Aromia. The procedural
             scene remains underneath as a deterministic loading/failure fallback.
             Bespoke H01 assets still have to pass the ingredient-anchor visual gate. */}
-        <img
+        <Image
           src="/editorial/bright-soft-focus.png"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-[.68] mix-blend-multiply dark:hidden"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-[.68] mix-blend-multiply dark:hidden"
         />
-        <img
+        <Image
           src="/editorial/moody-closeup.png"
           alt=""
-          className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-[.72] mix-blend-soft-light dark:block"
+          fill
+          priority
+          sizes="100vw"
+          className="hidden object-cover object-center opacity-[.72] mix-blend-soft-light dark:block"
         />
       </div>
       <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(251,248,243,.72)_0%,rgba(251,248,243,.26)_44%,rgba(251,248,243,.08)_100%)] dark:bg-[linear-gradient(0deg,rgba(14,12,10,.66)_0%,rgba(14,12,10,.18)_44%,rgba(14,12,10,.08)_100%)]" />
