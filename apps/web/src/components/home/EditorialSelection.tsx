@@ -1,96 +1,57 @@
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 
-const EYEBROW =
-  "font-sans text-[11px] uppercase tracking-[.24em] text-gold-contrast font-semibold";
+const EYEBROW = "font-sans text-[10px] uppercase tracking-[.28em] text-gold-contrast font-semibold";
 
 function formatPrice(perfume: Perfume) {
-  return Number(perfume.precio_referencia).toLocaleString("es-AR", {
-    style: "currency",
-    currency: perfume.moneda,
-  });
+  return Number(perfume.precio_referencia).toLocaleString("es-AR", { style: "currency", currency: perfume.moneda });
 }
 
-/**
- * Selección editorial: un protagonista tratado como objeto de revista +
- * tres referencias de apoyo. Evita recortar agresivamente la foto de
- * catálogo mientras aún no existen assets editoriales finales.
- */
 export function EditorialSelection({ perfumes }: { perfumes: Perfume[] }) {
   const [feature, ...rest] = perfumes;
   if (!feature) return null;
 
   return (
     <section className="mx-auto w-full max-w-6xl px-6 lg:px-10">
-      <div className="mb-7 flex flex-wrap items-end justify-between gap-5 border-b border-line pb-5">
+      <div className="mb-10 grid grid-cols-1 gap-6 border-b border-line pb-6 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className={EYEBROW}>Selección Aromia</p>
-          <h2 className="mt-2 max-w-[13ch] font-display text-3xl font-medium leading-[1.02] text-ink lg:text-[44px]">
-            Fragancias que merecen una segunda mirada.
-          </h2>
+          <p className={EYEBROW}>Selección Aromia · Edit 01</p>
+          <h2 className="mt-3 max-w-[11ch] font-display text-[40px] font-medium leading-[.94] tracking-[-.025em] text-ink lg:text-[58px]">Cuatro perfumes. Cuatro formas de ocupar una habitación.</h2>
         </div>
-        <p className="max-w-[34ch] font-sans text-xs leading-5 text-muted lg:text-right">
-          Cuatro entradas al catálogo real, ordenadas como una selección editorial y no como otro escaparate.
-        </p>
+        <p className="max-w-[34ch] font-sans text-xs leading-5 text-muted lg:pb-1 lg:text-right">Una edición breve del catálogo real: escogida para comparar carácter, no popularidad.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.28fr_.72fr] lg:gap-10">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.35fr_.65fr] lg:gap-14">
         <Link href={`/catalogo/${feature.slug}`} className="group block">
-          <div className="relative min-h-[430px] overflow-hidden bg-[#f2eadc] dark:bg-[#17120d] lg:min-h-[560px]">
-            <div className="absolute left-5 top-5 z-[1] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.16em] text-[rgba(33,29,23,.55)] dark:text-[rgba(242,235,221,.58)]">
-              <span>N°01</span>
-              <span className="h-px w-8 bg-current opacity-40" />
-              <span>Elección del editor</span>
+          <div className="relative min-h-[480px] overflow-hidden bg-[radial-gradient(circle_at_54%_42%,#fffdf7_0%,#f1e7d7_54%,#e4d6c2_100%)] dark:bg-[radial-gradient(circle_at_54%_42%,#211a13_0%,#15100c_62%,#0e0b08_100%)] lg:min-h-[610px]">
+            <div className="absolute inset-x-5 top-5 z-[2] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.18em] text-muted">
+              <span>01</span><span className="h-px w-10 bg-current opacity-40" /><span>Editor&apos;s object</span>
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element -- asset remoto del catálogo actual; se sustituirá por asset editorial propio */}
-            <img
-              src={feature.imagen_url}
-              alt={`${feature.nombre} de ${feature.marca}`}
-              className="absolute inset-0 h-full w-full object-contain p-14 transition-transform duration-700 group-hover:scale-[1.025] sm:p-20 lg:p-24"
-            />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#f2eadc] via-[#f2eadc]/65 to-transparent dark:from-[#17120d] dark:via-[#17120d]/65" />
-            <div className="absolute inset-x-5 bottom-5 z-[1] flex items-end justify-between gap-4">
-              <div>
-                <p className="font-display text-2xl font-semibold leading-none text-ink lg:text-[34px]">
-                  {feature.nombre}
-                </p>
-                <p className="mt-2 font-plex text-[11px] uppercase tracking-[.1em] text-muted">
-                  {feature.marca}
-                </p>
-              </div>
-              <span className="font-plex text-xs text-ink">{formatPrice(feature)}</span>
+            <span aria-hidden="true" className="absolute -right-4 top-8 font-display text-[130px] leading-none text-[rgba(182,138,68,.08)] lg:text-[220px] dark:text-[rgba(200,168,107,.06)]">01</span>
+            {/* eslint-disable-next-line @next/next/no-img-element -- remote catalog asset */}
+            <img src={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} className="absolute inset-0 h-full w-full object-contain p-16 drop-shadow-[0_30px_28px_rgba(82,56,27,.14)] transition-transform duration-700 group-hover:scale-[1.025] sm:p-20 lg:p-24" />
+            <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[linear-gradient(0deg,#efe4d3_0%,rgba(239,228,211,.8)_42%,transparent_100%)] dark:bg-[linear-gradient(0deg,#14100c_0%,rgba(20,16,12,.82)_42%,transparent_100%)]" />
+            <div className="absolute inset-x-6 bottom-6 z-[2] flex items-end justify-between gap-5">
+              <div><p className="font-display text-[30px] font-semibold leading-none text-ink lg:text-[42px]">{feature.nombre}</p><p className="mt-2 font-plex text-[10px] uppercase tracking-[.14em] text-muted">{feature.marca}</p></div>
+              <div className="text-right"><p className="font-plex text-[9px] uppercase tracking-[.12em] text-muted">Referencia</p><span className="mt-1 block font-plex text-xs text-ink">{formatPrice(feature)}</span></div>
             </div>
           </div>
         </Link>
 
         <div className="flex flex-col justify-between">
-          <div className="flex flex-col border-t border-line">
-            {rest.slice(0, 3).map((perfume, index) => (
-              <Link
-                key={perfume.slug}
-                href={`/catalogo/${perfume.slug}`}
-                className="group grid grid-cols-[38px_1fr_auto] items-baseline gap-3 border-b border-line py-5 transition-[padding] hover:pl-2"
-              >
-                <span className="font-plex text-[10px] tracking-[.08em] text-gold-contrast">
-                  N°{String(index + 2).padStart(2, "0")}
-                </span>
-                <span>
-                  <span className="block font-display text-xl text-ink transition-colors group-hover:text-gold-contrast">
-                    {perfume.nombre}
-                  </span>
-                  <span className="mt-1 block font-sans text-xs text-muted">{perfume.marca}</span>
-                </span>
-                <span className="font-plex text-[11px] text-ink">{formatPrice(perfume)}</span>
-              </Link>
-            ))}
+          <div>
+            <p className="mb-5 font-display text-xl italic text-muted">The supporting cast</p>
+            <div className="flex flex-col border-t border-line">
+              {rest.slice(0, 3).map((perfume, index) => (
+                <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} className="group grid grid-cols-[32px_1fr] gap-x-4 border-b border-line py-6 sm:grid-cols-[32px_1fr_auto]">
+                  <span className="font-plex text-[9px] tracking-[.12em] text-gold-contrast">0{index + 2}</span>
+                  <span><span className="block font-display text-[24px] leading-none text-ink transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:text-gold-contrast">{perfume.nombre}</span><span className="mt-2 block font-plex text-[9px] uppercase tracking-[.12em] text-muted">{perfume.marca}</span></span>
+                  <span className="col-start-2 mt-3 font-plex text-[10px] text-muted sm:col-start-auto sm:mt-1">{formatPrice(perfume)}</span>
+                </Link>
+              ))}
+            </div>
           </div>
-
-          <Link
-            href="/catalogo"
-            className="nav-link mt-8 self-start font-sans text-sm text-ink transition hover:text-gold-contrast"
-          >
-            Ver todo el catálogo →
-          </Link>
+          <Link href="/catalogo" className="nav-link mt-10 self-start font-sans text-sm text-ink transition hover:text-gold-contrast">Abrir la edición completa →</Link>
         </div>
       </div>
     </section>
