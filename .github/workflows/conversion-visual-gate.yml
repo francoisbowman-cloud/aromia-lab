@@ -24,7 +24,7 @@ jobs:
         run: |
           cat > /tmp/aromia-conversion-api.mjs <<'EOF'
           import http from 'node:http';
-          const p={id:1,slug:'baccarat-rouge-540',nombre:'Baccarat Rouge 540',marca:'Maison Francis Kurkdjian',familia_olfativa:'Ambarado floral',genero:'unisex',categoria_precio:'lujo',nicho_o_comercial:'nicho',precio_referencia:325,moneda:'USD',imagen_url:null,link_afiliado:null};
+          const p={id:1,slug:'baccarat-rouge-540',nombre:'Baccarat Rouge 540',marca:'Maison Francis Kurkdjian',familia_olfativa:'amaderado',genero:'unisex',categoria_precio:'lujo',nicho_o_comercial:'nicho',precio_referencia:325,moneda:'USD',imagen_url:null,link_afiliado:null};
           http.createServer((req,res)=>{res.setHeader('Content-Type','application/json');if(req.url==='/api/perfumes')return res.end(JSON.stringify([p]));if(req.url==='/api/perfumes/baccarat-rouge-540')return res.end(JSON.stringify({...p,descripcion_corta:'Una firma luminosa de azafrán, ámbar y cedro.',notas_salida:['Azafrán'],notas_corazon:['Ámbar'],notas_fondo:['Cedro'],retailers:[{id:1,nombre:'Retailer editorial',detalle:'70 ml · Eau de parfum',precio:325,moneda:'USD',link_afiliado:'https://example.com'}]}));if(req.url==='/api/articulos')return res.end('[]');res.statusCode=404;res.end('{}');}).listen(4000,'127.0.0.1');
           EOF
           node /tmp/aromia-conversion-api.mjs >/tmp/conversion-api.log 2>&1 &
@@ -43,7 +43,7 @@ jobs:
           import { chromium } from 'playwright';
           const browser=await chromium.launch({headless:true});
           for(const [mode,viewport] of [['desktop',{width:1440,height:1000}],['mobile',{width:390,height:844}]]){
-            for(const [name,path] of [['product','/catalogo/baccarat-rouge-540'],['quiz-result','/quiz/resultado/minimalista']]){
+            for(const [name,path] of [['product','/catalogo/baccarat-rouge-540'],['quiz-result','/quiz/resultado/amaderado-silencioso']]){
               const page=await browser.newPage({viewport});
               await page.goto(`http://127.0.0.1:3000${path}`,{waitUntil:'networkidle'});
               await page.screenshot({path:`conversion-gate/${name}-${mode}.png`,fullPage:true});
