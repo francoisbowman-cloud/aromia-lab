@@ -78,9 +78,9 @@ function imageCandidatesFromHtml(html: string, pageUrl: string): string[] {
     /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image(?::src)?["'][^>]*>/gi,
   ];
   for (const pattern of metaPatterns) {
-    for (const match of html.matchAll(pattern)) candidates.push(match[1]);
+    for (const match of Array.from(html.matchAll(pattern))) candidates.push(match[1]);
   }
-  for (const match of html.matchAll(/"image"\s*:\s*(?:\[\s*)?"(https?:\\?\/\\?\/[^"\\]+(?:\\.[^"\\]*)*)"/gi)) {
+  for (const match of Array.from(html.matchAll(/"image"\s*:\s*(?:\[\s*)?"(https?:\\?\/\\?\/[^"\\]+(?:\\.[^"\\]*)*)"/gi))) {
     candidates.push(match[1].replace(/\\\//g, "/"));
   }
 
