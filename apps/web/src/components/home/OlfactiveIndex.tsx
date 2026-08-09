@@ -39,7 +39,7 @@ export function OlfactiveIndex({ categorias }: { categorias: Categoria[] }) {
             <Link
               key={cat.label}
               href={`/catalogo?familia=${encodeURIComponent(cat.familias[0])}`}
-              className="group grid grid-cols-[36px_auto_1fr_auto] items-baseline gap-3 border-b border-line py-4.5 transition-[padding] hover:pl-2 lg:py-5"
+              className="group grid grid-cols-[36px_auto_1fr_auto] items-baseline gap-3 border-b border-line py-[18px] transition-[padding] hover:pl-2 lg:py-5"
             >
               <span className="font-plex text-[10px] tracking-[.1em] text-gold-contrast">
                 {String(index + 1).padStart(2, "0")}
