@@ -2,7 +2,7 @@ name: Catalog Pipeline CI
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: ["main", "feat/catalog-pipeline-500"]
     paths:
       - "scripts/catalog/**"
       - "catalog/**"
