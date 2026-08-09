@@ -92,6 +92,14 @@ body {
     transition: none !important;
     scroll-behavior: auto !important;
   }
+
+  /* La regla `*` de arriba apaga la transición de `.reveal`, pero no basta:
+     su estado base es opacity:0, así que sin esto el contenido quedaría
+     invisible para quien pidió menos movimiento. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* Aromia Magazine — vista de impresión/PDF (spec aromia-magazine-especificacion.md).
@@ -134,6 +142,23 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Reveal en scroll (Home — Fase Visual & Conversion Upgrade, Hybrid 01):
+     IntersectionObserver (ver components/home/Reveal.tsx) agrega
+     `.is-visible` al entrar en viewport. Sin la clase, el contenido debe
+     seguir siendo legible (no depende de JS para existir) — solo la
+     transición de entrada depende de ella. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
   }
 
   /* Carrusel de "Reseñas destacadas" (Home): scroll-snap nativo con la
@@ -200,5 +225,80 @@ body {
     outline: 2px solid var(--gold-2);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+}
+
+/* Home — Fase Visual & Conversion Upgrade, Hybrid 01 (docs/design/visual-upgrade).
+   Escenas de fondo con placeholders dirigidos (gradientes, no fotografía real
+   todavía) para Hero/Product Reveal, Ecosistema/Quiz y Magazine. Cada una
+   responde a [data-theme="dark"] igual que el resto del sistema — Atelier
+   Ivorio en claro, Maison Grafito en oscuro, misma lógica que --bg/--text.
+   Cuando entren assets reales, estas clases pasan a ser el fallback/loading
+   state en vez de la imagen final. */
+@layer components {
+  .aromia-scene-macro {
+    background: radial-gradient(circle at 20% 30%, rgba(214, 196, 86, 0.55), transparent 42%),
+      radial-gradient(circle at 78% 20%, rgba(224, 168, 84, 0.62), transparent 40%),
+      radial-gradient(circle at 13% 68%, rgba(178, 122, 74, 0.5), transparent 42%),
+      radial-gradient(circle at 80% 76%, rgba(255, 250, 240, 0.75), transparent 38%),
+      radial-gradient(ellipse 60% 45% at 40% 22%, rgba(255, 252, 244, 0.65), transparent 60%),
+      linear-gradient(155deg, #f7f2e6 0%, #efe6d2 55%, #f2ebda 100%);
+  }
+
+  [data-theme="dark"] .aromia-scene-macro {
+    background: radial-gradient(circle at 20% 30%, rgba(196, 181, 84, 0.5), transparent 40%),
+      radial-gradient(circle at 78% 20%, rgba(200, 168, 107, 0.5), transparent 40%),
+      radial-gradient(circle at 13% 68%, rgba(122, 70, 48, 0.48), transparent 40%),
+      radial-gradient(circle at 80% 76%, rgba(233, 220, 192, 0.34), transparent 38%),
+      linear-gradient(160deg, #0e0c0a, #100b08);
+  }
+
+  .aromia-scene-glow {
+    background: radial-gradient(ellipse 70% 60% at 30% 30%, rgba(224, 168, 84, 0.32), transparent 55%),
+      radial-gradient(circle at 75% 70%, rgba(214, 196, 86, 0.26), transparent 55%), #f7f2e6;
+  }
+
+  [data-theme="dark"] .aromia-scene-glow {
+    background: conic-gradient(from 210deg at 30% 30%, rgba(200, 168, 107, 0.4), rgba(14, 12, 10, 0) 40%),
+      radial-gradient(circle at 75% 70%, rgba(168, 127, 74, 0.3), transparent 55%), #100c09;
+  }
+
+  .aromia-scene-editorial {
+    background: radial-gradient(ellipse 65% 50% at 60% 34%, rgba(224, 168, 84, 0.4), transparent 62%),
+      linear-gradient(155deg, #f7f2e6 0%, #efe6d2 55%, #f2ebda 100%);
+  }
+
+  [data-theme="dark"] .aromia-scene-editorial {
+    background: radial-gradient(ellipse 70% 55% at 62% 38%, rgba(200, 168, 107, 0.35), transparent 60%),
+      linear-gradient(155deg, #1c1610 0%, #0e0c0a 55%, #100b08 100%);
+  }
+
+  /* Etiqueta editorial anclada (Hero) — punto + hairline + texto, sin
+     superficie/relleno. No es un chip de UI (ver decisión de diseño en
+     docs/design/visual-upgrade/AROMIA-VISUAL-UPGRADE-BASELINE.md). */
+  .aromia-note-dot {
+    background: var(--gold-contrast);
+    box-shadow: 0 0 0 5px rgba(134, 101, 38, 0.22);
+  }
+
+  [data-theme="dark"] .aromia-note-dot {
+    background: var(--gold-2);
+    box-shadow: 0 0 0 5px rgba(216, 189, 140, 0.22);
+  }
+
+  .aromia-note-line {
+    background: rgba(33, 29, 23, 0.4);
+  }
+
+  [data-theme="dark"] .aromia-note-line {
+    background: rgba(242, 235, 221, 0.45);
+  }
+
+  .aromia-note:hover .aromia-note-line {
+    background: var(--gold-contrast);
+  }
+
+  [data-theme="dark"] .aromia-note:hover .aromia-note-line {
+    background: var(--gold-2);
   }
 }
