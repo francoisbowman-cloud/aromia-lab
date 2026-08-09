@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildCoverage, assessProvenance, scoreCandidate, selectCandidates } from "../engine.mjs";
+import { buildCoverage, assessProvenance, scoreCandidate, selectCandidates, identityFromRow } from "../engine.mjs";
 
 const current = [
   { slug: "a", nombre: "Alpha EDP", marca: "Brand A", genero: "masculino", familia_olfativa: "amaderado", categoria_precio: "lujo", nicho_o_comercial: "nicho" },
@@ -34,6 +34,21 @@ test("buildCoverage reads legacy Aromia columns", () => {
   assert.equal(coverage.price_segment.lujo, 2);
 });
 
+test("pending/unknown values never become fake coverage dimensions", () => {
+  const coverage = buildCoverage([
+    ...current,
+    { marca: "Brand D", nombre: "Unknown EDP", genero: "unisex", familia_olfativa: "pending", categoria_precio: "pending" },
+  ]);
+  assert.equal(coverage.family.pending, undefined);
+  assert.equal(coverage.price_segment.pending, undefined);
+});
+
+test("modern split identity preserves legitimate product names ending in Perfume", () => {
+  const identity = identityFromRow(candidate({ brand: "Juliette Has a Gun", name: "Not a Perfume", concentration: "EDP" }));
+  assert.equal(identity.baseName, "not a perfume");
+  assert.equal(identity.concentration, "edp");
+});
+
 test("assessProvenance rewards valid verified multi-source evidence", () => {
   const result = assessProvenance(candidate({ source_url: "https://one.example/a;https://two.example/b" }));
   assert.equal(result.gate, "SOURCE_PRESENT");
@@ -46,6 +61,13 @@ test("source is a hard gate; confidence alone is never enough", () => {
   const scored = scoreCandidate(candidate({ source_url: "", data_confidence: "high" }), coverage);
   assert.equal(scored.eligible, false);
   assert.ok(scored.blocks.includes("SOURCE_REQUIRED"));
+});
+
+test("pending family is not rewarded as a new olfactive family", () => {
+  const coverage = buildCoverage(current);
+  const scored = scoreCandidate(candidate({ family: "pending" }), coverage);
+  assert.equal(scored.family, null);
+  assert.ok(!scored.reasons.includes("NEW_OLFACTIVE_FAMILY"));
 });
 
 test("exact existing product is blocked while a distinct concentration remains eligible", () => {
