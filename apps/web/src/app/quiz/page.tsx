@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { QuizFlow } from "@/components/quiz/QuizFlow";
 
 export const metadata: Metadata = {
-  title: "¿Qué perfume eres? — Aromia",
-  description: "Respondé el quiz de matching y descubrí qué perfumes van con vos.",
+  title: "¿Qué perfume eres?",
+  description: "Descubre tu perfil olfativo con el quiz de Aromia y encuentra perfumes alineados con tu estilo, ocasión y presencia.",
   alternates: { canonical: "/quiz" },
+  openGraph: { title: "¿Qué perfume eres?", description: "Descubre tu perfil olfativo y una selección de perfumes alineados contigo.", type: "website" },
 };
 
 export default function QuizPage() {
@@ -18,18 +19,13 @@ export default function QuizPage() {
             <h1 className="mt-5 max-w-[8ch] font-display text-[56px] font-medium leading-[.9] tracking-[-.045em] text-ink lg:text-[84px]">¿Qué perfume eres?</h1>
             <p className="mt-7 max-w-[38ch] font-sans text-[15px] leading-7 text-muted">No buscamos una etiqueta. Buscamos el contraste entre luz, textura, ocasión y presencia que define cómo quieres oler.</p>
           </div>
-
           <div className="mt-16 border-t border-line pt-5 font-plex text-[9px] uppercase tracking-[.16em] text-muted">
             <div className="flex items-center justify-between"><span>6 preguntas</span><span>≈ 2 minutos</span></div>
             <div className="mt-3 flex items-center gap-3"><span className="h-px flex-1 bg-line"/><span>Perfil → selección</span></div>
           </div>
         </div>
-
         <div className="relative flex items-center px-6 py-12 lg:px-14 lg:py-16">
-          <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-            <div className="absolute right-[-12%] top-[8%] h-[42vw] max-h-[620px] w-[42vw] max-w-[620px] rounded-full border border-[#d8c8ae] opacity-40 dark:border-[#5d4a31]" />
-            <div className="absolute bottom-[9%] left-[6%] h-32 w-32 rounded-full bg-[#d9b97c]/15 blur-2xl" />
-          </div>
+          <div aria-hidden="true" className="absolute inset-0 overflow-hidden"><div className="absolute right-[-12%] top-[8%] h-[42vw] max-h-[620px] w-[42vw] max-w-[620px] rounded-full border border-[#d8c8ae] opacity-40 dark:border-[#5d4a31]" /><div className="absolute bottom-[9%] left-[6%] h-32 w-32 rounded-full bg-[#d9b97c]/15 blur-2xl" /></div>
           <div className="relative w-full"><QuizFlow /></div>
         </div>
       </section>
