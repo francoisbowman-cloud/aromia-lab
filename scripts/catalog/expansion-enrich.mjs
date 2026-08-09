@@ -67,7 +67,21 @@ export function runEnrichment() {
   const routed = routeEvidence(readCsv(resolved.path));
   writeCsv(join(dir, "auto-ready.csv"), routed.autoReady); writeCsv(join(dir, "review-required.csv"), routed.reviewRequired); writeCsv(join(dir, "blocked.csv"), routed.blocked);
   const total = routed.drafted.length;
-  const report = { evidence_source: resolved.source, total, auto_ready: routed.autoReady.length, review_required: routed.reviewRequired.length, blocked: routed.blocked.length, auto_preparation_yield: total ? routed.autoReady.length / total : null, human_review_burden: total ? routed.reviewRequired.length / total : null };
+  const reviewReasons = {};
+  for (const row of routed.reviewRequired) reviewReasons[row.quality_reason] = (reviewReasons[row.quality_reason] ?? 0) + 1;
+  const penaltyCounts = {};
+  for (const row of routed.reviewRequired) for (const penalty of splitList(row.confidence_penalties)) penaltyCounts[penalty] = (penaltyCounts[penalty] ?? 0) + 1;
+  const report = {
+    evidence_source: resolved.source,
+    total,
+    auto_ready: routed.autoReady.length,
+    review_required: routed.reviewRequired.length,
+    blocked: routed.blocked.length,
+    auto_preparation_yield: total ? routed.autoReady.length / total : null,
+    human_review_burden: total ? routed.reviewRequired.length / total : null,
+    review_reasons: reviewReasons,
+    review_penalties: penaltyCounts,
+  };
   writeFileSync(join(dir, "enrichment-report.json"), JSON.stringify(report, null, 2) + "\n", "utf-8"); return report;
 }
 
