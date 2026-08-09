@@ -1,0 +1,43 @@
+name: Catalog Expansion Engine CI
+
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "catalog/**"
+      - "scripts/catalog/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/catalog-engine-ci.yml"
+  push:
+    branches:
+      - "main"
+    paths:
+      - "catalog/**"
+      - "scripts/catalog/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/catalog-engine-ci.yml"
+
+jobs:
+  catalog:
+    name: catalog (tests + engine smoke)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: scripts/catalog/package-lock.json
+      - name: Install catalog tooling
+        run: npm ci --prefix scripts/catalog
+      - name: Run catalog regression suite
+        run: npm --prefix scripts/catalog test
+      - name: Run engine against real Batch 002
+        run: node scripts/catalog/engine.mjs catalog/imports/batch-002.csv --limit 25
+      - name: Verify engine outputs
+        run: |
+          test -s catalog/reports/engine-batch-002.json
+          test -s catalog/reports/engine-batch-002-selection.csv
