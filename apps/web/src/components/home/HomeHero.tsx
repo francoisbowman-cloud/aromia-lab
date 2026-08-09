@@ -66,9 +66,23 @@ export function HomeHero() {
       <div
         ref={sceneRef}
         aria-hidden="true"
-        className="aromia-scene-macro absolute -inset-3 transition-transform duration-300 ease-out"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(120,95,60,.18)_0%,transparent_46%,rgba(120,95,60,.05)_100%)] dark:bg-[linear-gradient(0deg,rgba(14,12,10,.52)_0%,transparent_44%,rgba(14,12,10,.2)_100%)]" />
+        className="aromia-scene-macro absolute -inset-3 overflow-hidden transition-transform duration-300 ease-out"
+      >
+        {/* Provisional photographic masters already owned by Aromia. The procedural
+            scene remains underneath as a deterministic loading/failure fallback.
+            Bespoke H01 assets still have to pass the ingredient-anchor visual gate. */}
+        <img
+          src="/editorial/bright-soft-focus.png"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-[.68] mix-blend-multiply dark:hidden"
+        />
+        <img
+          src="/editorial/moody-closeup.png"
+          alt=""
+          className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-[.72] mix-blend-soft-light dark:block"
+        />
+      </div>
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(251,248,243,.72)_0%,rgba(251,248,243,.26)_44%,rgba(251,248,243,.08)_100%)] dark:bg-[linear-gradient(0deg,rgba(14,12,10,.66)_0%,rgba(14,12,10,.18)_44%,rgba(14,12,10,.08)_100%)]" />
 
       <div className="absolute left-6 top-6 z-[2] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.18em] text-[rgba(33,29,23,.55)] dark:text-[rgba(242,235,221,.58)] lg:left-10 lg:top-8">
         <span>Aromia</span>
@@ -80,13 +94,13 @@ export function HomeHero() {
         <a
           key={note.label}
           href="#indice-olfativo"
-          className={`aromia-note group absolute z-[1] ${note.mobile ? "flex" : "hidden sm:flex"} cursor-pointer items-center gap-[9px] ${
+          className={`aromia-note group absolute z-[1] ${note.mobile ? "flex" : "hidden lg:flex"} cursor-pointer items-center gap-[9px] ${
             note.reverse ? "flex-row-reverse" : ""
           } ${note.className}`}
         >
           <span className="aromia-note-dot h-[5px] w-[5px] flex-none rounded-full transition-shadow" />
-          <span className="aromia-note-line h-px w-[22px] flex-none transition-all group-hover:w-8 sm:w-[26px]" />
-          <span className="font-plex text-[9px] uppercase tracking-[.16em] text-ink transition-colors [text-shadow:0_1px_8px_rgba(251,248,243,.8)] sm:text-[10px] dark:[text-shadow:0_1px_8px_rgba(14,12,10,.75)]">
+          <span className="aromia-note-line h-px w-[22px] flex-none transition-all group-hover:w-8 lg:w-[26px]" />
+          <span className="font-plex text-[9px] uppercase tracking-[.16em] text-ink transition-colors [text-shadow:0_1px_8px_rgba(251,248,243,.8)] lg:text-[10px] dark:[text-shadow:0_1px_8px_rgba(14,12,10,.75)]">
             {note.label}
           </span>
         </a>
