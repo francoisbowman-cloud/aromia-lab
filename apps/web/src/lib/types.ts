@@ -27,6 +27,7 @@ export interface Perfume {
   moneda: string | null;
   categoria_precio: "económico" | "medio" | "premium" | "lujo" | null;
   imagen_url: string | null;
+  image_source?: string | null;
   link_afiliado: string | null;
   tienda?: string;
   rating_promedio?: number;
