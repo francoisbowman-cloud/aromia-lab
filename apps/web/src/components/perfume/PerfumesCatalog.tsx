@@ -16,6 +16,8 @@ export function PerfumesCatalog({
   initialFamilia,
 }: {
   perfumes: Perfume[];
+  /** Prefiltra por familia olfativa al llegar desde un link con `?familia=`
+   * (ej. los chips de Home) — sigue siendo editable desde el select. */
   initialFamilia?: string;
 }) {
   const [q, setQ] = useState("");
@@ -126,21 +128,17 @@ export function PerfumesCatalog({
         </Select>
       </div>
 
-      <p className="mt-4 font-sans text-sm text-muted">
-        {filtrados.length} {filtrados.length === 1 ? "fragancia" : "fragancias"}
-      </p>
-
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filtrados.map((perfume) => (
-          <PerfumeCard key={perfume.slug} perfume={perfume} />
-        ))}
-      </div>
-
       {filtrados.length === 0 ? (
-        <div className="mt-10 rounded-card border border-line bg-surface p-8 text-center font-sans text-sm text-muted">
-          No encontramos fragancias con esos filtros.
+        <p className="mt-12 text-center font-sans text-sm text-muted">
+          No encontramos perfumes con esos filtros.
+        </p>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtrados.map((perfume) => (
+            <PerfumeCard key={perfume.slug} perfume={perfume} />
+          ))}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
