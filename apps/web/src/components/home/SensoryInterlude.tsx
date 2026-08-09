@@ -33,7 +33,7 @@ export function SensoryInterlude() {
         </div>
 
         <div className="hidden lg:block" aria-hidden="true">
-          <div className="ml-auto flex max-w-[280px] items-center justify-between border-t border-ink/20 pt-3 font-plex text-[9px] uppercase tracking-[.16em] text-ink/50 dark:border-paper/20 dark:text-paper/50">
+          <div className="ml-auto flex max-w-[280px] items-center justify-between border-t border-[rgba(33,29,23,.2)] pt-3 font-plex text-[9px] uppercase tracking-[.16em] text-[rgba(33,29,23,.5)] dark:border-[rgba(242,235,221,.22)] dark:text-[rgba(242,235,221,.52)]">
             <span>Materia</span>
             <span>→</span>
             <span>Identidad</span>
