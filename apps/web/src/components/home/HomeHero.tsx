@@ -101,7 +101,8 @@ export function HomeHero() {
         <a
           key={note.label}
           href="#indice-olfativo"
-          className={`aromia-note group absolute z-[1] ${note.mobile ? "flex" : "hidden lg:flex"} cursor-pointer items-center gap-[9px] ${
+          aria-label={`Explorar el índice olfativo desde ${note.label}`}
+          className={`aromia-note group absolute z-[1] ${note.mobile ? "flex" : "hidden lg:flex"} min-h-11 cursor-pointer items-center gap-[9px] rounded-sm px-1 outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${
             note.reverse ? "flex-row-reverse" : ""
           } ${note.className}`}
         >
