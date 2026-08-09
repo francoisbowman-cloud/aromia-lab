@@ -4,7 +4,7 @@ Hybrid Signature is the production visual contract for Aromia across Home, Catal
 
 ## Baseline
 
-- Current source baseline: `main@e3d121d8f483a0f6b5bd783520525d44ce6e688e`
+- Source baseline: current `main` catalog publication.
 - Catalog/data contracts from main remain source of truth.
 - Hybrid Signature changes presentation and interaction without weakening nullable/pending catalog safeguards.
 
@@ -30,11 +30,7 @@ Hybrid Signature is the production visual contract for Aromia across Home, Catal
 
 - Catalog is a premium discovery surface, not a utility grid.
 - Product imagery uses real catalog assets and preserves visible product identity when available.
-- Family filter always has a clear exit path:
-  - neutral `Todas las familias` option;
-  - removable active filter chip (`×`);
-  - global `Borrar filtros` action;
-  - empty-state reset.
+- Family filter always has a clear exit path: neutral `Todas las familias`, removable active chip (`×`), global `Borrar filtros`, and empty-state reset.
 - Deep links from Home remain supported.
 
 ## Product Detail
@@ -53,6 +49,6 @@ Hybrid Signature is the production visual contract for Aromia across Home, Catal
 - Hero overlap issue resolved by removing floating notes.
 - Generic anonymous hero backgrounds removed.
 - Real catalog product image is the visual object when available.
-- GitHub Actions final branch gate: API typecheck PASS; web npm ci/lint/typecheck/production build PASS.
-- Isolated Railway preview previously validated SUCCESS.
-- Final merge to production requires explicit authorization.
+- GitHub Actions on the final code change: API typecheck PASS; web npm ci/lint/typecheck/production build PASS.
+- Isolated Railway preview validated SUCCESS.
+- Production merge explicitly authorized by the project owner on 2026-08-09.
