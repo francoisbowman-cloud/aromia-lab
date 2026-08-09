@@ -1,0 +1,269 @@
+{
+  "batch": "batch-001.normalized",
+  "file": "C:\\Users\\user\\Claude\\Projects\\aromia-catalog-pipeline\\catalog\\staging\\batch-001.normalized.csv",
+  "pipelineVersion": "0.1.0",
+  "schemaVersion": "2026-08-fase3-v1",
+  "generatedAt": "2026-08-08T20:25:03.573Z",
+  "fatal": false,
+  "header": [
+    "id",
+    "slug",
+    "brand",
+    "name",
+    "concentration",
+    "gender",
+    "family",
+    "subfamily",
+    "launch_year",
+    "perfumer",
+    "country",
+    "description",
+    "top_notes",
+    "middle_notes",
+    "base_notes",
+    "accords",
+    "season",
+    "occasion",
+    "longevity",
+    "sillage",
+    "price_segment",
+    "amazon_url",
+    "source_url",
+    "image_url",
+    "image_source",
+    "affiliate_status",
+    "source_verified",
+    "data_confidence",
+    "visual_quality",
+    "review_status",
+    "seo_title",
+    "seo_description",
+    "status",
+    "notes",
+    "created_at",
+    "updated_at",
+    "price_status"
+  ],
+  "unexpectedColumns": [],
+  "fileIssues": [],
+  "totalRows": 25,
+  "okRows": 23,
+  "warningRows": 1,
+  "errorRows": 1,
+  "rows": [
+    {
+      "row": 2,
+      "id": "1",
+      "slug": "chanel-no5-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 3,
+      "id": "2",
+      "slug": "tobacco-vanille-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 4,
+      "id": "3",
+      "slug": "santal-33-edp",
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
+    },
+    {
+      "row": 5,
+      "id": "4",
+      "slug": "shalimar-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 6,
+      "id": "5",
+      "slug": "eros-parfum",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 7,
+      "id": "6",
+      "slug": "paradoxe-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 8,
+      "id": "7",
+      "slug": "armani-code-parfum",
+      "level": "error",
+      "noteStructure": "UNKNOWN",
+      "issues": [
+        {
+          "severity": "error",
+          "code": "no_notes_information",
+          "field": "top_notes",
+          "message": "Sin pirámide (top/middle/base), sin lista plana en accords — no hay ninguna información de notas olfativas verificable. No basta con que falte la pirámide (eso es FLAT/PARTIAL, no bloquea); acá no hay nada registrado."
+        }
+      ]
+    },
+    {
+      "row": 9,
+      "id": "8",
+      "slug": "naxos-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 10,
+      "id": "9",
+      "slug": "side-effect-edp",
+      "level": "info",
+      "noteStructure": "FLAT",
+      "issues": []
+    },
+    {
+      "row": 11,
+      "id": "10",
+      "slug": "212-vip-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 12,
+      "id": "11",
+      "slug": "explorer-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 13,
+      "id": "12",
+      "slug": "scandal-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 14,
+      "id": "13",
+      "slug": "the-one-for-men-edt",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 15,
+      "id": "14",
+      "slug": "interlude-woman-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 16,
+      "id": "15",
+      "slug": "vibrant-leather-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 17,
+      "id": "16",
+      "slug": "cloud-edp",
+      "level": "info",
+      "noteStructure": "PARTIAL",
+      "issues": []
+    },
+    {
+      "row": 18,
+      "id": "17",
+      "slug": "gypsy-water-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 19,
+      "id": "18",
+      "slug": "percival-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 20,
+      "id": "19",
+      "slug": "ani-extrait",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 21,
+      "id": "20",
+      "slug": "cedrat-boise-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 22,
+      "id": "21",
+      "slug": "born-in-roma-uomo-edt",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 23,
+      "id": "22",
+      "slug": "terre-d-hermes-parfum",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 24,
+      "id": "23",
+      "slug": "vanilla-28-edp",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    },
+    {
+      "row": 25,
+      "id": "24",
+      "slug": "elysium-pour-homme-parfum-cologne",
+      "level": "warning",
+      "noteStructure": "PYRAMID",
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "non_standard_concentration",
+          "field": "concentration",
+          "message": "'Parfum Cologne' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."
+        }
+      ]
+    },
+    {
+      "row": 26,
+      "id": "25",
+      "slug": "replica-jazz-club-edt",
+      "level": "info",
+      "noteStructure": "PYRAMID",
+      "issues": []
+    }
+  ]
+}

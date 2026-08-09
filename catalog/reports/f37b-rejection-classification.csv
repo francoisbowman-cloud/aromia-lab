@@ -1,0 +1,31 @@
+batch,slug,category,already_resolved,reason
+batch-001,armani-code-parfum,REAL_RESEARCH_GAP,true,UNKNOWN: sin pirámide ni accords en la pasada original. Fetch a armani.com/armanibeauty.com no expuso ficha de notas (no confirmado que la marca no publique). YA REMEDIADO vía Fragrantica secundaria — no requiere reenvío.
+batch-001,santal-33-edp,SOURCE_DOES_NOT_PUBLISH,true,FLAT confirmado: Le Labo (oficial) y Fragrantica confirman que la marca no separa niveles top/middle/base para este producto.
+batch-001,side-effect-edp,SOURCE_DOES_NOT_PUBLISH,true,"FLAT confirmado: sitio oficial de Initio confirma que no hay pirámide por niveles, solo lista plana."
+batch-001,naxos-edp,MODEL_REQUIREMENT_GAP,true,Único bloqueante era family pending (pirámide ya estaba completa). Resuelto por la regla F3.7B #3 (family opcional).
+batch-001,explorer-edp,MODEL_REQUIREMENT_GAP,true,Único bloqueante era family pending.
+batch-001,scandal-edp,MODEL_REQUIREMENT_GAP,true,Único bloqueante era family pending.
+batch-001,the-one-for-men-edt,MODEL_REQUIREMENT_GAP,true,Único bloqueante era family pending.
+batch-001,cloud-edp,MODEL_REQUIREMENT_GAP,true,Único bloqueante era base_notes pending (estructura PARTIAL) — la exigencia individual minItems:1 ya no aplica.
+batch-001,replica-jazz-club-edt,MODEL_REQUIREMENT_GAP,true,Único bloqueante era family pending.
+batch-002,daisy-edt,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,boss-bottled-edt,REAL_RESEARCH_GAP,false,FLAT pero por CONFLICTO no resuelto entre dos fuentes secundarias (no por confirmación de no-publicación) — Cowork señaló explícitamente 'requiere segunda pasada dedicada'. Ya no bloquea (FLAT es válido) pero sigue siendo candidato genuino a más investigación.
+batch-002,chloe-edp,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,philosykos-edt,SOURCE_DOES_NOT_PUBLISH,true,Confirmado en sitio oficial Diptyque: no separa por niveles.
+batch-002,do-son-edt,SOURCE_DOES_NOT_PUBLISH,true,Confirmado en sitio oficial: sin pirámide por niveles.
+batch-002,ambre-sultan-edp,SOURCE_DOES_NOT_PUBLISH,true,Confirmado: el sitio oficial no publica desglose de notas.
+batch-002,halfeti-edp,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,angels-share-edp,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,eau-rose-edt,SOURCE_DOES_NOT_PUBLISH,true,Confirmado en sitio oficial: sin pirámide por niveles.
+batch-002,bat-extrait,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,bleu-de-chanel-parfum,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,coco-mademoiselle-edp,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,luna-rossa-edt,SOURCE_DOES_NOT_PUBLISH,true,Confirmado en sitio oficial: no publica pirámide con niveles.
+batch-002,signorina-edp,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,leau-dissey-pour-homme-edt,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,amen-edt,SOURCE_DOES_NOT_PUBLISH,true,Confirmado en sitio oficial: no publica pirámide top/middle/base.
+batch-002,phantom-edt,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,loewe-001-woman-edp,SOURCE_DOES_NOT_PUBLISH,true,Confirmado: sitio oficial no publica pirámide con niveles.
+batch-002,loewe-001-man-edp,SOURCE_DOES_NOT_PUBLISH,true,Confirmado: sitio oficial no publica pirámide con niveles.
+batch-002,black-afgano-extrait,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."
+batch-002,new-york-signature-scent-pure-perfume,MODEL_REQUIREMENT_GAP,true,"family pending, pirámide completa."

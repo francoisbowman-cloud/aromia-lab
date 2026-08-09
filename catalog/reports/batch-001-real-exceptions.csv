@@ -1,0 +1,18 @@
+row,id,slug,catalog_relation,quality_status,category,requires_human_decision,note
+4,3,santal-33-edp,NEW,REJECTED,F,false,top_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /top_notes must NOT have fewer than 1 items
+4,3,santal-33-edp,NEW,REJECTED,F,false,heart_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /heart_notes must NOT have fewer than 1 items
+4,3,santal-33-edp,NEW,REJECTED,F,false,base_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /base_notes must NOT have fewer than 1 items
+8,7,armani-code-parfum,NEW,REJECTED,F,false,family: dejado 'pending' a propósito (Cowork no inventó el dato) — /family must NOT have fewer than 1 characters
+8,7,armani-code-parfum,NEW,REJECTED,F,false,top_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /top_notes must NOT have fewer than 1 items
+8,7,armani-code-parfum,NEW,REJECTED,F,false,heart_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /heart_notes must NOT have fewer than 1 items
+8,7,armani-code-parfum,NEW,REJECTED,F,false,base_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /base_notes must NOT have fewer than 1 items
+9,8,naxos-edp,NEW,REJECTED,F,false,family: dejado 'pending' a propósito (Cowork no inventó el dato) — /family must NOT have fewer than 1 characters
+10,9,side-effect-edp,NEW,REJECTED,F,false,top_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /top_notes must NOT have fewer than 1 items
+10,9,side-effect-edp,NEW,REJECTED,F,false,heart_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /heart_notes must NOT have fewer than 1 items
+10,9,side-effect-edp,NEW,REJECTED,F,false,base_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /base_notes must NOT have fewer than 1 items
+12,11,explorer-edp,NEW,REJECTED,F,false,family: dejado 'pending' a propósito (Cowork no inventó el dato) — /family must NOT have fewer than 1 characters
+13,12,scandal-edp,NEW,REJECTED,F,false,family: dejado 'pending' a propósito (Cowork no inventó el dato) — /family must NOT have fewer than 1 characters
+14,13,the-one-for-men-edt,NEW,REJECTED,F,false,family: dejado 'pending' a propósito (Cowork no inventó el dato) — /family must NOT have fewer than 1 characters
+17,16,cloud-edp,NEW,REJECTED,F,false,base_notes: dejado 'pending' a propósito (Cowork no inventó el dato) — /base_notes must NOT have fewer than 1 items
+25,24,elysium-pour-homme-parfum-cologne,NEW,CATALOG_READY_WITH_PENDING,B,false,"'Parfum Cologne' no está en el set canónico conocido (EDC/EDT/EDP/Parfum/Extrait/Elixir) — no es un enum cerrado (ver SCHEMA_COMPARISON.md #A), se conserva tal cual. Confirmar que no sea un error de tipeo."
+26,25,replica-jazz-club-edt,NEW,REJECTED,F,false,family: dejado 'pending' a propósito (Cowork no inventó el dato) — /family must NOT have fewer than 1 characters
