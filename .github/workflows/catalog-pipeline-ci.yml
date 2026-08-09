@@ -35,3 +35,9 @@ jobs:
       - name: Verify protected inputs unchanged
         run: |
           git diff --exit-code -- ../../catalog/imports/batch-001.csv ../../catalog/imports/batch-002.csv ../../catalog/aromia-catalog-master.csv ../../PERFUMES_INITIAL_50.csv
+      - name: Upload Batch 003 dry-run artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-003-expansion-dry-run
+          path: catalog/expansion/batch-003/
+          if-no-files-found: error
