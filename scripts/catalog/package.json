@@ -16,6 +16,7 @@
     "expand": "node expansion-engine.mjs 100",
     "harvest": "node expansion-harvest.mjs",
     "enrich": "node expansion-enrich.mjs",
+    "enrich-published-75": "node enrich-published-75.mjs",
     "build-batch-003": "node expansion-batch-builder.mjs",
     "expansion-gate": "node expansion-gate.mjs",
     "test": "node --test --test-concurrency=1 tests/",
