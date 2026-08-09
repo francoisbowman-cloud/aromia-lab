@@ -40,10 +40,30 @@ test("brand-only official page cannot confirm a specific identity", () => {
   assert.equal(identity.confirmed, false);
 });
 
-test("harvest never falls back to non-official search when sitemap has no match", async () => {
-  const fetchImpl = async (url) => ({ ok: true, status: 200, url, headers: { get: () => "text/xml" }, text: async () => url.endsWith("robots.txt") ? "Sitemap: https://brand.test/sitemap.xml" : "<urlset><url><loc>https://brand.test/collections/gifts</loc></url></urlset>" });
+test("harvest fallbacks never query non-official hosts when sitemap has no match", async () => {
+  const requested = [];
+  const fetchImpl = async (url) => {
+    requested.push(url);
+    const isRobots = url.endsWith("robots.txt");
+    const isSitemap = url.endsWith("sitemap.xml");
+    const isLanding = url === "https://brand.test" || url === "https://brand.test/";
+    const ok = isRobots || isSitemap || isLanding;
+    return {
+      ok,
+      status: ok ? 200 : 404,
+      url,
+      headers: { get: () => isSitemap ? "text/xml" : "text/html" },
+      text: async () => isRobots
+        ? "Sitemap: https://brand.test/sitemap.xml"
+        : isSitemap
+          ? "<urlset><url><loc>https://brand.test/collections/gifts</loc></url></urlset>"
+          : "<a href='/fragrances'>Fragrances</a>",
+    };
+  };
   const result = await harvestCandidate({ candidate_id: "x", brand: "Brand", name: "Amber Moon", concentration: "EDP", official_domain: "brand.test" }, { fetchImpl, timeoutMs: 1000 });
-  assert.equal(result.harvest_status, "NOT_FOUND");
+  assert.notEqual(result.harvest_status, "HARVESTED");
+  assert.ok(requested.length > 0);
+  assert.ok(requested.every((url) => new URL(url).hostname === "brand.test"));
   assert.equal(result.source_url, "");
 });
 
