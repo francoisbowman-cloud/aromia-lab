@@ -5,4 +5,4 @@ RUN npm ci
 COPY . .
 RUN npm run build
 EXPOSE 4000
-CMD ["npm", "start"]
+CMD ["sh", "-lc", "node dist/db/applyCatalogCompleteness.js && node dist/index.js"]
