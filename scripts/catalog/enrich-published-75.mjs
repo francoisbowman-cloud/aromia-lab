@@ -12,6 +12,7 @@ const BATCHES = [
   ["batch-002", join(REPO_ROOT, "catalog", "staging", "batch-002.normalized.csv")],
 ];
 const OUT_DIR = join(REPO_ROOT, "catalog", "expansion", "published-enrichment");
+const IMAGE_REMEDIATION_PATH = join(REPO_ROOT, "catalog", "expansion", "published-image-remediation.csv");
 const NON_OFFICIAL = new Set(["fragrantica.com", "www.fragrantica.com", "amazon.com", "www.amazon.com"]);
 const SECONDARY_IMAGE_HOSTS = ["fragrantica.com"];
 
@@ -35,6 +36,17 @@ function brandDomainMap() {
     const path = join(REPO_ROOT, "catalog", "expansion", file);
     if (!existsSync(path)) continue;
     for (const row of readCsv(path)) if (row.brand && row.official_domain && !map.has(row.brand.toLowerCase())) map.set(row.brand.toLowerCase(), row.official_domain);
+  }
+  return map;
+}
+
+function imageRemediationMap() {
+  const map = new Map();
+  if (!existsSync(IMAGE_REMEDIATION_PATH)) return map;
+  for (const row of readCsv(IMAGE_REMEDIATION_PATH)) {
+    if (!row.slug || !row.image_url || !row.image_source) throw new Error("invalid published image remediation row");
+    if (map.has(row.slug)) throw new Error(`duplicate image remediation slug: ${row.slug}`);
+    map.set(row.slug, row);
   }
   return map;
 }
@@ -95,7 +107,7 @@ async function fallbackImageFromKnownSources(sourceRow, candidate, harvested) {
   return null;
 }
 
-function mergeRow(source, harvested, imageFallback, batch) {
+function mergeRow(source, harvested, imageFallback, imageRemediation, batch) {
   const row = { ...source };
   row.catalog_source = batch;
   row.description = mergeIfPending(row.description, harvested.description);
@@ -107,8 +119,16 @@ function mergeRow(source, harvested, imageFallback, batch) {
   row.middle_notes = mergeIfPending(row.middle_notes, harvested.middle_notes);
   row.base_notes = mergeIfPending(row.base_notes, harvested.base_notes);
   row.accords = mergeIfPending(row.accords, harvested.accords);
-  row.image_url = mergeIfPending(row.image_url, harvested.image_url || imageFallback?.image_url);
-  row.image_source = mergeIfPending(row.image_source, harvested.image_source || imageFallback?.image_source);
+
+  const selectedImage = harvested.image_url
+    ? { image_url: harvested.image_url, image_source: harvested.image_source, provenance: "official-harvest" }
+    : imageFallback?.image_url
+      ? { image_url: imageFallback.image_url, image_source: imageFallback.image_source, provenance: imageFallback.image_provenance }
+      : imageRemediation?.image_url
+        ? { image_url: imageRemediation.image_url, image_source: imageRemediation.image_source, provenance: `audited-${imageRemediation.image_source_type}` }
+        : null;
+  row.image_url = mergeIfPending(row.image_url, selectedImage?.image_url);
+  row.image_source = mergeIfPending(row.image_source, selectedImage?.image_source);
 
   const commerce = publicationMetadata(row);
   row.amazon_url = mergeIfPending(row.amazon_url, commerce.amazon_url);
@@ -121,7 +141,7 @@ function mergeRow(source, harvested, imageFallback, batch) {
   row.enrichment_identity_confirmed = harvested.identity_confirmed;
   row.enrichment_official_source = harvested.official_source;
   row.enrichment_discovery_method = harvested.discovery_method || "";
-  row.enrichment_image_provenance = harvested.image_url ? "official-harvest" : imageFallback?.image_provenance || "";
+  row.enrichment_image_provenance = selectedImage?.provenance || "";
   row.enrichment_error = harvested.error || "";
   return row;
 }
@@ -140,22 +160,27 @@ function completeness(rows) {
 }
 
 const domains = brandDomainMap();
+const remediation = imageRemediationMap();
 const source = BATCHES.flatMap(([batch, path]) => readCsv(path).map((row) => ({ batch, row })));
 if (source.length !== 75) throw new Error(`Expected 75 published source rows, got ${source.length}`);
+const sourceSlugs = new Set(source.map(({ row }) => row.slug));
+for (const slug of remediation.keys()) if (!sourceSlugs.has(slug)) throw new Error(`image remediation slug is not in published 75: ${slug}`);
+
 const candidates = source.map(({ row }) => toCandidate(row, domains));
 const noDomain = candidates.filter((c) => !c.official_domain).map((c) => c.candidate_id);
-console.log(`[published-enrichment] rows=75 candidates_with_domain=${75-noDomain.length} without_domain=${noDomain.length}`);
+console.log(`[published-enrichment] rows=75 candidates_with_domain=${75-noDomain.length} without_domain=${noDomain.length} image_remediations=${remediation.size}`);
 const harvested = await mapConcurrent(candidates, Number(process.env.AROMIA_HARVEST_CONCURRENCY || 6), (candidate) => harvestCandidate(candidate), (done, total, result, candidate) => {
   if (done === 1 || done % 10 === 0 || done === total) console.log(`[published-enrichment] ${done}/${total} ${candidate.candidate_id}:${result.harvest_status}`);
 });
 const imageFallbacks = await mapConcurrent(source, 6, ({ row }, i) => fallbackImageFromKnownSources(row, candidates[i], harvested[i]), (done, total) => {
   if (done === 1 || done % 10 === 0 || done === total) console.log(`[published-image-fallback] ${done}/${total}`);
 });
-const merged = source.map(({ batch, row }, i) => mergeRow(row, harvested[i], imageFallbacks[i], batch));
+const merged = source.map(({ batch, row }, i) => mergeRow(row, harvested[i], imageFallbacks[i], remediation.get(row.slug), batch));
 mkdirSync(OUT_DIR, { recursive: true });
 writeCsv(join(OUT_DIR, "published-75-enriched.csv"), merged);
 writeCsv(join(OUT_DIR, "published-75-harvest.csv"), harvested);
-writeCsv(join(OUT_DIR, "published-75-image-fallbacks.csv"), source.map(({ row }, i) => ({ slug: row.slug, ...(imageFallbacks[i] || {}) })));
+writeCsv(join(OUT_DIR, "published-75-image-fallbacks.csv"), source.map(({ row }, i) => ({ slug: row.slug, ...(imageFallbacks[i] || {}), remediation_used: pending(harvested[i].image_url) && !imageFallbacks[i]?.image_url && remediation.has(row.slug) ? "true" : "false" })));
+const completion = completeness(merged);
 const report = {
   generated_at: new Date().toISOString(),
   production_write: false,
@@ -163,7 +188,11 @@ const report = {
   candidates_without_official_domain: noDomain,
   harvest: summarizeHarvest(harvested),
   image_fallbacks_recovered: imageFallbacks.filter(Boolean).length,
-  completeness: completeness(merged),
+  audited_image_remediations: remediation.size,
+  completeness: completion,
 };
 writeFileSync(join(OUT_DIR, "published-75-enrichment-report.json"), JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify(report, null, 2));
+if (completion.image_complete !== 75) throw new Error(`published image completion gate failed: ${completion.image_complete}/75`);
+if (completion.commercial_link_complete !== 75) throw new Error(`published commerce completion gate failed: ${completion.commercial_link_complete}/75`);
+if (completion.editorial_complete !== 75) throw new Error(`published editorial completion gate failed: ${completion.editorial_complete}/75`);
