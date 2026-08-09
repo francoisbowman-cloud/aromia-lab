@@ -1,0 +1,2 @@
+candidate_id,slug,brand,name,concentration,gender,family,launch_year,perfumer,country,top_notes,middle_notes,base_notes,accords,price_segment,source_url,identity_confirmed,official_source,source_does_not_publish_notes,relation_ambiguous,blocking_conflict,catalog_relation
+example-001,brand-alpha-edp,Brand,Alpha,EDP,unisex,woody,2024,Perfumer,France,bergamot,iris,cedar,,premium,https://brand.example/alpha,true,true,false,false,false,NEW
