@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const EYEBROW =
@@ -15,15 +16,19 @@ export function SensoryInterlude() {
         {/* Primera capa fotográfica real reutilizando masters editoriales ya
             versionados por Aromia. El gradiente queda debajo como fallback;
             H02 bespoke sigue siendo reemplazable sin reescribir el componente. */}
-        <img
+        <Image
           src="/editorial/sunlit-warm.png"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-[.62] mix-blend-multiply dark:hidden"
+          fill
+          sizes="100vw"
+          className="object-cover object-center opacity-[.62] mix-blend-multiply dark:hidden"
         />
-        <img
+        <Image
           src="/editorial/cinematic-warm.png"
           alt=""
-          className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-[.66] mix-blend-soft-light dark:block"
+          fill
+          sizes="100vw"
+          className="hidden object-cover object-center opacity-[.66] mix-blend-soft-light dark:block"
         />
       </div>
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,239,227,.97)_0%,rgba(246,239,227,.84)_40%,rgba(246,239,227,.24)_70%,transparent_100%)] dark:bg-[linear-gradient(90deg,rgba(16,12,9,.96)_0%,rgba(16,12,9,.82)_40%,rgba(16,12,9,.2)_70%,transparent_100%)]" />
