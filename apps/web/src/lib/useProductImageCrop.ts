@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 
 type CropResult = {
   bgColor: string;
-  /** Bounding box del producto (0-1, relativo al tamaño natural de la imagen) —
-   * distintos proveedores (Amazon, Notino, Douglas) dejan márgenes en blanco muy
-   * distintos alrededor de la botella, así que se detecta por foto en vez de
-   * asumir un recorte fijo. */
   box: { x0: number; y0: number; x1: number; y1: number };
+};
+
+type CropRender = {
+  backgroundSize: string;
+  backgroundPosition: string;
+  imageStyle: { width: string; height: string; left: string; top: string };
 };
 
 function analyzeImage(img: HTMLImageElement): CropResult | null {
@@ -81,7 +83,7 @@ function analyzeImage(img: HTMLImageElement): CropResult | null {
   }
 }
 
-function renderCrop(img: HTMLImageElement, box: CropResult["box"], container: HTMLElement) {
+function renderCrop(img: HTMLImageElement, box: CropResult["box"], container: HTMLElement): CropRender | null {
   const cw = container.clientWidth;
   const ch = container.clientHeight;
   const nw = img.naturalWidth;
@@ -97,10 +99,13 @@ function renderCrop(img: HTMLImageElement, box: CropResult["box"], container: HT
   const scaledH = nh * scale;
   const boxCenterX = ((box.x0 + box.x1) / 2) * nw * scale;
   const boxCenterY = ((box.y0 + box.y1) / 2) * nh * scale;
+  const left = cw / 2 - boxCenterX;
+  const top = ch / 2 - boxCenterY;
 
   return {
     backgroundSize: `${scaledW}px ${scaledH}px`,
-    backgroundPosition: `${cw / 2 - boxCenterX}px ${ch / 2 - boxCenterY}px`,
+    backgroundPosition: `${left}px ${top}px`,
+    imageStyle: { width: `${scaledW}px`, height: `${scaledH}px`, left: `${left}px`, top: `${top}px` },
   };
 }
 
@@ -108,7 +113,7 @@ export function useProductImageCrop(src: string | undefined) {
   const [imgError, setImgError] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [bgColor, setBgColor] = useState<string | null>(null);
-  const [crop, setCrop] = useState<{ backgroundSize: string; backgroundPosition: string } | null>(null);
+  const [crop, setCrop] = useState<CropRender | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<CropResult["box"] | null>(null);
@@ -162,6 +167,7 @@ export function useProductImageCrop(src: string | undefined) {
     frameBackground,
     backgroundSize: crop?.backgroundSize ?? "contain",
     backgroundPosition: crop?.backgroundPosition ?? "center",
+    imageStyle: crop?.imageStyle ?? { width: "100%", height: "100%", left: "0px", top: "0px" },
     imgError,
     imgLoaded,
     handleLoad,
