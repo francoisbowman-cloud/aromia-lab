@@ -12,7 +12,7 @@ on:
 
 jobs:
   catalog:
-    name: catalog (tests + Batch 003 full run)
+    name: catalog (tests + published enrichment + Batch 003 full run)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -27,6 +27,13 @@ jobs:
       - run: npm ci
       - name: Regression suite
         run: npm test
+      - name: Enrich published Batch 001 + 002 (75 rows, read-only)
+        env:
+          AROMIA_HARVEST_CONCURRENCY: "6"
+        run: |
+          npm run enrich-published-75
+          echo '--- published 75 enrichment ---'
+          cat ../../catalog/expansion/published-enrichment/published-75-enrichment-report.json
       - name: Expansion Automation v1 selection
         run: npm run expand
       - name: Verify Batch 003 selection contract
@@ -49,6 +56,13 @@ jobs:
       - name: Verify protected inputs unchanged
         run: |
           git diff --exit-code -- ../../catalog/imports/batch-001.csv ../../catalog/imports/batch-002.csv ../../catalog/aromia-catalog-master.csv ../../PERFUMES_INITIAL_50.csv
+      - name: Upload published enrichment artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-75-enrichment
+          path: catalog/expansion/published-enrichment/
+          if-no-files-found: error
       - name: Upload Batch 003 full-run artifacts
         if: always()
         uses: actions/upload-artifact@v4
