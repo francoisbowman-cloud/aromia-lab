@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 import { ImagePlaceholder } from "./ImagePlaceholder";
@@ -22,7 +23,32 @@ function formatPrice(perfume: Perfume) {
 
 export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: Perfume; variant?: "catalog" | "featured"; index?: number }) {
   const { imgRef, frameRef, frameBackground, backgroundSize, backgroundPosition, imgError, imgLoaded, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
+  const [requestImage, setRequestImage] = useState(false);
   const hasImage = Boolean(perfume.imagen_url) && !imgError;
+
+  useEffect(() => {
+    if (!perfume.imagen_url || requestImage) return;
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setRequestImage(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setRequestImage(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "700px 0px" },
+    );
+
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, [frameRef, perfume.imagen_url, requestImage]);
 
   return (
     <Link href={`/catalogo/${perfume.slug}`} className="group relative flex flex-col overflow-hidden border-b border-r border-line bg-[#fffdf8] transition-colors duration-500 hover:bg-[#f8f2e9] dark:bg-[#14100c] dark:hover:bg-[#18130f]">
@@ -32,11 +58,11 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
       </div>
 
       <div ref={frameRef} className="relative aspect-[4/5] overflow-hidden bg-[#f3ede3] dark:bg-[#1a1510]" style={frameBackground ? { background: frameBackground } : undefined}>
-        {hasImage ? (
+        {hasImage && requestImage ? (
           <>
-            {/* The hidden probe is the lazy-loading gate for the decorative background. */}
+            {/* Probe used for crop analysis. It is mounted only near the viewport, so offscreen cards have no image request at all. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img ref={imgRef} src={perfume.imagen_url ?? ""} alt="" aria-hidden="true" crossOrigin="anonymous" loading="lazy" decoding="async" className="absolute h-px w-px opacity-0" onLoad={handleLoad} onError={handleError} />
+            <img ref={imgRef} src={perfume.imagen_url ?? ""} alt="" aria-hidden="true" crossOrigin="anonymous" decoding="async" className="absolute h-px w-px opacity-0" onLoad={handleLoad} onError={handleError} />
             {imgLoaded ? (
               <div role="img" aria-label={`${perfume.nombre} de ${perfume.marca}`} className="absolute inset-0 bg-no-repeat transition-transform duration-700 ease-out group-hover:scale-[1.028]" style={{ backgroundImage: `url(${perfume.imagen_url})`, backgroundSize, backgroundPosition }} />
             ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen cargando`} />}
