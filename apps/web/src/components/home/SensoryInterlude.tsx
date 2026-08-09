@@ -1,28 +1,46 @@
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const EYEBROW =
   "font-sans text-[11px] uppercase tracking-[.26em] font-semibold text-gold-contrast dark:text-gold-dark";
 
 /**
- * Product Reveal — continuación del set del hero (misma clase de escena,
- * `.aromia-scene-macro`), ahora resuelto como el momento donde la materia
- * prima se piensa como frasco. Puente entre el Índice Olfativo (discovery)
- * y el Magazine (storytelling), no relleno.
+ * Product Reveal — la materia del hero se materializa en objeto. Mantiene
+ * el mismo universo visual pero cambia la composición: menos "CTA centrado",
+ * más spread editorial con tensión entre copy y escena.
  */
 export function SensoryInterlude() {
   return (
-    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden text-center">
-      <div aria-hidden="true" className="aromia-scene-macro absolute inset-0" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(251,248,243,.18),rgba(251,248,243,.7))] dark:bg-[radial-gradient(ellipse_at_center,rgba(14,12,10,.14),rgba(14,12,10,.64))]" />
-      <div className="relative z-[1] max-w-[640px] px-6">
-        <p className={EYEBROW}>Product Reveal · de la materia al frasco</p>
-        <p className="mt-5 font-display text-2xl font-medium italic leading-snug text-ink lg:text-4xl">
-          Antes de ser un frasco, cada perfume es una acumulación de materia: resina, madera,
-          flor, piel.
-        </p>
-        <Button asChild variant="outline" size="lg" className="mt-7">
-          <a href="#indice-olfativo">Descubrir las notas ↑</a>
-        </Button>
+    <section className="relative min-h-[72vh] overflow-hidden bg-[#f6efe3] dark:bg-[#100c09]">
+      <div aria-hidden="true" className="aromia-scene-macro absolute inset-0 opacity-80 dark:opacity-90" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,239,227,.94)_0%,rgba(246,239,227,.74)_38%,rgba(246,239,227,.18)_68%,transparent_100%)] dark:bg-[linear-gradient(90deg,rgba(16,12,9,.92)_0%,rgba(16,12,9,.72)_38%,rgba(16,12,9,.18)_68%,transparent_100%)]" />
+
+      <div className="relative z-[1] mx-auto grid min-h-[72vh] w-full max-w-6xl grid-cols-1 items-end px-6 py-14 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:px-10 lg:py-20">
+        <div>
+          <p className={EYEBROW}>Product Reveal · de la materia al frasco</p>
+          <p className="mt-5 max-w-[13ch] font-display text-[36px] font-medium italic leading-[1.02] tracking-[-.02em] text-ink lg:text-[58px]">
+            Antes de ser un frasco, cada perfume es materia, memoria y piel.
+          </p>
+          <p className="mt-5 max-w-[42ch] font-sans text-sm leading-6 text-muted">
+            Resina, madera, flor, cítrico: el objeto llega después. Primero está la sensación que
+            quieres reconocer en ti.
+          </p>
+          <Link
+            href="#indice-olfativo"
+            className="nav-link mt-8 font-sans text-sm text-ink transition hover:text-gold-contrast"
+          >
+            Volver al índice olfativo ↑
+          </Link>
+        </div>
+
+        <div className="hidden lg:block" aria-hidden="true">
+          <div className="ml-auto flex max-w-[280px] items-center justify-between border-t border-ink/20 pt-3 font-plex text-[9px] uppercase tracking-[.16em] text-ink/50 dark:border-paper/20 dark:text-paper/50">
+            <span>Materia</span>
+            <span>→</span>
+            <span>Identidad</span>
+            <span>→</span>
+            <span>Objeto</span>
+          </div>
+        </div>
       </div>
     </section>
   );
