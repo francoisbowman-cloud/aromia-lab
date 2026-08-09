@@ -1,0 +1,36 @@
+-- Published catalog enrichment chunk 5/5 (15 rows)
+ALTER TABLE perfumes
+  ADD COLUMN IF NOT EXISTS amazon_url TEXT,
+  ADD COLUMN IF NOT EXISTS image_source TEXT,
+  ADD COLUMN IF NOT EXISTS affiliate_status TEXT,
+  ADD COLUMN IF NOT EXISTS visual_quality TEXT;
+
+WITH e(slug,image_url,image_source,amazon_url,description) AS (
+  VALUES
+  ('bat-extrait','https://www.zoologistperfumes.com/cdn/shop/files/Bottle-Front-Bat_600x.jpg?v=1772388338','https://www.zoologistperfumes.com/products/zoologist-bat-deluxe-bottle','https://www.amazon.com/s?k=Zoologist+Perfumes+Bat+Extrait+perfume&tag=aromialab-20','Extrait inspirado en cuevas tropicales; higo y fruta de la pasión sobre acordes minerales y de cuero.'),
+  ('bleu-de-chanel-parfum','https://fimgs.net/mdimg/perfume-social-cards/en-social-49912.jpeg','https://www.fragrantica.com/perfume/Chanel/Bleu-de-Chanel-Parfum-49912.html','https://www.amazon.com/s?k=Chanel+Bleu+de+Chanel+Parfum+perfume&tag=aromialab-20','Versión Parfum del icónico Bleu de Chanel; mayor intensidad y persistencia que la EDT y EDP.'),
+  ('green-irish-tweed-edp','https://creedboutique.com/cdn/shop/files/1500x1500_GIT_0002_Layer_1_1.jpg?v=1768429622','https://creedboutique.com/products/green-irish-tweed','https://www.amazon.com/s?k=Creed+Green+Irish+Tweed+EDP+perfume&tag=aromialab-20','Fougère aromático fresco; menta y violeta sobre sándalo, un referente masculino desde los 80.'),
+  ('millesime-imperial-edp','https://creedboutique.com/cdn/shop/files/PDP-Image-Carousel-Millesime-Imperial-100ml-Bottle.jpg?v=1779284540','https://creedboutique.com/products/millesime-imperial','https://www.amazon.com/s?k=Creed+Mill%C3%A9sime+Imp%C3%A9rial+EDP+perfume&tag=aromialab-20','Cítrico marino inspirado en el Mediterráneo; bergamota y acorde salino sobre maderas limpias.'),
+  ('habit-rouge-edt','https://fimgs.net/mdimg/perfume-social-cards/en-social-16.jpeg','https://www.fragrantica.com/perfume/Guerlain/Habit-Rouge-Eau-de-Toilette-16.html','https://www.amazon.com/s?k=Guerlain+Habit+Rouge+EDT+perfume&tag=aromialab-20','Oriental amaderado pionero; primer fougère oriental masculino de Guerlain, con acorde de cuero y vainilla.'),
+  ('coco-mademoiselle-edp','https://fimgs.net/mdimg/perfume-social-cards/en-social-611.jpeg','https://www.fragrantica.com/perfume/Chanel/Coco-Mademoiselle-611.html','https://www.amazon.com/s?k=Chanel+Coco+Mademoiselle+EDP+perfume&tag=aromialab-20','Oriental fresco icónico; reinterpretación juvenil del espíritu Chanel para el nuevo milenio.'),
+  ('luna-rossa-edt','https://media.marionnaud.ch/medias/sys_master/prd-images/h2b/h38/12437920514078/prd-front-69287600_2000x2000/prd-front-69287600-2000x2000.jpg','https://www.marionnaud.ch/fr/prada/luna-rossa/eau-de-toilette/p/BP_69287600','https://www.amazon.com/s?k=Prada+Luna+Rossa+EDT+perfume&tag=aromialab-20','Fougère aromático fresco; lavanda y menta verde sobre ámbar, inspirado en las velas de competición.'),
+  ('signorina-edp','https://fimgs.net/mdimg/perfume-social-cards/en-social-13639.jpeg','https://www.fragrantica.com/perfume/Salvatore-Ferragamo/Signorina-13639.html','https://www.amazon.com/s?k=Salvatore+Ferragamo+Signorina+EDP+perfume&tag=aromialab-20','Floral afrutado juvenil; pera y grosella negra sobre un fondo cremoso de panna cotta.'),
+  ('leau-dissey-pour-homme-edt','https://fimgs.net/mdimg/perfume-social-cards/en-social-721.jpeg','https://www.fragrantica.com/perfume/Issey-Miyake/L-Eau-d-Issey-Pour-Homme-721.html','https://www.amazon.com/s?k=Issey+Miyake+L%27Eau+d%27Issey+Pour+Homme+EDT+perfume&tag=aromialab-20','Acuático amaderado masculino; contraparte del icónico L''Eau d''Issey femenino, cítricos sobre maderas limpias.'),
+  ('amen-edt','https://inter.mugler.com/dw/image/v2/BDCR_PRD/on/demandware.static/-/Sites-mugler-master-catalog/default/dwe035803b/images/pdp/M020101024/3439600055726-amen-eau-de-toilette-100ml-main.jpg?q=70&sfrm=png&sh=1224&sm=cut&sw=1224','https://inter.mugler.com/int/fragrance/men-s-fragrances/a-men/a-men-eau-de-toilette/M020101024.html','https://www.amazon.com/s?k=Mugler+A%2AMen+EDT+perfume&tag=aromialab-20','Ambarado gourmand pionero; café y pachulí sobre vainilla bourbon, primera fragancia masculina de la casa.'),
+  ('phantom-edt','https://www.beautyhub.com.bd/uploads/all/gRGHTbtGABpMCCJWWWoq6cH6tWm7za6TJfZ6nlh0.webp','https://www.beautyhub.com.bd/product/paco-rabanne-phantom-edt-100ml-ptonz','https://www.amazon.com/s?k=Rabanne+Phantom+EDT+perfume&tag=aromialab-20','Amaderado tecnológico con lavanda y manzana; frasco futurista en forma de altavoz inteligente.'),
+  ('loewe-001-woman-edp','https://www.smellattractiveperfumes.com/10101-large_default/loewe-001-w-edp-100ml.jpg','https://www.smellattractiveperfumes.com/perfumes/loewe-001-w-edp-100ml.html','https://www.amazon.com/s?k=Loewe+001+Woman+EDP+perfume&tag=aromialab-20','Floral oriental minimalista; jazmín y lino sobre almizcle, primera fragancia de la maison española.'),
+  ('loewe-001-man-edp','https://media.neimanmarcus.com/f_auto%2Cq_auto%3Alow%2Car_4%3A5%2Cc_fill%2Cdpr_2.0%2Cw_456/01/nm_4446204_100836_m','https://www.neimanmarcus.com/p/loewe-001-man-eau-de-parfum-3-4-oz-prod257750349','https://www.amazon.com/s?k=Loewe+001+Man+EDP+perfume&tag=aromialab-20','Amaderado almizclado minimalista; semilla de zanahoria y ciprés sobre almizcle limpio.'),
+  ('black-afgano-extrait','https://nasomatto.com/cdn/shop/files/Black_Afgano-ProductPage3-30ML.jpg?v=1739800391','https://nasomatto.com/products/black-afgano','https://www.amazon.com/s?k=Nasomatto+Black+Afgano+Extrait+perfume&tag=aromialab-20','Extrait cannábico y resinoso de culto; una de las fragancias más controvertidas y buscadas del nicho underground.'),
+  ('new-york-signature-scent-pure-perfume','https://cdn2.jomashop.com/media/catalog/product/n/e/new-york-signature-bond-no9-edp-spray-33-oz-100-ml-u-888874002111.jpg','https://www.jomashop.com/bond-no-9-perfume-9nyses33.html','https://www.amazon.com/s?k=Bond+No.+9+New+York+Signature+Scent+Pure+Perfume+30%25+perfume&tag=aromialab-20','Pure perfume de altísima concentración creado para el 10º aniversario de la boutique NoHo; oud y rosa sobre musgo.')
+)
+UPDATE perfumes p SET
+  imagen_url = CASE WHEN p.imagen_url IS NULL OR btrim(p.imagen_url) = '' OR lower(btrim(p.imagen_url)) = 'pending' THEN e.image_url ELSE p.imagen_url END,
+  image_source = CASE WHEN p.image_source IS NULL OR btrim(p.image_source) = '' OR lower(btrim(p.image_source)) = 'pending' THEN e.image_source ELSE p.image_source END,
+  amazon_url = CASE WHEN p.amazon_url IS NULL OR btrim(p.amazon_url) = '' OR lower(btrim(p.amazon_url)) = 'pending' THEN e.amazon_url ELSE p.amazon_url END,
+  link_afiliado = CASE WHEN p.link_afiliado IS NULL OR btrim(p.link_afiliado) = '' OR lower(btrim(p.link_afiliado)) = 'pending' THEN e.amazon_url ELSE p.link_afiliado END,
+  affiliate_status = 'active',
+  visual_quality = CASE WHEN p.visual_quality IS NULL OR btrim(p.visual_quality) = '' OR lower(btrim(p.visual_quality)) IN ('pending','not-audited') THEN 'medium' ELSE p.visual_quality END,
+  descripcion_corta = CASE WHEN p.descripcion_corta IS NULL OR btrim(p.descripcion_corta) = '' OR lower(btrim(p.descripcion_corta)) = 'pending' THEN e.description ELSE p.descripcion_corta END,
+  actualizado_en = now()
+FROM e
+WHERE p.slug = e.slug;
