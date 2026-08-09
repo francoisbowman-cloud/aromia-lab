@@ -6,27 +6,17 @@ import type { Perfume } from "@/lib/types";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { useProductImageCrop } from "@/lib/useProductImageCrop";
 
-const ROTATE_MS = 6000;
+const ROTATE_MS = 6500;
 
-/**
- * Panel del hero de Home: antes era una foto editorial genérica (stock
- * atmosférico, sin relación con el perfume de la tarjeta "Elección del
- * editor" de al lado). Ahora es dinámico — rota entre varios perfumes reales
- * y muestra su foto de producto real (Amazon/Notino/Douglas), nunca un mockup
- * de IA, sincronizada 1:1 con el nombre/marca/precio de la tarjeta.
- */
 export function HeroEditorPick({ perfumes }: { perfumes: Perfume[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const current = perfumes[index];
+  const current = perfumes[index % Math.max(perfumes.length, 1)];
 
   useEffect(() => {
-    if (perfumes.length <= 1 || paused) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % perfumes.length);
-    }, ROTATE_MS);
-    return () => clearInterval(id);
+    if (paused || perfumes.length <= 1) return;
+    const timer = window.setInterval(() => setIndex((i) => (i + 1) % perfumes.length), ROTATE_MS);
+    return () => window.clearInterval(timer);
   }, [perfumes.length, paused]);
 
   const {
@@ -38,10 +28,11 @@ export function HeroEditorPick({ perfumes }: { perfumes: Perfume[] }) {
     imgError,
     handleLoad,
     handleError,
-  } = useProductImageCrop(current?.imagen_url);
+  } = useProductImageCrop(current?.imagen_url ?? undefined);
 
   if (!current) return null;
   const showImage = Boolean(current.imagen_url) && !imgError;
+  const hasReferencePrice = current.precio_referencia != null && Boolean(current.moneda);
 
   return (
     <div
@@ -59,7 +50,7 @@ export function HeroEditorPick({ perfumes }: { perfumes: Perfume[] }) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               ref={imgRef}
-              src={current.imagen_url}
+              src={current.imagen_url ?? ""}
               alt=""
               aria-hidden="true"
               crossOrigin="anonymous"
@@ -111,10 +102,12 @@ export function HeroEditorPick({ perfumes }: { perfumes: Perfume[] }) {
         <div className="mt-1.5 font-display text-lg leading-[1.05] text-ink">{current.nombre}</div>
         <div className="mt-1 font-sans text-xs text-muted">
           {current.marca} ·{" "}
-          {Number(current.precio_referencia).toLocaleString("es-AR", {
-            style: "currency",
-            currency: current.moneda,
-          })}
+          {hasReferencePrice
+            ? Number(current.precio_referencia).toLocaleString("es-AR", {
+                style: "currency",
+                currency: current.moneda!,
+              })
+            : "Precio por confirmar"}
         </div>
       </Link>
     </div>
