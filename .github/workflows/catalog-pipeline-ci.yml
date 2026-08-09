@@ -1,0 +1,43 @@
+name: Catalog Pipeline CI
+
+on:
+  pull_request:
+    branches: ["ci/catalog-expansion-v1-gate"]
+    paths:
+      - "scripts/catalog/**"
+      - "catalog/**"
+      - "PERFUMES_INITIAL_50.csv"
+      - ".github/workflows/catalog-pipeline-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  catalog:
+    name: catalog (tests + expansion dry-run)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts/catalog
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: scripts/catalog/package-lock.json
+      - run: npm ci
+      - name: Regression suite
+        run: npm test
+      - name: Expansion Automation v1 dry-run
+        run: npm run expand
+      - name: Verify Batch 003 selection contract
+        run: |
+          node -e "const r=require('../../catalog/expansion/batch-003/selection-report.json'); if(r.selected!==100) throw new Error('Batch 003 selector did not produce 100 candidates'); if(r.guardrails.writes_postgres||r.guardrails.mutates_raw_inputs||r.guardrails.master_import) throw new Error('Expansion guardrail violated'); console.log(r)"
+      - name: Verify protected inputs unchanged
+        run: |
+          git diff --exit-code -- ../../catalog/imports/batch-001.csv ../../catalog/imports/batch-002.csv ../../catalog/aromia-catalog-master.csv ../../PERFUMES_INITIAL_50.csv
+      - name: Upload Batch 003 dry-run artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-003-expansion-dry-run
+          path: catalog/expansion/batch-003/
+          if-no-files-found: error
