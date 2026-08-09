@@ -4,6 +4,12 @@ const DEFAULT_TIMEOUT_MS = 8000;
 const MAX_SITEMAPS = 30;
 const MAX_URLS = 20000;
 
+// A Batch 003 run contains several candidates from the same house. Discovery of
+// robots/sitemaps is domain-wide, so repeating it per perfume multiplies network
+// cost without adding evidence. Cache the in-flight Promise as well as the final
+// corpus so concurrent candidates for one house share exactly one crawl.
+const discoveryCorpusCache = new Map();
+
 function normalizeHost(host) {
   return String(host ?? "").toLowerCase().replace(/^www\./, "");
 }
@@ -92,9 +98,7 @@ async function fetchText(url, { fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_M
   } finally { clearTimeout(timer); }
 }
 
-export async function discoverOfficialUrls(candidate, options = {}) {
-  const officialDomain = String(candidate.official_domain ?? "").trim();
-  if (!officialDomain) return { status: "NO_OFFICIAL_DOMAIN", urls: [], sitemapCount: 0 };
+async function buildOfficialCorpus(officialDomain, options = {}) {
   const origin = `https://${officialDomain}`;
   const sitemapSeeds = new Set([`${origin}/sitemap.xml`]);
   try {
@@ -124,18 +128,53 @@ export async function discoverOfficialUrls(candidate, options = {}) {
     } catch {}
   }
 
-  // If sitemap discovery produces no identity-specific candidate, inspect only the
-  // official landing page links. This is still same-domain and read-only, not a web-search fallback.
-  let ranked = [...pageUrls].map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+  // Landing links are domain-wide too. Cache them once, but use them only for a
+  // candidate whose sitemap corpus has no identity match.
+  let landingLinks = [];
+  try {
+    const landing = await fetchText(origin, options);
+    landingLinks = extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
+  } catch {}
+
+  return {
+    officialDomain,
+    pageUrls: [...pageUrls],
+    landingLinks,
+    sitemapCount: visited.size,
+    scannedUrlCount: pageUrls.size,
+  };
+}
+
+function getOfficialCorpus(officialDomain, options = {}) {
+  // Custom fetch implementations are used by tests and must remain isolated from
+  // global network cache to keep fixtures deterministic.
+  if (options.fetchImpl) return buildOfficialCorpus(officialDomain, options);
+  const key = normalizeHost(officialDomain);
+  if (!discoveryCorpusCache.has(key)) {
+    const promise = buildOfficialCorpus(officialDomain, options).catch((error) => {
+      discoveryCorpusCache.delete(key);
+      throw error;
+    });
+    discoveryCorpusCache.set(key, promise);
+  }
+  return discoveryCorpusCache.get(key);
+}
+
+export function clearDiscoveryCorpusCache() {
+  discoveryCorpusCache.clear();
+}
+
+export async function discoverOfficialUrls(candidate, options = {}) {
+  const officialDomain = String(candidate.official_domain ?? "").trim();
+  if (!officialDomain) return { status: "NO_OFFICIAL_DOMAIN", urls: [], sitemapCount: 0 };
+
+  const corpus = await getOfficialCorpus(officialDomain, options).catch(() => ({ pageUrls: [], landingLinks: [], sitemapCount: 0, scannedUrlCount: 0 }));
+  let ranked = corpus.pageUrls.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
   if (!ranked.length) {
-    try {
-      const landing = await fetchText(origin, options);
-      const links = extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
-      ranked = links.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
-    } catch {}
+    ranked = corpus.landingLinks.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
   }
 
-  return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 8), sitemapCount: visited.size, scannedUrlCount: pageUrls.size };
+  return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 8), sitemapCount: corpus.sitemapCount, scannedUrlCount: corpus.scannedUrlCount };
 }
 
 export async function fetchOfficialPage(url, officialDomain, options = {}) {
