@@ -17,6 +17,15 @@ test("explicit top-heart-base labels become PYRAMID", () => {
   assert.match(notes.base_notes, /Cedar/);
 });
 
+test("explicit multilingual note labels remain structured, never inferred", () => {
+  const french = extractExplicitNotes(`<div>Notes de tête : Bergamote Notes de cœur : Jasmin Notes de fond : Cèdre Ingrédients:</div>`);
+  assert.equal(french.structure, "PYRAMID");
+  assert.match(french.top_notes, /Bergamote/);
+  const spanish = extractExplicitNotes(`<div>Notas de salida: Limón Notas de corazón: Rosa Notas de fondo: Almizcle Ingredientes:</div>`);
+  assert.equal(spanish.structure, "PYRAMID");
+  assert.match(spanish.base_notes, /Almizcle/);
+});
+
 test("flat notes remain FLAT and are never promoted into a pyramid", () => {
   const notes = extractExplicitNotes(`<p>Fragrance notes: Juniper berry, cedar, tonka bean, jasmine Details</p>`);
   assert.equal(notes.structure, "FLAT");
@@ -34,6 +43,11 @@ test("Eau de Parfum is EDP, never generic Parfum", () => {
   assert.equal(extractExplicitMetadata(html, "https://brand.test/products/amber-moon-eau-de-parfum").concentration, "EDP");
 });
 
+test("hyphenated official URL is explicit concentration evidence", () => {
+  assert.equal(extractExplicitMetadata(`<meta property="og:title" content="Amber Moon">`, "https://brand.test/fragrance/amber-moon-eau-de-parfum").concentration, "EDP");
+  assert.equal(extractExplicitMetadata(`<meta property="og:title" content="Amber Moon">`, "https://brand.test/fragrance/amber-moon-eau-de-toilette").concentration, "EDT");
+});
+
 test("explicit audience and launch metadata are extracted without guessing", () => {
   const html = `<meta property="og:title" content="Amber Moon Eau de Toilette for Men"><meta property="og:description" content="Launched in 2022. Olfactory family: Woody Aromatic">`;
   const meta = extractExplicitMetadata(html, "https://brand.test/men/amber-moon");
@@ -41,6 +55,12 @@ test("explicit audience and launch metadata are extracted without guessing", () 
   assert.equal(meta.concentration, "EDT");
   assert.equal(meta.launch_year, "2022");
   assert.equal(meta.family, "Woody Aromatic");
+});
+
+test("Product JSON-LD audience is accepted as explicit gender evidence", () => {
+  const html = `<script type="application/ld+json">{"@type":"Product","name":"Amber Moon","audience":{"@type":"PeopleAudience","audienceType":"Women"}}</script><meta property="og:title" content="Amber Moon Eau de Parfum">`;
+  const row = extractPageEvidence(html, "https://brand.test/amber-moon-eau-de-parfum");
+  assert.equal(row.gender, "femenino");
 });
 
 test("female and unisex cues remain explicit and separate", () => {
