@@ -7,9 +7,6 @@ import { Button } from "@/components/ui/button";
 const EYEBROW =
   "font-sans text-[11px] uppercase tracking-[.3em] font-semibold text-gold-contrast dark:text-gold-dark";
 
-// Las coordenadas son parte del placeholder dirigido. Cuando entren assets
-// reales deben calibrarse por crop/breakpoint contra los ingredientes que
-// realmente aparezcan en la fotografía (ver Visual Contract pendiente).
 const HERO_NOTES = [
   {
     label: "Bergamota",
@@ -40,8 +37,6 @@ const HERO_NOTES = [
 export function HomeHero() {
   const sceneRef = useRef<HTMLDivElement>(null);
 
-  // Paralaje deliberadamente mínimo y solo para puntero fino. También
-  // respeta prefers-reduced-motion sin introducir estado ni dependencia.
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (
       !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
@@ -98,7 +93,7 @@ export function HomeHero() {
       ))}
 
       <div className="relative z-[1] max-w-[980px] px-6 pb-12 sm:pb-16 lg:px-10 lg:pb-20">
-        <p className={EYEBROW}>La autoridad editorial que además vende</p>
+        <p className={EYEBROW}>Perfumería · cultura · discovery</p>
         <h1 className="mt-5 max-w-[12ch] font-display text-[46px] font-semibold leading-[.94] tracking-[-.03em] text-ink sm:text-[58px] lg:text-[96px]">
           No fabricamos perfumes.
           <br />
@@ -106,8 +101,8 @@ export function HomeHero() {
         </h1>
         <div className="mt-6 flex max-w-[720px] flex-col gap-6 border-t border-[rgba(33,29,23,.15)] pt-5 dark:border-[rgba(242,235,221,.16)] sm:flex-row sm:items-end sm:justify-between">
           <p className="max-w-[430px] font-sans text-[15px] leading-relaxed text-[rgba(33,29,23,.8)] dark:text-[rgba(242,235,221,.8)]">
-            Reseñas honestas, comparadas y sin ruido — para encontrar la fragancia que realmente te
-            representa.
+            Reseñas, contexto y comparación para entender qué transmite una fragancia antes de
+            elegirla.
           </p>
           <div className="flex shrink-0 flex-wrap items-center gap-4">
             <Button asChild size="lg">
