@@ -6,7 +6,7 @@ import { REPO_ROOT, isMainModule, normalizeConcentration } from "./lib.mjs";
 import { discoverOfficialUrls, fetchOfficialPage, tokenizeIdentity } from "./source-discovery.mjs";
 import { extractPageEvidence } from "./structured-extractor.mjs";
 
-const DEFAULT_CONCURRENCY = 4;
+const DEFAULT_CONCURRENCY = 6;
 
 function readCsv(path) { return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true, relax_column_count: true }); }
 function writeCsv(path, rows) { mkdirSync(dirname(path), { recursive: true }); if (!rows.length) { writeFileSync(path, "", "utf-8"); return; } writeFileSync(path, stringifyCsv(rows, { header: true }), "utf-8"); }
@@ -65,9 +65,17 @@ export async function harvestCandidate(candidate, options = {}) {
   return { ...base, harvest_status: "FETCH_FAILED", discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: errors.join(" | ").slice(0, 1400) };
 }
 
-export async function mapConcurrent(items, limit, fn) {
-  const results = new Array(items.length); let cursor = 0;
-  async function worker() { while (true) { const index = cursor++; if (index >= items.length) return; results[index] = await fn(items[index], index); } }
+export async function mapConcurrent(items, limit, fn, onProgress = null) {
+  const results = new Array(items.length); let cursor = 0; let completed = 0;
+  async function worker() {
+    while (true) {
+      const index = cursor++;
+      if (index >= items.length) return;
+      results[index] = await fn(items[index], index);
+      completed += 1;
+      onProgress?.(completed, items.length, results[index], items[index]);
+    }
+  }
   await Promise.all(Array.from({ length: Math.max(1, Math.min(limit, items.length || 1)) }, worker));
   return results;
 }
@@ -85,7 +93,16 @@ export async function runHarvest({ concurrency = DEFAULT_CONCURRENCY, limit = 10
   const manifestPath = join(dir, "candidate-manifest.csv");
   if (!existsSync(manifestPath)) return { skipped: true, reason: "candidate-manifest.csv not present; run npm run expand first" };
   const candidates = readCsv(manifestPath).slice(0, limit);
-  const rows = await mapConcurrent(candidates, concurrency, (candidate) => harvestCandidate(candidate, options));
+  const rows = await mapConcurrent(
+    candidates,
+    concurrency,
+    (candidate) => harvestCandidate(candidate, options),
+    (completed, total, row, candidate) => {
+      if (completed === 1 || completed % 10 === 0 || completed === total) {
+        console.log(`[harvest] ${completed}/${total} latest=${candidate.candidate_id}:${row.harvest_status}`);
+      }
+    },
+  );
   writeCsv(join(dir, "harvest-results.csv"), rows);
   writeCsv(join(dir, "evidence.auto.csv"), rows);
   const report = summarizeHarvest(rows);
