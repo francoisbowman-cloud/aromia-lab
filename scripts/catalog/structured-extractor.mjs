@@ -52,6 +52,21 @@ function cleanListText(value) {
   return String(value ?? "").replace(/\s+/g, " ").replace(/^[\s:–—-]+|[\s.;]+$/g, "").trim();
 }
 
+function imageFromProduct(product) {
+  const image = product?.image;
+  if (typeof image === "string") return image;
+  if (Array.isArray(image)) {
+    for (const item of image) {
+      if (typeof item === "string") return item;
+      if (item?.url) return item.url;
+      if (item?.contentUrl) return item.contentUrl;
+    }
+  }
+  if (image?.url) return image.url;
+  if (image?.contentUrl) return image.contentUrl;
+  return "";
+}
+
 function explicitTier(text, labels, nextLabels) {
   const start = labels.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
   const next = nextLabels.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
@@ -104,12 +119,9 @@ function audienceFromProduct(product) {
 function genderFromExplicitAudience(value) {
   const normalized = String(value ?? "").trim().toLowerCase();
   if (!normalized) return "";
-  const men = /^(men|man|male|homme|hombre|uomo|masculin|masculino)$/.test(normalized);
-  const women = /^(women|woman|female|femme|mujer|donna|féminin|feminin|femenino)$/.test(normalized);
-  const unisex = /^(unisex|all genders|gender neutral|gender-neutral)$/.test(normalized);
-  if (unisex || (men && women)) return "unisex";
-  if (men) return "masculino";
-  if (women) return "femenino";
+  if (/^(unisex|all genders|gender neutral|gender-neutral)$/.test(normalized)) return "unisex";
+  if (/^(men|man|male|homme|hombre|uomo|masculin|masculino)$/.test(normalized)) return "masculino";
+  if (/^(women|woman|female|femme|mujer|donna|féminin|feminin|femenino)$/.test(normalized)) return "femenino";
   return "";
 }
 
@@ -146,12 +158,17 @@ export function extractPageEvidence(html, url) {
   const title = extractMeta(html, "og:title") || product?.name || "";
   const description = extractMeta(html, "og:description") || product?.description || "";
   const brand = typeof product?.brand === "string" ? product.brand : product?.brand?.name ?? "";
+  const imageUrl = extractMeta(html, "og:image") || imageFromProduct(product);
   const notes = extractExplicitNotes(html);
   const metadata = extractExplicitMetadata(html, url, product);
   return {
     source_url: url,
     title: cleanListText(title),
     description: cleanListText(stripHtml(description)),
+    image_url: cleanListText(imageUrl),
+    image_source: imageUrl ? url : "",
+    seo_title: cleanListText(title),
+    seo_description: cleanListText(stripHtml(description)),
     structured_product_name: cleanListText(product?.name ?? ""),
     structured_brand: cleanListText(brand),
     notes_structure: notes.structure,
