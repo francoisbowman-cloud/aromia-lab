@@ -71,9 +71,25 @@ export function extractExplicitNotes(html) {
   return { structure: "UNKNOWN", top_notes: "", middle_notes: "", base_notes: "", accords: "" };
 }
 
+function concentrationFrom(text) {
+  const patterns = [
+    ["Extrait", /\b(extrait(?: de parfum)?|perfume extract)\b/i],
+    ["Elixir", /\belixir\b/i],
+    ["EDP", /\b(eau de parfum|edp)\b/i],
+    ["EDT", /\b(eau de toilette|edt)\b/i],
+    ["EDC", /\b(eau de cologne|edc)\b/i],
+    ["Parfum", /\bparfum\b/i],
+  ];
+  for (const [value, re] of patterns) if (re.test(text)) return value;
+  return "";
+}
+
 export function extractExplicitMetadata(html, url = "") {
   const text = stripHtml(html);
-  const searchable = `${url} ${extractMeta(html, "og:title")} ${extractMeta(html, "og:description")} ${text.slice(0, 12000)}`;
+  const title = extractMeta(html, "og:title");
+  const description = extractMeta(html, "og:description");
+  const primary = `${url} ${title} ${description}`;
+  const searchable = `${primary} ${text.slice(0, 12000)}`;
   let gender = "";
   const men = /\b(for|pour)\s+(men|him|homme)|\bmens?\s+(fragrance|perfume|parfum)|\/men(?:\/|-|$)/i.test(searchable);
   const women = /\b(for|pour)\s+(women|her|femme)|\bwomens?\s+(fragrance|perfume|parfum)|\/women(?:\/|-|$)/i.test(searchable);
@@ -82,20 +98,12 @@ export function extractExplicitMetadata(html, url = "") {
   else if (men) gender = "masculino";
   else if (women) gender = "femenino";
 
-  let concentration = "";
-  const concentrationPatterns = [
-    ["Extrait", /\b(extrait(?: de parfum)?|perfume extract)\b/i],
-    ["Elixir", /\belixir\b/i],
-    ["Parfum", /\bparfum\b/i],
-    ["EDP", /\b(eau de parfum|edp)\b/i],
-    ["EDT", /\b(eau de toilette|edt)\b/i],
-    ["EDC", /\b(eau de cologne|edc)\b/i],
-  ];
-  for (const [value, re] of concentrationPatterns) { if (re.test(searchable)) { concentration = value; break; } }
-
+  // Product-scoped signals first; page body only as a fallback because related-product
+  // navigation frequently mentions other concentrations.
+  const concentration = concentrationFrom(primary) || concentrationFrom(text.slice(0, 2500));
   const yearMatch = searchable.match(/\b(?:launched|introduced|created|released|since)\s+(?:in\s+)?((?:19|20)\d{2})\b/i);
   const launch_year = yearMatch?.[1] ?? "";
-  const perfumerMatch = searchable.match(/\b(?:perfumer|perfume[r]?|nose)\s*[:\-–—]\s*([A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+(?:\s+[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+){1,4})/);
+  const perfumerMatch = searchable.match(/\b(?:perfumer|nose)\s*[:\-–—]\s*([A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+(?:\s+[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+){1,4})/);
   const perfumer = perfumerMatch?.[1] ?? "";
   const familyMatch = searchable.match(/\b(?:olfactive|olfactory|fragrance)\s+family\s*[:\-–—]\s*([^.;|]{3,80})/i);
   const family = cleanListText(familyMatch?.[1] ?? "");
