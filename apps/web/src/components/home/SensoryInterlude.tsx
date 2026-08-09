@@ -5,14 +5,14 @@ const EYEBROW =
 
 /**
  * Product Reveal — la materia del hero se materializa en objeto. Mantiene
- * el mismo universo visual pero cambia la composición: menos "CTA centrado",
- * más spread editorial con tensión entre copy y escena.
+ * el mismo universo visual pero usa su propio placeholder H02: el frasco
+ * entra en el tercio derecho y el copy conserva una zona segura a la izquierda.
  */
 export function SensoryInterlude() {
   return (
     <section className="relative min-h-[72vh] overflow-hidden bg-[#f6efe3] dark:bg-[#100c09]">
-      <div aria-hidden="true" className="aromia-scene-macro absolute inset-0 opacity-80 dark:opacity-90" />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,239,227,.94)_0%,rgba(246,239,227,.74)_38%,rgba(246,239,227,.18)_68%,transparent_100%)] dark:bg-[linear-gradient(90deg,rgba(16,12,9,.92)_0%,rgba(16,12,9,.72)_38%,rgba(16,12,9,.18)_68%,transparent_100%)]" />
+      <div aria-hidden="true" className="aromia-scene-reveal absolute inset-0" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,239,227,.96)_0%,rgba(246,239,227,.78)_38%,rgba(246,239,227,.16)_69%,transparent_100%)] dark:bg-[linear-gradient(90deg,rgba(16,12,9,.94)_0%,rgba(16,12,9,.74)_38%,rgba(16,12,9,.14)_69%,transparent_100%)]" />
 
       <div className="relative z-[1] mx-auto grid min-h-[72vh] w-full max-w-6xl grid-cols-1 items-end px-6 py-14 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:px-10 lg:py-20">
         <div>
