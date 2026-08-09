@@ -1,0 +1,36 @@
+-- Published catalog enrichment chunk 4/5 (15 rows)
+ALTER TABLE perfumes
+  ADD COLUMN IF NOT EXISTS amazon_url TEXT,
+  ADD COLUMN IF NOT EXISTS image_source TEXT,
+  ADD COLUMN IF NOT EXISTS affiliate_status TEXT,
+  ADD COLUMN IF NOT EXISTS visual_quality TEXT;
+
+WITH e(slug,image_url,image_source,amazon_url,description) AS (
+  VALUES
+  ('musc-ravageur-edp','https://scentira.in/cdn/shop/files/Frederic_malle_musc_ravageur_edp_1_9ea53f86-283d-4803-b3be-deead946677c.png?v=1756889459&width=1000','https://scentira.in/products/frederic-malle-musc-ravageur-eau-de-parfum','https://www.amazon.com/s?k=Frederic+Malle+Musc+Ravageur+EDP+perfume&tag=aromialab-20','Ambarado almizclado sensual; uno de los primeros lanzamientos de la casa Frederic Malle.'),
+  ('ambre-sultan-edp','https://sergelutens.com/cdn/shop/files/SLCOLLECTIONNOIRE2025-PACKSHOT_Ambresultan_100ml_Product_36112356155_Graybackground_RVB_2000x2000_300dpi_JPG.jpg?v=1779801400','https://sergelutens.com/products/ambre-sultan-eau-de-parfum-spray','https://www.amazon.com/s?k=Serge+Lutens+Ambre+Sultan+EDP+perfume&tag=aromialab-20','Ambarado herbal especiado; una de las composiciones más veneradas de Serge Lutens, sin concesión a la dulzura fácil.'),
+  ('wonderwood-edp','https://fimgs.net/mdimg/perfume-social-cards/en-social-8991.jpeg','https://www.fragrantica.com/perfume/Comme-des-Garcons/Wonderwood-8991.html','https://www.amazon.com/s?k=Comme+des+Gar%C3%A7ons+Wonderwood+EDP+perfume&tag=aromialab-20','Amaderado seco y ahumado; interpretación conceptual y arquitectónica de la madera por Comme des Garçons.'),
+  ('colonia-edc','https://fimgs.net/mdimg/perfume-social-cards/en-social-1681.jpeg','https://www.fragrantica.com/perfume/Acqua-di-Parma/Acqua-di-Parma-Colonia-1681.html','https://www.amazon.com/s?k=Acqua+di+Parma+Colonia+EDC+perfume&tag=aromialab-20','Cítrico clásico italiano desde 1916; la fragancia fundacional de la maison, elegancia atemporal.'),
+  ('halfeti-edp','https://fimgs.net/mdimg/perfume-social-cards/en-social-31396.jpeg','https://www.fragrantica.com/perfume/Penhaligon-s/Halfeti-31396.html','https://www.amazon.com/s?k=Penhaligon%27s+Halfeti+EDP+perfume&tag=aromialab-20','Oriental amaderado inspirado en la ciudad turca sumergida de Halfeti; rosa búlgara sobre oud y cuero.'),
+  ('no1-masculine-parfum','https://us.clivechristian.com/cdn/shop/products/CC-NO1P50RM01_1.png?v=1754382831','https://us.clivechristian.com/products/no1-masculine','https://www.amazon.com/s?k=Clive+Christian+No.+1+Masculine+Parfum+perfume&tag=aromialab-20','Amaderado floral de ultra lujo; sándalo envejecido 50 años como nota distintiva de la casa británica.'),
+  ('more-than-words-edp','https://www.xerjoff.com/cdn/shop/files/listing-xerjoff-morethanwords-eau-de-parfum-50ml.png?v=1747738061','https://www.xerjoff.com/en-us/products/more-than-words-eau-de-parfum','https://www.amazon.com/s?k=Xerjoff+More+Than+Words+EDP+perfume&tag=aromialab-20','De la colección ''Join The Club''; una fragancia cuyas notas la marca mantiene deliberadamente en secreto.'),
+  ('jubilation-xxv-man-edp','https://amouage.com/cdn/shop/files/JUBILATION_MAN_100_ML.jpg?v=1759211804','https://amouage.com/products/jubilation-xxv-man','https://www.amazon.com/s?k=Amouage+Jubilation+XXV+Man+EDP+perfume&tag=aromialab-20','Amaderado oriental de aniversario; complejidad especiada y resinosa característica de la alta perfumería de Amouage.'),
+  ('jubilation-25-woman-edp','https://amouage.com/cdn/shop/files/JUBILATION_WOMAN_100_ML.jpg?v=1758800917','https://amouage.com/products/jubilation-25-woman','https://www.amazon.com/s?k=Amouage+Jubilation+25+Woman+EDP+perfume&tag=aromialab-20','Floral aldehído de aniversario; contraparte femenina de Jubilation, con rosa y azafrán sobre resinas.'),
+  ('angels-share-edp','https://hrd-live.cdn.scayle.cloud/images/749a5310bb0191051390a445b19be620.jpg?quality=75','https://www.harrods.com/en-us/p/kilian-angels-share-eau-de-parfum-100ml-000000000007406612','https://www.amazon.com/s?k=By+Kilian+Angels%27+Share+EDP+perfume&tag=aromialab-20','Gourmand amaderado de la colección ''The Liquors''; cognac y roble evocando una bodega de añejamiento.'),
+  ('straight-to-heaven-white-cristal-edp','https://www.elpalaciodehierro.com/on/demandware.static/-/Sites-palacio-master-catalog/default/dwce49f158/images/43883854/large/43883854_x1.jpg','https://www.elpalaciodehierro.com/kilian-paris-perfume-straight-to-heaven-eau-de-parfum-100-ml-unisex-43883854.html','https://www.amazon.com/s?k=By+Kilian+Straight+to+Heaven%2C+white+cristal+EDP+perfume&tag=aromialab-20','Amaderado especiado de la colección ''The Cellars''; ron y nuez moscada sobre pachulí y vainilla.'),
+  ('eau-rose-edt','https://diptyqueparis.com/cdn/shop/files/diptyque-eauroseeaudetoilette-ROSE50V2-front.webp?v=1764594458','https://diptyqueparis.com/en-al/products/eau-de-toilette-eau-rose-50ml-1','https://www.amazon.com/s?k=Diptyque+Eau+Rose+EDT+perfume&tag=aromialab-20','Floral rosado luminoso; rosa damascena y centifolia con un giro afrutado de lichi.'),
+  ('not-a-perfume-edp','https://momperfume.in/cdn/shop/files/juliette-has-a-gun-not-a-perfume_6ccc7e1e-2a37-4ff5-9bb5-dc337447bfa5.jpg?v=1720103921','https://momperfume.in/products/juliette-has-a-gun-not-a-perfume-edp-2','https://www.amazon.com/s?k=Juliette+Has+a+Gun+Not+a+Perfume+EDP+perfume&tag=aromialab-20','Fragancia mono-molecular de Cetalox; concepto minimalista, ''el no-perfume'' que huele a piel limpia.'),
+  ('rien-edp','https://www.etatlibredorange.com/cdn/shop/products/Rien50ml.jpg?crop=center&height=600&v=1772620129&width=600','https://www.etatlibredorange.com/products/rien','https://www.amazon.com/s?k=Etat+Libre+d%27Orange+Rien+EDP+perfume&tag=aromialab-20','Amaderado especiado provocador; cuero y pimienta negra en la firma irreverente de la casa francesa.'),
+  ('taif-edp','https://www.olfactoryfactoryllc.com/cdn/shop/products/ormonde-jayne-ta-if-eau-de-parfum-en.jpg?v=1661258154','https://www.olfactoryfactoryllc.com/products/ormonde-jayne-taif-eau-de-parfum','https://www.amazon.com/s?k=Ormonde+Jayne+Ta%27if+EDP+perfume&tag=aromialab-20','Floral ambarado inspirado en la ciudad árabe de las rosas; dátiles y azafrán sobre vainilla ugandesa.')
+)
+UPDATE perfumes p SET
+  imagen_url = CASE WHEN p.imagen_url IS NULL OR btrim(p.imagen_url) = '' OR lower(btrim(p.imagen_url)) = 'pending' THEN e.image_url ELSE p.imagen_url END,
+  image_source = CASE WHEN p.image_source IS NULL OR btrim(p.image_source) = '' OR lower(btrim(p.image_source)) = 'pending' THEN e.image_source ELSE p.image_source END,
+  amazon_url = CASE WHEN p.amazon_url IS NULL OR btrim(p.amazon_url) = '' OR lower(btrim(p.amazon_url)) = 'pending' THEN e.amazon_url ELSE p.amazon_url END,
+  link_afiliado = CASE WHEN p.link_afiliado IS NULL OR btrim(p.link_afiliado) = '' OR lower(btrim(p.link_afiliado)) = 'pending' THEN e.amazon_url ELSE p.link_afiliado END,
+  affiliate_status = 'active',
+  visual_quality = CASE WHEN p.visual_quality IS NULL OR btrim(p.visual_quality) = '' OR lower(btrim(p.visual_quality)) IN ('pending','not-audited') THEN 'medium' ELSE p.visual_quality END,
+  descripcion_corta = CASE WHEN p.descripcion_corta IS NULL OR btrim(p.descripcion_corta) = '' OR lower(btrim(p.descripcion_corta)) = 'pending' THEN e.description ELSE p.descripcion_corta END,
+  actualizado_en = now()
+FROM e
+WHERE p.slug = e.slug;
