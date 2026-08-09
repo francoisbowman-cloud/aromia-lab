@@ -70,6 +70,16 @@ test("female and unisex cues remain explicit and separate", () => {
   assert.equal(unisex.gender, "unisex");
 });
 
+test("official OpenGraph publication fields are preserved", () => {
+  const html = `<meta property="og:title" content="Amber Moon Eau de Parfum"><meta property="og:description" content="Warm amber fragrance with cedar and iris."><meta property="og:image" content="https://cdn.brand.test/amber-moon.webp"><script type="application/ld+json">{"@type":"Product","name":"Amber Moon","brand":{"name":"Maison Test"}}</script>`;
+  const row = extractPageEvidence(html, "https://brand.test/products/amber-moon-eau-de-parfum");
+  assert.equal(row.image_url, "https://cdn.brand.test/amber-moon.webp");
+  assert.equal(row.image_source, "https://brand.test/products/amber-moon-eau-de-parfum");
+  assert.match(row.description, /Warm amber/);
+  assert.equal(row.seo_title, "Amber Moon Eau de Parfum");
+  assert.match(row.seo_description, /cedar/);
+});
+
 test("page evidence combines meta, JSON-LD and explicit notes conservatively", () => {
   const html = `<meta property="og:title" content="Amber Moon Eau de Parfum"><script type="application/ld+json">{"@type":"Product","name":"Amber Moon","brand":{"name":"Maison Test"}}</script><main>Top: Bergamot Heart: Iris Base: Cedar Ingredients:</main>`;
   const row = extractPageEvidence(html, "https://brand.test/products/amber-moon");
