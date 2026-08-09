@@ -147,6 +147,7 @@ async function resolveFromAmazonUrl(url: string): Promise<AmazonCatalogProduct |
   if (!affiliateUrl) return null;
   const asin = directAsin(affiliateUrl);
   const html = await fetchAmazonHtml(affiliateUrl);
+
   if (asin) {
     return {
       productUrl: productUrlForAsin(asin),
@@ -154,16 +155,21 @@ async function resolveFromAmazonUrl(url: string): Promise<AmazonCatalogProduct |
       source: "amazon-product",
     };
   }
+
   if (html) {
     const result = extractSearchResult(html);
     if (result) {
+      const productUrl = productUrlForAsin(result.asin);
+      const productHtml = await fetchAmazonHtml(productUrl);
+      const productImage = productHtml ? extractProductImage(productHtml) : null;
       return {
-        productUrl: productUrlForAsin(result.asin),
-        imageUrl: result.imageUrl,
-        source: "amazon-search",
+        productUrl,
+        imageUrl: productImage ?? result.imageUrl,
+        source: productImage ? "amazon-product" : "amazon-search",
       };
     }
   }
+
   return { productUrl: affiliateUrl, imageUrl: null, source: "amazon-link" };
 }
 
