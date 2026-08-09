@@ -12,7 +12,7 @@ on:
 
 jobs:
   catalog:
-    name: catalog (tests + expansion dry-run)
+    name: catalog (tests + Batch 003 full run)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -27,25 +27,32 @@ jobs:
       - run: npm ci
       - name: Regression suite
         run: npm test
-      - name: Expansion Automation v1 dry-run
+      - name: Expansion Automation v1 selection
         run: npm run expand
       - name: Verify Batch 003 selection contract
         run: |
           node -e "const r=require('../../catalog/expansion/batch-003/selection-report.json'); if(r.selected!==100) throw new Error('Batch 003 selector did not produce 100 candidates'); if(r.guardrails.writes_postgres||r.guardrails.mutates_raw_inputs||r.guardrails.master_import) throw new Error('Expansion guardrail violated'); console.log(r)"
-      - name: Live official-source harvest pilot (10 candidates)
+      - name: Live official-source harvest — full Batch 003 (100 candidates)
         env:
-          AROMIA_HARVEST_CONCURRENCY: "4"
+          AROMIA_HARVEST_CONCURRENCY: "6"
         run: |
-          npm run harvest -- 10
+          npm run harvest -- 100
           npm run enrich
+          npm run build-batch-003
+          npm run expansion-gate || true
+          echo '--- harvest ---'
           cat ../../catalog/expansion/batch-003/harvest-report.json
+          echo '--- enrichment ---'
           cat ../../catalog/expansion/batch-003/enrichment-report.json
+          echo '--- EA4 ---'
+          cat ../../catalog/expansion/batch-003/go-no-go.json
       - name: Verify protected inputs unchanged
         run: |
           git diff --exit-code -- ../../catalog/imports/batch-001.csv ../../catalog/imports/batch-002.csv ../../catalog/aromia-catalog-master.csv ../../PERFUMES_INITIAL_50.csv
-      - name: Upload Batch 003 dry-run artifacts
+      - name: Upload Batch 003 full-run artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: batch-003-expansion-dry-run
+          name: batch-003-expansion-full-run
           path: catalog/expansion/batch-003/
           if-no-files-found: error
