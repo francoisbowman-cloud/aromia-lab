@@ -1,7 +1,8 @@
 # Aromia — Hybrid Signature Visual Contract v1
 
-Status: implementation contract
+Status: preview-ready implementation contract
 Mainline baseline: `main@e3d121d8f483a0f6b5bd783520525d44ce6e688e`
+Preview: `web-hybrid-signature-01-production.up.railway.app`
 
 ## Thesis
 Aromia is one visual system with three synchronized modes: Editorial, Discovery and Commerce. It must never read as a generic luxury ecommerce template.
@@ -44,3 +45,6 @@ CSS, IntersectionObserver and native pointer motion are preferred. Respect `pref
 - No card grid as the universal layout primitive.
 - No fake pricing or product metadata.
 - No visual change that weakens routing, accessibility, responsive behavior or catalog data integrity.
+
+## Technical gate
+The production-code commit rebased over current catalog main passed GitHub Actions API typecheck and Web lint + typecheck + production build, and the isolated Railway service completed successfully. Final approval remains visual QA in the preview; no production merge is implied.
