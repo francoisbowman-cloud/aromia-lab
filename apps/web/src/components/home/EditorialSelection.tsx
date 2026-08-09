@@ -37,7 +37,7 @@ export function EditorialSelection({ perfumes }: { perfumes: Perfume[] }) {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.28fr_.72fr] lg:gap-10">
         <Link href={`/catalogo/${feature.slug}`} className="group block">
           <div className="relative min-h-[430px] overflow-hidden bg-[#f2eadc] dark:bg-[#17120d] lg:min-h-[560px]">
-            <div className="absolute left-5 top-5 z-[1] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.16em] text-ink/55 dark:text-paper/55">
+            <div className="absolute left-5 top-5 z-[1] flex items-center gap-3 font-plex text-[9px] uppercase tracking-[.16em] text-[rgba(33,29,23,.55)] dark:text-[rgba(242,235,221,.58)]">
               <span>N°01</span>
               <span className="h-px w-8 bg-current opacity-40" />
               <span>Elección del editor</span>
