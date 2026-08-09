@@ -1,6 +1,7 @@
 "use client";
 
 import type { Retailer } from "@/lib/types";
+import { publicText } from "@/lib/catalogDisplay";
 import { trackEvent } from "@/lib/analytics";
 
 export function PriceTableSkeleton() {
@@ -11,13 +12,24 @@ export function PriceTableSkeleton() {
   );
 }
 
-export function PriceTable({ retailers, perfumeSlug, perfumeNombre }: { retailers: Retailer[]; perfumeSlug?: string; perfumeNombre?: string }) {
+export function PriceTable({ retailers, directLink, perfumeSlug, perfumeNombre }: { retailers: Retailer[]; directLink?: string | null; perfumeSlug?: string; perfumeNombre?: string }) {
+  const safeDirectLink = publicText(directLink);
+
+  if (retailers.length === 0 && safeDirectLink) {
+    return (
+      <section className="grid gap-6 border-y border-line py-9 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div><p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Disponibilidad</p><p className="mt-3 font-display text-2xl text-ink">Consulta precio y stock actuales.</p><p className="mt-2 max-w-[48ch] font-sans text-sm leading-6 text-muted">El valor final depende del formato, vendedor y disponibilidad. Aromia te lleva al canal comercial sin inventar una referencia de precio.</p></div>
+        <a href={safeDirectLink} target="_blank" rel="sponsored noopener" onClick={() => trackEvent("affiliate_click", { retailer: "direct", perfume_slug: perfumeSlug, perfume_name: perfumeNombre })} className="group flex min-w-44 items-center justify-between border-b border-ink pb-2 font-plex text-[9px] uppercase tracking-[.14em] text-ink transition hover:border-gold hover:text-gold-contrast"><span>Ver disponibilidad</span><span aria-hidden="true" className="transition-transform group-hover:translate-x-1">↗</span></a>
+      </section>
+    );
+  }
+
   if (retailers.length === 0) {
     return (
       <section className="border-y border-line py-12">
         <p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Disponibilidad</p>
-        <p className="mt-3 font-display text-2xl text-ink">Oferta por verificar.</p>
-        <p className="mt-2 max-w-[42ch] font-sans text-sm leading-6 text-muted">Todavía no tenemos un retailer verificado para esta fragancia. Preferimos dejar el espacio vacío antes que mostrar un enlace incierto.</p>
+        <p className="mt-3 font-display text-2xl text-ink">Sin oferta activa publicada.</p>
+        <p className="mt-2 max-w-[42ch] font-sans text-sm leading-6 text-muted">No mostramos precios ni enlaces sin una fuente comercial válida.</p>
       </section>
     );
   }

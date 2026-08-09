@@ -13,6 +13,8 @@ type CropRender = {
   imageStyle: { width: string; height: string; left: string; top: string };
 };
 
+const TARGET_OBJECT_OCCUPANCY = 0.76;
+
 function analyzeImage(img: HTMLImageElement): CropResult | null {
   try {
     const canvas = document.createElement("canvas");
@@ -94,7 +96,9 @@ function renderCrop(img: HTMLImageElement, box: CropResult["box"], container: HT
   const boxHeightPx = (box.y1 - box.y0) * nh;
   if (boxWidthPx <= 0 || boxHeightPx <= 0) return null;
 
-  const scale = Math.min(cw / boxWidthPx, ch / boxHeightPx);
+  // Fit the detected bottle/object into roughly three quarters of the card.
+  // This removes excessive source whitespace while preserving consistent luxury breathing room.
+  const scale = Math.min((cw * TARGET_OBJECT_OCCUPANCY) / boxWidthPx, (ch * TARGET_OBJECT_OCCUPANCY) / boxHeightPx);
   const scaledW = nw * scale;
   const scaledH = nh * scale;
   const boxCenterX = ((box.x0 + box.x1) / 2) * nw * scale;
@@ -158,7 +162,7 @@ export function useProductImageCrop(src: string | undefined) {
   }, []);
 
   const frameBackground = bgColor
-    ? `radial-gradient(130% 140% at 50% 38%, color-mix(in srgb, ${bgColor} 88%, white) 0%, ${bgColor} 100%)`
+    ? `radial-gradient(130% 140% at 50% 38%, color-mix(in srgb, ${bgColor} 94%, white) 0%, ${bgColor} 100%)`
     : undefined;
 
   return {
@@ -167,7 +171,7 @@ export function useProductImageCrop(src: string | undefined) {
     frameBackground,
     backgroundSize: crop?.backgroundSize ?? "contain",
     backgroundPosition: crop?.backgroundPosition ?? "center",
-    imageStyle: crop?.imageStyle ?? { width: "100%", height: "100%", left: "0px", top: "0px" },
+    imageStyle: crop?.imageStyle ?? { width: "76%", height: "76%", left: "12%", top: "12%" },
     imgError,
     imgLoaded,
     handleLoad,
