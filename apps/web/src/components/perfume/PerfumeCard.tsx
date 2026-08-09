@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
+import { formattedReferencePrice, publicText } from "@/lib/catalogDisplay";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { RatingStars } from "@/components/RatingStars";
 import { useProductImageCrop } from "@/lib/useProductImageCrop";
@@ -16,15 +17,12 @@ export function PerfumeCardSkeleton() {
   );
 }
 
-function formatPrice(perfume: Perfume) {
-  if (perfume.precio_referencia == null || !perfume.moneda) return "Precio por verificar";
-  return Number(perfume.precio_referencia).toLocaleString("es-AR", { style: "currency", currency: perfume.moneda });
-}
-
 export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: Perfume; variant?: "catalog" | "featured"; index?: number }) {
   const { imgRef, frameRef, frameBackground, imageStyle, imgError, imgLoaded, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
   const [requestImage, setRequestImage] = useState(false);
-  const hasImage = Boolean(perfume.imagen_url) && !imgError;
+  const hasImage = Boolean(publicText(perfume.imagen_url)) && !imgError;
+  const family = publicText(perfume.familia_olfativa);
+  const price = formattedReferencePrice(perfume);
 
   useEffect(() => {
     if (!perfume.imagen_url || requestImage) return;
@@ -57,10 +55,9 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
         <span>{perfume.nicho_o_comercial ?? "Aromia edit"}</span>
       </div>
 
-      <div ref={frameRef} className="relative aspect-[4/5] overflow-hidden bg-[#f3ede3] dark:bg-[#1a1510]" style={frameBackground ? { background: frameBackground } : undefined}>
+      <div ref={frameRef} className="relative aspect-[4/5] overflow-hidden bg-white dark:bg-[#f7f4ee]" style={frameBackground ? { background: frameBackground } : undefined}>
         {hasImage && requestImage ? (
           <>
-            {/* One request serves both crop analysis and the final visible object. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               ref={imgRef}
@@ -70,23 +67,23 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
               decoding="async"
               onLoad={handleLoad}
               onError={handleError}
-              className={`absolute max-w-none object-contain transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.028] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+              className={`absolute max-w-none object-contain transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.025] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               style={imageStyle}
             />
             {!imgLoaded ? <ImagePlaceholder alt={`${perfume.nombre} — imagen cargando`} /> : null}
           </>
         ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen no disponible`} />}
-        <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.72)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1 dark:border-white/15 dark:bg-[rgba(20,16,12,.72)]">→</span>
+        <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.72)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1">→</span>
       </div>
 
       <div className="flex flex-1 flex-col px-4 pb-5 pt-5 lg:px-5 lg:pb-6">
-        <p className="font-plex text-[9px] uppercase tracking-[.16em] text-gold-contrast">{perfume.familia_olfativa ?? "Familia por verificar"}</p>
+        <p className="min-h-3 font-plex text-[9px] uppercase tracking-[.16em] text-gold-contrast">{family ?? "Objeto olfativo"}</p>
         <h3 className="mt-3 max-w-[12ch] font-display text-[25px] font-medium leading-[.98] tracking-[-.02em] text-ink">{perfume.nombre}</h3>
         <p className="mt-2 font-sans text-xs text-muted">{perfume.marca}</p>
 
         {variant === "featured" && perfume.rating_promedio ? <RatingStars rating={perfume.rating_promedio} className="mt-5" /> : (
           <div className="mt-7 flex items-end justify-between gap-4 border-t border-line pt-4">
-            <div><p className="font-plex text-[8px] uppercase tracking-[.14em] text-muted">Referencia</p><p className="mt-1 font-display text-lg text-ink">{formatPrice(perfume)}</p></div>
+            <div><p className="font-plex text-[8px] uppercase tracking-[.14em] text-muted">Referencia</p><p className="mt-1 font-display text-lg text-ink">{price ?? "Ver disponibilidad"}</p></div>
             <span className="font-plex text-[8px] uppercase tracking-[.14em] text-muted transition-colors group-hover:text-gold-contrast">Abrir objeto</span>
           </div>
         )}
