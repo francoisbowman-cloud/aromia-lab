@@ -43,7 +43,7 @@ jobs:
           cat /tmp/perf-web.log; exit 1
       - name: Assert lazy image behavior
         run: |
-          cat > /tmp/assert-lazy.mjs <<'EOF'
+          cat > .perf-assert-lazy.mjs <<'EOF'
           import { chromium } from 'playwright';
           const browser=await chromium.launch({headless:true});
           const page=await browser.newPage({viewport:{width:1440,height:900}});
@@ -59,4 +59,4 @@ jobs:
           console.log(`PASS lazy images: initial=${initial}/40, afterScroll=${afterScroll}/40`);
           await browser.close();
           EOF
-          node /tmp/assert-lazy.mjs
+          node .perf-assert-lazy.mjs
