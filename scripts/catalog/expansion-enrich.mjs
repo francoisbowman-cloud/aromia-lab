@@ -52,14 +52,22 @@ export function routeEvidence(rows) {
 function readCsv(path) { return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true, relax_column_count: true }); }
 function writeCsv(path, rows) { mkdirSync(dirname(path), { recursive: true }); if (!rows.length) { writeFileSync(path, "", "utf-8"); return; } writeFileSync(path, stringifyCsv(rows, { header: true }), "utf-8"); }
 
+export function resolveEvidencePath(dir) {
+  const manual = join(dir, "evidence.csv");
+  const automated = join(dir, "evidence.auto.csv");
+  if (existsSync(manual)) return { path: manual, source: "manual_override" };
+  if (existsSync(automated)) return { path: automated, source: "automated_harvest" };
+  return null;
+}
+
 export function runEnrichment() {
   const dir = join(REPO_ROOT, "catalog", "expansion", "batch-003");
-  const evidencePath = join(dir, "evidence.csv");
-  if (!existsSync(evidencePath)) return { skipped: true, reason: "evidence.csv not present" };
-  const routed = routeEvidence(readCsv(evidencePath));
+  const resolved = resolveEvidencePath(dir);
+  if (!resolved) return { skipped: true, reason: "no evidence.csv or evidence.auto.csv present" };
+  const routed = routeEvidence(readCsv(resolved.path));
   writeCsv(join(dir, "auto-ready.csv"), routed.autoReady); writeCsv(join(dir, "review-required.csv"), routed.reviewRequired); writeCsv(join(dir, "blocked.csv"), routed.blocked);
   const total = routed.drafted.length;
-  const report = { total, auto_ready: routed.autoReady.length, review_required: routed.reviewRequired.length, blocked: routed.blocked.length, auto_preparation_yield: total ? routed.autoReady.length / total : null, human_review_burden: total ? routed.reviewRequired.length / total : null };
+  const report = { evidence_source: resolved.source, total, auto_ready: routed.autoReady.length, review_required: routed.reviewRequired.length, blocked: routed.blocked.length, auto_preparation_yield: total ? routed.autoReady.length / total : null, human_review_burden: total ? routed.reviewRequired.length / total : null };
   writeFileSync(join(dir, "enrichment-report.json"), JSON.stringify(report, null, 2) + "\n", "utf-8"); return report;
 }
 
