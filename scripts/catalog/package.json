@@ -14,6 +14,7 @@
     "calibrate": "node calibrate.mjs",
     "apply-remediation": "node apply-remediation.mjs",
     "expand": "node expansion-engine.mjs 100",
+    "harvest": "node expansion-harvest.mjs",
     "enrich": "node expansion-enrich.mjs",
     "build-batch-003": "node expansion-batch-builder.mjs",
     "expansion-gate": "node expansion-gate.mjs",
