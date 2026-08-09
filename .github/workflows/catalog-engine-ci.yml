@@ -22,7 +22,7 @@ on:
 
 jobs:
   catalog:
-    name: catalog (tests + engine smoke)
+    name: catalog (tests + expansion + sourcing smoke)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,18 +35,24 @@ jobs:
         run: npm ci --prefix scripts/catalog
       - name: Run catalog regression suite
         run: npm --prefix scripts/catalog test
-      - name: Run engine against real Batch 002
+      - name: Run expansion engine against real Batch 002
         run: node scripts/catalog/engine.mjs catalog/imports/batch-002.csv --limit 25
+      - name: Run sourcing engine against economical seed pool
+        run: node scripts/catalog/sourcing.mjs catalog/sourcing/pool-economico-001.csv --limit 10
       - name: Verify engine outputs
         run: |
           test -s catalog/reports/engine-batch-002.json
           test -s catalog/reports/engine-batch-002-selection.csv
-      - name: Upload real gap report and selection queue
+          test -s catalog/reports/sourcing-economico-001.json
+          test -s catalog/reports/sourcing-economico-001-selection.csv
+      - name: Upload catalog engine artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: catalog-engine-batch-002
+          name: catalog-engine-artifacts
           path: |
             catalog/reports/engine-batch-002.json
             catalog/reports/engine-batch-002-selection.csv
+            catalog/reports/sourcing-economico-001.json
+            catalog/reports/sourcing-economico-001-selection.csv
           if-no-files-found: error
           retention-days: 14

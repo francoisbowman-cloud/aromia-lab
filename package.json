@@ -1,7 +1,7 @@
 {
   "name": "aromia-lab-tooling",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Tooling de raíz del repo. Apps/web y apps/api conservan sus propios package.json y builds; este paquete solo expone utilidades operativas para imágenes y expansión de catálogo.",
   "type": "module",
   "scripts": {
@@ -15,6 +15,7 @@
     "catalog:calibrate": "node scripts/catalog/calibrate.mjs",
     "catalog:apply-remediation": "node scripts/catalog/apply-remediation.mjs",
     "catalog:engine": "node scripts/catalog/engine.mjs",
+    "catalog:sourcing": "node scripts/catalog/sourcing.mjs",
     "catalog:test": "npm --prefix scripts/catalog test"
   },
   "dependencies": {
