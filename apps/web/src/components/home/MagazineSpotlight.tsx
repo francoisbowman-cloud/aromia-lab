@@ -23,7 +23,9 @@ export function MagazineSpotlight({ articulo }: { articulo: Article }) {
           </div>
 
           <div className="my-12 max-w-[560px] lg:my-16">
-            <p className="font-plex text-[10px] uppercase tracking-[.18em] text-muted">Historia destacada</p>
+            <p className="font-plex text-[10px] uppercase tracking-[.18em] text-muted">
+              Historia destacada
+            </p>
             <h2 className="mt-4 font-display text-[38px] font-medium leading-[1.02] tracking-[-.02em] text-ink lg:text-[58px]">
               {articulo.titulo}
             </h2>
@@ -52,7 +54,7 @@ export function MagazineSpotlight({ articulo }: { articulo: Article }) {
             className="aromia-scene-editorial absolute inset-0 transition-transform duration-700 group-hover:scale-[1.025]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(33,29,23,.10)_100%)] dark:bg-[linear-gradient(180deg,transparent_42%,rgba(14,12,10,.32)_100%)]" />
-          <div className="absolute bottom-5 left-5 font-plex text-[9px] uppercase tracking-[.16em] text-ink/55 dark:text-paper/60">
+          <div className="absolute bottom-5 left-5 font-plex text-[9px] uppercase tracking-[.16em] text-[rgba(33,29,23,.55)] dark:text-[rgba(242,235,221,.62)]">
             Aromia Magazine / Cover Story
           </div>
         </Link>
