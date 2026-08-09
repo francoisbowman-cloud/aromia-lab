@@ -8,14 +8,24 @@ Base contractual: GO-100 (`274311d`). Esta capa expande el catálogo sin escribi
 2. **Candidate pool** — pool semilla sobredimensionado (130 identidades) dividido por estratos.
 3. **Identity resolver** — normaliza marca, nombre y concentración; compara contra `PERFUMES_INITIAL_50.csv`, Batch 001, Batch 002 y master.
 4. **Gap-aware selector** — combina prioridad, relación, disponibilidad de dominio oficial y bonus por marca ausente/subrepresentada; intenta producir 100 identidades únicas.
-5. **Source discovery queue** — crea consultas y dominio oficial preferido por candidato; el dominio semilla NO cuenta como provenance verificado.
-6. **Structured evidence adapter** — `expansion-enrich.mjs` consume `evidence.csv` y prepara campos estructurados.
-7. **Provenance** — ninguna fila puede ser `AUTO_READY` sin al menos un `source_url`.
-8. **Normalization / relation** — concentración normalizada; `NEW` / `RELATED_VARIANT` se conserva sin dedup destructiva.
-9. **Explainable confidence** — dimensiones separadas: identidad, fuente, notas, metadata y relación; conserva razones y penalizaciones.
-10. **Quality gates** — `AUTO_READY`, `REVIEW_REQUIRED`, `BLOCKED`.
-11. **Batch Builder** — solo `AUTO_READY` entra a `batch-003-prepared.csv`, con `candidate_id` como ID de trazabilidad de batch (no PK de Postgres) y `status=draft`.
-12. **GO/NO-GO** — evalúa 100 filas, >=90% auto-preparation, <=10% Human Review Burden, <=3% blocked, cero dedup destructiva, cero MODEL_REQUIREMENT_GAP y cero escrituras Postgres.
+5. **Official Source Discovery** — lee `robots.txt`/sitemaps del dominio oficial, nunca sale del host oficial y puntúa URLs por identidad.
+6. **Conservative Structured Extractor** — extrae Product JSON-LD, metadatos explícitos, audience/concentration explícitos y notas solo cuando existen labels inequívocos; jamás convierte prosa libre en pirámide.
+7. **Automated Harvest** — procesa candidatos con concurrencia limitada, verifica identidad + concentración y genera `evidence.auto.csv`. Un `evidence.csv` manual posterior funciona como override explícito.
+8. **Structured evidence adapter** — enruta evidencia automática/manual hacia el contrato Aromia.
+9. **Provenance** — ninguna fila puede ser `AUTO_READY` sin al menos un `source_url` verificado.
+10. **Normalization / relation** — concentración normalizada; `NEW` / `RELATED_VARIANT` se conserva sin dedup destructiva.
+11. **Explainable confidence** — dimensiones separadas: identidad, fuente, notas, metadata y relación; conserva razones y penalizaciones.
+12. **Quality gates** — `AUTO_READY`, `REVIEW_REQUIRED`, `BLOCKED`.
+13. **Batch Builder** — solo `AUTO_READY` entra a `batch-003-prepared.csv`, con `candidate_id` como ID de trazabilidad de batch (no PK de Postgres) y `status=draft`.
+14. **GO/NO-GO** — evalúa 100 filas, >=90% auto-preparation, <=10% Human Review Burden, <=3% blocked, cero dedup destructiva, cero MODEL_REQUIREMENT_GAP y cero escrituras Postgres.
+
+## Source discovery: límites intencionales
+
+V1 no es un crawler generalista. Solo consulta `robots.txt`, sitemaps y páginas del `official_domain` semilla. Redirects a hosts ajenos son rechazados. Se limitan sitemaps, URLs inspeccionadas, concurrencia y timeout.
+
+La presencia de un dominio oficial en el candidate pool **no cuenta como provenance**. Solo una URL de página realmente encontrada y validada puede elevar `official_source=true`.
+
+El extractor solo promueve hechos explícitos. Si no puede confirmar identidad, concentración, gender o notas, esa ausencia llega al quality gate y termina en `REVIEW_REQUIRED`; no se rellena con inferencias.
 
 ## Estratos de Batch 003
 
@@ -66,6 +76,7 @@ Desde `scripts/catalog`:
 ```bash
 npm test
 npm run expand
+npm run harvest -- 100
 npm run enrich
 npm run build-batch-003
 npm run expansion-gate
@@ -73,7 +84,9 @@ npm run expansion-gate
 
 `npm run expand` genera manifiesto, gap report, exclusiones y cola de descubrimiento en `catalog/expansion/batch-003/`.
 
-`npm run enrich` solo actúa si existe `evidence.csv` y produce `auto-ready.csv`, `review-required.csv`, `blocked.csv` y métricas.
+`npm run harvest -- 100` intenta descubrimiento y extracción read-only en fuentes oficiales para las filas seleccionadas. Produce `harvest-results.csv`, `evidence.auto.csv` y `harvest-report.json`.
+
+`npm run enrich` usa `evidence.csv` si existe; si no, consume `evidence.auto.csv`. Produce `auto-ready.csv`, `review-required.csv`, `blocked.csv` y métricas.
 
 `npm run build-batch-003` solo acepta filas `AUTO_READY`; genera un batch compatible con el contrato de entrada del pipeline, sin importar nada.
 
@@ -82,6 +95,8 @@ npm run expansion-gate
 ## CI de validación
 
 Mientras GO-100 no está en `main`, PR #18 usa temporalmente `ci/catalog-expansion-v1-gate` como base de validación. Ese branch contiene únicamente el workflow sobre GO-100 para permitir ejecutar la suite sin contaminar `main`. Antes de integración final, el PR vuelve a su base contractual correspondiente.
+
+El CI ejecuta regresión, selección de 100, guardrails y un harvest online piloto de 10 candidatos. El harvest piloto mide capacidad real pero no altera producción ni el master.
 
 ## Guardrails
 
