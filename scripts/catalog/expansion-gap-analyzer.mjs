@@ -1,4 +1,11 @@
-import { clean, fold } from "./expansion-engine.mjs";
+function clean(value) {
+  const v = String(value ?? "").trim();
+  return ["", "pending", "null", "undefined", "n/a"].includes(v.toLowerCase()) ? "" : v;
+}
+
+function fold(value) {
+  return clean(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+}
 
 function increment(map, key) {
   if (!key) return;
