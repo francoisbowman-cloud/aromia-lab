@@ -1,14 +1,15 @@
 import { URL } from "node:url";
 
-const DEFAULT_TIMEOUT_MS = 8000;
-const MAX_SITEMAPS = 30;
-const MAX_URLS = 20000;
+const DEFAULT_TIMEOUT_MS = 4500;
+const MAX_SITEMAPS = 12;
+const MAX_URLS = 12000;
 
 // A Batch 003 run contains several candidates from the same house. Discovery of
 // robots/sitemaps is domain-wide, so repeating it per perfume multiplies network
 // cost without adding evidence. Cache the in-flight Promise as well as the final
 // corpus so concurrent candidates for one house share exactly one crawl.
 const discoveryCorpusCache = new Map();
+const landingLinksCache = new Map();
 
 function normalizeHost(host) {
   return String(host ?? "").toLowerCase().replace(/^www\./, "");
@@ -128,21 +129,28 @@ async function buildOfficialCorpus(officialDomain, options = {}) {
     } catch {}
   }
 
-  // Landing links are domain-wide too. Cache them once, but use them only for a
-  // candidate whose sitemap corpus has no identity match.
-  let landingLinks = [];
-  try {
-    const landing = await fetchText(origin, options);
-    landingLinks = extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
-  } catch {}
-
   return {
     officialDomain,
     pageUrls: [...pageUrls],
-    landingLinks,
     sitemapCount: visited.size,
     scannedUrlCount: pageUrls.size,
   };
+}
+
+async function loadLandingLinks(officialDomain, options = {}) {
+  const origin = `https://${officialDomain}`;
+  const load = async () => {
+    try {
+      const landing = await fetchText(origin, options);
+      return extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
+    } catch {
+      return [];
+    }
+  };
+  if (options.fetchImpl) return load();
+  const key = normalizeHost(officialDomain);
+  if (!landingLinksCache.has(key)) landingLinksCache.set(key, load());
+  return landingLinksCache.get(key);
 }
 
 function getOfficialCorpus(officialDomain, options = {}) {
@@ -162,16 +170,18 @@ function getOfficialCorpus(officialDomain, options = {}) {
 
 export function clearDiscoveryCorpusCache() {
   discoveryCorpusCache.clear();
+  landingLinksCache.clear();
 }
 
 export async function discoverOfficialUrls(candidate, options = {}) {
   const officialDomain = String(candidate.official_domain ?? "").trim();
   if (!officialDomain) return { status: "NO_OFFICIAL_DOMAIN", urls: [], sitemapCount: 0 };
 
-  const corpus = await getOfficialCorpus(officialDomain, options).catch(() => ({ pageUrls: [], landingLinks: [], sitemapCount: 0, scannedUrlCount: 0 }));
+  const corpus = await getOfficialCorpus(officialDomain, options).catch(() => ({ pageUrls: [], sitemapCount: 0, scannedUrlCount: 0 }));
   let ranked = corpus.pageUrls.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
   if (!ranked.length) {
-    ranked = corpus.landingLinks.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+    const landingLinks = await loadLandingLinks(officialDomain, options);
+    ranked = landingLinks.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
   }
 
   return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 8), sitemapCount: corpus.sitemapCount, scannedUrlCount: corpus.scannedUrlCount };
