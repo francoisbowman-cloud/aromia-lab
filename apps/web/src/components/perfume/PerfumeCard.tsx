@@ -21,8 +21,8 @@ function formatPrice(perfume: Perfume) {
 }
 
 export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: Perfume; variant?: "catalog" | "featured"; index?: number }) {
-  const { imgRef, frameRef, frameBackground, backgroundSize, backgroundPosition, imgError, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
-  const showImage = Boolean(perfume.imagen_url) && !imgError;
+  const { imgRef, frameRef, frameBackground, backgroundSize, backgroundPosition, imgError, imgLoaded, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
+  const hasImage = Boolean(perfume.imagen_url) && !imgError;
 
   return (
     <Link href={`/catalogo/${perfume.slug}`} className="group relative flex flex-col overflow-hidden border-b border-r border-line bg-[#fffdf8] transition-colors duration-500 hover:bg-[#f8f2e9] dark:bg-[#14100c] dark:hover:bg-[#18130f]">
@@ -32,11 +32,14 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
       </div>
 
       <div ref={frameRef} className="relative aspect-[4/5] overflow-hidden bg-[#f3ede3] dark:bg-[#1a1510]" style={frameBackground ? { background: frameBackground } : undefined}>
-        {showImage ? (
+        {hasImage ? (
           <>
+            {/* The hidden probe is the lazy-loading gate for the decorative background. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img ref={imgRef} src={perfume.imagen_url ?? ""} alt="" aria-hidden="true" crossOrigin="anonymous" className="absolute h-0 w-0 opacity-0" onLoad={handleLoad} onError={handleError} />
-            <div role="img" aria-label={`${perfume.nombre} de ${perfume.marca}`} className="absolute inset-0 bg-no-repeat transition-transform duration-700 ease-out group-hover:scale-[1.028]" style={{ backgroundImage: `url(${perfume.imagen_url})`, backgroundSize, backgroundPosition }} />
+            <img ref={imgRef} src={perfume.imagen_url ?? ""} alt="" aria-hidden="true" crossOrigin="anonymous" loading="lazy" decoding="async" className="absolute h-px w-px opacity-0" onLoad={handleLoad} onError={handleError} />
+            {imgLoaded ? (
+              <div role="img" aria-label={`${perfume.nombre} de ${perfume.marca}`} className="absolute inset-0 bg-no-repeat transition-transform duration-700 ease-out group-hover:scale-[1.028]" style={{ backgroundImage: `url(${perfume.imagen_url})`, backgroundSize, backgroundPosition }} />
+            ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen cargando`} />}
           </>
         ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen no disponible`} />}
         <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.72)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1 dark:border-white/15 dark:bg-[rgba(20,16,12,.72)]">→</span>
