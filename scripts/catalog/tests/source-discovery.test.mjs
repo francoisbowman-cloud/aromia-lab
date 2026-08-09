@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseRobotsSitemaps, parseSitemapXml, scoreUrlForCandidate, sameRegistrableHost, discoverOfficialUrls, tokenizeIdentity, extractInternalLinks } from "../source-discovery.mjs";
+import { parseRobotsSitemaps, parseSitemapXml, scoreUrlForCandidate, sameRegistrableHost, discoverOfficialUrls, tokenizeIdentity, extractInternalLinks, isFragranceNavigationUrl } from "../source-discovery.mjs";
 
 test("robots and sitemap parsers preserve official URLs", () => {
   assert.deepEqual(parseRobotsSitemaps("User-agent: *\nSitemap: https://brand.test/sitemap.xml\nSitemap: https://brand.test/products.xml"), ["https://brand.test/sitemap.xml","https://brand.test/products.xml"]);
@@ -28,6 +28,12 @@ test("landing-page fallback extracts only internal non-sitemap links", () => {
   assert.deepEqual(extractInternalLinks(html, "https://brand.test", "brand.test"), ["https://brand.test/products/amber-moon"]);
 });
 
+test("fragrance navigation classifier remains bounded to relevant categories", () => {
+  assert.equal(isFragranceNavigationUrl("https://brand.test/beauty/fragrances"), true);
+  assert.equal(isFragranceNavigationUrl("https://brand.test/fragrance/women"), true);
+  assert.equal(isFragranceNavigationUrl("https://brand.test/blog/fragrance-history"), false);
+});
+
 test("discovery prioritizes product sitemaps and never ranks XML as product pages", async () => {
   const pages = new Map([
     ["https://brand.test/robots.txt", "Sitemap: https://brand.test/sitemap.xml"],
@@ -41,4 +47,18 @@ test("discovery prioritizes product sitemaps and never ranks XML as product page
   assert.equal(result.urls[0].url, "https://brand.test/products/amber-moon-edp");
   assert.ok(result.urls.every((x) => !x.url.endsWith(".xml")));
   assert.equal(result.sitemapCount, 3);
+});
+
+test("when sitemap misses, discovery follows one official fragrance navigation depth", async () => {
+  const pages = new Map([
+    ["https://brand.test/robots.txt", ""],
+    ["https://brand.test/sitemap.xml", "<urlset><url><loc>https://brand.test/about</loc></url></urlset>"],
+    ["https://brand.test", `<a href="/fragrances">Fragrances</a><a href="/about">About</a>`],
+    ["https://brand.test/fragrances", `<a href="/fragrances/amber-moon-eau-de-parfum">Amber Moon</a><a href="https://evil.test/amber-moon">Bad</a>`],
+  ]);
+  const fetchImpl = async (url) => ({ ok: pages.has(url), status: pages.has(url) ? 200 : 404, url, headers: { get: () => "text/html" }, text: async () => pages.get(url) ?? "" });
+  const result = await discoverOfficialUrls({ brand: "Brand", name: "Amber Moon", concentration: "EDP", official_domain: "brand.test" }, { fetchImpl, timeoutMs: 1000 });
+  assert.equal(result.status, "FOUND");
+  assert.equal(result.urls[0].url, "https://brand.test/fragrances/amber-moon-eau-de-parfum");
+  assert.ok(result.urls.every((x) => x.url.startsWith("https://brand.test/")));
 });
