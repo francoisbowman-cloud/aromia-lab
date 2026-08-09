@@ -56,3 +56,18 @@ UPDATE perfumes
 SET familia_olfativa = NULL, actualizado_en = now()
 WHERE slug IN ('ambre-sultan-edp', 'new-york-signature-scent-pure-perfume')
   AND (familia_olfativa IS NULL OR btrim(familia_olfativa) = '' OR lower(btrim(familia_olfativa)) IN ('pending', 'por verificar', 'no verificado'));
+
+-- The brand explicitly keeps the Join The Club note structure secret. Store absence as
+-- absence, not as workflow text that can leak into the product experience.
+UPDATE perfumes
+SET notas_salida = ARRAY[]::text[],
+    notas_corazon = ARRAY[]::text[],
+    notas_fondo = ARRAY[]::text[],
+    notes_status = 'source-does-not-publish',
+    actualizado_en = now()
+WHERE slug = 'more-than-words-edp'
+  AND EXISTS (
+    SELECT 1
+    FROM unnest(coalesce(notas_salida, ARRAY[]::text[]) || coalesce(notas_corazon, ARRAY[]::text[]) || coalesce(notas_fondo, ARRAY[]::text[])) AS note
+    WHERE lower(note) LIKE 'no verificado%'
+  );
