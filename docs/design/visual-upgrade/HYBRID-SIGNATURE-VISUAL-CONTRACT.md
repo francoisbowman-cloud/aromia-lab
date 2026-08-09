@@ -1,50 +1,46 @@
 # Aromia — Hybrid Signature Visual Contract v1
 
 Status: implementation contract
-Branch baseline: `feat/aromia-hybrid-signature-01`
+Mainline baseline: `main@e3d121d8f483a0f6b5bd783520525d44ce6e688e`
 
 ## Thesis
 Aromia is one visual system with three synchronized modes: Editorial, Discovery and Commerce. It must never read as a generic luxury ecommerce template.
 
 ## Core visual grammar
 - Light: luminous ivory, warm paper, champagne/taupe, ink contrast, restrained gold.
-- Dark: graphite/brown-black, warm smoke, controlled gold, specular depth — never flat black UI.
-- Typography: display serif for emotion and hierarchy; sans for readable interface; tracked micro-labels for editorial metadata.
-- Rules: thin hairlines, large whitespace, no pill-heavy UI, minimal radius, deliberate object framing.
-- Motion: 200–500ms, subtle elevation/parallax only where it adds depth; reduced-motion always respected.
+- Dark: graphite/brown-black, warm smoke, controlled gold; never plain black as a shortcut.
+- Display serif for narrative hierarchy; sans for utility; tracked micro-labels for navigation and editorial metadata.
+- Recurrent devices: fine rules, issue numbering, olfactive anchors, material transitions, object-led product photography.
+- Sections connect as chapters rather than isolated cards.
 
-## Page roles
-### Home — Experience / Desire
-Ingredient-led hero, real catalog object, olfactive anchors, editorial chapters. Product appears as an object of desire, not a packshot tile.
+## Catalog interaction contract
+A filter reached from Home must always have an obvious exit. Family filtering exposes three reset paths:
+1. explicit neutral option: `Todas las familias` / no filter;
+2. active removable chip with ×;
+3. global `Borrar filtros` action.
+Deep links from the Home olfactive index remain valid.
 
-### Catalog — Discovery / Clarity
-Sticky filter rail, explicit neutral state, removable active filters, editorial product grid.
+## Product truth contract
+- Product imagery must represent the real catalog item; no invented bottle or borrowed logo.
+- Pending image, price or family data must render as pending rather than fabricated information.
+- Verified retailer offers remain the only commerce offers emitted in structured data.
 
-Filter reset contract:
-1. Every select MUST have a neutral first option (`Todas...` / `Sin filtro`).
-2. Every applied high-value filter MUST surface as a removable chip.
-3. Global `Borrar filtros` MUST remain visible when filters exist.
-4. Empty result state MUST offer `Ver colección completa`.
+## Surface roles
+- Home = desire + curation + discovery.
+- Catalog = clarity + comparison without generic marketplace styling.
+- Product = conviction; object, anatomy, performance, story, commerce, community.
+- Magazine = editorial authority connected to discovery.
+- Quiz = olfactive consultation rather than generic form flow.
 
-### Product — Conviction
-Large object-led spread followed by Commerce → Performance/Skin → Editorial Context → Community. Product image remains truthful to source photography.
+## Light / Dark
+Both themes keep identical information architecture and visual grammar. Light is Atelier Ivorio: natural illumination, warm stone, paper, crystal and air. Dark is Maison Grafito: depth, reflection, warm shadow and controlled highlights.
 
-### Magazine — Authority
-Cover-story rhythm and magazine composition, then related stories. Editorial authority must visually belong to the same Aromia system as commerce.
+## Motion
+CSS, IntersectionObserver and native pointer motion are preferred. Respect `prefers-reduced-motion`. Motion should reinforce depth or chapter transitions, never decorate without purpose.
 
-## Component rules
-- Buttons: primary gold/ink, secondary hairline, tertiary text-link.
-- Product cards: 4:5 image field, restrained border, editorial family label, clean price/action footer.
-- Dropdowns: explicit reset state; no dead-end preselected option.
-- Chips: removable filters only; do not use chips as decoration.
-- Focus: visible gold/ink focus treatment.
-- Light/Dark: one hierarchy, two art directions; never duplicate page structure.
-
-## Acceptance gate
-A screen passes only if:
-1. It is recognizable as Aromia without relying on the logo.
-2. It preserves truthful catalog/product data.
-3. It does not look like a generic component library.
-4. Navigation and filter reset are obvious.
-5. Light and Dark retain equivalent hierarchy and conversion clarity.
-6. Mobile keeps the editorial intent rather than collapsing into anonymous stacked cards.
+## Non-negotiables
+- No cold UI gray in Light.
+- No full-chapter black blocks as a default Light-mode contrast device.
+- No card grid as the universal layout primitive.
+- No fake pricing or product metadata.
+- No visual change that weakens routing, accessibility, responsive behavior or catalog data integrity.
