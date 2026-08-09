@@ -15,6 +15,7 @@
     "apply-remediation": "node apply-remediation.mjs",
     "expand": "node expansion-engine.mjs 100",
     "enrich": "node expansion-enrich.mjs",
+    "build-batch-003": "node expansion-batch-builder.mjs",
     "expansion-gate": "node expansion-gate.mjs",
     "test": "node --test --test-concurrency=1 tests/",
     "posttest": "node tests/cleanup-artifacts.mjs"
