@@ -3,13 +3,11 @@ import { URL } from "node:url";
 const DEFAULT_TIMEOUT_MS = 4500;
 const MAX_SITEMAPS = 12;
 const MAX_URLS = 12000;
+const MAX_NAV_SECTIONS = 4;
 
-// A Batch 003 run contains several candidates from the same house. Discovery of
-// robots/sitemaps is domain-wide, so repeating it per perfume multiplies network
-// cost without adding evidence. Cache the in-flight Promise as well as the final
-// corpus so concurrent candidates for one house share exactly one crawl.
 const discoveryCorpusCache = new Map();
 const landingLinksCache = new Map();
+const navigationCorpusCache = new Map();
 
 function normalizeHost(host) {
   return String(host ?? "").toLowerCase().replace(/^www\./, "");
@@ -26,8 +24,6 @@ export function sameRegistrableHost(url, officialDomain) {
 }
 
 export function tokenizeIdentity(candidate) {
-  // Brand tokens are deliberately excluded: on brand-owned sites they match almost
-  // every URL and swamp the actual product-name signal (observed in Bvlgari pilot).
   const text = `${candidate.name ?? ""}`
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const stop = new Set(["eau","de","du","des","the","for","pour","parfum","perfume","edp","edt","edc","extrait","elixir","le","la","les","and","homme","uomo"]);
@@ -89,6 +85,16 @@ export function extractInternalLinks(html, baseUrl, officialDomain) {
   return [...links];
 }
 
+export function isFragranceNavigationUrl(url) {
+  try {
+    const path = decodeURIComponent(new URL(url).pathname).toLowerCase();
+    return /(?:^|\/)(?:fragrance|fragrances|perfume|perfumes|parfum|parfums|scent|scents|beauty)(?:\/|$|-)/.test(path)
+      && !/blog|article|journal|faq|careers|store-locator/.test(path);
+  } catch {
+    return false;
+  }
+}
+
 async function fetchText(url, { fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -129,12 +135,7 @@ async function buildOfficialCorpus(officialDomain, options = {}) {
     } catch {}
   }
 
-  return {
-    officialDomain,
-    pageUrls: [...pageUrls],
-    sitemapCount: visited.size,
-    scannedUrlCount: pageUrls.size,
-  };
+  return { officialDomain, pageUrls: [...pageUrls], sitemapCount: visited.size, scannedUrlCount: pageUrls.size };
 }
 
 async function loadLandingLinks(officialDomain, options = {}) {
@@ -143,9 +144,7 @@ async function loadLandingLinks(officialDomain, options = {}) {
     try {
       const landing = await fetchText(origin, options);
       return extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
-    } catch {
-      return [];
-    }
+    } catch { return []; }
   };
   if (options.fetchImpl) return load();
   const key = normalizeHost(officialDomain);
@@ -153,9 +152,27 @@ async function loadLandingLinks(officialDomain, options = {}) {
   return landingLinksCache.get(key);
 }
 
+async function buildNavigationCorpus(officialDomain, options = {}) {
+  const landingLinks = await loadLandingLinks(officialDomain, options);
+  const sections = landingLinks.filter(isFragranceNavigationUrl).slice(0, MAX_NAV_SECTIONS);
+  const all = new Set(landingLinks);
+  await Promise.all(sections.map(async (sectionUrl) => {
+    try {
+      const page = await fetchText(sectionUrl, options);
+      for (const link of extractInternalLinks(page.text, page.finalUrl, officialDomain)) all.add(link);
+    } catch {}
+  }));
+  return [...all];
+}
+
+async function loadNavigationCorpus(officialDomain, options = {}) {
+  if (options.fetchImpl) return buildNavigationCorpus(officialDomain, options);
+  const key = normalizeHost(officialDomain);
+  if (!navigationCorpusCache.has(key)) navigationCorpusCache.set(key, buildNavigationCorpus(officialDomain, options));
+  return navigationCorpusCache.get(key);
+}
+
 function getOfficialCorpus(officialDomain, options = {}) {
-  // Custom fetch implementations are used by tests and must remain isolated from
-  // global network cache to keep fixtures deterministic.
   if (options.fetchImpl) return buildOfficialCorpus(officialDomain, options);
   const key = normalizeHost(officialDomain);
   if (!discoveryCorpusCache.has(key)) {
@@ -171,6 +188,13 @@ function getOfficialCorpus(officialDomain, options = {}) {
 export function clearDiscoveryCorpusCache() {
   discoveryCorpusCache.clear();
   landingLinksCache.clear();
+  navigationCorpusCache.clear();
+}
+
+function rankUrls(urls, candidate) {
+  return urls.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) }))
+    .filter((r) => r.score > 0)
+    .sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
 }
 
 export async function discoverOfficialUrls(candidate, options = {}) {
@@ -178,10 +202,10 @@ export async function discoverOfficialUrls(candidate, options = {}) {
   if (!officialDomain) return { status: "NO_OFFICIAL_DOMAIN", urls: [], sitemapCount: 0 };
 
   const corpus = await getOfficialCorpus(officialDomain, options).catch(() => ({ pageUrls: [], sitemapCount: 0, scannedUrlCount: 0 }));
-  let ranked = corpus.pageUrls.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+  let ranked = rankUrls(corpus.pageUrls, candidate);
   if (!ranked.length) {
-    const landingLinks = await loadLandingLinks(officialDomain, options);
-    ranked = landingLinks.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+    const navigationUrls = await loadNavigationCorpus(officialDomain, options);
+    ranked = rankUrls(navigationUrls, candidate);
   }
 
   return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 8), sitemapCount: corpus.sitemapCount, scannedUrlCount: corpus.scannedUrlCount };
