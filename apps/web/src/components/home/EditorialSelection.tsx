@@ -24,13 +24,13 @@ export function EditorialSelection({ perfumes }: { perfumes: Perfume[] }) {
     <section className="mx-auto w-full max-w-6xl px-6 lg:px-10">
       <div className="mb-7 flex flex-wrap items-end justify-between gap-5 border-b border-line pb-5">
         <div>
-          <p className={EYEBROW}>Reseñas destacadas</p>
-          <h2 className="mt-2 font-display text-3xl font-medium leading-tight text-ink lg:text-[42px]">
-            Lo que está mirando la comunidad
+          <p className={EYEBROW}>Selección Aromia</p>
+          <h2 className="mt-2 max-w-[13ch] font-display text-3xl font-medium leading-[1.02] text-ink lg:text-[44px]">
+            Fragancias que merecen una segunda mirada.
           </h2>
         </div>
         <p className="max-w-[34ch] font-sans text-xs leading-5 text-muted lg:text-right">
-          Selección editorial sobre el catálogo real: menos escaparate, más contexto para elegir.
+          Cuatro entradas al catálogo real, ordenadas como una selección editorial y no como otro escaparate.
         </p>
       </div>
 
