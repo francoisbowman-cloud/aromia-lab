@@ -3,6 +3,10 @@
 -- Existing non-placeholder production values are never overwritten, except the known
 -- malformed legacy value "floral pending" on Tresor.
 
+ALTER TABLE perfumes
+  ADD COLUMN IF NOT EXISTS launch_year INTEGER,
+  ADD COLUMN IF NOT EXISTS perfumer TEXT;
+
 WITH verified(slug, family, perfumer, launch_year, top_notes, middle_notes, base_notes) AS (
   VALUES
     ('daisy-edt', 'floral amaderado almizclado', NULL, NULL, NULL, NULL, NULL),
