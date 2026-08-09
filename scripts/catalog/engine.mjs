@@ -17,43 +17,37 @@ const DEFAULT_LIMIT = 25;
 const PRICE_SEGMENTS = ["económico", "medio", "premium", "lujo"];
 const GENDERS = ["masculino", "femenino", "unisex"];
 
-function text(value) {
-  return String(value ?? "").trim();
-}
+const text = (value) => String(value ?? "").trim();
+const norm = (value) => normalizeForKey(text(value));
 
-function norm(value) {
-  return normalizeForKey(text(value));
+export function identityFromRow(row) {
+  const rawName = row.name ?? row.nombre;
+  const embedded = extractConcentrationFromName(rawName);
+  const concentration = text(row.concentration) || text(embedded.concentration);
+  return {
+    brand: norm(row.brand ?? row.marca),
+    baseName: norm(embedded.baseName),
+    concentration: norm(concentration),
+  };
 }
 
 function candidateKey(row) {
-  return [norm(row.brand ?? row.marca), norm(row.name ?? row.nombre), norm(row.concentration ?? extractConcentrationFromName(row.nombre).concentration)].join("|");
+  const identity = identityFromRow(row);
+  return [identity.brand, identity.baseName, identity.concentration].join("|");
 }
 
 function productFamilyKey(row) {
-  const name = row.name ?? row.nombre;
-  const base = extractConcentrationFromName(name).baseName;
-  return [norm(row.brand ?? row.marca), norm(base)].join("|");
+  const identity = identityFromRow(row);
+  return [identity.brand, identity.baseName].join("|");
 }
 
-function valueFor(row, modern, legacy) {
-  return text(row[modern] ?? row[legacy]);
-}
-
+const valueFor = (row, modern, legacy) => text(row[modern] ?? row[legacy]);
 function increment(map, key) {
-  if (!key) return;
-  map[key] = (map[key] ?? 0) + 1;
+  if (key) map[key] = (map[key] ?? 0) + 1;
 }
 
 export function buildCoverage(rows) {
-  const coverage = {
-    total: rows.length,
-    brand: {},
-    family: {},
-    gender: {},
-    price_segment: {},
-    market_position: {},
-  };
-
+  const coverage = { total: rows.length, brand: {}, family: {}, gender: {}, price_segment: {}, market_position: {} };
   for (const row of rows) {
     increment(coverage.brand, norm(valueFor(row, "brand", "marca")));
     increment(coverage.family, norm(valueFor(row, "family", "familia_olfativa")));
@@ -61,7 +55,6 @@ export function buildCoverage(rows) {
     increment(coverage.price_segment, norm(valueFor(row, "price_segment", "categoria_precio")));
     increment(coverage.market_position, norm(valueFor(row, "market_position", "nicho_o_comercial")));
   }
-
   return coverage;
 }
 
@@ -75,69 +68,54 @@ function distributionDeficit(coverageMap, key, allowed) {
   const total = allowed.reduce((sum, item) => sum + (coverageMap[item] ?? 0), 0);
   if (total === 0) return 1;
   const target = 1 / allowed.length;
-  const currentShare = (coverageMap[key] ?? 0) / total;
-  return Math.max(0, target - currentShare) / target;
+  return Math.max(0, target - (coverageMap[key] ?? 0) / total) / target;
 }
 
 export function assessProvenance(row) {
   const urls = splitList(row.source_url).filter(isValidUrl);
   const verifiedRaw = norm(row.source_verified);
-  const verified = verifiedRaw === "true" || verifiedRaw === "1" || verifiedRaw === "yes" || verifiedRaw === "si" || verifiedRaw === "sí";
+  const verified = ["true", "1", "yes", "si", "sí"].includes(verifiedRaw);
   const confidence = norm(row.data_confidence);
-
   let score = 0;
   if (urls.length >= 1) score += 10;
   if (urls.length >= 2) score += 3;
   if (verified) score += 4;
   if (confidence === "high") score += 3;
   else if (confidence === "medium") score += 1;
-
-  return {
-    urls,
-    verified,
-    confidence: confidence || null,
-    score: Math.min(20, score),
-    gate: urls.length > 0 ? "SOURCE_PRESENT" : "SOURCE_REQUIRED",
-  };
+  return { urls, verified, confidence: confidence || null, score: Math.min(20, score), gate: urls.length ? "SOURCE_PRESENT" : "SOURCE_REQUIRED" };
 }
 
 export function scoreCandidate(row, coverage, existingKeys = new Set(), existingProductFamilies = new Set()) {
-  const brand = norm(row.brand);
-  const name = norm(row.name);
-  const concentration = norm(row.concentration);
+  const identity = identityFromRow(row);
   const family = norm(row.family);
   const gender = norm(row.gender);
   const price = norm(row.price_segment);
   const key = candidateKey(row);
   const familyKey = productFamilyKey(row);
   const provenance = assessProvenance(row);
-
   const reasons = [];
   const blocks = [];
 
-  if (!brand || !name || !concentration || !gender) blocks.push("IDENTITY_INCOMPLETE");
+  if (!identity.brand || !identity.baseName || !identity.concentration || !gender) blocks.push("IDENTITY_INCOMPLETE");
   if (existingKeys.has(key)) blocks.push("EXACT_PRODUCT_ALREADY_COVERED");
   if (provenance.gate !== "SOURCE_PRESENT") blocks.push("SOURCE_REQUIRED");
 
   let score = 0;
-
-  const brandCount = coverage.brand[brand] ?? 0;
+  const brandCount = coverage.brand[identity.brand] ?? 0;
   const brandPoints = deficitScore(brandCount, 22, 6, 12);
   score += brandPoints;
-  if (brandPoints > 0) reasons.push(brandCount === 0 ? "NEW_BRAND" : "UNDERREPRESENTED_BRAND");
+  if (brandPoints) reasons.push(brandCount === 0 ? "NEW_BRAND" : "UNDERREPRESENTED_BRAND");
 
-  const familyCount = family ? (coverage.family[family] ?? 0) : 0;
+  const familyCount = family ? coverage.family[family] ?? 0 : 0;
   const familyPoints = family ? deficitScore(familyCount, 20, 5, 10) : 0;
   score += familyPoints;
-  if (familyPoints > 0) reasons.push(familyCount === 0 ? "NEW_OLFACTIVE_FAMILY" : "UNDERREPRESENTED_FAMILY");
+  if (familyPoints) reasons.push(familyCount === 0 ? "NEW_OLFACTIVE_FAMILY" : "UNDERREPRESENTED_FAMILY");
 
   const genderPoints = Math.round(distributionDeficit(coverage.gender, gender, GENDERS) * 14);
-  score += genderPoints;
-  if (genderPoints > 0) reasons.push("GENDER_BALANCE_GAP");
-
   const pricePoints = Math.round(distributionDeficit(coverage.price_segment, price, PRICE_SEGMENTS) * 12);
-  score += pricePoints;
-  if (pricePoints > 0) reasons.push("PRICE_SEGMENT_GAP");
+  score += genderPoints + pricePoints;
+  if (genderPoints) reasons.push("GENDER_BALANCE_GAP");
+  if (pricePoints) reasons.push("PRICE_SEGMENT_GAP");
 
   if (!existingProductFamilies.has(familyKey)) {
     score += 10;
@@ -151,8 +129,7 @@ export function scoreCandidate(row, coverage, existingKeys = new Set(), existing
   if (provenance.score >= 14) reasons.push("STRONG_PROVENANCE");
 
   const launchYear = Number(row.launch_year);
-  const currentYear = new Date().getUTCFullYear();
-  if (Number.isFinite(launchYear) && launchYear >= currentYear - 2) {
+  if (Number.isFinite(launchYear) && launchYear >= new Date().getUTCFullYear() - 2) {
     score += 5;
     reasons.push("RECENT_RELEASE");
   }
@@ -194,37 +171,27 @@ export function selectCandidates(candidateRows, currentRows, limit = DEFAULT_LIM
   const productFamilies = new Set(currentRows.map(productFamilyKey));
   const remaining = [...candidateRows];
   const selected = [];
-  const rejected = [];
+  const notSelected = [];
   const selectedKeys = new Set();
 
-  while (remaining.length > 0 && selected.length < limit) {
+  while (remaining.length && selected.length < limit) {
+    const allKeys = new Set([...existingKeys, ...selectedKeys]);
     const scored = remaining
-      .map((row) => scoreCandidate(row, coverage, new Set([...existingKeys, ...selectedKeys]), productFamilies))
+      .map((row) => scoreCandidate(row, coverage, allKeys, productFamilies))
       .sort((a, b) => b.score - a.score || a.candidate_key.localeCompare(b.candidate_key));
-
     const best = scored.find((candidate) => candidate.eligible);
     if (!best) break;
-
     selected.push({ ...best, rank: selected.length + 1 });
     selectedKeys.add(best.candidate_key);
     productFamilies.add(best.product_family_key);
     coverage = applySelectionToCoverage(coverage, best);
-
     const index = remaining.findIndex((row) => candidateKey(row) === best.candidate_key);
     if (index >= 0) remaining.splice(index, 1);
   }
 
-  for (const row of remaining) {
-    const assessed = scoreCandidate(row, coverage, new Set([...existingKeys, ...selectedKeys]), productFamilies);
-    rejected.push(assessed);
-  }
-
-  return {
-    selected,
-    notSelected: rejected,
-    initialCoverage: buildCoverage(currentRows),
-    projectedCoverage: coverage,
-  };
+  const finalKeys = new Set([...existingKeys, ...selectedKeys]);
+  for (const row of remaining) notSelected.push(scoreCandidate(row, coverage, finalKeys, productFamilies));
+  return { selected, notSelected, initialCoverage: buildCoverage(currentRows), projectedCoverage: coverage };
 }
 
 export function summarizeGaps(coverage) {
@@ -232,7 +199,6 @@ export function summarizeGaps(coverage) {
     const entries = allowed ? allowed.map((key) => [key, map[key] ?? 0]) : Object.entries(map);
     return entries.sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0])).slice(0, 10);
   };
-
   return {
     total: coverage.total,
     leastRepresentedBrands: least(coverage.brand),
@@ -262,7 +228,6 @@ export function runEngine({ pool, current = CURRENT_AROMIA_CSV, limit = DEFAULT_
   const result = selectCandidates(candidateRows, currentRows, limit);
   const poolName = basename(pool).replace(/\.csv$/i, "");
   const reportBase = `engine-${poolName}`;
-
   const report = {
     engine_version: "0.1.0",
     generated_at: new Date().toISOString(),
@@ -276,36 +241,29 @@ export function runEngine({ pool, current = CURRENT_AROMIA_CSV, limit = DEFAULT_
     selected: result.selected.map(({ raw, ...candidate }) => candidate),
     not_selected: result.notSelected.map(({ raw, ...candidate }) => candidate),
   };
-
   const jsonPath = resolve(REPORTS_DIR, `${reportBase}.json`);
   const csvPath = resolve(REPORTS_DIR, `${reportBase}-selection.csv`);
   writeJson(jsonPath, report);
-  writeCsv(
-    csvPath,
-    ["rank", "id", "brand", "name", "concentration", "family", "gender", "price_segment", "score", "reasons", "source_url", "data_confidence"],
-    result.selected.map((candidate) => ({
-      rank: candidate.rank,
-      id: candidate.id ?? "",
-      brand: candidate.brand,
-      name: candidate.name,
-      concentration: candidate.concentration,
-      family: candidate.family ?? "",
-      gender: candidate.gender ?? "",
-      price_segment: candidate.price_segment ?? "",
-      score: candidate.score,
-      reasons: candidate.reasons.join(";"),
-      source_url: candidate.source_url ?? "",
-      data_confidence: candidate.data_confidence ?? "",
-    })),
-  );
-
+  writeCsv(csvPath, ["rank", "id", "brand", "name", "concentration", "family", "gender", "price_segment", "score", "reasons", "source_url", "data_confidence"], result.selected.map((candidate) => ({
+    rank: candidate.rank,
+    id: candidate.id ?? "",
+    brand: candidate.brand,
+    name: candidate.name,
+    concentration: candidate.concentration,
+    family: candidate.family ?? "",
+    gender: candidate.gender ?? "",
+    price_segment: candidate.price_segment ?? "",
+    score: candidate.score,
+    reasons: candidate.reasons.join(";"),
+    source_url: candidate.source_url ?? "",
+    data_confidence: candidate.data_confidence ?? "",
+  })));
   return { ...report, jsonPath, csvPath };
 }
 
 if (isMainModule(import.meta.url)) {
   try {
-    const args = parseArgs(process.argv.slice(2));
-    const result = runEngine(args);
+    const result = runEngine(parseArgs(process.argv.slice(2)));
     log(`Catalog Expansion Engine: ${result.selected_count}/${result.candidate_count} candidatos seleccionados.`);
     log(`Reporte: ${result.jsonPath}`);
     log(`Selección: ${result.csvPath}`);
