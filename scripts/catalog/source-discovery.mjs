@@ -1,8 +1,8 @@
 import { URL } from "node:url";
 
-const DEFAULT_TIMEOUT_MS = 10000;
-const MAX_SITEMAPS = 12;
-const MAX_URLS = 12000;
+const DEFAULT_TIMEOUT_MS = 8000;
+const MAX_SITEMAPS = 30;
+const MAX_URLS = 20000;
 
 function normalizeHost(host) {
   return String(host ?? "").toLowerCase().replace(/^www\./, "");
@@ -19,9 +19,11 @@ export function sameRegistrableHost(url, officialDomain) {
 }
 
 export function tokenizeIdentity(candidate) {
-  const text = `${candidate.brand ?? ""} ${candidate.name ?? ""} ${candidate.concentration ?? ""}`
+  // Brand tokens are deliberately excluded: on brand-owned sites they match almost
+  // every URL and swamp the actual product-name signal (observed in Bvlgari pilot).
+  const text = `${candidate.name ?? ""}`
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  const stop = new Set(["eau","de","du","des","the","for","pour","parfum","perfume","edp","edt","edc","extrait","elixir","le","la","les","and"]);
+  const stop = new Set(["eau","de","du","des","the","for","pour","parfum","perfume","edp","edt","edc","extrait","elixir","le","la","les","and","homme","uomo"]);
   return [...new Set(text.split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !stop.has(t)))];
 }
 
@@ -29,12 +31,16 @@ export function scoreUrlForCandidate(url, candidate) {
   let pathname;
   try { pathname = decodeURIComponent(new URL(url).pathname).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
   catch { return -Infinity; }
+  if (/\.xml($|\?)/i.test(url)) return -Infinity;
   const tokens = tokenizeIdentity(candidate);
   if (!tokens.length) return 0;
-  let score = 0;
-  for (const token of tokens) if (pathname.includes(token)) score += token.length >= 7 ? 4 : 2;
-  if (/product|products|fragrance|perfume|parfum|eau-de/.test(pathname)) score += 2;
-  if (/collection|collections|category|search|blog|article|journal|gift|discovery-set/.test(pathname)) score -= 3;
+  const hits = tokens.filter((token) => pathname.includes(token));
+  if (!hits.length) return 0;
+  let score = hits.reduce((sum, token) => sum + (token.length >= 7 ? 5 : 3), 0);
+  const coverage = hits.length / tokens.length;
+  score += Math.round(coverage * 10);
+  if (/product|products|fragrance|fragrances|perfume|parfum|eau-de/.test(pathname)) score += 4;
+  if (/collection|collections|category|search|blog|article|journal|gift|discovery-set|heritage|faq|careers/.test(pathname)) score -= 5;
   return score;
 }
 
@@ -50,11 +56,37 @@ export function parseRobotsSitemaps(text) {
   return String(text ?? "").split(/\r?\n/).map((line) => line.match(/^\s*Sitemap:\s*(\S+)/i)?.[1]).filter(Boolean);
 }
 
+function sitemapPriority(url) {
+  const u = String(url ?? "").toLowerCase();
+  let score = 0;
+  if (/product|products|fragrance|fragrances|perfume|parfum/.test(u)) score += 30;
+  if (/en[-_/]|\/en\/|us[-_/]|\/us\//.test(u)) score += 8;
+  if (/image|video|blog|news|article|store|career|faq/.test(u)) score -= 20;
+  return score;
+}
+
+function sortSitemapQueue(queue) {
+  queue.sort((a, b) => sitemapPriority(b) - sitemapPriority(a) || a.localeCompare(b));
+}
+
+export function extractInternalLinks(html, baseUrl, officialDomain) {
+  const links = new Set();
+  const re = /<a\b[^>]*href=["']([^"'#]+)["'][^>]*>/gi;
+  let m;
+  while ((m = re.exec(String(html ?? ""))) !== null) {
+    try {
+      const url = new URL(m[1].replace(/&amp;/g, "&"), baseUrl).toString();
+      if (sameRegistrableHost(url, officialDomain) && !/\.xml($|\?)/i.test(url)) links.add(url);
+    } catch {}
+  }
+  return [...links];
+}
+
 async function fetchText(url, { fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetchImpl(url, { redirect: "follow", signal: controller.signal, headers: { "user-agent": "AromiaCatalogExpansion/1.0 (+catalog research; read-only)" } });
+    const res = await fetchImpl(url, { redirect: "follow", signal: controller.signal, headers: { "user-agent": "AromiaCatalogExpansion/1.0 (+catalog research; read-only)", "accept-language": "en-US,en;q=0.8" } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return { text: await res.text(), finalUrl: res.url || url, contentType: res.headers?.get?.("content-type") ?? "" };
   } finally { clearTimeout(timer); }
@@ -71,6 +103,7 @@ export async function discoverOfficialUrls(candidate, options = {}) {
   } catch {}
 
   const queue = [...sitemapSeeds];
+  sortSitemapQueue(queue);
   const visited = new Set();
   const pageUrls = new Set();
   while (queue.length && visited.size < MAX_SITEMAPS && pageUrls.size < MAX_URLS) {
@@ -80,16 +113,29 @@ export async function discoverOfficialUrls(candidate, options = {}) {
     try {
       const { text } = await fetchText(sitemapUrl, options);
       const locations = parseSitemapXml(text);
+      const nested = [];
       for (const loc of locations) {
         if (!sameRegistrableHost(loc, officialDomain)) continue;
-        if (/\.xml($|\?)/i.test(loc) && queue.length + visited.size < MAX_SITEMAPS) queue.push(loc);
+        if (/\.xml($|\?)/i.test(loc)) nested.push(loc);
         else if (pageUrls.size < MAX_URLS) pageUrls.add(loc);
       }
+      for (const loc of nested) if (!visited.has(loc) && !queue.includes(loc)) queue.push(loc);
+      sortSitemapQueue(queue);
     } catch {}
   }
 
-  const ranked = [...pageUrls].map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
-  return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 5), sitemapCount: visited.size, scannedUrlCount: pageUrls.size };
+  // If sitemap discovery produces no identity-specific candidate, inspect only the
+  // official landing page links. This is still same-domain and read-only, not a web-search fallback.
+  let ranked = [...pageUrls].map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+  if (!ranked.length) {
+    try {
+      const landing = await fetchText(origin, options);
+      const links = extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
+      ranked = links.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) })).filter((r) => r.score > 0).sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+    } catch {}
+  }
+
+  return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 8), sitemapCount: visited.size, scannedUrlCount: pageUrls.size };
 }
 
 export async function fetchOfficialPage(url, officialDomain, options = {}) {
