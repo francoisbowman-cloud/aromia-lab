@@ -7,10 +7,18 @@ const EYEBROW =
 
 /**
  * Magazine como autoridad editorial, resuelto como spread y no como card.
- * La fotografía seguirá siendo placeholder hasta que entre el asset real,
- * pero la composición ya reserva una zona visual independiente del copy.
+ * Si el artículo ya tiene imagen de portada, Home la usa como asset real;
+ * el gradiente editorial permanece detrás como fallback visual seguro.
  */
 export function MagazineSpotlight({ articulo }: { articulo: Article }) {
+  const coverStyle = articulo.imagen_portada_url
+    ? {
+        backgroundImage: `linear-gradient(180deg, transparent 44%, rgba(33,29,23,.16) 100%), url("${articulo.imagen_portada_url}")`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }
+    : undefined;
+
   return (
     <section className="relative overflow-hidden bg-[#fffdf8] dark:bg-[#100d0a]">
       <div className="mx-auto grid min-h-[68vh] w-full max-w-[1440px] grid-cols-1 lg:grid-cols-[.82fr_1.18fr]">
@@ -47,14 +55,15 @@ export function MagazineSpotlight({ articulo }: { articulo: Article }) {
         <Link
           href={`/magazine/${articulo.slug}`}
           aria-label={`Leer ${articulo.titulo}`}
-          className="group relative min-h-[420px] overflow-hidden lg:min-h-full"
+          className="group relative min-h-[420px] overflow-hidden bg-[#efe6d2] dark:bg-[#17120d] lg:min-h-full"
         >
           <div
             aria-hidden="true"
             className="aromia-scene-editorial absolute inset-0 transition-transform duration-700 group-hover:scale-[1.025]"
+            style={coverStyle}
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(33,29,23,.10)_100%)] dark:bg-[linear-gradient(180deg,transparent_42%,rgba(14,12,10,.32)_100%)]" />
-          <div className="absolute bottom-5 left-5 font-plex text-[9px] uppercase tracking-[.16em] text-[rgba(33,29,23,.55)] dark:text-[rgba(242,235,221,.62)]">
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_48%,rgba(33,29,23,.06)_100%)] dark:bg-[linear-gradient(180deg,transparent_44%,rgba(14,12,10,.24)_100%)]" />
+          <div className="absolute bottom-5 left-5 font-plex text-[9px] uppercase tracking-[.16em] text-[rgba(33,29,23,.62)] [text-shadow:0_1px_8px_rgba(251,248,243,.72)] dark:text-[rgba(242,235,221,.72)] dark:[text-shadow:0_1px_8px_rgba(14,12,10,.7)]">
             Aromia Magazine / Cover Story
           </div>
         </Link>
