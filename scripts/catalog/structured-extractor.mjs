@@ -55,23 +55,32 @@ function cleanListText(value) {
 function explicitTier(text, labels, nextLabels) {
   const start = labels.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
   const next = nextLabels.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-  const re = new RegExp(`(?:${start})\\s*(?:notes?)?\\s*[:\\-–—]?\\s*(.{1,220}?)(?=(?:${next})\\s*(?:notes?)?\\s*[:\\-–—]?|$)`, "i");
+  const re = new RegExp(`(?:${start})\\s*(?:notes?|noten|notas?)?\\s*[:\\-–—]?\\s*(.{1,220}?)(?=(?:${next})\\s*(?:notes?|noten|notas?)?\\s*[:\\-–—]?|$)`, "i");
   const m = text.match(re);
   return m ? cleanListText(m[1]) : "";
 }
 
 export function extractExplicitNotes(html) {
   const text = stripHtml(html);
-  const top = explicitTier(text, ["top", "head", "opening"], ["heart", "middle", "base", "dry down", "drydown"]);
-  const middle = explicitTier(text, ["heart", "middle"], ["base", "dry down", "drydown"]);
-  const base = explicitTier(text, ["base", "dry down", "drydown"], ["ingredients", "details", "size", "how to use"]);
+  const topLabels = ["top", "head", "opening", "notes de tête", "note de tête", "notas de salida", "nota de salida", "note di testa", "kopfnote", "kopfnoten"];
+  const heartLabels = ["heart", "middle", "notes de cœur", "note de cœur", "notes de coeur", "note de coeur", "notas de corazón", "nota de corazón", "notas de corazon", "nota de corazon", "note di cuore", "herznote", "herznoten"];
+  const baseLabels = ["base", "dry down", "drydown", "notes de fond", "note de fond", "notas de fondo", "nota de fondo", "note di fondo", "basisnote", "basisnoten"];
+  const terminalLabels = ["ingredients", "ingrédients", "ingredientes", "ingredienti", "details", "détails", "detalles", "size", "taille", "how to use"];
+  const top = explicitTier(text, topLabels, [...heartLabels, ...baseLabels]);
+  const middle = explicitTier(text, heartLabels, baseLabels);
+  const base = explicitTier(text, baseLabels, terminalLabels);
   if (top || middle || base) return { structure: [top,middle,base].every(Boolean) ? "PYRAMID" : "PARTIAL", top_notes: top, middle_notes: middle, base_notes: base, accords: "" };
-  const flatPatterns = [/(?:key\s+notes|fragrance\s+notes|olfactive\s+notes|olfactory\s+notes|notes)\s*[:\-–—]\s*(.{3,220}?)(?=(?:ingredients|details|size|how to use|$))/i];
+  const flatPatterns = [
+    /(?:key\s+notes|fragrance\s+notes|olfactive\s+notes|olfactory\s+notes|notes olfactives|notes clés|notas olfativas|notas clave|note olfattive|duftnoten|notes)\s*[:\-–—]\s*(.{3,220}?)(?=(?:ingredients|ingrédients|ingredientes|ingredienti|details|détails|detalles|size|taille|how to use|$))/i,
+  ];
   for (const re of flatPatterns) { const m = text.match(re); if (m) return { structure: "FLAT", top_notes: "", middle_notes: "", base_notes: "", accords: cleanListText(m[1]) }; }
   return { structure: "UNKNOWN", top_notes: "", middle_notes: "", base_notes: "", accords: "" };
 }
 
 function concentrationFrom(text) {
+  // URLs are explicit product evidence too. Convert separators so paths such as
+  // /eau-de-parfum/ are read exactly like visible "Eau de Parfum" labels.
+  const normalized = decodeURIComponent(String(text ?? "")).replace(/[_+\-/]+/g, " ");
   const patterns = [
     ["Extrait", /\b(extrait(?: de parfum)?|perfume extract)\b/i],
     ["Elixir", /\belixir\b/i],
@@ -80,20 +89,32 @@ function concentrationFrom(text) {
     ["EDC", /\b(eau de cologne|edc)\b/i],
     ["Parfum", /\bparfum\b/i],
   ];
-  for (const [value, re] of patterns) if (re.test(text)) return value;
+  for (const [value, re] of patterns) if (re.test(normalized)) return value;
   return "";
 }
 
-export function extractExplicitMetadata(html, url = "") {
+function audienceFromProduct(product) {
+  const audience = product?.audience;
+  const raw = typeof audience === "string"
+    ? audience
+    : Array.isArray(audience)
+      ? audience.map((x) => typeof x === "string" ? x : x?.audienceType ?? x?.name ?? "").join(" ")
+      : audience?.audienceType ?? audience?.name ?? "";
+  return String(raw ?? "");
+}
+
+export function extractExplicitMetadata(html, url = "", product = null) {
   const text = stripHtml(html);
   const title = extractMeta(html, "og:title");
   const description = extractMeta(html, "og:description");
-  const primary = `${url} ${title} ${description}`;
+  const jsonAudience = audienceFromProduct(product);
+  const jsonCategory = typeof product?.category === "string" ? product.category : "";
+  const primary = `${url} ${title} ${description} ${jsonAudience} ${jsonCategory}`;
   const searchable = `${primary} ${text.slice(0, 12000)}`;
   let gender = "";
-  const men = /\b(for|pour)\s+(men|him|homme)|\bmens?\s+(fragrance|perfume|parfum)|\/men(?:\/|-|$)/i.test(searchable);
-  const women = /\b(for|pour)\s+(women|her|femme)|\bwomens?\s+(fragrance|perfume|parfum)|\/women(?:\/|-|$)/i.test(searchable);
-  const unisex = /\bunisex\b|gender[- ]?neutral/i.test(searchable);
+  const men = /\b(for|pour|para)\s+(men|him|homme|hombre|uomo)|\bmens?\s+(fragrance|perfume|parfum)|\bhomme\b|\bmasculin\b|\bmasculino\b|\buomo\b|\/men(?:\/|-|$)/i.test(searchable);
+  const women = /\b(for|pour|para)\s+(women|her|femme|mujer|donna)|\bwomens?\s+(fragrance|perfume|parfum)|\bfemme\b|\bféminin\b|\bfeminin\b|\bfemenino\b|\bdonna\b|\/women(?:\/|-|$)/i.test(searchable);
+  const unisex = /\bunisex\b|gender[- ]?neutral|sans genre|senza genere/i.test(searchable);
   if (unisex || (men && women)) gender = "unisex";
   else if (men) gender = "masculino";
   else if (women) gender = "femenino";
@@ -101,11 +122,11 @@ export function extractExplicitMetadata(html, url = "") {
   // Product-scoped signals first; page body only as a fallback because related-product
   // navigation frequently mentions other concentrations.
   const concentration = concentrationFrom(primary) || concentrationFrom(text.slice(0, 2500));
-  const yearMatch = searchable.match(/\b(?:launched|introduced|created|released|since)\s+(?:in\s+)?((?:19|20)\d{2})\b/i);
+  const yearMatch = searchable.match(/\b(?:launched|introduced|created|released|since|lancé|lance|créé|cree|lanzado|creado|lanciato|creato)\s+(?:in|en|nel|in\s+the\s+year)?\s*((?:19|20)\d{2})\b/i);
   const launch_year = yearMatch?.[1] ?? "";
-  const perfumerMatch = searchable.match(/\b(?:perfumer|nose)\s*[:\-–—]\s*([A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+(?:\s+[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+){1,4})/);
+  const perfumerMatch = searchable.match(/\b(?:perfumer|nose|parfumeur|perfumista|naso)\s*[:\-–—]\s*([A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+(?:\s+[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+){1,4})/);
   const perfumer = perfumerMatch?.[1] ?? "";
-  const familyMatch = searchable.match(/\b(?:olfactive|olfactory|fragrance)\s+family\s*[:\-–—]\s*([^.;|]{3,80})/i);
+  const familyMatch = searchable.match(/\b(?:olfactive|olfactory|fragrance|famille olfactive|familia olfativa|famiglia olfattiva)\s*(?:family|famille|familia|famiglia)?\s*[:\-–—]\s*([^.;|]{3,80})/i);
   const family = cleanListText(familyMatch?.[1] ?? "");
   return { gender, concentration, launch_year, perfumer, family };
 }
@@ -116,7 +137,7 @@ export function extractPageEvidence(html, url) {
   const description = extractMeta(html, "og:description") || product?.description || "";
   const brand = typeof product?.brand === "string" ? product.brand : product?.brand?.name ?? "";
   const notes = extractExplicitNotes(html);
-  const metadata = extractExplicitMetadata(html, url);
+  const metadata = extractExplicitMetadata(html, url, product);
   return {
     source_url: url,
     title: cleanListText(title),
