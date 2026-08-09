@@ -43,6 +43,13 @@ test("explicit audience and launch metadata are extracted without guessing", () 
   assert.equal(meta.family, "Woody Aromatic");
 });
 
+test("female and unisex cues remain explicit and separate", () => {
+  const female = extractExplicitMetadata(`<meta property="og:title" content="Rose Sky Eau de Parfum for Women">`, "https://brand.test/women/rose-sky");
+  const unisex = extractExplicitMetadata(`<meta property="og:title" content="Shared Woods Eau de Parfum"><meta property="og:description" content="A gender-neutral fragrance">`, "https://brand.test/shared-woods");
+  assert.equal(female.gender, "femenino");
+  assert.equal(unisex.gender, "unisex");
+});
+
 test("page evidence combines meta, JSON-LD and explicit notes conservatively", () => {
   const html = `<meta property="og:title" content="Amber Moon Eau de Parfum"><script type="application/ld+json">{"@type":"Product","name":"Amber Moon","brand":{"name":"Maison Test"}}</script><main>Top: Bergamot Heart: Iris Base: Cedar Ingredients:</main>`;
   const row = extractPageEvidence(html, "https://brand.test/products/amber-moon");
