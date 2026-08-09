@@ -1,6 +1,6 @@
 # AROMIA HOME — VISUAL GATE STATUS
 
-Status: PREVIEW READY / FINAL PHOTOGRAPHIC APPROVAL PENDING
+Status: PREVIEW DEPLOYMENT IN PROGRESS / FINAL PHOTOGRAPHIC APPROVAL PENDING
 Branch: `feat/aromia-home-visual-polish-01`
 Draft PR: #17
 Scope: Home only.
@@ -106,21 +106,30 @@ The current branch head must also finish green after the final photography/a11y 
 
 ## 9. Railway
 
-Production is intentionally untouched.
+Production remains untouched and continues to source `main`.
 
-Railway `web` is sourced from `main`, not the visual branch, so PR #17 does not auto-deploy a preview. Existing production services remain on their previous successful deployments.
+An isolated preview service now exists solely for this visual gate:
 
-No production redeploy, source-branch mutation or new preview service is performed by this gate without an explicit deployment decision.
+- service: `web-visual-preview`
+- source branch: `feat/aromia-home-visual-polish-01`
+- root: `/apps/web`
+- generated domain: `web-visual-preview-production.up.railway.app`
+- production `web`, API, Redis and Postgres service configuration is not replaced or retargeted.
+
+The preview service reuses required web variables through Railway service references. Its purpose is visual QA only. It must not receive Aromia custom production domains.
+
+The first source deployment is triggered by this branch commit so the preview snapshot is guaranteed to come from the visual branch rather than an earlier `main` snapshot.
 
 ## 10. Gate decision
 
-Current decision: **PREVIEW READY — DO NOT MERGE YET**.
+Current decision: **PREVIEW DEPLOYMENT IN PROGRESS — DO NOT MERGE YET**.
 
 To advance:
 1. current-head CI green;
-2. visual preview at desktop, 768×1024 tablet and 375×812 mobile;
-3. Light/Dark visual check;
-4. decide whether repository-owned provisional masters are strong enough for a preview release or replace them with bespoke H01/H02 masters;
-5. only then mark PR #17 ready for review / merge.
+2. isolated Railway preview successful from the visual branch;
+3. visual preview at desktop, 768×1024 tablet and 375×812 mobile;
+4. Light/Dark visual check;
+5. decide whether repository-owned provisional masters are strong enough for a preview release or replace them with bespoke H01/H02 masters;
+6. only then mark PR #17 ready for review / merge.
 
-Home is structurally and technically mature enough to stop redesigning by abstraction. Remaining decisions should be made from a rendered preview, not additional speculative CSS.
+Home is structurally and technically mature enough to stop redesigning by abstraction. Remaining decisions should be made from the rendered preview, not additional speculative CSS.
