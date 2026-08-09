@@ -49,6 +49,7 @@ export async function harvestCandidate(candidate, options = {}) {
       if (expectedConcentration && extractedConcentration !== expectedConcentration) { errors.push(`concentration_conflict:${candidate.concentration}->${evidence.concentration}:${hit.url}`); continue; }
 
       const publication = publicationMetadata({ ...candidate, ...evidence, brand: candidate.brand, name: candidate.name, concentration: evidence.concentration });
+      const sourceDoesNotPublishNotes = evidence.notes_structure === "UNKNOWN";
       return {
         ...base,
         concentration: evidence.concentration,
@@ -59,6 +60,7 @@ export async function harvestCandidate(candidate, options = {}) {
         description: publication.description,
         harvest_status: "HARVESTED", source_url: evidence.source_url,
         identity_confirmed: "true", official_source: "true",
+        source_does_not_publish_notes: sourceDoesNotPublishNotes ? "true" : "false",
         top_notes: evidence.top_notes, middle_notes: evidence.middle_notes, base_notes: evidence.base_notes, accords: evidence.accords,
         notes_structure: evidence.notes_structure, page_title: evidence.title, page_description: evidence.description,
         image_url: publication.image_url, image_source: publication.image_source,
@@ -108,6 +110,7 @@ export function summarizeHarvest(rows) {
   const causes = {}; for (const row of rows) { const cause = failureCause(row); causes[cause] = (causes[cause] ?? 0) + 1; }
   const harvested = rows.filter((r) => r.harvest_status === "HARVESTED");
   const explicitNotes = harvested.filter((r) => r.notes_structure && r.notes_structure !== "UNKNOWN");
+  const noNotesPublished = harvested.filter((r) => r.source_does_not_publish_notes === "true");
   const criticalComplete = harvested.filter((r) => r.brand && r.name && r.concentration && r.gender);
   const withImages = harvested.filter((r) => r.image_url);
   const withDescriptions = harvested.filter((r) => r.description);
@@ -116,6 +119,7 @@ export function summarizeHarvest(rows) {
     total: rows.length, counts, failure_causes: causes,
     harvested: harvested.length, harvested_rate: rows.length ? harvested.length / rows.length : null,
     explicit_notes: explicitNotes.length, explicit_notes_rate: rows.length ? explicitNotes.length / rows.length : null,
+    verified_source_no_notes: noNotesPublished.length,
     critical_complete: criticalComplete.length, critical_complete_rate: rows.length ? criticalComplete.length / rows.length : null,
     image_complete: withImages.length, image_complete_rate: rows.length ? withImages.length / rows.length : null,
     description_complete: withDescriptions.length, description_complete_rate: rows.length ? withDescriptions.length / rows.length : null,
