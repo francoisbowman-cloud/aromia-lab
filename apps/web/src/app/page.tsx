@@ -19,8 +19,6 @@ const EYEBROW =
 export default async function Home() {
   const [perfumes, articulos] = await Promise.all([getPerfumes(), getArticulos()]);
 
-  // Reseñas destacadas: prioriza perfumes con rating real; si todavía no
-  // hay suficientes, conserva el catálogo real como fallback editorial.
   const conRating = perfumes.filter((p) => p.rating_promedio);
   const destacados = (conRating.length >= 3 ? conRating : perfumes).slice(0, 4);
 
@@ -35,11 +33,9 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col overflow-hidden">
-      {/* 1 · Hero — Editorial Cinematic + lenguaje macro sensorial */}
       <HomeHero />
 
-      {/* 2 · Prueba de valor — deliberadamente subordinada al hero */}
-      <div className="border-b border-line bg-paper/60 dark:bg-surface/35">
+      <div className="border-b border-line bg-[rgba(251,248,243,.62)] dark:bg-[rgba(23,18,13,.72)]">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-7 gap-y-2 px-6 py-4 font-plex text-[10.5px] uppercase tracking-[.08em] text-muted lg:px-10">
           <span>
             <b className="font-sans font-bold text-gold-contrast">{perfumes.length}</b>{" "}
@@ -58,43 +54,36 @@ export default async function Home() {
       </div>
 
       <div className="flex flex-col gap-20 py-20 lg:gap-32 lg:py-32">
-        {/* 3 · Destacados — selección editorial, no listado de catálogo */}
         {destacados.length > 0 ? (
           <Reveal>
             <EditorialSelection perfumes={destacados} />
           </Reveal>
         ) : null}
 
-        {/* 4 · Ecosistema — gesto tipográfico grande */}
         <Reveal>
           <EcosystemGesture />
         </Reveal>
 
-        {/* 5 · Índice Olfativo */}
         {categoriasConResultados.length > 0 ? (
           <Reveal>
             <OlfactiveIndex categorias={categoriasConResultados} />
           </Reveal>
         ) : null}
 
-        {/* 6 · Product Reveal — materia → identidad → objeto */}
         <Reveal>
           <SensoryInterlude />
         </Reveal>
 
-        {/* 7 · Magazine — autoridad editorial */}
         {ultimoArticulo ? (
           <Reveal>
             <MagazineSpotlight articulo={ultimoArticulo} />
           </Reveal>
         ) : null}
 
-        {/* 8 · Quiz — discovery como consulta olfativa */}
         <Reveal>
           <QuizSpotlight />
         </Reveal>
 
-        {/* 9 · Conversión final — un capítulo editorial, no dos cards */}
         <Reveal className="mx-auto w-full max-w-6xl px-6 lg:px-10">
           <section className="border-y border-line py-10 lg:py-14">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.15fr_.85fr] lg:gap-20">
@@ -112,7 +101,7 @@ export default async function Home() {
 
                 <Link
                   href="/club"
-                  className="group inline-flex w-fit items-center gap-3 border-b border-ink/30 pb-1.5 font-plex text-[11px] uppercase tracking-[.14em] text-ink transition-colors hover:border-gold hover:text-gold-contrast"
+                  className="group inline-flex w-fit items-center gap-3 border-b border-[rgba(33,29,23,.3)] pb-1.5 font-plex text-[11px] uppercase tracking-[.14em] text-ink transition-colors hover:border-gold hover:text-gold-contrast dark:border-[rgba(242,235,221,.32)]"
                 >
                   Entrar al Club
                   <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
