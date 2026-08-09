@@ -18,7 +18,7 @@ export function MagazineSpotlight({ articulo }: { articulo: Article }) {
           <div className="flex items-center justify-between gap-4 border-b border-line pb-5">
             <p className={EYEBROW}>Magazine · {CATEGORIA_LABEL[articulo.categoria]}</p>
             <span className="font-plex text-[9px] uppercase tracking-[.16em] text-muted">
-              Lectura / 04 min
+              Edición digital
             </span>
           </div>
 
