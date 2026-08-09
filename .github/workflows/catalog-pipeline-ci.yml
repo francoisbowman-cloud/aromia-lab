@@ -32,6 +32,14 @@ jobs:
       - name: Verify Batch 003 selection contract
         run: |
           node -e "const r=require('../../catalog/expansion/batch-003/selection-report.json'); if(r.selected!==100) throw new Error('Batch 003 selector did not produce 100 candidates'); if(r.guardrails.writes_postgres||r.guardrails.mutates_raw_inputs||r.guardrails.master_import) throw new Error('Expansion guardrail violated'); console.log(r)"
+      - name: Live official-source harvest pilot (10 candidates)
+        env:
+          AROMIA_HARVEST_CONCURRENCY: "4"
+        run: |
+          npm run harvest -- 10
+          npm run enrich
+          cat ../../catalog/expansion/batch-003/harvest-report.json
+          cat ../../catalog/expansion/batch-003/enrichment-report.json
       - name: Verify protected inputs unchanged
         run: |
           git diff --exit-code -- ../../catalog/imports/batch-001.csv ../../catalog/imports/batch-002.csv ../../catalog/aromia-catalog-master.csv ../../PERFUMES_INITIAL_50.csv
