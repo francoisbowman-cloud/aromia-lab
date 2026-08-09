@@ -22,7 +22,7 @@ function formatPrice(perfume: Perfume) {
 }
 
 export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: Perfume; variant?: "catalog" | "featured"; index?: number }) {
-  const { imgRef, frameRef, frameBackground, backgroundSize, backgroundPosition, imgError, imgLoaded, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
+  const { imgRef, frameRef, frameBackground, imageStyle, imgError, imgLoaded, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
   const [requestImage, setRequestImage] = useState(false);
   const hasImage = Boolean(perfume.imagen_url) && !imgError;
 
@@ -60,12 +60,20 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
       <div ref={frameRef} className="relative aspect-[4/5] overflow-hidden bg-[#f3ede3] dark:bg-[#1a1510]" style={frameBackground ? { background: frameBackground } : undefined}>
         {hasImage && requestImage ? (
           <>
-            {/* Probe used for crop analysis. It is mounted only near the viewport, so offscreen cards have no image request at all. */}
+            {/* One request serves both crop analysis and the final visible object. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img ref={imgRef} src={perfume.imagen_url ?? ""} alt="" aria-hidden="true" crossOrigin="anonymous" decoding="async" className="absolute h-px w-px opacity-0" onLoad={handleLoad} onError={handleError} />
-            {imgLoaded ? (
-              <div role="img" aria-label={`${perfume.nombre} de ${perfume.marca}`} className="absolute inset-0 bg-no-repeat transition-transform duration-700 ease-out group-hover:scale-[1.028]" style={{ backgroundImage: `url(${perfume.imagen_url})`, backgroundSize, backgroundPosition }} />
-            ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen cargando`} />}
+            <img
+              ref={imgRef}
+              src={perfume.imagen_url ?? ""}
+              alt={`${perfume.nombre} de ${perfume.marca}`}
+              crossOrigin="anonymous"
+              decoding="async"
+              onLoad={handleLoad}
+              onError={handleError}
+              className={`absolute max-w-none object-contain transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.028] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+              style={imageStyle}
+            />
+            {!imgLoaded ? <ImagePlaceholder alt={`${perfume.nombre} — imagen cargando`} /> : null}
           </>
         ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen no disponible`} />}
         <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.72)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1 dark:border-white/15 dark:bg-[rgba(20,16,12,.72)]">→</span>
