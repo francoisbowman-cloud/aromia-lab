@@ -96,7 +96,7 @@ npm run expansion-gate
 
 Mientras GO-100 no está en `main`, PR #18 usa temporalmente `ci/catalog-expansion-v1-gate` como base de validación. Ese branch contiene únicamente el workflow sobre GO-100 para permitir ejecutar la suite sin contaminar `main`. Antes de integración final, el PR vuelve a su base contractual correspondiente.
 
-El CI ejecuta regresión, selección de 100, guardrails y un harvest online piloto de 10 candidatos. El harvest piloto mide capacidad real pero no altera producción ni el master.
+El CI ejecuta regresión, selección de 100, guardrails y el **harvest online completo de los 100 candidatos de Batch 003**, seguido por enrichment, batch builder y EA4 GO/NO-GO. Los artifacts se conservan aunque el gate operativo sea `NO_GO`, para poder clasificar y remediar causas sistémicas sin investigación fila por fila.
 
 ## Guardrails
 
