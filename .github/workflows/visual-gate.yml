@@ -88,7 +88,7 @@ jobs:
           ];
           for (const [name, path] of targets) {
             for (const [mode, viewport] of [['desktop', { width: 1440, height: 1100 }], ['mobile', { width: 390, height: 844 }]]) {
-              const page = await browser.newPage({ viewportSize: viewport, deviceScaleFactor: 1 });
+              const page = await browser.newPage({ viewport });
               await page.goto(`http://127.0.0.1:3000${path}`, { waitUntil: 'networkidle' });
               await page.screenshot({ path: `visual-gate/${name}-${mode}.png`, fullPage: true });
               fs.writeFileSync(`visual-gate/${name}-${mode}.html`, await page.content());
