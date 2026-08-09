@@ -1,0 +1,316 @@
+import { resolve, basename } from "node:path";
+import {
+  CURRENT_AROMIA_CSV,
+  REPORTS_DIR,
+  readCsv,
+  writeCsv,
+  writeJson,
+  normalizeForKey,
+  extractConcentrationFromName,
+  splitList,
+  isValidUrl,
+  isMainModule,
+  log,
+} from "./lib.mjs";
+
+const DEFAULT_LIMIT = 25;
+const PRICE_SEGMENTS = ["económico", "medio", "premium", "lujo"];
+const GENDERS = ["masculino", "femenino", "unisex"];
+
+function text(value) {
+  return String(value ?? "").trim();
+}
+
+function norm(value) {
+  return normalizeForKey(text(value));
+}
+
+function candidateKey(row) {
+  return [norm(row.brand ?? row.marca), norm(row.name ?? row.nombre), norm(row.concentration ?? extractConcentrationFromName(row.nombre).concentration)].join("|");
+}
+
+function productFamilyKey(row) {
+  const name = row.name ?? row.nombre;
+  const base = extractConcentrationFromName(name).baseName;
+  return [norm(row.brand ?? row.marca), norm(base)].join("|");
+}
+
+function valueFor(row, modern, legacy) {
+  return text(row[modern] ?? row[legacy]);
+}
+
+function increment(map, key) {
+  if (!key) return;
+  map[key] = (map[key] ?? 0) + 1;
+}
+
+export function buildCoverage(rows) {
+  const coverage = {
+    total: rows.length,
+    brand: {},
+    family: {},
+    gender: {},
+    price_segment: {},
+    market_position: {},
+  };
+
+  for (const row of rows) {
+    increment(coverage.brand, norm(valueFor(row, "brand", "marca")));
+    increment(coverage.family, norm(valueFor(row, "family", "familia_olfativa")));
+    increment(coverage.gender, norm(valueFor(row, "gender", "genero")));
+    increment(coverage.price_segment, norm(valueFor(row, "price_segment", "categoria_precio")));
+    increment(coverage.market_position, norm(valueFor(row, "market_position", "nicho_o_comercial")));
+  }
+
+  return coverage;
+}
+
+function deficitScore(count, zeroBonus, diminishingWeight, cap) {
+  if (count === 0) return zeroBonus;
+  return Math.max(0, Math.min(cap, diminishingWeight * (3 - Math.min(count, 3))));
+}
+
+function distributionDeficit(coverageMap, key, allowed) {
+  if (!key || !allowed.includes(key)) return 0;
+  const total = allowed.reduce((sum, item) => sum + (coverageMap[item] ?? 0), 0);
+  if (total === 0) return 1;
+  const target = 1 / allowed.length;
+  const currentShare = (coverageMap[key] ?? 0) / total;
+  return Math.max(0, target - currentShare) / target;
+}
+
+export function assessProvenance(row) {
+  const urls = splitList(row.source_url).filter(isValidUrl);
+  const verifiedRaw = norm(row.source_verified);
+  const verified = verifiedRaw === "true" || verifiedRaw === "1" || verifiedRaw === "yes" || verifiedRaw === "si" || verifiedRaw === "sí";
+  const confidence = norm(row.data_confidence);
+
+  let score = 0;
+  if (urls.length >= 1) score += 10;
+  if (urls.length >= 2) score += 3;
+  if (verified) score += 4;
+  if (confidence === "high") score += 3;
+  else if (confidence === "medium") score += 1;
+
+  return {
+    urls,
+    verified,
+    confidence: confidence || null,
+    score: Math.min(20, score),
+    gate: urls.length > 0 ? "SOURCE_PRESENT" : "SOURCE_REQUIRED",
+  };
+}
+
+export function scoreCandidate(row, coverage, existingKeys = new Set(), existingProductFamilies = new Set()) {
+  const brand = norm(row.brand);
+  const name = norm(row.name);
+  const concentration = norm(row.concentration);
+  const family = norm(row.family);
+  const gender = norm(row.gender);
+  const price = norm(row.price_segment);
+  const key = candidateKey(row);
+  const familyKey = productFamilyKey(row);
+  const provenance = assessProvenance(row);
+
+  const reasons = [];
+  const blocks = [];
+
+  if (!brand || !name || !concentration || !gender) blocks.push("IDENTITY_INCOMPLETE");
+  if (existingKeys.has(key)) blocks.push("EXACT_PRODUCT_ALREADY_COVERED");
+  if (provenance.gate !== "SOURCE_PRESENT") blocks.push("SOURCE_REQUIRED");
+
+  let score = 0;
+
+  const brandCount = coverage.brand[brand] ?? 0;
+  const brandPoints = deficitScore(brandCount, 22, 6, 12);
+  score += brandPoints;
+  if (brandPoints > 0) reasons.push(brandCount === 0 ? "NEW_BRAND" : "UNDERREPRESENTED_BRAND");
+
+  const familyCount = family ? (coverage.family[family] ?? 0) : 0;
+  const familyPoints = family ? deficitScore(familyCount, 20, 5, 10) : 0;
+  score += familyPoints;
+  if (familyPoints > 0) reasons.push(familyCount === 0 ? "NEW_OLFACTIVE_FAMILY" : "UNDERREPRESENTED_FAMILY");
+
+  const genderPoints = Math.round(distributionDeficit(coverage.gender, gender, GENDERS) * 14);
+  score += genderPoints;
+  if (genderPoints > 0) reasons.push("GENDER_BALANCE_GAP");
+
+  const pricePoints = Math.round(distributionDeficit(coverage.price_segment, price, PRICE_SEGMENTS) * 12);
+  score += pricePoints;
+  if (pricePoints > 0) reasons.push("PRICE_SEGMENT_GAP");
+
+  if (!existingProductFamilies.has(familyKey)) {
+    score += 10;
+    reasons.push("NEW_PRODUCT_LINE");
+  } else if (!existingKeys.has(key)) {
+    score += 4;
+    reasons.push("RELATED_VARIANT");
+  }
+
+  score += provenance.score;
+  if (provenance.score >= 14) reasons.push("STRONG_PROVENANCE");
+
+  const launchYear = Number(row.launch_year);
+  const currentYear = new Date().getUTCFullYear();
+  if (Number.isFinite(launchYear) && launchYear >= currentYear - 2) {
+    score += 5;
+    reasons.push("RECENT_RELEASE");
+  }
+
+  return {
+    id: row.id || null,
+    brand: text(row.brand),
+    name: text(row.name),
+    concentration: text(row.concentration),
+    family: text(row.family) || null,
+    gender: text(row.gender) || null,
+    price_segment: text(row.price_segment) || null,
+    source_url: text(row.source_url) || null,
+    data_confidence: text(row.data_confidence) || null,
+    candidate_key: key,
+    product_family_key: familyKey,
+    score: Math.max(0, Math.min(100, Math.round(score))),
+    eligible: blocks.length === 0,
+    blocks,
+    reasons,
+    provenance,
+    raw: row,
+  };
+}
+
+function applySelectionToCoverage(coverage, candidate) {
+  const next = structuredClone(coverage);
+  increment(next.brand, norm(candidate.brand));
+  increment(next.family, norm(candidate.family));
+  increment(next.gender, norm(candidate.gender));
+  increment(next.price_segment, norm(candidate.price_segment));
+  next.total += 1;
+  return next;
+}
+
+export function selectCandidates(candidateRows, currentRows, limit = DEFAULT_LIMIT) {
+  let coverage = buildCoverage(currentRows);
+  const existingKeys = new Set(currentRows.map(candidateKey));
+  const productFamilies = new Set(currentRows.map(productFamilyKey));
+  const remaining = [...candidateRows];
+  const selected = [];
+  const rejected = [];
+  const selectedKeys = new Set();
+
+  while (remaining.length > 0 && selected.length < limit) {
+    const scored = remaining
+      .map((row) => scoreCandidate(row, coverage, new Set([...existingKeys, ...selectedKeys]), productFamilies))
+      .sort((a, b) => b.score - a.score || a.candidate_key.localeCompare(b.candidate_key));
+
+    const best = scored.find((candidate) => candidate.eligible);
+    if (!best) break;
+
+    selected.push({ ...best, rank: selected.length + 1 });
+    selectedKeys.add(best.candidate_key);
+    productFamilies.add(best.product_family_key);
+    coverage = applySelectionToCoverage(coverage, best);
+
+    const index = remaining.findIndex((row) => candidateKey(row) === best.candidate_key);
+    if (index >= 0) remaining.splice(index, 1);
+  }
+
+  for (const row of remaining) {
+    const assessed = scoreCandidate(row, coverage, new Set([...existingKeys, ...selectedKeys]), productFamilies);
+    rejected.push(assessed);
+  }
+
+  return {
+    selected,
+    notSelected: rejected,
+    initialCoverage: buildCoverage(currentRows),
+    projectedCoverage: coverage,
+  };
+}
+
+export function summarizeGaps(coverage) {
+  const least = (map, allowed = null) => {
+    const entries = allowed ? allowed.map((key) => [key, map[key] ?? 0]) : Object.entries(map);
+    return entries.sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0])).slice(0, 10);
+  };
+
+  return {
+    total: coverage.total,
+    leastRepresentedBrands: least(coverage.brand),
+    leastRepresentedFamilies: least(coverage.family),
+    genderBalance: least(coverage.gender, GENDERS),
+    priceBalance: least(coverage.price_segment, PRICE_SEGMENTS),
+  };
+}
+
+function parseArgs(argv) {
+  const positional = [];
+  let limit = DEFAULT_LIMIT;
+  let current = CURRENT_AROMIA_CSV;
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === "--limit") limit = Number(argv[++i]);
+    else if (argv[i] === "--current") current = resolve(argv[++i]);
+    else positional.push(argv[i]);
+  }
+  if (!positional[0]) throw new Error("Uso: engine.mjs <candidate-pool.csv> [--limit 25] [--current catalog.csv]");
+  if (!Number.isInteger(limit) || limit < 1 || limit > 200) throw new Error("--limit debe ser un entero entre 1 y 200");
+  return { pool: resolve(positional[0]), current, limit };
+}
+
+export function runEngine({ pool, current = CURRENT_AROMIA_CSV, limit = DEFAULT_LIMIT }) {
+  const currentRows = readCsv(current).rows;
+  const candidateRows = readCsv(pool).rows;
+  const result = selectCandidates(candidateRows, currentRows, limit);
+  const poolName = basename(pool).replace(/\.csv$/i, "");
+  const reportBase = `engine-${poolName}`;
+
+  const report = {
+    engine_version: "0.1.0",
+    generated_at: new Date().toISOString(),
+    current_catalog: current,
+    candidate_pool: pool,
+    requested_limit: limit,
+    selected_count: result.selected.length,
+    candidate_count: candidateRows.length,
+    gaps_before: summarizeGaps(result.initialCoverage),
+    gaps_after: summarizeGaps(result.projectedCoverage),
+    selected: result.selected.map(({ raw, ...candidate }) => candidate),
+    not_selected: result.notSelected.map(({ raw, ...candidate }) => candidate),
+  };
+
+  const jsonPath = resolve(REPORTS_DIR, `${reportBase}.json`);
+  const csvPath = resolve(REPORTS_DIR, `${reportBase}-selection.csv`);
+  writeJson(jsonPath, report);
+  writeCsv(
+    csvPath,
+    ["rank", "id", "brand", "name", "concentration", "family", "gender", "price_segment", "score", "reasons", "source_url", "data_confidence"],
+    result.selected.map((candidate) => ({
+      rank: candidate.rank,
+      id: candidate.id ?? "",
+      brand: candidate.brand,
+      name: candidate.name,
+      concentration: candidate.concentration,
+      family: candidate.family ?? "",
+      gender: candidate.gender ?? "",
+      price_segment: candidate.price_segment ?? "",
+      score: candidate.score,
+      reasons: candidate.reasons.join(";"),
+      source_url: candidate.source_url ?? "",
+      data_confidence: candidate.data_confidence ?? "",
+    })),
+  );
+
+  return { ...report, jsonPath, csvPath };
+}
+
+if (isMainModule(import.meta.url)) {
+  try {
+    const args = parseArgs(process.argv.slice(2));
+    const result = runEngine(args);
+    log(`Catalog Expansion Engine: ${result.selected_count}/${result.candidate_count} candidatos seleccionados.`);
+    log(`Reporte: ${result.jsonPath}`);
+    log(`Selección: ${result.csvPath}`);
+  } catch (error) {
+    process.stderr.write(`${error.message}\n`);
+    process.exitCode = 1;
+  }
+}
