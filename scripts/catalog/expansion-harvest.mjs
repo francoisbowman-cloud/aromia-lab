@@ -80,12 +80,48 @@ export async function mapConcurrent(items, limit, fn, onProgress = null) {
   return results;
 }
 
+function failureCause(row) {
+  if (row.harvest_status === "NOT_FOUND") return "not_found_in_official_discovery";
+  if (row.harvest_status === "NO_OFFICIAL_DOMAIN") return "no_official_domain";
+  const e = String(row.error ?? "");
+  if (e.includes("concentration_unverified")) return "concentration_unverified";
+  if (e.includes("concentration_conflict")) return "concentration_conflict";
+  if (e.includes("identity_mismatch")) return "identity_mismatch";
+  if (/HTTP 404/.test(e)) return "http_404";
+  if (/HTTP 403/.test(e)) return "http_403";
+  if (/HTTP 429/.test(e)) return "http_429";
+  if (/abort|timeout/i.test(e)) return "timeout";
+  if (/Redirect left official domain|Refusing non-official host/.test(e)) return "host_guard";
+  return row.harvest_status === "HARVESTED" ? "harvested" : "other_fetch_failure";
+}
+
 export function summarizeHarvest(rows) {
   const counts = {}; for (const row of rows) counts[row.harvest_status] = (counts[row.harvest_status] ?? 0) + 1;
+  const causes = {}; for (const row of rows) { const cause = failureCause(row); causes[cause] = (causes[cause] ?? 0) + 1; }
+  const byDomain = {};
+  for (const row of rows) {
+    const domain = row.official_domain || "(none)";
+    byDomain[domain] ??= { total: 0, harvested: 0, not_found: 0, fetch_failed: 0 };
+    byDomain[domain].total += 1;
+    if (row.harvest_status === "HARVESTED") byDomain[domain].harvested += 1;
+    if (row.harvest_status === "NOT_FOUND") byDomain[domain].not_found += 1;
+    if (row.harvest_status === "FETCH_FAILED") byDomain[domain].fetch_failed += 1;
+  }
   const harvested = rows.filter((r) => r.harvest_status === "HARVESTED");
   const explicitNotes = harvested.filter((r) => r.notes_structure && r.notes_structure !== "UNKNOWN");
   const criticalComplete = harvested.filter((r) => r.brand && r.name && r.concentration && r.gender);
-  return { total: rows.length, counts, harvested: harvested.length, harvested_rate: rows.length ? harvested.length / rows.length : null, explicit_notes: explicitNotes.length, explicit_notes_rate: rows.length ? explicitNotes.length / rows.length : null, critical_complete: criticalComplete.length, critical_complete_rate: rows.length ? criticalComplete.length / rows.length : null };
+  return {
+    total: rows.length,
+    counts,
+    failure_causes: causes,
+    domain_summary: Object.fromEntries(Object.entries(byDomain).sort((a,b) => b[1].total - a[1].total || a[0].localeCompare(b[0])).slice(0, 25)),
+    harvested: harvested.length,
+    harvested_rate: rows.length ? harvested.length / rows.length : null,
+    explicit_notes: explicitNotes.length,
+    explicit_notes_rate: rows.length ? explicitNotes.length / rows.length : null,
+    critical_complete: criticalComplete.length,
+    critical_complete_rate: rows.length ? criticalComplete.length / rows.length : null,
+  };
 }
 
 export async function runHarvest({ concurrency = DEFAULT_CONCURRENCY, limit = 100, options = {} } = {}) {
@@ -98,9 +134,7 @@ export async function runHarvest({ concurrency = DEFAULT_CONCURRENCY, limit = 10
     concurrency,
     (candidate) => harvestCandidate(candidate, options),
     (completed, total, row, candidate) => {
-      if (completed === 1 || completed % 10 === 0 || completed === total) {
-        console.log(`[harvest] ${completed}/${total} latest=${candidate.candidate_id}:${row.harvest_status}`);
-      }
+      if (completed === 1 || completed % 10 === 0 || completed === total) console.log(`[harvest] ${completed}/${total} latest=${candidate.candidate_id}:${row.harvest_status}`);
     },
   );
   writeCsv(join(dir, "harvest-results.csv"), rows);
