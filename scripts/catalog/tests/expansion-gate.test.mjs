@@ -2,9 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { evaluateExpansionGate } from "../expansion-gate.mjs";
 
-test("GO when Batch 003 meets automation targets", () => {
+test("GO when Batch 003 meets automation and publication targets", () => {
   const result = evaluateExpansionGate(
-    { total: 100, auto_preparation_yield: 0.95, human_review_burden: 0.05, blocked: 0 },
+    { total: 100, auto_preparation_yield: 0.95, human_review_burden: 0.05, publication_completion_yield: 0.96, image_completion_yield: 0.94, blocked: 0 },
     { destructive_duplicates: 0, model_requirement_gaps: 0, protected_inputs_unchanged: true, postgres_writes: 0 },
   );
   assert.equal(result.decision, "GO");
@@ -13,7 +13,7 @@ test("GO when Batch 003 meets automation targets", () => {
 
 test("NO_GO when human review burden exceeds 10%", () => {
   const result = evaluateExpansionGate(
-    { total: 100, auto_preparation_yield: 0.88, human_review_burden: 0.12, blocked: 0 },
+    { total: 100, auto_preparation_yield: 0.88, human_review_burden: 0.12, publication_completion_yield: 0.95, image_completion_yield: 0.95, blocked: 0 },
     { destructive_duplicates: 0, model_requirement_gaps: 0, protected_inputs_unchanged: true, postgres_writes: 0 },
   );
   assert.equal(result.decision, "NO_GO");
@@ -21,9 +21,19 @@ test("NO_GO when human review burden exceeds 10%", () => {
   assert.ok(result.failed.includes("human_review_burden"));
 });
 
+test("NO_GO when publication or image coverage is incomplete", () => {
+  const result = evaluateExpansionGate(
+    { total: 100, auto_preparation_yield: 0.95, human_review_burden: 0.05, publication_completion_yield: 0.84, image_completion_yield: 0.79, blocked: 0 },
+    { destructive_duplicates: 0, model_requirement_gaps: 0, protected_inputs_unchanged: true, postgres_writes: 0 },
+  );
+  assert.equal(result.decision, "NO_GO");
+  assert.ok(result.failed.includes("publication_completion_yield"));
+  assert.ok(result.failed.includes("image_completion_yield"));
+});
+
 test("NO_GO on any destructive duplicate or model requirement gap", () => {
   const result = evaluateExpansionGate(
-    { total: 100, auto_preparation_yield: 0.97, human_review_burden: 0.02, blocked: 1 },
+    { total: 100, auto_preparation_yield: 0.97, human_review_burden: 0.02, publication_completion_yield: 0.97, image_completion_yield: 0.97, blocked: 1 },
     { destructive_duplicates: 1, model_requirement_gaps: 1, protected_inputs_unchanged: true, postgres_writes: 0 },
   );
   assert.equal(result.decision, "NO_GO");
