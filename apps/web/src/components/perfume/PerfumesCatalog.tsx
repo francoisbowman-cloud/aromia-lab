@@ -16,8 +16,6 @@ export function PerfumesCatalog({
   initialFamilia,
 }: {
   perfumes: Perfume[];
-  /** Prefiltra por familia olfativa al llegar desde un link con `?familia=`
-   * (ej. los chips de Home) — sigue siendo editable desde el select. */
   initialFamilia?: string;
 }) {
   const [q, setQ] = useState("");
@@ -28,12 +26,19 @@ export function PerfumesCatalog({
   const [nichoOComercial, setNichoOComercial] = useState("");
 
   const familias = useMemo(
-    () => Array.from(new Set(perfumes.map((p) => p.familia_olfativa))).sort(),
+    () => Array.from(
+      new Set(perfumes.map((p) => p.familia_olfativa).filter((f): f is string => Boolean(f))),
+    ).sort(),
     [perfumes],
   );
 
   const categoriasConResultados = useMemo(() => {
-    const presentes = new Set(perfumes.map((p) => categoriaDe(p.familia_olfativa)));
+    const presentes = new Set(
+      perfumes
+        .map((p) => p.familia_olfativa)
+        .filter((f): f is string => Boolean(f))
+        .map((f) => categoriaDe(f)),
+    );
     return CATEGORIAS_PRINCIPALES.filter((c) => presentes.has(c.label));
   }, [perfumes]);
 
@@ -43,7 +48,7 @@ export function PerfumesCatalog({
       if (texto && !`${p.nombre} ${p.marca}`.toLowerCase().includes(texto)) return false;
       if (genero && p.genero !== genero) return false;
       if (familia && p.familia_olfativa !== familia) return false;
-      if (categoria && categoriaDe(p.familia_olfativa) !== categoria) return false;
+      if (categoria && (!p.familia_olfativa || categoriaDe(p.familia_olfativa) !== categoria)) return false;
       if (categoriaPrecio && p.categoria_precio !== categoriaPrecio) return false;
       if (nichoOComercial && p.nicho_o_comercial !== nichoOComercial) return false;
       return true;
@@ -121,17 +126,21 @@ export function PerfumesCatalog({
         </Select>
       </div>
 
+      <p className="mt-4 font-sans text-sm text-muted">
+        {filtrados.length} {filtrados.length === 1 ? "fragancia" : "fragancias"}
+      </p>
+
+      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {filtrados.map((perfume) => (
+          <PerfumeCard key={perfume.slug} perfume={perfume} />
+        ))}
+      </div>
+
       {filtrados.length === 0 ? (
-        <p className="mt-12 text-center font-sans text-sm text-muted">
-          No encontramos perfumes con esos filtros.
-        </p>
-      ) : (
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtrados.map((perfume) => (
-            <PerfumeCard key={perfume.slug} perfume={perfume} />
-          ))}
+        <div className="mt-10 rounded-card border border-line bg-surface p-8 text-center font-sans text-sm text-muted">
+          No encontramos fragancias con esos filtros.
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
