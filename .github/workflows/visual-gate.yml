@@ -77,7 +77,7 @@ jobs:
       - name: Capture desktop and mobile
         run: |
           mkdir -p visual-gate
-          cat > /tmp/capture.mjs <<'EOF'
+          cat > visual-gate/capture.mjs <<'EOF'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
           const browser = await chromium.launch({ headless: true });
@@ -97,7 +97,7 @@ jobs:
           }
           await browser.close();
           EOF
-          node /tmp/capture.mjs
+          node visual-gate/capture.mjs
 
       - uses: actions/upload-artifact@v4
         with:
