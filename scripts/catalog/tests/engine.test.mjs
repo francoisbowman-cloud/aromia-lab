@@ -60,6 +60,17 @@ test("exact existing product is blocked while a distinct concentration remains e
   assert.ok(variant.reasons.includes("RELATED_VARIANT"));
 });
 
+test("legacy names with embedded concentration dedupe against modern split fields", () => {
+  const result = selectCandidates(
+    [candidate({ brand: "Brand A", name: "Alpha", concentration: "EDP" })],
+    current,
+    1,
+  );
+  assert.equal(result.selected.length, 0);
+  assert.equal(result.notSelected.length, 1);
+  assert.ok(result.notSelected[0].blocks.includes("EXACT_PRODUCT_ALREADY_COVERED"));
+});
+
 test("gap candidate outranks another addition to an overrepresented segment", () => {
   const coverage = buildCoverage(current);
   const gap = scoreCandidate(candidate(), coverage);
