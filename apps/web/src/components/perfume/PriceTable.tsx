@@ -1,91 +1,49 @@
 "use client";
 
 import type { Retailer } from "@/lib/types";
-import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 
 export function PriceTableSkeleton() {
-  return (
-    <section className="rounded-table border border-line bg-surface" aria-busy="true">
-      <div className="divide-y divide-line">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="grid grid-cols-[1.2fr_.8fr_.7fr] items-center gap-4 p-4">
-            <div className="h-4 w-24 animate-pulse rounded bg-soft" />
-            <div className="h-4 w-16 animate-pulse rounded bg-soft" />
-            <div className="h-10 w-full animate-pulse rounded bg-soft" />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  return <section className="min-h-[240px] animate-pulse border-y border-line bg-soft" aria-busy="true" />;
 }
 
-export function PriceTable({
-  retailers,
-  perfumeSlug,
-  perfumeNombre,
-}: {
-  retailers: Retailer[];
-  /** Opcionales — sin ellos el evento igual se manda, solo con menos
-   * contexto (retailer/precio). Ninguna vista existente los pasa hoy
-   * salvo la ficha de producto. */
-  perfumeSlug?: string;
-  perfumeNombre?: string;
-}) {
+export function PriceTable({ retailers, perfumeSlug, perfumeNombre }: { retailers: Retailer[]; perfumeSlug?: string; perfumeNombre?: string }) {
   if (retailers.length === 0) {
     return (
-      <section className="rounded-table border border-line bg-surface p-6 text-center font-sans text-sm text-muted">
-        Oferta no disponible en este momento.
+      <section className="border-y border-line py-10">
+        <p className="font-display text-[30px] italic text-muted">Oferta no disponible en este momento.</p>
+        <p className="mt-3 max-w-[48ch] font-sans text-sm leading-6 text-muted">La ficha permanece publicada por su valor editorial; las ofertas aparecen únicamente cuando existe una fuente comercial verificable.</p>
       </section>
     );
   }
 
   return (
-    <section className="overflow-hidden rounded-table border border-line bg-surface">
-      <ul className="divide-y divide-line">
-        {retailers.map((r) => (
-          <li
-            key={r.id}
-            className="grid grid-cols-1 items-center gap-3 p-4 sm:grid-cols-[1.2fr_.8fr_.7fr] sm:gap-4"
-          >
+    <section>
+      <ul className="border-t border-line">
+        {retailers.map((r, index) => (
+          <li key={r.id} className="grid grid-cols-[38px_1fr] gap-4 border-b border-line py-6 sm:grid-cols-[44px_1.3fr_.7fr_auto] sm:items-center lg:py-7">
+            <span className="font-plex text-[9px] tracking-[.14em] text-gold-contrast">{String(index + 1).padStart(2, "0")}</span>
             <div>
-              <p className="font-sans text-sm font-medium text-ink">{r.nombre}</p>
-              {r.detalle ? <p className="font-sans text-xs text-muted">{r.detalle}</p> : null}
+              <p className="font-display text-[24px] leading-none text-ink">{r.nombre}</p>
+              {r.detalle ? <p className="mt-2 font-sans text-xs leading-5 text-muted">{r.detalle}</p> : null}
             </div>
-            <p className="font-display text-lg text-ink">
-              {Number(r.precio).toLocaleString("es-AR", {
-                style: "currency",
-                currency: r.moneda,
-              })}
+            <p className="col-start-2 font-display text-[26px] text-ink sm:col-start-auto">
+              {Number(r.precio).toLocaleString("es-AR", { style: "currency", currency: r.moneda })}
             </p>
-            <Button asChild className="w-full">
-              <a
-                href={r.link_afiliado}
-                target="_blank"
-                rel="sponsored noopener"
-                onClick={() =>
-                  trackEvent("affiliate_click", {
-                    retailer: r.nombre,
-                    price: r.precio,
-                    currency: r.moneda,
-                    perfume_slug: perfumeSlug,
-                    perfume_name: perfumeNombre,
-                  })
-                }
-              >
-                Ver oferta
-              </a>
-            </Button>
+            <a
+              href={r.link_afiliado}
+              target="_blank"
+              rel="sponsored noopener"
+              className="group col-start-2 inline-flex w-fit items-center gap-3 border-b border-ink pb-2 font-plex text-[9px] uppercase tracking-[.15em] text-ink transition hover:border-gold hover:text-gold-contrast dark:border-[#f2ebdd] sm:col-start-auto"
+              onClick={() => trackEvent("affiliate_click", { retailer: r.nombre, price: r.precio, currency: r.moneda, perfume_slug: perfumeSlug, perfume_name: perfumeNombre })}
+            >
+              Ver oferta <span className="transition-transform group-hover:translate-x-1">↗</span>
+            </a>
           </li>
         ))}
       </ul>
-      {/* Mismo disclosure que ya declara el footer (As an Amazon Associate...) —
-          acá se repite junto al enlace real, que es donde tiene que estar para
-          ser "clara y conspicua" (no alcanza con que viva solo en el footer). */}
-      <p className="border-t border-line bg-soft px-4 py-2.5 font-sans text-[11px] leading-relaxed text-muted">
-        Aromia participa en el Programa de Afiliados de Amazon y puede ganar una
-        comisión por compras realizadas a través de estos enlaces, sin costo
-        adicional para vos.
+      <p className="border-b border-line py-4 font-sans text-[11px] leading-relaxed text-muted">
+        Aromia participa en el Programa de Afiliados de Amazon y puede ganar una comisión por compras realizadas a través de estos enlaces, sin costo adicional para vos.
       </p>
     </section>
   );
