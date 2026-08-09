@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 import { formattedReferencePrice, publicText } from "@/lib/catalogDisplay";
-import { ImagePlaceholder } from "./ImagePlaceholder";
 import { RatingStars } from "@/components/RatingStars";
-import { useProductImageCrop } from "@/lib/useProductImageCrop";
+import { ProductImage } from "./ProductImage";
 
 export function PerfumeCardSkeleton() {
   return (
@@ -18,35 +16,8 @@ export function PerfumeCardSkeleton() {
 }
 
 export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: Perfume; variant?: "catalog" | "featured"; index?: number }) {
-  const { imgRef, frameRef, frameBackground, imageStyle, imgError, imgLoaded, handleLoad, handleError } = useProductImageCrop(perfume.imagen_url ?? "");
-  const [requestImage, setRequestImage] = useState(false);
-  const hasImage = Boolean(publicText(perfume.imagen_url)) && !imgError;
   const family = publicText(perfume.familia_olfativa);
   const price = formattedReferencePrice(perfume);
-
-  useEffect(() => {
-    if (!perfume.imagen_url || requestImage) return;
-    const frame = frameRef.current;
-    if (!frame) return;
-
-    if (typeof IntersectionObserver === "undefined") {
-      setRequestImage(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setRequestImage(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "700px 0px" },
-    );
-
-    observer.observe(frame);
-    return () => observer.disconnect();
-  }, [frameRef, perfume.imagen_url, requestImage]);
 
   return (
     <Link href={`/catalogo/${perfume.slug}`} className="group relative flex flex-col overflow-hidden border-b border-r border-line bg-[#fffdf8] transition-colors duration-500 hover:bg-[#f8f2e9] dark:bg-[#14100c] dark:hover:bg-[#18130f]">
@@ -55,25 +26,9 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
         <span>{perfume.nicho_o_comercial ?? "Aromia edit"}</span>
       </div>
 
-      <div ref={frameRef} className="relative aspect-[4/5] overflow-hidden bg-white dark:bg-[#f7f4ee]" style={frameBackground ? { background: frameBackground } : undefined}>
-        {hasImage && requestImage ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              ref={imgRef}
-              src={perfume.imagen_url ?? ""}
-              alt={`${perfume.nombre} de ${perfume.marca}`}
-              crossOrigin="anonymous"
-              decoding="async"
-              onLoad={handleLoad}
-              onError={handleError}
-              className={`absolute max-w-none object-contain transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.025] ${imgLoaded ? "opacity-100" : "opacity-0"}`}
-              style={imageStyle}
-            />
-            {!imgLoaded ? <ImagePlaceholder alt={`${perfume.nombre} — imagen cargando`} /> : null}
-          </>
-        ) : <ImagePlaceholder alt={`${perfume.nombre} — imagen no disponible`} />}
-        <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.72)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1">→</span>
+      <div className="relative aspect-[4/5] overflow-hidden bg-[#fbfaf7] dark:bg-[#f7f4ee]">
+        <ProductImage slug={perfume.slug} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" />
+        <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.82)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1">→</span>
       </div>
 
       <div className="flex flex-1 flex-col px-4 pb-5 pt-5 lg:px-5 lg:pb-6">
