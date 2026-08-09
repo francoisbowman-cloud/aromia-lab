@@ -28,18 +28,20 @@ export function evidenceToDraft(row) {
     metadataFields,
     relationUnambiguous: String(row.relation_ambiguous ?? "").toLowerCase() !== "true",
   });
-  const gate = qualityGate({
+  let gate = qualityGate({
     confidence,
     provenanceCount: sourceUrls.length,
     blockingConflict: String(row.blocking_conflict ?? "").toLowerCase() === "true",
   });
+  const critical = { brand: clean(row.brand), name: clean(row.name), concentration: clean(row.concentration), gender: clean(row.gender) };
+  const missingCritical = Object.entries(critical).filter(([, value]) => !value).map(([field]) => field);
+  if (gate.state === EXPANSION_STATES.AUTO_READY && missingCritical.length) {
+    gate = { state: EXPANSION_STATES.REVIEW_REQUIRED, reason: `critical_metadata_missing:${missingCritical.join("|")}` };
+  }
   return {
     candidate_id: clean(row.candidate_id),
     slug: clean(row.slug),
-    brand: clean(row.brand),
-    name: clean(row.name),
-    concentration: clean(row.concentration),
-    gender: clean(row.gender),
+    ...critical,
     family: clean(row.family),
     launch_year: clean(row.launch_year),
     perfumer: clean(row.perfumer),
