@@ -7,6 +7,19 @@ Source of truth for art direction:
 
 Do not place exploratory generations here. Only assets that passed the Home asset acceptance gate belong in this directory.
 
+## Current provisional photographic layer
+
+To avoid blocking implementation while H01/H02 bespoke photography is still pending, Home currently reuses editorial masters that already belong to the Aromia repository:
+
+- H01 Light provisional: `/editorial/bright-soft-focus.png`
+- H01 Dark provisional: `/editorial/moody-closeup.png`
+- H02 Light provisional: `/editorial/sunlit-warm.png`
+- H02 Dark provisional: `/editorial/cinematic-warm.png`
+
+These are **not automatically approved as final H01/H02 masters**. They provide real photographic texture for preview and responsive QA while the procedural CSS scene remains underneath as fallback.
+
+Important: H01 final approval still requires visible ingredient/material anchors that genuinely correspond to the UI labels. If the provisional photography does not satisfy the bergamot / ambergris-accord / cognac-leather / orange-blossom map, keep it only as a preview master and replace it with a bespoke H01 asset before declaring the photographic gate final.
+
 ## Approved slot names
 
 ### H01 — Sensory Hero
@@ -55,20 +68,20 @@ Do not optimize so aggressively that glass edges, ingredient texture, grain or s
 
 ## Integration rule
 
-Until these files exist and pass visual QA, the CSS classes in `apps/web/src/app/globals.css` remain the production-safe fallback:
+The CSS classes in `apps/web/src/app/globals.css` remain production-safe fallback/loading layers even while provisional or final photography is present:
 
 - `.aromia-scene-macro` → H01
 - `.aromia-scene-reveal` → H02
 - `.aromia-scene-editorial` → H03 fallback
 
-Do not reference missing files from CSS. Add the real asset only after the corresponding file is committed so a branch never ships deliberate 404 image requests.
+Final bespoke assets should replace only the image layer, not remove the fallback until loading/error behavior is visually verified.
 
 ## Responsive anchor QA
 
-After H01 is committed, recalibrate the anchor coordinates in:
+After H01 final is committed, recalibrate the anchor coordinates in:
 `apps/web/src/components/home/HomeHero.tsx`
 
 Default policy:
-- desktop: up to 4 labels;
-- mobile: 2 labels unless the approved crop safely supports more;
+- desktop (`lg` and above): up to 4 labels;
+- tablet and mobile: 2 labels by default to protect hierarchy and crop safety;
 - anchors must point to visible ingredient/material features, never approximate empty space.
