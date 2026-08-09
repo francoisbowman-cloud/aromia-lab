@@ -5,6 +5,7 @@ import { stringify as stringifyCsv } from "csv-stringify/sync";
 import { REPO_ROOT, isMainModule, normalizeConcentration } from "./lib.mjs";
 import { discoverOfficialUrls, fetchOfficialPage, tokenizeIdentity } from "./source-discovery.mjs";
 import { extractPageEvidence } from "./structured-extractor.mjs";
+import { publicationMetadata } from "./commerce-enrichment.mjs";
 
 const DEFAULT_CONCURRENCY = 6;
 
@@ -25,10 +26,12 @@ export async function harvestCandidate(candidate, options = {}) {
   const discovered = await discoverOfficialUrls(candidate, options);
   const base = {
     candidate_id: candidate.candidate_id, brand: candidate.brand, name: candidate.name,
-    concentration: "", gender: "", family: "", launch_year: "", perfumer: "", country: "",
+    concentration: "", gender: "", family: "", launch_year: "", perfumer: "", country: "", description: "",
     official_domain: candidate.official_domain, catalog_relation: candidate.relation || "NEW",
     identity_confirmed: "false", official_source: "false", source_does_not_publish_notes: "false",
     source_url: "", top_notes: "", middle_notes: "", base_notes: "", accords: "", notes_structure: "UNKNOWN",
+    image_url: "", image_source: "", amazon_url: "", affiliate_status: "pending", visual_quality: "not-audited",
+    seo_title: "", seo_description: "",
   };
   if (discovered.status !== "FOUND") return { ...base, harvest_status: discovered.status, discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "" };
 
@@ -45,6 +48,7 @@ export async function harvestCandidate(candidate, options = {}) {
       if (!extractedConcentration) { errors.push(`concentration_unverified:${hit.url}`); continue; }
       if (expectedConcentration && extractedConcentration !== expectedConcentration) { errors.push(`concentration_conflict:${candidate.concentration}->${evidence.concentration}:${hit.url}`); continue; }
 
+      const publication = publicationMetadata({ ...candidate, ...evidence, brand: candidate.brand, name: candidate.name, concentration: evidence.concentration });
       return {
         ...base,
         concentration: evidence.concentration,
@@ -52,10 +56,14 @@ export async function harvestCandidate(candidate, options = {}) {
         family: evidence.family,
         launch_year: evidence.launch_year,
         perfumer: evidence.perfumer,
+        description: publication.description,
         harvest_status: "HARVESTED", source_url: evidence.source_url,
         identity_confirmed: "true", official_source: "true",
         top_notes: evidence.top_notes, middle_notes: evidence.middle_notes, base_notes: evidence.base_notes, accords: evidence.accords,
         notes_structure: evidence.notes_structure, page_title: evidence.title, page_description: evidence.description,
+        image_url: publication.image_url, image_source: publication.image_source,
+        amazon_url: publication.amazon_url, affiliate_status: publication.affiliate_status, visual_quality: publication.visual_quality,
+        seo_title: publication.seo_title, seo_description: publication.seo_description,
         structured_product_name: evidence.structured_product_name, structured_brand: evidence.structured_brand,
         evidence_method: evidence.evidence_method, identity_token_coverage: identity.coverage.toFixed(2), discovery_score: hit.score,
         discovery_scanned_urls: discovered.scannedUrlCount ?? 0, error: "",
@@ -98,29 +106,20 @@ function failureCause(row) {
 export function summarizeHarvest(rows) {
   const counts = {}; for (const row of rows) counts[row.harvest_status] = (counts[row.harvest_status] ?? 0) + 1;
   const causes = {}; for (const row of rows) { const cause = failureCause(row); causes[cause] = (causes[cause] ?? 0) + 1; }
-  const byDomain = {};
-  for (const row of rows) {
-    const domain = row.official_domain || "(none)";
-    byDomain[domain] ??= { total: 0, harvested: 0, not_found: 0, fetch_failed: 0 };
-    byDomain[domain].total += 1;
-    if (row.harvest_status === "HARVESTED") byDomain[domain].harvested += 1;
-    if (row.harvest_status === "NOT_FOUND") byDomain[domain].not_found += 1;
-    if (row.harvest_status === "FETCH_FAILED") byDomain[domain].fetch_failed += 1;
-  }
   const harvested = rows.filter((r) => r.harvest_status === "HARVESTED");
   const explicitNotes = harvested.filter((r) => r.notes_structure && r.notes_structure !== "UNKNOWN");
   const criticalComplete = harvested.filter((r) => r.brand && r.name && r.concentration && r.gender);
+  const withImages = harvested.filter((r) => r.image_url);
+  const withDescriptions = harvested.filter((r) => r.description);
+  const withCommerceLinks = harvested.filter((r) => r.amazon_url);
   return {
-    total: rows.length,
-    counts,
-    failure_causes: causes,
-    domain_summary: Object.fromEntries(Object.entries(byDomain).sort((a,b) => b[1].total - a[1].total || a[0].localeCompare(b[0])).slice(0, 25)),
-    harvested: harvested.length,
-    harvested_rate: rows.length ? harvested.length / rows.length : null,
-    explicit_notes: explicitNotes.length,
-    explicit_notes_rate: rows.length ? explicitNotes.length / rows.length : null,
-    critical_complete: criticalComplete.length,
-    critical_complete_rate: rows.length ? criticalComplete.length / rows.length : null,
+    total: rows.length, counts, failure_causes: causes,
+    harvested: harvested.length, harvested_rate: rows.length ? harvested.length / rows.length : null,
+    explicit_notes: explicitNotes.length, explicit_notes_rate: rows.length ? explicitNotes.length / rows.length : null,
+    critical_complete: criticalComplete.length, critical_complete_rate: rows.length ? criticalComplete.length / rows.length : null,
+    image_complete: withImages.length, image_complete_rate: rows.length ? withImages.length / rows.length : null,
+    description_complete: withDescriptions.length, description_complete_rate: rows.length ? withDescriptions.length / rows.length : null,
+    commerce_link_complete: withCommerceLinks.length, commerce_link_complete_rate: rows.length ? withCommerceLinks.length / rows.length : null,
   };
 }
 
@@ -129,14 +128,9 @@ export async function runHarvest({ concurrency = DEFAULT_CONCURRENCY, limit = 10
   const manifestPath = join(dir, "candidate-manifest.csv");
   if (!existsSync(manifestPath)) return { skipped: true, reason: "candidate-manifest.csv not present; run npm run expand first" };
   const candidates = readCsv(manifestPath).slice(0, limit);
-  const rows = await mapConcurrent(
-    candidates,
-    concurrency,
-    (candidate) => harvestCandidate(candidate, options),
-    (completed, total, row, candidate) => {
-      if (completed === 1 || completed % 10 === 0 || completed === total) console.log(`[harvest] ${completed}/${total} latest=${candidate.candidate_id}:${row.harvest_status}`);
-    },
-  );
+  const rows = await mapConcurrent(candidates, concurrency, (candidate) => harvestCandidate(candidate, options), (completed, total, row, candidate) => {
+    if (completed === 1 || completed % 10 === 0 || completed === total) console.log(`[harvest] ${completed}/${total} latest=${candidate.candidate_id}:${row.harvest_status}`);
+  });
   writeCsv(join(dir, "harvest-results.csv"), rows);
   writeCsv(join(dir, "evidence.auto.csv"), rows);
   const report = summarizeHarvest(rows);
