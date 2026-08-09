@@ -253,7 +253,7 @@ export function getRecommendationsForProfile(
 ): QuizRecommendation {
   const matched = perfumes.filter((p) => {
     if (profile.nichoFiltro && p.nicho_o_comercial !== profile.nichoFiltro) return false;
-    if (profile.familias.length > 0 && !profile.familias.includes(p.familia_olfativa)) {
+    if (profile.familias.length > 0 && (!p.familia_olfativa || !profile.familias.includes(p.familia_olfativa))) {
       return false;
     }
     return true;
