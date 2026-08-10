@@ -1,6 +1,12 @@
 import type { Article, Perfume } from "./types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const LOCAL_API = "http://localhost:4000";
+const PRODUCTION_API = "https://api-production-fe2f.up.railway.app";
+const API_BASE_URL = (
+  process.env.API_URL
+  ?? process.env.NEXT_PUBLIC_API_URL
+  ?? (process.env.NODE_ENV === "production" ? PRODUCTION_API : LOCAL_API)
+).replace(/\/$/, "");
 const RETRY_DELAYS_MS = [250, 700, 1400];
 
 async function fetchWithRetry(url: string, init?: RequestInit & { next?: { revalidate?: number } }): Promise<Response | null> {
