@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import type { Perfume } from "@/lib/types";
-import { PRODUCTION_API } from "@/lib/api";
 import { PerfumesCatalog } from "./PerfumesCatalog";
 
 export function ResilientPerfumesCatalog({
@@ -21,16 +20,16 @@ export function ResilientPerfumesCatalog({
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), 12_000);
 
-    fetch(`${PRODUCTION_API}/api/perfumes`, {
+    fetch("/api/catalog-data", {
       cache: "no-store",
       signal: controller.signal,
       headers: { Accept: "application/json" },
     })
       .then(async (response) => {
-        if (!response.ok) throw new Error(`Catalog API ${response.status}`);
-        const data = await response.json();
-        if (!Array.isArray(data)) throw new Error("Catalog API did not return an array");
-        return data as Perfume[];
+        if (!response.ok) throw new Error(`Catalog proxy ${response.status}`);
+        const payload = await response.json();
+        if (!payload || !Array.isArray(payload.perfumes)) throw new Error("Catalog proxy returned invalid payload");
+        return payload.perfumes as Perfume[];
       })
       .then((data) => setPerfumes(data))
       .catch(() => setPerfumes([]))
@@ -53,8 +52,8 @@ export function ResilientPerfumesCatalog({
       </p>
       <p className="mt-3 max-w-[42ch] font-sans text-sm leading-6 text-muted">
         {recovering
-          ? "Estamos recuperando el índice directamente desde Aromia API."
-          : "El catálogo publicado sigue protegido en la base de datos. Recarga la página para volver a intentar."}
+          ? "Estamos recuperando las fragancias publicadas."
+          : "El catálogo sigue publicado en Aromia. Recarga la página para volver a intentar."}
       </p>
     </div>
   );
