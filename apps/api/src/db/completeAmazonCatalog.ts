@@ -88,7 +88,7 @@ async function fetchHtml(url: string) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
-      const response = await fetch(url,{redirect:"follow",cache:"no-store",signal:controller.signal,headers:{"user-agent":userAgent,accept:"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9"}});
+      const response = await fetch(url,{redirect:"follow",signal:controller.signal,headers:{"user-agent":userAgent,accept:"text/html,application/xhtml+xml","accept-language":"en-US,en;q=0.9"}});
       if (response.ok) { const html = await response.text(); if (!captcha(html)) return html; }
     } catch { /* retry with alternate user agent */ }
     finally { clearTimeout(timer); }
