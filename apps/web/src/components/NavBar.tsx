@@ -6,10 +6,9 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
   { href: "/catalogo", label: "Fragancias", section: "catalog" },
-  { href: "/catalogo#indice-olfativo", label: "Colecciones", section: "collections" },
-  { href: "/academia", label: "Maison", section: "academia" },
-  { href: "/magazine", label: "Journal", section: "magazine" },
-  { href: "/quiz", label: "Descubrir", section: "quiz" },
+  { href: "/academia", label: "Academia", section: "academia" },
+  { href: "/magazine", label: "Revista", section: "magazine" },
+  { href: "/quiz", label: "Quiz", section: "quiz" },
 ] as const;
 
 function IconLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
@@ -32,9 +31,7 @@ export default function NavBar() {
           {links.map((link) => {
             const active = link.section === "catalog"
               ? pathname === "/catalogo" || pathname.startsWith("/catalogo/")
-              : link.section === "collections"
-                ? false
-                : pathname === link.href || pathname.startsWith(`${link.href}/`);
+              : pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
               <li key={link.label}>
                 <Link href={link.href} aria-current={active ? "page" : undefined} className={`nav-link border-b pb-1 transition ${active ? "border-gold text-ink" : "border-transparent text-muted hover:text-ink"}`}>{link.label}</Link>
@@ -45,7 +42,7 @@ export default function NavBar() {
 
         <div className="hidden items-center gap-0.5 sm:flex">
           <IconLink href="/catalogo" label="Buscar fragancias"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></IconLink>
-          <IconLink href="/quiz" label="Descubrir mi perfume"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><path d="M12 3 9.8 8.8 4 11l5.8 2.2L12 19l2.2-5.8L20 11l-5.8-2.2L12 3Z"/></svg></IconLink>
+          <IconLink href="/quiz" label="Encontrar mi perfume"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><path d="M12 3 9.8 8.8 4 11l5.8 2.2L12 19l2.2-5.8L20 11l-5.8-2.2L12 3Z"/></svg></IconLink>
           <IconLink href="/club" label="Club Aromia"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><path d="M20.8 5.8c-2-2-5.2-1.9-7.2.1L12 7.5l-1.6-1.6c-2-2-5.2-2.1-7.2-.1-2 2-2 5.2 0 7.2L12 21l8.8-8c2-2 2-5.2 0-7.2Z"/></svg></IconLink>
           <ThemeToggle className="ml-1" />
         </div>
