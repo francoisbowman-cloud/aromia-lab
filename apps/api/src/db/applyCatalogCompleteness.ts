@@ -2,6 +2,7 @@ import "dotenv/config";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pool } from "./pool";
+import { completePublishedAmazonCatalog } from "./completeAmazonCatalog";
 
 const REQUIRED_MIGRATIONS = [
   "012a_complete_published_catalog_01.sql",
@@ -20,12 +21,20 @@ async function applyCatalogCompleteness() {
   const available = new Set(readdirSync(migrationsDir).filter((file) => file.endsWith(".sql")));
   const missing = REQUIRED_MIGRATIONS.filter((file) => !available.has(file));
   if (missing.length > 0) throw new Error(`Missing catalog completeness migrations: ${missing.join(", ")}`);
+
   try {
     for (const file of REQUIRED_MIGRATIONS) {
       const sql = readFileSync(join(migrationsDir, file), "utf-8");
       await pool.query(sql);
       console.log(`[catalog-completeness] applied ${file}`);
     }
-  } finally { await pool.end(); }
+    await completePublishedAmazonCatalog(pool);
+  } finally {
+    await pool.end();
+  }
 }
-applyCatalogCompleteness().catch((error) => { console.error("CATALOG_COMPLETENESS_MIGRATION_FAILED", error); process.exit(1); });
+
+applyCatalogCompleteness().catch((error) => {
+  console.error("CATALOG_COMPLETENESS_MIGRATION_FAILED", error);
+  process.exit(1);
+});
