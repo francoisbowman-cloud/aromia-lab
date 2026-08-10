@@ -19,7 +19,7 @@ async function fetchWithRetry(url: string, init?: RequestInit & { next?: { reval
 }
 
 export async function getPerfumes(): Promise<Perfume[]> {
-  const res = await fetchWithRetry(`${API_BASE_URL}/api/perfumes`, { next: { revalidate: 60 } });
+  const res = await fetchWithRetry(`${API_BASE_URL}/api/perfumes`, { cache: "no-store" });
   if (!res?.ok) return [];
   try { return await res.json(); } catch { return []; }
 }
@@ -46,7 +46,7 @@ export async function getArticuloBySlug(slug: string): Promise<Article | null> {
 }
 
 export async function getPerfumeBySlug(slug: string): Promise<Perfume | null> {
-  const res = await fetchWithRetry(`${API_BASE_URL}/api/perfumes/${slug}`, { next: { revalidate: 60 } });
+  const res = await fetchWithRetry(`${API_BASE_URL}/api/perfumes/${slug}`, { cache: "no-store" });
   if (!res || res.status === 404 || !res.ok) return null;
   try { return await res.json(); } catch { return null; }
 }
