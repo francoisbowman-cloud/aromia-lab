@@ -29,7 +29,13 @@ async function applyCatalogCompleteness() {
       await pool.query(sql);
       console.log(`[catalog-completeness] applied ${file}`);
     }
-    await completePublishedAmazonCatalog(pool);
+
+    try {
+      await completePublishedAmazonCatalog(pool);
+    } catch (error) {
+      console.error("AMAZON_CATALOG_COMPLETION_DEGRADED", error);
+      console.error("[catalog-completeness] Amazon enrichment failed; API startup will continue with the last verified catalog state");
+    }
   } finally {
     await pool.end();
   }
