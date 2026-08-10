@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node preflight-catalog.mjs && next start",
     "lint": "next lint",
     "test": "vitest run"
   },
