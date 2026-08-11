@@ -68,7 +68,9 @@ async function walk(dir) {
 for (const file of await walk("apps/web/src")) {
   const source = await text(file);
   if (/fimgs\.net\/mdimg\/perfume-social-cards/i.test(source) && !file.includes("catalog-image")) failures.push(`forbidden_social_card_reference ${file}`);
-  if (/trackEvent\([^\n]+(?:email|correo|message|mensaje)/i.test(source)) failures.push(`analytics_possible_pii ${file}`);
+  for (const call of source.match(/trackEvent\([\s\S]*?\);/g) || []) {
+    if (/\b(?:email|correo|message|mensaje)\s*:/i.test(call)) failures.push(`analytics_possible_pii ${file}`);
+  }
 }
 
 const contract = await text("docs/OMNI-INTEGRATION.md");
