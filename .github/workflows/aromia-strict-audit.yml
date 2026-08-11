@@ -3,6 +3,8 @@ name: Aromia Strict Audit
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -40,19 +42,27 @@ jobs:
           npm run build
 
   ccl-production-catalog:
+    if: github.event_name != 'pull_request'
+    needs: code-and-governance
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: CCL catalog and PDP coverage audit
+      - name: Wait for production and prove CCL + PDP coverage
         env:
           AROMIA_API_BASE: https://api-production-fe2f.up.railway.app
           AROMIA_WEB_BASE: https://www.aromialab.com
           AROMIA_EXPECTED_PUBLISHED: "125"
           AROMIA_AUDIT_CONCURRENCY: "6"
-        run: node scripts/catalog/ccl-production-audit.mjs
+        run: |
+          for attempt in {1..16}; do
+            echo "CCL production proof attempt ${attempt}/16"
+            if node scripts/catalog/ccl-production-audit.mjs; then exit 0; fi
+            sleep 15
+          done
+          exit 1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
