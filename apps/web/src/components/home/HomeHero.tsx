@@ -25,7 +25,7 @@ export function HomeHero({ perfume }: { perfume?: Perfume }) {
           <div className="pointer-events-none absolute bottom-[6%] left-[7%] right-[2%] h-[18%] rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(140,98,47,.18),transparent_68%)] blur-xl dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,.55),transparent_70%)]" />
           {perfume ? (
             <Link href={`/catalogo/${perfume.slug}`} aria-label={`Ver ${perfume.nombre} de ${perfume.marca}`} className="absolute inset-0 z-[2] flex items-center justify-center px-8 pb-12 pt-8 lg:px-12 lg:pb-14 lg:pt-12">
-              <ProductImage slug={perfume.slug} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" className="h-full w-full bg-transparent dark:bg-transparent" />
+              <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" className="h-full w-full bg-transparent dark:bg-transparent" />
             </Link>
           ) : (
             <div className="absolute inset-0 z-[2] grid place-items-center px-12 text-center"><p className="max-w-[22ch] font-display text-3xl italic text-muted">Objeto editorial en preparación.</p></div>
