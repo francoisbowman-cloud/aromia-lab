@@ -164,11 +164,12 @@ export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "
   const [status, setStatus] = useState<"loading" | "ready" | "fallback" | "error">("loading");
   const [directFailed, setDirectFailed] = useState(false);
   const src = `/api/catalog-image/${encodeURIComponent(slug)}`;
+  const directImageUrl = imageUrl && !/\/perfume-social-cards\//i.test(imageUrl) ? imageUrl : null;
 
   useEffect(() => {
     setStatus("loading");
     setDirectFailed(false);
-  }, [src, imageUrl]);
+  }, [src, directImageUrl]);
 
   const onLoad = () => {
     const img = imgRef.current;
@@ -205,10 +206,10 @@ export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "
         className={`max-h-[84%] max-w-[84%] object-contain transition-[opacity,transform] duration-700 ease-out ${mode === "card" ? "group-hover:scale-[1.025]" : "hover:scale-[1.012]"} ${status === "ready" ? "opacity-100" : "opacity-0"}`}
       />
 
-      {status === "fallback" || (status === "error" && imageUrl && !directFailed) ? (
+      {status === "fallback" || (status === "error" && directImageUrl && !directFailed) ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={status === "fallback" ? src : imageUrl ?? undefined}
+          src={status === "fallback" ? src : directImageUrl ?? undefined}
           alt={alt}
           loading={mode === "card" ? "lazy" : "eager"}
           decoding="async"
@@ -217,7 +218,7 @@ export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "
         />
       ) : null}
       {status === "loading" ? <div className="absolute inset-[18%] animate-pulse bg-[#f0ece4]" aria-hidden="true" /> : null}
-      {status === "error" && (!imageUrl || directFailed) ? <ImagePlaceholder alt={`${alt} — imagen temporalmente no disponible`} /> : null}
+      {status === "error" && (!directImageUrl || directFailed) ? <ImagePlaceholder alt={`${alt} — imagen temporalmente no disponible`} /> : null}
     </div>
   );
 }

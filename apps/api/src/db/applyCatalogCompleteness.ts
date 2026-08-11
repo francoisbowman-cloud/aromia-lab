@@ -15,6 +15,7 @@ const REQUIRED_MIGRATIONS = [
   "014_assert_catalog_display_integrity.sql",
   "015_amazon_catalog_commerce_gate.sql",
   "016_restore_and_assert_published_catalog_count.sql",
+  "017_omni_ccl_product_media_gate.sql",
 ];
 
 async function applyCatalogCompleteness() {

@@ -17,6 +17,11 @@ function safeCatalogImageUrl(value: string | null | undefined): string | null {
     if (/^(10|127)\./.test(host) || /^169\.254\./.test(host) || /^192\.168\./.test(host)) return null;
     const private172 = host.match(/^172\.(\d+)\./);
     if (private172 && Number(private172[1]) >= 16 && Number(private172[1]) <= 31) return null;
+    const socialCard = url.pathname.match(/^\/mdimg\/perfume-social-cards\/en-social-([0-9]+)\.jpeg$/i);
+    if (url.hostname.toLowerCase() === "fimgs.net" && socialCard) {
+      url.pathname = `/mdimg/perfume/375x500.${socialCard[1]}.jpg`;
+      url.search = "";
+    }
     return url.toString();
   } catch {
     return null;
@@ -50,13 +55,13 @@ export async function GET(_request: Request, { params }: { params: { slug: strin
   if (catalogUrl) {
     const catalogImage = await fetchImage(catalogUrl);
     if (catalogImage) {
-      return new Response(catalogImage.bytes, { headers: { "content-type": catalogImage.contentType, "cache-control": "public, s-maxage=604800, stale-while-revalidate=2592000", "x-aromia-image-origin": "catalog", "x-aromia-image-policy": "catalog-first" } });
+      return new Response(catalogImage.bytes, { headers: { "content-type": catalogImage.contentType, "cache-control": "public, s-maxage=604800, stale-while-revalidate=2592000", "x-aromia-image-origin": "catalog", "x-aromia-image-policy": "omni-ccl-product-only" } });
     }
   }
 
   const amazon = await resolveAmazonCatalogProduct(perfume);
-  if (!amazon?.imageUrl) return new Response("Product image unavailable", { status: 404, headers: { "cache-control": "public, max-age=300", "x-aromia-image-policy": "catalog-first" } });
+  if (!amazon?.imageUrl) return new Response("Product image unavailable", { status: 404, headers: { "cache-control": "public, max-age=300", "x-aromia-image-policy": "omni-ccl-product-only" } });
   const image = await fetchImage(amazon.imageUrl);
-  if (!image) return new Response("Product image unavailable", { status: 404, headers: { "cache-control": "public, max-age=300", "x-aromia-image-policy": "catalog-first" } });
-  return new Response(image.bytes, { headers: { "content-type": image.contentType, "cache-control": "public, s-maxage=604800, stale-while-revalidate=2592000", "x-aromia-image-origin": amazon.source, "x-aromia-image-policy": "catalog-first" } });
+  if (!image) return new Response("Product image unavailable", { status: 404, headers: { "cache-control": "public, max-age=300", "x-aromia-image-policy": "omni-ccl-product-only" } });
+  return new Response(image.bytes, { headers: { "content-type": image.contentType, "cache-control": "public, s-maxage=604800, stale-while-revalidate=2592000", "x-aromia-image-origin": amazon.source, "x-aromia-image-policy": "omni-ccl-product-only" } });
 }
