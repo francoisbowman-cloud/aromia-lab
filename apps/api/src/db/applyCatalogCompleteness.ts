@@ -30,11 +30,18 @@ async function applyCatalogCompleteness() {
       console.log(`[catalog-completeness] applied ${file}`);
     }
 
-    try {
-      await completePublishedAmazonCatalog(pool);
-    } catch (error) {
-      console.error("AMAZON_CATALOG_COMPLETION_DEGRADED", error);
-      console.error("[catalog-completeness] Amazon enrichment failed; API startup will continue with the last verified catalog state");
+    // Amazon resolution is a slow, rate-limited enrichment job. Running it before
+    // Express listens made every deploy return 502s for several minutes. Keep it
+    // explicitly opt-in for maintenance runs; startup only applies deterministic DB gates.
+    if (process.env.RUN_AMAZON_COMPLETION_ON_STARTUP === "true") {
+      try {
+        await completePublishedAmazonCatalog(pool);
+      } catch (error) {
+        console.error("AMAZON_CATALOG_COMPLETION_DEGRADED", error);
+        console.error("[catalog-completeness] Amazon enrichment failed; API startup will continue with the last verified catalog state");
+      }
+    } else {
+      console.log("[catalog-completeness] skipped Amazon enrichment during startup");
     }
   } finally {
     await pool.end();
