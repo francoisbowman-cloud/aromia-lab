@@ -1,0 +1,71 @@
+name: Aromia Strict Audit
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: aromia-strict-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-and-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/web/package-lock.json
+            apps/api/package-lock.json
+      - name: Root tooling
+        run: npm ci
+      - name: Fase 3 verification only
+        run: npm run catalog:test
+      - name: OMNI strict governance audit
+        run: npm run audit:omni
+      - name: API build
+        working-directory: apps/api
+        run: npm ci && npm run build
+      - name: Web lint, typecheck and production build
+        working-directory: apps/web
+        run: |
+          npm ci
+          npm run lint
+          npx tsc --noEmit
+          npm run build
+
+  ccl-production-catalog:
+    if: github.event_name != 'pull_request'
+    needs: code-and-governance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Wait for production and prove CCL + PDP coverage
+        env:
+          AROMIA_API_BASE: https://api-production-fe2f.up.railway.app
+          AROMIA_WEB_BASE: https://www.aromialab.com
+          AROMIA_EXPECTED_PUBLISHED: "125"
+          AROMIA_AUDIT_CONCURRENCY: "6"
+        run: |
+          for attempt in {1..16}; do
+            echo "CCL production proof attempt ${attempt}/16"
+            if node scripts/catalog/ccl-production-audit.mjs; then exit 0; fi
+            sleep 15
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ccl-production-audit
+          path: docs/audits/ccl-production-latest.json
+          retention-days: 14
