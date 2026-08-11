@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 
 type Mode = "card" | "hero";
@@ -166,22 +166,27 @@ export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "
   const src = `/api/catalog-image/${encodeURIComponent(slug)}`;
   const directImageUrl = imageUrl && !/\/perfume-social-cards\//i.test(imageUrl) ? imageUrl : null;
 
-  useEffect(() => {
-    setStatus("loading");
-    setDirectFailed(false);
-  }, [src, directImageUrl]);
-
-  const onLoad = () => {
+  const renderLoadedImage = useCallback(() => {
     const img = imgRef.current;
     const canvas = canvasRef.current;
-    if (!img || !canvas) return;
+    if (!img || !canvas || !img.complete || img.naturalWidth === 0) return;
     try {
       renderNormalized(img, canvas, mode);
       setStatus("ready");
     } catch {
       setStatus("fallback");
     }
-  };
+  }, [mode]);
+
+  useEffect(() => {
+    setStatus("loading");
+    setDirectFailed(false);
+
+    // A cached image can finish before React hydrates and attaches onLoad.
+    // Render it explicitly after refs exist so cards never remain as skeletons.
+    const frame = window.requestAnimationFrame(renderLoadedImage);
+    return () => window.cancelAnimationFrame(frame);
+  }, [src, directImageUrl, renderLoadedImage]);
 
   return (
     <div className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-[#fbfaf7] dark:bg-[#f7f4ee] ${className}`}>
@@ -194,7 +199,7 @@ export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "
         aria-hidden="true"
         loading={mode === "card" ? "lazy" : "eager"}
         decoding="async"
-        onLoad={onLoad}
+        onLoad={renderLoadedImage}
         onError={() => setStatus("error")}
         className="pointer-events-none absolute h-px w-px opacity-0"
       />
