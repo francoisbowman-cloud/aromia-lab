@@ -8,6 +8,7 @@ type Mode = "card" | "hero";
 type Props = {
   slug: string;
   alt: string;
+  imageUrl?: string | null;
   mode?: Mode;
   className?: string;
 };
@@ -157,13 +158,17 @@ function renderNormalized(img: HTMLImageElement, canvas: HTMLCanvasElement, mode
   out.drawImage(source, box.x0, box.y0, sw, sh, padX, padY, sw, sh);
 }
 
-export function ProductImage({ slug, alt, mode = "card", className = "" }: Props) {
+export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "" }: Props) {
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "fallback" | "error">("loading");
+  const [directFailed, setDirectFailed] = useState(false);
   const src = `/api/catalog-image/${encodeURIComponent(slug)}`;
 
-  useEffect(() => setStatus("loading"), [src]);
+  useEffect(() => {
+    setStatus("loading");
+    setDirectFailed(false);
+  }, [src, imageUrl]);
 
   const onLoad = () => {
     const img = imgRef.current;
@@ -200,12 +205,19 @@ export function ProductImage({ slug, alt, mode = "card", className = "" }: Props
         className={`max-h-[84%] max-w-[84%] object-contain transition-[opacity,transform] duration-700 ease-out ${mode === "card" ? "group-hover:scale-[1.025]" : "hover:scale-[1.012]"} ${status === "ready" ? "opacity-100" : "opacity-0"}`}
       />
 
-      {status === "fallback" ? (
+      {status === "fallback" || (status === "error" && imageUrl && !directFailed) ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} className="max-h-[78%] max-w-[78%] object-contain object-center" />
+        <img
+          src={status === "fallback" ? src : imageUrl ?? undefined}
+          alt={alt}
+          loading={mode === "card" ? "lazy" : "eager"}
+          decoding="async"
+          onError={() => setDirectFailed(true)}
+          className="max-h-[78%] max-w-[78%] object-contain object-center"
+        />
       ) : null}
       {status === "loading" ? <div className="absolute inset-[18%] animate-pulse bg-[#f0ece4]" aria-hidden="true" /> : null}
-      {status === "error" ? <ImagePlaceholder alt={`${alt} — imagen temporalmente no disponible`} /> : null}
+      {status === "error" && (!imageUrl || directFailed) ? <ImagePlaceholder alt={`${alt} — imagen temporalmente no disponible`} /> : null}
     </div>
   );
 }

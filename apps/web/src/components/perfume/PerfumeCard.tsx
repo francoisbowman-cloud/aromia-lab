@@ -18,7 +18,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index }: { perfume: 
     <article className="group relative flex flex-col overflow-hidden border-b border-r border-line bg-[#fffdf8] transition-colors duration-500 hover:bg-[#f8f2e9] dark:bg-[#14100c] dark:hover:bg-[#18130f]">
       <div className="flex items-center justify-between border-b border-line px-4 py-3 font-plex text-[8px] uppercase tracking-[.16em] text-muted lg:px-5"><span>{index == null ? "Selección" : String(index + 1).padStart(2,"0")}</span><span>{perfume.nicho_o_comercial ?? "Aromia edit"}</span></div>
       <a href={buyHref} target="_blank" rel="sponsored noopener noreferrer" aria-label={`Ver ${perfume.nombre} de ${perfume.marca} en Amazon`} className="relative block aspect-[4/5] overflow-hidden bg-[#fbfaf7] dark:bg-[#f7f4ee]">
-        <ProductImage slug={perfume.slug} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" />
+        <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" />
         <span className="absolute left-4 top-4 border border-[rgba(33,29,23,.14)] bg-[rgba(251,248,243,.9)] px-2.5 py-1.5 font-plex text-[7px] uppercase tracking-[.16em] text-ink backdrop-blur-sm">Amazon image</span>
         <span aria-hidden="true" className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center border border-[rgba(33,29,23,.2)] bg-[rgba(251,248,243,.88)] font-display text-lg text-ink backdrop-blur-sm transition-transform group-hover:translate-x-1">↗</span>
       </a>
