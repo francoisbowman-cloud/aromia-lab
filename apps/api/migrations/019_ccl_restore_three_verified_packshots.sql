@@ -21,9 +21,12 @@ BEGIN
   FROM perfumes
   WHERE activo = true
     AND estado = 'publicado'
-    AND slug IN ('luna-rossa-edt', 'chanel-no5-edp', 'straight-to-heaven-white-cristal-edp')
-    AND imagen_url ~* '/mdimg/perfume/375x500\\.[0-9]+\\.jpg$'
-    AND visual_quality = 'omni-product-approved';
+    AND visual_quality = 'omni-product-approved'
+    AND (
+      (slug = 'luna-rossa-edt' AND imagen_url = 'https://fimgs.net/mdimg/perfume/375x500.15754.jpg')
+      OR (slug = 'chanel-no5-edp' AND imagen_url = 'https://fimgs.net/mdimg/perfume/375x500.40069.jpg')
+      OR (slug = 'straight-to-heaven-white-cristal-edp' AND imagen_url = 'https://fimgs.net/mdimg/perfume/375x500.4323.jpg')
+    );
 
   IF repaired_count <> 3 THEN
     RAISE EXCEPTION 'CCL_PACKSHOT_REPAIR_FAILED repaired=% expected=3', repaired_count;
