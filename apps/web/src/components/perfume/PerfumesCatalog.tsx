@@ -51,18 +51,35 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
 
   const activeCount = [q, genero, familia, categoria, categoriaPrecio, nichoOComercial, ocasion].filter(Boolean).length;
   const clearFilters = () => { setQ(""); setGenero(""); setFamilia(""); setCategoria(""); setCategoriaPrecio(""); setNichoOComercial(""); setOcasion(""); setSort("relevancia"); };
+  const selectClass = "h-11 border-0 bg-transparent shadow-none focus-visible:ring-0";
   const chipClass = "inline-flex items-center gap-2 border-b border-[#b68a44] py-1 font-plex text-[9px] uppercase tracking-[.12em] text-ink transition hover:text-gold-contrast";
 
+  const filterControls = <>
+    <div className="border-b border-line p-2 lg:border-b-0"><Select value={familia} onChange={(e) => setFamilia(e.target.value)} aria-label="Filtrar por familia olfativa" className={selectClass}><option value="">— Familia</option>{familias.map((f) => <option key={f} value={f}>{f}</option>)}</Select></div>
+    <div className="border-b border-line p-2 lg:border-b-0"><Select value={genero} onChange={(e) => setGenero(e.target.value)} aria-label="Filtrar por género" className={selectClass}><option value="">— Género</option>{GENEROS.map((g) => <option key={g} value={g}>{g}</option>)}</Select></div>
+    <div className="border-b border-line p-2 lg:border-b-0"><Select value={ocasion} onChange={(e) => setOcasion(e.target.value)} aria-label="Filtrar por ocasión" className={selectClass}><option value="">— Ocasión</option>{ocasiones.map((item) => <option key={item} value={item}>{item}</option>)}</Select></div>
+    <div className="border-b border-line p-2 lg:border-b-0"><Select value={categoriaPrecio} onChange={(e) => setCategoriaPrecio(e.target.value)} aria-label="Filtrar por precio" className={selectClass}><option value="">— Precio</option>{CATEGORIAS_PRECIO.map((c) => <option key={c} value={c}>{c}</option>)}</Select></div>
+    <div className="border-b border-line p-2 lg:border-b-0"><Select value={nichoOComercial} onChange={(e) => setNichoOComercial(e.target.value)} aria-label="Filtrar por tipo" className={selectClass}><option value="">— Tipo</option>{NICHO_O_COMERCIAL.map((n) => <option key={n} value={n}>{n}</option>)}</Select></div>
+  </>;
+
   return <div>
-    <div className="sticky top-16 z-20 border-y border-line bg-[rgba(251,248,243,.96)] backdrop-blur-md dark:bg-[rgba(15,12,9,.96)]">
-      <div className="flex items-center gap-4 border-b border-line px-0 py-3 font-plex text-[8px] uppercase tracking-[.18em] text-muted"><span>Refinar selección</span><span className="h-px flex-1 bg-line"/><span>{activeCount === 0 ? "Archivo completo" : `${activeCount} filtros activos`}</span></div>
-      <div className="grid grid-cols-1 gap-px bg-line lg:grid-cols-[1.5fr_repeat(5,1fr)_auto]">
-        <div className="bg-[#fbf8f3] py-2 pr-0 dark:bg-[#0f0c09] lg:pr-3"><Input value={q} onChange={(e) => setQ(e.target.value)} onBlur={() => q.trim() && trackEvent("internal_search", { context: "catalog", query_length: q.trim().length, results: filtrados.length })} placeholder="Perfume, marca, familia o nota…" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0" /></div>
-        <div className="bg-[#fbf8f3] p-2 dark:bg-[#0f0c09]"><Select value={familia} onChange={(e) => setFamilia(e.target.value)} aria-label="Filtrar por familia olfativa" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"><option value="">— Familia</option>{familias.map((f) => <option key={f} value={f}>{f}</option>)}</Select></div>
-        <div className="bg-[#fbf8f3] p-2 dark:bg-[#0f0c09]"><Select value={genero} onChange={(e) => setGenero(e.target.value)} aria-label="Filtrar por género" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"><option value="">— Género</option>{GENEROS.map((g) => <option key={g} value={g}>{g}</option>)}</Select></div>
-        <div className="bg-[#fbf8f3] p-2 dark:bg-[#0f0c09]"><Select value={ocasion} onChange={(e) => setOcasion(e.target.value)} aria-label="Filtrar por ocasión" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"><option value="">— Ocasión</option>{ocasiones.map((item) => <option key={item} value={item}>{item}</option>)}</Select></div>
-        <div className="bg-[#fbf8f3] p-2 dark:bg-[#0f0c09]"><Select value={categoriaPrecio} onChange={(e) => setCategoriaPrecio(e.target.value)} aria-label="Filtrar por precio" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"><option value="">— Precio</option>{CATEGORIAS_PRECIO.map((c) => <option key={c} value={c}>{c}</option>)}</Select></div>
-        <div className="bg-[#fbf8f3] p-2 dark:bg-[#0f0c09]"><Select value={nichoOComercial} onChange={(e) => setNichoOComercial(e.target.value)} aria-label="Filtrar por tipo" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"><option value="">— Tipo</option>{NICHO_O_COMERCIAL.map((n) => <option key={n} value={n}>{n}</option>)}</Select></div>
+    <div className="sticky top-[72px] z-20 border-y border-line bg-[rgba(251,248,243,.97)] backdrop-blur-md dark:bg-[rgba(15,12,9,.97)]">
+      <div className="hidden items-center gap-4 border-b border-line py-3 font-plex text-[8px] uppercase tracking-[.18em] text-muted lg:flex"><span>Refinar selección</span><span className="h-px flex-1 bg-line"/><span>{activeCount === 0 ? "Archivo completo" : `${activeCount} filtros activos`}</span></div>
+      <div className="p-3 lg:hidden">
+        <Input value={q} onChange={(e) => setQ(e.target.value)} onBlur={() => q.trim() && trackEvent("internal_search", { context: "catalog", query_length: q.trim().length, results: filtrados.length })} placeholder="Perfume, marca, familia o nota…" className="h-12 border-line bg-transparent shadow-none focus-visible:ring-0" />
+        <details className="group mt-2 border border-line bg-[#fffdf8]/80 dark:bg-[#120f0c]/80">
+          <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between px-4 font-plex text-[9px] uppercase tracking-[.15em] text-ink [&::-webkit-details-marker]:hidden">
+            <span>Filtros{activeCount ? ` · ${activeCount}` : ""}</span><span aria-hidden="true" className="text-base transition-transform group-open:rotate-45">＋</span>
+          </summary>
+          <div className="max-h-[56vh] overflow-y-auto border-t border-line bg-[#fbf8f3] dark:bg-[#0f0c09]">
+            {filterControls}
+            <div className="p-3"><button type="button" onClick={clearFilters} disabled={activeCount === 0 && sort === "relevancia"} className="min-h-11 w-full border border-line font-plex text-[9px] uppercase tracking-[.14em] text-ink disabled:opacity-30">Borrar filtros</button></div>
+          </div>
+        </details>
+      </div>
+      <div className="hidden grid-cols-[1.5fr_repeat(5,1fr)_auto] gap-px bg-line lg:grid">
+        <div className="bg-[#fbf8f3] py-2 pr-3 dark:bg-[#0f0c09]"><Input value={q} onChange={(e) => setQ(e.target.value)} onBlur={() => q.trim() && trackEvent("internal_search", { context: "catalog", query_length: q.trim().length, results: filtrados.length })} placeholder="Perfume, marca, familia o nota…" className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0" /></div>
+        {filterControls}
         <button type="button" onClick={clearFilters} disabled={activeCount === 0 && sort === "relevancia"} className="min-h-14 whitespace-nowrap bg-[#fbf8f3] px-5 font-plex text-[9px] uppercase tracking-[.14em] text-ink transition hover:text-gold-contrast disabled:opacity-30 dark:bg-[#0f0c09]">Borrar</button>
       </div>
     </div>
