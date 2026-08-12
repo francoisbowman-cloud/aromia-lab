@@ -17,6 +17,7 @@
     "expand:v2": "node expansion-engine.mjs 100",
     "harvest:v2": "node expansion-harvest-v2.mjs 100",
     "recover-evidence:v2": "node expansion-evidence-recover.mjs",
+    "secondary-enrich:v2": "node expansion-secondary-enrich.mjs",
     "enrich:v2": "node expansion-enrich-v2.mjs",
     "build-batch:v2": "node expansion-batch-builder-v2.mjs",
     "remediation:v2": "node expansion-remediation-plan.mjs",
