@@ -14,6 +14,7 @@
     "calibrate": "node calibrate.mjs",
     "apply-remediation": "node apply-remediation.mjs",
     "engine": "node engine.mjs",
+    "expand:v2": "node expansion-engine.mjs 100",
     "test": "node --test --test-concurrency=1 tests/",
     "posttest": "node tests/cleanup-artifacts.mjs"
   },
