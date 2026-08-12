@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPerfumeBySlug } from "@/lib/api";
+import { getArticulos, getPerfumeBySlug, getPerfumes } from "@/lib/api";
+import { getSimilarPerfumes } from "@/lib/discovery";
 import { HeroHeader } from "@/components/perfume/HeroHeader";
 import { PriceTable } from "@/components/perfume/PriceTable";
 import { PerformanceBars } from "@/components/perfume/PerformanceBars";
 import { SkinEvolution } from "@/components/perfume/SkinEvolution";
 import { CommunityReviews } from "@/components/perfume/CommunityReviews";
 import { EditorialMood } from "@/components/perfume/EditorialMood";
+import { SimilarPerfumes } from "@/components/perfume/SimilarPerfumes";
+import { RelatedEditorial } from "@/components/perfume/RelatedEditorial";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aromialab.com").replace(/\/$/, "");
 function catalogImageUrl(slug: string) { return `${SITE_URL}/api/catalog-image/${encodeURIComponent(slug)}`; }
@@ -27,6 +30,10 @@ function buildProductJsonLd(perfume: NonNullable<Awaited<ReturnType<typeof getPe
 
 export default async function CatalogoDetailPage({ params }: { params: { slug: string } }) {
   const perfume = await getPerfumeBySlug(params.slug); if (!perfume) notFound();
+  const [perfumes, articulos] = await Promise.all([getPerfumes(), getArticulos()]);
+  const similares = getSimilarPerfumes(perfume, perfumes, 6);
+  const relacionados = articulos.filter((article) => article.perfumes_relacionados?.includes(perfume.id));
+
   return (
     <main className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]" aria-live="polite">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(perfume)) }} />
@@ -35,6 +42,8 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
       <section className="border-y border-line bg-[#f3eadc] dark:bg-[#15110d]"><div className="mx-auto max-w-[1160px] px-6 py-16 lg:px-10 lg:py-24"><div className="mb-10 flex items-center gap-4 border-b border-line pb-4 font-plex text-[9px] uppercase tracking-[.18em] text-muted"><span>Editorial study</span><span className="h-px flex-1 bg-line"/><span>03 / Contexto</span></div><EditorialMood slug={perfume.slug} nombre={perfume.nombre}/></div></section>
       <section id="precios" className="mx-auto max-w-[1160px] scroll-mt-24 px-6 py-16 lg:px-10 lg:py-24"><div className="mb-3 font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">Compra informada</div><div className="mb-10 grid grid-cols-1 gap-5 border-b border-line pb-8 lg:grid-cols-[1fr_.72fr] lg:items-end"><h2 className="max-w-[12ch] font-display text-[42px] font-medium leading-[.95] tracking-[-.03em] text-ink lg:text-[58px]">Dónde encontrarlo, sin romper la historia.</h2><p className="max-w-[44ch] font-sans text-sm leading-6 text-muted lg:justify-self-end">La imagen de producto y el destino comercial principal se resuelven desde Amazon; los datos olfativos permanecen separados de esa capa comercial.</p></div><PriceTable retailers={perfume.retailers ?? []} directLink={catalogBuyUrl(perfume.slug)} perfumeSlug={perfume.slug} perfumeNombre={perfume.nombre}/></section>
       <section className="border-t border-line bg-[#fffdf8] dark:bg-[#100d0a]"><div className="mx-auto max-w-[1160px] px-6 py-16 lg:px-10 lg:py-24"><div className="mb-10 flex items-center gap-4 border-b border-line pb-4 font-plex text-[9px] uppercase tracking-[.18em] text-muted"><span>Comunidad</span><span className="h-px flex-1 bg-line"/><span>05 / Lectura colectiva</span></div><CommunityReviews ratingPromedio={perfume.rating_promedio} resenaSintetizada={perfume.resena_sintetizada}/></div></section>
+      <SimilarPerfumes sourceSlug={perfume.slug} results={similares} />
+      <RelatedEditorial perfumeSlug={perfume.slug} articles={relacionados} />
     </main>
   );
 }
