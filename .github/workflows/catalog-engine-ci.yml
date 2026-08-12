@@ -59,10 +59,14 @@ jobs:
         env:
           AROMIA_HARVEST_CONCURRENCY: "6"
         run: npm --prefix scripts/catalog run harvest:v2
-      - name: Route evidence through quality gate
+      - name: Preserve partial official provenance
+        run: npm --prefix scripts/catalog run recover-evidence:v2
+      - name: Route evidence through catalog readiness gate
         run: npm --prefix scripts/catalog run enrich:v2
-      - name: Build publication-ready draft batch
+      - name: Build catalog-ready draft batch
         run: npm --prefix scripts/catalog run build-batch:v2
+      - name: Build remediation queue
+        run: npm --prefix scripts/catalog run remediation:v2
       - name: Evaluate Expansion GO / NO-GO
         id: expansion_gate
         continue-on-error: true
@@ -76,6 +80,8 @@ jobs:
         run: |
           test -s catalog/expansion/batch-003/harvest-report.json
           test -s catalog/expansion/batch-003/enrichment-report.json
+          test -s catalog/expansion/batch-003/remediation-report.json
+          test -s catalog/expansion/batch-003/remediation-queue.csv
           test -s catalog/expansion/batch-003/go-no-go.json
           test -f catalog/expansion/batch-003/auto-ready.csv
           test -f catalog/expansion/batch-003/review-required.csv
@@ -85,6 +91,8 @@ jobs:
           cat catalog/expansion/batch-003/harvest-report.json
           echo '--- enrichment ---'
           cat catalog/expansion/batch-003/enrichment-report.json
+          echo '--- remediation ---'
+          cat catalog/expansion/batch-003/remediation-report.json
           echo '--- go/no-go ---'
           cat catalog/expansion/batch-003/go-no-go.json
       - name: Verify legacy engine outputs
