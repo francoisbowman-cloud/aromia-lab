@@ -15,7 +15,7 @@
     "apply-remediation": "node apply-remediation.mjs",
     "engine": "node engine.mjs",
     "expand:v2": "node expansion-engine.mjs 100",
-    "harvest:v2": "node expansion-harvest.mjs 100",
+    "harvest:v2": "node expansion-harvest-v2.mjs 100",
     "enrich:v2": "node expansion-enrich.mjs",
     "build-batch:v2": "node expansion-batch-builder.mjs",
     "gate:v2": "node expansion-gate.mjs",
