@@ -12,7 +12,7 @@ function overlap(a?: string[], b?: string[]) {
   const left = values(a);
   const right = values(b);
   let count = 0;
-  for (const item of left) if (right.has(item)) count += 1;
+  Array.from(left).forEach((item) => { if (right.has(item)) count += 1; });
   return count;
 }
 
