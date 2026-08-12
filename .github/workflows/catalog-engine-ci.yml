@@ -22,7 +22,7 @@ on:
 
 jobs:
   catalog:
-    name: catalog (tests + expansion + sourcing smoke)
+    name: catalog (tests + expansion v2 + sourcing smoke)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,11 +35,32 @@ jobs:
         run: npm ci --prefix scripts/catalog
       - name: Run catalog regression suite
         run: npm --prefix scripts/catalog test
-      - name: Run expansion engine against real Batch 002
+      - name: Run legacy expansion engine against real Batch 002
         run: node scripts/catalog/engine.mjs catalog/imports/batch-002.csv --limit 25
+      - name: Run Expansion Automation v2 selection
+        run: npm --prefix scripts/catalog run expand:v2
+      - name: Verify Expansion v2 contract
+        run: |
+          test -s catalog/expansion/batch-003/candidate-manifest.csv
+          test -s catalog/expansion/batch-003/source-discovery-queue.csv
+          test -s catalog/expansion/batch-003/excluded-candidates.csv
+          test -s catalog/expansion/batch-003/gap-report.json
+          test -s catalog/expansion/batch-003/selection-report.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const r = JSON.parse(fs.readFileSync('catalog/expansion/batch-003/selection-report.json','utf8'));
+          if (r.selected !== 100) throw new Error(`expected 100 selected, got ${r.selected}`);
+          if (r.guardrails?.writes_postgres !== false) throw new Error('Postgres write guard violated');
+          if (r.guardrails?.mutates_raw_inputs !== false) throw new Error('raw input mutation guard violated');
+          if (r.guardrails?.master_import !== false) throw new Error('master import guard violated');
+          console.log(JSON.stringify(r, null, 2));
+          NODE
       - name: Run sourcing engine against economical seed pool
         run: node scripts/catalog/sourcing.mjs catalog/sourcing/pool-economico-001.csv --limit 10
-      - name: Verify engine outputs
+      - name: Verify protected inputs unchanged
+        run: |
+          git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports/batch-001.csv catalog/imports/batch-002.csv catalog/aromia-catalog-master.csv
+      - name: Verify legacy engine outputs
         run: |
           test -s catalog/reports/engine-batch-002.json
           test -s catalog/reports/engine-batch-002-selection.csv
@@ -50,6 +71,7 @@ jobs:
         with:
           name: catalog-engine-artifacts
           path: |
+            catalog/expansion/batch-003/
             catalog/reports/engine-batch-002.json
             catalog/reports/engine-batch-002-selection.csv
             catalog/reports/sourcing-economico-001.json
