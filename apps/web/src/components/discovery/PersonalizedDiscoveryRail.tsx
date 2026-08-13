@@ -10,6 +10,7 @@ export function PersonalizedDiscoveryRail({ perfumes, source, title = "Explora d
   const [profile, setProfile] = useState(() => loadDiscoveryProfile());
   useEffect(() => {
     const refresh = () => setProfile(loadDiscoveryProfile());
+    refresh();
     window.addEventListener(DISCOVERY_PROFILE_EVENT, refresh);
     window.addEventListener("storage", refresh);
     return () => { window.removeEventListener(DISCOVERY_PROFILE_EVENT, refresh); window.removeEventListener("storage", refresh); };
