@@ -1,0 +1,116 @@
+name: Taste Preview Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  visual-gate:
+    if: github.head_ref == 'feat/aromia-taste-landing-01'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Chromium harness
+        shell: bash
+        run: |
+          mkdir -p /tmp/taste-gate
+          cd /tmp/taste-gate
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Capture and validate Taste preview
+        shell: bash
+        env:
+          TASTE_URL: https://web-taste-preview-01-production.up.railway.app/taste
+        run: |
+          cd /tmp/taste-gate
+          cat > gate.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+
+          const url = process.env.TASTE_URL;
+          const artifacts = '/tmp/taste-gate/artifacts';
+          fs.mkdirSync(artifacts, { recursive: true });
+
+          const requiredText = [
+            'El perfume no se elige.',
+            'Empieza por una sensación.',
+            'Aromia Magazine',
+            'Tu gusto deja un rastro.',
+            'La Carta Aromia'
+          ];
+
+          async function openReady(page) {
+            let lastError;
+            for (let attempt = 1; attempt <= 12; attempt++) {
+              try {
+                const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+                if (response && response.ok()) {
+                  await page.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
+                  return response;
+                }
+                lastError = new Error(`HTTP ${response ? response.status() : 'no response'}`);
+              } catch (error) {
+                lastError = error;
+              }
+              await page.waitForTimeout(5000);
+            }
+            throw lastError || new Error('Preview never became reachable');
+          }
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const report = { url, checks: {}, consoleErrors: [] };
+
+            const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+            desktop.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push(msg.text()); });
+            const response = await openReady(desktop);
+            report.checks.http = response.status();
+            report.checks.title = await desktop.title();
+            report.checks.desktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+            for (const text of requiredText) report.checks[`text:${text}`] = await desktop.getByText(text, { exact: false }).count();
+            report.checks.desktopH1 = (await desktop.locator('h1').first().textContent())?.trim() || '';
+            await desktop.screenshot({ path: `${artifacts}/desktop-light.png`, fullPage: true });
+            await desktop.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
+            await desktop.waitForTimeout(400);
+            await desktop.screenshot({ path: `${artifacts}/desktop-dark.png`, fullPage: true });
+
+            const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+            mobile.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push(msg.text()); });
+            await openReady(mobile);
+            report.checks.mobileOverflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+            report.checks.mobileH1 = (await mobile.locator('h1').first().textContent())?.trim() || '';
+            report.checks.mobileBodyWidth = await mobile.evaluate(() => document.body.getBoundingClientRect().width);
+            await mobile.screenshot({ path: `${artifacts}/mobile-light.png`, fullPage: true });
+
+            fs.writeFileSync(`${artifacts}/report.json`, JSON.stringify(report, null, 2));
+            await browser.close();
+
+            const missing = requiredText.filter(text => !report.checks[`text:${text}`]);
+            if (report.checks.http !== 200) throw new Error(`Expected HTTP 200, got ${report.checks.http}`);
+            if (report.checks.desktopOverflow > 2) throw new Error(`Desktop horizontal overflow: ${report.checks.desktopOverflow}px`);
+            if (report.checks.mobileOverflow > 2) throw new Error(`Mobile horizontal overflow: ${report.checks.mobileOverflow}px`);
+            if (missing.length) throw new Error(`Missing critical text: ${missing.join(', ')}`);
+            if (!report.checks.desktopH1.includes('El perfume no se elige')) throw new Error('Hero H1 mismatch');
+          })().catch(error => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
+          node gate.cjs
+
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: taste-preview-evidence
+          path: /tmp/taste-gate/artifacts
+          if-no-files-found: warn
+          retention-days: 7
