@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getArticulos, getPerfumes } from "@/lib/api";
 import { HomeHero } from "@/components/home/HomeHero";
+import { MaterialStatement } from "@/components/home/MaterialStatement";
 import { EditorialSelection } from "@/components/home/EditorialSelection";
 import { OlfactiveIndex } from "@/components/home/OlfactiveIndex";
+import { SensoryInterlude } from "@/components/home/SensoryInterlude";
 import { HomeCatalogPreview } from "@/components/home/HomeCatalogPreview";
 import { HomeJournalStrip } from "@/components/home/HomeJournalStrip";
 import { CATEGORIAS_PRINCIPALES } from "@/lib/olfactiveCategories";
@@ -33,6 +35,8 @@ export default async function Home() {
     <main className="overflow-hidden bg-bg text-ink">
       <HomeHero perfume={heroPerfume} />
 
+      <MaterialStatement />
+
       {destacados.length > 0 ? (
         <section className="bg-[#fffdfa] py-16 dark:bg-[#0f0c09] lg:py-20">
           <EditorialSelection perfumes={destacados} />
@@ -40,6 +44,8 @@ export default async function Home() {
       ) : null}
 
       {categoriasConResultados.length > 0 ? <OlfactiveIndex categorias={categoriasConResultados} /> : null}
+
+      <SensoryInterlude />
 
       <HomeCatalogPreview perfumes={destacados.length >= 5 ? destacados : perfumes} familias={familias} />
 
