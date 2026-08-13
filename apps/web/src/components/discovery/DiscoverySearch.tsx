@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Article, Perfume } from "@/lib/types";
 import { discoveryTextScore } from "@/lib/discovery";
@@ -10,9 +10,10 @@ import { trackEvent } from "@/lib/analytics";
 
 export function DiscoverySearch({ perfumes, articles, initialQuery = "" }: { perfumes: Perfume[]; articles: Article[]; initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
-  const profile = useMemo(() => loadDiscoveryProfile(), []);
+  const [profile, setProfile] = useState(() => loadDiscoveryProfile());
+  useEffect(() => { setProfile(loadDiscoveryProfile()); }, []);
   const q = query.trim();
-  const perfumeResults = useMemo(() => q ? perfumes.map((perfume) => ({ perfume, score: discoveryTextScore(perfume, q) + Math.round(personalizedPerfumeScore(perfume, profile).score * 0.2) })).filter((item) => discoveryTextScore(item.perfume, q) > 0).sort((a,b)=>b.score-a.score || a.perfume.nombre.localeCompare(b.perfume.nombre)).slice(0,12) : [], [perfumes, profile, q]);
+  const perfumeResults = useMemo(() => q ? perfumes.map((perfume) => ({ perfume, textScore: discoveryTextScore(perfume, q), personalScore: personalizedPerfumeScore(perfume, profile).score })).filter((item) => item.textScore > 0).map((item) => ({ perfume: item.perfume, score: item.textScore + Math.round(item.personalScore * 0.2) })).sort((a,b)=>b.score-a.score || a.perfume.nombre.localeCompare(b.perfume.nombre)).slice(0,12) : [], [perfumes, profile, q]);
   const articleResults = useMemo(() => {
     if (!q) return [];
     const needle = q.toLowerCase();
