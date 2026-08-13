@@ -65,6 +65,29 @@ jobs:
             throw lastError || new Error('Preview never became reachable');
           }
 
+          async function warmLazyMedia(page) {
+            await page.evaluate(async () => {
+              const step = Math.max(500, Math.round(window.innerHeight * 0.75));
+              for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+                window.scrollTo(0, y);
+                await new Promise(resolve => setTimeout(resolve, 180));
+              }
+              window.scrollTo(0, document.documentElement.scrollHeight);
+              await new Promise(resolve => setTimeout(resolve, 500));
+              window.scrollTo(0, 0);
+            });
+            await page.waitForTimeout(600);
+          }
+
+          async function mediaHealth(page) {
+            return page.evaluate(() => {
+              const canvases = Array.from(document.querySelectorAll('canvas[role="img"]'));
+              const visibleCanvases = canvases.filter(canvas => canvas.width > 0 && canvas.height > 0 && getComputedStyle(canvas).opacity !== '0');
+              const placeholders = Array.from(document.querySelectorAll('[aria-label*="imagen temporalmente no disponible"]')).length;
+              return { canvases: canvases.length, visibleCanvases: visibleCanvases.length, placeholders };
+            });
+          }
+
           (async () => {
             const browser = await chromium.launch({ headless: true });
             const report = { url, checks: {}, consoleErrors: [] };
@@ -72,11 +95,13 @@ jobs:
             const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
             desktop.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push(msg.text()); });
             const response = await openReady(desktop);
+            await warmLazyMedia(desktop);
             report.checks.http = response.status();
             report.checks.title = await desktop.title();
             report.checks.desktopOverflow = await desktop.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
             for (const text of requiredText) report.checks[`text:${text}`] = await desktop.getByText(text, { exact: false }).count();
             report.checks.desktopH1 = (await desktop.locator('h1').first().textContent())?.trim() || '';
+            report.checks.desktopMedia = await mediaHealth(desktop);
             await desktop.screenshot({ path: `${artifacts}/desktop-light.png`, fullPage: true });
             await desktop.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
             await desktop.waitForTimeout(400);
@@ -85,9 +110,11 @@ jobs:
             const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
             mobile.on('console', msg => { if (msg.type() === 'error') report.consoleErrors.push(msg.text()); });
             await openReady(mobile);
+            await warmLazyMedia(mobile);
             report.checks.mobileOverflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
             report.checks.mobileH1 = (await mobile.locator('h1').first().textContent())?.trim() || '';
             report.checks.mobileBodyWidth = await mobile.evaluate(() => document.body.getBoundingClientRect().width);
+            report.checks.mobileMedia = await mediaHealth(mobile);
             await mobile.screenshot({ path: `${artifacts}/mobile-light.png`, fullPage: true });
 
             fs.writeFileSync(`${artifacts}/report.json`, JSON.stringify(report, null, 2));
@@ -99,6 +126,8 @@ jobs:
             if (report.checks.mobileOverflow > 2) throw new Error(`Mobile horizontal overflow: ${report.checks.mobileOverflow}px`);
             if (missing.length) throw new Error(`Missing critical text: ${missing.join(', ')}`);
             if (!report.checks.desktopH1.includes('El perfume no se elige')) throw new Error('Hero H1 mismatch');
+            if (report.checks.mobileMedia.visibleCanvases < 3) throw new Error(`Expected at least 3 loaded product canvases on mobile, got ${report.checks.mobileMedia.visibleCanvases}`);
+            if (report.checks.mobileMedia.placeholders > 0) throw new Error(`Mobile product placeholders detected: ${report.checks.mobileMedia.placeholders}`);
           })().catch(error => {
             console.error(error);
             process.exit(1);
