@@ -11,8 +11,13 @@ export function SimilarPerfumes({ sourceSlug, results }: { sourceSlug: string; r
   const [profile, setProfile] = useState(() => loadDiscoveryProfile());
   useEffect(() => {
     const refresh = () => setProfile(loadDiscoveryProfile());
+    refresh();
     window.addEventListener(DISCOVERY_PROFILE_EVENT, refresh);
-    return () => window.removeEventListener(DISCOVERY_PROFILE_EVENT, refresh);
+    window.addEventListener("storage", refresh);
+    return () => {
+      window.removeEventListener(DISCOVERY_PROFILE_EVENT, refresh);
+      window.removeEventListener("storage", refresh);
+    };
   }, []);
   const ranked = useMemo(() => results.map((result) => {
     const personal = personalizedPerfumeScore(result.perfume, profile);
