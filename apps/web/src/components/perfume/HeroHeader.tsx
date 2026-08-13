@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
 import { formattedReferencePrice, publicText } from "@/lib/catalogDisplay";
 import { perfumersForPerfume } from "@/lib/perfumers";
+import { recordPerfumeInterest, recordPerfumerInterest } from "@/lib/discoveryProfile";
 import { ProductImage } from "./ProductImage";
 
 export function HeroHeaderSkeleton() {
@@ -16,6 +18,9 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
   const price = formattedReferencePrice(perfume);
   const perfumers = perfumersForPerfume(perfume.slug);
   const buyHref = `/api/catalog-buy/${encodeURIComponent(perfume.slug)}`;
+
+  useEffect(() => { recordPerfumeInterest(perfume, 1); }, [perfume]);
+
   return (
     <section className="grid min-h-[72vh] overflow-hidden border-y border-line bg-[#fffdf8] dark:bg-[#100d0a] lg:grid-cols-[1.1fr_.9fr]">
       <div className="relative min-h-[480px] overflow-hidden bg-[#e9dcc8] dark:bg-[#17120d] lg:min-h-[72vh]">
@@ -29,7 +34,7 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
       </div>
       <div className="flex flex-col justify-between px-6 py-10 lg:px-12 lg:py-14">
         <div><div className="flex items-center gap-4 border-b border-line pb-4 font-plex text-[8px] uppercase tracking-[.18em] text-muted"><span>Producto</span><span className="h-px flex-1 bg-line"/><span>Hybrid Signature</span></div><p className="mt-10 min-h-3 font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">{family ?? "Objeto olfativo"}</p><h1 className="mt-4 max-w-[10ch] font-display text-[48px] font-medium leading-[.92] tracking-[-.035em] text-ink lg:text-[72px]">{perfume.nombre}</h1><p className="mt-3 font-sans text-base text-muted">{perfume.marca}</p>{publicText(perfume.descripcion_corta)?<p className="mt-7 max-w-[46ch] font-sans text-[15px] leading-7 text-muted">{publicText(perfume.descripcion_corta)}</p>:null}
-          <dl className="mt-10 grid grid-cols-2 border-y border-line font-sans text-sm"><div className="border-r border-line py-5 pr-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Género</dt><dd className="mt-2 capitalize text-ink">{perfume.genero}</dd></div><div className="py-5 pl-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Concentración</dt><dd className="mt-2 text-ink">{concentration ?? "No especificada"}</dd></div>{family?<div className="col-span-2 border-t border-line py-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Familia olfativa</dt><dd className="mt-2 font-display text-xl capitalize text-ink">{family}</dd></div>:null}{perfumers.length?<div className="col-span-2 border-t border-line py-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Perfumista{perfumers.length > 1 ? "s" : ""}</dt><dd className="mt-2 flex flex-wrap gap-x-4 gap-y-2">{perfumers.map((perfumer) => <Link key={perfumer.slug} href={`/perfumistas/${perfumer.slug}`} className="border-b border-gold/50 pb-0.5 font-display text-xl text-ink transition hover:text-gold-contrast">{perfumer.name}</Link>)}</dd></div>:null}</dl></div>
+          <dl className="mt-10 grid grid-cols-2 border-y border-line font-sans text-sm"><div className="border-r border-line py-5 pr-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Género</dt><dd className="mt-2 capitalize text-ink">{perfume.genero}</dd></div><div className="py-5 pl-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Concentración</dt><dd className="mt-2 text-ink">{concentration ?? "No especificada"}</dd></div>{family?<div className="col-span-2 border-t border-line py-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Familia olfativa</dt><dd className="mt-2 font-display text-xl capitalize text-ink">{family}</dd></div>:null}{perfumers.length?<div className="col-span-2 border-t border-line py-5"><dt className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Perfumista{perfumers.length > 1 ? "s" : ""}</dt><dd className="mt-2 flex flex-wrap gap-x-4 gap-y-2">{perfumers.map((perfumer) => <Link key={perfumer.slug} href={`/perfumistas/${perfumer.slug}`} onClick={() => recordPerfumerInterest(perfumer.slug, 3)} className="border-b border-gold/50 pb-0.5 font-display text-xl text-ink transition hover:text-gold-contrast">{perfumer.name}</Link>)}</dd></div>:null}</dl></div>
         <div className="mt-12 flex items-end justify-between gap-6 border-t border-line pt-5"><div><p className="font-plex text-[8px] uppercase tracking-[.16em] text-muted">Referencia</p><p className="mt-1 font-display text-2xl text-ink">{price ?? "Ver disponibilidad"}</p></div><a href={buyHref} target="_blank" rel="sponsored noopener noreferrer" className="border-b border-ink pb-1 font-plex text-[9px] uppercase tracking-[.14em] text-ink transition hover:border-gold hover:text-gold-contrast dark:border-[#f2ebdd]">Comprar en Amazon ↗</a></div>
       </div>
     </section>
