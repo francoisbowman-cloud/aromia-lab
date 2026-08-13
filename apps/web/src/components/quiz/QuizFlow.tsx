@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { QUIZ_QUESTIONS, QUIZ_PROFILES, getDominantTag, type QuizTag } from "@/lib/quizData";
+import { recordQuizProfile } from "@/lib/discoveryProfile";
 import { trackEvent } from "@/lib/analytics";
 
 export function QuizFlow() {
@@ -22,6 +23,7 @@ export function QuizFlow() {
     if (esUltima) {
       const dominante = getDominantTag(nuevosScores);
       const perfil = QUIZ_PROFILES.find((p) => p.tag === dominante)!;
+      recordQuizProfile(perfil.slug, perfil.familias);
       trackEvent("quiz_completed", { perfil: perfil.slug, total_questions: QUIZ_QUESTIONS.length });
       router.push(`/quiz/resultado/${perfil.slug}`);
       return;
