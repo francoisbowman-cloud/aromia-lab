@@ -1,4 +1,4 @@
-# Aromia — Product Growth Measurement v1
+# Aromia — Product Growth Measurement v2
 
 ## Scope
 
@@ -10,7 +10,11 @@ Aromia is not optimized for raw pageviews. The primary journey is:
 
 `discovery → understanding → comparison → product intent → commercial exit / owned audience`
 
-A healthy session should increasingly move through one or more of these stages without making the editorial experience feel like an aggressive store.
+Discovery v2 adds a local learning loop:
+
+`explicit/observed interest → local olfactory map → explainable reranking → new discovery route → stronger or broader signal`
+
+The learning loop is a browser-side product feature, not an analytics profile.
 
 ## Core events
 
@@ -25,50 +29,59 @@ A healthy session should increasingly move through one or more of these stages w
 | `quiz_started` | User commits to Discovery | `total_questions` |
 | `quiz_answered` | Quiz progression | `question_number`, `option` |
 | `quiz_completed` | Discovery produces a profile | `perfil`, `total_questions` |
-| `quiz_result_product_clicked` | Personalized result creates PDP intent | `perfume_slug`, `position` |
+| `quiz_result_product_clicked` | Quiz result creates PDP intent | `perfume_slug`, `position` |
 | `editorial_reader_open` | Reader activates immersive article reading | `article_slug`, `category`, `reading_minutes` |
 | `content_to_product` | Magazine context creates PDP intent | `article_slug`, `perfume_slug`, `position` |
 | `product_to_content` | PDP creates an editorial continuation | `perfume_slug`, `article_slug`, `position` |
 | `search_content_clicked` | Global search creates editorial intent | `article_slug`, `position` |
-| `affiliate_click` | Product intent becomes retailer exit | `retailer`, `perfume_slug`, `offer_type`, `offer_position`, `offer_count`, optional price/currency |
+| `affiliate_click` | Product intent becomes retailer exit | `retailer`, `perfume_slug`, offer metadata |
 | `newsletter_signup` | Visitor becomes owned audience | `fuente` |
 
-No email address, raw search query or other user-entered PII is sent to analytics events.
+The local Discovery v2 profile is deliberately **not** copied to GA. Families, notes, perfumer weights, viewed-product history and quiz-weight history remain in browser storage. Analytics observes navigation outcomes, not the full preference map.
 
 ## KPI model
 
-1. **Discovery interaction rate** = sessions with `internal_search`, `similar_clicked`, `compare_started` or `quiz_started` / eligible sessions.
+1. **Discovery interaction rate** = sessions with search/similarity/comparison/quiz activity / eligible sessions.
 2. **Similarity continuation rate** = `similar_clicked / PDP page_view`.
 3. **Comparison start rate** = `compare_started / PDP page_view`.
-4. **Discovery completion rate** = `quiz_completed / quiz_started`.
+4. **Quiz completion rate** = `quiz_completed / quiz_started`.
 5. **Quiz recommendation progression** = `quiz_result_product_clicked / quiz_completed`.
 6. **Editorial-to-product rate** = `content_to_product / article page_view`.
 7. **Product-to-editorial rate** = `product_to_content / PDP page_view`.
-8. **PDP commercial intent rate** = sessions with `affiliate_click / PDP sessions`.
-9. **Owned audience conversion** = `newsletter_signup / eligible surface sessions` split by `fuente`.
-10. **Experience health** = Core Web Vitals segmented by route/device; performance regressions should be evaluated alongside conversion.
+8. **Olfactory-map adoption proxy** = page views of `/descubrir` among returning discovery sessions. Do not transmit the map itself merely to measure adoption.
+9. **Discovery depth** = number of distinct Discovery surfaces reached in a session: Search, PDP, Perfumistas, Magazine, Quiz, Compare, `/descubrir`.
+10. **PDP commercial intent rate** = sessions with `affiliate_click / PDP sessions`.
+11. **Owned audience conversion** = `newsletter_signup / eligible surface sessions` split by `fuente`.
+12. **Experience health** = Core Web Vitals segmented by route/device.
 
-## Guardrails
+## Discovery v2 interpretation
 
-- Do not optimize affiliate CTR in isolation; it can rise while editorial trust falls.
-- Quiz completion should be read together with result-to-PDP progression.
-- Product/content relationships remain grounded in `perfumes_relacionados`; never inject unrelated inventory into Magazine.
-- Similarity is deterministic and derived only from published catalog attributes. It does not change catalog ownership or source data.
-- Search analytics records query length and result counts, not the user's raw query.
-- Newsletter signup must remain contextual and never block content.
-- Web Vitals are telemetry only; measurement must not add blocking scripts to rendering.
-- Do not add analytics that sends email, free text, or other PII.
-- Any consent/GDPR implementation remains a separate product/legal decision; this measurement layer does not resolve that decision.
+- Search remains text-first. The local profile may re-rank only among textually relevant results.
+- Similarity remains evidence-first. Personalization can change ordering but does not rewrite the deterministic similarity evidence.
+- Article relationships remain grounded in `perfumes_relacionados`; local personalization is presented as a separate continuation surface.
+- Perfumer relationships are taken only from the reviewed attribution index.
+- Weak article/PDP observations are bounded; Quiz completion is a stronger explicit signal.
+- Already-viewed products receive a bounded ranking penalty so Discovery does not collapse into repetition.
+
+## Privacy guardrails
+
+- Never send email, account identity, free text, raw search terms or the serialized local discovery profile to analytics.
+- `internal_search` records query length and result counts, not the query itself.
+- Local preference storage must remain optional, resettable and non-blocking.
+- Do not fingerprint or synchronize the olfactory map across devices without a separate explicit product/privacy decision.
+- Do not use analytics failure or localStorage failure to block navigation, commerce, reading, Quiz or rendering.
+- GDPR/GA consent remains a separate product/legal decision.
 
 ## Recommended GA4 views
 
-- Discovery funnel: `internal_search` / `quiz_started` → PDP → `similar_clicked` / `compare_started` → `affiliate_click`.
-- Quiz funnel: `/quiz` → `quiz_started` → `quiz_completed` → `quiz_result_product_clicked` → PDP → `affiliate_click`.
-- Editorial loop: article → `content_to_product` → PDP → `product_to_content`.
-- Breakdown: `similar_clicked` by `source_slug`, `target_slug`, `position`, and score band.
-- Breakdown: search result CTR by `context` and result-count band; do not collect raw terms.
-- Performance: `web_vital` by `metric_name`, `metric_rating`, route and device category.
+- Discovery funnel: Search/Quiz → PDP → Similar/Compare → affiliate exit.
+- Quiz funnel: `/quiz` → completion → result PDP → continuation.
+- Editorial loop: article → related product → PDP → editorial continuation.
+- Authorship loop: `/perfumistas` → perfumer detail → work PDP.
+- Map adoption: `/descubrir` page views and subsequent surface transitions, without preference payloads.
+- Search: result CTR by result-count band; never raw search terms.
+- Performance: Web Vitals by route and device category, including `/descubrir` and `/perfumistas`.
 
 ## Release gate
 
-For web/product releases, preserve event names and parameter semantics unless this document is updated in the same PR. Analytics failure must never block navigation, affiliate exit, newsletter submission, quiz completion, article reading, search, comparison or rendering.
+For web/product releases, preserve event names and parameter semantics unless this document is updated in the same PR. OMNI must reject analytics calls that contain obvious email/message fields or a raw `query` parameter. Discovery profile state must remain browser-local and resettable. Fase 3 remains isolated.
