@@ -31,6 +31,11 @@
   --border: var(--line);
   --input: var(--line);
   --ring: var(--gold);
+
+  /* Aromia Editorial Motion — ver .claude/skills/aromia-editorial-motion */
+  --editorial-motion-distance: 24px;
+  --editorial-motion-duration: 700ms;
+  --editorial-mask-softness: 45%;
 }
 
 [data-theme="dark"] {
@@ -75,6 +80,8 @@ body { color: var(--text); background: var(--bg); font-family: var(--font-body),
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
+  .editorial-parallax { transform: none !important; }
+  .editorial-depth:hover { transform: none !important; }
 }
 
 @media print {
@@ -93,9 +100,40 @@ body { color: var(--text); background: var(--bg); font-family: var(--font-body),
   .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .animate-fade-in { animation: aromia-fade-in .6s ease; }
+
+  /* Aromia Editorial Motion — .claude/skills/aromia-editorial-motion.
+     Vocabulario mínimo: bleed (objeto fuera de su contenedor),
+     diffusion (imagen→fondo), depth (separación de planos), parallax
+     (offset sutil entre capas). No agregar utilidades one-off nuevas
+     acá sin ampliar la skill primero. */
+  .editorial-bleed { position: relative; overflow: visible; z-index: 1; }
+
+  .editorial-diffusion {
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - var(--editorial-mask-softness)), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - var(--editorial-mask-softness)), transparent 100%);
+  }
+  .editorial-diffusion-vertical {
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 calc(100% - var(--editorial-mask-softness)), transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 calc(100% - var(--editorial-mask-softness)), transparent 100%);
+  }
+
+  .editorial-depth { transition: transform var(--editorial-motion-duration) cubic-bezier(.2,.7,.2,1), box-shadow var(--editorial-motion-duration) ease; }
+  .editorial-depth:hover { transform: translateY(-4px) scale(1.012); box-shadow: 0 30px 80px rgba(20,15,8,.16); }
+
+  .editorial-parallax { transform: translateY(0); will-change: transform; }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .editorial-parallax {
+        animation: editorial-parallax-shift linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+    }
+  }
 }
 
 @keyframes aromia-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes editorial-parallax-shift { from { transform: translateY(calc(var(--editorial-motion-distance) * -1)); } to { transform: translateY(0); } }
 
 @layer components {
   .nav-link { position: relative; display: inline-flex; align-items: center; min-height: 40px; padding: 8px 1px; outline: none; }
