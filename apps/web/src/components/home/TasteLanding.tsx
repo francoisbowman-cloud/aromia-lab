@@ -41,15 +41,10 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
   const index = categorias.slice(0, 6);
 
   return (
-    <main className="overflow-hidden bg-[#fbf8f3] text-ink dark:bg-[#0d0b09]">
-      <section className="relative min-h-[760px] border-b border-line lg:min-h-[calc(100vh-72px)]">
-        <div className="absolute inset-y-0 right-0 hidden w-[46%] overflow-hidden lg:block">
-          <div className="absolute inset-0 scale-[1.02] bg-cover bg-center transition-transform duration-[1400ms] hover:scale-100" style={{ backgroundImage: "url('/editorial/cinematic-warm.png')" }} />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,#fbf8f3_0%,rgba(251,248,243,.88)_7%,rgba(251,248,243,.08)_45%,rgba(251,248,243,0)_100%)] dark:bg-[linear-gradient(90deg,#0d0b09_0%,rgba(13,11,9,.88)_7%,rgba(13,11,9,.08)_45%,rgba(13,11,9,0)_100%)]" />
-        </div>
-
-        <div className="relative mx-auto grid min-h-[760px] w-full max-w-[1440px] grid-cols-1 px-6 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[1.06fr_.94fr] lg:px-10 xl:px-14">
-          <div className="flex flex-col justify-between py-10 sm:py-14 lg:py-16">
+    <main className="overflow-hidden bg-paper text-ink">
+      <section className="relative border-b border-line">
+        <div className="mx-auto grid min-h-[760px] w-full max-w-[1440px] grid-cols-1 px-6 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[1.04fr_.96fr] lg:px-10 xl:px-14">
+          <div className="flex flex-col justify-between py-10 sm:py-14 lg:pr-10 lg:py-16 xl:pr-14">
             <div className="flex items-center gap-5 font-plex text-[9px] uppercase tracking-[.19em] text-muted">
               <span>Perfume · Cultura · Descubrimiento</span><span className="h-px w-10 bg-gold/70" />
             </div>
@@ -63,20 +58,46 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
                   Aromia traduce fragancias en lenguaje humano: carácter, materia, contexto y sensación. Menos ruido. Más criterio para encontrar aquello que sí se parece a ti.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Link href="/quiz" className="inline-flex min-h-12 items-center justify-center border border-ink bg-ink px-5 font-plex text-[9px] uppercase tracking-[.17em] text-[#fbf8f3] transition duration-300 hover:bg-gold-contrast dark:border-[#f2ebdd] dark:bg-[#f2ebdd] dark:text-[#0d0b09]">Encontrar mi firma</Link>
+                  <Link href="/quiz" className="inline-flex min-h-12 items-center justify-center border border-ink bg-ink px-5 font-plex text-[9px] uppercase tracking-[.17em] text-paper transition duration-300 hover:bg-gold-contrast dark:border-[#f2ebdd] dark:bg-[#f2ebdd] dark:text-[#0d0b09]">Encontrar mi firma</Link>
                   <Link href="/catalogo" className="inline-flex min-h-12 items-center justify-center border border-line bg-transparent px-5 font-plex text-[9px] uppercase tracking-[.17em] text-ink transition duration-300 hover:border-gold hover:text-gold-contrast">Explorar</Link>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6 border-t border-line pt-6 sm:grid-cols-4 lg:max-w-[760px]">
-              {[['01','Catálogo curado'],['02','Índice olfativo'],['03','Magazine'],['04','Discovery']].map(([n,label]) => <div key={n}><p className="font-display text-lg text-gold-contrast">{n}</p><p className="mt-1 font-plex text-[8px] uppercase tracking-[.16em] text-muted">{label}</p></div>)}
+              {[["01","Catálogo curado"],["02","Índice olfativo"],["03","Magazine"],["04","Discovery"]].map(([n,label]) => <div key={n}><p className="font-display text-lg text-gold-contrast">{n}</p><p className="mt-1 font-plex text-[8px] uppercase tracking-[.16em] text-muted">{label}</p></div>)}
             </div>
           </div>
 
-          <div className="relative -mx-6 min-h-[360px] overflow-hidden border-t border-line lg:hidden">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/editorial/cinematic-warm.png')" }} />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#fbf8f3_0%,rgba(251,248,243,0)_30%)] dark:bg-[linear-gradient(180deg,#0d0b09_0%,rgba(13,11,9,0)_30%)]" />
+          <div className="relative -mx-6 min-h-[500px] border-t border-line lg:mx-0 lg:min-h-full lg:border-l lg:border-t-0">
+            <div className="aromia-scene-glow absolute inset-0" aria-hidden="true" />
+            {hero ? (
+              <div className="relative grid h-full min-h-[500px] grid-rows-[1fr_auto] lg:min-h-[calc(100vh-72px)]">
+                <div className="relative min-h-[390px] overflow-hidden lg:min-h-0">
+                  <div className="absolute left-6 right-6 top-6 z-10 flex items-center justify-between font-plex text-[8px] uppercase tracking-[.18em] text-muted lg:left-8 lg:right-8 lg:top-8">
+                    <span>Objeto editorial</span><span>01 / catálogo vivo</span>
+                  </div>
+                  <div className="absolute inset-x-[5%] bottom-[2%] top-[9%] sm:inset-x-[12%] lg:-left-[4%] lg:right-[6%] lg:bottom-[1%] lg:top-[10%]">
+                    <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" className="!bg-transparent" />
+                  </div>
+                </div>
+                <Link href={`/catalogo/${hero.slug}`} className="group relative z-10 grid gap-3 border-t border-line bg-surface px-6 py-5 sm:grid-cols-[1fr_auto] sm:items-end lg:px-8 lg:py-6">
+                  <div>
+                    <p className="font-plex text-[8px] uppercase tracking-[.17em] text-gold-contrast">{publicText(hero.familia_olfativa) ?? "Selección Aromia"}</p>
+                    <p className="mt-2 font-display text-[28px] leading-none tracking-[-.025em] text-ink sm:text-[32px]">{hero.nombre}</p>
+                    <p className="mt-1 font-display text-lg text-muted">{hero.marca}</p>
+                  </div>
+                  <div className="flex items-end justify-between gap-6 sm:block sm:text-right">
+                    <p className="font-display text-xl text-gold-contrast">{formattedReferencePrice(hero) ?? ""}</p>
+                    <p className="mt-2 font-plex text-[8px] uppercase tracking-[.16em] text-muted transition-transform duration-300 group-hover:translate-x-1">Ver fragancia →</p>
+                  </div>
+                </Link>
+              </div>
+            ) : (
+              <div className="relative flex min-h-[500px] items-end px-6 py-8 lg:min-h-full lg:px-8">
+                <p className="max-w-[24ch] font-display text-3xl leading-tight text-ink">El catálogo define el objeto. La atmósfera nunca lo sustituye.</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
