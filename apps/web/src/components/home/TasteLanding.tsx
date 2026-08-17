@@ -78,7 +78,7 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
                     <span>Objeto editorial</span><span>01 / catálogo vivo</span>
                   </div>
                   <div className="absolute inset-x-[5%] bottom-[2%] top-[9%] sm:inset-x-[12%] lg:-left-[4%] lg:right-[6%] lg:bottom-[1%] lg:top-[10%]">
-                    <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" className="!bg-transparent" />
+                    <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" className="!bg-transparent [&>canvas]:scale-[1.3] sm:[&>canvas]:scale-[1.15] lg:[&>canvas]:scale-100" />
                   </div>
                 </div>
                 <Link href={`/catalogo/${hero.slug}`} className="group relative z-10 grid gap-3 border-t border-line bg-surface px-6 py-5 sm:grid-cols-[1fr_auto] sm:items-end lg:px-8 lg:py-6">
