@@ -72,14 +72,14 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
               </div>
 
               <div className="flex flex-col justify-between pl-2 sm:pl-6">
-                <p className="text-right font-plex text-[8px] uppercase tracking-[.18em] text-muted">Materia recurrente</p>
+                <p className="text-right font-plex text-[8px] uppercase tracking-[.18em] text-muted">Notas · materia recurrente</p>
                 <div className="flex flex-wrap content-center justify-end gap-x-3 gap-y-4 py-8 text-right">
                   {notes.length ? notes.map(([name, score]) => (
                     <Link key={name} href={`/buscar?q=${encodeURIComponent(name)}`} className="font-display capitalize leading-none text-ink transition-colors hover:text-gold-contrast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70" style={{ fontSize: `${18 + 20 * strength(score, noteMax)}px`, opacity: .55 + .45 * strength(score, noteMax) }}>{label(name)}</Link>
                   )) : <p className="max-w-[18ch] font-display text-3xl leading-tight text-muted">Las notas aparecerán al entrar en pirámides verificadas.</p>}
                 </div>
                 <div>
-                  <p className="mb-4 text-right font-plex text-[8px] uppercase tracking-[.18em] text-muted">Autorías</p>
+                  <p className="mb-4 text-right font-plex text-[8px] uppercase tracking-[.18em] text-muted">Perfumistas · autorías</p>
                   <div className="space-y-2 text-right">
                     {perfumers.length ? perfumers.map(({ item, slug }) => <Link key={slug} href={`/perfumistas/${slug}`} className="block font-display text-xl text-ink transition-colors hover:text-gold-contrast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70">{item?.name ?? label(slug)}</Link>) : <p className="font-sans text-[11px] leading-5 text-muted">Las autorías aparecen solo cuando visitas una atribución verificada.</p>}
                   </div>
@@ -92,7 +92,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
 
       <section aria-labelledby="routes-title" className="py-14 lg:py-20">
         <div className="mb-10 grid gap-5 border-b border-line pb-6 lg:grid-cols-[1fr_.72fr] lg:items-end">
-          <div><p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Siguientes rutas</p><h2 id="routes-title" className="mt-4 max-w-[9ch] font-display text-[44px] leading-[.92] tracking-[-.035em] sm:text-[58px]">Perfumes que continúan la conversación.</h2></div>
+          <div><p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Recomendaciones vivas · siguientes rutas</p><h2 id="routes-title" className="mt-4 max-w-[9ch] font-display text-[44px] leading-[.92] tracking-[-.035em] sm:text-[58px]">Perfumes que continúan la conversación.</h2></div>
           <p className="max-w-[42ch] font-sans text-sm leading-6 text-muted lg:justify-self-end">No son “productos para ti” en abstracto. Cada ruta existe porque comparte señales concretas con lo que ya exploraste.</p>
         </div>
 
