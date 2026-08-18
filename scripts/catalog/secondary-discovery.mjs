@@ -3,9 +3,12 @@ import { URL } from "node:url";
 const SEARCH_TIMEOUT_MS = 6500;
 const PAGE_TIMEOUT_MS = 6500;
 const TRUSTED_HOSTS = ["fragrantica.com", "www.fragrantica.com", "fragrantica.es", "www.fragrantica.es", "beta.fragrantica.com"];
+const IDENTITY_STOP_WORDS = new Set(["eau","de","du","des","the","for","pour","by","and","parfum","perfume","edp","edt","edc","extrait","elixir","le","la","les"]);
+const GENDER_WORDS = new Set(["homme","femme","uomo","donna","men","women","male","female"]);
 
 function fold(value) { return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); }
-function tokens(value) { const stop=new Set(["eau","de","du","des","the","for","pour","parfum","perfume","edp","edt","edc","extrait","elixir","le","la","les","and","homme","uomo"]); return [...new Set(fold(value).split(/\s+/).filter((t)=>t.length>=3&&!stop.has(t)))]; }
+function words(value) { return fold(value).split(/\s+/).filter(Boolean); }
+function tokens(value) { return [...new Set(words(value).filter((t)=>!IDENTITY_STOP_WORDS.has(t)))]; }
 export function isTrustedSecondaryUrl(url) { try { return TRUSTED_HOSTS.includes(new URL(url).hostname.toLowerCase()); } catch { return false; } }
 async function fetchText(url, timeoutMs = PAGE_TIMEOUT_MS) {
   const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -14,7 +17,25 @@ async function fetchText(url, timeoutMs = PAGE_TIMEOUT_MS) {
 }
 function unwrap(href, base) { try { const url=new URL(href,base); const uddg=url.searchParams.get("uddg"); if(uddg)return decodeURIComponent(uddg); const target=url.searchParams.get("url")||url.searchParams.get("q"); if(target&&/^https?:/i.test(target))return decodeURIComponent(target); return url.toString(); } catch { return ""; } }
 export function parseSearchLinks(html, base="https://www.bing.com") { const out=[]; const raw=String(html??""); const direct=/https?:\/\/(?:www\.|beta\.)?fragrantica(?:\.com|\.es)\/[^"'<>\s&]+/gi; for(const match of raw.match(direct)??[]){const url=match.replace(/&amp;.*$/i,"");if(isTrustedSecondaryUrl(url)&&!out.includes(url))out.push(url);} const re=/<a[^>]+href=["']([^"']+)["'][^>]*>/gi; let m; while((m=re.exec(raw))!==null){const url=unwrap(m[1],base);if(url&&isTrustedSecondaryUrl(url)&&!out.includes(url))out.push(url);} return out; }
-function scoreIdentity(candidate,text,url){ const corpus=fold(`${url} ${text.slice(0,8000)}`); const nt=tokens(candidate.name),bt=tokens(candidate.brand); const hits=nt.filter((t)=>corpus.includes(t)).length,bh=bt.filter((t)=>corpus.includes(t)).length; const coverage=nt.length?hits/nt.length:0; return {confirmed:coverage>=0.6&&(bt.length===0||bh>=1),coverage}; }
+
+export function scoreSecondaryIdentity(candidate,text,url){
+  const corpus=new Set(words(`${url} ${String(text??"").slice(0,8000)}`));
+  const nt=tokens(candidate.name), bt=tokens(candidate.brand);
+  const brandSet=new Set(bt);
+  const productTokens=nt.filter((t)=>!brandSet.has(t));
+  const requiredProductTokens=productTokens.length?productTokens:nt;
+  const hits=nt.filter((t)=>corpus.has(t)).length;
+  const brandHits=bt.filter((t)=>corpus.has(t)).length;
+  const productHits=requiredProductTokens.filter((t)=>corpus.has(t));
+  const coverage=nt.length?hits/nt.length:0;
+  const candidateGender=nt.filter((t)=>GENDER_WORDS.has(t));
+  const conflictingGender=candidateGender.some((token)=>{
+    if(["homme","uomo","men","male"].includes(token)) return ["femme","donna","women","female"].some((x)=>corpus.has(x));
+    if(["femme","donna","women","female"].includes(token)) return ["homme","uomo","men","male"].some((x)=>corpus.has(x));
+    return false;
+  });
+  return {confirmed:nt.length>0&&coverage>=0.8&&productHits.length>0&&(bt.length===0||brandHits>=1)&&!conflictingGender,coverage,productHits,conflictingGender};
+}
 function stripHtml(html){ return String(html??"").replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi," ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&amp;/g,"&").replace(/&#39;|&apos;/g,"'").replace(/&quot;/g,'"').replace(/&nbsp;/gi," ").replace(/\s+/g," ").trim(); }
 function extractGender(text){ const t=String(text??""); if(/for women and men|for men and women|para Hombres y Mujeres|para Mujeres y Hombres|for women & men|for men & women/i.test(t))return "unisex"; if(/for men\b|para Hombres\b/i.test(t))return "masculino"; if(/for women\b|para Mujeres\b/i.test(t))return "femenino"; return ""; }
 function extractConcentration(text){ const head=String(text??"").slice(0,5000); if(/\bExtrait(?: de Parfum)?\b/i.test(head))return "Extrait"; if(/\bElixir\b/i.test(head))return "Elixir"; if(/\bEau de Parfum\b|\bEDP\b/i.test(head))return "EDP"; if(/\bEau de Toilette\b|\bEDT\b/i.test(head))return "EDT"; if(/\bEau de Cologne\b|\bEDC\b/i.test(head))return "EDC"; if(/\bParfum\b/i.test(head))return "Parfum"; return ""; }
@@ -23,7 +44,7 @@ function extractNotes(text){ const t=String(text??""); const top=t.match(/Top no
 function yearCompatible(candidateYear,evidenceYear){ const expected=Number(candidateYear),observed=Number(evidenceYear); if(!Number.isFinite(expected)||!Number.isFinite(observed))return true; return Math.abs(expected-observed)<=1; }
 export async function discoverSecondaryEvidenceAtUrl(candidate,url){
   if(!isTrustedSecondaryUrl(url))return {status:"UNTRUSTED_URL",source_url:"",error:`untrusted_secondary_url:${url}`};
-  try { const page=await fetchText(url); if(!isTrustedSecondaryUrl(page.finalUrl))throw new Error(`redirect_left_trusted_host:${page.finalUrl}`); const text=stripHtml(page.text); const identity=scoreIdentity(candidate,text,page.finalUrl); if(!identity.confirmed)return {status:"IDENTITY_MISMATCH",source_url:page.finalUrl,error:`identity_mismatch:${identity.coverage.toFixed(2)}`}; const launch_year=extractLaunchYear(text); if(!yearCompatible(candidate.launch_year,launch_year))return {status:"YEAR_CONFLICT",source_url:page.finalUrl,launch_year,error:`launch_year_conflict:${candidate.launch_year}->${launch_year}`}; const gender=extractGender(text),concentration=extractConcentration(text),notes=extractNotes(text); return {status:"FOUND",source_url:page.finalUrl,gender,concentration,launch_year,...notes,identity_confirmed:"true",secondary_source:"true",evidence_method:"trusted_secondary_curated_url",identity_coverage:identity.coverage.toFixed(2),error:""}; }
+  try { const page=await fetchText(url); if(!isTrustedSecondaryUrl(page.finalUrl))throw new Error(`redirect_left_trusted_host:${page.finalUrl}`); const text=stripHtml(page.text); const identity=scoreSecondaryIdentity(candidate,text,page.finalUrl); if(!identity.confirmed)return {status:"IDENTITY_MISMATCH",source_url:page.finalUrl,error:`identity_mismatch:${identity.coverage.toFixed(2)}${identity.conflictingGender?":gender_conflict":""}`}; const launch_year=extractLaunchYear(text); if(!yearCompatible(candidate.launch_year,launch_year))return {status:"YEAR_CONFLICT",source_url:page.finalUrl,launch_year,error:`launch_year_conflict:${candidate.launch_year}->${launch_year}`}; const gender=extractGender(text),concentration=extractConcentration(text),notes=extractNotes(text); return {status:"FOUND",source_url:page.finalUrl,gender,concentration,launch_year,...notes,identity_confirmed:"true",secondary_source:"true",evidence_method:"trusted_secondary_curated_url",identity_coverage:identity.coverage.toFixed(2),error:""}; }
   catch(error){ return {status:"FETCH_FAILED",source_url:url,gender:"",concentration:"",launch_year:"",top_notes:"",middle_notes:"",base_notes:"",accords:"",notes_structure:"UNKNOWN",identity_confirmed:"false",secondary_source:"false",evidence_method:"",error:error.message}; }
 }
 async function searchLinks(candidate){ const phrase=`${candidate.brand} ${candidate.name} ${candidate.concentration||""}`.trim(); const q1=encodeURIComponent(`site:fragrantica.com/perfume ${phrase}`),q2=encodeURIComponent(`site:fragrantica.es/perfume ${phrase}`); const engines=[[`https://www.bing.com/search?q=${q1}`,"https://www.bing.com"],[`https://www.google.com/search?q=${q1}`,"https://www.google.com"],[`https://html.duckduckgo.com/html/?q=${q1}`,"https://duckduckgo.com"],[`https://www.bing.com/search?q=${q2}`,"https://www.bing.com"]]; const out=[]; for(const [url,base] of engines){try{const html=(await fetchText(url,SEARCH_TIMEOUT_MS)).text;for(const link of parseSearchLinks(html,base))if(!out.includes(link))out.push(link);if(out.length>=6)break;}catch{}} return out.slice(0,10); }

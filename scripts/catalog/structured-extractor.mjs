@@ -67,10 +67,17 @@ function imageFromProduct(product) {
   return "";
 }
 
+function labelAlternation(labels) {
+  return [...labels]
+    .sort((a, b) => b.length - a.length)
+    .map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+}
+
 function explicitTier(text, labels, nextLabels) {
-  const start = labels.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-  const next = nextLabels.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-  const re = new RegExp(`(?:${start})\\s*(?:notes?|noten|notas?)?\\s*[:\\-–—]?\\s*(.{1,220}?)(?=(?:${next})\\s*(?:notes?|noten|notas?)?\\s*[:\\-–—]?|$)`, "i");
+  const start = labelAlternation(labels);
+  const next = labelAlternation(nextLabels);
+  const re = new RegExp(`(?:^|\\b)(?:${start})(?=\\b|\\s)\\s*(?:notes?|noten|notas?)?\\s*[:\\-–—]?\\s*(.{1,220}?)(?=(?:\\b(?:${next})(?=\\b|\\s))\\s*(?:notes?|noten|notas?)?\\s*[:\\-–—]?|$)`, "i");
   const m = text.match(re);
   return m ? cleanListText(m[1]) : "";
 }

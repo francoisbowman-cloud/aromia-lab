@@ -5,9 +5,28 @@ import { stringify as stringifyCsv } from "csv-stringify/sync";
 import { REPO_ROOT, isMainModule } from "./lib.mjs";
 import { clean, EXPANSION_STATES } from "./expansion-engine.mjs";
 import { evidenceToDraft, resolveEvidencePath } from "./expansion-enrich.mjs";
+import { sanitizeExtractedNotes } from "./note-evidence-guard.mjs";
 
 function readCsv(path) { return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true, relax_column_count: true }); }
 function writeCsv(path, rows) { mkdirSync(dirname(path), { recursive: true }); if (!rows.length) { writeFileSync(path, "", "utf-8"); return; } writeFileSync(path, stringifyCsv(rows, { header: true }), "utf-8"); }
+
+export function requireVerifiedNotesUnavailability(row) {
+  const claimsUnavailable = String(row.source_does_not_publish_notes ?? "").toLowerCase() === "true";
+  const verifiedUnavailable = String(row.notes_unavailability_verified ?? "").toLowerCase() === "true";
+  if (!claimsUnavailable || verifiedUnavailable) return row;
+  return {
+    ...row,
+    source_does_not_publish_notes: "false",
+    notes_unavailability_guard: "unverified_claim_downgraded_to_unresolved",
+  };
+}
+
+export function sanitizeReadinessEvidence(row) {
+  return sanitizeExtractedNotes({
+    ...row,
+    title: row.page_title || row.title || `${row.brand ?? ""} ${row.name ?? ""}`.trim(),
+  });
+}
 
 export function recalibrateCatalogReadiness(draft) {
   const publicationOnly = String(draft.quality_reason ?? "").startsWith("publication_metadata_missing:");
@@ -20,7 +39,11 @@ export function recalibrateCatalogReadiness(draft) {
 }
 
 export function routeEvidenceV2(rows, options = {}) {
-  const drafted = rows.map((row) => recalibrateCatalogReadiness(evidenceToDraft(row, options)));
+  const drafted = rows.map((row) => {
+    const sanitized = sanitizeReadinessEvidence(row);
+    const guarded = requireVerifiedNotesUnavailability(sanitized);
+    return recalibrateCatalogReadiness(evidenceToDraft(guarded, options));
+  });
   return {
     drafted,
     autoReady: drafted.filter((r) => r.quality_status === EXPANSION_STATES.AUTO_READY),
