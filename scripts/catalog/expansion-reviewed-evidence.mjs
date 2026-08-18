@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseCsv } from "csv-parse/sync";
 import { stringify as stringifyCsv } from "csv-stringify/sync";
-import { GENDER_ENUM, REPO_ROOT, isMainModule } from "./lib.mjs";
+import { GENDER_ENUM, REPO_ROOT, isMainModule, normalizeConcentration } from "./lib.mjs";
 import { isTrustedSecondaryUrl } from "./secondary-discovery.mjs";
 
 const CLEARABLE_FIELDS = new Set(["family", "image_url", "image_source", "seo_title", "seo_description", "description"]);
@@ -10,6 +10,7 @@ const NOTE_FIELDS = ["top_notes", "middle_notes", "base_notes", "accords"];
 const SOURCE_KINDS = new Set(["official", "trusted_secondary"]);
 const SOURCE_MODES = new Set(["append", "replace"]);
 const NOTE_MODES = new Set(["keep", "replace"]);
+const SOURCE_IDENTITY_STOP_WORDS = new Set(["eau", "de", "du", "des", "the", "for", "pour", "by", "and", "parfum", "perfume", "edp", "edt", "edc", "extrait", "elixir", "le", "la", "les", "au", "inc"]);
 
 function readCsv(path) {
   return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true, relax_column_count: false, trim: true });
@@ -21,7 +22,7 @@ function clean(value) {
 function fold(value) {
   return clean(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
-function bool(value) { return String(value ?? "").toLowerCase() === "true"; }
+function words(value) { return fold(value).split(/\s+/).filter(Boolean); }
 function splitList(value) { return clean(value) ? clean(value).split(";").map((x) => x.trim()).filter(Boolean) : []; }
 function canonicalUrl(value) {
   const u = new URL(clean(value));
@@ -43,9 +44,22 @@ function validateIdentity(candidate, patch) {
     throw new Error(`reviewed_evidence_identity_mismatch:${patch.candidate_id}`);
   }
 }
+function validateSourceIdentity(candidate, source, patch) {
+  const urlWords = new Set(words(new URL(source).pathname));
+  const rawNameTokens = words(candidate.name);
+  const nameTokens = rawNameTokens.filter((token) => !SOURCE_IDENTITY_STOP_WORDS.has(token));
+  const required = nameTokens.length ? nameTokens : rawNameTokens;
+  const hits = required.filter((token) => urlWords.has(token));
+  const coverage = required.length ? hits.length / required.length : 0;
+  if (!required.length || coverage < 0.8 || hits.length === 0) {
+    throw new Error(`reviewed_evidence_source_identity_mismatch:${patch.candidate_id}:${coverage.toFixed(2)}`);
+  }
+  return coverage;
+}
 function validateSource(candidate, patch, curatedSecondary) {
   if (!SOURCE_KINDS.has(patch.source_kind)) throw new Error(`reviewed_evidence_source_kind_invalid:${patch.candidate_id}`);
   if (!SOURCE_MODES.has(patch.source_mode)) throw new Error(`reviewed_evidence_source_mode_invalid:${patch.candidate_id}`);
+  if (!clean(patch.review_note)) throw new Error(`reviewed_evidence_review_note_required:${patch.candidate_id}`);
   const source = canonicalUrl(patch.source_url);
   if (patch.source_kind === "official") {
     if (!officialHostMatches(source, candidate.official_domain)) throw new Error(`reviewed_evidence_official_host_mismatch:${patch.candidate_id}`);
@@ -54,7 +68,25 @@ function validateSource(candidate, patch, curatedSecondary) {
     const curated = clean(curatedSecondary.get(patch.candidate_id));
     if (!curated || canonicalUrl(curated) !== source) throw new Error(`reviewed_evidence_secondary_not_curated:${patch.candidate_id}`);
   }
-  return source;
+  const identityCoverage = validateSourceIdentity(candidate, source, patch);
+  return { source, identityCoverage };
+}
+function canonicalConcentration(value) {
+  return clean(normalizeConcentration(clean(value)).value).toLowerCase();
+}
+function validateConcentration(existing, candidate, patch) {
+  const reviewed = clean(patch.concentration);
+  if (!reviewed) return clean(existing);
+  const reviewedCanonical = canonicalConcentration(reviewed);
+  const expectedCanonical = canonicalConcentration(candidate.concentration);
+  if (!reviewedCanonical || (expectedCanonical && reviewedCanonical !== expectedCanonical)) {
+    throw new Error(`reviewed_evidence_concentration_candidate_conflict:${patch.candidate_id}:${candidate.concentration}->${reviewed}`);
+  }
+  const current = clean(existing);
+  if (current && canonicalConcentration(current) !== reviewedCanonical) {
+    throw new Error(`reviewed_evidence_concentration_conflict:${patch.candidate_id}:${current}->${reviewed}`);
+  }
+  return reviewed;
 }
 function validateGender(existing, patch) {
   const gender = clean(patch.gender);
@@ -64,10 +96,12 @@ function validateGender(existing, patch) {
   if (current && current !== gender) throw new Error(`reviewed_evidence_gender_conflict:${patch.candidate_id}:${current}->${gender}`);
   return gender;
 }
-function validateLaunchYear(existing, patch) {
+function validateLaunchYear(existing, candidate, patch) {
   const year = clean(patch.launch_year);
   if (!year) return clean(existing);
   if (!/^\d{4}$/.test(year) || Number(year) < 1850 || Number(year) > 2100) throw new Error(`reviewed_evidence_launch_year_invalid:${patch.candidate_id}`);
+  const candidateYear = clean(candidate.launch_year);
+  if (candidateYear && candidateYear !== year) throw new Error(`reviewed_evidence_launch_year_candidate_conflict:${patch.candidate_id}:${candidateYear}->${year}`);
   const current = clean(existing);
   if (current && current !== year) throw new Error(`reviewed_evidence_launch_year_conflict:${patch.candidate_id}:${current}->${year}`);
   return year;
@@ -108,14 +142,15 @@ export function applyReviewedEvidence(evidenceRows, manifestRows, patchRows, sec
     const candidate = manifestById.get(id);
     const row = evidenceById.get(id);
     if (!candidate || !row) throw new Error(`reviewed_evidence_candidate_not_selected:${id}`);
-    if (!bool(row.identity_confirmed)) throw new Error(`reviewed_evidence_requires_prior_identity_confirmation:${id}`);
     validateIdentity(candidate, patch);
-    const reviewedSource = validateSource(candidate, patch, curatedSecondary);
+    const { source: reviewedSource, identityCoverage } = validateSource(candidate, patch, curatedSecondary);
     const touched = [];
 
+    const concentration = validateConcentration(row.concentration, candidate, patch);
+    if (concentration && canonicalConcentration(concentration) !== canonicalConcentration(row.concentration)) { row.concentration = concentration; touched.push("concentration"); }
     const gender = validateGender(row.gender, patch);
     if (gender && gender !== clean(row.gender)) { row.gender = gender; touched.push("gender"); }
-    const launchYear = validateLaunchYear(row.launch_year, patch);
+    const launchYear = validateLaunchYear(row.launch_year, candidate, patch);
     if (launchYear && launchYear !== clean(row.launch_year)) { row.launch_year = launchYear; touched.push("launch_year"); }
 
     if (patch.source_mode === "replace") {
@@ -128,17 +163,20 @@ export function applyReviewedEvidence(evidenceRows, manifestRows, patchRows, sec
     }
     if (patch.source_kind === "official") row.official_source = "true";
     if (patch.source_kind === "trusted_secondary") row.secondary_source = "true";
+    if (String(row.identity_confirmed ?? "").toLowerCase() !== "true") touched.push("identity_confirmed");
+    row.identity_confirmed = "true";
 
     applyNotes(row, patch, touched);
     applyClears(row, patch, touched);
     row.reviewed_evidence = "true";
     row.reviewed_evidence_source = reviewedSource;
     row.reviewed_evidence_kind = patch.source_kind;
+    row.reviewed_evidence_identity_coverage = identityCoverage.toFixed(2);
     row.reviewed_evidence_fields = [...new Set(touched)].join(";");
     row.reviewed_evidence_note = clean(patch.review_note);
     row.evidence_method = [clean(row.evidence_method), `reviewed_evidence:${patch.source_kind}`].filter(Boolean).join("+");
     evidenceById.set(id, row);
-    audit.push({ candidate_id: id, source_kind: patch.source_kind, source_mode: patch.source_mode, touched: [...new Set(touched)] });
+    audit.push({ candidate_id: id, source_kind: patch.source_kind, source_mode: patch.source_mode, identity_coverage: Number(identityCoverage.toFixed(2)), touched: [...new Set(touched)] });
   }
 
   return { rows: evidenceRows.map((row) => evidenceById.get(row.candidate_id) ?? row), audit };
@@ -168,6 +206,7 @@ export function runReviewedEvidence() {
     trusted_secondary_sources: result.audit.filter((row) => row.source_kind === "trusted_secondary").length,
     source_replacements: result.audit.filter((row) => row.source_mode === "replace").length,
     cleared_fields: result.audit.flatMap((row) => row.touched).filter((field) => field.startsWith("clear:")).length,
+    min_source_identity_coverage: result.audit.length ? Math.min(...result.audit.map((row) => row.identity_coverage)) : null,
     production_write: false,
     mutates_raw_inputs: false,
     output: "catalog/expansion/batch-003/evidence.csv",
