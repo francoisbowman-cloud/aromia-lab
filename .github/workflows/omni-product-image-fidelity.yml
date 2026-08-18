@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   acqua-di-gio-fidelity:
-    if: github.head_ref == 'agent/omni-render-gate-integration'
+    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
