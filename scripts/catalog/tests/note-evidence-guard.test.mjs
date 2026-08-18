@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { isPlausibleNoteValue, sanitizeExtractedNotes } from "../note-evidence-guard.mjs";
-import { requireVerifiedNotesUnavailability } from "../expansion-enrich-v2.mjs";
+import { requireVerifiedNotesUnavailability, sanitizeReadinessEvidence } from "../expansion-enrich-v2.mjs";
 
 test("rejects Gucci-style prose captured between note labels", () => {
   assert.equal(isPlausibleNoteValue("of Lemon and piquant Pink Pepper leads into a"), false);
@@ -39,6 +39,22 @@ test("sanitization recomputes the structure fail-closed", () => {
   assert.equal(result.top_notes, "");
   assert.equal(result.middle_notes, "Rose, jasmine");
   assert.equal(result.base_notes, "");
+  assert.equal(result.notes_structure, "PARTIAL");
+});
+
+test("readiness boundary re-sanitizes note evidence added by secondary enrichment", () => {
+  const result = sanitizeReadinessEvidence({
+    brand: "Orto Parisi",
+    name: "Terroni",
+    page_title: "Terroni Parfum",
+    top_notes: "",
+    middle_notes: "abedul; ámbar; benjuí; las Notas de Fondo son madera de gaiac; vetiver; cedro",
+    base_notes: "madera de gaiac; vetiver; cedro; almizcle",
+    accords: "",
+    notes_structure: "PARTIAL",
+  });
+  assert.equal(result.middle_notes, "");
+  assert.equal(result.base_notes, "madera de gaiac; vetiver; cedro; almizcle");
   assert.equal(result.notes_structure, "PARTIAL");
 });
 
