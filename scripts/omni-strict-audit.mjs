@@ -17,6 +17,13 @@ await requireText("docs/design/visual-upgrade/HYBRID-SIGNATURE-VISUAL-CONTRACT.m
   ["hybrid_contract_missing_pdp_sequence", /Identity.*Object.*Sensory anatomy.*Performance.*Story.*Commerce.*Community/is],
 ]);
 
+await requireText("apps/web/src/components/home/TasteLanding.tsx", [
+  ["home_hero_missing_real_catalog_product", /<ProductImage\s+slug=\{hero\.slug\}\s+imageUrl=\{hero\.imagen_url\}/],
+  ["home_hero_missing_catalog_identity", /Objeto del catálogo/],
+]);
+const home = await text("apps/web/src/components/home/TasteLanding.tsx");
+if (/editorial\/cinematic-warm\.png/i.test(home)) failures.push("home_hero_anonymous_background_regression");
+
 await requireText("apps/web/src/app/catalogo/[slug]/page.tsx", [
   ["pdp_missing_not_found", /notFound\(\)/], ["pdp_missing_canonical", /canonical:\s*`\/catalogo\/\$\{perfume\.slug\}`/], ["pdp_missing_product_jsonld", /application\/ld\+json/], ["pdp_missing_hero", /<HeroHeader/], ["pdp_missing_sensory_anatomy", /<SkinEvolution/], ["pdp_missing_performance", /<PerformanceBars/], ["pdp_missing_story", /<EditorialMood/], ["pdp_missing_commerce", /<PriceTable/], ["pdp_missing_community", /<CommunityReviews/],
 ]);
