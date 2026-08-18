@@ -116,9 +116,13 @@ async function rollbackBatch(client: PoolClient, slugs: string[], digest: string
 }
 async function main() {
   await materializeApprovedBatch();
+  const {rows,slugs,sha256: digest}=loadBatch(); const action=process.env.CATALOG_IMPORT_ACTION ?? "validate";
+  if (!new Set(["validate","import","rollback"]).has(action)) throw new Error(`unsupported CATALOG_IMPORT_ACTION=${action}`);
+  if (action === "validate") {
+    console.log(JSON.stringify({ phase: "validated", batch: BATCH_SOURCE, artifact_sha256: digest, rows: rows.length, distinct_slugs: new Set(slugs).size, database_connection: false }, null, 2));
+    return;
+  }
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required");
-  const {rows,slugs,sha256: digest}=loadBatch(); const action=process.env.CATALOG_IMPORT_ACTION ?? "import";
-  if (!new Set(["import","rollback"]).has(action)) throw new Error(`unsupported CATALOG_IMPORT_ACTION=${action}`);
   const pool=new Pool({connectionString:process.env.DATABASE_URL}); const client=await pool.connect();
   try { if (action === "rollback") await rollbackBatch(client,slugs,digest); else await importBatch(client,rows,slugs,digest); }
   finally { client.release(); await pool.end(); }
