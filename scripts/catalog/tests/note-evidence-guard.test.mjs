@@ -1,0 +1,42 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { isPlausibleNoteValue, sanitizeExtractedNotes } from "../note-evidence-guard.mjs";
+
+test("rejects Gucci-style prose captured between note labels", () => {
+  assert.equal(isPlausibleNoteValue("of Lemon and piquant Pink Pepper leads into a"), false);
+  assert.equal(isPlausibleNoteValue("Patchouli reveals its rich, leathery and woody facets. Here, the scent is presented in a three-piece gift set"), false);
+});
+
+test("rejects UI and performance copy masquerading as notes", () => {
+  assert.equal(isPlausibleNoteValue("Scroll to the top"), false);
+  assert.equal(isPlausibleNoteValue("Musks Perfume sillage Middle volume but long lasting"), false);
+});
+
+test("rejects a product title captured as a note", () => {
+  assert.equal(isPlausibleNoteValue("Fahrenheit men", { title: "Fahrenheit Eau de Toilette - Men" }), false);
+});
+
+test("rejects embedded tier labels inside a captured tier", () => {
+  assert.equal(isPlausibleNoteValue("abedul; ámbar; benjuí; las Notas de Fondo son madera de gaiac; vetiver"), false);
+});
+
+test("accepts concise note names and explicit lists", () => {
+  assert.equal(isPlausibleNoteValue("Green Pear"), true);
+  assert.equal(isPlausibleNoteValue("Bergamot, lemon, pink pepper"), true);
+  assert.equal(isPlausibleNoteValue("madera de gaiac; vetiver; cedro; almizcle; musgo; pachulí; haba tonka; vainilla"), true);
+});
+
+test("sanitization recomputes the structure fail-closed", () => {
+  const result = sanitizeExtractedNotes({
+    title: "Example Eau de Parfum",
+    notes_structure: "PYRAMID",
+    top_notes: "Scroll to the top",
+    middle_notes: "Rose, jasmine",
+    base_notes: "A vanilla note envelops all these elements with a soft and spicy accord in the",
+    accords: "",
+  });
+  assert.equal(result.top_notes, "");
+  assert.equal(result.middle_notes, "Rose, jasmine");
+  assert.equal(result.base_notes, "");
+  assert.equal(result.notes_structure, "PARTIAL");
+});
