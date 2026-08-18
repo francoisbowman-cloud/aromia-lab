@@ -8,6 +8,7 @@ function words(value) {
 
 const PROSE_OR_UI = /\b(?:scroll\s+to\s+the\s+top|product|gift\s+set|bottle|sillage|long\s+lasting|presented|presents|discover|leads?\s+into|reveals?|envelops?|enhanced|volume|click|shop|add\s+to\s+bag|how\s+to\s+use)\b/i;
 const EMBEDDED_TIER_LABEL = /\b(?:top|head|opening|heart|middle|base|dry\s*down)\s+notes?\b|\bnotas?\s+de\s+(?:salida|coraz[oó]n|fondo)\b|\bnotes?\s+de\s+(?:t[eê]te|c[oœ]ur|fond)\b/i;
+const TRUNCATED_LABEL_FRAGMENT = /^[a-z]\s+[\p{L}\p{N}]/iu;
 
 function titleLike(value, title) {
   const noteWords = [...new Set(words(value).filter((w) => w.length >= 3))];
@@ -24,6 +25,7 @@ export function isPlausibleNoteValue(value, { title = "" } = {}) {
   if (/[.!?]/.test(text)) return false;
   if (PROSE_OR_UI.test(text)) return false;
   if (EMBEDDED_TIER_LABEL.test(text)) return false;
+  if (TRUNCATED_LABEL_FRAGMENT.test(text)) return false;
   if (titleLike(text, title)) return false;
 
   const tokenCount = words(text).length;
