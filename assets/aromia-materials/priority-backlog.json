@@ -1,0 +1,22 @@
+{
+  "basis": "Aromia catalog and expansion evidence; prioritize recurrence plus compositional value",
+  "tiers": {
+    "A_missing_next": [
+      {"id":"vetiver","category":"root-grass","reason":"repeated catalog note; structural woody/earthy material"},
+      {"id":"cedar","category":"wood","reason":"repeated catalog note; high reuse across masculine/unisex compositions"},
+      {"id":"lemon","category":"citrus","reason":"frequent citrus opening; distinct from bergamot"},
+      {"id":"petitgrain","category":"green-citrus","reason":"recurs in evidence and expands leafy citrus vocabulary"},
+      {"id":"musk","category":"abstract-material","reason":"high catalog recurrence; needs a non-literal, honest visual treatment rather than fake animal material"}
+    ],
+    "B_missing_next": [
+      {"id":"ginger","category":"spice-root","reason":"catalog occurrence and strong compositional utility"},
+      {"id":"benzoin","category":"resin","reason":"catalog occurrence; complements frankincense/myrrh with warmer balsamic texture"},
+      {"id":"coriander","category":"spice-seed","reason":"catalog occurrence and aromatic freshness"},
+      {"id":"cumin","category":"spice-seed","reason":"catalog occurrence; use sparingly"},
+      {"id":"chestnut","category":"gourmand-wood","reason":"catalog occurrence; useful for warm gourmand stories"}
+    ],
+    "A_covered": ["bergamot","grapefruit","mandarin","neroli-orange-blossom","pink-pepper","lavender","cardamom","patchouli","tonka-bean","vanilla","saffron","orris-root","cloves"],
+    "core_editorial_covered": ["rose","jasmine","ylang-ylang","sandalwood","oud-agarwood","oakmoss","frankincense","myrrh","pear","apple","blackcurrant","juniper","tobacco","cinnamon"]
+  },
+  "special_rule": "Musk and other abstract/synthetic/animal-associated notes must not be represented with misleading literal animal-origin imagery. Prefer material abstraction or labeled educational treatment."
+}

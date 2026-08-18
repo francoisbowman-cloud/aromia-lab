@@ -29,6 +29,7 @@ export function QuizFlow() {
       return;
     }
     setScores(nuevosScores);
+    trackEvent("quiz_progress_reveal", { completed_questions: step + 1, next_question: step + 2, total_questions: QUIZ_QUESTIONS.length });
     setStep((s) => s + 1);
   }
 
