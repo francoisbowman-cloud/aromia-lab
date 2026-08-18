@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { isPlausibleNoteValue, sanitizeExtractedNotes } from "../note-evidence-guard.mjs";
+import { requireVerifiedNotesUnavailability } from "../expansion-enrich-v2.mjs";
 
 test("rejects Gucci-style prose captured between note labels", () => {
   assert.equal(isPlausibleNoteValue("of Lemon and piquant Pink Pepper leads into a"), false);
@@ -39,4 +40,22 @@ test("sanitization recomputes the structure fail-closed", () => {
   assert.equal(result.middle_notes, "Rose, jasmine");
   assert.equal(result.base_notes, "");
   assert.equal(result.notes_structure, "PARTIAL");
+});
+
+test("UNKNOWN extraction cannot auto-claim that the source publishes no notes", () => {
+  const guarded = requireVerifiedNotesUnavailability({
+    notes_structure: "UNKNOWN",
+    source_does_not_publish_notes: "true",
+  });
+  assert.equal(guarded.source_does_not_publish_notes, "false");
+  assert.equal(guarded.notes_unavailability_guard, "unverified_claim_downgraded_to_unresolved");
+});
+
+test("explicitly verified note unavailability remains supported", () => {
+  const guarded = requireVerifiedNotesUnavailability({
+    notes_structure: "UNKNOWN",
+    source_does_not_publish_notes: "true",
+    notes_unavailability_verified: "true",
+  });
+  assert.equal(guarded.source_does_not_publish_notes, "true");
 });
