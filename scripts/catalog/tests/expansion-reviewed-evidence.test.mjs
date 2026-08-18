@@ -4,14 +4,14 @@ import { applyReviewedEvidence } from "../expansion-reviewed-evidence.mjs";
 
 function fixture() {
   return {
-    evidence: [{ candidate_id: "c001", brand: "Maison Test", name: "Alpha Homme", concentration: "EDP", gender: "", identity_confirmed: "true", official_source: "true", source_url: "https://maison.test/alpha-homme", top_notes: "Old", middle_notes: "", base_notes: "", family: "bad scraped prose", image_url: "https://maison.test/gift-set.jpg", image_source: "https://maison.test/gift-set", seo_title: "Gift Set", notes_structure: "PARTIAL" }],
+    evidence: [{ candidate_id: "c001", brand: "Maison Test", name: "Alpha Homme", concentration: "EDP", gender: "", identity_confirmed: "true", official_source: "true", source_url: "https://maison.test/alpha-homme-x", top_notes: "Old", middle_notes: "", base_notes: "", family: "bad scraped prose", image_url: "https://maison.test/alpha-homme-x.jpg", image_source: "https://maison.test/alpha-homme-x", seo_title: "Alpha Homme X", seo_description: "wrong flanker", description: "wrong flanker", notes_structure: "PARTIAL" }],
     manifest: [{ candidate_id: "c001", brand: "Maison Test", name: "Alpha Homme", concentration: "EDP", official_domain: "maison.test", launch_year: "2024" }],
     secondary: [{ candidate_id: "c001", source_url: "https://www.fragrantica.com/perfume/Maison-Test/Alpha-Homme-12345.html" }],
   };
 }
 
 function patch(overrides = {}) {
-  return { candidate_id: "c001", brand: "Maison Test", name: "Alpha Homme", source_url: "https://maison.test/products/alpha-homme", source_kind: "official", source_mode: "append", concentration: "EDP", gender: "masculino", launch_year: "2024", top_notes: "Citrus", middle_notes: "Iris", base_notes: "Cedar", accords: "", notes_mode: "replace", clear_fields: "family", review_note: "manual verification", ...overrides };
+  return { candidate_id: "c001", brand: "Maison Test", name: "Alpha Homme", source_url: "https://maison.test/products/alpha-homme", supplemental_source_url: "", source_kind: "official", source_mode: "append", concentration: "EDP", gender: "masculino", launch_year: "2024", top_notes: "Citrus", middle_notes: "Iris", base_notes: "Cedar", accords: "", notes_mode: "replace", clear_fields: "family", review_note: "manual verification", ...overrides };
 }
 
 test("reviewed evidence can fill critical metadata and replace a verified complete pyramid", () => {
@@ -61,6 +61,32 @@ test("trusted secondary evidence must be both trusted and pre-curated for the ca
   const f = fixture();
   const p = patch({ source_kind: "trusted_secondary", source_url: "https://www.fragrantica.com/perfume/Maison-Test/Other-999.html" });
   assert.throws(() => applyReviewedEvidence(f.evidence, f.manifest, [p], f.secondary), /secondary_not_curated/);
+});
+
+test("an official replacement may retain a separately curated exact secondary source", () => {
+  const f = fixture();
+  const supplemental = f.secondary[0].source_url;
+  const { rows, audit } = applyReviewedEvidence(f.evidence, f.manifest, [patch({ source_mode: "replace", supplemental_source_url: supplemental, clear_fields: "image_url;image_source;seo_title;seo_description;description" })], f.secondary);
+  assert.equal(rows[0].source_url, `https://maison.test/products/alpha-homme;${supplemental}`);
+  assert.equal(rows[0].reviewed_evidence_supplemental_source, supplemental);
+  assert.equal(rows[0].reviewed_evidence_supplemental_identity_coverage, "1.00");
+  assert.equal(rows[0].secondary_source, "true");
+  assert.equal(rows[0].image_url, "");
+  assert.equal(rows[0].image_source, "");
+  assert.equal(rows[0].seo_title, "");
+  assert.equal(rows[0].seo_description, "");
+  assert.equal(rows[0].description, "");
+  assert.equal(audit[0].supplemental_secondary, true);
+});
+
+test("supplemental source must be the candidate's curated trusted secondary URL", () => {
+  const f = fixture();
+  assert.throws(() => applyReviewedEvidence(f.evidence, f.manifest, [patch({ supplemental_source_url: "https://www.fragrantica.com/perfume/Maison-Test/Other-999.html" })], f.secondary), /supplemental_secondary_not_curated/);
+});
+
+test("supplemental secondary is only allowed with an official primary source", () => {
+  const f = fixture();
+  assert.throws(() => applyReviewedEvidence(f.evidence, f.manifest, [patch({ source_kind: "trusted_secondary", source_url: f.secondary[0].source_url, supplemental_source_url: f.secondary[0].source_url })], f.secondary), /supplemental_requires_official_primary/);
 });
 
 test("review note is mandatory for manually promoted evidence", () => {
