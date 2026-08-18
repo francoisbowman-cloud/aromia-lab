@@ -5,6 +5,11 @@ import Link from "next/link";
 import type { Article } from "@/lib/types";
 import { CATEGORIA_LABEL } from "@/lib/magazineCategories";
 
+function isAuditedCover(url?: string | null) {
+  if (!url) return false;
+  return !url.includes("/editorial/");
+}
+
 export function MagazineSecondaryStory({
   article,
   isFirst: _isFirst,
@@ -13,7 +18,7 @@ export function MagazineSecondaryStory({
   isFirst: boolean;
 }) {
   const [imgError, setImgError] = useState(false);
-  const showImage = Boolean(article.imagen_portada_url) && !imgError;
+  const showImage = isAuditedCover(article.imagen_portada_url) && !imgError;
 
   return (
     <Link
