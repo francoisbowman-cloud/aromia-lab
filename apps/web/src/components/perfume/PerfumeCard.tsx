@@ -30,7 +30,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
 
   return (
     <article className="group relative flex flex-col overflow-hidden bg-[#fffdf8] transition-colors duration-500 hover:bg-[#f8f2e9] dark:bg-[#14100c] dark:hover:bg-[#18130f]">
-      <div className="flex items-center justify-between px-4 py-3 font-plex text-[8px] uppercase tracking-[.16em] text-muted lg:px-5">
+      <div className="flex items-center justify-between px-4 py-3 font-plex text-xs uppercase tracking-[.12em] text-muted lg:px-5">
         <span>{index == null ? "Selección" : String(index + 1).padStart(2, "0")}</span>
         <span>{perfume.nicho_o_comercial ?? "Aromia edit"}</span>
       </div>
@@ -42,11 +42,11 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
         className="relative block aspect-[4/5] overflow-hidden bg-white outline-none"
       >
         <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" />
-        <span className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center bg-[rgba(255,255,255,.9)] font-display text-lg text-ink shadow-[0_4px_20px_rgba(33,29,23,.08)] backdrop-blur-sm transition-transform group-hover:translate-x-1">→</span>
+        <span className="absolute bottom-4 right-4 grid h-11 w-11 place-items-center bg-[rgba(255,255,255,.92)] font-display text-lg text-ink shadow-[0_4px_20px_rgba(33,29,23,.08)] backdrop-blur-sm transition-transform group-hover:translate-x-1">→</span>
       </Link>
 
       <Link href={`/catalogo/${perfume.slug}`} onClick={trackOpen} className="flex flex-1 flex-col px-4 pb-5 pt-5 outline-none lg:px-5 lg:pb-6">
-        <p className="min-h-3 font-plex text-[9px] uppercase tracking-[.16em] text-gold-contrast">{family ?? "Objeto olfativo"}</p>
+        <p className="min-h-3 font-plex text-xs uppercase tracking-[.13em] text-gold-contrast">{family ?? "Objeto olfativo"}</p>
         <h3 className="mt-3 max-w-[12ch] font-display text-[25px] font-medium leading-[.98] tracking-[-.02em] text-ink">{perfume.nombre}</h3>
         <p className="mt-2 font-sans text-sm text-muted">{perfume.marca}</p>
         {variant === "featured" && perfume.rating_promedio ? (
@@ -54,10 +54,10 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
         ) : (
           <div className="mt-7 flex items-end justify-between gap-4 pt-4">
             <div>
-              <p className="font-plex text-[8px] uppercase tracking-[.14em] text-muted">Referencia</p>
+              <p className="font-plex text-xs uppercase tracking-[.12em] text-muted">Referencia</p>
               <p className="mt-1 font-display text-lg text-ink">{price ?? "Ver disponibilidad"}</p>
             </div>
-            <span className="font-plex text-[8px] uppercase tracking-[.14em] text-muted transition-colors group-hover:text-gold-contrast">Ver ficha</span>
+            <span className="font-plex text-xs uppercase tracking-[.12em] text-muted transition-colors group-hover:text-gold-contrast">Ver ficha</span>
           </div>
         )}
       </Link>
