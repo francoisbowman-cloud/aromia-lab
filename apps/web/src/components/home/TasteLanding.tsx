@@ -36,47 +36,73 @@ function perfumeNotes(perfume: Perfume) {
 export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Perfume[]; articulos: Article[]; categorias: Categoria[] }) {
   const visuales = pickDistinct(perfumes, 8);
   const hero = visuales[0] ?? perfumes[0];
+  const editorial = visuales[4] ?? visuales[1] ?? hero;
   const selection = (visuales.length >= 4 ? visuales : perfumes).slice(1, 4);
   const story = articulos.find((article) => article.categoria !== "academia") ?? articulos[0];
   const index = categorias.slice(0, 6);
 
   return (
     <main className="overflow-hidden bg-[#fbf8f3] text-ink dark:bg-[#0d0b09]">
-      <section className="relative min-h-[760px] border-b border-line lg:min-h-[calc(100vh-72px)]">
-        <div className="absolute inset-y-0 right-0 hidden w-[46%] overflow-hidden lg:block">
-          <div className="absolute inset-0 scale-[1.02] bg-cover bg-center transition-transform duration-[1400ms] hover:scale-100" style={{ backgroundImage: "url('/editorial/cinematic-warm.png')" }} />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,#fbf8f3_0%,rgba(251,248,243,.88)_7%,rgba(251,248,243,.08)_45%,rgba(251,248,243,0)_100%)] dark:bg-[linear-gradient(90deg,#0d0b09_0%,rgba(13,11,9,.88)_7%,rgba(13,11,9,.08)_45%,rgba(13,11,9,0)_100%)]" />
+      <section className="relative overflow-hidden border-b border-line">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="absolute -right-[12%] top-[8%] h-[62%] w-[58%] rounded-full bg-[radial-gradient(circle,rgba(200,168,107,.18)_0%,rgba(200,168,107,.06)_36%,transparent_70%)] blur-3xl dark:opacity-55" />
+          <div className="absolute bottom-0 right-0 h-px w-[56%] bg-gradient-to-l from-gold/45 to-transparent" />
         </div>
 
-        <div className="relative mx-auto grid min-h-[760px] w-full max-w-[1440px] grid-cols-1 px-6 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[1.06fr_.94fr] lg:px-10 xl:px-14">
-          <div className="flex flex-col justify-between py-10 sm:py-14 lg:py-16">
+        <div className="relative mx-auto grid min-h-[760px] w-full max-w-[1440px] grid-cols-1 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[.94fr_1.06fr]">
+          <div className="flex flex-col justify-between px-6 py-10 sm:py-14 lg:px-10 lg:py-16 xl:px-14">
             <div className="flex items-center gap-5 font-plex text-[9px] uppercase tracking-[.19em] text-muted">
               <span>Perfume · Cultura · Descubrimiento</span><span className="h-px w-10 bg-gold/70" />
             </div>
 
-            <div className="max-w-[820px] py-12 lg:py-8">
-              <h1 className="max-w-[9.4ch] font-display text-[clamp(4.4rem,9vw,9.6rem)] font-medium leading-[.78] tracking-[-.055em] text-ink">
+            <div className="max-w-[760px] py-12 lg:py-8">
+              <h1 className="max-w-[9.4ch] font-display text-[clamp(4.25rem,8.3vw,8.8rem)] font-medium leading-[.8] tracking-[-.055em] text-ink">
                 El perfume no se elige. <span className="text-gold-contrast">Se reconoce.</span>
               </h1>
-              <div className="mt-10 grid max-w-[760px] gap-7 border-t border-line pt-7 sm:grid-cols-[1fr_auto] sm:items-end">
+              <div className="mt-10 grid max-w-[720px] gap-7 border-t border-line pt-7 sm:grid-cols-[1fr_auto] sm:items-end">
                 <p className="max-w-[47ch] font-sans text-sm leading-7 text-muted sm:text-[15px]">
                   Aromia traduce fragancias en lenguaje humano: carácter, materia, contexto y sensación. Menos ruido. Más criterio para encontrar aquello que sí se parece a ti.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Link href="/quiz" className="inline-flex min-h-12 items-center justify-center border border-ink bg-ink px-5 font-plex text-[9px] uppercase tracking-[.17em] text-[#fbf8f3] transition duration-300 hover:bg-gold-contrast dark:border-[#f2ebdd] dark:bg-[#f2ebdd] dark:text-[#0d0b09]">Encontrar mi firma</Link>
-                  <Link href="/catalogo" className="inline-flex min-h-12 items-center justify-center border border-line bg-transparent px-5 font-plex text-[9px] uppercase tracking-[.17em] text-ink transition duration-300 hover:border-gold hover:text-gold-contrast">Explorar</Link>
+                  <Link href="/quiz" className="inline-flex min-h-12 items-center justify-center border border-ink bg-ink px-5 font-plex text-[9px] uppercase tracking-[.17em] text-[#fbf8f3] transition duration-300 hover:bg-gold-contrast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold dark:border-[#f2ebdd] dark:bg-[#f2ebdd] dark:text-[#0d0b09]">Encontrar mi firma</Link>
+                  <Link href="/catalogo" className="inline-flex min-h-12 items-center justify-center border border-line bg-transparent px-5 font-plex text-[9px] uppercase tracking-[.17em] text-ink transition duration-300 hover:border-gold hover:text-gold-contrast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Explorar</Link>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 border-t border-line pt-6 sm:grid-cols-4 lg:max-w-[760px]">
+            <div className="grid grid-cols-2 gap-6 border-t border-line pt-6 sm:grid-cols-4 lg:max-w-[720px]">
               {[['01','Catálogo curado'],['02','Índice olfativo'],['03','Magazine'],['04','Discovery']].map(([n,label]) => <div key={n}><p className="font-display text-lg text-gold-contrast">{n}</p><p className="mt-1 font-plex text-[8px] uppercase tracking-[.16em] text-muted">{label}</p></div>)}
             </div>
           </div>
 
-          <div className="relative -mx-6 min-h-[360px] overflow-hidden border-t border-line lg:hidden">
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/editorial/cinematic-warm.png')" }} />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#fbf8f3_0%,rgba(251,248,243,0)_30%)] dark:bg-[linear-gradient(180deg,#0d0b09_0%,rgba(13,11,9,0)_30%)]" />
+          <div className="relative min-h-[520px] border-t border-line bg-[#f1e9dd] dark:bg-[#17130f] lg:min-h-full lg:border-l lg:border-t-0">
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+              <div className="absolute inset-x-[8%] top-[8%] h-[66%] rounded-[50%] bg-[radial-gradient(ellipse,rgba(255,255,255,.78)_0%,rgba(255,255,255,.28)_42%,transparent_72%)] blur-2xl dark:opacity-20" />
+              <div className="absolute left-[10%] top-0 h-full w-px bg-line/70" />
+              <div className="absolute right-[10%] top-0 h-full w-px bg-line/70" />
+              <div className="absolute bottom-[14%] left-[10%] right-[10%] h-px bg-line/70" />
+            </div>
+
+            {hero ? (
+              <Link href={`/catalogo/${hero.slug}`} className="group relative flex min-h-[520px] h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-6px] focus-visible:outline-gold lg:min-h-[calc(100vh-72px)]" aria-label={`Descubrir ${hero.nombre} de ${hero.marca}`}>
+                <div className="relative flex-1 p-7 sm:p-10 lg:p-12">
+                  <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" className="bg-transparent dark:bg-transparent" />
+                </div>
+                <div className="relative mx-6 mb-6 grid gap-4 border-t border-line bg-[#fbf8f3]/80 px-4 py-4 backdrop-blur-sm dark:bg-[#0d0b09]/80 sm:mx-8 sm:grid-cols-[1fr_auto] sm:items-end lg:mx-10">
+                  <div>
+                    <p className="font-plex text-[8px] uppercase tracking-[.17em] text-gold-contrast">Objeto del catálogo · {publicText(hero.familia_olfativa) ?? "Selección"}</p>
+                    <p className="mt-2 font-display text-[28px] leading-none tracking-[-.025em] text-ink">{hero.nombre}</p>
+                    <p className="mt-1 font-sans text-xs text-muted">{hero.marca}</p>
+                  </div>
+                  <div className="flex items-center justify-between gap-6 sm:block sm:text-right">
+                    <p className="font-display text-xl text-ink">{formattedReferencePrice(hero) ?? "Ver ficha"}</p>
+                    <p className="mt-1 font-plex text-[8px] uppercase tracking-[.14em] text-muted transition-transform duration-300 group-hover:translate-x-1">Abrir →</p>
+                  </div>
+                </div>
+              </Link>
+            ) : (
+              <div className="flex min-h-[520px] items-center justify-center px-8 text-center font-sans text-sm text-muted lg:min-h-[calc(100vh-72px)]">El catálogo está preparando su próxima selección.</div>
+            )}
           </div>
         </div>
       </section>
@@ -104,28 +130,28 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
         </div>
       </section>
 
-      {hero ? (
+      {editorial ? (
         <section className="bg-[#15110d] text-[#f2ebdd]">
           <div className="mx-auto grid min-h-[680px] w-full max-w-[1440px] grid-cols-1 lg:grid-cols-[.82fr_1.18fr]">
             <div className="order-2 flex flex-col justify-between px-6 py-12 lg:order-1 lg:px-10 lg:py-14 xl:px-14">
-              <div className="flex items-center justify-between border-b border-white/15 pb-4 font-plex text-[8px] uppercase tracking-[.17em] text-[#b7ad9a]"><span>Selección editorial</span><span>Objeto 01</span></div>
+              <div className="flex items-center justify-between border-b border-white/15 pb-4 font-plex text-[8px] uppercase tracking-[.17em] text-[#b7ad9a]"><span>Selección editorial</span><span>Objeto 02</span></div>
               <div className="py-12">
-                <p className="font-display text-[20px] text-[#c8a86b]">{hero.marca}</p>
-                <h2 className="mt-3 max-w-[8ch] font-display text-[60px] leading-[.86] tracking-[-.045em] sm:text-[78px]">{hero.nombre}</h2>
-                <p className="mt-7 max-w-[42ch] font-sans text-sm leading-7 text-[#b7ad9a]">{hero.descripcion_corta ?? hero.resena_sintetizada ?? "Una pieza elegida por su capacidad de sostener identidad, contraste y presencia más allá de la primera impresión."}</p>
+                <p className="font-display text-[20px] text-[#c8a86b]">{editorial.marca}</p>
+                <h2 className="mt-3 max-w-[8ch] font-display text-[60px] leading-[.86] tracking-[-.045em] sm:text-[78px]">{editorial.nombre}</h2>
+                <p className="mt-7 max-w-[42ch] font-sans text-sm leading-7 text-[#b7ad9a]">{editorial.descripcion_corta ?? editorial.resena_sintetizada ?? "Una pieza elegida por su capacidad de sostener identidad, contraste y presencia más allá de la primera impresión."}</p>
                 <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3 border-y border-white/15 py-5">
-                  {publicText(hero.familia_olfativa) ? <span className="font-plex text-[8px] uppercase tracking-[.16em] text-[#d8bd8c]">{publicText(hero.familia_olfativa)}</span> : null}
-                  {perfumeNotes(hero).map((note) => <span key={note} className="font-sans text-xs text-[#b7ad9a]">{note}</span>)}
+                  {publicText(editorial.familia_olfativa) ? <span className="font-plex text-[8px] uppercase tracking-[.16em] text-[#d8bd8c]">{publicText(editorial.familia_olfativa)}</span> : null}
+                  {perfumeNotes(editorial).map((note) => <span key={note} className="font-sans text-xs text-[#b7ad9a]">{note}</span>)}
                 </div>
                 <div className="mt-8 flex items-end justify-between gap-6">
-                  <Link href={`/catalogo/${hero.slug}`} className="inline-flex min-h-11 items-center border-b border-[#c8a86b] font-plex text-[9px] uppercase tracking-[.17em] text-[#f2ebdd]">Entrar en la fragancia →</Link>
-                  <span className="font-display text-2xl text-[#d8bd8c]">{formattedReferencePrice(hero) ?? ""}</span>
+                  <Link href={`/catalogo/${editorial.slug}`} className="inline-flex min-h-11 items-center border-b border-[#c8a86b] font-plex text-[9px] uppercase tracking-[.17em] text-[#f2ebdd]">Entrar en la fragancia →</Link>
+                  <span className="font-display text-2xl text-[#d8bd8c]">{formattedReferencePrice(editorial) ?? ""}</span>
                 </div>
               </div>
               <p className="max-w-[38ch] font-sans text-[11px] leading-5 text-[#82796d]">La selección cambia con el catálogo. Aromia no inventa una narrativa: parte de los datos y los convierte en lectura editorial.</p>
             </div>
             <div className="order-1 relative min-h-[520px] overflow-hidden bg-[#f7f3eb] lg:order-2 lg:min-h-[680px]">
-              <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" />
+              <ProductImage slug={editorial.slug} imageUrl={editorial.imagen_url} alt={`${editorial.nombre} de ${editorial.marca}`} mode="hero" />
               <div className="pointer-events-none absolute inset-0 border-[18px] border-[#15110d]/0 lg:border-[28px]" />
             </div>
           </div>
