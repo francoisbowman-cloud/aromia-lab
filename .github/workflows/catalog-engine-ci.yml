@@ -22,7 +22,7 @@ on:
 
 jobs:
   catalog:
-    name: catalog (tests + expansion v2 + harvest + secondary + gate)
+    name: catalog (tests + expansion v2 + harvest + reviewed evidence + gate)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -88,6 +88,8 @@ jobs:
         env:
           AROMIA_SECONDARY_CONCURRENCY: "5"
         run: npm --prefix scripts/catalog run secondary-enrich:v2
+      - name: Apply human-reviewed evidence with fail-closed guards
+        run: npm --prefix scripts/catalog run reviewed-evidence:v2
       - name: Route evidence through catalog readiness gate
         run: npm --prefix scripts/catalog run enrich:v2
       - name: Build catalog-ready draft batch
@@ -107,6 +109,8 @@ jobs:
         run: |
           test -s catalog/expansion/batch-003/harvest-report.json
           test -s catalog/expansion/batch-003/secondary-enrichment-report.json
+          test -s catalog/expansion/batch-003/reviewed-evidence-report.json
+          test -s catalog/expansion/batch-003/evidence.csv
           test -s catalog/expansion/batch-003/enrichment-report.json
           test -s catalog/expansion/batch-003/remediation-report.json
           test -s catalog/expansion/batch-003/remediation-queue.csv
@@ -117,6 +121,8 @@ jobs:
           test -f catalog/expansion/batch-003/batch-003-prepared.csv
           echo '--- secondary ---'
           cat catalog/expansion/batch-003/secondary-enrichment-report.json
+          echo '--- reviewed evidence ---'
+          cat catalog/expansion/batch-003/reviewed-evidence-report.json
           echo '--- enrichment ---'
           cat catalog/expansion/batch-003/enrichment-report.json
           echo '--- remediation ---'
