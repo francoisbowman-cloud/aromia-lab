@@ -1,0 +1,15 @@
+{
+  "batch": "batch-003",
+  "accepted_artifact_sha256": "e97833db0a7555c67cd7a84342fdca844efc1ae876fcdeabfa4512611a2ad32b",
+  "rows": 10,
+  "source_head": "305042bd05858b382574ed5e6e64c473a08e4cb4",
+  "source_pr": 80,
+  "decision": "GO",
+  "minPreparedRows": 10,
+  "auto_ready": 10,
+  "review_required": 90,
+  "blocked": 0,
+  "manual_artifact_inspection": "PASS",
+  "rejected_prior_go_reason": "Nishane Hacivat inherited HACIVAT X 15ml source/image/SEO; corrected before acceptance",
+  "production_write": false
+}
