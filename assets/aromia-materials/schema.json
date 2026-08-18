@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aromialab.com/schemas/material-library-v1.json",
+  "title": "Aromia Material Library Asset",
+  "type": "object",
+  "required": ["id", "display_name", "category", "file", "relative_path", "format", "alpha", "sha256", "status", "source_type", "canonical_product_identity", "approved_for_editorial", "approved_for_product_identity", "provenance_required_for_note_claim"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "display_name": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "file": {"type": "string", "pattern": "^[a-z0-9-]+\\.(webp|png)$"},
+    "relative_path": {"type": "string", "pattern": "^assets/aromia-materials/files/"},
+    "format": {"enum": ["webp", "png"]},
+    "alpha": {"type": "boolean"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"enum": ["generated_material", "review", "approved", "rejected", "deprecated"]},
+    "source_type": {"enum": ["generated_material", "licensed_photo", "original_photo", "public_domain", "unknown"]},
+    "canonical_product_identity": {"type": "boolean"},
+    "approved_for_editorial": {"type": "boolean"},
+    "approved_for_product_identity": {"type": "boolean"},
+    "provenance_required_for_note_claim": {"type": "boolean"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}
