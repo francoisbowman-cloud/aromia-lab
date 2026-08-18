@@ -1,0 +1,41 @@
+{
+  "library": "Aromia Material Library v1",
+  "purpose": "Reusable atmospheric ingredient assets for editorial perfume compositions",
+  "rules": [
+    "Atmospheric/editorial use only; never replace canonical perfume packshots or factual product identity.",
+    "Prefer transparent compositing; preserve natural scale and material behavior.",
+    "Reject outputs with impossible anatomy, duplicated structures, plastic texture, halos, malformed seeds/petals, or overt generative artifacts.",
+    "Do not imply that an ingredient is present in a perfume unless catalog provenance confirms it.",
+    "Use restraint: one or two meaningful materials can outperform decorative abundance."
+  ],
+  "assets": [
+    {"id":"apple","category":"fruit","file":"apple.webp","format":"webp","alpha":true,"sha256":"792e283b3c3a5972ebeda0f6eb4f578e6108e1fe7aea20d017cd56421c04bad8","status":"generated_material","canonical_product_identity":false},
+    {"id":"bergamot","category":"citrus","file":"bergamot.webp","format":"webp","alpha":true,"sha256":"3b081d99fe74147e6cc9d8f0b5a97b8f39e454ae5803656978419949faba7ce0","status":"generated_material","canonical_product_identity":false},
+    {"id":"blackcurrant","category":"fruit","file":"blackcurrant.webp","format":"webp","alpha":true,"sha256":"0a0b6c3acd2bad351a2f8bc3ef0b47402b8be5fab50ceaf9e0549ec57a66b74e","status":"generated_material","canonical_product_identity":false},
+    {"id":"cardamom","category":"spice","file":"cardamom.webp","format":"webp","alpha":true,"sha256":"ab0c3b1671296421ed357cdee22163a7a1e543844ca6b0f0872dd634d9540d45","status":"generated_material","canonical_product_identity":false},
+    {"id":"cinnamon","category":"spice","file":"cinnamon.webp","format":"webp","alpha":true,"sha256":"6286c3cca23ffe0b53b963da015fb7f15332e6daf37675fcd778ffd2fd00a58d","status":"generated_material","canonical_product_identity":false},
+    {"id":"cloves","category":"spice","file":"cloves.webp","format":"webp","alpha":true,"sha256":"ab0df3ab370b9ce2e3dc0458d80a81adc19b5dde278154fd3f5e6fde562a44e7","status":"generated_material","canonical_product_identity":false},
+    {"id":"frankincense","category":"resin","file":"frankincense.webp","format":"webp","alpha":true,"sha256":"9df3daaf613dfac38211c8bce648f516c21961aaaac3d67dbb45e24cc1d379fb","status":"generated_material","canonical_product_identity":false},
+    {"id":"grapefruit","category":"citrus","file":"grapefruit.webp","format":"webp","alpha":true,"sha256":"5e11f8ec748a66b308c8f0920860f4cd558b013a26d2b0528bc608dd221e67f9","status":"generated_material","canonical_product_identity":false},
+    {"id":"iris","category":"floral-powdery","file":"iris.webp","format":"webp","alpha":true,"sha256":"4d0057fe2846b50237d42cf492e2002d095638f30440fea370b193be83b02c6f","status":"generated_material","canonical_product_identity":false},
+    {"id":"jasmine","category":"floral","file":"jasmine.webp","format":"webp","alpha":true,"sha256":"2829cfe08056505c6fd46c8b3d2f3422a341d48985a200e4a5656a04422b03b7","status":"generated_material","canonical_product_identity":false},
+    {"id":"juniper","category":"aromatic","file":"juniper.webp","format":"webp","alpha":true,"sha256":"77c58521c1fd2c97df33171318d486f48298da2d0bf2181a296877918f792a75","status":"generated_material","canonical_product_identity":false},
+    {"id":"lavender","category":"aromatic","file":"lavender.webp","format":"webp","alpha":true,"sha256":"c46393c51e36969ede536b08bd4f027c0c442aba0f483179039025067a5efcdd","status":"generated_material","canonical_product_identity":false},
+    {"id":"mandarin","category":"citrus","file":"mandarin.webp","format":"webp","alpha":true,"sha256":"b4c6629d8ff5417a2d3ada5a6cc8a81b128c496891768615260c92b216b7c015","status":"generated_material","canonical_product_identity":false},
+    {"id":"myrrh","category":"resin","file":"myrrh.webp","format":"webp","alpha":true,"sha256":"fbb043dbcfd8796748a7b5eb809a80bcfcabe3a5cc3123d5cb1d63e0c63069ba","status":"generated_material","canonical_product_identity":false},
+    {"id":"neroli-orange-blossom","category":"floral-citrus","file":"neroli-orange-blossom.webp","format":"webp","alpha":true,"sha256":"e21695f572d27bac00e3b5acc57e1a9ebdbe64192e1a1a4940ffacbbe508ebed","status":"generated_material","canonical_product_identity":false},
+    {"id":"oakmoss","category":"mossy-green","file":"oakmoss.webp","format":"webp","alpha":true,"sha256":"ac0aa66fda8fa26e81f514316cb220461ec7cc1b9a920963b8a2c2532d1794ba","status":"generated_material","canonical_product_identity":false},
+    {"id":"orris-root","category":"root-powdery","file":"orris-root.webp","format":"webp","alpha":true,"sha256":"07bfdd7c1a8c39c1d9aafa506799ad405f3545a786ec7658cbf9c36079f4fdfe","status":"generated_material","canonical_product_identity":false},
+    {"id":"oud-agarwood","category":"wood-resin","file":"oud-agarwood.webp","format":"webp","alpha":true,"sha256":"8eefa2b5953f96e1e413129621fe4d34e66e95de55fe1b74f33418a122fc4760","status":"generated_material","canonical_product_identity":false},
+    {"id":"patchouli","category":"earthy-green","file":"patchouli.webp","format":"webp","alpha":true,"sha256":"dea2c56c435e5a9f55b08578bbe4cabfd1f729303b110d95f8fe18c7479e19fd","status":"generated_material","canonical_product_identity":false},
+    {"id":"pear","category":"fruit","file":"pear.webp","format":"webp","alpha":true,"sha256":"4db8d010beddad542d2f2fa830a68db64b8e9ea6470ae6a12a0d470e60be8905","status":"generated_material","canonical_product_identity":false},
+    {"id":"pink-pepper","category":"spice","file":"pink-pepper.webp","format":"webp","alpha":true,"sha256":"065d7b482e8b34b62d3e4830edd3e94e65242aee0b4396c14a573d04d89d16f9","status":"generated_material","canonical_product_identity":false},
+    {"id":"rose","category":"floral","file":"rose.webp","format":"webp","alpha":true,"sha256":"2d8a213306056725344a258e76d763b9b380688cc1575337b41109b39dd5a589","status":"generated_material","canonical_product_identity":false},
+    {"id":"saffron","category":"spice","file":"saffron.webp","format":"webp","alpha":true,"sha256":"f07d485efa99070dfd3d425a997949fccaace02f217ed1840034a665e021c071","status":"generated_material","canonical_product_identity":false},
+    {"id":"sandalwood","category":"wood","file":"sandalwood.webp","format":"webp","alpha":true,"sha256":"8ba70be58d1a0ad491eef34eac705ae6b9f5c59a77f1454d96113cfcc9e0b938","status":"generated_material","canonical_product_identity":false},
+    {"id":"tobacco","category":"leaf","file":"tobacco.webp","format":"webp","alpha":true,"sha256":"b8dd414770bee431284a2a07e6f9070eeacda184a1024b163bd467fecb6d8008","status":"generated_material","canonical_product_identity":false},
+    {"id":"tonka-bean","category":"gourmand","file":"tonka-bean.webp","format":"webp","alpha":true,"sha256":"d8a7a2e5df009c20cf965e2b7337c993aa355f4018d7a881c63b6769234b33dd","status":"generated_material","canonical_product_identity":false},
+    {"id":"vanilla","category":"gourmand","file":"vanilla.webp","format":"webp","alpha":true,"sha256":"0df285f29ce1833c4c1b60649b037ff46a1798bfea6f7c2bf1267bef0e7e94a0","status":"generated_material","canonical_product_identity":false},
+    {"id":"ylang-ylang","category":"floral","file":"ylang-ylang.webp","format":"webp","alpha":true,"sha256":"e020f4bb6682a420b0559523bd7669607396166713cd65fc7cb0a1a7d9931109","status":"generated_material","canonical_product_identity":false}
+  ]
+}
