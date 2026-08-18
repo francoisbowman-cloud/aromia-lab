@@ -1,0 +1,8 @@
+{
+  "batch": "batch-003",
+  "catalog_source": "batch-003",
+  "expected_rows": 10,
+  "authorization_env": "ROLLBACK_BATCH_003=YES",
+  "strategy": "delete only rows whose catalog_source is exactly batch-003 after verifying exactly 10 such rows exist",
+  "postcondition": "0 rows remain with catalog_source=batch-003"
+}
