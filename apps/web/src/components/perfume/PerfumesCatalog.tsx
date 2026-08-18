@@ -65,8 +65,8 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
     setSort("relevancia");
   };
 
-  const selectClass = "h-11 border-0 bg-transparent shadow-none focus-visible:ring-0";
-  const chipClass = "inline-flex items-center gap-2 pb-1 font-plex text-[9px] uppercase tracking-[.12em] text-ink transition hover:text-gold-contrast";
+  const selectClass = "h-11 border-0 bg-transparent text-sm shadow-none focus-visible:ring-0";
+  const chipClass = "inline-flex min-h-11 items-center gap-2 font-plex text-xs uppercase tracking-[.11em] text-ink transition hover:text-gold-contrast";
   const filterControls = (
     <>
       <div className="p-2"><Select value={familia} onChange={(e) => setFamilia(e.target.value)} aria-label="Filtrar por familia olfativa" className={selectClass}><option value="">— Familia</option>{familias.map((f) => <option key={f} value={f}>{f}</option>)}</Select></div>
@@ -80,7 +80,7 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
   return (
     <div>
       <div className="sticky top-[72px] z-20 bg-[rgba(251,248,243,.96)] py-3 backdrop-blur-md dark:bg-[rgba(15,12,9,.96)]">
-        <div className="hidden items-center justify-between pb-3 font-plex text-[9px] uppercase tracking-[.17em] text-muted lg:flex">
+        <div className="hidden items-center justify-between pb-3 font-plex text-xs uppercase tracking-[.14em] text-muted lg:flex">
           <span>Refinar selección</span>
           <span>{activeCount === 0 ? "Archivo completo" : `${activeCount} filtros activos`}</span>
         </div>
@@ -94,14 +94,14 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
             className="h-12 border-line/60 bg-[#fffdf8] shadow-none focus-visible:ring-0 dark:bg-[#14100c]"
           />
           <details className="group mt-2 bg-[#f3efe8] dark:bg-[#16110d]">
-            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between px-4 font-plex text-[9px] uppercase tracking-[.15em] text-ink [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between px-4 font-plex text-xs uppercase tracking-[.12em] text-ink [&::-webkit-details-marker]:hidden">
               <span>Filtros{activeCount ? ` · ${activeCount}` : ""}</span>
               <span aria-hidden="true" className="text-base transition-transform group-open:rotate-45">＋</span>
             </summary>
             <div className="max-h-[56vh] overflow-y-auto px-2 pb-3">
               {filterControls}
               <div className="p-2">
-                <button type="button" onClick={clearFilters} disabled={activeCount === 0 && sort === "relevancia"} className="min-h-11 w-full bg-[#fffdf8] font-plex text-[9px] uppercase tracking-[.14em] text-ink disabled:opacity-30 dark:bg-[#0f0c09]">Borrar filtros</button>
+                <button type="button" onClick={clearFilters} disabled={activeCount === 0 && sort === "relevancia"} className="min-h-11 w-full bg-[#fffdf8] font-plex text-xs uppercase tracking-[.12em] text-ink disabled:opacity-30 dark:bg-[#0f0c09]">Borrar filtros</button>
               </div>
             </div>
           </details>
@@ -118,18 +118,18 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
             />
           </div>
           {filterControls}
-          <button type="button" onClick={clearFilters} disabled={activeCount === 0 && sort === "relevancia"} className="min-h-14 whitespace-nowrap px-5 font-plex text-[9px] uppercase tracking-[.14em] text-ink transition hover:text-gold-contrast disabled:opacity-30">Borrar</button>
+          <button type="button" onClick={clearFilters} disabled={activeCount === 0 && sort === "relevancia"} className="min-h-14 whitespace-nowrap px-5 font-plex text-xs uppercase tracking-[.12em] text-ink transition hover:text-gold-contrast disabled:opacity-30">Borrar</button>
         </div>
       </div>
 
       <section id="indice-olfativo" className="scroll-mt-24 py-8">
         <div className="mb-5 flex items-center justify-between gap-4">
-          <p className="font-plex text-[9px] uppercase tracking-[.18em] text-muted">Índice olfativo</p>
-          {categoria ? <button type="button" onClick={() => setCategoria("")} className="font-plex text-[9px] uppercase tracking-[.14em] text-gold-contrast">Quitar categoría ×</button> : null}
+          <p className="font-plex text-xs uppercase tracking-[.14em] text-muted">Índice olfativo</p>
+          {categoria ? <button type="button" onClick={() => setCategoria("")} className="inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.11em] text-gold-contrast">Quitar categoría ×</button> : null}
         </div>
         <div className="flex gap-x-6 gap-y-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <button type="button" onClick={() => setCategoria("")} className={`shrink-0 pb-1 font-plex text-[9px] uppercase tracking-[.13em] ${categoria === "" ? "text-gold-contrast" : "text-muted"}`}>Todas</button>
-          {categoriasConResultados.map((c) => <button key={c.label} type="button" onClick={() => setCategoria(c.label)} className={`shrink-0 pb-1 font-plex text-[9px] uppercase tracking-[.13em] ${categoria === c.label ? "text-gold-contrast" : "text-muted"}`}>{c.label}</button>)}
+          <button type="button" onClick={() => setCategoria("")} className={`min-h-11 shrink-0 font-plex text-xs uppercase tracking-[.11em] ${categoria === "" ? "text-gold-contrast" : "text-muted"}`}>Todas</button>
+          {categoriasConResultados.map((c) => <button key={c.label} type="button" onClick={() => setCategoria(c.label)} className={`min-h-11 shrink-0 font-plex text-xs uppercase tracking-[.11em] ${categoria === c.label ? "text-gold-contrast" : "text-muted"}`}>{c.label}</button>)}
         </div>
       </section>
 
@@ -141,21 +141,21 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
           {ocasion ? <button onClick={() => setOcasion("")} className={chipClass}>Ocasión: {ocasion} ×</button> : null}
           {categoriaPrecio ? <button onClick={() => setCategoriaPrecio("")} className={chipClass}>Precio: {categoriaPrecio} ×</button> : null}
           {nichoOComercial ? <button onClick={() => setNichoOComercial("")} className={chipClass}>{nichoOComercial} ×</button> : null}
-          {activeCount === 0 ? <span className="font-plex text-[9px] uppercase tracking-[.14em] text-muted">Sin filtros · colección completa</span> : null}
+          {activeCount === 0 ? <span className="font-plex text-xs uppercase tracking-[.11em] text-muted">Sin filtros · colección completa</span> : null}
         </div>
         <div className="flex items-center gap-4">
-          <span className="font-plex text-[9px] uppercase tracking-[.14em] text-muted"><span className="text-ink">{filtrados.length}</span> / {perfumes.length}</span>
-          <Select value={sort} onChange={(e) => setSort(e.target.value as DiscoverySort)} aria-label="Ordenar catálogo" className="h-9 w-40 bg-transparent font-plex text-[9px] uppercase"><option value="relevancia">Relevancia</option><option value="rating">Rating</option><option value="precio-asc">Precio ↑</option><option value="precio-desc">Precio ↓</option><option value="nombre">A–Z</option></Select>
+          <span className="font-plex text-xs uppercase tracking-[.11em] text-muted"><span className="text-ink">{filtrados.length}</span> / {perfumes.length}</span>
+          <Select value={sort} onChange={(e) => setSort(e.target.value as DiscoverySort)} aria-label="Ordenar catálogo" className="h-11 w-40 bg-transparent font-plex text-xs uppercase"><option value="relevancia">Relevancia</option><option value="rating">Rating</option><option value="precio-asc">Precio ↑</option><option value="precio-desc">Precio ↓</option><option value="nombre">A–Z</option></Select>
         </div>
       </div>
 
       {filtrados.length === 0 ? (
         <div className="grid min-h-[360px] place-items-center py-16 text-center">
           <div>
-            <p className="font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">Sin coincidencias</p>
+            <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Sin coincidencias</p>
             <p className="mt-4 font-display text-4xl text-ink">Amplía el mapa olfativo.</p>
             <p className="mx-auto mt-4 max-w-[38ch] font-sans text-sm leading-6 text-muted">Retira una condición o vuelve al archivo completo.</p>
-            <button type="button" onClick={clearFilters} className="mt-7 font-plex text-[10px] uppercase tracking-[.14em] text-ink">Ver colección completa</button>
+            <button type="button" onClick={clearFilters} className="mt-7 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-ink">Ver colección completa</button>
           </div>
         </div>
       ) : (
