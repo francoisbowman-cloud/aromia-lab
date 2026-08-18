@@ -1,0 +1,51 @@
+candidate_id,brand,name,concentration,launch_year,stratum,difficulty,priority,official_domain
+c001,Hermès,H24,EDT,2021,mainstream,normal,90,hermes.com
+c002,Hermès,H24,EDP,2022,variant_risk,normal,88,hermes.com
+c003,Hermès,Terre d'Hermès Eau Givrée,EDP,2022,variant_risk,normal,86,hermes.com
+c004,Chanel,Allure Homme Sport,EDT,2004,mainstream,normal,95,chanel.com
+c005,Chanel,Allure Homme Sport Eau Extrême,EDP,2012,variant_risk,normal,94,chanel.com
+c006,Chanel,Platinum Égoïste,EDT,1993,mainstream,normal,82,chanel.com
+c007,Dior,Homme Intense,EDP,2011,mainstream,normal,96,dior.com
+c008,Dior,Homme Parfum,Parfum,2014,variant_risk,normal,94,dior.com
+c009,Dior,Fahrenheit,EDT,1988,mainstream,normal,92,dior.com
+c010,Dior,Fahrenheit Le Parfum,Parfum,2014,variant_risk,normal,84,dior.com
+c011,Yves Saint Laurent,Y,EDP,2018,mainstream,normal,97,yslbeautyus.com
+c012,Yves Saint Laurent,Y Le Parfum,Parfum,2021,variant_risk,normal,91,yslbeautyus.com
+c013,Yves Saint Laurent,MYSLF,EDP,2023,mainstream,normal,96,yslbeautyus.com
+c014,Yves Saint Laurent,MYSLF Le Parfum,Parfum,2024,variant_risk,normal,93,yslbeautyus.com
+c015,Giorgio Armani,Acqua di Giò Profondo,EDP,2020,mainstream,normal,97,giorgioarmanibeauty-usa.com
+c016,Giorgio Armani,Acqua di Giò Parfum,Parfum,2023,variant_risk,normal,95,giorgioarmanibeauty-usa.com
+c017,Giorgio Armani,Stronger With You Intensely,EDP,2019,mainstream,normal,97,giorgioarmanibeauty-usa.com
+c018,Giorgio Armani,Stronger With You Absolutely,Parfum,2021,variant_risk,normal,93,giorgioarmanibeauty-usa.com
+c019,Prada,Luna Rossa Carbon,EDT,2017,mainstream,normal,95,prada-beauty.com
+c020,Prada,Luna Rossa Black,EDP,2018,variant_risk,normal,93,prada-beauty.com
+c021,Prada,L'Homme,EDT,2016,mainstream,normal,95,prada-beauty.com
+c022,Prada,L'Homme Intense,EDP,2017,variant_risk,normal,88,prada-beauty.com
+c023,Valentino,Uomo Born in Roma Intense,EDP,2023,mainstream,normal,98,valentino-beauty.us
+c024,Valentino,Uomo Born in Roma Coral Fantasy,EDT,2022,variant_risk,normal,94,valentino-beauty.us
+c025,Jean Paul Gaultier,Le Beau Le Parfum,EDP,2022,mainstream,normal,96,jeanpaulgaultier.com
+c026,Jean Paul Gaultier,Le Male Elixir,Elixir,2023,variant_risk,normal,99,jeanpaulgaultier.com
+c027,Jean Paul Gaultier,Ultra Male,EDT,2015,mainstream,normal,95,jeanpaulgaultier.com
+c028,Paco Rabanne,Invictus Victory Elixir,Parfum,2023,variant_risk,normal,93,rabanne.com
+c029,Paco Rabanne,1 Million Elixir,Parfum,2022,mainstream,normal,94,rabanne.com
+c030,Versace,Dylan Blue,EDT,2016,mainstream,normal,97,versace.com
+c031,Versace,Eros Flame,EDP,2018,variant_risk,normal,94,versace.com
+c032,Dolce & Gabbana,K by Dolce & Gabbana,EDP,2020,mainstream,normal,90,dolcegabbana.com
+c033,Dolce & Gabbana,Light Blue Forever Pour Homme,EDP,2021,variant_risk,normal,89,dolcegabbana.com
+c034,Burberry,Hero,EDP,2022,mainstream,normal,92,burberry.com
+c035,Burberry,Hero Parfum,Parfum,2024,variant_risk,normal,90,burberry.com
+c036,Givenchy,Gentleman Réserve Privée,EDP,2022,mainstream,normal,97,givenchybeauty.com
+c037,Givenchy,Gentleman Society,EDP,2023,variant_risk,normal,91,givenchybeauty.com
+c038,Gucci,Guilty Pour Homme,EDP,2020,mainstream,normal,90,gucci.com
+c039,Gucci,Guilty Elixir de Parfum Pour Homme,Elixir,2023,variant_risk,normal,92,gucci.com
+c040,Tom Ford,Noir Extreme,EDP,2015,mainstream,normal,97,tomfordbeauty.com
+c041,Tom Ford,Noir Extreme Parfum,Parfum,2022,variant_risk,normal,93,tomfordbeauty.com
+c042,Tom Ford,Grey Vetiver,EDP,2009,mainstream,normal,88,tomfordbeauty.com
+c043,Maison Francis Kurkdjian,Gentle Fluidity Silver,EDP,2019,niche,normal,97,franciskurkdjian.com
+c044,Maison Francis Kurkdjian,Gentle Fluidity Gold,EDP,2019,niche,normal,95,franciskurkdjian.com
+c045,Maison Francis Kurkdjian,Grand Soir,EDP,2016,niche,normal,98,franciskurkdjian.com
+c046,Maison Francis Kurkdjian,724,EDP,2022,niche,normal,91,franciskurkdjian.com
+c047,Parfums de Marly,Althaïr,EDP,2023,niche,normal,98,parfums-de-marly.com
+c048,Parfums de Marly,Greenley,EDP,2020,niche,normal,96,parfums-de-marly.com
+c049,Parfums de Marly,Sedley,EDP,2019,niche,normal,94,parfums-de-marly.com
+c050,Parfums de Marly,Pegasus Exclusif,EDP,2020,variant_risk,normal,92,parfums-de-marly.com

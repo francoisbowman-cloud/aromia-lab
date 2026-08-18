@@ -1,0 +1,41 @@
+candidate_id,brand,name,concentration,launch_year,stratum,difficulty,priority,official_domain
+c091,Tauer Perfumes,L'Air du Désert Marocain,EDT,2005,hard_case,hard,96,tauerperfumes.com
+c092,Tauer Perfumes,Au Coeur du Désert,Extrait,2016,hard_case,hard,94,tauerperfumes.com
+c093,Nasomatto,Black Afgano,Extrait,2009,hard_case,hard,97,nasomatto.com
+c094,Nasomatto,Baraonda,Extrait,2016,hard_case,hard,91,nasomatto.com
+c095,Orto Parisi,Megamare,Parfum,2019,hard_case,hard,96,ortoparisi.com
+c096,Orto Parisi,Terroni,Parfum,2017,hard_case,hard,90,ortoparisi.com
+c097,Mancera,Cedrat Boise Intense,Extrait,2021,variant_risk,normal,96,manceraparfums.com
+c098,Mancera,Aoud Lemon Mint,EDP,2016,niche,normal,92,manceraparfums.com
+c099,Montale,Arabians Tonka,EDP,2019,niche,normal,97,montaleparfums.com
+c100,Montale,Intense Café,EDP,2013,niche,normal,94,montaleparfums.com
+c101,Essential Parfums,Bois Impérial,EDP,2020,niche,normal,97,essentialparfums.com
+c102,Essential Parfums,Divine Vanille,EDP,2019,niche,normal,92,essentialparfums.com
+c103,BDK Parfums,Gris Charnel,EDP,2019,niche,normal,98,bdkparfums.com
+c104,BDK Parfums,Gris Charnel Extrait,Extrait,2022,variant_risk,normal,96,bdkparfums.com
+c105,Goldfield & Banks,Pacific Rock Moss,EDP,2016,niche,normal,92,goldfieldandbanks.com
+c106,Goldfield & Banks,Bohemian Lime,EDP,2020,niche,normal,91,goldfieldandbanks.com
+c107,Maison Crivelli,Hibiscus Mahajád,Extrait,2021,hard_case,hard,93,maisoncrivelli.com
+c108,Maison Crivelli,Oud Maracujá,Extrait,2023,hard_case,hard,96,maisoncrivelli.com
+c109,Marc-Antoine Barrois,Ganymede,EDP,2019,niche,normal,99,marcantoinebarrois.com
+c110,Marc-Antoine Barrois,B683,EDP,2016,niche,normal,91,marcantoinebarrois.com
+c111,Liquides Imaginaires,Blanche Bête,EDP,2021,hard_case,hard,94,liquidesimaginaires.com
+c112,Liquides Imaginaires,Dom Rosa,EDP,2013,hard_case,hard,88,liquidesimaginaires.com
+c113,Memo Paris,African Leather,EDP,2015,niche,normal,96,memoparis.com
+c114,Memo Paris,Irish Leather,EDP,2013,niche,normal,90,memoparis.com
+c115,Penhaligon's,Halfeti,EDP,2015,niche,normal,98,penhaligons.com
+c116,Penhaligon's,The Tragedy of Lord George,EDP,2016,hard_case,normal,94,penhaligons.com
+c117,Acqua di Parma,Colonia Essenza,EDC,2010,mainstream,normal,91,acquadiparma.com
+c118,Acqua di Parma,Fico di Amalfi,EDT,2006,mainstream,normal,93,acquadiparma.com
+c119,Bvlgari,Man in Black,EDP,2014,mainstream,normal,96,bulgari.com
+c120,Bvlgari,Le Gemme Tygar,EDP,2016,niche,normal,98,bulgari.com
+c121,Carolina Herrera,Bad Boy Cobalt,EDP,2022,mainstream,normal,93,carolinaherrera.com
+c122,Carolina Herrera,212 VIP Black,EDP,2017,mainstream,normal,90,carolinaherrera.com
+c123,Azzaro,The Most Wanted Parfum,Parfum,2022,mainstream,normal,97,azzaro.com
+c124,Azzaro,Wanted by Night,EDP,2018,mainstream,normal,94,azzaro.com
+c125,Viktor&Rolf,Spicebomb Extreme,EDP,2015,mainstream,normal,99,viktor-rolf.com
+c126,Viktor&Rolf,Spicebomb Infrared,EDT,2021,variant_risk,normal,91,viktor-rolf.com
+c127,Mugler,A*Men,EDT,1996,mainstream,normal,92,mugler.com
+c128,Mugler,Alien Goddess,EDP,2021,mainstream,normal,90,mugler.com
+c129,Narciso Rodriguez,For Her Musc Noir Rose,EDP,2022,mainstream,normal,94,narcisorodriguezparfums.com
+c130,Narciso Rodriguez,Bleu Noir Parfum,Parfum,2022,mainstream,normal,92,narcisorodriguezparfums.com

@@ -1,0 +1,288 @@
+import { URL } from "node:url";
+
+const DEFAULT_TIMEOUT_MS = 4500;
+const MAX_SITEMAPS = 12;
+const MAX_URLS = 12000;
+const MAX_NAV_SECTIONS = 4;
+const MAX_DIRECT_GUESSES = 16;
+const MAX_SEARCH_PAGES = 2;
+
+const discoveryCorpusCache = new Map();
+const landingLinksCache = new Map();
+const navigationCorpusCache = new Map();
+
+function normalizeHost(host) {
+  return String(host ?? "").toLowerCase().replace(/^www\./, "");
+}
+
+export function sameRegistrableHost(url, officialDomain) {
+  try {
+    const host = normalizeHost(new URL(url).hostname);
+    const official = normalizeHost(officialDomain);
+    return host === official || host.endsWith(`.${official}`);
+  } catch {
+    return false;
+  }
+}
+
+function slugify(value) {
+  return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function concentrationSlug(value) {
+  const normalized = String(value ?? "").trim().toLowerCase();
+  const map = { edp: "eau-de-parfum", edt: "eau-de-toilette", edc: "eau-de-cologne", parfum: "parfum", extrait: "extrait-de-parfum", elixir: "elixir" };
+  return map[normalized] || slugify(value);
+}
+
+export function candidateUrlGuesses(candidate, officialDomain) {
+  const origin = `https://${officialDomain}`;
+  const name = slugify(candidate.name);
+  if (!name) return [];
+  const conc = concentrationSlug(candidate.concentration);
+  const shortConc = slugify(candidate.concentration);
+  const slugs = [...new Set([name, conc ? `${name}-${conc}` : "", shortConc ? `${name}-${shortConc}` : ""].filter(Boolean))];
+  const prefixes = ["products", "product", "fragrances", "fragrance", "perfumes", "perfume", "parfums", "parfum"];
+  const urls = [];
+  for (const slug of slugs) {
+    urls.push(`${origin}/${slug}`);
+    for (const prefix of prefixes) urls.push(`${origin}/${prefix}/${slug}`);
+  }
+  return [...new Set(urls)].slice(0, MAX_DIRECT_GUESSES);
+}
+
+export function tokenizeIdentity(candidate) {
+  const text = `${candidate.name ?? ""}`
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const stop = new Set(["eau","de","du","des","the","for","pour","parfum","perfume","edp","edt","edc","extrait","elixir","le","la","les","and","homme","uomo"]);
+  return [...new Set(text.split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !stop.has(t)))];
+}
+
+export function scoreUrlForCandidate(url, candidate) {
+  let pathname;
+  try { pathname = decodeURIComponent(new URL(url).pathname).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  catch { return -Infinity; }
+  if (/\.xml($|\?)/i.test(url)) return -Infinity;
+  const tokens = tokenizeIdentity(candidate);
+  if (!tokens.length) return 0;
+  const hits = tokens.filter((token) => pathname.includes(token));
+  if (!hits.length) return 0;
+  let score = hits.reduce((sum, token) => sum + (token.length >= 7 ? 5 : 3), 0);
+  const coverage = hits.length / tokens.length;
+  score += Math.round(coverage * 10);
+  if (/product|products|fragrance|fragrances|perfume|parfum|eau-de/.test(pathname)) score += 4;
+  if (/collection|collections|category|search|blog|article|journal|gift|discovery-set|heritage|faq|careers/.test(pathname)) score -= 5;
+  return score;
+}
+
+export function parseSitemapXml(xml) {
+  const out = [];
+  const re = /<loc>\s*([^<]+?)\s*<\/loc>/gi;
+  let m;
+  while ((m = re.exec(String(xml ?? ""))) !== null) out.push(m[1].replace(/&amp;/g, "&").trim());
+  return out;
+}
+
+export function parseRobotsSitemaps(text) {
+  return String(text ?? "").split(/\r?\n/).map((line) => line.match(/^\s*Sitemap:\s*(\S+)/i)?.[1]).filter(Boolean);
+}
+
+function sitemapPriority(url) {
+  const u = String(url ?? "").toLowerCase();
+  let score = 0;
+  if (/product|products|fragrance|fragrances|perfume|parfum/.test(u)) score += 30;
+  if (/en[-_/]|\/en\/|us[-_/]|\/us\//.test(u)) score += 8;
+  if (/image|video|blog|news|article|store|career|faq/.test(u)) score -= 20;
+  return score;
+}
+
+function sortSitemapQueue(queue) {
+  queue.sort((a, b) => sitemapPriority(b) - sitemapPriority(a) || a.localeCompare(b));
+}
+
+export function extractInternalLinks(html, baseUrl, officialDomain) {
+  const links = new Set();
+  const re = /<a\b[^>]*href=["']([^"'#]+)["'][^>]*>/gi;
+  let m;
+  while ((m = re.exec(String(html ?? ""))) !== null) {
+    try {
+      const url = new URL(m[1].replace(/&amp;/g, "&"), baseUrl).toString();
+      if (sameRegistrableHost(url, officialDomain) && !/\.xml($|\?)/i.test(url)) links.add(url);
+    } catch {}
+  }
+  return [...links];
+}
+
+export function isFragranceNavigationUrl(url) {
+  try {
+    const path = decodeURIComponent(new URL(url).pathname).toLowerCase();
+    return /(?:^|\/)(?:fragrance|fragrances|perfume|perfumes|parfum|parfums|scent|scents|beauty)(?:\/|$|-)/.test(path)
+      && !/blog|article|journal|faq|careers|store-locator/.test(path);
+  } catch {
+    return false;
+  }
+}
+
+async function fetchText(url, { fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetchImpl(url, { redirect: "follow", signal: controller.signal, headers: { "user-agent": "AromiaCatalogExpansion/1.0 (+catalog research; read-only)", "accept-language": "en-US,en;q=0.8" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return { text: await res.text(), finalUrl: res.url || url, contentType: res.headers?.get?.("content-type") ?? "" };
+  } finally { clearTimeout(timer); }
+}
+
+async function buildOfficialCorpus(officialDomain, options = {}) {
+  const origin = `https://${officialDomain}`;
+  const sitemapSeeds = new Set([`${origin}/sitemap.xml`]);
+  try {
+    const robots = await fetchText(`${origin}/robots.txt`, options);
+    for (const sitemap of parseRobotsSitemaps(robots.text)) if (sameRegistrableHost(sitemap, officialDomain)) sitemapSeeds.add(sitemap);
+  } catch {}
+
+  const queue = [...sitemapSeeds];
+  sortSitemapQueue(queue);
+  const visited = new Set();
+  const pageUrls = new Set();
+  while (queue.length && visited.size < MAX_SITEMAPS && pageUrls.size < MAX_URLS) {
+    const sitemapUrl = queue.shift();
+    if (visited.has(sitemapUrl) || !sameRegistrableHost(sitemapUrl, officialDomain)) continue;
+    visited.add(sitemapUrl);
+    try {
+      const { text } = await fetchText(sitemapUrl, options);
+      const locations = parseSitemapXml(text);
+      const nested = [];
+      for (const loc of locations) {
+        if (!sameRegistrableHost(loc, officialDomain)) continue;
+        if (/\.xml($|\?)/i.test(loc)) nested.push(loc);
+        else if (pageUrls.size < MAX_URLS) pageUrls.add(loc);
+      }
+      for (const loc of nested) if (!visited.has(loc) && !queue.includes(loc)) queue.push(loc);
+      sortSitemapQueue(queue);
+    } catch {}
+  }
+
+  return { officialDomain, pageUrls: [...pageUrls], sitemapCount: visited.size, scannedUrlCount: pageUrls.size };
+}
+
+async function loadLandingLinks(officialDomain, options = {}) {
+  const origin = `https://${officialDomain}`;
+  const load = async () => {
+    try {
+      const landing = await fetchText(origin, options);
+      return extractInternalLinks(landing.text, landing.finalUrl, officialDomain);
+    } catch { return []; }
+  };
+  if (options.fetchImpl) return load();
+  const key = normalizeHost(officialDomain);
+  if (!landingLinksCache.has(key)) landingLinksCache.set(key, load());
+  return landingLinksCache.get(key);
+}
+
+async function buildNavigationCorpus(officialDomain, options = {}) {
+  const landingLinks = await loadLandingLinks(officialDomain, options);
+  const sections = landingLinks.filter(isFragranceNavigationUrl).slice(0, MAX_NAV_SECTIONS);
+  const all = new Set(landingLinks);
+  await Promise.all(sections.map(async (sectionUrl) => {
+    try {
+      const page = await fetchText(sectionUrl, options);
+      for (const link of extractInternalLinks(page.text, page.finalUrl, officialDomain)) all.add(link);
+    } catch {}
+  }));
+  return [...all];
+}
+
+async function loadNavigationCorpus(officialDomain, options = {}) {
+  if (options.fetchImpl) return buildNavigationCorpus(officialDomain, options);
+  const key = normalizeHost(officialDomain);
+  if (!navigationCorpusCache.has(key)) navigationCorpusCache.set(key, buildNavigationCorpus(officialDomain, options));
+  return navigationCorpusCache.get(key);
+}
+
+async function probeDirectGuesses(candidate, officialDomain, options = {}) {
+  const guesses = candidateUrlGuesses(candidate, officialDomain);
+  const found = new Set();
+  let cursor = 0;
+  async function worker() {
+    while (true) {
+      const i = cursor++;
+      if (i >= guesses.length) return;
+      try {
+        const page = await fetchText(guesses[i], options);
+        if (sameRegistrableHost(page.finalUrl, officialDomain)) found.add(page.finalUrl);
+      } catch {}
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(4, guesses.length || 1) }, worker));
+  return [...found];
+}
+
+async function loadSearchLinks(candidate, officialDomain, options = {}) {
+  const origin = `https://${officialDomain}`;
+  const q = encodeURIComponent(String(candidate.name ?? "").trim());
+  if (!q) return [];
+  const pages = [`${origin}/search?q=${q}`, `${origin}/search?query=${q}`].slice(0, MAX_SEARCH_PAGES);
+  const links = new Set();
+  for (const searchUrl of pages) {
+    try {
+      const page = await fetchText(searchUrl, options);
+      for (const link of extractInternalLinks(page.text, page.finalUrl, officialDomain)) links.add(link);
+    } catch {}
+  }
+  return [...links];
+}
+
+function getOfficialCorpus(officialDomain, options = {}) {
+  if (options.fetchImpl) return buildOfficialCorpus(officialDomain, options);
+  const key = normalizeHost(officialDomain);
+  if (!discoveryCorpusCache.has(key)) {
+    const promise = buildOfficialCorpus(officialDomain, options).catch((error) => {
+      discoveryCorpusCache.delete(key);
+      throw error;
+    });
+    discoveryCorpusCache.set(key, promise);
+  }
+  return discoveryCorpusCache.get(key);
+}
+
+export function clearDiscoveryCorpusCache() {
+  discoveryCorpusCache.clear();
+  landingLinksCache.clear();
+  navigationCorpusCache.clear();
+}
+
+function rankUrls(urls, candidate) {
+  return urls.map((url) => ({ url, score: scoreUrlForCandidate(url, candidate) }))
+    .filter((r) => r.score > 0)
+    .sort((a,b) => b.score - a.score || a.url.localeCompare(b.url));
+}
+
+export async function discoverOfficialUrls(candidate, options = {}) {
+  const officialDomain = String(candidate.official_domain ?? "").trim();
+  if (!officialDomain) return { status: "NO_OFFICIAL_DOMAIN", urls: [], sitemapCount: 0 };
+
+  const corpus = await getOfficialCorpus(officialDomain, options).catch(() => ({ pageUrls: [], sitemapCount: 0, scannedUrlCount: 0 }));
+  let ranked = rankUrls(corpus.pageUrls, candidate);
+  if (!ranked.length) {
+    const navigationUrls = await loadNavigationCorpus(officialDomain, options);
+    ranked = rankUrls(navigationUrls, candidate);
+  }
+  if (!ranked.length) {
+    const searchLinks = await loadSearchLinks(candidate, officialDomain, options);
+    ranked = rankUrls(searchLinks, candidate);
+  }
+  if (!ranked.length) {
+    const direct = await probeDirectGuesses(candidate, officialDomain, options);
+    ranked = rankUrls(direct, candidate);
+  }
+
+  return { status: ranked.length ? "FOUND" : "NOT_FOUND", urls: ranked.slice(0, 8), sitemapCount: corpus.sitemapCount, scannedUrlCount: corpus.scannedUrlCount };
+}
+
+export async function fetchOfficialPage(url, officialDomain, options = {}) {
+  if (!sameRegistrableHost(url, officialDomain)) throw new Error(`Refusing non-official host: ${url}`);
+  const result = await fetchText(url, options);
+  if (!sameRegistrableHost(result.finalUrl, officialDomain)) throw new Error(`Redirect left official domain: ${result.finalUrl}`);
+  return result;
+}

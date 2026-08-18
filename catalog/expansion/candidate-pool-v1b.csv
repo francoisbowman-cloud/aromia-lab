@@ -1,0 +1,41 @@
+candidate_id,brand,name,concentration,launch_year,stratum,difficulty,priority,official_domain
+c051,Creed,Green Irish Tweed,EDP,1985,niche,normal,98,creedboutique.com
+c052,Creed,Silver Mountain Water,EDP,1995,niche,normal,97,creedboutique.com
+c053,Creed,Aventus Cologne,EDP,2019,variant_risk,normal,95,creedboutique.com
+c054,Amouage,Reflection Man,EDP,2007,niche,normal,98,amouage.com
+c055,Amouage,Enclave,EDP,2020,niche,normal,89,amouage.com
+c056,Amouage,Guidance,EDP,2023,niche,normal,97,amouage.com
+c057,Xerjoff,Torino21,EDP,2021,niche,normal,98,xerjoff.com
+c058,Xerjoff,Alexandria II,Parfum,2012,niche,normal,97,xerjoff.com
+c059,Xerjoff,Erba Gold,EDP,2016,variant_risk,normal,90,xerjoff.com
+c060,Initio Parfums Privés,Rehab,Extrait,2018,niche,normal,97,initioparfums.com
+c061,Initio Parfums Privés,Musk Therapy,Extrait,2021,niche,normal,95,initioparfums.com
+c062,Initio Parfums Privés,Paragon,Extrait,2022,niche,normal,96,initioparfums.com
+c063,Nishane,Hacivat,Extrait,2017,niche,normal,98,nishane.com
+c064,Nishane,Ani,Extrait,2019,niche,normal,98,nishane.com
+c065,Nishane,Wulong Cha,Extrait,2015,niche,normal,95,nishane.com
+c066,By Kilian,Angels' Share,EDP,2020,niche,normal,99,bykilian.com
+c067,By Kilian,Black Phantom,EDP,2017,niche,normal,97,bykilian.com
+c068,By Kilian,Straight to Heaven,EDP,2007,niche,normal,90,bykilian.com
+c069,Le Labo,Another 13,EDP,2010,nonstandard_notes,hard,98,lelabofragrances.com
+c070,Le Labo,Thé Noir 29,EDP,2015,nonstandard_notes,hard,96,lelabofragrances.com
+c071,Le Labo,Bergamote 22,EDP,2006,nonstandard_notes,hard,92,lelabofragrances.com
+c072,Escentric Molecules,Molecule 02,EDT,2008,nonstandard_notes,hard,94,escentric.com
+c073,Escentric Molecules,Molecule 04,EDT,2017,nonstandard_notes,hard,90,escentric.com
+c074,Juliette Has a Gun,Not a Perfume,EDP,2010,nonstandard_notes,hard,97,juliettehasagun.com
+c075,Juliette Has a Gun,Pear Inc.,EDP,2021,nonstandard_notes,hard,91,juliettehasagun.com
+c076,Comme des Garçons,Wonderwood,EDP,2010,nonstandard_notes,hard,89,commedesgarconsparfums.com
+c077,Comme des Garçons,Blackpepper,EDP,2016,nonstandard_notes,hard,87,commedesgarconsparfums.com
+c078,Aesop,Hwyl,EDP,2017,nonstandard_notes,hard,92,aesop.com
+c079,Aesop,Tacit,EDP,2015,nonstandard_notes,hard,90,aesop.com
+c080,Diptyque,Philosykos,EDT,1996,nonstandard_notes,hard,95,diptyqueparis.com
+c081,Diptyque,Philosykos,EDP,2012,variant_risk,hard,93,diptyqueparis.com
+c082,Diptyque,Orphéon,EDP,2021,niche,normal,96,diptyqueparis.com
+c083,Frederic Malle,Musc Ravageur,EDP,2000,niche,normal,98,fredericmalle.com
+c084,Frederic Malle,French Lover,EDP,2007,niche,normal,92,fredericmalle.com
+c085,Frederic Malle,The Moon,EDP,2019,hard_case,hard,90,fredericmalle.com
+c086,Roja Parfums,Elysium Eau Intense,EDP,2023,variant_risk,hard,94,rojaparfums.com
+c087,Roja Parfums,Enigma Pour Homme,Parfum,2013,hard_case,hard,91,rojaparfums.com
+c088,Clive Christian,X Masculine,Parfum,2001,hard_case,hard,89,clivechristian.com
+c089,Clive Christian,1872 Masculine,Parfum,2001,hard_case,hard,87,clivechristian.com
+c090,Ormonde Jayne,Montabaco Intensivo,EDP,2012,hard_case,hard,88,ormondejayne.com
