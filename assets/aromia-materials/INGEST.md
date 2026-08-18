@@ -4,15 +4,20 @@ The metadata in this directory is canonical in GitHub. Binary assets live at `as
 
 ## Current collaboration bundle
 
+- Artifact: `AROMIA_MATERIAL_LIBRARY_COLLAB_V1.zip`
 - Variant: `web-collaboration-384`
 - 28 transparent WebP assets
-- Expected bundle SHA-256: `1e6d19770b9a916da4a7323ee1422ff80f4e073ada4bf4a17ed1e41b10df8b57`
+- ZIP size: `1,140,580` bytes
+- Verified ZIP SHA-256: `60db653b0c822ada512dcf31ee78d9eb243cfe070384baa137a7fcc7cc782257`
 - Expected destination: `assets/aromia-materials/files/`
+- Per-file SHA-256 and byte sizes are authoritative in `manifest.json`.
+
+A local integrity pass verified all 28 files in this bundle against the individual hashes and byte sizes recorded in the manifest: 28 matched, 0 mismatches.
 
 ## Ingest procedure
 
-1. Obtain the approved collaboration bundle from the project owner or an approved project artifact.
-2. Verify the ZIP SHA-256 before extraction.
+1. Obtain `AROMIA_MATERIAL_LIBRARY_COLLAB_V1.zip` from the approved project handoff/artifact.
+2. Verify the ZIP SHA-256 above before extraction.
 3. Extract only the `.webp` files into `assets/aromia-materials/files/` without renaming them.
 4. Run:
 
@@ -21,11 +26,11 @@ node scripts/materials/validate-material-library.mjs --require-binaries
 ```
 
 5. The command must report all 28 binaries verified and zero missing files.
-6. Commit the binaries together with any corresponding CSV/manifest changes in a dedicated branch and open a PR.
+6. Commit the binaries together with any corresponding metadata changes in a dedicated branch and open a PR.
 
 ## Replacing one asset
 
-If a collaborator replaces an asset, the old hash must never be silently reused. Recompute SHA-256 and byte size from the final WebP, update both `materials.csv` and `manifest.json`, keep the same stable `id` unless the semantic material itself changes, and run the strict binary gate.
+If a collaborator replaces an asset, the old hash must never be silently reused. Recompute SHA-256 and byte size from the final WebP, update `manifest.json`, keep the same stable `id` unless the semantic material itself changes, and run the strict binary gate. Keep the simple CSV index synchronized if identity/category/file/status changes.
 
 ## Why binaries are separate from metadata validation
 
