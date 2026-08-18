@@ -21,6 +21,10 @@ test("rejects embedded tier labels inside a captured tier", () => {
   assert.equal(isPlausibleNoteValue("abedul; ámbar; benjuí; las Notas de Fondo son madera de gaiac; vetiver"), false);
 });
 
+test("rejects truncated residue from a shorter tier-label prefix", () => {
+  assert.equal(isPlausibleNoteValue("n Salbei-Essenz aus Frankreich, Kardamom-Essenz aus Guatemala"), false);
+});
+
 test("accepts concise note names and explicit lists", () => {
   assert.equal(isPlausibleNoteValue("Green Pear"), true);
   assert.equal(isPlausibleNoteValue("Bergamot, lemon, pink pepper"), true);
