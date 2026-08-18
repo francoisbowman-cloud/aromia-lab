@@ -17,6 +17,20 @@ await requireText("docs/design/visual-upgrade/HYBRID-SIGNATURE-VISUAL-CONTRACT.m
   ["hybrid_contract_missing_pdp_sequence", /Identity.*Object.*Sensory anatomy.*Performance.*Story.*Commerce.*Community/is],
 ]);
 
+await requireText("apps/web/src/components/home/TasteLanding.tsx", [
+  ["home_hero_missing_real_catalog_product", /<ProductImage\s+slug=\{hero\.slug\}\s+imageUrl=\{hero\.imagen_url\}/],
+  ["home_hero_missing_catalog_identity", /Objeto del catálogo/],
+]);
+const home = await text("apps/web/src/components/home/TasteLanding.tsx");
+if (/editorial\/cinematic-warm\.png/i.test(home)) failures.push("home_hero_anonymous_background_regression");
+
+await requireText("apps/web/src/components/perfume/ProductImage.tsx", [
+  ["catalog_product_stage_must_be_white", /bg-white/],
+  ["catalog_product_must_preserve_contain", /object-contain/],
+]);
+const productImage = await text("apps/web/src/components/perfume/ProductImage.tsx");
+if (/removeConnectedBackground|createElement\(["']canvas["']\)|getImageData\(/.test(productImage)) failures.push("catalog_product_destructive_background_extraction_regression");
+
 await requireText("apps/web/src/app/catalogo/[slug]/page.tsx", [
   ["pdp_missing_not_found", /notFound\(\)/], ["pdp_missing_canonical", /canonical:\s*`\/catalogo\/\$\{perfume\.slug\}`/], ["pdp_missing_product_jsonld", /application\/ld\+json/], ["pdp_missing_hero", /<HeroHeader/], ["pdp_missing_sensory_anatomy", /<SkinEvolution/], ["pdp_missing_performance", /<PerformanceBars/], ["pdp_missing_story", /<EditorialMood/], ["pdp_missing_commerce", /<PriceTable/], ["pdp_missing_community", /<CommunityReviews/],
 ]);
@@ -78,10 +92,15 @@ async function walk(dir) {
   return files;
 }
 
+const rioPlatenseUi = /\b(?:sabés|buscás|necesitás|llevás|volvé|usá|probá|tenés|querés|podés)\b/i;
+const internalAiJargon = /Sin feed artificial|Hybrid Signature/i;
+
 for (const file of await walk("apps/web/src")) {
   const source = await text(file);
   if (/fimgs\.net\/mdimg\/perfume-social-cards/i.test(source) && !file.includes("catalog-image")) failures.push(`forbidden_social_card_reference ${file}`);
   for (const call of source.match(/trackEvent\([\s\S]*?\);/g) || []) if (/\b(?:email|correo|message|mensaje|query)\s*:/i.test(call)) failures.push(`analytics_possible_pii_or_raw_query ${file}`);
+  if (rioPlatenseUi.test(source)) failures.push(`neutral_spanish_regression ${file}`);
+  if (internalAiJargon.test(source)) failures.push(`human_copy_regression ${file}`);
 }
 
 const contract = await text("docs/OMNI-INTEGRATION.md");
