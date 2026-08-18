@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   render-compare:
-    if: github.head_ref == 'agent/omni-render-gate-integration'
+    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
@@ -74,10 +74,7 @@ jobs:
           const fs = require('fs');
           const { chromium } = require('playwright');
 
-          const origins = {
-            before: 'http://127.0.0.1:3001',
-            after: 'http://127.0.0.1:3002',
-          };
+          const origins = { before: 'http://127.0.0.1:3001', after: 'http://127.0.0.1:3002' };
           const viewports = [
             { name: 'mobile', width: 390, height: 844 },
             { name: 'tablet', width: 768, height: 1024 },
@@ -94,9 +91,7 @@ jobs:
             } catch { return null; }
           }
 
-          function safeName(route) {
-            return route === '/' ? 'home' : route.replace(/^\//, '').replace(/[^a-z0-9-]+/gi, '-');
-          }
+          function safeName(route) { return route === '/' ? 'home' : route.replace(/^\//, '').replace(/[^a-z0-9-]+/gi, '-'); }
 
           async function inspect(browser, label, origin, route, viewport) {
             const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: 1 });
@@ -104,7 +99,6 @@ jobs:
             const pageErrors = [];
             page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
             page.on('pageerror', (e) => pageErrors.push(String(e.message || e)));
-
             const response = await page.goto(`${origin}${route}`, { waitUntil: 'networkidle', timeout: 60000 });
             await page.waitForTimeout(400);
             const metrics = await page.evaluate(() => {
@@ -159,7 +153,6 @@ jobs:
             const routes = [...staticRoutes, ...(slug ? [`/catalogo/${slug}`] : [])];
             const browser = await chromium.launch({ headless: true });
             const report = { baselineSha: process.env.AROMIA_BASELINE_SHA, routes, viewports, before: {}, after: {}, delta: {}, acceptance: [] };
-
             for (const viewport of viewports) {
               for (const route of routes) {
                 const key = `${viewport.name}:${route}`;
@@ -175,7 +168,6 @@ jobs:
                   undersizedTargets: a.undersizedTargets - b.undersizedTargets,
                   maxHeadingPx: a.maxHeadingPx - b.maxHeadingPx,
                 };
-
                 const hardFailures = [];
                 if (a.status >= 400 || a.status === 0) hardFailures.push(`HTTP ${a.status}`);
                 if (a.overflowX > 2) hardFailures.push(`horizontal overflow ${a.overflowX}px`);
@@ -186,11 +178,9 @@ jobs:
                 report.acceptance.push({ key, accepted: hardFailures.length === 0, hardFailures });
               }
             }
-
             await browser.close();
             const failures = report.acceptance.filter((x) => !x.accepted);
             fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
-
             const summary = {
               checks: report.acceptance.length,
               failures: failures.length,
