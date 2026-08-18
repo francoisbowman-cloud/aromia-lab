@@ -1,0 +1,152 @@
+name: OMNI Nav Diagnostic Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render-compare:
+    if: github.head_ref == 'omni/diagnostic-nav-dead-zone'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout AFTER
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout BEFORE worktree
+        shell: bash
+        run: git worktree add /tmp/aromia-before "${{ github.event.pull_request.base.sha }}"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install app dependencies
+        shell: bash
+        run: |
+          npm ci --prefix apps/web
+          npm ci --prefix /tmp/aromia-before/apps/web
+
+      - name: Install Playwright Chromium harness
+        shell: bash
+        run: |
+          mkdir -p /tmp/omni-nav-gate
+          cd /tmp/omni-nav-gate
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Start BEFORE and AFTER
+        shell: bash
+        run: |
+          cd /tmp/aromia-before/apps/web
+          npm run dev -- -p 3001 > /tmp/omni-before.log 2>&1 &
+          echo $! > /tmp/omni-before.pid
+          cd "$GITHUB_WORKSPACE/apps/web"
+          npm run dev -- -p 3002 > /tmp/omni-after.log 2>&1 &
+          echo $! > /tmp/omni-after.pid
+          for port in 3001 3002; do
+            ready=0
+            for i in {1..60}; do
+              if curl -fsS "http://127.0.0.1:${port}/quiz" >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            if [ "$ready" != 1 ]; then
+              echo "Server on port $port failed to become ready"
+              cat "/tmp/omni-$([ "$port" = 3001 ] && echo before || echo after).log" || true
+              exit 1
+            fi
+          done
+
+      - name: Render, verify and compare
+        shell: bash
+        run: |
+          cd /tmp/omni-nav-gate
+          mkdir -p artifacts
+          cat > gate.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+
+          const targets = {
+            before: 'http://127.0.0.1:3001/quiz',
+            after: 'http://127.0.0.1:3002/quiz',
+          };
+          const widths = [390, 768, 1024];
+          const report = { targets, widths, results: {}, delta: {} };
+
+          async function inspect(browser, label, url, width) {
+            const page = await browser.newPage({ viewport: { width, height: width === 390 ? 844 : 820 }, deviceScaleFactor: 1 });
+            const errors = [];
+            page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+            const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 });
+            if (!response || !response.ok()) throw new Error(`${label}@${width}: HTTP ${response?.status()}`);
+
+            const menuSummary = page.locator('summary', { hasText: 'Menú' });
+            const menuVisible = await menuSummary.isVisible().catch(() => false);
+            const desktopFragancias = page.locator('nav > ul a[href="/catalogo"]');
+            const desktopVisible = await desktopFragancias.isVisible().catch(() => false);
+            const searchIcon = page.locator('a[aria-label="Buscar en Aromia"]');
+            const utilityVisible = await searchIcon.isVisible().catch(() => false);
+            const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+
+            let menuEntryVisible = false;
+            if (menuVisible) {
+              await menuSummary.click();
+              menuEntryVisible = await page.locator('details[open] a[href="/catalogo"]').isVisible().catch(() => false);
+            }
+
+            const result = { width, menuVisible, desktopVisible, utilityVisible, menuEntryVisible, overflow, consoleErrors: errors.length };
+            await page.screenshot({ path: `artifacts/${label}-${width}.png`, fullPage: false });
+            await page.close();
+            return result;
+          }
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            for (const [label, url] of Object.entries(targets)) {
+              report.results[label] = {};
+              for (const width of widths) report.results[label][width] = await inspect(browser, label, url, width);
+            }
+            await browser.close();
+
+            const b768 = report.results.before[768];
+            const a768 = report.results.after[768];
+            report.delta = {
+              tabletMenuAvailability: Number(a768.menuVisible) - Number(b768.menuVisible),
+              tabletMenuEntryAvailability: Number(a768.menuEntryVisible) - Number(b768.menuEntryVisible),
+              tabletUtilityIcons: Number(a768.utilityVisible) - Number(b768.utilityVisible),
+              overflow: a768.overflow - b768.overflow,
+            };
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            console.log(JSON.stringify(report, null, 2));
+
+            if (b768.menuVisible) throw new Error('BEFORE control invalid: menu unexpectedly visible at 768px');
+            if (b768.desktopVisible) throw new Error('BEFORE control invalid: desktop primary nav unexpectedly visible at 768px');
+            if (!b768.utilityVisible) throw new Error('BEFORE control invalid: utility icons expected at 768px');
+            if (!a768.menuVisible || !a768.menuEntryVisible) throw new Error('AFTER failed: tablet menu/catalog entry not available at 768px');
+            if (a768.utilityVisible) throw new Error('AFTER failed: utility cluster should collapse into tablet menu below lg');
+            if (a768.overflow > 2) throw new Error(`AFTER failed: horizontal overflow ${a768.overflow}px at 768px`);
+
+            const a390 = report.results.after[390];
+            if (!a390.menuVisible || !a390.menuEntryVisible || a390.overflow > 2) throw new Error('AFTER failed mobile regression gate');
+
+            const a1024 = report.results.after[1024];
+            if (a1024.menuVisible || !a1024.desktopVisible || !a1024.utilityVisible || a1024.overflow > 2) throw new Error('AFTER failed desktop breakpoint gate');
+          })().catch(error => { console.error(error); process.exit(1); });
+          NODE
+          node gate.cjs
+
+      - name: Upload BEFORE / AFTER evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-nav-before-after
+          path: /tmp/omni-nav-gate/artifacts
+          if-no-files-found: warn
+          retention-days: 7
