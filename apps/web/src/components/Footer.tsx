@@ -26,8 +26,8 @@ export default function Footer() {
             <span className="font-display text-[28px] tracking-[.16em] text-ink">AROMIA</span>
             <p className="mt-5 max-w-[34ch] text-sm leading-7 text-muted">Perfumes, materias e historias para descubrir con más contexto y menos ruido.</p>
           </div>
-          <div><div className="mb-5 font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Explorar</div><ul className="flex flex-col gap-3">{ECOSISTEMA.map((item) => <li key={item.href}><Link href={item.href} className="nav-link text-sm text-muted transition hover:text-ink">{item.label}</Link></li>)}</ul></div>
-          <div><div className="mb-5 font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Continuar</div><ul className="flex flex-col gap-3">{COMUNIDAD.map((item) => <li key={item.href}><Link href={item.href} className="nav-link text-sm text-muted transition hover:text-ink">{item.label}</Link></li>)}</ul></div>
+          <div><div className="mb-3 font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Explorar</div><ul className="flex flex-col gap-1">{ECOSISTEMA.map((item) => <li key={item.href}><Link href={item.href} className="nav-link inline-flex min-h-11 items-center text-sm text-muted transition hover:text-ink">{item.label}</Link></li>)}</ul></div>
+          <div><div className="mb-3 font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Continuar</div><ul className="flex flex-col gap-1">{COMUNIDAD.map((item) => <li key={item.href}><Link href={item.href} className="nav-link inline-flex min-h-11 items-center text-sm text-muted transition hover:text-ink">{item.label}</Link></li>)}</ul></div>
           <div><div className="mb-5 font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Aromia</div><p className="text-sm leading-[2] text-muted">{VALORES.map((valor, i) => <span key={valor}>{valor}{i < VALORES.length - 1 ? <br /> : null}</span>)}</p></div>
         </div>
       </div>
