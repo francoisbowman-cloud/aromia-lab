@@ -7,9 +7,29 @@ import { PerfumeCard } from "@/components/perfume/PerfumeCard";
 import { DiscoverySignal } from "@/components/discovery/DiscoverySignal";
 import { PersonalizedDiscoveryRail } from "@/components/discovery/PersonalizedDiscoveryRail";
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aromialab.com").replace(/\/$/, "");
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const profile = getPerfumerProfile(params.slug);
-  return profile ? { title: `${profile.name} — Perfumistas — Aromia`, description: profile.bio } : {};
+  if (!profile) return {};
+  const title = `${profile.name} — Perfumistas — Aromia`;
+  return {
+    title,
+    description: profile.bio,
+    alternates: { canonical: `/perfumistas/${profile.slug}` },
+    openGraph: { title, description: profile.bio, type: "profile", url: `${SITE_URL}/perfumistas/${profile.slug}` },
+  };
+}
+
+function buildPersonJsonLd(profile: NonNullable<ReturnType<typeof getPerfumerProfile>>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    url: `${SITE_URL}/perfumistas/${profile.slug}`,
+    description: profile.bio,
+    knowsAbout: ["Perfumería", "Fragancias"],
+  };
 }
 
 export default async function PerfumerDetailPage({ params }: { params: { slug: string } }) {
@@ -19,6 +39,7 @@ export default async function PerfumerDetailPage({ params }: { params: { slug: s
   const works = profile.perfumeSlugs.map((slug) => catalog.find((p) => p.slug === slug)).filter((p): p is Perfume => Boolean(p));
 
   return <main className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd(profile)) }} />
     <DiscoverySignal perfumerSlug={profile.slug} />
     <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
       <p className="font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">Perfumista / {profile.era}</p>
