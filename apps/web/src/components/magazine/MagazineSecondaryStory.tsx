@@ -12,7 +12,7 @@ function isAuditedCover(url?: string | null) {
 
 export function MagazineSecondaryStory({
   article,
-  isFirst: _isFirst,
+  isFirst,
 }: {
   article: Article;
   isFirst: boolean;
@@ -23,7 +23,7 @@ export function MagazineSecondaryStory({
   return (
     <Link
       href={`/magazine/${article.slug}`}
-      className="flex min-h-20 items-start gap-4 py-2"
+      className={`flex min-h-20 items-start gap-4 py-2 ${isFirst ? "lg:pt-0" : "lg:pt-1"}`}
     >
       <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[2px]">
         {showImage ? (
@@ -50,9 +50,12 @@ export function MagazineSecondaryStory({
   );
 }
 
-export function MagazineSecondaryStorySkeleton({ isFirst: _isFirst }: { isFirst: boolean }) {
+export function MagazineSecondaryStorySkeleton({ isFirst }: { isFirst: boolean }) {
   return (
-    <div className="flex min-h-20 items-start gap-4 py-2" aria-busy="true">
+    <div
+      className={`flex min-h-20 items-start gap-4 py-2 ${isFirst ? "lg:pt-0" : "lg:pt-1"}`}
+      aria-busy="true"
+    >
       <div className="h-16 w-16 shrink-0 animate-pulse rounded-[2px] bg-soft" />
       <div className="flex flex-1 flex-col gap-2">
         <div className="h-3 w-16 animate-pulse rounded bg-soft" />
