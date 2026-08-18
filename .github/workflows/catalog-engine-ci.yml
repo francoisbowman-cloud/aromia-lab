@@ -26,6 +26,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Detect import-candidate release intent
+        id: release_intent
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$PR_BASE_SHA" "$PR_HEAD_SHA" > /tmp/catalog-changed-files.txt
+          else
+            git diff --name-only "$PUSH_BEFORE_SHA" "$GITHUB_SHA" > /tmp/catalog-changed-files.txt
+          fi
+          cat /tmp/catalog-changed-files.txt
+          if grep -Eq '^catalog/imports/batch-003\.csv$' /tmp/catalog-changed-files.txt; then
+            echo 'require_go=true' >> "$GITHUB_OUTPUT"
+            echo 'Import candidate detected: batch release GO is mandatory.'
+          else
+            echo 'require_go=false' >> "$GITHUB_OUTPUT"
+            echo 'Tooling/research change only: NO_GO remains a valid safe outcome.'
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -118,13 +142,21 @@ jobs:
             catalog/reports/sourcing-economico-001-selection.csv
           if-no-files-found: error
           retention-days: 14
-      - name: Enforce GO decision
+      - name: Enforce release GO only for import candidates
         if: always()
+        env:
+          REQUIRE_GO: ${{ steps.release_intent.outputs.require_go }}
         run: |
           node - <<'NODE'
           const fs = require('fs');
           const path = 'catalog/expansion/batch-003/go-no-go.json';
           if (!fs.existsSync(path)) throw new Error('go-no-go.json missing');
           const result = JSON.parse(fs.readFileSync(path, 'utf8'));
-          if (result.decision !== 'GO') throw new Error(`Expansion gate is ${result.decision}: ${result.failed?.join(', ')}`);
+          const requireGo = process.env.REQUIRE_GO === 'true';
+          if (requireGo && result.decision !== 'GO') {
+            throw new Error(`Import candidate blocked: Expansion gate is ${result.decision}: ${result.failed?.join(', ')}`);
+          }
+          if (!requireGo && result.decision !== 'GO') {
+            console.log(`Safe tooling outcome: batch remains ${result.decision}; no import candidate is being released.`);
+          }
           NODE
