@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { isPlausibleNoteValue, sanitizeExtractedNotes } from "../note-evidence-guard.mjs";
 import { requireVerifiedNotesUnavailability, sanitizeReadinessEvidence } from "../expansion-enrich-v2.mjs";
+import { extractExplicitNotes } from "../structured-extractor.mjs";
 
 test("rejects Gucci-style prose captured between note labels", () => {
   assert.equal(isPlausibleNoteValue("of Lemon and piquant Pink Pepper leads into a"), false);
@@ -23,6 +24,19 @@ test("rejects embedded tier labels inside a captured tier", () => {
 
 test("rejects truncated residue from a shorter tier-label prefix", () => {
   assert.equal(isPlausibleNoteValue("n Salbei-Essenz aus Frankreich, Kardamom-Essenz aus Guatemala"), false);
+});
+
+test("localized tier parser prefers Kopfnoten over the shorter Kopfnote prefix", () => {
+  const notes = extractExplicitNotes(`
+    <h4>Kopfnoten</h4><p>Salbei-Essenz aus Frankreich, Kardamom-Essenz aus Guatemala</p>
+    <h4>Herznoten</h4><p>Narzissen-Absolue, Vetiver-Essenz</p>
+    <h4>Basisnoten</h4><p>Zedernholz-Essenz, Sandelholz-Essenz</p>
+    <h4>Ingredients</h4>
+  `);
+  assert.equal(notes.structure, "PYRAMID");
+  assert.equal(notes.top_notes, "Salbei-Essenz aus Frankreich, Kardamom-Essenz aus Guatemala");
+  assert.equal(notes.middle_notes, "Narzissen-Absolue, Vetiver-Essenz");
+  assert.equal(notes.base_notes, "Zedernholz-Essenz, Sandelholz-Essenz");
 });
 
 test("accepts concise note names and explicit lists", () => {
