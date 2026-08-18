@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { parse } from "csv-parse/sync";
 import { Pool, type PoolClient } from "pg";
 
@@ -19,9 +19,30 @@ type SourceRow = {
 const BATCH_PATH = "catalog/imports/batch-003.csv";
 const BATCH_SOURCE = "batch-003";
 const EXPECTED_ROWS = 10;
+const ACCEPTED_MAIN_COMMIT = "6a7b484c4a7072c3360ff388b14319e1e9142c84";
 const ACCEPTED_ARTIFACT_SHA256 = "e97833db0a7555c67cd7a84342fdca844efc1ae876fcdeabfa4512611a2ad32b";
+const BATCH_URL = `https://raw.githubusercontent.com/francoisbowman-cloud/aromia-lab/${ACCEPTED_MAIN_COMMIT}/${BATCH_PATH}`;
 const VALID_GENDERS = new Set<Gender>(["masculino", "femenino", "unisex"]);
 const VALID_PRICE_SEGMENTS = new Set(["económico", "medio", "premium", "lujo"]);
+
+function sha256(bytes: Buffer): string {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
+async function materializeApprovedBatch(): Promise<string> {
+  const response = await fetch(BATCH_URL, { redirect: "follow" });
+  if (!response.ok) throw new Error(`approved batch fetch failed: HTTP ${response.status}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  const digest = sha256(bytes);
+  if (digest !== ACCEPTED_ARTIFACT_SHA256) {
+    throw new Error(`approved batch hash mismatch before materialization: expected ${ACCEPTED_ARTIFACT_SHA256}, got ${digest}`);
+  }
+  const absolute = resolve(process.cwd(), BATCH_PATH);
+  mkdirSync(dirname(absolute), { recursive: true });
+  writeFileSync(absolute, bytes);
+  console.log(JSON.stringify({ phase: "artifact_verified", source_commit: ACCEPTED_MAIN_COMMIT, artifact_sha256: digest, bytes: bytes.length }, null, 2));
+  return digest;
+}
 
 function clean(value: unknown): string | null {
   const text = String(value ?? "").trim();
@@ -39,8 +60,8 @@ function normalizePriceSegment(value: unknown): SourceRow["priceSegment"] {
 }
 function loadBatch(): { rows: SourceRow[]; slugs: string[]; sha256: string } {
   const absolute = resolve(process.cwd(), BATCH_PATH); const bytes = readFileSync(absolute);
-  const sha256 = createHash("sha256").update(bytes).digest("hex");
-  if (sha256 !== ACCEPTED_ARTIFACT_SHA256) throw new Error(`batch-003 artifact hash mismatch: expected ${ACCEPTED_ARTIFACT_SHA256}, got ${sha256}`);
+  const digest = sha256(bytes);
+  if (digest !== ACCEPTED_ARTIFACT_SHA256) throw new Error(`batch-003 artifact hash mismatch: expected ${ACCEPTED_ARTIFACT_SHA256}, got ${digest}`);
   const raw = parse(bytes, { columns: true, skip_empty_lines: true, relax_column_count: false, trim: true }) as RawRow[];
   if (raw.length !== EXPECTED_ROWS) throw new Error(`batch-003 expected ${EXPECTED_ROWS} rows, got ${raw.length}`);
   const rows = raw.map((row, index): SourceRow => {
@@ -58,17 +79,17 @@ function loadBatch(): { rows: SourceRow[]; slugs: string[]; sha256: string } {
     return { slug, name, brand, concentration: clean(row.concentration), gender, family: clean(row.family), subfamily: clean(row.subfamily), launchYear: parseLaunchYear(row.launch_year), perfumer: clean(row.perfumer), country: clean(row.country), description: clean(row.description), topNotes, middleNotes, baseNotes, accords: splitList(row.accords), priceSegment: normalizePriceSegment(row.price_segment), sourceUrl, imageUrl: clean(row.image_url), dataConfidence: "high", seoTitle: clean(row.seo_title), seoDescription: clean(row.seo_description) };
   });
   const slugs = rows.map((row) => row.slug); if (new Set(slugs).size !== EXPECTED_ROWS) throw new Error("batch-003 contains duplicate slugs");
-  return { rows, slugs, sha256 };
+  return { rows, slugs, sha256: digest };
 }
 async function insertRow(client: PoolClient, row: SourceRow) {
   await client.query(`INSERT INTO perfumes (slug,nombre,marca,genero,familia_olfativa,concentracion,notas_salida,notas_corazon,notas_fondo,accords,precio_referencia,moneda,categoria_precio,imagen_url,link_afiliado,descripcion_corta,activo,estado,source_url,data_confidence,notes_status,catalog_source,subfamilia_olfativa,launch_year,perfumer,country,seo_title,seo_description) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,NULL,NULL,$11,$12,NULL,$13,true,'publicado',$14,$15,'published',$16,$17,$18,$19,$20,$21,$22)`, [row.slug,row.name,row.brand,row.gender,row.family,row.concentration,row.topNotes,row.middleNotes,row.baseNotes,row.accords,row.priceSegment,row.imageUrl,row.description,row.sourceUrl,row.dataConfidence,BATCH_SOURCE,row.subfamily,row.launchYear,row.perfumer,row.country,row.seoTitle,row.seoDescription]);
 }
-async function importBatch(client: PoolClient, rows: SourceRow[], slugs: string[], sha256: string) {
+async function importBatch(client: PoolClient, rows: SourceRow[], slugs: string[], digest: string) {
   const beforeTotal = Number((await client.query("SELECT COUNT(*)::int AS n FROM perfumes")).rows[0].n);
   const beforePublished = Number((await client.query("SELECT COUNT(*)::int AS n FROM perfumes WHERE activo=true AND estado='publicado'")).rows[0].n);
   const existingRows = await client.query<{ slug: string }>("SELECT slug FROM perfumes WHERE slug = ANY($1::text[])", [slugs]);
   if (existingRows.rows.length) throw new Error(`preflight rejected existing slugs: ${existingRows.rows.map((row) => row.slug).join(", ")}`);
-  console.log(JSON.stringify({ phase:"preflight",batch:BATCH_SOURCE,artifact_sha256:sha256,beforeTotal,beforePublished,candidateRows:rows.length,existingSlugs:0 }, null, 2));
+  console.log(JSON.stringify({ phase:"preflight",batch:BATCH_SOURCE,artifact_sha256:digest,beforeTotal,beforePublished,candidateRows:rows.length,existingSlugs:0 }, null, 2));
   await client.query("BEGIN");
   try {
     for (const row of rows) await insertRow(client,row);
@@ -82,22 +103,24 @@ async function importBatch(client: PoolClient, rows: SourceRow[], slugs: string[
   const afterPublished = Number((await client.query("SELECT COUNT(*)::int AS n FROM perfumes WHERE activo=true AND estado='publicado'")).rows[0].n);
   const imported = (await client.query("SELECT slug,marca,nombre,activo,estado,catalog_source FROM perfumes WHERE catalog_source=$1 ORDER BY slug",[BATCH_SOURCE])).rows;
   if (afterTotal !== beforeTotal + EXPECTED_ROWS || afterPublished !== beforePublished + EXPECTED_ROWS || imported.length !== EXPECTED_ROWS) throw new Error(`post-commit verification failed: totals ${beforeTotal}->${afterTotal}, published ${beforePublished}->${afterPublished}, batchRows=${imported.length}`);
-  console.log(JSON.stringify({ phase:"committed",batch:BATCH_SOURCE,artifact_sha256:sha256,inserted:EXPECTED_ROWS,beforeTotal,afterTotal,beforePublished,afterPublished,imported }, null, 2));
+  console.log(JSON.stringify({ phase:"committed",batch:BATCH_SOURCE,artifact_sha256:digest,inserted:EXPECTED_ROWS,beforeTotal,afterTotal,beforePublished,afterPublished,imported }, null, 2));
 }
-async function rollbackBatch(client: PoolClient, slugs: string[], sha256: string) {
+async function rollbackBatch(client: PoolClient, slugs: string[], digest: string) {
   if (process.env.ALLOW_BATCH_003_ROLLBACK !== "yes") throw new Error("rollback requires ALLOW_BATCH_003_ROLLBACK=yes");
   const rows = (await client.query<{slug:string;catalog_source:string}>("SELECT slug,catalog_source FROM perfumes WHERE slug = ANY($1::text[]) ORDER BY slug",[slugs])).rows;
   if (rows.length !== EXPECTED_ROWS || rows.some((row) => row.catalog_source !== BATCH_SOURCE)) throw new Error(`rollback preflight refused: expected exactly ${EXPECTED_ROWS} rows owned by ${BATCH_SOURCE}, got ${rows.length}`);
   await client.query("BEGIN");
   try { const deleted = await client.query("DELETE FROM perfumes WHERE catalog_source=$1 AND slug = ANY($2::text[])",[BATCH_SOURCE,slugs]); if (deleted.rowCount !== EXPECTED_ROWS) throw new Error(`rollback expected ${EXPECTED_ROWS} deletes, got ${deleted.rowCount}`); await client.query("COMMIT"); }
   catch (error) { await client.query("ROLLBACK"); throw error; }
-  console.log(JSON.stringify({phase:"rolled_back",batch:BATCH_SOURCE,artifact_sha256:sha256,deleted:EXPECTED_ROWS},null,2));
+  console.log(JSON.stringify({phase:"rolled_back",batch:BATCH_SOURCE,artifact_sha256:digest,deleted:EXPECTED_ROWS},null,2));
 }
 async function main() {
-  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required"); const {rows,slugs,sha256}=loadBatch(); const action=process.env.CATALOG_IMPORT_ACTION ?? "import";
+  await materializeApprovedBatch();
+  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required");
+  const {rows,slugs,sha256: digest}=loadBatch(); const action=process.env.CATALOG_IMPORT_ACTION ?? "import";
   if (!new Set(["import","rollback"]).has(action)) throw new Error(`unsupported CATALOG_IMPORT_ACTION=${action}`);
   const pool=new Pool({connectionString:process.env.DATABASE_URL}); const client=await pool.connect();
-  try { if (action === "rollback") await rollbackBatch(client,slugs,sha256); else await importBatch(client,rows,slugs,sha256); }
+  try { if (action === "rollback") await rollbackBatch(client,slugs,digest); else await importBatch(client,rows,slugs,digest); }
   finally { client.release(); await pool.end(); }
 }
 main().catch((error)=>{ console.error("CATALOG_BATCH_003_FAILED",error); process.exit(1); });
