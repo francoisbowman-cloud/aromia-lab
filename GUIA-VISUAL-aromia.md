@@ -1,128 +1,222 @@
 # Guía visual — Aromia
 
-Referencia técnica reutilizable para implementar UI en `feature/v2.0`.
-Documenta el sistema de diseño ya vigente en el código (`apps/web/src/app/globals.css`,
-`apps/web/tailwind.config.ts`) más las reglas fijadas por el ticket "Adaptar
-variante visual de Aromia a producción" (25/07). No duplica decisiones de
-producto — esas viven en `ESTADO-aromia.md`. No duplica stack/comandos — eso
-vive en `CLAUDE.md`.
+Guía operativa para mantener una experiencia editorial, sensorial y humana a medida que Aromia crece.
+No define plantillas rígidas. Define relaciones, límites de calidad y señales que deben repetirse para que las páginas pertenezcan a la misma historia.
 
-## 1. Origen
+> Principio rector: **repetir relaciones, no layouts**.
 
-Prototipo de Claude Design (`Aromia_Layton_variantes_visuales.zip`), dos
-variantes del mismo sistema de diseño:
+## 1. Intención de marca
 
-- **Grafito** = tema **oscuro** (`data-theme="dark"`)
-- **Ivorio** = tema **claro** (`data-theme="light"`, default)
+Aromia debe sentirse como una publicación contemporánea sobre perfume que también permite descubrir, comparar y elegir.
 
-No son alternativas entre las que elegir — son los dos modos de un toggle de
-tema real, ya implementado en el sitio (`ThemeToggle.tsx`, persistido en
-`localStorage` bajo la clave `aromia_theme`, atributo `data-theme` en
-`<html>`, con script anti-flash en `layout.tsx`).
+La experiencia busca:
 
-## 2. Tokens de color
+- claridad antes que ornamentación;
+- carácter editorial sin sacrificar utilidad;
+- atmósfera sensorial sin convertir cada pantalla en una escena;
+- producto real y verificable como centro de confianza;
+- variación expresiva entre capítulos sin perder parentesco visual;
+- lenguaje humano, preciso y breve.
 
-Definidos en `apps/web/src/app/globals.css` (`:root` = claro, `[data-theme="dark"]`
-= oscuro) y expuestos a Tailwind en `tailwind.config.ts`. Nombres reales del
-código — no "gold-500"/"warm-white" genéricos:
+Evitar como atajos de “lujo”:
 
-| Token CSS | Clase Tailwind | Rol |
-|---|---|---|
-| `--bg` | `bg-paper` | Fondo de página |
-| `--surface` | `bg-surface` | Tarjetas, header, footer |
-| `--soft` | `bg-soft` | Fondo secundario (badges, skeletons, secciones alternas) |
-| `--text` | `text-ink` | Texto principal |
-| `--muted` | `text-muted` | Texto secundario |
-| `--line` | `border-line` | Bordes |
-| `--gold` / `--gold-2` | `text-gold` / `border-gold` | Dorado decorativo (invierte claro↔oscuro entre temas) |
-| `--gold-contrast` | `text-gold-contrast` | Dorado para texto/botones — **fijo en ambos temas** (WCAG AA 4.5:1, ver comentario en `globals.css`) |
+- negro + dorado usado por defecto;
+- glassmorphism gratuito;
+- 3D o parallax sin función;
+- exceso de cards y divisores;
+- layouts con apariencia SaaS;
+- frases vagas o meta que delaten generación automática;
+- fotografía artificialmente perfecta o materiales visualmente imposibles.
 
-Los tokens semánticos de shadcn (`--primary`, `--card`, `--ring`, etc.) son
-alias sobre esta paleta — no traen su propio color.
+## 2. Sistema de color
 
-**No usar hex sueltos en componentes nuevos.** El namespace `colors.admin.*`
-de `tailwind.config.ts` es la única excepción conocida (hex fijos, no
-reacciona al tema) — heredado del panel admin, no replicar el patrón fuera de ahí.
+Los tokens viven en `apps/web/src/app/globals.css` y se exponen a Tailwind.
+Usar roles semánticos antes que hex sueltos:
 
-## 3. Tipografía
+| Token / clase | Rol |
+|---|---|
+| `bg-paper` | fondo principal |
+| `bg-surface` | superficies secundarias |
+| `bg-soft` | agrupación suave, skeletons, estados |
+| `text-ink` | texto principal |
+| `text-muted` | texto secundario |
+| `border-line` | borde cuando realmente sea necesario |
+| `text-gold-contrast` | acento legible |
 
-Tres familias cargadas vía `next/font/google` en `apps/web/src/app/layout.tsx`:
+El dorado es un acento, no la identidad completa.
 
-| Familia | Variable CSS | Clase Tailwind | Uso |
-|---|---|---|---|
-| Cormorant Garamond | `--font-display` | `font-display` | Headings, nombres de perfume, cifras destacadas (rating, precio) — serif editorial en ambos temas |
-| Archivo | `--font-body` | `font-sans` (default del `<body>`) | Nav, labels uppercase, botones, UI general — reemplaza a Jost |
-| IBM Plex Sans | `--font-plex` | `font-plex` | Cuerpo de texto largo en secciones de tono más técnico/editorial (uso selectivo, no reemplaza a Archivo como default) |
+## 3. Tipografía y jerarquía
 
-## 4. Reglas de imagen — regla dura, sin excepción
+- `font-display`: titulares, nombres de perfume y cifras editoriales.
+- `font-sans`: UI, cuerpo y navegación por defecto.
+- `font-plex`: datos, labels técnicos o microcopy cuando aporte contraste funcional.
 
-Motivo: en variantes previas del catálogo, imágenes se recortaban o no
-encajaban en su contenedor.
+### Regla de escala
 
-1. **Ninguna imagen de producto se recorta ni se desborda de su contenedor.**
-   `object-fit: contain`, nunca `cover`, en todo contenedor de imagen de
-   producto. (`contain` = la imagen entra entera, puede dejar espacio vacío
-   a los lados; `cover` = llena el marco recortando lo que sobra — lo que
-   NO se quiere.)
-2. Cada contenedor de imagen declara un `aspect-ratio` fijo según su rol:
+Un titular puede ser expresivo, pero nunca debe hacer que el resto parezca una nota al pie.
 
-   | Rol | Aspect ratio | Componente |
-   |---|---|---|
-   | Catálogo (grid card) | **1:1** | `PerfumeCard.tsx` (`aspect-square`) |
-   | Hero de ficha de producto | **4:5** | `HeroHeader.tsx` (`aspect-[4/5]`) |
-   | Banners / editorial (mockups OVL) | **16:10** | `EditorialMood.tsx` (`aspect-[16/10]`) |
+- cuerpo editorial preferido: `16px` / `1.6–1.75` en desktop y mobile;
+- microcopy por debajo de `12px` solo para metadata secundaria, nunca para información necesaria;
+- displays de 70px+ se reservan para momentos excepcionales y deben probarse contra el cuerpo real;
+- mobile no es una reducción proporcional del desktop: ajustar longitud de línea, densidad y ritmo.
 
-   El prototipo usa 3:4 en la variante Grafito y 4:5 en Ivorio para el mismo
-   rol de hero — se fijó **4:5 en ambos temas** para no reflowear el layout
-   al cambiar de tema con el toggle.
-3. Si la imagen real no llena el `aspect-ratio` del contenedor, el espacio
-   remanente se rellena con el color de fondo del sistema de esa sección
-   (`bg-surface`/`bg-soft` según contexto) — **nunca** transparencia cruda
-   ni el fondo por defecto del navegador.
-4. Aplica a las tres fuentes de imagen del proyecto: Amazon/Notino/Douglas
-   (catálogo, fondo blanco), mockups OVL (ficha de producto, ambientación
-   editorial) y cualquier imagen de banner futura.
+El contraste entre escalas debe crear jerarquía, no una ruptura de legibilidad.
 
-`PerfumeCard.tsx` usa un análisis de bounding box vía `<canvas>` (ver
-comentarios en el archivo) en vez de `object-fit` plano — logra el mismo
-resultado (nada de la botella se recorta) recortando el margen en blanco
-propio de cada retailer, no el producto.
+## 4. Copy y voz
 
-## 5. Sistema de elementos interactivos — 3 niveles
+Idioma base: **español neutro**.
 
-1. **CTA primario** — `Button` de shadcn, variante `default`
-   (`apps/web/src/components/ui/button.tsx`): fondo `--primary` (dorado de
-   contraste), texto blanco, `rounded-full`, padding generoso.
-2. **CTA secundario** — `Button` variante `outline`: borde `--line`, fondo
-   transparente, hover a `border-gold`.
-3. **Navegación** (nav superior, footer, breadcrumbs, links dentro de texto
-   editorial) — clase utilitaria `.nav-link` (`globals.css`, `@layer components`):
-   - Subrayado animado (`::after` con `scaleX` desde el centro vía `left`/`right`),
-     no solo cambio de color — mantiene tono editorial sin volverse un botón.
-   - `:focus-visible` con outline visible en `--gold-2` — antes no existía
-     ningún estado de foco en `NavBar`/`Footer`, bloqueante de accesibilidad
-     para navegación por teclado.
-   - Área de toque: `padding: 8px 1px` vertical mínimo por link.
+Usar “sabes”, “buscas”, “vuelve”, “usa”, “necesitas”. Evitar regionalismos no intencionales en interfaces globales.
 
-**Regla de componentes**: todo CTA/hipervínculo de acción (ej. "Ver oferta
-en Amazon") es un `Button` real (con `asChild` si envuelve un `<a>`) — nunca
-texto plano suelto. Los enlaces de navegación secundaria sí pueden quedar
-como texto con `.nav-link`, eso es correcto.
+### Criterio editorial
 
-## 6. Checklist de coherencia visual entre vistas
+- una idea por párrafo;
+- si una oración comunica lo mismo que tres, usar una oración;
+- explicar beneficio o significado antes que describir el propio sistema;
+- evitar frases defensivas o meta como “sin feed artificial”, “curado por IA” o equivalentes si el usuario no necesita saberlo;
+- evitar solemnidad vacía y abstracciones de lujo genérico;
+- preferir verbos concretos y nombres específicos.
 
-Antes de cerrar cualquier tarea de diseño/frontend, además del
-`DESIGN-CHECKLIST.md` general, verificar que Home, Catálogo, Ficha de
-Producto y Magazine:
+## 5. Imagen de producto — regla dura
 
-- [ ] Comparten `font-display` para headings/nombres y `font-sans` (Archivo)
-      para UI/labels — se debe poder reconocer que son del mismo sitio sin
-      ver el logo.
-- [ ] Todo contenedor de imagen de producto usa `object-contain` +
-      `aspect-ratio` fijo según la tabla de la sección 4, nunca `object-cover`.
-- [ ] Todo link de navegación usa `.nav-link` (subrayado + focus-visible),
-      todo CTA de acción usa `Button`.
-- [ ] El toggle de tema no rompe contraste ni layout en ninguna vista — el
-      `--gold-contrast` fijo existe justamente para esto.
-- [ ] `print:hidden` en cualquier elemento de navegación agregado (NavBar,
-      Footer ya lo tienen).
+La identidad visual del perfume no se altera.
+
+1. Botella, tapa, etiqueta, logo, proporciones, líquido y reflejos se preservan.
+2. Producto siempre con `object-fit: contain`; nunca `cover`.
+3. El escenario de catálogo es **blanco puro** para integrar packshots de retailer sin crear cajas beige alrededor del producto.
+4. No remover fondos mediante tolerancias de color que puedan borrar vidrio, líquido, etiquetas claras o reflejos.
+5. Si un archivo de producto parece dañado, el sistema debe mostrar la fuente intacta o un placeholder antes que “repararlo” inventando píxeles.
+6. Fotografía generada puede complementar un producto, nunca sustituir su packshot canónico cuando la identidad no pueda verificarse.
+
+La fidelidad del objeto tiene prioridad sobre la limpieza estética.
+
+## 6. Materiales e ingredientes
+
+Aromia mantiene una biblioteca reutilizable de ingredientes y materias primas: cítricos, flores, maderas, raíces, resinas, especias, frutas y elementos botánicos.
+
+Uso correcto:
+
+- transparente cuando sea viable; blanco limpio como alternativa;
+- textura natural, pequeñas imperfecciones y color creíble;
+- escala y luz compatibles con la composición que los recibe;
+- utilizar ingredientes para explicar una nota, familia, materia o atmósfera concreta;
+- una composición puede mezclar activos, pero debe mantener una lógica de luz, profundidad y escala.
+
+No usar ingredientes como confeti decorativo. Si no ayudan a entender o sentir la fragancia, no se añaden.
+
+### Gate “NO IA”
+
+Rechazar un activo si presenta alguno de estos síntomas:
+
+- geometría botánica imposible;
+- simetría o perfección plástica excesiva;
+- texturas repetidas;
+- gotas, brillo o translucencia físicamente incoherentes;
+- bordes derretidos o piezas fusionadas;
+- escala ambigua;
+- dramatización cinematográfica que contradice un simple asset de materia prima.
+
+## 7. Composición y Narrative Harmony
+
+La coherencia se construye con **anclas** y **variación**.
+
+Anclas posibles:
+
+- voz tipográfica;
+- relación entre papel / tinta / acento;
+- ritmo de espaciado;
+- tratamiento de producto;
+- lógica de luz y materiales;
+- gramática de interacción y motion.
+
+Expresiones que pueden variar:
+
+- composición;
+- escala;
+- densidad;
+- crop editorial;
+- asimetría;
+- modo claro/oscuro;
+- superposición;
+- intensidad del motion.
+
+Una ruptura del patrón es válida cuando aumenta jerarquía, emoción o comprensión. La monotonía también es un defecto.
+
+## 8. Divisores y bordes
+
+Una línea debe tener trabajo que hacer.
+
+Usarla para:
+
+- separar dos controles que podrían confundirse;
+- marcar una frontera funcional importante;
+- sostener una tabla o dato que necesite lectura tabular.
+
+No usarla para separar automáticamente cada título, bloque, card, sección o columna.
+
+Orden de preferencia para crear separación:
+
+1. espacio;
+2. agrupación y alineación;
+3. cambio sutil de superficie;
+4. escala o ritmo;
+5. línea, solo si lo anterior no basta.
+
+## 9. Academia y contenido editorial
+
+El orden responde al interés del lector, no a una cronología académica automática.
+
+En Academia, la secuencia recomendada es:
+
+1. estructura / pirámide;
+2. familias olfativas;
+3. concentraciones;
+4. materias primas cuando los activos sean fiables;
+5. **Origen / historia como capítulo final**.
+
+El contenido histórico cierra y profundiza; no bloquea la entrada a conceptos más inmediatamente útiles.
+
+## 10. Catálogo
+
+El catálogo es archivo y descubrimiento, no panel administrativo.
+
+- filtros visibles pero silenciosos;
+- búsqueda prioritaria;
+- categorías olfativas como índice, no como segunda barra de navegación pesada;
+- cards separadas principalmente por espacio;
+- escenario de producto blanco;
+- metadata legible sin competir con nombre y marca;
+- estados vacíos con salida clara;
+- interacción táctil y teclado equivalentes.
+
+## 11. Motion
+
+Movimiento solo para:
+
+- mostrar continuidad;
+- revelar jerarquía;
+- confirmar estado;
+- orientar entre superficies.
+
+Respetar `prefers-reduced-motion`. Evitar animaciones simultáneas y parallax costoso por defecto.
+
+## 12. Gates antes de aceptar una intervención
+
+Toda modificación visual relevante debe responder:
+
+- **BEFORE:** ¿qué problema observable existía?
+- **AFTER:** ¿qué cambió exactamente?
+- **DELTA:** ¿qué mejoró para una persona real?
+- **WHY ACCEPTED:** ¿qué evidencia justifica conservarlo?
+
+Además:
+
+- mobile y tablet revisados;
+- teclado y focus visibles;
+- contraste suficiente;
+- reduced-motion preservado;
+- imágenes sin deformación o pérdida de identidad;
+- performance sin regresión importante;
+- SEO/rutas/datos preservados.
+
+Una versión nueva no se acepta solo por ser nueva.
