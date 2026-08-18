@@ -23,8 +23,6 @@ const METRIC_LABELS: Record<string, string> = {
   proyeccion: "Proyección",
 };
 
-// Descripciones genéricas de cada nivel (0-10) — texto educativo universal,
-// no dato inventado por perfume. Sin franja para 0 (sin dato).
 function nivelDescripcion(valor: number): string {
   if (valor >= 8) return "Muy alta";
   if (valor >= 6) return "Alta";
@@ -43,9 +41,6 @@ export function PerformanceBars({
 }) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    // Un tick después del mount para que el navegador registre el ancho en
-    // 0 antes de animar — si se setea directo en el render inicial, el
-    // browser puede pintar ya con el ancho final y la transición no corre.
     const id = requestAnimationFrame(() => setReady(true));
     return () => cancelAnimationFrame(id);
   }, []);
@@ -61,7 +56,7 @@ export function PerformanceBars({
   if (metrics.length === 0) {
     return (
       <section className="rounded-card border border-line bg-surface p-7 text-center">
-        <p className="font-sans text-[11px] uppercase tracking-[.2em] text-gold-contrast">
+        <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">
           Rendimiento en piel
         </p>
         <p className="mt-3 font-sans text-sm text-muted">Aún sin datos de desempeño.</p>
@@ -77,7 +72,7 @@ export function PerformanceBars({
         .map(([key, valor]) => `${METRIC_LABELS[key]}: ${valor} de 10`)
         .join(", ")}
     >
-      <p className="font-sans text-[11px] uppercase tracking-[.2em] text-gold-contrast">
+      <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">
         Rendimiento en piel
       </p>
       <div className="mt-6 flex flex-col gap-5">

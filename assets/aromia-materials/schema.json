@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aromialab.com/schemas/material-library-v1.json",
+  "title": "Aromia Material Manifest Asset",
+  "type": "object",
+  "required": ["id", "category", "file", "format", "alpha", "width", "height", "bytes", "sha256", "source_sha256", "variant", "relative_path", "status", "canonical_product_identity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "category": {"type": "string", "minLength": 1},
+    "file": {"type": "string", "pattern": "^[a-z0-9-]+\\.(webp|png)$"},
+    "format": {"enum": ["webp", "png"]},
+    "alpha": {"type": "boolean"},
+    "width": {"type": "integer", "minimum": 1},
+    "height": {"type": "integer", "minimum": 1},
+    "bytes": {"type": "integer", "minimum": 1},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "variant": {"type": "string", "minLength": 1},
+    "relative_path": {"type": "string", "pattern": "^assets/aromia-materials/files/"},
+    "status": {"enum": ["generated_material", "review", "approved", "rejected", "deprecated"]},
+    "canonical_product_identity": {"const": false}
+  },
+  "additionalProperties": false
+}

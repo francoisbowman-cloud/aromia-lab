@@ -29,15 +29,15 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
   return (
     <div className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]">
       <header className="mx-auto max-w-[1440px] px-6 pb-10 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
-        <div className="flex items-center gap-4 font-plex text-[9px] uppercase tracking-[.2em] text-muted"><span>Aromia Magazine</span><span className="h-px w-12 bg-line"/><span>Journal de parfum</span></div>
+        <div className="flex flex-wrap items-center justify-between gap-3 font-plex text-xs uppercase tracking-[.13em] text-muted"><span>Aromia Magazine</span><span>Journal de parfum</span></div>
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
           <div>
-            <p className="font-plex text-[9px] uppercase tracking-[.22em] text-gold-contrast">Edición 01 / Materia, memoria, deseo</p>
-            <h1 className="mt-5 max-w-[11ch] font-display text-[50px] font-medium leading-[.94] tracking-[-.04em] text-ink sm:text-[58px] lg:text-[72px]">Historias que cambian cómo hueles.</h1>
+            <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Edición 01 / Materia, memoria, deseo</p>
+            <h1 className="mt-5 max-w-[11ch] font-display text-[46px] font-medium leading-[.96] tracking-[-.04em] text-ink sm:text-[54px] lg:text-[64px]">Historias que cambian cómo hueles.</h1>
           </div>
           <div className="lg:justify-self-end">
             <p className="max-w-[40ch] font-sans text-base leading-7 text-muted">Reseñas, cultura y guías para entender mejor lo que llevas puesto y lo que quieres descubrir después.</p>
-            <div className="mt-6 flex gap-6 font-plex text-[9px] uppercase tracking-[.16em] text-muted"><span>{articulos.length} historias</span><span>Aromia / 2026</span></div>
+            <div className="mt-6 flex gap-6 font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{articulos.length} historias</span><span>Aromia / 2026</span></div>
           </div>
         </div>
       </header>
@@ -52,11 +52,11 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
             <div className="grid grid-cols-1 gap-10 pb-14 lg:grid-cols-[.62fr_1.38fr] lg:gap-14 lg:pb-20">
               <div className="flex flex-col justify-between gap-12 lg:py-4">
                 <div>
-                  <p className="font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">Portada / edición actual</p>
-                  <h2 className="mt-5 max-w-[10ch] font-display text-[40px] font-medium leading-[.96] tracking-[-.03em] text-ink sm:text-[46px] lg:text-[56px]">El perfume también es cultura material.</h2>
+                  <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Portada / edición actual</p>
+                  <h2 className="mt-5 max-w-[10ch] font-display text-[38px] font-medium leading-[.98] tracking-[-.03em] text-ink sm:text-[44px] lg:text-[52px]">El perfume también es cultura material.</h2>
                   <p className="mt-7 max-w-[38ch] font-sans text-base leading-7 text-muted">La botella, las materias y la firma olfativa cuentan una historia antes de llegar al catálogo.</p>
                 </div>
-                <div className="flex gap-8 font-plex text-[8px] uppercase tracking-[.15em] text-muted">
+                <div className="flex gap-8 font-plex text-xs uppercase tracking-[.12em] text-muted">
                   <span><span className="text-gold-contrast">Edición</span> 01</span>
                   <span><span className="text-gold-contrast">Selección</span> {filtered.length} historias</span>
                 </div>
@@ -67,8 +67,8 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
             {secondary.length > 0 ? (
               <aside className="pt-14 lg:pt-20">
                 <div className="mb-10 flex items-end justify-between gap-6">
-                  <div><p className="font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast">Siguiente lectura</p><h3 className="mt-3 font-display text-[32px] font-medium leading-none text-ink lg:text-[40px]">Tres caminos para continuar.</h3></div>
-                  <span className="hidden font-plex text-[8px] uppercase tracking-[.16em] text-muted sm:block">Archivo / {String(secondary.length).padStart(2, "0")}</span>
+                  <div><p className="font-plex text-xs uppercase tracking-[.13em] text-gold-contrast">Siguiente lectura</p><h3 className="mt-3 font-display text-[32px] font-medium leading-none text-ink lg:text-[40px]">Tres caminos para continuar.</h3></div>
+                  <span className="hidden font-plex text-xs uppercase tracking-[.12em] text-muted sm:block">Archivo / {String(secondary.length).padStart(2, "0")}</span>
                 </div>
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-10">
                   {secondary.map((article, i) => <div key={article.slug}><MagazineSecondaryStory article={article} isFirst={i === 0} /></div>)}

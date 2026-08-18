@@ -1,0 +1,24 @@
+name: Material Library CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/aromia-materials/**'
+      - 'scripts/materials/**'
+      - '.github/workflows/material-library-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate dataset, hashes and identity policy
+        run: node scripts/materials/validate-material-library.mjs

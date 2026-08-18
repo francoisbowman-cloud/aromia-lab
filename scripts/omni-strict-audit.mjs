@@ -65,7 +65,11 @@ await requireText("apps/web/src/lib/personalization.ts", [
 ]);
 await requireText("apps/web/src/app/descubrir/page.tsx", [["discovery_map_route_missing", /DiscoveryDashboard/]]);
 await requireText("apps/web/src/components/discovery/DiscoveryDashboard.tsx", [
-  ["discovery_map_families_missing", /Familias/], ["discovery_map_notes_missing", /Notas/], ["discovery_map_perfumers_missing", /Perfumistas/], ["discovery_map_recommendations_missing", /Recomendaciones vivas/],
+  ["discovery_map_families_missing", /topSignals\(profile\.families|families\.length/],
+  ["discovery_map_notes_missing", /topSignals\(profile\.notes|notes\.length/],
+  ["discovery_map_perfumers_missing", /topSignals\(profile\.perfumers|PERFUMERS\.find/],
+  ["discovery_map_recommendations_missing", /rankPersonalizedPerfumes|ranked\.map/],
+  ["discovery_routes_missing_real_product", /<ProductImage\s+slug=\{perfume\.slug\}/],
 ]);
 await requireText("apps/web/src/components/quiz/QuizFlow.tsx", [["quiz_must_feed_discovery_profile", /recordQuizProfile/]]);
 await requireText("apps/web/src/components/perfume/HeroHeader.tsx", [["pdp_must_feed_discovery_profile", /recordPerfumeInterest/]]);

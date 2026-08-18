@@ -18,9 +18,6 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeToggle({ className }: { className?: string }) {
-  // El script anti-flash en layout.tsx ya fija data-theme antes del primer
-  // paint; este estado solo se usa para el ícono, así que arranca en "light"
-  // (el default del script) y se sincroniza real en el primer render cliente.
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
@@ -40,7 +37,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       onClick={toggle}
       aria-label={theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
       className={
-        "inline-flex h-9 w-9 items-center justify-center rounded-full text-muted outline-none transition hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
+        "inline-flex h-11 w-11 items-center justify-center rounded-full text-muted outline-none transition hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
         (className ?? "")
       }
     >

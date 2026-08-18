@@ -1,0 +1,11 @@
+{
+  "artifact": "AROMIA_MATERIAL_LIBRARY_COLLAB_V1.zip",
+  "variant": "web-collaboration-384",
+  "asset_count": 28,
+  "bytes": 1140580,
+  "sha256": "60db653b0c822ada512dcf31ee78d9eb243cfe070384baa137a7fcc7cc782257",
+  "verified_against_manifest": true,
+  "verified_assets": 28,
+  "mismatches": 0,
+  "binary_hosting": "portable-artifact-until-repository-ingest"
+}

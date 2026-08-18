@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { pickEditorialImage } from "@/lib/editorialImages";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
@@ -9,63 +8,18 @@ export const metadata = {
 };
 
 const timeline = [
-  {
-    anio: "~4000 a.C.",
-    titulo: "Los primeros perfumes",
-    texto:
-      'Mesopotamia y Egipto queman resinas e incienso en rituales. La palabra "perfume" llegaría siglos después del latín per fumum: "a través del humo".',
-  },
-  {
-    anio: "1190",
-    titulo: "Grasse, la capital",
-    texto:
-      "La ciudad francesa comienza a perfumar guantes para suavizar el olor del cuero y termina convirtiéndose en un centro mundial de perfumería.",
-  },
-  {
-    anio: "1370",
-    titulo: 'El "Agua de Hungría"',
-    texto:
-      "Una de las primeras fórmulas modernas a base de alcohol mezcla aceites esenciales con espíritu de vino.",
-  },
-  {
-    anio: "1882",
-    titulo: "La revolución sintética",
-    texto:
-      "Fougère Royale introduce la cumarina sintética y demuestra que un perfume también puede crear un olor que no existe en la naturaleza.",
-  },
-  {
-    anio: "1921",
-    titulo: "Chanel N°5",
-    texto:
-      "Ernest Beaux lleva los aldehídos a una nueva escala y consolida la perfumería abstracta moderna.",
-  },
-  {
-    anio: "Hoy",
-    titulo: "Nicho y personalización",
-    texto:
-      "Casas independientes y grandes maisons conviven con una perfumería más diversa, experimental y personal.",
-  },
+  { anio: "~4000 a.C.", titulo: "Los primeros perfumes", texto: 'Mesopotamia y Egipto queman resinas e incienso en rituales. La palabra "perfume" llegaría siglos después del latín per fumum: "a través del humo".' },
+  { anio: "1190", titulo: "Grasse, la capital", texto: "La ciudad francesa comienza a perfumar guantes para suavizar el olor del cuero y termina convirtiéndose en un centro mundial de perfumería." },
+  { anio: "1370", titulo: 'El "Agua de Hungría"', texto: "Una de las primeras fórmulas modernas a base de alcohol mezcla aceites esenciales con espíritu de vino." },
+  { anio: "1882", titulo: "La revolución sintética", texto: "Fougère Royale introduce la cumarina sintética y demuestra que un perfume también puede crear un olor que no existe en la naturaleza." },
+  { anio: "1921", titulo: "Chanel N°5", texto: "Ernest Beaux lleva los aldehídos a una nueva escala y consolida la perfumería abstracta moderna." },
+  { anio: "Hoy", titulo: "Nicho y personalización", texto: "Casas independientes y grandes maisons conviven con una perfumería más diversa, experimental y personal." },
 ];
 
 const piramide = [
-  {
-    etiqueta: "Salida · 0–15 minutos",
-    titulo: "Notas de salida",
-    texto:
-      "Cítricos, especias ligeras y notas verdes suelen formar la primera impresión: brillante, volátil y breve.",
-  },
-  {
-    etiqueta: "Corazón · 15 min – 2 horas",
-    titulo: "Notas de corazón",
-    texto:
-      "Flores, frutas y especias aparecen cuando la salida se disipa y definen buena parte del carácter de la fragancia.",
-  },
-  {
-    etiqueta: "Fondo · 2+ horas",
-    titulo: "Notas de fondo",
-    texto:
-      "Maderas, almizcles, resinas y ámbar permanecen más tiempo sobre la piel y sostienen el rastro final del perfume.",
-  },
+  { etiqueta: "Salida · 0–15 minutos", titulo: "Notas de salida", texto: "Cítricos, especias ligeras y notas verdes suelen formar la primera impresión: brillante, volátil y breve." },
+  { etiqueta: "Corazón · 15 min – 2 horas", titulo: "Notas de corazón", texto: "Flores, frutas y especias aparecen cuando la salida se disipa y definen buena parte del carácter de la fragancia." },
+  { etiqueta: "Fondo · 2+ horas", titulo: "Notas de fondo", texto: "Maderas, almizcles, resinas y ámbar permanecen más tiempo sobre la piel y sostienen el rastro final del perfume." },
 ];
 
 const familias = [
@@ -87,43 +41,19 @@ const concentraciones = [
 ];
 
 export default function AcademiaPage() {
-  const heroImage = pickEditorialImage("academia-hero");
-
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-24 p-6 pb-24 lg:p-10">
-      <section className="relative -mx-6 flex flex-col items-center gap-5 overflow-hidden px-6 py-14 text-center lg:-mx-10 lg:px-10 lg:py-24">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={heroImage.src}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-paper/92 via-paper/86 to-paper" />
-        <div className="relative flex flex-col items-center gap-5">
-          <p className="font-sans text-[11px] uppercase tracking-[.22em] text-gold-contrast">
-            La Academia Aromia
-          </p>
+      <section className="relative -mx-6 overflow-hidden bg-[#f0e5d5] px-6 py-16 text-center dark:bg-[#17120d] lg:-mx-10 lg:px-10 lg:py-24">
+        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,.88),transparent_28%),radial-gradient(circle_at_84%_76%,rgba(182,138,68,.18),transparent_34%),linear-gradient(135deg,#fbf7f0_0%,#eee1ce_58%,#e4d0ad_100%)] dark:bg-[radial-gradient(circle_at_14%_18%,rgba(200,168,107,.09),transparent_30%),radial-gradient(circle_at_84%_76%,rgba(182,138,68,.08),transparent_34%),linear-gradient(135deg,#17120d_0%,#100d0a_70%,#21180f_100%)]" />
+        <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-5">
+          <p className="font-sans text-xs uppercase tracking-[.17em] text-gold-contrast">La Academia Aromia</p>
           <h1 className="max-w-2xl font-display text-[38px] font-semibold leading-[1.04] text-ink sm:text-[46px] lg:text-[54px]">
             Entiende el perfume <em className="text-gold-contrast not-italic">antes de elegirlo.</em>
           </h1>
-          <p className="max-w-xl font-sans text-base leading-7 text-muted">
-            Aprende a leer una fragancia a través de su estructura, sus familias y su concentración.
-          </p>
-          <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-3">
-            {[
-              ["#piramide", "La pirámide"],
-              ["#familias", "Familias olfativas"],
-              ["#concentraciones", "Concentraciones"],
-              ["#historia", "Origen"],
-            ].map(([href, label]) => (
-              <a
-                key={href}
-                href={href}
-                className="font-sans text-[11px] uppercase tracking-[.1em] text-muted transition hover:text-ink"
-              >
-                {label}
-              </a>
+          <p className="max-w-xl font-sans text-base leading-7 text-muted">Aprende a leer una fragancia a través de su estructura, sus familias y su concentración.</p>
+          <div className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-2">
+            {[["#piramide", "La pirámide"], ["#familias", "Familias olfativas"], ["#concentraciones", "Concentraciones"], ["#historia", "Origen"]].map(([href, label]) => (
+              <a key={href} href={href} className="inline-flex min-h-11 items-center px-1 font-sans text-xs uppercase tracking-[.1em] text-muted transition hover:text-ink">{label}</a>
             ))}
           </div>
         </div>
@@ -131,16 +61,14 @@ export default function AcademiaPage() {
 
       <section id="piramide" className="scroll-mt-20 pt-6">
         <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-[11px] uppercase tracking-[.22em] text-gold-contrast">Estructura</p>
+          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Estructura</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">La pirámide olfativa</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">
-            Una fragancia cambia con el tiempo: salida, corazón y fondo cuentan momentos distintos.
-          </p>
+          <p className="mt-3 font-sans text-base leading-7 text-muted">Una fragancia cambia con el tiempo: salida, corazón y fondo cuentan momentos distintos.</p>
         </div>
         <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-3">
           {piramide.map((tier) => (
             <div key={tier.titulo} className="rounded-card bg-surface p-7">
-              <p className="font-sans text-[11px] uppercase tracking-[.16em] text-gold-contrast">{tier.etiqueta}</p>
+              <p className="font-sans text-xs uppercase tracking-[.12em] text-gold-contrast">{tier.etiqueta}</p>
               <h3 className="mt-3 font-display text-xl font-semibold text-ink">{tier.titulo}</h3>
               <p className="mt-3 font-sans text-sm leading-6 text-muted">{tier.texto}</p>
             </div>
@@ -150,11 +78,9 @@ export default function AcademiaPage() {
 
       <section id="familias" className="scroll-mt-20 pt-6">
         <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-[11px] uppercase tracking-[.22em] text-gold-contrast">Clasificación</p>
+          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Clasificación</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">Las 8 familias olfativas</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">
-            Reconocer la familia dominante ayuda a anticipar el carácter de una fragancia.
-          </p>
+          <p className="mt-3 font-sans text-base leading-7 text-muted">Reconocer la familia dominante ayuda a anticipar el carácter de una fragancia.</p>
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
           {familias.map((fam) => (
@@ -169,43 +95,34 @@ export default function AcademiaPage() {
 
       <section id="concentraciones" className="scroll-mt-20 pt-6">
         <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-[11px] uppercase tracking-[.22em] text-gold-contrast">Cómo elegir</p>
+          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Cómo elegir</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">Qué cambia con la concentración</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">
-            La proporción de aceite aromático influye en intensidad, duración y, a menudo, precio.
-          </p>
+          <p className="mt-3 font-sans text-base leading-7 text-muted">La proporción de aceite aromático influye en intensidad, duración y, a menudo, precio.</p>
         </div>
         <div className="mx-auto flex max-w-2xl flex-col gap-7">
           {concentraciones.map((c) => (
             <div key={c.nombre} className="grid grid-cols-1 gap-3 sm:grid-cols-[140px_1fr_60px] sm:items-center sm:gap-5">
               <span className="font-display text-lg text-ink">{c.nombre}</span>
-              <span className="relative h-2 overflow-hidden rounded-full bg-gold/20">
-                <span className="absolute inset-y-0 left-0 rounded-full bg-gold-contrast" style={{ width: c.ancho }} />
-              </span>
+              <span className="relative h-2 overflow-hidden rounded-full bg-gold/20"><span className="absolute inset-y-0 left-0 rounded-full bg-gold-contrast" style={{ width: c.ancho }} /></span>
               <span className="font-sans text-xs text-muted sm:text-right">{c.pct}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Materia prima sigue oculta hasta sustituir las imágenes antiguas por activos fieles y auditados. */}
+      {/* Materia prima seguirá oculta hasta integrar activos NO-IA auditados de la nueva biblioteca reusable. */}
 
       <section id="historia" className="scroll-mt-20 pt-10">
         <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-[11px] uppercase tracking-[.22em] text-gold-contrast">Origen</p>
+          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Origen</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">Una historia de 6.000 años</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">
-            Del humo ritual a la perfumería abstracta: seis momentos para entender cómo llegamos hasta aquí.
-          </p>
+          <p className="mt-3 font-sans text-base leading-7 text-muted">Del humo ritual a la perfumería abstracta: seis momentos para entender cómo llegamos hasta aquí.</p>
         </div>
         <div className="mx-auto grid max-w-4xl gap-x-12 gap-y-10 sm:grid-cols-2">
           {timeline.map((item) => (
             <article key={item.anio} className="grid grid-cols-[72px_1fr] gap-5">
               <div className="font-display text-xl leading-none text-gold-contrast">{item.anio}</div>
-              <div>
-                <h3 className="font-display text-lg font-semibold text-ink">{item.titulo}</h3>
-                <p className="mt-2 font-sans text-sm leading-6 text-muted">{item.texto}</p>
-              </div>
+              <div><h3 className="font-display text-lg font-semibold text-ink">{item.titulo}</h3><p className="mt-2 font-sans text-sm leading-6 text-muted">{item.texto}</p></div>
             </article>
           ))}
         </div>
@@ -213,12 +130,8 @@ export default function AcademiaPage() {
 
       <section className="rounded-card bg-ink px-8 py-14 text-center text-paper">
         <h2 className="font-display text-3xl font-semibold lg:text-4xl">¿Ya sabes qué buscas?</h2>
-        <p className="mx-auto mt-3 max-w-md font-sans text-base leading-7 text-paper/75">
-          Vuelve al catálogo y explora con filtros de familia, ocasión y concentración.
-        </p>
-        <Button asChild size="lg" className="mt-6">
-          <Link href="/catalogo">Ir al catálogo →</Link>
-        </Button>
+        <p className="mx-auto mt-3 max-w-md font-sans text-base leading-7 text-paper/75">Vuelve al catálogo y explora con filtros de familia, ocasión y concentración.</p>
+        <Button asChild size="lg" className="mt-6"><Link href="/catalogo">Ir al catálogo →</Link></Button>
       </section>
     </main>
   );

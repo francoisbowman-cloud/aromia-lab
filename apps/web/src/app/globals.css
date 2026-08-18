@@ -118,3 +118,16 @@ body { color: var(--text); background: var(--bg); font-family: var(--font-body),
   .aromia-note:hover .aromia-note-line { background: var(--gold-contrast); }
   [data-theme="dark"] .aromia-note:hover .aromia-note-line { background: var(--gold-2); }
 }
+
+/* Aromia readability contract: editorial microcopy remains secondary by weight,
+   tracking and color, not by becoming physically unreadable. These legacy
+   arbitrary utilities are kept in source for compatibility but cannot render
+   below the 12px floor. */
+:where(
+  [class~="text-[8px]"],
+  [class~="text-[9px]"],
+  [class~="text-[10px]"],
+  [class~="text-[11px]"]
+) {
+  font-size: 0.75rem;
+}

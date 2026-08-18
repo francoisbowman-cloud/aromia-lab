@@ -1,0 +1,29 @@
+id,display_name,category,file,relative_path,status
+apple,Apple,fruit,apple.webp,assets/aromia-materials/files/apple.webp,generated_material
+bergamot,Bergamot,citrus,bergamot.webp,assets/aromia-materials/files/bergamot.webp,generated_material
+blackcurrant,Blackcurrant,fruit,blackcurrant.webp,assets/aromia-materials/files/blackcurrant.webp,generated_material
+cardamom,Cardamom,spice,cardamom.webp,assets/aromia-materials/files/cardamom.webp,generated_material
+cinnamon,Cinnamon,spice,cinnamon.webp,assets/aromia-materials/files/cinnamon.webp,generated_material
+cloves,Cloves,spice,cloves.webp,assets/aromia-materials/files/cloves.webp,generated_material
+frankincense,Frankincense,resin,frankincense.webp,assets/aromia-materials/files/frankincense.webp,generated_material
+grapefruit,Grapefruit,citrus,grapefruit.webp,assets/aromia-materials/files/grapefruit.webp,generated_material
+iris,Iris,floral-powdery,iris.webp,assets/aromia-materials/files/iris.webp,generated_material
+jasmine,Jasmine,floral,jasmine.webp,assets/aromia-materials/files/jasmine.webp,generated_material
+juniper,Juniper,aromatic,juniper.webp,assets/aromia-materials/files/juniper.webp,generated_material
+lavender,Lavender,aromatic,lavender.webp,assets/aromia-materials/files/lavender.webp,generated_material
+mandarin,Mandarin,citrus,mandarin.webp,assets/aromia-materials/files/mandarin.webp,generated_material
+myrrh,Myrrh,resin,myrrh.webp,assets/aromia-materials/files/myrrh.webp,generated_material
+neroli-orange-blossom,Neroli Orange Blossom,floral-citrus,neroli-orange-blossom.webp,assets/aromia-materials/files/neroli-orange-blossom.webp,generated_material
+oakmoss,Oakmoss,mossy-green,oakmoss.webp,assets/aromia-materials/files/oakmoss.webp,generated_material
+orris-root,Orris Root,root-powdery,orris-root.webp,assets/aromia-materials/files/orris-root.webp,generated_material
+oud-agarwood,Oud Agarwood,wood-resin,oud-agarwood.webp,assets/aromia-materials/files/oud-agarwood.webp,generated_material
+patchouli,Patchouli,earthy-green,patchouli.webp,assets/aromia-materials/files/patchouli.webp,generated_material
+pear,Pear,fruit,pear.webp,assets/aromia-materials/files/pear.webp,generated_material
+pink-pepper,Pink Pepper,spice,pink-pepper.webp,assets/aromia-materials/files/pink-pepper.webp,generated_material
+rose,Rose,floral,rose.webp,assets/aromia-materials/files/rose.webp,generated_material
+saffron,Saffron,spice,saffron.webp,assets/aromia-materials/files/saffron.webp,generated_material
+sandalwood,Sandalwood,wood,sandalwood.webp,assets/aromia-materials/files/sandalwood.webp,generated_material
+tobacco,Tobacco,leaf,tobacco.webp,assets/aromia-materials/files/tobacco.webp,generated_material
+tonka-bean,Tonka Bean,gourmand,tonka-bean.webp,assets/aromia-materials/files/tonka-bean.webp,generated_material
+vanilla,Vanilla,gourmand,vanilla.webp,assets/aromia-materials/files/vanilla.webp,generated_material
+ylang-ylang,Ylang Ylang,floral,ylang-ylang.webp,assets/aromia-materials/files/ylang-ylang.webp,generated_material

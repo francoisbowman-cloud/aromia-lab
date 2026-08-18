@@ -10,6 +10,7 @@ const FETCH_TIMEOUT_MS = 9000;
 
 function officialProductPage(slug: string, concentration?: string | null) {
   if (slug === "black-afgano") return "https://nasomatto.com/es/products/black-afgano";
+  if (slug === "acqua-di-gio-edt") return "https://www.giorgioarmanibeauty-usa.com/fragrances/mens-cologne/acqua-di-gio/acqua-di-gio-eau-de-toilette/A005.html?geo=false";
   if (slug === "chance-eau-tendre") {
     return String(concentration ?? "").toLowerCase().includes("toilette") || String(concentration ?? "").toLowerCase() === "edt"
       ? "https://www.chanel.com/us/fragrance/p/126320/chance-eau-tendre-eau-de-toilette-spray/"
@@ -76,9 +77,10 @@ export async function GET(_request: Request, { params }: { params: { slug: strin
   const perfume = await getPerfumeBySlug(params.slug);
   if (!perfume) return new Response("Not found", { status: 404 });
 
-  // OMNI visual quarantine: known aesthetic outliers use the manufacturer product
-  // page first. We resolve its current social/product packshot at request time rather
-  // than checking an unverified binary into the repository.
+  // OMNI visual quarantine: known aesthetic/identity outliers use an official
+  // manufacturer page first. The page's current social/product packshot is
+  // resolved at request time, preserving the real bottle instead of checking
+  // an unverified or destructively processed binary into the repository.
   const officialPage = officialProductPage(perfume.slug, perfume.concentracion);
   if (officialPage) {
     const officialImageUrl = await resolveOfficialPackshot(officialPage);
