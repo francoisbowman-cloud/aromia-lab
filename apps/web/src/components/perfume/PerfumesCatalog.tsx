@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Perfume } from "@/lib/types";
 import { discoveryTextScore, type DiscoverySort } from "@/lib/discovery";
 import { PerfumeCard } from "./PerfumeCard";
@@ -12,6 +12,7 @@ import { trackEvent } from "@/lib/analytics";
 const GENEROS = ["masculino", "femenino", "unisex"] as const;
 const CATEGORIAS_PRECIO = ["económico", "medio", "premium", "lujo"] as const;
 const NICHO_O_COMERCIAL = ["nicho", "comercial"] as const;
+const CATALOG_CHAPTER_SIZE = 24;
 
 export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfume[]; initialFamilia?: string }) {
   const [q, setQ] = useState("");
@@ -22,6 +23,7 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
   const [nichoOComercial, setNichoOComercial] = useState("");
   const [ocasion, setOcasion] = useState("");
   const [sort, setSort] = useState<DiscoverySort>("relevancia");
+  const [visibleCount, setVisibleCount] = useState(CATALOG_CHAPTER_SIZE);
 
   const familias = useMemo(() => Array.from(new Set(perfumes.map((p) => p.familia_olfativa).filter((f): f is string => Boolean(f)))).sort(), [perfumes]);
   const ocasiones = useMemo(() => Array.from(new Set(perfumes.flatMap((p) => p.ocasion ?? []))).sort(), [perfumes]);
@@ -53,6 +55,13 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
     });
   }, [perfumes, q, genero, familia, categoria, categoriaPrecio, nichoOComercial, ocasion, sort]);
 
+  useEffect(() => {
+    setVisibleCount(CATALOG_CHAPTER_SIZE);
+  }, [q, genero, familia, categoria, categoriaPrecio, nichoOComercial, ocasion, sort]);
+
+  const visibles = filtrados.slice(0, visibleCount);
+  const hasMore = visibles.length < filtrados.length;
+  const remaining = Math.max(0, filtrados.length - visibles.length);
   const activeCount = [q, genero, familia, categoria, categoriaPrecio, nichoOComercial, ocasion].filter(Boolean).length;
   const clearFilters = () => {
     setQ("");
@@ -159,9 +168,36 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
-          {filtrados.map((perfume, index) => <PerfumeCard key={perfume.slug} perfume={perfume} index={index} trackingContext="catalog" />)}
-        </div>
+        <>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+            {visibles.map((perfume, index) => <PerfumeCard key={perfume.slug} perfume={perfume} index={index} trackingContext="catalog" />)}
+          </div>
+
+          <div className="mt-12 border-t border-line pt-8 lg:mt-16 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-10">
+            <div>
+              <p className="font-plex text-xs uppercase tracking-[.14em] text-muted">Archivo en capítulos</p>
+              <p className="mt-3 font-display text-[32px] leading-none tracking-[-.02em] text-ink sm:text-[38px]">
+                {visibles.length} de {filtrados.length} fragancias a la vista.
+              </p>
+              <p className="mt-4 max-w-[52ch] font-sans text-sm leading-6 text-muted">
+                El índice se abre por tramos para mantener la exploración rápida incluso mientras crece la colección.
+              </p>
+            </div>
+            {hasMore ? (
+              <button
+                type="button"
+                onClick={() => setVisibleCount((count) => Math.min(count + CATALOG_CHAPTER_SIZE, filtrados.length))}
+                className="mt-7 inline-flex min-h-12 items-center justify-center gap-4 bg-ink px-6 font-plex text-xs uppercase tracking-[.12em] text-[#fbf8f3] transition hover:opacity-85 lg:mt-0"
+                aria-label={`Mostrar ${Math.min(CATALOG_CHAPTER_SIZE, remaining)} fragancias más`}
+              >
+                Continuar el índice
+                <span aria-hidden="true">↓</span>
+              </button>
+            ) : (
+              <p className="mt-7 font-plex text-xs uppercase tracking-[.12em] text-gold-contrast lg:mt-0">Fin del índice</p>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
