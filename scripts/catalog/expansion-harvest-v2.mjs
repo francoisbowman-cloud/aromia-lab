@@ -4,23 +4,54 @@ import { parse as parseCsv } from "csv-parse/sync";
 import { stringify as stringifyCsv } from "csv-stringify/sync";
 import { REPO_ROOT, isMainModule, normalizeConcentration } from "./lib.mjs";
 import { discoverOfficialUrlsV2, fetchOfficialPage, sameRegistrableHost } from "./source-discovery-v2.mjs";
-import { tokenizeIdentity } from "./source-discovery.mjs";
 import { extractPageEvidenceV2 } from "./structured-extractor-v2.mjs";
 import { publicationMetadata } from "./commerce-enrichment.mjs";
 
 const DEFAULT_CONCURRENCY = 6;
+const IDENTITY_STOP_WORDS = new Set(["eau", "de", "du", "des", "the", "for", "by", "and", "parfum", "perfume", "edp", "edt", "edc", "extrait", "elixir", "le", "la", "les"]);
+const GENDER_WORDS = new Set(["homme", "femme", "uomo", "donna", "men", "women", "male", "female"]);
+
 function readCsv(path) { return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true, relax_column_count: true }); }
 function writeCsv(path, rows) { mkdirSync(dirname(path), { recursive: true }); if (!rows.length) { writeFileSync(path, "", "utf-8"); return; } writeFileSync(path, stringifyCsv(rows, { header: true }), "utf-8"); }
 function canonicalConcentration(value) { return normalizeConcentration(String(value ?? "")).value.toLowerCase(); }
 function fold(value) { return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+function words(value) { return fold(value).split(/[^a-z0-9]+/).filter(Boolean); }
+function identityTokens(value) { return [...new Set(words(value).filter((token) => !IDENTITY_STOP_WORDS.has(token)))]; }
 function preferredOfficialUrls(candidate) { return String(candidate.source_url ?? "").split(";").map((s) => s.trim()).filter(Boolean).filter((url) => candidate.official_domain && sameRegistrableHost(url, candidate.official_domain)); }
 
 export function identityEvidence(candidate, evidence, pageUrl) {
-  const identityText = fold(`${pageUrl} ${evidence.title} ${evidence.structured_product_name}`);
-  const nameTokens = tokenizeIdentity(candidate);
-  const hits = nameTokens.filter((t) => identityText.includes(t));
+  const corpus = new Set(words(`${pageUrl} ${evidence.title ?? ""} ${evidence.structured_product_name ?? ""}`));
+  const nameTokens = identityTokens(candidate.name);
+  const brandTokens = new Set(identityTokens(candidate.brand));
+  const productTokens = nameTokens.filter((token) => !brandTokens.has(token));
+  const requiredProductTokens = productTokens.length ? productTokens : nameTokens;
+  const hits = nameTokens.filter((token) => corpus.has(token));
+  const productHits = requiredProductTokens.filter((token) => corpus.has(token));
   const coverage = nameTokens.length ? hits.length / nameTokens.length : 0;
-  return { confirmed: nameTokens.length > 0 && coverage >= 0.6, coverage, hits, tokens: nameTokens };
+
+  const candidateGenderWords = nameTokens.filter((token) => GENDER_WORDS.has(token));
+  const conflictingGender = candidateGenderWords.some((token) => {
+    if (token === "homme" || token === "uomo" || token === "men" || token === "male") return corpus.has("femme") || corpus.has("donna") || corpus.has("women") || corpus.has("female");
+    if (token === "femme" || token === "donna" || token === "women" || token === "female") return corpus.has("homme") || corpus.has("uomo") || corpus.has("men") || corpus.has("male");
+    return false;
+  });
+
+  // A source is allowed to prove a row only when the page matches the product,
+  // not merely the brand or a nearby flanker. Word-boundary matching prevents a
+  // one-letter product such as "K" from being satisfied by arbitrary text.
+  const confirmed = nameTokens.length > 0
+    && coverage >= 0.8
+    && productHits.length > 0
+    && !conflictingGender;
+
+  return {
+    confirmed,
+    coverage,
+    hits,
+    productHits,
+    tokens: nameTokens,
+    conflictingGender,
+  };
 }
 
 export async function harvestCandidateV2(candidate, options = {}) {
@@ -45,7 +76,11 @@ export async function harvestCandidateV2(candidate, options = {}) {
       const page = await fetchOfficialPage(hit.url, candidate.official_domain, options);
       const evidence = extractPageEvidenceV2(page.text, page.finalUrl);
       const identity = identityEvidence(candidate, evidence, page.finalUrl);
-      if (!identity.confirmed) { errors.push(`identity_mismatch:${identity.coverage.toFixed(2)}:${hit.url}`); continue; }
+      if (!identity.confirmed) {
+        const conflict = identity.conflictingGender ? ":gender_conflict" : "";
+        errors.push(`identity_mismatch:${identity.coverage.toFixed(2)}${conflict}:${hit.url}`);
+        continue;
+      }
       const expected = canonicalConcentration(candidate.concentration);
       const extracted = canonicalConcentration(evidence.concentration);
       if (!extracted) { errors.push(`concentration_unverified:${hit.url}`); continue; }
