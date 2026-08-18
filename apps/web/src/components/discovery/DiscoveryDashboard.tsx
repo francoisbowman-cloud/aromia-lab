@@ -7,6 +7,7 @@ import type { Perfume } from "@/lib/types";
 import { PERFUMERS } from "@/lib/perfumers";
 import { clearDiscoveryProfile, DISCOVERY_PROFILE_EVENT, loadDiscoveryProfile, topSignals } from "@/lib/discoveryProfile";
 import { rankPersonalizedPerfumes } from "@/lib/personalization";
+import { trackEvent } from "@/lib/analytics";
 
 function label(value: string) { return value.replace(/-/g, " "); }
 function strength(score: number, max: number) { return max > 0 ? Math.max(.28, score / max) : .28; }
@@ -46,7 +47,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
               <p className="font-plex text-[8px] uppercase tracking-[.18em] text-muted">Familias que regresan</p>
               <div className="mt-7 space-y-5">
                 {families.length ? families.map(([name, score], index) => (
-                  <Link key={name} href={`/catalogo?familia=${encodeURIComponent(name)}`} className="group block outline-none focus-visible:ring-2 focus-visible:ring-gold/70">
+                  <Link key={name} href={`/catalogo?familia=${encodeURIComponent(name)}`} onClick={() => trackEvent("intention_discovery", { signal_type: "family", value: name, position: index + 1 })} className="group block outline-none focus-visible:ring-2 focus-visible:ring-gold/70">
                     <div className="flex items-end gap-3">
                       <span className="font-plex text-[8px] text-gold-contrast">0{index + 1}</span>
                       <span className="origin-left font-display capitalize leading-none tracking-[-.025em] text-ink transition-transform group-hover:translate-x-1 motion-reduce:transition-none" style={{ fontSize: `${24 + 12 * strength(score, familyMax)}px` }}>{label(name)}</span>
@@ -60,12 +61,12 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
               <p className="font-plex text-[8px] uppercase tracking-[.18em] text-muted">Notas</p>
               <div className="mt-7 flex flex-wrap gap-x-3 gap-y-4">
                 {notes.length ? notes.map(([name, score]) => (
-                  <Link key={name} href={`/buscar?q=${encodeURIComponent(name)}`} className="font-display capitalize leading-none text-ink transition-colors hover:text-gold-contrast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70" style={{ fontSize: `${17 + 10 * strength(score, noteMax)}px`, opacity: .62 + .38 * strength(score, noteMax) }}>{label(name)}</Link>
+                  <Link key={name} href={`/buscar?q=${encodeURIComponent(name)}`} onClick={() => trackEvent("olfactory_note_open", { note: name, source: "discovery_map" })} className="font-display capitalize leading-none text-ink transition-colors hover:text-gold-contrast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70" style={{ fontSize: `${17 + 10 * strength(score, noteMax)}px`, opacity: .62 + .38 * strength(score, noteMax) }}>{label(name)}</Link>
                 )) : <p className="font-sans text-sm leading-6 text-muted">Las notas aparecen cuando exploras pirámides verificadas.</p>}
               </div>
               <div className="mt-10">
                 <p className="font-plex text-[8px] uppercase tracking-[.18em] text-muted">Perfumistas</p>
-                <div className="mt-4 space-y-2">{perfumers.length ? perfumers.map(({ item, slug }) => <Link key={slug} href={`/perfumistas/${slug}`} className="block font-display text-xl text-ink transition-colors hover:text-gold-contrast">{item?.name ?? label(slug)}</Link>) : <p className="font-sans text-sm leading-6 text-muted">Las autorías se incorporan al visitar perfiles verificados.</p>}</div>
+                <div className="mt-4 space-y-2">{perfumers.length ? perfumers.map(({ item, slug }) => <Link key={slug} href={`/perfumistas/${slug}`} onClick={() => trackEvent("perfumer_open", { perfumer_slug: slug, source: "discovery_map" })} className="block font-display text-xl text-ink transition-colors hover:text-gold-contrast">{item?.name ?? label(slug)}</Link>) : <p className="font-sans text-sm leading-6 text-muted">Las autorías se incorporan al visitar perfiles verificados.</p>}</div>
               </div>
             </div>
           </div>
@@ -80,7 +81,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ranked.map(({ perfume, reasons }, index) => (
-            <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} className="group relative min-h-[430px] overflow-hidden bg-[#fffdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/70 dark:bg-[#15110d]">
+            <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} onClick={() => trackEvent("similar_perfume_click", { source: "discovery_map", target_slug: perfume.slug, position: index + 1, reason_count: reasons.length })} className="group relative min-h-[430px] overflow-hidden bg-[#fffdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/70 dark:bg-[#15110d]">
               <div className="absolute inset-x-0 top-0 h-[60%] overflow-hidden bg-white"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" /></div>
               <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#fffdf8] via-[#fffdf8] to-[#fffdf8]/10 p-6 pt-16 dark:from-[#15110d] dark:via-[#15110d] dark:to-[#15110d]/10">
                 <div className="flex items-center justify-between font-plex text-[8px] uppercase tracking-[.16em] text-muted"><span>Ruta {String(index + 1).padStart(2, "0")}</span><span>{perfume.marca}</span></div>
@@ -95,7 +96,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
 
       <div className="flex flex-col gap-4 py-8 sm:flex-row sm:items-end sm:justify-between">
         <p className="max-w-[56ch] font-sans text-xs leading-5 text-muted">Este mapa se guarda únicamente en tu navegador. Puedes borrarlo cuando quieras.</p>
-        <button type="button" onClick={() => { clearDiscoveryProfile(); setProfile(loadDiscoveryProfile()); }} className="min-h-11 self-start font-plex text-[9px] uppercase tracking-[.14em] text-muted transition-colors hover:text-ink sm:self-auto">Reiniciar mi mapa</button>
+        <button type="button" onClick={() => { clearDiscoveryProfile(); setProfile(loadDiscoveryProfile()); trackEvent("discovery_profile_reset"); }} className="min-h-11 self-start font-plex text-[9px] uppercase tracking-[.14em] text-muted transition-colors hover:text-ink sm:self-auto">Reiniciar mi mapa</button>
       </div>
     </div>
   );
