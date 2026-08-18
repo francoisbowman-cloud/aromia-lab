@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { identityEvidence } from "../expansion-harvest-v2.mjs";
+import { scoreSecondaryIdentity } from "../secondary-discovery.mjs";
 
 function evidence(title, structured = "") {
   return { title, structured_product_name: structured };
@@ -53,4 +54,34 @@ test("single-letter product identity must match as a whole word", () => {
     "https://www.dolcegabbana.com/beauty/k-by-dolce-gabbana",
   );
   assert.equal(good.confirmed, true);
+});
+
+test("secondary source rejects Pour Femme for a Pour Homme candidate", () => {
+  const result = scoreSecondaryIdentity(
+    { brand: "Gucci", name: "Guilty Pour Homme" },
+    "Gucci Guilty Pour Femme is a fragrance for women. Guilty Pour Femme Eau de Parfum.",
+    "https://www.fragrantica.com/perfume/Gucci/Gucci-Guilty-Pour-Femme-48710.html",
+  );
+  assert.equal(result.confirmed, false);
+  assert.equal(result.conflictingGender, true);
+});
+
+test("secondary source rejects adjacent product for single-letter K", () => {
+  const result = scoreSecondaryIdentity(
+    { brand: "Dolce & Gabbana", name: "K by Dolce & Gabbana" },
+    "Dolce & Gabbana Devotion Eau de Parfum for women",
+    "https://www.fragrantica.com/perfume/Dolce-Gabbana/Devotion-84951.html",
+  );
+  assert.equal(result.confirmed, false);
+  assert.equal(result.productHits.includes("k"), false);
+});
+
+test("secondary source accepts exact Noir Extreme identity", () => {
+  const result = scoreSecondaryIdentity(
+    { brand: "Tom Ford", name: "Noir Extreme" },
+    "Tom Ford Noir Extreme Eau de Parfum is a fragrance for men",
+    "https://www.fragrantica.com/perfume/Tom-Ford/Noir-Extreme-29675.html",
+  );
+  assert.equal(result.confirmed, true);
+  assert.equal(result.coverage, 1);
 });
