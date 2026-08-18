@@ -1,0 +1,125 @@
+name: OMNI Quiz Divider Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render-compare:
+    if: github.head_ref == 'omni/repair-border-line-overuse'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout AFTER
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout BEFORE worktree
+        shell: bash
+        run: git worktree add /tmp/aromia-before "${{ github.event.pull_request.base.sha }}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install app dependencies
+        shell: bash
+        run: |
+          npm ci --prefix apps/web
+          npm ci --prefix /tmp/aromia-before/apps/web
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          mkdir -p /tmp/omni-divider-gate
+          cd /tmp/omni-divider-gate
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Start BEFORE and AFTER
+        shell: bash
+        run: |
+          cd /tmp/aromia-before/apps/web
+          npm run dev -- -p 3001 > /tmp/before.log 2>&1 &
+          cd "$GITHUB_WORKSPACE/apps/web"
+          npm run dev -- -p 3002 > /tmp/after.log 2>&1 &
+          for port in 3001 3002; do
+            for i in {1..60}; do
+              curl -fsS "http://127.0.0.1:${port}/quiz" >/dev/null && break
+              sleep 1
+            done
+          done
+
+      - name: Render and compare
+        shell: bash
+        run: |
+          cd /tmp/omni-divider-gate
+          mkdir -p artifacts
+          cat > gate.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+          const targets = { before: 'http://127.0.0.1:3001/quiz', after: 'http://127.0.0.1:3002/quiz' };
+          const report = {};
+
+          async function inspect(browser, label, url) {
+            const page = await browser.newPage({ viewport: { width: 768, height: 1100 }, deviceScaleFactor: 1 });
+            const errors = [];
+            page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 });
+            const result = await page.evaluate(() => {
+              const els = Array.from(document.querySelectorAll('main *'));
+              const longRules = [];
+              for (const el of els) {
+                const r = el.getBoundingClientRect();
+                if (r.width < window.innerWidth * .58 || r.height <= 0) continue;
+                const s = getComputedStyle(el);
+                const top = parseFloat(s.borderTopWidth) > 0 && s.borderTopStyle !== 'none';
+                const bottom = parseFloat(s.borderBottomWidth) > 0 && s.borderBottomStyle !== 'none';
+                if (top || bottom) longRules.push({ tag: el.tagName, top, bottom, width: Math.round(r.width) });
+              }
+              const buttons = Array.from(document.querySelectorAll('button')).filter(b => b.getBoundingClientRect().height > 0).length;
+              return {
+                longHorizontalRules: longRules.reduce((n, x) => n + Number(x.top) + Number(x.bottom), 0),
+                longRuleElements: longRules.length,
+                visibleButtons: buttons,
+                overflow: document.documentElement.scrollWidth - window.innerWidth,
+              };
+            });
+            result.consoleErrors = errors.length;
+            await page.screenshot({ path: `artifacts/${label}-768.png`, fullPage: true });
+            await page.close();
+            return result;
+          }
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            report.before = await inspect(browser, 'before', targets.before);
+            report.after = await inspect(browser, 'after', targets.after);
+            await browser.close();
+            report.delta = {
+              longHorizontalRules: report.after.longHorizontalRules - report.before.longHorizontalRules,
+              visibleButtons: report.after.visibleButtons - report.before.visibleButtons,
+              overflow: report.after.overflow - report.before.overflow,
+            };
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            console.log(JSON.stringify(report, null, 2));
+            if (!(report.after.longHorizontalRules < report.before.longHorizontalRules)) throw new Error('Divider count did not improve');
+            if (report.after.visibleButtons < report.before.visibleButtons) throw new Error('Quiz options regressed');
+            if (report.after.overflow > 2) throw new Error('Horizontal overflow introduced');
+            if (report.after.consoleErrors > 0) throw new Error('Console errors introduced');
+          })().catch(e => { console.error(e); process.exit(1); });
+          NODE
+          node gate.cjs
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-quiz-divider-before-after
+          path: /tmp/omni-divider-gate/artifacts
+          retention-days: 7
