@@ -1,0 +1,99 @@
+name: OMNI Product Image Fidelity
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  acqua-di-gio-fidelity:
+    if: github.head_ref == 'agent/omni-render-gate-integration'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      API_URL: https://api-production-fe2f.up.railway.app
+      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+      - name: Install Playwright
+        run: |
+          mkdir -p /tmp/omni-image-fidelity
+          cd /tmp/omni-image-fidelity
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+      - name: Start Aromia
+        run: |
+          cd apps/web
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3002 > /tmp/aromia-image-fidelity.log 2>&1 &
+          for i in {1..90}; do
+            if curl -fsS http://127.0.0.1:3002/catalogo/acqua-di-gio-edt >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/aromia-image-fidelity.log
+          exit 1
+      - name: Verify image route and capture evidence
+        shell: bash
+        run: |
+          cd /tmp/omni-image-fidelity
+          mkdir -p artifacts
+          cat > verify.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+          (async () => {
+            const image = await fetch('http://127.0.0.1:3002/api/catalog-image/acqua-di-gio-edt');
+            const origin = image.headers.get('x-aromia-image-origin');
+            const contentType = image.headers.get('content-type') || '';
+            if (!image.ok || !contentType.startsWith('image/')) {
+              throw new Error(`Acqua di Gio image unavailable: HTTP ${image.status} ${contentType}`);
+            }
+            const browser = await chromium.launch({ headless: true });
+            const report = { imageStatus: image.status, imageOrigin: origin, contentType, viewports: {} };
+            for (const viewport of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:1000}]) {
+              const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+              const errors = [];
+              page.on('pageerror', e => errors.push(String(e.message || e)));
+              const response = await page.goto('http://127.0.0.1:3002/catalogo/acqua-di-gio-edt', { waitUntil: 'networkidle', timeout: 60000 });
+              await page.waitForTimeout(500);
+              const metrics = await page.evaluate(() => ({
+                h1: document.querySelector('h1')?.textContent?.trim() || '',
+                brokenImages: Array.from(document.images).filter(img => img.complete && img.naturalWidth === 0).length,
+                overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+                productStageWhite: (() => {
+                  const img = document.querySelector('img[alt*="Acqua" i]');
+                  if (!img?.parentElement) return false;
+                  return getComputedStyle(img.parentElement).backgroundColor === 'rgb(255, 255, 255)';
+                })(),
+              }));
+              report.viewports[viewport.name] = { status: response?.status() ?? 0, pageErrors: errors.length, ...metrics };
+              await page.screenshot({ path: `artifacts/acqua-di-gio-${viewport.name}.png`, fullPage: true });
+              await page.close();
+            }
+            await browser.close();
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            for (const result of Object.values(report.viewports)) {
+              if (result.status >= 400 || result.pageErrors || result.brokenImages || result.overflowX > 2 || !result.productStageWhite) {
+                throw new Error(`Acqua di Gio fidelity regression: ${JSON.stringify(report)}`);
+              }
+            }
+            console.log(JSON.stringify(report, null, 2));
+          })().catch(error => { console.error(error); process.exit(1); });
+          NODE
+          node verify.cjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: acqua-di-gio-fidelity
+          path: /tmp/omni-image-fidelity/artifacts
+          retention-days: 14
+      - name: Print logs on failure
+        if: failure()
+        run: tail -n 180 /tmp/aromia-image-fidelity.log || true
