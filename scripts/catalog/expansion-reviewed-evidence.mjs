@@ -44,7 +44,7 @@ function validateIdentity(candidate, patch) {
     throw new Error(`reviewed_evidence_identity_mismatch:${patch.candidate_id}`);
   }
 }
-function validateSourceIdentity(candidate, source, patch) {
+function validateSourceIdentity(candidate, source, patch, label = "source") {
   const urlWords = new Set(words(new URL(source).pathname));
   const rawNameTokens = words(candidate.name);
   const nameTokens = rawNameTokens.filter((token) => !SOURCE_IDENTITY_STOP_WORDS.has(token));
@@ -52,24 +52,41 @@ function validateSourceIdentity(candidate, source, patch) {
   const hits = required.filter((token) => urlWords.has(token));
   const coverage = required.length ? hits.length / required.length : 0;
   if (!required.length || coverage < 0.8 || hits.length === 0) {
-    throw new Error(`reviewed_evidence_source_identity_mismatch:${patch.candidate_id}:${coverage.toFixed(2)}`);
+    throw new Error(`reviewed_evidence_${label}_identity_mismatch:${patch.candidate_id}:${coverage.toFixed(2)}`);
   }
   return coverage;
+}
+function validateCuratedSecondary(candidate, sourceValue, patch, curatedSecondary, label = "secondary") {
+  const source = canonicalUrl(sourceValue);
+  if (!isTrustedSecondaryUrl(source)) throw new Error(`reviewed_evidence_untrusted_${label}:${patch.candidate_id}`);
+  const curated = clean(curatedSecondary.get(patch.candidate_id));
+  if (!curated || canonicalUrl(curated) !== source) throw new Error(`reviewed_evidence_${label}_not_curated:${patch.candidate_id}`);
+  const identityCoverage = validateSourceIdentity(candidate, source, patch, label);
+  return { source, identityCoverage };
 }
 function validateSource(candidate, patch, curatedSecondary) {
   if (!SOURCE_KINDS.has(patch.source_kind)) throw new Error(`reviewed_evidence_source_kind_invalid:${patch.candidate_id}`);
   if (!SOURCE_MODES.has(patch.source_mode)) throw new Error(`reviewed_evidence_source_mode_invalid:${patch.candidate_id}`);
   if (!clean(patch.review_note)) throw new Error(`reviewed_evidence_review_note_required:${patch.candidate_id}`);
   const source = canonicalUrl(patch.source_url);
+  let identityCoverage;
   if (patch.source_kind === "official") {
     if (!officialHostMatches(source, candidate.official_domain)) throw new Error(`reviewed_evidence_official_host_mismatch:${patch.candidate_id}`);
+    identityCoverage = validateSourceIdentity(candidate, source, patch);
   } else {
-    if (!isTrustedSecondaryUrl(source)) throw new Error(`reviewed_evidence_untrusted_secondary:${patch.candidate_id}`);
-    const curated = clean(curatedSecondary.get(patch.candidate_id));
-    if (!curated || canonicalUrl(curated) !== source) throw new Error(`reviewed_evidence_secondary_not_curated:${patch.candidate_id}`);
+    ({ identityCoverage } = validateCuratedSecondary(candidate, source, patch, curatedSecondary));
   }
-  const identityCoverage = validateSourceIdentity(candidate, source, patch);
-  return { source, identityCoverage };
+
+  const supplementalValue = clean(patch.supplemental_source_url);
+  let supplementalSource = "";
+  let supplementalCoverage = null;
+  if (supplementalValue) {
+    if (patch.source_kind !== "official") throw new Error(`reviewed_evidence_supplemental_requires_official_primary:${patch.candidate_id}`);
+    const validated = validateCuratedSecondary(candidate, supplementalValue, patch, curatedSecondary, "supplemental_secondary");
+    supplementalSource = validated.source;
+    supplementalCoverage = validated.identityCoverage;
+  }
+  return { source, identityCoverage, supplementalSource, supplementalCoverage };
 }
 function canonicalConcentration(value) {
   return clean(normalizeConcentration(clean(value)).value).toLowerCase();
@@ -143,7 +160,7 @@ export function applyReviewedEvidence(evidenceRows, manifestRows, patchRows, sec
     const row = evidenceById.get(id);
     if (!candidate || !row) throw new Error(`reviewed_evidence_candidate_not_selected:${id}`);
     validateIdentity(candidate, patch);
-    const { source: reviewedSource, identityCoverage } = validateSource(candidate, patch, curatedSecondary);
+    const { source: reviewedSource, identityCoverage, supplementalSource, supplementalCoverage } = validateSource(candidate, patch, curatedSecondary);
     const touched = [];
 
     const concentration = validateConcentration(row.concentration, candidate, patch);
@@ -161,6 +178,11 @@ export function applyReviewedEvidence(evidenceRows, manifestRows, patchRows, sec
       if (merged !== clean(row.source_url)) touched.push("source_url:append");
       row.source_url = merged;
     }
+    if (supplementalSource) {
+      row.source_url = mergeUrls(row.source_url, supplementalSource);
+      row.secondary_source = "true";
+      touched.push("source_url:supplemental_secondary");
+    }
     if (patch.source_kind === "official") row.official_source = "true";
     if (patch.source_kind === "trusted_secondary") row.secondary_source = "true";
     if (String(row.identity_confirmed ?? "").toLowerCase() !== "true") touched.push("identity_confirmed");
@@ -170,13 +192,15 @@ export function applyReviewedEvidence(evidenceRows, manifestRows, patchRows, sec
     applyClears(row, patch, touched);
     row.reviewed_evidence = "true";
     row.reviewed_evidence_source = reviewedSource;
+    row.reviewed_evidence_supplemental_source = supplementalSource;
     row.reviewed_evidence_kind = patch.source_kind;
     row.reviewed_evidence_identity_coverage = identityCoverage.toFixed(2);
+    row.reviewed_evidence_supplemental_identity_coverage = supplementalCoverage === null ? "" : supplementalCoverage.toFixed(2);
     row.reviewed_evidence_fields = [...new Set(touched)].join(";");
     row.reviewed_evidence_note = clean(patch.review_note);
-    row.evidence_method = [clean(row.evidence_method), `reviewed_evidence:${patch.source_kind}`].filter(Boolean).join("+");
+    row.evidence_method = [clean(row.evidence_method), `reviewed_evidence:${patch.source_kind}`, supplementalSource ? "reviewed_evidence:trusted_secondary" : ""].filter(Boolean).join("+");
     evidenceById.set(id, row);
-    audit.push({ candidate_id: id, source_kind: patch.source_kind, source_mode: patch.source_mode, identity_coverage: Number(identityCoverage.toFixed(2)), touched: [...new Set(touched)] });
+    audit.push({ candidate_id: id, source_kind: patch.source_kind, source_mode: patch.source_mode, identity_coverage: Number(identityCoverage.toFixed(2)), supplemental_secondary: Boolean(supplementalSource), supplemental_identity_coverage: supplementalCoverage === null ? null : Number(supplementalCoverage.toFixed(2)), touched: [...new Set(touched)] });
   }
 
   return { rows: evidenceRows.map((row) => evidenceById.get(row.candidate_id) ?? row), audit };
@@ -198,15 +222,17 @@ export function runReviewedEvidence() {
   );
   const output = join(dir, "evidence.csv");
   writeFileSync(output, stringifyCsv(result.rows, { header: true }), "utf-8");
+  const coverages = result.audit.flatMap((row) => [row.identity_coverage, row.supplemental_identity_coverage]).filter((value) => value !== null);
   const report = {
     contract: "reviewed-evidence-v1",
     patches: result.audit.length,
     candidates: result.audit.map((row) => row.candidate_id),
     official_sources: result.audit.filter((row) => row.source_kind === "official").length,
     trusted_secondary_sources: result.audit.filter((row) => row.source_kind === "trusted_secondary").length,
+    supplemental_trusted_secondary_sources: result.audit.filter((row) => row.supplemental_secondary).length,
     source_replacements: result.audit.filter((row) => row.source_mode === "replace").length,
     cleared_fields: result.audit.flatMap((row) => row.touched).filter((field) => field.startsWith("clear:")).length,
-    min_source_identity_coverage: result.audit.length ? Math.min(...result.audit.map((row) => row.identity_coverage)) : null,
+    min_source_identity_coverage: coverages.length ? Math.min(...coverages) : null,
     production_write: false,
     mutates_raw_inputs: false,
     output: "catalog/expansion/batch-003/evidence.csv",
