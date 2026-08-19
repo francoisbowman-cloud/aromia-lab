@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - "omni/catalog-scale-to-500-staging"
     paths:
       - "catalog/research/batch-*.request"
       - "catalog/imports/batch-*.csv"
