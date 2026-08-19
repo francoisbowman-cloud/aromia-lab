@@ -23,6 +23,11 @@ test("exact known identity is blocked, same family different concentration is re
   assert.deepEqual(classifyCandidate({ brand: "Brand", name: "Alpha", concentration: "EDP" }, universe), { relation: "RELATED_VARIANT", state: EXPANSION_STATES.AUTO_READY });
 });
 
+test("known family without concentration fails closed as ambiguous variant", () => {
+  const universe = buildKnownUniverse({ batchRows: [{ brand: "Brand", name: "Alpha", concentration: "EDT" }] });
+  assert.deepEqual(classifyCandidate({ brand: "Brand", name: "Alpha", concentration: "" }, universe), { relation: "AMBIGUOUS_VARIANT", state: EXPANSION_STATES.BLOCKED });
+});
+
 test("candidate selector never emits duplicate identities and respects limit", () => {
   const universe = buildKnownUniverse();
   const pool = [

@@ -1,0 +1,521 @@
+candidate_id,brand,name,concentration,launch_year,stratum,difficulty,priority,official_domain
+c131,Chanel,Bleu de Chanel,,,mainstream,normal,90,chanel.com
+c132,Dior,Sauvage,,,mainstream,normal,90,dior.com
+c133,Yves Saint Laurent,La Nuit de L'Homme,,,mainstream,normal,90,yslbeautyus.com
+c134,Giorgio Armani,Acqua di Giò,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c135,Prada,Luna Rossa,,,mainstream,normal,90,prada-beauty.com
+c136,Valentino,Uomo Born in Roma,,,mainstream,normal,90,valentino-beauty.us
+c137,Jean Paul Gaultier,Le Male,,,mainstream,normal,90,jeanpaulgaultier.com
+c138,Rabanne,1 Million,,,mainstream,normal,90,rabanne.com
+c139,Versace,Versace Pour Homme,,,mainstream,normal,90,versace.com
+c140,Dolce & Gabbana,The One for Men,,,mainstream,normal,90,dolcegabbana.com
+c141,Burberry,Burberry Hero Eau de Toilette,,,mainstream,normal,90,burberry.com
+c142,Givenchy,Gentleman Eau de Toilette Intense,,,mainstream,normal,90,givenchybeauty.com
+c143,Gucci,Guilty Pour Homme Eau de Toilette,,,mainstream,normal,90,gucci.com
+c144,Tom Ford,Oud Wood,,,mainstream,normal,90,tomfordbeauty.com
+c145,Maison Francis Kurkdjian,Baccarat Rouge 540,,,niche,normal,90,franciskurkdjian.com
+c146,Parfums de Marly,Layton,,,niche,normal,90,parfums-de-marly.com
+c147,Creed,Aventus,,,niche,normal,90,creedboutique.com
+c148,Amouage,Interlude Man,,,niche,normal,90,amouage.com
+c149,Xerjoff,Naxos,,,niche,normal,90,xerjoff.com
+c150,Initio Parfums Privés,Side Effect,,,niche,normal,90,initioparfums.com
+c151,Nishane,Ani X,,,niche,normal,90,nishane.com
+c152,By Kilian,Apple Brandy on the Rocks,,,niche,normal,90,bykilian.com
+c153,Le Labo,Santal 33,,,nonstandard_notes,hard,90,lelabofragrances.com
+c154,Diptyque,Tam Dao Eau de Toilette,,,niche,normal,90,diptyqueparis.com
+c155,Frederic Malle,Portrait of a Lady,,,niche,normal,90,fredericmalle.com
+c156,Roja Parfums,Elysium Parfum Cologne,,,niche,normal,90,rojaparfums.com
+c157,Ormonde Jayne,Ormonde Man,,,niche,normal,90,ormondejayne.com
+c158,Tauer Perfumes,Lonestar Memories,,,hard_case,hard,90,tauerperfumes.com
+c159,Nasomatto,Pardon,,,hard_case,hard,90,nasomatto.com
+c160,Orto Parisi,Boccanera,,,hard_case,hard,90,ortoparisi.com
+c161,Mancera,Cedrat Boise,,,niche,normal,90,manceraparfums.com
+c162,Montale,Ristretto Intense Café,,,niche,normal,90,montaleparfums.com
+c163,Essential Parfums,Bois Impérial Extrait,,,niche,normal,90,essentialparfums.com
+c164,BDK Parfums,Rouge Smoking,,,niche,normal,90,bdkparfums.com
+c165,Goldfield & Banks,Ingenious Ginger,,,niche,normal,90,goldfieldandbanks.com
+c166,Maison Crivelli,Papyrus Moléculaire,,,hard_case,hard,90,maisoncrivelli.com
+c167,Marc-Antoine Barrois,Ganymede Extrait,,,niche,normal,90,marcantoinebarrois.com
+c168,Liquides Imaginaires,Dom Rosa Millésimé,,,niche,normal,90,liquidesimaginaires.com
+c169,Memo Paris,Italian Leather,,,niche,normal,90,memoparis.com
+c170,Penhaligon's,Halfeti Leather,,,niche,normal,90,penhaligons.com
+c171,Acqua di Parma,Colonia,,,mainstream,normal,90,acquadiparma.com
+c172,Bvlgari,Bvlgari Man Wood Essence,,,mainstream,normal,90,bulgari.com
+c173,Carolina Herrera,Bad Boy,,,mainstream,normal,90,carolinaherrera.com
+c174,Azzaro,Wanted,,,mainstream,normal,90,azzaro.com
+c175,Viktor&Rolf,Spicebomb,,,mainstream,normal,90,viktor-rolf.com
+c176,Mugler,A*Men Fantasm,,,mainstream,normal,90,mugler.com
+c177,Narciso Rodriguez,For Her Eau de Toilette,,,mainstream,normal,90,narcisorodriguezparfums.com
+c178,Jo Malone London,Wood Sage & Sea Salt,,,mainstream,normal,90,jomalone.com
+c179,Byredo,Bal d'Afrique,,,niche,normal,90,byredo.com
+c180,Maison Margiela,Replica Jazz Club,,,niche,normal,90,maisonmargiela-fragrances.us
+c181,Aesop,Marrakech Intense,,,niche,normal,90,aesop.com
+c182,Escentric Molecules,Molecule 01,,,nonstandard_notes,hard,90,escentric.com
+c183,Juliette Has a Gun,Not a Perfume Superdose,,,niche,normal,90,juliettehasagun.com
+c184,Comme des Garçons,2,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c185,Guerlain,L'Homme Idéal,,,mainstream,normal,90,guerlain.com
+c186,Hermès,Terre d'Hermès,,,mainstream,normal,90,hermes.com
+c187,Louis Vuitton,Imagination,,,mainstream,normal,90,us.louisvuitton.com
+c188,Ex Nihilo,Blue Talisman,,,niche,normal,90,ex-nihilo-paris.com
+c189,Matiere Premiere,Radical Rose,,,niche,normal,90,matiere-premiere.com
+c190,Fragrance Du Bois,Oud Bleu Intense,,,niche,normal,90,fragrancedubois.com
+c191,Atelier des Ors,Lune Féline,,,niche,normal,90,atelierdesors.com
+c192,Etat Libre d'Orange,You or Someone Like You,,,hard_case,hard,90,etatlibredorange.com
+c193,Zoologist,Bee,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c194,Imaginary Authors,Memoirs of a Trespasser,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c195,Serge Lutens,Chergui,,,niche,normal,90,sergelutens.com
+c196,Kayali,Vanilla 28,,,niche,normal,90,kayali.com
+c197,Lattafa,Khamrah,,,niche,normal,90,lattafa.com
+c198,Une Nuit Nomade,Sugar Leather,,,niche,normal,90,unenuitnomade.com
+c199,Chanel,Bleu de Chanel Parfum,,,mainstream,normal,90,chanel.com
+c200,Dior,Sauvage Eau de Parfum,,,mainstream,normal,90,dior.com
+c201,Yves Saint Laurent,L'Homme,,,mainstream,normal,90,yslbeautyus.com
+c202,Giorgio Armani,Acqua di Giò Eau de Parfum,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c203,Prada,Luna Rossa Ocean,,,mainstream,normal,90,prada-beauty.com
+c204,Valentino,Uomo Born in Roma Green Stravaganza,,,mainstream,normal,90,valentino-beauty.us
+c205,Jean Paul Gaultier,Le Male Le Parfum,,,mainstream,normal,90,jeanpaulgaultier.com
+c206,Rabanne,1 Million Parfum,,,mainstream,normal,90,rabanne.com
+c207,Versace,Eros,,,mainstream,normal,90,versace.com
+c208,Dolce & Gabbana,The One for Men Eau de Parfum,,,mainstream,normal,90,dolcegabbana.com
+c209,Burberry,Burberry Hero Parfum Intense,,,mainstream,normal,90,burberry.com
+c210,Givenchy,Gentleman Eau de Parfum Boisée,,,mainstream,normal,90,givenchybeauty.com
+c211,Gucci,Guilty Pour Homme Parfum,,,mainstream,normal,90,gucci.com
+c212,Tom Ford,Oud Wood Parfum,,,mainstream,normal,90,tomfordbeauty.com
+c213,Maison Francis Kurkdjian,Baccarat Rouge 540 Extrait de Parfum,,,niche,normal,90,franciskurkdjian.com
+c214,Parfums de Marly,Layton Exclusif,,,niche,normal,90,parfums-de-marly.com
+c215,Creed,Absolu Aventus,,,niche,normal,90,creedboutique.com
+c216,Amouage,Interlude Black Iris,,,niche,normal,90,amouage.com
+c217,Xerjoff,Erba Pura,,,niche,normal,90,xerjoff.com
+c218,Initio Parfums Privés,Oud for Greatness,,,niche,normal,90,initioparfums.com
+c219,Nishane,Hacivat X,,,niche,normal,90,nishane.com
+c220,By Kilian,Roses on Ice,,,niche,normal,90,bykilian.com
+c221,Le Labo,Rose 31,,,nonstandard_notes,hard,90,lelabofragrances.com
+c222,Diptyque,Tam Dao Eau de Parfum,,,niche,normal,90,diptyqueparis.com
+c223,Frederic Malle,Carnal Flower,,,niche,normal,90,fredericmalle.com
+c224,Roja Parfums,Elysium Pour Homme Parfum,,,niche,normal,90,rojaparfums.com
+c225,Ormonde Jayne,Ormonde Woman,,,niche,normal,90,ormondejayne.com
+c226,Tauer Perfumes,Incense Extreme,,,hard_case,hard,90,tauerperfumes.com
+c227,Nasomatto,Duro,,,hard_case,hard,90,nasomatto.com
+c228,Orto Parisi,Bergamask,,,hard_case,hard,90,ortoparisi.com
+c229,Mancera,Instant Crush,,,niche,normal,90,manceraparfums.com
+c230,Montale,Chocolate Greedy,,,niche,normal,90,montaleparfums.com
+c231,Essential Parfums,Nice Bergamote,,,niche,normal,90,essentialparfums.com
+c232,BDK Parfums,Pas Ce Soir,,,niche,normal,90,bdkparfums.com
+c233,Goldfield & Banks,Silky Woods,,,niche,normal,90,goldfieldandbanks.com
+c234,Maison Crivelli,Santal Volcanique,,,hard_case,hard,90,maisoncrivelli.com
+c235,Marc-Antoine Barrois,B683 Extrait,,,niche,normal,90,marcantoinebarrois.com
+c236,Liquides Imaginaires,Bloody Wood,,,niche,normal,90,liquidesimaginaires.com
+c237,Memo Paris,French Leather,,,niche,normal,90,memoparis.com
+c238,Penhaligon's,Halfeti Cedar,,,niche,normal,90,penhaligons.com
+c239,Acqua di Parma,Colonia Pura,,,mainstream,normal,90,acquadiparma.com
+c240,Bvlgari,Bvlgari Man Terrae Essence,,,mainstream,normal,90,bulgari.com
+c241,Carolina Herrera,Bad Boy Le Parfum,,,mainstream,normal,90,carolinaherrera.com
+c242,Azzaro,Wanted Eau de Parfum,,,mainstream,normal,90,azzaro.com
+c243,Viktor&Rolf,Spicebomb Night Vision Eau de Toilette,,,mainstream,normal,90,viktor-rolf.com
+c244,Mugler,Alien,,,mainstream,normal,90,mugler.com
+c245,Narciso Rodriguez,For Her Eau de Parfum,,,mainstream,normal,90,narcisorodriguezparfums.com
+c246,Jo Malone London,English Pear & Freesia,,,mainstream,normal,90,jomalone.com
+c247,Byredo,Gypsy Water,,,niche,normal,90,byredo.com
+c248,Maison Margiela,Replica By the Fireplace,,,niche,normal,90,maisonmargiela-fragrances.us
+c249,Aesop,Eidesis,,,niche,normal,90,aesop.com
+c250,Escentric Molecules,Molecule 01 + Iris,,,nonstandard_notes,hard,90,escentric.com
+c251,Juliette Has a Gun,Vanilla Vibes,,,niche,normal,90,juliettehasagun.com
+c252,Comme des Garçons,2 Man,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c253,Guerlain,L'Homme Idéal Eau de Parfum,,,mainstream,normal,90,guerlain.com
+c254,Hermès,Terre d'Hermès Parfum,,,mainstream,normal,90,hermes.com
+c255,Louis Vuitton,L'Immensité,,,mainstream,normal,90,us.louisvuitton.com
+c256,Ex Nihilo,Fleur Narcotique,,,niche,normal,90,ex-nihilo-paris.com
+c257,Matiere Premiere,Falcon Leather,,,niche,normal,90,matiere-premiere.com
+c258,Fragrance Du Bois,Oud Jaune Intense,,,niche,normal,90,fragrancedubois.com
+c259,Atelier des Ors,Lune Féline Extrait,,,niche,normal,90,atelierdesors.com
+c260,Etat Libre d'Orange,Fat Electrician,,,hard_case,hard,90,etatlibredorange.com
+c261,Zoologist,Squid,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c262,Imaginary Authors,A City on Fire,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c263,Serge Lutens,Ambre Sultan,,,niche,normal,90,sergelutens.com
+c264,Kayali,Yum Pistachio Gelato 33,,,niche,normal,90,kayali.com
+c265,Lattafa,Khamrah Qahwa,,,niche,normal,90,lattafa.com
+c266,Une Nuit Nomade,Nothing but Sea and Sky,,,niche,normal,90,unenuitnomade.com
+c267,Chanel,Bleu de Chanel Eau de Parfum,,,mainstream,normal,90,chanel.com
+c268,Dior,Sauvage Parfum,,,mainstream,normal,90,dior.com
+c269,Yves Saint Laurent,L'Homme Eau de Parfum,,,mainstream,normal,90,yslbeautyus.com
+c270,Giorgio Armani,Acqua di Giò Profondo Parfum,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c271,Prada,Luna Rossa Ocean Eau de Parfum,,,mainstream,normal,90,prada-beauty.com
+c272,Valentino,Uomo Born in Roma Yellow Dream,,,mainstream,normal,90,valentino-beauty.us
+c273,Jean Paul Gaultier,Le Male Elixir Absolu,,,mainstream,normal,90,jeanpaulgaultier.com
+c274,Rabanne,1 Million Royal,,,mainstream,normal,90,rabanne.com
+c275,Versace,Eros Parfum,,,mainstream,normal,90,versace.com
+c276,Dolce & Gabbana,The One Gold for Men,,,mainstream,normal,90,dolcegabbana.com
+c277,Burberry,Burberry Brit for Him,,,mainstream,normal,90,burberry.com
+c278,Givenchy,Gentleman Eau de Parfum,,,mainstream,normal,90,givenchybeauty.com
+c279,Gucci,Guilty Absolute Pour Homme,,,mainstream,normal,90,gucci.com
+c280,Tom Ford,Tobacco Vanille,,,mainstream,normal,90,tomfordbeauty.com
+c281,Maison Francis Kurkdjian,Amyris Homme,,,niche,normal,90,franciskurkdjian.com
+c282,Parfums de Marly,Carlisle,,,niche,normal,90,parfums-de-marly.com
+c283,Creed,Viking,,,niche,normal,90,creedboutique.com
+c284,Amouage,Interlude 53,,,niche,normal,90,amouage.com
+c285,Xerjoff,Torino22,,,niche,normal,90,xerjoff.com
+c286,Initio Parfums Privés,Oud for Greatness Neo,,,niche,normal,90,initioparfums.com
+c287,Nishane,Wulong Cha X,,,niche,normal,90,nishane.com
+c288,By Kilian,Vodka on the Rocks,,,niche,normal,90,bykilian.com
+c289,Le Labo,Vetiver 46,,,nonstandard_notes,hard,90,lelabofragrances.com
+c290,Diptyque,Eau Duelle Eau de Toilette,,,niche,normal,90,diptyqueparis.com
+c291,Frederic Malle,Promise,,,niche,normal,90,fredericmalle.com
+c292,Roja Parfums,Enigma Parfum Cologne,,,niche,normal,90,rojaparfums.com
+c293,Ormonde Jayne,Montabaco,,,niche,normal,90,ormondejayne.com
+c294,Tauer Perfumes,Orange Star,,,hard_case,hard,90,tauerperfumes.com
+c295,Nasomatto,Blamage,,,hard_case,hard,90,nasomatto.com
+c296,Orto Parisi,Brutus,,,hard_case,hard,90,ortoparisi.com
+c297,Mancera,Red Tobacco,,,niche,normal,90,manceraparfums.com
+c298,Montale,Honey Aoud,,,niche,normal,90,montaleparfums.com
+c299,Essential Parfums,The Musc,,,niche,normal,90,essentialparfums.com
+c300,BDK Parfums,Pas Ce Soir Extrait,,,niche,normal,90,bdkparfums.com
+c301,Goldfield & Banks,Silky Woods Elixir,,,niche,normal,90,goldfieldandbanks.com
+c302,Maison Crivelli,Bois Datchaï,,,hard_case,hard,90,maisoncrivelli.com
+c303,Marc-Antoine Barrois,Encelade,,,niche,normal,90,marcantoinebarrois.com
+c304,Liquides Imaginaires,Fleur de Sable,,,niche,normal,90,liquidesimaginaires.com
+c305,Memo Paris,Russian Leather,,,niche,normal,90,memoparis.com
+c306,Penhaligon's,The Blazing Mr Sam,,,niche,normal,90,penhaligons.com
+c307,Acqua di Parma,Colonia Club,,,mainstream,normal,90,acquadiparma.com
+c308,Bvlgari,Bvlgari Man Glacial Essence,,,mainstream,normal,90,bulgari.com
+c309,Carolina Herrera,Bad Boy Extreme,,,mainstream,normal,90,carolinaherrera.com
+c310,Azzaro,The Most Wanted,,,mainstream,normal,90,azzaro.com
+c311,Viktor&Rolf,Spicebomb Night Vision Eau de Parfum,,,mainstream,normal,90,viktor-rolf.com
+c312,Mugler,Alien Goddess Intense,,,mainstream,normal,90,mugler.com
+c313,Narciso Rodriguez,For Her Musc Noir,,,mainstream,normal,90,narcisorodriguezparfums.com
+c314,Jo Malone London,Lime Basil & Mandarin,,,mainstream,normal,90,jomalone.com
+c315,Byredo,Mojave Ghost,,,niche,normal,90,byredo.com
+c316,Maison Margiela,Replica Beach Walk,,,niche,normal,90,maisonmargiela-fragrances.us
+c317,Aesop,Karst,,,niche,normal,90,aesop.com
+c318,Escentric Molecules,Molecule 01 + Patchouli,,,nonstandard_notes,hard,90,escentric.com
+c319,Juliette Has a Gun,Mmmm...,,,niche,normal,90,juliettehasagun.com
+c320,Comme des Garçons,Amazingreen,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c321,Guerlain,L'Homme Idéal Parfum,,,mainstream,normal,90,guerlain.com
+c322,Hermès,Terre d'Hermès Eau Intense Vétiver,,,mainstream,normal,90,hermes.com
+c323,Louis Vuitton,Météore,,,mainstream,normal,90,us.louisvuitton.com
+c324,Ex Nihilo,Fleur Narcotique Extrait,,,niche,normal,90,ex-nihilo-paris.com
+c325,Matiere Premiere,Encens Suave,,,niche,normal,90,matiere-premiere.com
+c326,Fragrance Du Bois,Oud Orange Intense,,,niche,normal,90,fragrancedubois.com
+c327,Atelier des Ors,Riviera Drive,,,niche,normal,90,atelierdesors.com
+c328,Etat Libre d'Orange,Remarkable People,,,hard_case,hard,90,etatlibredorange.com
+c329,Zoologist,Tyrannosaurus Rex,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c330,Imaginary Authors,Every Storm a Serenade,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c331,Serge Lutens,Féminité du Bois,,,niche,normal,90,sergelutens.com
+c332,Kayali,Lovefest Burning Cherry 48,,,niche,normal,90,kayali.com
+c333,Lattafa,Asad,,,niche,normal,90,lattafa.com
+c334,Une Nuit Nomade,Jardins de Misfah,,,niche,normal,90,unenuitnomade.com
+c335,Chanel,Égoïste,,,mainstream,normal,90,chanel.com
+c336,Dior,Sauvage Elixir,,,mainstream,normal,90,dior.com
+c337,Yves Saint Laurent,L'Homme Le Parfum,,,mainstream,normal,90,yslbeautyus.com
+c338,Giorgio Armani,Acqua di Giò Absolu,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c339,Prada,Luna Rossa Ocean Le Parfum,,,mainstream,normal,90,prada-beauty.com
+c340,Valentino,Uomo Born in Roma Extradose,,,mainstream,normal,90,valentino-beauty.us
+c341,Jean Paul Gaultier,Le Beau,,,mainstream,normal,90,jeanpaulgaultier.com
+c342,Rabanne,1 Million Golden Oud,,,mainstream,normal,90,rabanne.com
+c343,Versace,Eros Energy,,,mainstream,normal,90,versace.com
+c344,Dolce & Gabbana,Light Blue Pour Homme,,,mainstream,normal,90,dolcegabbana.com
+c345,Burberry,Burberry London for Men,,,mainstream,normal,90,burberry.com
+c346,Givenchy,Gentleman Cologne,,,mainstream,normal,90,givenchybeauty.com
+c347,Gucci,Gucci Guilty Love Edition Pour Homme,,,mainstream,normal,90,gucci.com
+c348,Tom Ford,Tuscan Leather,,,mainstream,normal,90,tomfordbeauty.com
+c349,Maison Francis Kurkdjian,Amyris Homme Extrait,,,niche,normal,90,franciskurkdjian.com
+c350,Parfums de Marly,Herod,,,niche,normal,90,parfums-de-marly.com
+c351,Creed,Viking Cologne,,,niche,normal,90,creedboutique.com
+c352,Amouage,Jubilation XXV Man,,,niche,normal,90,amouage.com
+c353,Xerjoff,Torino23,,,niche,normal,90,xerjoff.com
+c354,Initio Parfums Privés,Atomic Rose,,,niche,normal,90,initioparfums.com
+c355,Nishane,Hundred Silent Ways,,,niche,normal,90,nishane.com
+c356,By Kilian,"Love, Don't Be Shy",,,niche,normal,90,bykilian.com
+c357,Le Labo,Patchouli 24,,,nonstandard_notes,hard,90,lelabofragrances.com
+c358,Diptyque,Eau Duelle Eau de Parfum,,,niche,normal,90,diptyqueparis.com
+c359,Frederic Malle,Rose & Cuir,,,niche,normal,90,fredericmalle.com
+c360,Roja Parfums,Burlington 1819,,,niche,normal,90,rojaparfums.com
+c361,Ormonde Jayne,Montabaco Cuba,,,niche,normal,90,ormondejayne.com
+c362,Tauer Perfumes,Phi Une Rose de Kandahar,,,hard_case,hard,90,tauerperfumes.com
+c363,Nasomatto,Narcotic V.,,,hard_case,hard,90,nasomatto.com
+c364,Orto Parisi,Cuoium,,,hard_case,hard,90,ortoparisi.com
+c365,Mancera,Hindu Kush,,,niche,normal,90,manceraparfums.com
+c366,Montale,Black Aoud,,,niche,normal,90,montaleparfums.com
+c367,Essential Parfums,Orange X Santal,,,niche,normal,90,essentialparfums.com
+c368,BDK Parfums,Crème de Cuir,,,niche,normal,90,bdkparfums.com
+c369,Goldfield & Banks,Desert Rosewood,,,niche,normal,90,goldfieldandbanks.com
+c370,Maison Crivelli,Rose Saltifolia,,,hard_case,hard,90,maisoncrivelli.com
+c371,Marc-Antoine Barrois,Tilia,,,niche,normal,90,marcantoinebarrois.com
+c372,Liquides Imaginaires,Desert Suave,,,niche,normal,90,liquidesimaginaires.com
+c373,Memo Paris,Iberian Leather,,,niche,normal,90,memoparis.com
+c374,Penhaligon's,The Inimitable William Penhaligon,,,niche,normal,90,penhaligons.com
+c375,Acqua di Parma,Colonia C.L.U.B.,,,mainstream,normal,90,acquadiparma.com
+c376,Bvlgari,Bvlgari Man Rain Essence,,,mainstream,normal,90,bulgari.com
+c377,Carolina Herrera,Bad Boy Cobalt Elixir,,,mainstream,normal,90,carolinaherrera.com
+c378,Azzaro,The Most Wanted Intense,,,mainstream,normal,90,azzaro.com
+c379,Viktor&Rolf,Spicebomb Infrared Eau de Parfum,,,mainstream,normal,90,viktor-rolf.com
+c380,Mugler,Alien Hypersense,,,mainstream,normal,90,mugler.com
+c381,Narciso Rodriguez,For Her Pure Musc,,,mainstream,normal,90,narcisorodriguezparfums.com
+c382,Jo Malone London,Myrrh & Tonka,,,mainstream,normal,90,jomalone.com
+c383,Byredo,Mojave Ghost Absolu de Parfum,,,niche,normal,90,byredo.com
+c384,Maison Margiela,Replica Lazy Sunday Morning,,,niche,normal,90,maisonmargiela-fragrances.us
+c385,Aesop,Miraceti,,,niche,normal,90,aesop.com
+c386,Escentric Molecules,Molecule 01 + Mandarin,,,nonstandard_notes,hard,90,escentric.com
+c387,Juliette Has a Gun,Lady Vengeance,,,niche,normal,90,juliettehasagun.com
+c388,Comme des Garçons,Black,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c389,Guerlain,L'Homme Idéal Extrême,,,mainstream,normal,90,guerlain.com
+c390,Hermès,H24 Herbes Vives,,,mainstream,normal,90,hermes.com
+c391,Louis Vuitton,Orage,,,mainstream,normal,90,us.louisvuitton.com
+c392,Ex Nihilo,Lust in Paradise,,,niche,normal,90,ex-nihilo-paris.com
+c393,Matiere Premiere,Parisian Musc,,,niche,normal,90,matiere-premiere.com
+c394,Fragrance Du Bois,Milano,,,niche,normal,90,fragrancedubois.com
+c395,Atelier des Ors,Riviera Lazuli,,,niche,normal,90,atelierdesors.com
+c396,Etat Libre d'Orange,Hermann à mes Côtés me Paraissait une Ombre,,,hard_case,hard,90,etatlibredorange.com
+c397,Zoologist,Macaque Yuzu Edition,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c398,Imaginary Authors,Saint Julep,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c399,Serge Lutens,Fille en Aiguilles,,,niche,normal,90,sergelutens.com
+c400,Kayali,Eden Juicy Apple 01,,,niche,normal,90,kayali.com
+c401,Lattafa,Asad Bourbon,,,niche,normal,90,lattafa.com
+c402,Une Nuit Nomade,Ambre Khandjar,,,niche,normal,90,unenuitnomade.com
+c403,Chanel,Antaeus,,,mainstream,normal,90,chanel.com
+c404,Dior,Dior Homme,,,mainstream,normal,90,dior.com
+c405,Yves Saint Laurent,Y Eau de Toilette,,,mainstream,normal,90,yslbeautyus.com
+c406,Giorgio Armani,Acqua di Giò Profumo,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c407,Prada,Luna Rossa Sport,,,mainstream,normal,90,prada-beauty.com
+c408,Valentino,Valentino Uomo,,,mainstream,normal,90,valentino-beauty.us
+c409,Jean Paul Gaultier,Le Beau Paradise Garden,,,mainstream,normal,90,jeanpaulgaultier.com
+c410,Rabanne,Invictus,,,mainstream,normal,90,rabanne.com
+c411,Versace,Dreamer,,,mainstream,normal,90,versace.com
+c412,Dolce & Gabbana,Light Blue Eau Intense Pour Homme,,,mainstream,normal,90,dolcegabbana.com
+c413,Burberry,Mr. Burberry,,,mainstream,normal,90,burberry.com
+c414,Givenchy,Gentleman Society Extrême,,,mainstream,normal,90,givenchybeauty.com
+c415,Gucci,Guilty Elixir de Parfum Pour Femme,,,mainstream,normal,90,gucci.com
+c416,Tom Ford,Ombré Leather,,,mainstream,normal,90,tomfordbeauty.com
+c417,Maison Francis Kurkdjian,L'Homme À la rose,,,niche,normal,90,franciskurkdjian.com
+c418,Parfums de Marly,Pegasus,,,niche,normal,90,parfums-de-marly.com
+c419,Creed,Royal Oud,,,niche,normal,90,creedboutique.com
+c420,Amouage,Jubilation 40 Man,,,niche,normal,90,amouage.com
+c421,Xerjoff,Torino24,,,niche,normal,90,xerjoff.com
+c422,Initio Parfums Privés,Psychedelic Love,,,niche,normal,90,initioparfums.com
+c423,Nishane,Hundred Silent Ways X,,,niche,normal,90,nishane.com
+c424,By Kilian,"Love, Don't Be Shy Extreme",,,niche,normal,90,bykilian.com
+c425,Le Labo,Labdanum 18,,,nonstandard_notes,hard,90,lelabofragrances.com
+c426,Diptyque,Do Son Eau de Toilette,,,niche,normal,90,diptyqueparis.com
+c427,Frederic Malle,Geranium Pour Monsieur,,,niche,normal,90,fredericmalle.com
+c428,Roja Parfums,Isola Blu,,,niche,normal,90,rojaparfums.com
+c429,Ormonde Jayne,Nawab of Oudh Intensivo,,,niche,normal,90,ormondejayne.com
+c430,Tauer Perfumes,Sundowner,,,hard_case,hard,90,tauerperfumes.com
+c431,Nasomatto,Absinth,,,hard_case,hard,90,nasomatto.com
+c432,Orto Parisi,Seminalis,,,hard_case,hard,90,ortoparisi.com
+c433,Mancera,Roses Vanille,,,niche,normal,90,manceraparfums.com
+c434,Montale,Oudmazing,,,niche,normal,90,montaleparfums.com
+c435,Essential Parfums,Fig Infusion,,,niche,normal,90,essentialparfums.com
+c436,BDK Parfums,Sel d'Argent,,,niche,normal,90,bdkparfums.com
+c437,Goldfield & Banks,Wood Infusion,,,niche,normal,90,goldfieldandbanks.com
+c438,Maison Crivelli,Absinthe Boréale,,,hard_case,hard,90,maisoncrivelli.com
+c439,Marc-Antoine Barrois,Aldebaran,,,niche,normal,90,marcantoinebarrois.com
+c440,Liquides Imaginaires,Fortis,,,niche,normal,90,liquidesimaginaires.com
+c441,Memo Paris,Moroccan Leather,,,niche,normal,90,memoparis.com
+c442,Penhaligon's,The Omniscient Mr Thompson,,,niche,normal,90,penhaligons.com
+c443,Acqua di Parma,Colonia Il Profumo,,,mainstream,normal,90,acquadiparma.com
+c444,Bvlgari,Le Gemme Gyan,,,mainstream,normal,90,bulgari.com
+c445,Carolina Herrera,212 Men,,,mainstream,normal,90,carolinaherrera.com
+c446,Azzaro,Chrome,,,mainstream,normal,90,azzaro.com
+c447,Viktor&Rolf,Spicebomb Dark Leather,,,mainstream,normal,90,viktor-rolf.com
+c448,Mugler,Angel,,,mainstream,normal,90,mugler.com
+c449,Narciso Rodriguez,For Her Fleur Musc,,,mainstream,normal,90,narcisorodriguezparfums.com
+c450,Jo Malone London,Peony & Blush Suede,,,mainstream,normal,90,jomalone.com
+c451,Byredo,Blanche,,,niche,normal,90,byredo.com
+c452,Maison Margiela,Replica Sailing Day,,,niche,normal,90,maisonmargiela-fragrances.us
+c453,Aesop,Eremia,,,niche,normal,90,aesop.com
+c454,Escentric Molecules,Molecule 01 + Black Tea,,,nonstandard_notes,hard,90,escentric.com
+c455,Juliette Has a Gun,Miss Charming,,,niche,normal,90,juliettehasagun.com
+c456,Comme des Garçons,Concrete,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c457,Guerlain,Habit Rouge,,,mainstream,normal,90,guerlain.com
+c458,Hermès,Voyage d'Hermès,,,mainstream,normal,90,hermes.com
+c459,Louis Vuitton,Sur la Route,,,mainstream,normal,90,us.louisvuitton.com
+c460,Ex Nihilo,Devil Tender,,,niche,normal,90,ex-nihilo-paris.com
+c461,Matiere Premiere,Bois d'Ebène,,,niche,normal,90,matiere-premiere.com
+c462,Fragrance Du Bois,London Oud,,,niche,normal,90,fragrancedubois.com
+c463,Atelier des Ors,Riviera Sunrise,,,niche,normal,90,atelierdesors.com
+c464,Etat Libre d'Orange,Une Amourette,,,hard_case,hard,90,etatlibredorange.com
+c465,Zoologist,Macaque Fuji Apple Edition,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c466,Imaginary Authors,Cape Heartache,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c467,Serge Lutens,Borneo 1834,,,niche,normal,90,sergelutens.com
+c468,Kayali,Eden Sparkling Lychee 39,,,niche,normal,90,kayali.com
+c469,Lattafa,Yara,,,niche,normal,90,lattafa.com
+c470,Une Nuit Nomade,Memory Motel,,,niche,normal,90,unenuitnomade.com
+c471,Chanel,Pour Monsieur,,,mainstream,normal,90,chanel.com
+c472,Dior,Dior Homme Cologne,,,mainstream,normal,90,dior.com
+c473,Yves Saint Laurent,Y Eau de Parfum Intense,,,mainstream,normal,90,yslbeautyus.com
+c474,Giorgio Armani,Armani Code,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c475,Prada,Prada L'Homme L'Eau,,,mainstream,normal,90,prada-beauty.com
+c476,Valentino,Valentino Uomo Intense,,,mainstream,normal,90,valentino-beauty.us
+c477,Jean Paul Gaultier,Scandal Pour Homme,,,mainstream,normal,90,jeanpaulgaultier.com
+c478,Rabanne,Invictus Platinum,,,mainstream,normal,90,rabanne.com
+c479,Versace,Man Eau Fraîche,,,mainstream,normal,90,versace.com
+c480,Dolce & Gabbana,Light Blue Summer Vibes Pour Homme,,,mainstream,normal,90,dolcegabbana.com
+c481,Burberry,Mr. Burberry Indigo,,,mainstream,normal,90,burberry.com
+c482,Givenchy,Gentleman Society Ambrée,,,mainstream,normal,90,givenchybeauty.com
+c483,Gucci,Bloom,,,mainstream,normal,90,gucci.com
+c484,Tom Ford,Ombré Leather Parfum,,,mainstream,normal,90,tomfordbeauty.com
+c485,Maison Francis Kurkdjian,Aqua Universalis,,,niche,normal,90,franciskurkdjian.com
+c486,Parfums de Marly,Percival,,,niche,normal,90,parfums-de-marly.com
+c487,Creed,Himalaya,,,niche,normal,90,creedboutique.com
+c488,Amouage,Epic Man,,,niche,normal,90,amouage.com
+c489,Xerjoff,Alexandria III,,,niche,normal,90,xerjoff.com
+c490,Initio Parfums Privés,Absolute Aphrodisiac,,,niche,normal,90,initioparfums.com
+c491,Nishane,Fan Your Flames,,,niche,normal,90,nishane.com
+c492,By Kilian,Good Girl Gone Bad,,,niche,normal,90,bykilian.com
+c493,Le Labo,Lys 41,,,nonstandard_notes,hard,90,lelabofragrances.com
+c494,Diptyque,Do Son Eau de Parfum,,,niche,normal,90,diptyqueparis.com
+c495,Frederic Malle,Cologne Indélébile,,,niche,normal,90,fredericmalle.com
+c496,Roja Parfums,Apex,,,niche,normal,90,rojaparfums.com
+c497,Ormonde Jayne,Muscat,,,niche,normal,90,ormondejayne.com
+c498,Tauer Perfumes,L'Air des Alpes Suisses,,,hard_case,hard,90,tauerperfumes.com
+c499,Nasomatto,Silver Musk,,,hard_case,hard,90,nasomatto.com
+c500,Orto Parisi,Stercus,,,hard_case,hard,90,ortoparisi.com
+c501,Mancera,Coco Vanille,,,niche,normal,90,manceraparfums.com
+c502,Montale,Roses Musk,,,niche,normal,90,montaleparfums.com
+c503,Essential Parfums,Rose Magnetic,,,niche,normal,90,essentialparfums.com
+c504,BDK Parfums,Citrus Riviera,,,niche,normal,90,bdkparfums.com
+c505,Goldfield & Banks,Southern Bloom,,,niche,normal,90,goldfieldandbanks.com
+c506,Maison Crivelli,Iris Malikhân,,,hard_case,hard,90,maisoncrivelli.com
+c507,Liquides Imaginaires,Sancti,,,niche,normal,90,liquidesimaginaires.com
+c508,Memo Paris,Ocean Leather,,,niche,normal,90,memoparis.com
+c509,Penhaligon's,Much Ado About the Duke,,,niche,normal,90,penhaligons.com
+c510,Acqua di Parma,Arancia di Capri,,,mainstream,normal,90,acquadiparma.com
+c511,Bvlgari,Le Gemme Falkar,,,mainstream,normal,90,bulgari.com
+c512,Carolina Herrera,212 Sexy Men,,,mainstream,normal,90,carolinaherrera.com
+c513,Azzaro,Chrome Extreme,,,mainstream,normal,90,azzaro.com
+c514,Viktor&Rolf,Flowerbomb,,,mainstream,normal,90,viktor-rolf.com
+c515,Mugler,Angel Elixir,,,mainstream,normal,90,mugler.com
+c516,Narciso Rodriguez,Narciso Poudrée,,,mainstream,normal,90,narcisorodriguezparfums.com
+c517,Jo Malone London,Pomegranate Noir,,,mainstream,normal,90,jomalone.com
+c518,Byredo,Bibliothèque,,,niche,normal,90,byredo.com
+c519,Maison Margiela,Replica Bubble Bath,,,niche,normal,90,maisonmargiela-fragrances.us
+c520,Aesop,Rozu,,,niche,normal,90,aesop.com
+c521,Escentric Molecules,Molecule 01 + Ginger,,,nonstandard_notes,hard,90,escentric.com
+c522,Juliette Has a Gun,Musc Invisible,,,niche,normal,90,juliettehasagun.com
+c523,Comme des Garçons,Copper,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c524,Guerlain,Habit Rouge Rouge Privé,,,mainstream,normal,90,guerlain.com
+c525,Hermès,Voyage d'Hermès Parfum,,,mainstream,normal,90,hermes.com
+c526,Louis Vuitton,Afternoon Swim,,,mainstream,normal,90,us.louisvuitton.com
+c527,Ex Nihilo,Atlas Fever,,,niche,normal,90,ex-nihilo-paris.com
+c528,Matiere Premiere,Neroli Oranger,,,niche,normal,90,matiere-premiere.com
+c529,Fragrance Du Bois,New York Intense,,,niche,normal,90,fragrancedubois.com
+c530,Atelier des Ors,Riviera Collection Pomelo Riviera,,,niche,normal,90,atelierdesors.com
+c531,Etat Libre d'Orange,Spice Must Flow,,,hard_case,hard,90,etatlibredorange.com
+c532,Zoologist,Camel,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c533,Imaginary Authors,Yesterday Haze,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c534,Serge Lutens,Un Bois Vanille,,,niche,normal,90,sergelutens.com
+c535,Kayali,Invite Only Amber 23,,,niche,normal,90,kayali.com
+c536,Lattafa,Yara Tous,,,niche,normal,90,lattafa.com
+c537,Une Nuit Nomade,Mr. Vetiver,,,niche,normal,90,unenuitnomade.com
+c538,Chanel,Allure Homme,,,mainstream,normal,90,chanel.com
+c539,Dior,Dior Homme Sport,,,mainstream,normal,90,dior.com
+c540,Yves Saint Laurent,Y Elixir,,,mainstream,normal,90,yslbeautyus.com
+c541,Giorgio Armani,Armani Code Parfum,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c542,Prada,Prada Amber Pour Homme,,,mainstream,normal,90,prada-beauty.com
+c543,Valentino,Donna Born in Roma,,,mainstream,normal,90,valentino-beauty.us
+c544,Jean Paul Gaultier,Scandal Pour Homme Le Parfum,,,mainstream,normal,90,jeanpaulgaultier.com
+c545,Rabanne,Invictus Victory,,,mainstream,normal,90,rabanne.com
+c546,Versace,Blue Jeans,,,mainstream,normal,90,versace.com
+c547,Dolce & Gabbana,K by Dolce & Gabbana Parfum,,,mainstream,normal,90,dolcegabbana.com
+c548,Burberry,Burberry Goddess,,,mainstream,normal,90,burberry.com
+c549,Givenchy,Pi,,,mainstream,normal,90,givenchybeauty.com
+c550,Gucci,Bloom Ambrosia di Fiori,,,mainstream,normal,90,gucci.com
+c551,Tom Ford,Neroli Portofino,,,mainstream,normal,90,tomfordbeauty.com
+c552,Maison Francis Kurkdjian,Aqua Universalis Cologne forte,,,niche,normal,90,franciskurkdjian.com
+c553,Parfums de Marly,Haltane,,,niche,normal,90,parfums-de-marly.com
+c554,Creed,Original Vetiver,,,niche,normal,90,creedboutique.com
+c555,Amouage,Lyric Man,,,niche,normal,90,amouage.com
+c556,Xerjoff,Uden,,,niche,normal,90,xerjoff.com
+c557,Initio Parfums Privés,Blessed Baraka,,,niche,normal,90,initioparfums.com
+c558,Nishane,Fan Your Flames X,,,niche,normal,90,nishane.com
+c559,By Kilian,Good Girl Gone Bad Extreme,,,niche,normal,90,bykilian.com
+c560,Le Labo,Ylang 49,,,nonstandard_notes,hard,90,lelabofragrances.com
+c561,Diptyque,Fleur de Peau,,,niche,normal,90,diptyqueparis.com
+c562,Frederic Malle,Bigarade Concentrée,,,niche,normal,90,fredericmalle.com
+c563,Roja Parfums,Apex Parfum,,,niche,normal,90,rojaparfums.com
+c564,Ormonde Jayne,Levant,,,niche,normal,90,ormondejayne.com
+c565,Tauer Perfumes,Golestan,,,hard_case,hard,90,tauerperfumes.com
+c566,Nasomatto,Hindu Grass,,,hard_case,hard,90,nasomatto.com
+c567,Orto Parisi,Viride,,,hard_case,hard,90,ortoparisi.com
+c568,Mancera,Sicily,,,niche,normal,90,manceraparfums.com
+c569,Montale,Starry Nights,,,niche,normal,90,montaleparfums.com
+c570,Essential Parfums,Mon Vetiver,,,niche,normal,90,essentialparfums.com
+c571,BDK Parfums,Villa Néroli,,,niche,normal,90,bdkparfums.com
+c572,Goldfield & Banks,White Sandalwood,,,niche,normal,90,goldfieldandbanks.com
+c573,Maison Crivelli,Lys Sølaberg,,,hard_case,hard,90,maisoncrivelli.com
+c574,Liquides Imaginaires,Tumultu,,,niche,normal,90,liquidesimaginaires.com
+c575,Memo Paris,Argentina,,,niche,normal,90,memoparis.com
+c576,Penhaligon's,Terrible Teddy,,,niche,normal,90,penhaligons.com
+c577,Acqua di Parma,Bergamotto di Calabria,,,mainstream,normal,90,acquadiparma.com
+c578,Bvlgari,Le Gemme Onekh,,,mainstream,normal,90,bulgari.com
+c579,Carolina Herrera,212 VIP Men,,,mainstream,normal,90,carolinaherrera.com
+c580,Azzaro,Chrome Aqua,,,mainstream,normal,90,azzaro.com
+c581,Viktor&Rolf,Flowerbomb Ruby Orchid,,,mainstream,normal,90,viktor-rolf.com
+c582,Mugler,Angel Nova,,,mainstream,normal,90,mugler.com
+c583,Narciso Rodriguez,Narciso Rouge,,,mainstream,normal,90,narcisorodriguezparfums.com
+c584,Jo Malone London,Oud & Bergamot,,,mainstream,normal,90,jomalone.com
+c585,Byredo,Black Saffron,,,niche,normal,90,byredo.com
+c586,Maison Margiela,Replica Coffee Break,,,niche,normal,90,maisonmargiela-fragrances.us
+c587,Aesop,Gloam,,,niche,normal,90,aesop.com
+c588,Escentric Molecules,Molecule 03,,,nonstandard_notes,hard,90,escentric.com
+c589,Juliette Has a Gun,Sunny Side Up,,,niche,normal,90,juliettehasagun.com
+c590,Comme des Garçons,Floriental,,,nonstandard_notes,hard,90,commedesgarconsparfums.com
+c591,Guerlain,Vetiver,,,mainstream,normal,90,guerlain.com
+c592,Hermès,Bel Ami,,,mainstream,normal,90,hermes.com
+c593,Louis Vuitton,Pacific Chill,,,mainstream,normal,90,us.louisvuitton.com
+c594,Ex Nihilo,Gold Immortals,,,niche,normal,90,ex-nihilo-paris.com
+c595,Matiere Premiere,Cologne Cedrat,,,niche,normal,90,matiere-premiere.com
+c596,Fragrance Du Bois,Parisian,,,niche,normal,90,fragrancedubois.com
+c597,Atelier des Ors,Bois Sikar,,,niche,normal,90,atelierdesors.com
+c598,Etat Libre d'Orange,Soul of My Soul,,,hard_case,hard,90,etatlibredorange.com
+c599,Zoologist,Elephant,,,nonstandard_notes,hard,90,zoologistperfumes.com
+c600,Imaginary Authors,The Soft Lawn,,,nonstandard_notes,hard,90,imaginaryauthors.com
+c601,Serge Lutens,Five O'Clock Au Gingembre,,,niche,normal,90,sergelutens.com
+c602,Kayali,Déjà Vu White Flower 57,,,niche,normal,90,kayali.com
+c603,Lattafa,Yara Candy,,,niche,normal,90,lattafa.com
+c604,Une Nuit Nomade,Click Song,,,niche,normal,90,unenuitnomade.com
+c605,Chanel,Allure Homme Edition Blanche,,,mainstream,normal,90,chanel.com
+c606,Dior,Dior Homme Original,,,mainstream,normal,90,dior.com
+c607,Yves Saint Laurent,MYSLF L'Absolu,,,mainstream,normal,90,yslbeautyus.com
+c608,Giorgio Armani,Armani Code Eau de Parfum,,,mainstream,normal,90,giorgioarmanibeauty-usa.com
+c609,Prada,Infusion d'Iris,,,mainstream,normal,90,prada-beauty.com
+c610,Valentino,Donna Born in Roma Intense,,,mainstream,normal,90,valentino-beauty.us
+c611,Jean Paul Gaultier,Scandal Pour Homme Absolu,,,mainstream,normal,90,jeanpaulgaultier.com
+c612,Rabanne,Invictus Parfum,,,mainstream,normal,90,rabanne.com
+c613,Versace,Crystal Noir,,,mainstream,normal,90,versace.com
+c614,Dolce & Gabbana,Devotion,,,mainstream,normal,90,dolcegabbana.com
+c615,Burberry,Burberry Goddess Intense,,,mainstream,normal,90,burberry.com
+c616,Givenchy,Xeryus Rouge,,,mainstream,normal,90,givenchybeauty.com
+c617,Gucci,Flora Gorgeous Gardenia,,,mainstream,normal,90,gucci.com
+c618,Tom Ford,Mandarino di Amalfi,,,mainstream,normal,90,tomfordbeauty.com
+c619,Maison Francis Kurkdjian,Aqua Vitae Cologne forte,,,niche,normal,90,franciskurkdjian.com
+c620,Parfums de Marly,Oajan,,,niche,normal,90,parfums-de-marly.com
+c621,Creed,Original Santal,,,niche,normal,90,creedboutique.com
+c622,Amouage,Memoir Man,,,niche,normal,90,amouage.com
+c623,Xerjoff,Uden Overdose,,,niche,normal,90,xerjoff.com
+c624,Initio Parfums Privés,High Frequency,,,niche,normal,90,initioparfums.com
+c625,Nishane,Kredo,,,niche,normal,90,nishane.com
+c626,By Kilian,Intoxicated,,,niche,normal,90,bykilian.com
+c627,Le Labo,Baie 19,,,nonstandard_notes,hard,90,lelabofragrances.com
+c628,Diptyque,Eau Capitale,,,niche,normal,90,diptyqueparis.com
+c629,Frederic Malle,Monsieur.,,,niche,normal,90,fredericmalle.com
+c630,Roja Parfums,Oceania,,,niche,normal,90,rojaparfums.com
+c631,Ormonde Jayne,Damask,,,niche,normal,90,ormondejayne.com
+c632,Tauer Perfumes,Cologne du Maghreb,,,hard_case,hard,90,tauerperfumes.com
+c633,Nasomatto,China White,,,hard_case,hard,90,nasomatto.com
+c634,Mancera,Wind Wood,,,niche,normal,90,manceraparfums.com
+c635,Montale,Infinity,,,niche,normal,90,montaleparfums.com
+c636,Essential Parfums,Patchouli Mania,,,niche,normal,90,essentialparfums.com
+c637,BDK Parfums,Tubéreuse Impériale,,,niche,normal,90,bdkparfums.com
+c638,Goldfield & Banks,Sunset Hour,,,niche,normal,90,goldfieldandbanks.com
+c639,Maison Crivelli,Patchouli Magnetik,,,hard_case,hard,90,maisoncrivelli.com
+c640,Liquides Imaginaires,L'Ile Pourpre,,,niche,normal,90,liquidesimaginaires.com
+c641,Memo Paris,Sintra,,,niche,normal,90,memoparis.com
+c642,Penhaligon's,Changing Constance,,,niche,normal,90,penhaligons.com
+c643,Acqua di Parma,Mirto di Panarea,,,mainstream,normal,90,acquadiparma.com
+c644,Bvlgari,Le Gemme Orom,,,mainstream,normal,90,bulgari.com
+c645,Carolina Herrera,212 VIP Black Elixir,,,mainstream,normal,90,carolinaherrera.com
+c646,Azzaro,Chrome United,,,mainstream,normal,90,azzaro.com
+c647,Viktor&Rolf,Flowerbomb Tiger Lily,,,mainstream,normal,90,viktor-rolf.com
+c648,Mugler,Aura Mugler,,,mainstream,normal,90,mugler.com
+c649,Narciso Rodriguez,Narciso Ambrée,,,mainstream,normal,90,narcisorodriguezparfums.com
+c650,Jo Malone London,Cypress & Grapevine,,,mainstream,normal,90,jomalone.com

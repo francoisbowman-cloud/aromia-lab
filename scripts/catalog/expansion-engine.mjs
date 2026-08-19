@@ -27,7 +27,10 @@ export function classifyCandidate(candidate, universe) {
   const p = identityParts(candidate);
   if (!p.brand || !p.name) return { relation: "INVALID_IDENTITY", state: EXPANSION_STATES.BLOCKED };
   if (p.concentration && universe.exact.has(exactIdentityKey(candidate))) return { relation: "EXISTING", state: EXPANSION_STATES.BLOCKED };
-  if (universe.family.has(familyIdentityKey(candidate))) return { relation: "RELATED_VARIANT", state: EXPANSION_STATES.AUTO_READY };
+  if (universe.family.has(familyIdentityKey(candidate))) {
+    if (!p.concentration) return { relation: "AMBIGUOUS_VARIANT", state: EXPANSION_STATES.BLOCKED };
+    return { relation: "RELATED_VARIANT", state: EXPANSION_STATES.AUTO_READY };
+  }
   return { relation: "NEW", state: EXPANSION_STATES.AUTO_READY };
 }
 

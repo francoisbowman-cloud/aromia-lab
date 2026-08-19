@@ -2,8 +2,9 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parse as parseCsv } from "csv-parse/sync";
 import { stringify as stringifyCsv } from "csv-stringify/sync";
-import { REPO_ROOT, slugify, isMainModule } from "./lib.mjs";
+import { slugify, isMainModule } from "./lib.mjs";
 import { BATCH003_COLUMNS } from "./expansion-batch-builder.mjs";
+import { DEFAULT_EXPANSION_BATCH, expansionDir, preparedBatchFilename, resolveBatchId } from "./expansion-context.mjs";
 
 function pending(value) { return value === undefined || value === null || String(value).trim() === "" ? "pending" : String(value).trim(); }
 function confidenceLabel(score) { const n = Number(score ?? 0); return n >= 0.9 ? "high" : n >= 0.75 ? "medium" : "low"; }
@@ -26,11 +27,11 @@ export function toCatalogBatchRowV2(row, date = new Date().toISOString().slice(0
 }
 
 function readCsv(path) { return parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true }); }
-export function runBatchBuilderV2() {
-  const dir = join(REPO_ROOT, "catalog", "expansion", "batch-003"); const input = join(dir, "auto-ready.csv");
-  if (!existsSync(input)) return { skipped: true, reason: "auto-ready.csv not present" };
+export function runBatchBuilderV2({ batchId = DEFAULT_EXPANSION_BATCH } = {}) {
+  const dir = expansionDir(batchId); const input = join(dir, "auto-ready.csv");
+  if (!existsSync(input)) return { skipped: true, reason: "auto-ready.csv not present", batch_id: batchId };
   const ids = new Set(); const rows = readCsv(input).map((row) => { const out = toCatalogBatchRowV2(row); if (ids.has(out.id)) throw new Error(`Duplicate trace id: ${out.id}`); ids.add(out.id); return out; });
-  const output = join(dir, "batch-003-prepared.csv"); mkdirSync(dirname(output), { recursive: true }); writeFileSync(output, stringifyCsv(rows, { header: true, columns: BATCH003_COLUMNS }), "utf-8");
-  return { rows: rows.length, output, production_write: false, master_import: false, publication_enrichment_optional: true };
+  const output = join(dir, preparedBatchFilename(batchId)); mkdirSync(dirname(output), { recursive: true }); writeFileSync(output, stringifyCsv(rows, { header: true, columns: BATCH003_COLUMNS }), "utf-8");
+  return { batch_id: batchId, rows: rows.length, output, production_write: false, master_import: false, publication_enrichment_optional: true };
 }
-if (isMainModule(import.meta.url)) console.log(JSON.stringify(runBatchBuilderV2(), null, 2));
+if (isMainModule(import.meta.url)) console.log(JSON.stringify(runBatchBuilderV2({ batchId: resolveBatchId() }), null, 2));
