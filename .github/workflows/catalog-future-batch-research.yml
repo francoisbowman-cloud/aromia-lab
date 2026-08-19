@@ -1,0 +1,141 @@
+name: Catalog Future Batch Research
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "catalog/research/batch-*.request"
+      - "catalog/imports/batch-*.csv"
+      - "catalog/expansion/candidate-pool-*.csv"
+      - "scripts/catalog/**"
+      - ".github/workflows/catalog-future-batch-research.yml"
+
+jobs:
+  research:
+    name: future batch research (NO_GO allowed, no DB writes)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve requested future batch
+        id: batch
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > /tmp/changed.txt
+          mapfile -t REQUESTS < <(grep -E '^catalog/research/batch-[0-9]{3}\.request$' /tmp/changed.txt | sort -u)
+          if [ "${#REQUESTS[@]}" -eq 0 ]; then
+            echo 'has_request=false' >> "$GITHUB_OUTPUT"
+            echo 'No future-batch request in this PR; research workflow is a clean no-op.'
+            exit 0
+          fi
+          if [ "${#REQUESTS[@]}" -ne 1 ]; then
+            echo "Expected exactly one future-batch request, found ${#REQUESTS[@]}" >&2
+            exit 1
+          fi
+          BATCH_ID="$(basename "${REQUESTS[0]}" .request)"
+          echo 'has_request=true' >> "$GITHUB_OUTPUT"
+          echo "batch_id=$BATCH_ID" >> "$GITHUB_OUTPUT"
+          echo "Researching $BATCH_ID"
+
+      - uses: actions/setup-node@v4
+        if: steps.batch.outputs.has_request == 'true'
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: scripts/catalog/package-lock.json
+
+      - name: Install catalog tooling
+        if: steps.batch.outputs.has_request == 'true'
+        run: npm ci --prefix scripts/catalog
+
+      - name: Run catalog regression suite
+        if: steps.batch.outputs.has_request == 'true'
+        run: npm --prefix scripts/catalog test
+
+      - name: Select cumulative cohort
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run expand:v2
+
+      - name: Harvest official evidence
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+          AROMIA_HARVEST_CONCURRENCY: "6"
+        run: npm --prefix scripts/catalog run harvest:v2
+
+      - name: Recover partial official provenance
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run recover-evidence:v2
+
+      - name: Enrich from governed secondary sources
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+          AROMIA_SECONDARY_CONCURRENCY: "6"
+        run: npm --prefix scripts/catalog run secondary-enrich:v2
+
+      - name: Route research evidence through readiness
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run enrich:v2
+
+      - name: Build research prepared partition
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run build-batch:v2
+
+      - name: Build remediation queue
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run remediation:v2
+
+      - name: Evaluate research GO / NO_GO without enforcing release
+        if: steps.batch.outputs.has_request == 'true'
+        continue-on-error: true
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run gate:v2
+
+      - name: Summarize research yield
+        if: steps.batch.outputs.has_request == 'true'
+        env:
+          BATCH_ID: ${{ steps.batch.outputs.batch_id }}
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const batch=process.env.BATCH_ID;
+          const dir=`catalog/expansion/${batch}`;
+          const selection=JSON.parse(fs.readFileSync(`${dir}/selection-report.json`,'utf8'));
+          const harvest=JSON.parse(fs.readFileSync(`${dir}/harvest-report.json`,'utf8'));
+          const secondary=JSON.parse(fs.readFileSync(`${dir}/secondary-enrichment-report.json`,'utf8'));
+          const enrich=JSON.parse(fs.readFileSync(`${dir}/enrichment-report.json`,'utf8'));
+          const gate=JSON.parse(fs.readFileSync(`${dir}/go-no-go.json`,'utf8'));
+          if (gate.checks?.postgres_writes !== true) throw new Error('research no-write guard did not pass');
+          console.log(JSON.stringify({batch, selected:selection.selected, harvested:harvest.harvested, secondary_found:secondary.secondary_found, auto_ready:enrich.auto_ready, review_required:enrich.review_required, blocked:enrich.blocked, decision:gate.decision, production_write:false},null,2));
+          NODE
+
+      - name: Verify protected catalog inputs unchanged
+        if: steps.batch.outputs.has_request == 'true'
+        run: git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports catalog/aromia-catalog-master.csv
+
+      - name: Upload future-batch research artifact
+        if: always() && steps.batch.outputs.has_request == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-${{ steps.batch.outputs.batch_id }}
+          path: catalog/expansion/${{ steps.batch.outputs.batch_id }}/
+          if-no-files-found: error
+          retention-days: 14
