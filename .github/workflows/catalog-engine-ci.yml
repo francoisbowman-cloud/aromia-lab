@@ -43,11 +43,15 @@ jobs:
             git diff --name-only "$PUSH_BEFORE_SHA" "$GITHUB_SHA" > /tmp/catalog-changed-files.txt
           fi
           cat /tmp/catalog-changed-files.txt
-          if grep -Eq '^catalog/imports/batch-003\.csv$' /tmp/catalog-changed-files.txt; then
+          IMPORT_PATH="$(grep -E '^catalog/imports/batch-[0-9]{3}\.csv$' /tmp/catalog-changed-files.txt | tail -n 1 || true)"
+          if [ -n "$IMPORT_PATH" ]; then
+            BATCH_ID="$(basename "$IMPORT_PATH" .csv)"
             echo 'require_go=true' >> "$GITHUB_OUTPUT"
-            echo 'Import candidate detected: batch release GO is mandatory.'
+            echo "batch_id=$BATCH_ID" >> "$GITHUB_OUTPUT"
+            echo "Import candidate detected for $BATCH_ID: batch release GO is mandatory."
           else
             echo 'require_go=false' >> "$GITHUB_OUTPUT"
+            echo 'batch_id=batch-003' >> "$GITHUB_OUTPUT"
             echo 'Tooling/research change only: NO_GO remains a valid safe outcome.'
           fi
       - uses: actions/setup-node@v4
@@ -74,9 +78,28 @@ jobs:
           const fs = require('fs');
           const r = JSON.parse(fs.readFileSync('catalog/expansion/batch-003/selection-report.json','utf8'));
           if (r.selected !== 100) throw new Error(`expected 100 selected, got ${r.selected}`);
+          if (r.candidate_pool_files.join(',') !== 'candidate-pool-v1a.csv,candidate-pool-v1b.csv,candidate-pool-v1c.csv') throw new Error(`batch-003 replay pool drift: ${r.candidate_pool_files}`);
+          if (r.imported_batch_files.join(',') !== 'batch-001.csv,batch-002.csv') throw new Error(`batch-003 replay import drift: ${r.imported_batch_files}`);
           if (r.guardrails?.writes_postgres !== false) throw new Error('Postgres write guard violated');
           if (r.guardrails?.mutates_raw_inputs !== false) throw new Error('raw input mutation guard violated');
           if (r.guardrails?.master_import !== false) throw new Error('master import guard violated');
+          NODE
+      - name: Dry-run Batch 004 selection against cumulative universe
+        env:
+          AROMIA_EXPANSION_BATCH: "batch-004"
+        run: |
+          npm --prefix scripts/catalog run expand:v2
+          test -s catalog/expansion/batch-004/candidate-manifest.csv
+          test -s catalog/expansion/batch-004/selection-report.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const r = JSON.parse(fs.readFileSync('catalog/expansion/batch-004/selection-report.json','utf8'));
+          if (r.selected !== 100) throw new Error(`batch-004 expected 100 selected, got ${r.selected}`);
+          if (!r.candidate_pool_files.includes('candidate-pool-v2.csv')) throw new Error('batch-004 did not discover candidate-pool-v2.csv');
+          if (!r.imported_batch_files.includes('batch-003.csv')) throw new Error('batch-004 known universe does not include batch-003.csv');
+          if (!Array.isArray(r.selected_candidate_ids) || r.selected_candidate_ids.length !== 100) throw new Error('batch-004 selected_candidate_ids missing');
+          if (new Set(r.selected_candidate_ids).size !== 100) throw new Error('batch-004 selected duplicate candidate ids');
+          console.log('BATCH004_SELECTED_IDS=' + r.selected_candidate_ids.join(','));
           NODE
       - name: Harvest official evidence for 100 selected candidates
         env:
@@ -104,7 +127,7 @@ jobs:
         run: node scripts/catalog/sourcing.mjs catalog/sourcing/pool-economico-001.csv --limit 10
       - name: Verify protected inputs unchanged
         run: |
-          git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports/batch-001.csv catalog/imports/batch-002.csv catalog/aromia-catalog-master.csv
+          git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports/batch-001.csv catalog/imports/batch-002.csv catalog/imports/batch-003.csv catalog/aromia-catalog-master.csv
       - name: Verify expansion artifacts
         run: |
           test -s catalog/expansion/batch-003/harvest-report.json
@@ -119,6 +142,7 @@ jobs:
           test -f catalog/expansion/batch-003/review-required.csv
           test -f catalog/expansion/batch-003/blocked.csv
           test -f catalog/expansion/batch-003/batch-003-prepared.csv
+          test -s catalog/expansion/batch-004/selection-report.json
           echo '--- secondary ---'
           cat catalog/expansion/batch-003/secondary-enrichment-report.json
           echo '--- reviewed evidence ---'
@@ -142,6 +166,9 @@ jobs:
           name: catalog-engine-artifacts
           path: |
             catalog/expansion/batch-003/
+            catalog/expansion/batch-004/selection-report.json
+            catalog/expansion/batch-004/candidate-manifest.csv
+            catalog/expansion/batch-004/source-discovery-queue.csv
             catalog/reports/engine-batch-002.json
             catalog/reports/engine-batch-002-selection.csv
             catalog/reports/sourcing-economico-001.json
@@ -152,13 +179,19 @@ jobs:
         if: always()
         env:
           REQUIRE_GO: ${{ steps.release_intent.outputs.require_go }}
+          RELEASE_BATCH_ID: ${{ steps.release_intent.outputs.batch_id }}
         run: |
           node - <<'NODE'
           const fs = require('fs');
-          const path = 'catalog/expansion/batch-003/go-no-go.json';
-          if (!fs.existsSync(path)) throw new Error('go-no-go.json missing');
-          const result = JSON.parse(fs.readFileSync(path, 'utf8'));
+          const batchId = process.env.RELEASE_BATCH_ID || 'batch-003';
+          const path = `catalog/expansion/${batchId}/go-no-go.json`;
           const requireGo = process.env.REQUIRE_GO === 'true';
+          if (!fs.existsSync(path)) {
+            if (requireGo) throw new Error(`${path} missing for import candidate`);
+            console.log(`Tooling-only run: ${path} is not required.`);
+            process.exit(0);
+          }
+          const result = JSON.parse(fs.readFileSync(path, 'utf8'));
           if (requireGo && result.decision !== 'GO') {
             throw new Error(`Import candidate blocked: Expansion gate is ${result.decision}: ${result.failed?.join(', ')}`);
           }
