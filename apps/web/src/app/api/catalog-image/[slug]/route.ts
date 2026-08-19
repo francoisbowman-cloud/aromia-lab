@@ -73,6 +73,27 @@ function imageResponse(image: { bytes: ArrayBuffer; contentType: string }, origi
   return new Response(image.bytes, { headers: { "content-type": image.contentType, "cache-control": "public, s-maxage=604800, stale-while-revalidate=2592000", "x-aromia-image-origin": origin, "x-aromia-image-policy": "omni-ccl-product-only" } });
 }
 
+function placeholderResponse() {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" role="img" aria-label="Imagen de producto temporalmente no disponible">
+      <rect width="240" height="320" fill="#f3f1ed"/>
+      <g transform="translate(72 72)" fill="none" stroke="#9b958d" stroke-width="3">
+        <rect x="34" y="0" width="28" height="18" rx="4"/>
+        <rect x="24" y="18" width="48" height="16" rx="4"/>
+        <rect x="8" y="34" width="80" height="122" rx="12"/>
+      </g>
+    </svg>`;
+  return new Response(svg, {
+    status: 200,
+    headers: {
+      "content-type": "image/svg+xml; charset=utf-8",
+      "cache-control": "public, max-age=300",
+      "x-aromia-image-origin": "placeholder",
+      "x-aromia-image-policy": "omni-ccl-product-only",
+    },
+  });
+}
+
 export async function GET(_request: Request, { params }: { params: { slug: string } }) {
   const perfume = await getPerfumeBySlug(params.slug);
   if (!perfume) return new Response("Not found", { status: 404 });
@@ -97,8 +118,13 @@ export async function GET(_request: Request, { params }: { params: { slug: strin
   }
 
   const amazon = await resolveAmazonCatalogProduct(perfume);
-  if (!amazon?.imageUrl) return new Response("Product image unavailable", { status: 404, headers: { "cache-control": "public, max-age=300", "x-aromia-image-policy": "omni-ccl-product-only" } });
-  const image = await fetchImage(amazon.imageUrl);
-  if (!image) return new Response("Product image unavailable", { status: 404, headers: { "cache-control": "public, max-age=300", "x-aromia-image-policy": "omni-ccl-product-only" } });
-  return imageResponse(image, amazon.source);
+  if (amazon?.imageUrl) {
+    const image = await fetchImage(amazon.imageUrl);
+    if (image) return imageResponse(image, amazon.source);
+  }
+
+  // Valid products without a trustworthy retrievable packshot still return a
+  // valid image resource. This avoids pre-hydration broken-image races while
+  // preserving the distinction between verified product imagery and fallback.
+  return placeholderResponse();
 }
