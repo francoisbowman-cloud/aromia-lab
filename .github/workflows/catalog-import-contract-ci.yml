@@ -1,0 +1,36 @@
+name: Catalog Import Contract CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "apps/api/src/db/catalogBatchImportContract.ts"
+      - "apps/api/src/db/catalogBatchImportContract.test.ts"
+      - "apps/api/src/db/importCatalogBatch.ts"
+      - "catalog/imports/batch-*.manifest.json"
+      - "apps/api/package.json"
+      - ".github/workflows/catalog-import-contract-ci.yml"
+
+jobs:
+  contract:
+    name: generic importer (contract + build + no-write validation)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: apps/api/package-lock.json
+      - name: Install API dependencies
+        run: npm ci --prefix apps/api
+      - name: Run import contract tests
+        run: npm --prefix apps/api run test:catalog-import
+      - name: Build API TypeScript
+        run: npm --prefix apps/api run build
+      - name: Validate accepted Batch 003 without database access
+        env:
+          CATALOG_IMPORT_ACTION: validate
+          CATALOG_IMPORT_BATCH: batch-003
+        run: npm --prefix apps/api run catalog-import
