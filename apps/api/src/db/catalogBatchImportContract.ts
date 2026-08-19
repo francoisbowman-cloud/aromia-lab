@@ -45,6 +45,7 @@ export type SourceRow = {
 const BATCH_PATTERN = /^batch-\d{3}$/;
 const VALID_GENDERS = new Set<Gender>(["masculino", "femenino", "unisex"]);
 const VALID_PRICE_SEGMENTS = new Set<PriceSegment>(["económico", "medio", "premium", "lujo"]);
+const DEFAULT_REPO_ROOT = resolve(__dirname, "../../../..");
 
 export function normalizeBatchId(value: unknown): string {
   const batchId = String(value ?? "").trim();
@@ -93,7 +94,7 @@ function validateManifest(raw: unknown, batchId: string): ImportManifest {
   return m as ImportManifest;
 }
 
-export function loadBatchDefinition(batchIdInput: unknown, rootDir = process.cwd()): {
+export function loadBatchDefinition(batchIdInput: unknown, rootDir = DEFAULT_REPO_ROOT): {
   batchId: string;
   manifest: ImportManifest;
   rows: SourceRow[];
