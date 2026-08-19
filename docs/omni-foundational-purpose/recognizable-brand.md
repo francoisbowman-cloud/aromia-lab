@@ -9,23 +9,9 @@ Maximum creative iterations: **2**
 
 > Haz que una parte importante de Aromia se sienta inequívocamente Aromia sin rediseñarla arbitrariamente ni recurrir a clichés de lujo.
 
-## Operator does not specify
-
-- route or section
-- aesthetic
-- color treatment
-- layout pattern
-- effect or motion
-- Director / skill
-- implementation
-
 ## Preservation contract
 
 Preserve real data, product identity, routes, SEO, analytics, accessibility, responsive behavior and performance. Avoid generic AI luxury, black-and-gold shortcuts, gratuitous glass/3D/motion, excessive cards and decorative novelty.
-
-## Acceptance
-
-OMNI must independently locate the weakest high-value brand-expression surface, explain what makes it generic or insufficiently distinctive, strengthen recognizable Aromia signals without architecture drift, use at most two iterations, and prove a materially BETTER brand-distinctiveness delta. Technical PASS alone is insufficient.
 
 ---
 
@@ -50,38 +36,50 @@ Club is the weakest high-value expression of that system. Its copy is on-brand, 
 ### `quiz-strong-brand-expression`
 
 - surface: `quiz`
-- severity: **control**
 - disposition: **PARK**
 - decision: preserve its editorial question framing and asymmetry as evidence that Aromia can already feel distinctive without ornamental effects.
 
 ## TARGET
 
-**Club Aromia — right-side visual field behind the existing waitlist form.**
+**Club Aromia — right-side visual field around the existing waitlist form.**
 
-## DIAGNOSE
+## ITERATION 1
 
-The problem is not the palette or typography. It is that the visual field does not encode Aromia's core idea: identity is built as an olfactory trace through profile, community and discovery.
+Hypothesis: replace anonymous decorative circles with a restrained olfactory trace using the three real Club pillars already present on the page.
 
-## CREATIVE / EXPERIENCE HYPOTHESIS
+Implementation used large low-opacity `Perfil / Comunidad / Discovery` labels and 01/02/03 nodes behind the waitlist foreground.
 
-> If the anonymous decorative circles are replaced by a restrained olfactory-trace index built from the three real Club pillars already present on the page, the waitlist can become recognizably Aromia without changing its product scope or inventing claims.
+### Technical verification
 
-The intervention will:
+- shared stacked evidence: **24/24 PASS**;
+- no route, overflow, H1, page-error, broken-image or console regression detected;
+- form behavior and original copy preserved.
 
-- reuse only `Perfil`, `Comunidad`, `Discovery` and their existing 01/02/03 numbering;
-- turn them into a vertical editorial trace behind the form;
-- preserve the waitlist card, input behavior and all copy;
-- keep the treatment quiet enough that the form remains the functional foreground;
-- add no new data or product promises.
+### Perceptual verification
 
-Expected delta:
+**REJECTED.**
 
-- brand distinctiveness: BETTER;
-- relationship to Home/Discovery editorial language: BETTER;
-- waitlist clarity: unchanged;
-- accessibility/function: unchanged;
-- generic-luxury tells: reduced.
+Desktop increased brand signal, but the mobile render violates the hierarchy contract: background words and numeric nodes leak through and around the functional form, producing ghosted text and competing with the real copy. The page is technically valid but perceptually noisier.
 
-## ITERATION 1 PLAN
+Why rejected:
 
-Replace only the decorative background on the right side of Club with a numbered olfactory trace using the existing pillar labels. Reject if the trace becomes dashboard-like, visually competes with the form, or relies on luxury clichés rather than Aromia's own content language.
+1. the trace occupies the same visual plane as the form instead of a reserved secondary plane;
+2. large background typography becomes accidental content on narrow screens;
+3. the intervention improves recognizability by sacrificing clarity, which is not an acceptable trade;
+4. technical green does not override a perceptual regression.
+
+This failed attempt remains recorded as evidence.
+
+## ITERATION 2 HYPOTHESIS
+
+> Preserve the olfactory trace idea, but physically separate identity from function: reserve a narrow trace rail beside the form on desktop and use a small in-flow index above the form on mobile. No decorative content may sit behind readable form text.
+
+Iteration 2 constraints:
+
+- desktop trace stays outside the form footprint;
+- mobile trace participates in normal document flow, not absolute background layering;
+- only 01 Perfil / 02 Comunidad / 03 Discovery are used;
+- no large ghost typography;
+- no new copy or claims;
+- form remains the dominant focal object;
+- reject if the result becomes dashboard-like or generic premium-card styling.
