@@ -80,12 +80,12 @@ The strongest cross-product weakness is product-image presentation, not Home com
 
 `report.json` shows many product `<img>` elements with valid `naturalWidth` / `naturalHeight` even when their screenshots remain visually covered by the loading stage. For example, the desktop catalog contains valid natural dimensions for Loewe 001 Man, 001 Woman, 1 Million, 212 VIP, Acqua di Gio, Dior Addict and many others while the screenshot still presents many of those card stages as empty.
 
-Current `ProductImage` couples visual visibility to React state:
+The baseline `ProductImage` coupled visual visibility to React state:
 
-- the `<img>` remains `opacity-0` until `status === "ready"`;
-- a mount/source `useEffect` resets status to `loading`;
-- if a source has already loaded or the event ordering races with that reset, valid pixels can remain hidden behind the skeleton;
-- the direct-fallback path can load successfully, set `ready`, and then cause the component to render the original proxy source again because source choice is derived from `status` rather than persistent source selection.
+- the `<img>` remained `opacity-0` until `status === "ready"`;
+- a mount/source `useEffect` reset status to `loading`;
+- if an image loaded before hydration or event ordering raced with that reset, valid pixels could remain hidden behind the skeleton;
+- the direct-fallback path could also return to the failed proxy because source choice was derived from load status.
 
 This explains why historical technical gates could report `brokenImages: 0` while a human still saw visually empty product stages.
 
@@ -99,7 +99,7 @@ The issue is higher impact than another stylistic redesign because correcting it
 
 ## CREATIVE / EXPERIENCE HYPOTHESIS
 
-> If `ProductImage` stops treating React loading state as the authority for whether valid product pixels may be visible, and instead persists the active image source through a one-way proxy → direct fallback → placeholder sequence, Aromia will recover product salience across core surfaces without any arbitrary redesign.
+> If product-image rendering stops depending on post-hydration client load events, while source resolution and fail-safe fallback are centralized in the same-origin image endpoint, Aromia will recover product salience across core surfaces without arbitrary redesign.
 
 Expected perceptual delta:
 
@@ -108,7 +108,7 @@ Expected perceptual delta:
 - atmosphere/emotion: BETTER — existing editorial layouts regain contrast between product and space;
 - narrative rhythm: BETTER — image/text alternation becomes intentional rather than interrupted by empty media stages;
 - brand distinctiveness: BETTER or neutral — Aromia's existing art direction is restored, not replaced;
-- preservation/identity: BETTER — actual product identity becomes visible while geometry/content/layout stay intact.
+- preservation/identity: BETTER — verified product identity becomes visible while geometry/content/layout stay intact.
 
 ## CAPABILITY SELECTION
 
@@ -116,18 +116,67 @@ OMNI selects:
 
 - **Render / evidence** to prove the symptom and re-render AFTER;
 - **Visual Director / Taste** for perceptual salience and non-decorative intervention judgment;
-- **UI implementation** for the bounded `ProductImage` state fix;
+- **UI implementation** for bounded product-image presentation logic;
 - **Product Image Fidelity / Strict Audit / v2 CI** as preservation gates.
 
 No new section, visual style, effect, dependency or invented content is justified.
 
-## ITERATION 1 PLAN
+## ITERATION 1 — REJECTED
 
-Change only the shared `ProductImage` source-state behavior:
+### Intervention
 
-1. persist the selected source independently of loaded/ready state;
-2. do not hide a valid `<img>` behind JS-controlled opacity while waiting for state synchronization;
-3. on proxy error, move once to a valid direct image URL when available;
-4. if direct fallback also fails, move once to the existing accessible placeholder;
-5. preserve loading mode, sizing, hover behavior, alt text, fidelity and same-origin proxy preference;
-6. rerun the exact BEFORE/AFTER evidence workflow and all applicable CI gates.
+`ProductImage` stopped hiding valid images behind JS-controlled opacity and introduced persistent proxy → direct fallback state.
+
+### Positive perceptual evidence
+
+Iteration 1 immediately restored important product objects:
+
+- Home hero: Loewe 001 Man became visible.
+- Catalog first row: Loewe 001 Man, Loewe 001 Woman, 1 Million and 212 VIP became visible together instead of mostly skeletons.
+- Discovery gained visible product imagery that was previously hidden.
+
+### Why rejected
+
+Foundational Purpose run #3 produced **23/24 technical PASS and 1 technical FAIL**.
+
+Failure:
+
+`mobile:/descubrir` — `broken images 0 -> 1`
+
+The failed product was A*Men. Its same-origin proxy returns 404 when no trustworthy image can be resolved. The browser can emit that error before React hydration attaches `onError`, leaving the broken-image glyph/alt text visible. This is a real pre-hydration failure, not a flaky metric.
+
+Therefore Iteration 1 is **REJECTED** despite its strong visual improvement.
+
+Evidence artifact: `omni-foundational-purpose-evidence`, artifact ID `9369518584`, SHA-256 `e0f483fc23c560d303b37e160b152781c6b463c77bacbf60fe43e0b0fe8e11da`.
+
+## ITERATION 2 — FINAL ALLOWED ITERATION
+
+### Revised root cause
+
+The system had two competing source/fallback authorities:
+
+1. `/api/catalog-image/[slug]` already resolves official, catalog and governed Amazon sources;
+2. `ProductImage` attempted its own post-hydration source/fallback state machine.
+
+That duplication created both the hidden-valid-image race and the broken-image pre-hydration race.
+
+### Intervention
+
+- `ProductImage` becomes declarative: it renders only the same-origin catalog-image endpoint and no longer owns source/fallback state.
+- The image endpoint remains the sole resolver for official/catalog/Amazon product sources.
+- If a valid perfume has no trustworthy retrievable packshot, the endpoint returns a neutral bottle placeholder as a valid SVG image resource with `x-aromia-image-origin: placeholder` rather than an HTTP 404.
+- Invalid perfume slugs still return 404.
+- Real/verified imagery remains preferred; placeholder is only the terminal fail-safe.
+
+### Acceptance requirements
+
+Iteration 2 must now prove all of the following:
+
+- 24/24 technical comparisons PASS;
+- no broken-image regression;
+- real product images visible on Home/Catalog/Discovery/PDP where resolvable;
+- unavailable A*Men renders a deliberate neutral placeholder rather than broken UI;
+- v2 CI PASS;
+- Strict Audit PASS;
+- external perceptual verdict = BETTER;
+- no production deployment during the trial.
