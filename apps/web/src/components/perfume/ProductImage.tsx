@@ -20,58 +20,51 @@ type Props = {
  * browser. That can erase translucent glass, pale liquid, labels and highlights
  * from real perfume packshots. Aromia now keeps the source image intact and
  * lets a pure-white stage absorb white retailer/packshot backgrounds naturally.
+ *
+ * Source selection is intentionally independent from load state. A valid image
+ * must never become visually hidden because React state races with the browser's
+ * image lifecycle. Fallback is one-way: proxy -> direct source -> placeholder.
  */
 export function ProductImage({ slug, alt, imageUrl, mode = "card", className = "" }: Props) {
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
-  const [directFailed, setDirectFailed] = useState(false);
-  const src = `/api/catalog-image/${encodeURIComponent(slug)}`;
+  const proxySrc = `/api/catalog-image/${encodeURIComponent(slug)}`;
   const directImageUrl = imageUrl && !/\/perfume-social-cards\//i.test(imageUrl) ? imageUrl : null;
+  const [activeSrc, setActiveSrc] = useState(proxySrc);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    setStatus("loading");
-    setDirectFailed(false);
-  }, [src, directImageUrl]);
+    setActiveSrc(proxySrc);
+    setFailed(false);
+  }, [proxySrc, directImageUrl]);
 
-  const imageClass = `max-h-[84%] max-w-[84%] object-contain object-center transition-[opacity,transform] duration-500 ease-out ${
+  const imageClass = `max-h-[84%] max-w-[84%] object-contain object-center transition-transform duration-500 ease-out ${
     mode === "card" ? "group-hover:scale-[1.018]" : "hover:scale-[1.008]"
   }`;
 
+  const handleError = () => {
+    if (activeSrc === proxySrc && directImageUrl && directImageUrl !== proxySrc) {
+      setActiveSrc(directImageUrl);
+      return;
+    }
+    setFailed(true);
+  };
+
   return (
     <div className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-white ${className}`}>
-      {status !== "error" ? (
-        // Same-origin proxy preserves source fidelity while avoiding retailer/CDN presentation differences.
+      {!failed ? (
+        // Same-origin proxy is preferred for fidelity; direct image is a persistent fallback.
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={src}
+          key={activeSrc}
+          src={activeSrc}
           alt={alt}
           loading={mode === "card" ? "lazy" : "eager"}
           decoding="async"
-          onLoad={() => setStatus("ready")}
-          onError={() => setStatus("error")}
-          className={`${imageClass} ${status === "ready" ? "opacity-100" : "opacity-0"}`}
-        />
-      ) : null}
-
-      {status === "error" && directImageUrl && !directFailed ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={directImageUrl}
-          alt={alt}
-          loading={mode === "card" ? "lazy" : "eager"}
-          decoding="async"
-          onLoad={() => setStatus("ready")}
-          onError={() => setDirectFailed(true)}
+          onError={handleError}
           className={imageClass}
         />
-      ) : null}
-
-      {status === "loading" ? (
-        <div className="absolute inset-[18%] animate-pulse bg-[#f3f1ed]" aria-hidden="true" />
-      ) : null}
-
-      {status === "error" && (!directImageUrl || directFailed) ? (
+      ) : (
         <ImagePlaceholder alt={`${alt} — imagen temporalmente no disponible`} />
-      ) : null}
+      )}
     </div>
   );
 }
