@@ -29,18 +29,26 @@ test("batch id validation rejects traversal and malformed identifiers", () => {
   }
 });
 
-test("candidate pools are discovered rather than hardcoded", () => {
-  const files = candidatePoolPaths().map(basename);
+test("batch-003 replay is frozen to its legacy candidate pools", () => {
+  const files = candidatePoolPaths("batch-003").map(basename);
+  assert.deepEqual(files, ["candidate-pool-v1a.csv", "candidate-pool-v1b.csv", "candidate-pool-v1c.csv"]);
+});
+
+test("future batches discover all governed candidate pools", () => {
+  const files = candidatePoolPaths("batch-004").map(basename);
   assert.ok(files.includes("candidate-pool-v1a.csv"));
   assert.ok(files.includes("candidate-pool-v1b.csv"));
   assert.ok(files.includes("candidate-pool-v1c.csv"));
+  assert.ok(files.includes("candidate-pool-v2.csv"));
   assert.deepEqual(files, [...files].sort((a, b) => a.localeCompare(b)));
 });
 
-test("known-universe imports include batch-003 and remain future-compatible", () => {
-  const files = importedBatchPaths().map(basename);
-  assert.ok(files.includes("batch-001.csv"));
-  assert.ok(files.includes("batch-002.csv"));
-  assert.ok(files.includes("batch-003.csv"));
-  assert.deepEqual(files, [...files].sort((a, b) => a.localeCompare(b)));
+test("known universe includes only imports older than the batch being prepared", () => {
+  const batch003 = importedBatchPaths("batch-003").map(basename);
+  const batch004 = importedBatchPaths("batch-004").map(basename);
+  assert.deepEqual(batch003, ["batch-001.csv", "batch-002.csv"]);
+  assert.ok(batch004.includes("batch-001.csv"));
+  assert.ok(batch004.includes("batch-002.csv"));
+  assert.ok(batch004.includes("batch-003.csv"));
+  assert.ok(!batch004.includes("batch-004.csv"));
 });
