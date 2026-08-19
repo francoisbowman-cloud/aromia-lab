@@ -1,0 +1,225 @@
+name: OMNI Foundational Purpose
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    if: startsWith(github.head_ref, 'omni/foundational-purpose-')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      API_URL: https://api-production-fe2f.up.railway.app
+      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - name: Checkout AFTER
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout BEFORE worktree
+        shell: bash
+        run: git worktree add /tmp/aromia-before "$BASE_SHA"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install web dependencies
+        shell: bash
+        run: |
+          npm ci --prefix apps/web
+          npm ci --prefix /tmp/aromia-before/apps/web
+
+      - name: Install Playwright
+        shell: bash
+        run: |
+          mkdir -p /tmp/omni-purpose
+          cd /tmp/omni-purpose
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Start BEFORE and AFTER
+        shell: bash
+        run: |
+          cd /tmp/aromia-before/apps/web
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3001 > /tmp/aromia-purpose-before.log 2>&1 &
+          cd "$GITHUB_WORKSPACE/apps/web"
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3002 > /tmp/aromia-purpose-after.log 2>&1 &
+          for port in 3001 3002; do
+            ready=0
+            for i in {1..90}; do
+              if curl -fsS "http://127.0.0.1:${port}/" >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            if [ "$ready" -ne 1 ]; then
+              echo "App on port ${port} did not start"
+              exit 1
+            fi
+          done
+
+      - name: Capture evidence
+        shell: bash
+        run: |
+          cd /tmp/omni-purpose
+          mkdir -p artifacts
+          cat > evidence.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+
+          const origins = { before: 'http://127.0.0.1:3001', after: 'http://127.0.0.1:3002' };
+          const viewports = [
+            { name: 'mobile', width: 390, height: 844 },
+            { name: 'tablet', width: 768, height: 1024 },
+            { name: 'desktop', width: 1440, height: 1000 },
+          ];
+          const staticRoutes = ['/', '/catalogo', '/quiz', '/descubrir', '/academia', '/club', '/magazine'];
+
+          async function resolvePdpSlug() {
+            try {
+              const response = await fetch(process.env.API_URL + '/api/perfumes');
+              if (!response.ok) return null;
+              const rows = await response.json();
+              return Array.isArray(rows) ? rows.find((p) => p && p.slug)?.slug ?? null : null;
+            } catch { return null; }
+          }
+
+          function safeName(route) {
+            return route === '/' ? 'home' : route.replace(/^\//, '').replace(/[^a-z0-9-]+/gi, '-');
+          }
+
+          async function inspect(browser, label, origin, route, viewport) {
+            const page = await browser.newPage({
+              viewport: { width: viewport.width, height: viewport.height },
+              deviceScaleFactor: 1,
+            });
+            const consoleErrors = [];
+            const pageErrors = [];
+            page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+            page.on('pageerror', (e) => pageErrors.push(String(e.message || e)));
+            const response = await page.goto(`${origin}${route}`, { waitUntil: 'networkidle', timeout: 60000 });
+            await page.waitForTimeout(600);
+            const metrics = await page.evaluate(() => {
+              const visible = (el) => {
+                const r = el.getBoundingClientRect();
+                const s = getComputedStyle(el);
+                return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none';
+              };
+              const images = Array.from(document.images).filter(visible);
+              const imageDetails = images.map((img) => {
+                const r = img.getBoundingClientRect();
+                return {
+                  src: img.currentSrc || img.src,
+                  naturalWidth: img.naturalWidth,
+                  naturalHeight: img.naturalHeight,
+                  renderedWidth: Math.round(r.width),
+                  renderedHeight: Math.round(r.height),
+                  alt: img.alt || '',
+                };
+              });
+              const imageArea = imageDetails.reduce((n, img) => n + img.renderedWidth * img.renderedHeight, 0);
+              const viewportArea = window.innerWidth * window.innerHeight;
+              const text = Array.from(document.querySelectorAll('main *')).filter(visible).filter((el) => (el.textContent || '').trim() && el.children.length === 0);
+              const fontSizes = text.map((el) => parseFloat(getComputedStyle(el).fontSize)).filter(Number.isFinite);
+              const interactives = Array.from(document.querySelectorAll('a,button,input,select,summary')).filter(visible);
+              const undersizedTargets = interactives.filter((el) => {
+                const r = el.getBoundingClientRect();
+                return r.width < 44 || r.height < 44;
+              }).length;
+              const headings = Array.from(document.querySelectorAll('h1,h2,h3')).filter(visible);
+              const headingSizes = headings.map((el) => parseFloat(getComputedStyle(el).fontSize) || 0);
+              return {
+                pageHeight: document.documentElement.scrollHeight,
+                overflowX: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+                h1Count: document.querySelectorAll('h1').length,
+                visibleImages: images.length,
+                brokenImages: images.filter((img) => img.complete && img.naturalWidth === 0).length,
+                imageAreaViewportRatio: Number((imageArea / Math.max(1, viewportArea)).toFixed(3)),
+                imageDetails,
+                visibleTextNodes: fontSizes.length,
+                textBelow12px: fontSizes.filter((n) => n < 12).length,
+                textBelow14px: fontSizes.filter((n) => n < 14).length,
+                interactiveCount: interactives.length,
+                undersizedTargets,
+                maxHeadingPx: headingSizes.length ? Math.max(...headingSizes) : 0,
+              };
+            });
+            metrics.status = response?.status() ?? 0;
+            metrics.consoleErrors = consoleErrors.length;
+            metrics.pageErrors = pageErrors.length;
+            await page.screenshot({ path: `artifacts/${label}-${safeName(route)}-${viewport.name}.png`, fullPage: true });
+            await page.close();
+            return metrics;
+          }
+
+          (async () => {
+            const slug = await resolvePdpSlug();
+            const routes = [...staticRoutes, ...(slug ? [`/catalogo/${slug}`] : [])];
+            const browser = await chromium.launch({ headless: true });
+            const report = {
+              brief: 'I do not know what is wrong here. Discover it and make the result materially better.',
+              baseSha: process.env.BASE_SHA,
+              headSha: process.env.GITHUB_SHA,
+              routes,
+              viewports,
+              before: {},
+              after: {},
+              delta: {},
+              technicalAcceptance: [],
+            };
+            for (const viewport of viewports) {
+              for (const route of routes) {
+                const key = `${viewport.name}:${route}`;
+                report.before[key] = await inspect(browser, 'before', origins.before, route, viewport);
+                report.after[key] = await inspect(browser, 'after', origins.after, route, viewport);
+                const b = report.before[key];
+                const a = report.after[key];
+                report.delta[key] = {
+                  pageHeight: a.pageHeight - b.pageHeight,
+                  visibleImages: a.visibleImages - b.visibleImages,
+                  imageAreaViewportRatio: Number((a.imageAreaViewportRatio - b.imageAreaViewportRatio).toFixed(3)),
+                  textBelow12px: a.textBelow12px - b.textBelow12px,
+                  undersizedTargets: a.undersizedTargets - b.undersizedTargets,
+                  maxHeadingPx: a.maxHeadingPx - b.maxHeadingPx,
+                };
+                const failures = [];
+                if (a.status >= 400 || a.status === 0) failures.push(`HTTP ${a.status}`);
+                if (a.overflowX > 2) failures.push(`horizontal overflow ${a.overflowX}px`);
+                if (a.pageErrors > 0) failures.push(`${a.pageErrors} page errors`);
+                if (a.consoleErrors > b.consoleErrors) failures.push(`console errors ${b.consoleErrors}->${a.consoleErrors}`);
+                if (a.brokenImages > b.brokenImages) failures.push(`broken images ${b.brokenImages}->${a.brokenImages}`);
+                if (a.h1Count !== 1) failures.push(`expected one h1, found ${a.h1Count}`);
+                report.technicalAcceptance.push({ key, accepted: failures.length === 0, failures });
+              }
+            }
+            await browser.close();
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            const failures = report.technicalAcceptance.filter((item) => !item.accepted);
+            console.log(JSON.stringify({ checks: report.technicalAcceptance.length, failures: failures.length }, null, 2));
+            if (failures.length) process.exit(1);
+          })().catch((error) => { console.error(error); process.exit(1); });
+          NODE
+          API_URL="$API_URL" BASE_SHA="$BASE_SHA" GITHUB_SHA="$GITHUB_SHA" node evidence.cjs
+
+      - name: Upload foundational evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-foundational-purpose-evidence
+          path: /tmp/omni-purpose/artifacts
+          retention-days: 30
+
+      - name: Print app logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo '--- BEFORE ---'
+          tail -n 160 /tmp/aromia-purpose-before.log || true
+          echo '--- AFTER ---'
+          tail -n 160 /tmp/aromia-purpose-after.log || true
