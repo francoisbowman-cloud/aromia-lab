@@ -12,6 +12,10 @@ function clean(v) { const s=String(v??"").trim(); return ["","pending","null","u
 function canonical(v) { return normalizeConcentration(clean(v)).value.toLowerCase(); }
 function needsSecondary(row) { return !clean(row.source_url) || !clean(row.gender) || (!clean(row.top_notes)&&!clean(row.middle_notes)&&!clean(row.base_notes)&&!clean(row.accords)&&!bool(row.source_does_not_publish_notes)); }
 function mergeUrls(a,b) { return [...new Set([...(clean(a)?clean(a).split(";"):[]), ...(clean(b)?clean(b).split(";"):[])].map((x)=>x.trim()).filter(Boolean))].join(";"); }
+function mergedSourceMap(dir) {
+  const paths=[join(REPO_ROOT,"catalog","expansion","secondary-source-map.csv"),join(dir,"secondary-source-map.csv")];
+  const out=new Map(); for(const path of paths) if(existsSync(path)) for(const row of readCsv(path)) out.set(row.candidate_id,row.source_url); return out;
+}
 
 export function mergeSecondaryEvidence(row, secondary, candidate) {
   if (secondary.status !== "FOUND") return { ...row, secondary_status: secondary.status, secondary_error: secondary.error ?? "", curated_source_url: secondary.source_url ?? "" };
@@ -43,10 +47,9 @@ async function mapConcurrent(items, limit, fn) {
 
 export async function runSecondaryEnrichment({ concurrency = 5, batchId = DEFAULT_EXPANSION_BATCH } = {}) {
   const dir=expansionDir(batchId); const evidencePath=join(dir,"evidence.auto.csv"); const manifestPath=join(dir,"candidate-manifest.csv");
-  const mapPath=join(REPO_ROOT,"catalog","expansion","secondary-source-map.csv");
   if(!existsSync(evidencePath)||!existsSync(manifestPath)) return {skipped:true,reason:"evidence or manifest missing",batch_id:batchId};
   const evidence=readCsv(evidencePath); const manifest=readCsv(manifestPath); const byId=new Map(manifest.map((r)=>[r.candidate_id,r]));
-  const sourceMap=existsSync(mapPath)?new Map(readCsv(mapPath).map((r)=>[r.candidate_id,r.source_url])):new Map(); const targets=evidence.filter(needsSecondary);
+  const sourceMap=mergedSourceMap(dir); const targets=evidence.filter(needsSecondary);
   const resolved=await mapConcurrent(targets,concurrency,async(row)=>{
     const candidate=byId.get(row.candidate_id)??row; const curated=sourceMap.get(row.candidate_id);
     let secondary=curated?await discoverSecondaryEvidenceAtUrl(candidate,curated):null;
