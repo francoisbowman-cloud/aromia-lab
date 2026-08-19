@@ -1,7 +1,8 @@
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseCsv } from "csv-parse/sync";
-import { REPO_ROOT, isMainModule } from "./lib.mjs";
+import { isMainModule } from "./lib.mjs";
+import { DEFAULT_EXPANSION_BATCH, expansionDir, preparedBatchFilename, resolveBatchId } from "./expansion-context.mjs";
 
 export const EXPANSION_GATE_V2 = Object.freeze({
   minRows: 100,
@@ -19,10 +20,6 @@ export function evaluateExpansionGateV2(report, diagnostics = {}, thresholds = E
   const reviewRequired = Number(report.review_required ?? 0);
   const blocked = Number(report.blocked ?? 0);
   const preparedRows = Number(diagnostics.prepared_rows ?? 0);
-
-  // Hard release checks protect catalog integrity. Automation yield is deliberately
-  // measured separately: low automation must create a remediation backlog, not
-  // force safe AUTO_READY rows to be discarded with unresolved candidates.
   const checks = {
     row_count: Number(report.total ?? 0) >= thresholds.minRows,
     partition_integrity: autoReady + reviewRequired + blocked === Number(report.total ?? 0),
@@ -38,25 +35,17 @@ export function evaluateExpansionGateV2(report, diagnostics = {}, thresholds = E
     postgres_writes: Number(diagnostics.postgres_writes ?? 0) === 0,
   };
   const failed = Object.entries(checks).filter(([, pass]) => !pass).map(([name]) => name);
-
   const automation = {
     target_auto_preparation_yield: Number(report.auto_preparation_yield ?? 0) >= thresholds.automationTargetMinYield,
     target_human_review_burden: Number(report.human_review_burden ?? 1) <= thresholds.automationTargetMaxHumanReviewBurden,
   };
-
   return {
     decision: failed.length ? "NO_GO" : "GO",
-    checks,
-    failed,
-    thresholds,
-    automation,
+    checks, failed, thresholds, automation,
     automation_target_met: Object.values(automation).every(Boolean),
     remediation_required: reviewRequired > 0,
     observability: {
-      auto_ready: autoReady,
-      review_required: reviewRequired,
-      blocked,
-      prepared_rows: preparedRows,
+      auto_ready: autoReady, review_required: reviewRequired, blocked, prepared_rows: preparedRows,
       auto_preparation_yield: report.auto_preparation_yield ?? null,
       human_review_burden: report.human_review_burden ?? null,
       publication_completion_yield: report.publication_completion_yield ?? null,
@@ -67,14 +56,9 @@ export function evaluateExpansionGateV2(report, diagnostics = {}, thresholds = E
   };
 }
 
-function preparedBatchDiagnostics(dir) {
-  const path = join(dir, "batch-003-prepared.csv");
-  if (!existsSync(path)) return {
-    prepared_rows: 0,
-    prepared_rows_all_auto_ready: false,
-    prepared_rows_source_verified: false,
-    prepared_rows_unique_ids: false,
-  };
+function preparedBatchDiagnostics(dir, batchId) {
+  const path = join(dir, preparedBatchFilename(batchId));
+  if (!existsSync(path)) return { prepared_rows: 0, prepared_rows_all_auto_ready: false, prepared_rows_source_verified: false, prepared_rows_unique_ids: false };
   const rows = parseCsv(readFileSync(path, "utf-8"), { columns: true, skip_empty_lines: true });
   const ids = rows.map((row) => String(row.id ?? "").trim()).filter(Boolean);
   return {
@@ -85,20 +69,20 @@ function preparedBatchDiagnostics(dir) {
   };
 }
 
-export function runGateV2() {
-  const dir = join(REPO_ROOT, "catalog", "expansion", "batch-003");
+export function runGateV2({ batchId = DEFAULT_EXPANSION_BATCH } = {}) {
+  const dir = expansionDir(batchId);
   const reportPath = join(dir, "enrichment-report.json");
   const diagnosticsPath = join(dir, "diagnostics.json");
-  if (!existsSync(reportPath)) return { decision: "NOT_READY", reason: "enrichment-report.json not present" };
+  if (!existsSync(reportPath)) return { decision: "NOT_READY", reason: "enrichment-report.json not present", batch_id: batchId };
   const report = JSON.parse(readFileSync(reportPath, "utf-8"));
   const diagnostics = existsSync(diagnosticsPath) ? JSON.parse(readFileSync(diagnosticsPath, "utf-8")) : {};
-  Object.assign(diagnostics, preparedBatchDiagnostics(dir));
-  const result = evaluateExpansionGateV2(report, diagnostics);
+  Object.assign(diagnostics, preparedBatchDiagnostics(dir, batchId));
+  const result = { batch_id: batchId, ...evaluateExpansionGateV2(report, diagnostics) };
   writeFileSync(join(dir, "go-no-go.json"), JSON.stringify(result, null, 2) + "\n", "utf-8");
   return result;
 }
 
 if (isMainModule(import.meta.url)) {
-  const result = runGateV2(); console.log(JSON.stringify(result, null, 2));
+  const result = runGateV2({ batchId: resolveBatchId() }); console.log(JSON.stringify(result, null, 2));
   if (result.decision === "NO_GO") process.exitCode = 1;
 }
