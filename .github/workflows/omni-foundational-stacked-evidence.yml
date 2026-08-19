@@ -1,0 +1,141 @@
+name: OMNI Foundational Stacked Evidence
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    if: startsWith(github.head_ref, 'omni/foundational-purpose-') && github.head_ref != 'omni/foundational-purpose-unknown-problem'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      API_URL: https://api-production-fe2f.up.railway.app
+      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - name: Checkout AFTER
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout BEFORE worktree
+        run: git worktree add /tmp/aromia-before "$BASE_SHA"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install web dependencies
+        run: |
+          npm ci --prefix apps/web
+          npm ci --prefix /tmp/aromia-before/apps/web
+      - name: Install Playwright
+        run: |
+          mkdir -p /tmp/omni-stacked-evidence
+          cd /tmp/omni-stacked-evidence
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+      - name: Start BEFORE and AFTER
+        run: |
+          cd /tmp/aromia-before/apps/web
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3001 > /tmp/stacked-before.log 2>&1 &
+          cd "$GITHUB_WORKSPACE/apps/web"
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3002 > /tmp/stacked-after.log 2>&1 &
+          for port in 3001 3002; do
+            ready=0
+            for i in {1..90}; do
+              if curl -fsS "http://127.0.0.1:${port}/" >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            [ "$ready" -eq 1 ] || exit 1
+          done
+      - name: Capture warmed product evidence
+        run: |
+          cd /tmp/omni-stacked-evidence
+          mkdir -p artifacts
+          cat > capture.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+          const origins = { before: 'http://127.0.0.1:3001', after: 'http://127.0.0.1:3002' };
+          const viewports = [
+            { name: 'mobile', width: 390, height: 844 },
+            { name: 'tablet', width: 768, height: 1024 },
+            { name: 'desktop', width: 1440, height: 1000 },
+          ];
+          const routes = ['/', '/catalogo', '/quiz', '/descubrir', '/academia', '/club', '/magazine', '/catalogo/loewe-001-man-edp'];
+          const safe = route => route === '/' ? 'home' : route.replace(/^\//, '').replace(/[^a-z0-9-]+/gi, '-');
+          async function warm(page) {
+            const vh = await page.evaluate(() => innerHeight);
+            const ph = await page.evaluate(() => document.documentElement.scrollHeight);
+            for (let y = 0; y < ph; y += Math.max(320, Math.floor(vh * .72))) {
+              await page.evaluate(top => scrollTo({ top, behavior: 'instant' }), y);
+              await page.waitForTimeout(180);
+            }
+            await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
+            await page.waitForTimeout(500);
+          }
+          async function inspect(browser, label, origin, route, viewport) {
+            const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+            const pageErrors = []; const consoleErrors = [];
+            page.on('pageerror', e => pageErrors.push(String(e.message || e)));
+            page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+            const response = await page.goto(origin + route, { waitUntil: 'networkidle', timeout: 60000 });
+            await warm(page);
+            const metrics = await page.evaluate(() => {
+              const imgs = Array.from(document.images);
+              const product = imgs.filter(img => (img.currentSrc || img.src).includes('/api/catalog-image/'));
+              const headings = Array.from(document.querySelectorAll('h1,h2,h3')).map(el => ({ text: (el.textContent || '').trim().slice(0, 120), size: parseFloat(getComputedStyle(el).fontSize) || 0 }));
+              return {
+                pageHeight: document.documentElement.scrollHeight,
+                overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+                h1Count: document.querySelectorAll('h1').length,
+                brokenImages: imgs.filter(img => img.complete && img.naturalWidth === 0).length,
+                productImages: product.length,
+                loadedProductImages: product.filter(img => img.complete && img.naturalWidth > 0 && Number(getComputedStyle(img).opacity) >= .99).length,
+                headings,
+                interactives: Array.from(document.querySelectorAll('a,button,input,select,summary')).filter(el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }).length,
+              };
+            });
+            Object.assign(metrics, { status: response?.status() ?? 0, pageErrors: pageErrors.length, consoleErrors: consoleErrors.length });
+            await page.screenshot({ path: `artifacts/${label}-${safe(route)}-${viewport.name}.png`, fullPage: true });
+            await page.close();
+            return metrics;
+          }
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const report = { brief: process.env.OMNI_PURPOSE_BRIEF || '', baseSha: process.env.BASE_SHA, before: {}, after: {}, acceptance: [] };
+            for (const viewport of viewports) for (const route of routes) {
+              const key = `${viewport.name}:${route}`;
+              const b = await inspect(browser, 'before', origins.before, route, viewport);
+              const a = await inspect(browser, 'after', origins.after, route, viewport);
+              report.before[key] = b; report.after[key] = a;
+              const failures = [];
+              if (!a.status || a.status >= 400) failures.push(`HTTP ${a.status}`);
+              if (a.h1Count !== 1) failures.push(`h1 ${a.h1Count}`);
+              if (a.overflowX > 2) failures.push(`overflow ${a.overflowX}`);
+              if (a.pageErrors) failures.push(`page errors ${a.pageErrors}`);
+              if (a.consoleErrors > b.consoleErrors) failures.push(`console ${b.consoleErrors}->${a.consoleErrors}`);
+              if (a.brokenImages > b.brokenImages) failures.push(`broken ${b.brokenImages}->${a.brokenImages}`);
+              report.acceptance.push({ key, accepted: failures.length === 0, failures });
+            }
+            await browser.close();
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            const failures = report.acceptance.filter(x => !x.accepted);
+            console.log(JSON.stringify({ checks: report.acceptance.length, failures }, null, 2));
+            if (failures.length) process.exit(1);
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
+          BASE_SHA="$BASE_SHA" node capture.cjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-foundational-stacked-evidence
+          path: /tmp/omni-stacked-evidence/artifacts
+          retention-days: 30
+      - name: Print logs on failure
+        if: failure()
+        run: |
+          tail -n 160 /tmp/stacked-before.log || true
+          tail -n 160 /tmp/stacked-after.log || true
