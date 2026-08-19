@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   acqua-di-gio-fidelity:
-    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration'
+    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration' || startsWith(github.head_ref, 'omni/foundational-purpose-')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
@@ -53,6 +53,9 @@ jobs:
             const contentType = image.headers.get('content-type') || '';
             if (!image.ok || !contentType.startsWith('image/')) {
               throw new Error(`Acqua di Gio image unavailable: HTTP ${image.status} ${contentType}`);
+            }
+            if (!origin || origin === 'placeholder') {
+              throw new Error(`Acqua di Gio fidelity requires a real resolved product image, received origin=${origin}`);
             }
             const browser = await chromium.launch({ headless: true });
             const report = { imageStatus: image.status, imageOrigin: origin, contentType, viewports: {} };
