@@ -54,7 +54,7 @@ The Home composition places the product image inside a beige panel, then a large
 
 **Home hero — Loewe 001 Man product stage.**
 
-## ITERATION 1
+## ITERATION 1 — REJECTED
 
 Intervention:
 
@@ -64,34 +64,55 @@ Intervention:
 - metadata overlap/z-order strengthened;
 - product source pixels untouched.
 
-### Technical result
-
-Both benchmark workflows finished **SUCCESS**.
-
-### Perceptual result
-
-**MIXED — REJECTED.**
-
-Desktop gains some layering, but the white image field remains visually dominant and the bottle still reads as content inside a frame. Mobile changes are too small to qualify as a material improvement. The intervention is technically sound and directionally correct, but it does not satisfy the founding brief strongly enough.
-
-This attempt remains recorded rather than being upgraded to PASS because it is merely newer.
+Technical workflows were green, but the perceptual result was **MIXED**. Desktop gained layering while the white wrapper still dominated; mobile delta was too small. The iteration was rejected rather than upgraded because it was merely newer.
 
 ## ITERATION 2 — FINAL ALLOWED ITERATION
 
-Revised diagnosis:
-
-The first attempt added z-depth without sufficiently removing the original planar framing. The main cause therefore remains: a white product wrapper surrounding a gray source field keeps the viewer aware of two image planes before reading the bottle.
-
-### Revised hypothesis
+Revised hypothesis:
 
 > If the Home-only immersive hero stops imposing a white wrapper, matches its surrounding stage to the verified source's neutral field, and lets the unchanged source occupy more of the available area, the bottle will gain presence because one redundant visual plane disappears rather than because more decoration is added.
 
-Iteration 2 constraints:
+Implementation:
 
-1. only hero presentations explicitly requesting `bg-transparent` may receive this immersive treatment;
-2. Catalog and PDP remain canonical white-stage controls;
-3. source image URL and source pixels remain unchanged;
-4. hero image maximum visual area may increase from 84% to 94%, without cropping;
-5. wrapper field changes to a neutral gray close to the packshot background, reducing the nested-frame effect;
-6. no new blur, glow, 3D, reflection or generated image;
-7. reject if product identity, contrast, mobile composition or technical gates regress.
+- only `mode="hero"` presentations explicitly requesting `bg-transparent` receive the immersive treatment;
+- canonical card/PDP/catalog white stages remain unchanged;
+- hero image visual area increases from 84% to 94% without cropping;
+- redundant white wrapper becomes a neutral field close to the source packshot background;
+- Iteration 1's restrained stage depth/metadata z-order remains;
+- source URL and source pixels remain unchanged.
+
+### Technical result
+
+`OMNI Flat Image Stacked` run #6: **SUCCESS**.
+
+Evidence artifact:
+
+- ID `9374227514`
+- digest `sha256:37d3d23f8631b1f565e6475f7b95623681592fcb275710d448d59679ba8e4c88`
+- 12 focused Home/Catalog/Discovery/PDP × mobile/tablet/desktop comparisons passed.
+
+### Perceptual result
+
+**BETTER — INTERNALLY ACCEPTED.**
+
+Desktop BEFORE reads as beige panel → white picture mount → gray source rectangle → bottle. AFTER suppresses the redundant white mount and lets the bottle/source plane occupy materially more of the hero field. The eye lands on Loewe before reading the picture frame.
+
+Mobile now also shows a material delta: the bottle becomes larger and the stage reads as one quieter field rather than a small image inset inside a card. No crop, label loss, geometry drift or product-color manipulation is introduced.
+
+Criterion verdicts:
+
+- product presence: **BETTER**;
+- figure/ground depth: **BETTER**;
+- focal hierarchy: **BETTER**;
+- mobile composition: **BETTER**;
+- product identity/fidelity: **UNCHANGED / PASS**;
+- Catalog/PDP control presentation: **UNCHANGED**;
+- technical behavior: **PASS**.
+
+No third iteration is permitted or justified.
+
+## VERDICT
+
+**INTERNAL FOUNDATIONAL VERDICT: BETTER / ACCEPTED ON ITERATION 2.**
+
+Campaign-wide independent external perceptual review remains required before production consolidation.
