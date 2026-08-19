@@ -1,7 +1,7 @@
 {
   "name": "@aromia/catalog-scripts",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.2.0",
   "description": "Pipeline y motor de expansión de catálogo de Aromia (Fase 3 — Catalog Data Pipeline & Expansion 500). No forma parte del build de apps/web ni apps/api. Nunca escribe a Postgres de producción.",
   "type": "module",
   "scripts": {
