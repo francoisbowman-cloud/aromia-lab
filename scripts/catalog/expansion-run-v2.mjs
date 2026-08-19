@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, basename } from "node:path";
 import { stringify as stringifyCsv } from "csv-stringify/sync";
 import { REPO_ROOT, isMainModule } from "./lib.mjs";
@@ -6,14 +6,14 @@ import { readCsv, buildKnownUniverse, selectCandidates, buildDiscoveryTask } fro
 import { analyzeCatalogGaps, serializableGapReport } from "./expansion-gap-analyzer.mjs";
 import { candidatePoolPaths, importedBatchPaths, expansionDir, DEFAULT_EXPANSION_BATCH, resolveBatchId } from "./expansion-context.mjs";
 
-function safeRead(path) { try { return readCsv(path); } catch { return []; } }
+function safeRead(path) { return existsSync(path) ? readCsv(path) : []; }
 function writeCsv(path, rows) { writeFileSync(path, stringifyCsv(rows, { header: true }), "utf-8"); }
 
 export function runExpansionV2({ limit = 100, batchId = DEFAULT_EXPANSION_BATCH } = {}) {
   const currentPath = join(REPO_ROOT, "PERFUMES_INITIAL_50.csv");
   const masterPath = join(REPO_ROOT, "catalog", "aromia-catalog-master.csv");
-  const poolPaths = candidatePoolPaths();
-  const importPaths = importedBatchPaths();
+  const poolPaths = candidatePoolPaths(batchId);
+  const importPaths = importedBatchPaths(batchId);
   const currentRows = safeRead(currentPath);
   const batchRows = importPaths.flatMap(safeRead);
   const masterRows = safeRead(masterPath);
@@ -30,14 +30,10 @@ export function runExpansionV2({ limit = 100, batchId = DEFAULT_EXPANSION_BATCH 
   writeCsv(join(outputDir, "excluded-candidates.csv"), evaluated.filter((row) => row.state === "BLOCKED").map(({ _index, ...r }) => r));
   writeFileSync(join(outputDir, "gap-report.json"), JSON.stringify(serializableGapReport(gapAnalysis), null, 2) + "\n", "utf-8");
   const report = {
-    version: "expansion-automation-v2-multibatch",
-    batch_id: batchId,
-    generated_at: new Date().toISOString(),
-    requested_limit: limit,
-    candidate_pool_size: poolRows.length,
-    candidate_pool_files: poolPaths.map(basename),
-    imported_batch_files: importPaths.map(basename),
-    selected: selected.length,
+    version: "expansion-automation-v2-multibatch", batch_id: batchId, generated_at: new Date().toISOString(),
+    requested_limit: limit, candidate_pool_size: poolRows.length, candidate_pool_files: poolPaths.map(basename),
+    imported_batch_files: importPaths.map(basename), selected: selected.length,
+    selected_candidate_ids: selected.map((row) => row.candidate_id),
     known_universe: { exact_identities: universe.exact.size, family_identities: universe.family.size, rows_analyzed: knownRows.length },
     gap_aware_scoring: true,
     guardrails: { writes_postgres: false, mutates_raw_inputs: false, master_import: false },
