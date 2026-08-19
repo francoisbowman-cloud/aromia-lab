@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Resolve exactly one reviewed batch
+      - name: Resolve reviewed batch when present
         id: batch
         shell: bash
         env:
@@ -31,73 +31,92 @@ jobs:
           mapfile -t BATCHES < <(grep -E '^catalog/expansion/batch-[0-9]{3}/(reviewed-evidence|secondary-source-map)\.csv$' /tmp/changed.txt \
             | sed -E 's#^catalog/expansion/(batch-[0-9]{3})/.*#\1#' \
             | sort -u)
+          if [ "${#BATCHES[@]}" -eq 0 ]; then
+            echo 'has_batch=false' >> "$GITHUB_OUTPUT"
+            echo 'Tooling-only catalog change: no reviewed batch gate required.'
+            exit 0
+          fi
           if [ "${#BATCHES[@]}" -ne 1 ]; then
-            echo "Expected exactly one reviewed batch, found ${#BATCHES[@]}: ${BATCHES[*]}" >&2
+            echo "Expected at most one reviewed batch, found ${#BATCHES[@]}: ${BATCHES[*]}" >&2
             exit 1
           fi
+          echo 'has_batch=true' >> "$GITHUB_OUTPUT"
           echo "batch_id=${BATCHES[0]}" >> "$GITHUB_OUTPUT"
           echo "Resolved ${BATCHES[0]}"
 
       - uses: actions/setup-node@v4
+        if: steps.batch.outputs.has_batch == 'true'
         with:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: scripts/catalog/package-lock.json
 
       - name: Install catalog tooling
+        if: steps.batch.outputs.has_batch == 'true'
         run: npm ci --prefix scripts/catalog
 
       - name: Run catalog regression suite
+        if: steps.batch.outputs.has_batch == 'true'
         run: npm --prefix scripts/catalog test
 
       - name: Select cumulative 100-candidate cohort
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run expand:v2
 
       - name: Harvest official evidence
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
           AROMIA_HARVEST_CONCURRENCY: "6"
         run: npm --prefix scripts/catalog run harvest:v2
 
       - name: Recover partial official provenance
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run recover-evidence:v2
 
       - name: Enrich from trusted secondary sources
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
           AROMIA_SECONDARY_CONCURRENCY: "5"
         run: npm --prefix scripts/catalog run secondary-enrich:v2
 
       - name: Apply reviewed evidence fail closed
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run reviewed-evidence:v2
 
       - name: Route catalog readiness
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run enrich:v2
 
       - name: Build prepared batch
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run build-batch:v2
 
       - name: Build remediation queue
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run remediation:v2
 
       - name: Evaluate hard release gate
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run gate:v2
 
       - name: Verify GO, import-ready confidence, and no production write
+        if: steps.batch.outputs.has_batch == 'true'
         env:
           BATCH_ID: ${{ steps.batch.outputs.batch_id }}
         run: |
@@ -134,14 +153,17 @@ jobs:
               raise SystemExit(f'{batch}: production import contract accepts only NEW rows')
           if any(r.get('notes_status') != 'published' for r in rows):
               raise SystemExit(f'{batch}: production import contract requires published notes')
-          print({'batch': batch, 'import_ready_rows': len(rows), 'all_high_confidence': True})
+          if any(not (r.get('top_notes') or '').strip() or not (r.get('middle_notes') or '').strip() or not (r.get('base_notes') or '').strip() for r in rows):
+              raise SystemExit(f'{batch}: production import contract requires a complete top/middle/base pyramid')
+          print({'batch': batch, 'import_ready_rows': len(rows), 'all_high_confidence': True, 'all_complete_pyramid': True})
           PY
 
       - name: Verify protected catalog inputs unchanged
+        if: steps.batch.outputs.has_batch == 'true'
         run: git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports catalog/aromia-catalog-master.csv
 
       - name: Upload reviewed batch evidence
-        if: always()
+        if: always() && steps.batch.outputs.has_batch == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: reviewed-${{ steps.batch.outputs.batch_id }}
