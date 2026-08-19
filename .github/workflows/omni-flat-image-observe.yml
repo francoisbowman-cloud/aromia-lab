@@ -1,0 +1,188 @@
+name: OMNI Flat Image Observe
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  observe:
+    if: github.head_ref == 'omni/foundational-purpose-flat-image'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      API_URL: https://api-production-fe2f.up.railway.app
+      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - name: Checkout AFTER
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout BEFORE worktree
+        shell: bash
+        run: git worktree add /tmp/aromia-before "$BASE_SHA"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install web dependencies
+        run: |
+          npm ci --prefix apps/web
+          npm ci --prefix /tmp/aromia-before/apps/web
+
+      - name: Install Playwright
+        run: |
+          mkdir -p /tmp/omni-flat-image
+          cd /tmp/omni-flat-image
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Start BEFORE and AFTER
+        shell: bash
+        run: |
+          cd /tmp/aromia-before/apps/web
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3001 > /tmp/aromia-flat-before.log 2>&1 &
+          cd "$GITHUB_WORKSPACE/apps/web"
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3002 > /tmp/aromia-flat-after.log 2>&1 &
+          for port in 3001 3002; do
+            ready=0
+            for i in {1..90}; do
+              if curl -fsS "http://127.0.0.1:${port}/" >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            if [ "$ready" -ne 1 ]; then exit 1; fi
+          done
+
+      - name: Capture visual inventory
+        shell: bash
+        run: |
+          cd /tmp/omni-flat-image
+          mkdir -p artifacts
+          cat > observe.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+
+          const origins = { before: 'http://127.0.0.1:3001', after: 'http://127.0.0.1:3002' };
+          const viewports = [
+            { name: 'mobile', width: 390, height: 844 },
+            { name: 'tablet', width: 768, height: 1024 },
+            { name: 'desktop', width: 1440, height: 1000 },
+          ];
+          const staticRoutes = ['/', '/catalogo', '/descubrir', '/magazine', '/academia'];
+
+          async function resolvePdpSlug() {
+            try {
+              const response = await fetch(process.env.API_URL + '/api/perfumes');
+              if (!response.ok) return null;
+              const rows = await response.json();
+              return Array.isArray(rows) ? rows.find((p) => p && p.slug)?.slug ?? null : null;
+            } catch { return null; }
+          }
+
+          function safeName(route) {
+            return route === '/' ? 'home' : route.replace(/^\//, '').replace(/[^a-z0-9-]+/gi, '-');
+          }
+
+          async function warm(page) {
+            const viewportHeight = await page.evaluate(() => innerHeight);
+            const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+            const step = Math.max(320, Math.floor(viewportHeight * 0.72));
+            for (let y = 0; y < pageHeight; y += step) {
+              await page.evaluate((top) => scrollTo({ top, behavior: 'instant' }), y);
+              await page.waitForTimeout(220);
+            }
+            await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+            await page.waitForTimeout(450);
+            await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
+            await page.waitForTimeout(450);
+          }
+
+          async function inspect(browser, label, origin, route, viewport) {
+            const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: 1 });
+            const pageErrors = [];
+            page.on('pageerror', (e) => pageErrors.push(String(e.message || e)));
+            const response = await page.goto(`${origin}${route}`, { waitUntil: 'networkidle', timeout: 60000 });
+            await warm(page);
+            const metrics = await page.evaluate(() => {
+              const imgs = Array.from(document.images);
+              const inventory = imgs.map((img, index) => {
+                const r = img.getBoundingClientRect();
+                const s = getComputedStyle(img);
+                const parent = img.parentElement ? getComputedStyle(img.parentElement) : null;
+                return {
+                  index,
+                  alt: img.alt || '',
+                  src: img.currentSrc || img.src,
+                  naturalWidth: img.naturalWidth,
+                  naturalHeight: img.naturalHeight,
+                  renderedWidth: Math.round(r.width),
+                  renderedHeight: Math.round(r.height),
+                  renderedArea: Math.round(r.width * r.height),
+                  opacity: Number(s.opacity),
+                  objectFit: s.objectFit,
+                  parentBackground: parent?.backgroundColor || null,
+                  complete: img.complete,
+                };
+              });
+              return {
+                overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+                h1Count: document.querySelectorAll('h1').length,
+                brokenImages: imgs.filter((img) => img.complete && img.naturalWidth === 0).length,
+                inventory,
+              };
+            });
+            metrics.status = response?.status() ?? 0;
+            metrics.pageErrors = pageErrors.length;
+            await page.screenshot({ path: `artifacts/${label}-${safeName(route)}-${viewport.name}.png`, fullPage: true });
+            await page.close();
+            return metrics;
+          }
+
+          (async () => {
+            const slug = await resolvePdpSlug();
+            const routes = [...staticRoutes, ...(slug ? [`/catalogo/${slug}`] : [])];
+            const browser = await chromium.launch({ headless: true });
+            const report = { baseSha: process.env.BASE_SHA, routes, viewports, before: {}, controlAfter: {}, acceptance: [] };
+            for (const viewport of viewports) {
+              for (const route of routes) {
+                const key = `${viewport.name}:${route}`;
+                const before = await inspect(browser, 'before', origins.before, route, viewport);
+                const after = await inspect(browser, 'control-after', origins.after, route, viewport);
+                report.before[key] = before;
+                report.controlAfter[key] = after;
+                const failures = [];
+                if (after.status >= 400 || after.status === 0) failures.push(`HTTP ${after.status}`);
+                if (after.overflowX > 2) failures.push(`horizontal overflow ${after.overflowX}px`);
+                if (after.h1Count !== 1) failures.push(`expected one h1, found ${after.h1Count}`);
+                if (after.pageErrors > 0) failures.push(`${after.pageErrors} page errors`);
+                report.acceptance.push({ key, accepted: failures.length === 0, failures });
+              }
+            }
+            await browser.close();
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            const failures = report.acceptance.filter((x) => !x.accepted);
+            console.log(JSON.stringify({ checks: report.acceptance.length, failures: failures.length }, null, 2));
+            if (failures.length) process.exit(1);
+          })().catch((error) => { console.error(error); process.exit(1); });
+          NODE
+          API_URL="$API_URL" BASE_SHA="$BASE_SHA" node observe.cjs
+
+      - name: Upload observation packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-flat-image-observation
+          path: /tmp/omni-flat-image/artifacts
+          retention-days: 30
+
+      - name: Print logs on failure
+        if: failure()
+        run: |
+          tail -n 160 /tmp/aromia-flat-before.log || true
+          tail -n 160 /tmp/aromia-flat-after.log || true
