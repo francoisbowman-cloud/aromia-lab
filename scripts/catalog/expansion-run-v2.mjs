@@ -31,8 +31,8 @@ export function runExpansionV2({ limit = 100, batchId = DEFAULT_EXPANSION_BATCH 
   writeFileSync(join(outputDir, "gap-report.json"), JSON.stringify(serializableGapReport(gapAnalysis), null, 2) + "\n", "utf-8");
   const report = {
     version: "expansion-automation-v2-multibatch", batch_id: batchId, generated_at: new Date().toISOString(),
-    requested_limit: limit, candidate_pool_size: poolRows.length, candidate_pool_files: poolPaths.map(basename),
-    imported_batch_files: importPaths.map(basename), selected: selected.length,
+    requested_limit: limit, candidate_pool_size: poolRows.length, candidate_pool_files: poolPaths.map((path) => basename(path)),
+    imported_batch_files: importPaths.map((path) => basename(path)), selected: selected.length,
     selected_candidate_ids: selected.map((row) => row.candidate_id),
     known_universe: { exact_identities: universe.exact.size, family_identities: universe.family.size, rows_analyzed: knownRows.length },
     gap_aware_scoring: true,
