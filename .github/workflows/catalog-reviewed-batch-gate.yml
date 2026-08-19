@@ -1,0 +1,129 @@
+name: Catalog Reviewed Batch Gate
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "catalog/expansion/batch-*/reviewed-evidence.csv"
+      - "catalog/expansion/batch-*/secondary-source-map.csv"
+      - "scripts/catalog/**"
+      - ".github/workflows/catalog-reviewed-batch-gate.yml"
+
+jobs:
+  reviewed-batch:
+    name: reviewed batch (full evidence loop + GO)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve exactly one reviewed batch
+        id: batch
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > /tmp/changed.txt
+          cat /tmp/changed.txt
+          mapfile -t BATCHES < <(grep -E '^catalog/expansion/batch-[0-9]{3}/(reviewed-evidence|secondary-source-map)\.csv$' /tmp/changed.txt \
+            | sed -E 's#^catalog/expansion/(batch-[0-9]{3})/.*#\1#' \
+            | sort -u)
+          if [ "${#BATCHES[@]}" -ne 1 ]; then
+            echo "Expected exactly one reviewed batch, found ${#BATCHES[@]}: ${BATCHES[*]}" >&2
+            exit 1
+          fi
+          echo "batch_id=${BATCHES[0]}" >> "$GITHUB_OUTPUT"
+          echo "Resolved ${BATCHES[0]}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: scripts/catalog/package-lock.json
+
+      - name: Install catalog tooling
+        run: npm ci --prefix scripts/catalog
+
+      - name: Run catalog regression suite
+        run: npm --prefix scripts/catalog test
+
+      - name: Select cumulative 100-candidate cohort
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run expand:v2
+
+      - name: Harvest official evidence
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+          AROMIA_HARVEST_CONCURRENCY: "6"
+        run: npm --prefix scripts/catalog run harvest:v2
+
+      - name: Recover partial official provenance
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run recover-evidence:v2
+
+      - name: Enrich from trusted secondary sources
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+          AROMIA_SECONDARY_CONCURRENCY: "5"
+        run: npm --prefix scripts/catalog run secondary-enrich:v2
+
+      - name: Apply reviewed evidence fail closed
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run reviewed-evidence:v2
+
+      - name: Route catalog readiness
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run enrich:v2
+
+      - name: Build prepared batch
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run build-batch:v2
+
+      - name: Build remediation queue
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run remediation:v2
+
+      - name: Evaluate hard release gate
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
+        run: npm --prefix scripts/catalog run gate:v2
+
+      - name: Verify GO and no production write
+        env:
+          BATCH_ID: ${{ steps.batch.outputs.batch_id }}
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const batch = process.env.BATCH_ID;
+          const dir = `catalog/expansion/${batch}`;
+          const gate = JSON.parse(fs.readFileSync(`${dir}/go-no-go.json`, 'utf8'));
+          const enrichment = JSON.parse(fs.readFileSync(`${dir}/enrichment-report.json`, 'utf8'));
+          const prepared = `${dir}/${batch}-prepared.csv`;
+          if (gate.decision !== 'GO') throw new Error(`${batch} blocked: ${gate.failed?.join(', ')}`);
+          if (!fs.existsSync(prepared)) throw new Error(`${prepared} missing`);
+          if (Number(gate.observability?.prepared_rows || 0) < 10) throw new Error('prepared batch below 10 rows');
+          if (enrichment.total !== 100) throw new Error(`expected 100 evidence rows, got ${enrichment.total}`);
+          if (gate.checks?.postgres_writes !== true) throw new Error('Postgres no-write guard did not pass');
+          console.log(JSON.stringify({ batch, decision: gate.decision, prepared_rows: gate.observability.prepared_rows, auto_ready: enrichment.auto_ready, review_required: enrichment.review_required, blocked: enrichment.blocked }, null, 2));
+          NODE
+
+      - name: Verify protected catalog inputs unchanged
+        run: git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports catalog/aromia-catalog-master.csv
+
+      - name: Upload reviewed batch evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reviewed-${{ steps.batch.outputs.batch_id }}
+          path: catalog/expansion/${{ steps.batch.outputs.batch_id }}/
+          if-no-files-found: error
+          retention-days: 14
