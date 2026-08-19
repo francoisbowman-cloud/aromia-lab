@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - "omni/catalog-scale-to-500-staging"
     paths:
       - "catalog/expansion/batch-*/reviewed-evidence.csv"
       - "catalog/expansion/batch-*/secondary-source-map.csv"
