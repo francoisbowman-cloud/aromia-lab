@@ -12,7 +12,7 @@ on:
 
 jobs:
   reviewed-batch:
-    name: reviewed batch (full evidence loop + GO)
+    name: reviewed batch (full evidence loop + GO + import-ready confidence)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -97,7 +97,7 @@ jobs:
           AROMIA_EXPANSION_BATCH: ${{ steps.batch.outputs.batch_id }}
         run: npm --prefix scripts/catalog run gate:v2
 
-      - name: Verify GO and no production write
+      - name: Verify GO, import-ready confidence, and no production write
         env:
           BATCH_ID: ${{ steps.batch.outputs.batch_id }}
         run: |
@@ -115,6 +115,27 @@ jobs:
           if (gate.checks?.postgres_writes !== true) throw new Error('Postgres no-write guard did not pass');
           console.log(JSON.stringify({ batch, decision: gate.decision, prepared_rows: gate.observability.prepared_rows, auto_ready: enrichment.auto_ready, review_required: enrichment.review_required, blocked: enrichment.blocked }, null, 2));
           NODE
+          python3 - <<'PY'
+          import csv, os
+          batch = os.environ['BATCH_ID']
+          path = f'catalog/expansion/{batch}/{batch}-prepared.csv'
+          with open(path, newline='', encoding='utf-8') as fh:
+              rows = list(csv.DictReader(fh))
+          if len(rows) < 10:
+              raise SystemExit(f'{batch}: prepared batch below 10 rows')
+          bad = [r.get('id') or r.get('slug') or 'unknown' for r in rows if r.get('data_confidence') != 'high']
+          if bad:
+              raise SystemExit(f'{batch}: import contract requires data_confidence=high for every prepared row; failing rows={bad}')
+          if any((r.get('source_verified') or '').lower() != 'true' for r in rows):
+              raise SystemExit(f'{batch}: source_verified must be true for every prepared row')
+          if any(r.get('quality_status') != 'AUTO_READY' for r in rows):
+              raise SystemExit(f'{batch}: every prepared row must remain AUTO_READY')
+          if any(r.get('catalog_relation') != 'NEW' for r in rows):
+              raise SystemExit(f'{batch}: production import contract accepts only NEW rows')
+          if any(r.get('notes_status') != 'published' for r in rows):
+              raise SystemExit(f'{batch}: production import contract requires published notes')
+          print({'batch': batch, 'import_ready_rows': len(rows), 'all_high_confidence': True})
+          PY
 
       - name: Verify protected catalog inputs unchanged
         run: git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports catalog/aromia-catalog-master.csv
