@@ -1,0 +1,10 @@
+{
+  "batch_id": "batch-003",
+  "expected_rows": 10,
+  "artifact_sha256": "e97833db0a7555c67cd7a84342fdca844efc1ae876fcdeabfa4512611a2ad32b",
+  "quality_status": "AUTO_READY",
+  "source_verified": true,
+  "data_confidence": "high",
+  "catalog_relation": "NEW",
+  "notes_status": "published"
+}
