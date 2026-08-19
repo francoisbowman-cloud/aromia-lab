@@ -43,33 +43,22 @@ export default function ClubPage() {
           </div>
         </div>
 
-        <div className="relative flex items-center overflow-hidden px-6 py-12 lg:px-14 lg:py-16">
-          <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-y-[7%] left-[9%] w-px bg-[#b79a6b]/25 dark:bg-[#806842]/30" />
-            <div className="absolute inset-x-[9%] top-[11%] flex items-center justify-between font-plex text-[9px] uppercase tracking-[.18em] text-[#8e744f]/70 dark:text-[#c7a76f]/55">
-              <span>Club Aromia</span>
-              <span>Traza / 01–03</span>
-            </div>
-            <div className="absolute inset-x-[9%] top-[24%] space-y-8 sm:space-y-10 lg:top-[22%] lg:space-y-12">
-              {pillars.map(([number, title], index) => (
-                <div key={number} className="relative grid grid-cols-[38px_1fr] items-center gap-4 sm:grid-cols-[48px_1fr]">
-                  <span className="relative z-10 grid h-8 w-8 place-items-center bg-[#fbf8f3] font-display text-sm text-gold-contrast dark:bg-[#0f0c09] sm:h-9 sm:w-9">
-                    {number}
-                  </span>
-                  <div className="relative">
-                    <div className="absolute left-[-14px] right-0 top-1/2 h-px bg-[#b79a6b]/20 dark:bg-[#806842]/25" />
-                    <span className={`relative inline-block bg-[#fbf8f3]/80 pr-4 font-display text-[clamp(2.2rem,4.8vw,4.8rem)] leading-none tracking-[-.045em] text-[#3a3026]/[.09] dark:bg-[#0f0c09]/80 dark:text-[#f2ebdd]/[.07] ${index === 1 ? "translate-x-[5%]" : index === 2 ? "translate-x-[10%]" : ""}`}>
-                      {title}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute bottom-[8%] right-[8%] h-24 w-24 rounded-full border border-[#b79a6b]/20 dark:border-[#806842]/25" />
-            <div className="absolute bottom-[11%] right-[11%] h-10 w-10 rounded-full border border-[#b79a6b]/20 dark:border-[#806842]/25" />
+        <div className="relative px-6 py-12 lg:grid lg:grid-cols-[.34fr_.66fr] lg:items-center lg:gap-8 lg:px-10 lg:py-16 xl:gap-10 xl:px-14">
+          <div aria-hidden="true" className="mb-8 grid grid-cols-3 border-y border-[#b79a6b]/25 py-4 lg:mb-0 lg:block lg:border-y-0 lg:py-0">
+            {pillars.map(([number, title]) => (
+              <div key={number} className="min-w-0 text-center lg:relative lg:border-l lg:border-[#b79a6b]/30 lg:pb-10 lg:pl-5 lg:pt-3 lg:text-left dark:lg:border-[#806842]/35">
+                <span className="font-display text-sm text-gold-contrast">{number}</span>
+                <span className="ml-2 font-plex text-[9px] uppercase tracking-[.13em] text-muted lg:ml-0 lg:mt-3 lg:block">{title}</span>
+                <span className="hidden lg:absolute lg:-left-[3px] lg:top-[13px] lg:block lg:h-[5px] lg:w-[5px] lg:rounded-full lg:bg-gold-contrast" />
+              </div>
+            ))}
+            <p className="hidden lg:block lg:border-l lg:border-[#b79a6b]/30 lg:pl-5 lg:pt-2 font-plex text-[8px] uppercase leading-5 tracking-[.14em] text-muted dark:lg:border-[#806842]/35">
+              Identidad<br />rastro<br />afinidad
+            </p>
           </div>
 
-          <div className="relative ml-auto w-full max-w-xl bg-[#fffdf8]/92 px-1 py-8 shadow-[0_24px_70px_rgba(52,42,31,.08)] backdrop-blur-sm dark:bg-[#120f0c]/92 dark:shadow-[0_24px_70px_rgba(0,0,0,.22)] sm:px-8 sm:py-10">
+          <div className="relative w-full bg-[#fffdf8] py-8 dark:bg-[#120f0c] sm:px-8 sm:py-10 lg:px-7 xl:px-9">
+            <div aria-hidden="true" className="absolute left-0 top-0 h-px w-20 bg-gold-contrast/45" />
             <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Lista de espera</p>
             <h2 className="mt-4 max-w-[12ch] font-display text-[36px] font-medium leading-[1.02] tracking-[-.02em] text-ink sm:text-[42px] lg:text-[46px]">
               Entra antes de que abramos las puertas.
