@@ -18,17 +18,23 @@ function reviewedPatchPath(batchId, dir) {
   return null;
 }
 
+function secondaryMapRows(dir) {
+  const globalPath = join(REPO_ROOT, "catalog", "expansion", "secondary-source-map.csv");
+  const localPath = join(dir, "secondary-source-map.csv");
+  const merged = new Map();
+  if (existsSync(globalPath)) for (const row of readCsv(globalPath)) merged.set(row.candidate_id, row);
+  if (existsSync(localPath)) for (const row of readCsv(localPath)) merged.set(row.candidate_id, row);
+  return [...merged.values()];
+}
+
 export function runReviewedEvidenceBatch({ batchId = DEFAULT_EXPANSION_BATCH } = {}) {
   const dir = expansionDir(batchId);
   const evidencePath = join(dir, "evidence.auto.csv");
   const manifestPath = join(dir, "candidate-manifest.csv");
   const patchPath = reviewedPatchPath(batchId, dir);
-  const secondaryMapPath = join(REPO_ROOT, "catalog", "expansion", "secondary-source-map.csv");
   if (!existsSync(evidencePath) || !existsSync(manifestPath) || !patchPath) return { skipped: true, reason: "evidence.auto.csv, manifest, or batch reviewed-evidence.csv missing", batch_id: batchId };
 
-  const result = applyReviewedEvidence(
-    readCsv(evidencePath), readCsv(manifestPath), readCsv(patchPath), existsSync(secondaryMapPath) ? readCsv(secondaryMapPath) : [],
-  );
+  const result = applyReviewedEvidence(readCsv(evidencePath), readCsv(manifestPath), readCsv(patchPath), secondaryMapRows(dir));
   const output = join(dir, "evidence.csv");
   writeFileSync(output, stringifyCsv(result.rows, { header: true }), "utf-8");
   const coverages = result.audit.flatMap((row) => [row.identity_coverage, row.supplemental_identity_coverage]).filter((value) => value !== null);
