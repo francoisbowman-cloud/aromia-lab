@@ -1,7 +1,7 @@
 {
   "name": "@aromia/catalog-scripts",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Pipeline y motor de expansión de catálogo de Aromia (Fase 3 — Catalog Data Pipeline & Expansion 500). No forma parte del build de apps/web ni apps/api. Nunca escribe a Postgres de producción.",
   "type": "module",
   "scripts": {
@@ -14,11 +14,11 @@
     "calibrate": "node calibrate.mjs",
     "apply-remediation": "node apply-remediation.mjs",
     "engine": "node engine.mjs",
-    "expand:v2": "node expansion-engine.mjs 100",
-    "harvest:v2": "node expansion-harvest-v2.mjs 100",
+    "expand:v2": "node expansion-run-v2.mjs 100",
+    "harvest:v2": "node expansion-harvest-batch-v2.mjs 100",
     "recover-evidence:v2": "node expansion-evidence-recover.mjs",
     "secondary-enrich:v2": "node expansion-secondary-enrich.mjs",
-    "reviewed-evidence:v2": "node expansion-reviewed-evidence.mjs",
+    "reviewed-evidence:v2": "node expansion-reviewed-evidence-batch.mjs",
     "enrich:v2": "node expansion-enrich-v2.mjs",
     "build-batch:v2": "node expansion-batch-builder-v2.mjs",
     "remediation:v2": "node expansion-remediation-plan.mjs",
