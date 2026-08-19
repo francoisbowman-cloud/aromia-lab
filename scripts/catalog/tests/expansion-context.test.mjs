@@ -30,12 +30,12 @@ test("batch id validation rejects traversal and malformed identifiers", () => {
 });
 
 test("batch-003 replay is frozen to its legacy candidate pools", () => {
-  const files = candidatePoolPaths("batch-003").map(basename);
+  const files = candidatePoolPaths("batch-003").map((path) => basename(path));
   assert.deepEqual(files, ["candidate-pool-v1a.csv", "candidate-pool-v1b.csv", "candidate-pool-v1c.csv"]);
 });
 
 test("future batches discover all governed candidate pools", () => {
-  const files = candidatePoolPaths("batch-004").map(basename);
+  const files = candidatePoolPaths("batch-004").map((path) => basename(path));
   assert.ok(files.includes("candidate-pool-v1a.csv"));
   assert.ok(files.includes("candidate-pool-v1b.csv"));
   assert.ok(files.includes("candidate-pool-v1c.csv"));
@@ -44,8 +44,8 @@ test("future batches discover all governed candidate pools", () => {
 });
 
 test("known universe includes only imports older than the batch being prepared", () => {
-  const batch003 = importedBatchPaths("batch-003").map(basename);
-  const batch004 = importedBatchPaths("batch-004").map(basename);
+  const batch003 = importedBatchPaths("batch-003").map((path) => basename(path));
+  const batch004 = importedBatchPaths("batch-004").map((path) => basename(path));
   assert.deepEqual(batch003, ["batch-001.csv", "batch-002.csv"]);
   assert.ok(batch004.includes("batch-001.csv"));
   assert.ok(batch004.includes("batch-002.csv"));
