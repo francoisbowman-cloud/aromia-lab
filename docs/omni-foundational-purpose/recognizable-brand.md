@@ -43,43 +43,64 @@ Club is the weakest high-value expression of that system. Its copy is on-brand, 
 
 **Club Aromia — right-side visual field around the existing waitlist form.**
 
-## ITERATION 1
+## ITERATION 1 — REJECTED
 
 Hypothesis: replace anonymous decorative circles with a restrained olfactory trace using the three real Club pillars already present on the page.
 
 Implementation used large low-opacity `Perfil / Comunidad / Discovery` labels and 01/02/03 nodes behind the waitlist foreground.
 
-### Technical verification
+Technical verification was green, but perceptual verification failed: mobile background words and numeric nodes leaked through and around the functional form. The page became more recognizable by sacrificing clarity.
 
-- shared stacked evidence: **24/24 PASS**;
-- no route, overflow, H1, page-error, broken-image or console regression detected;
-- form behavior and original copy preserved.
+**REJECTED despite technical PASS.**
 
-### Perceptual verification
+## ITERATION 2
 
-**REJECTED.**
-
-Desktop increased brand signal, but the mobile render violates the hierarchy contract: background words and numeric nodes leak through and around the functional form, producing ghosted text and competing with the real copy. The page is technically valid but perceptually noisier.
-
-Why rejected:
-
-1. the trace occupies the same visual plane as the form instead of a reserved secondary plane;
-2. large background typography becomes accidental content on narrow screens;
-3. the intervention improves recognizability by sacrificing clarity, which is not an acceptable trade;
-4. technical green does not override a perceptual regression.
-
-This failed attempt remains recorded as evidence.
-
-## ITERATION 2 HYPOTHESIS
+Hypothesis:
 
 > Preserve the olfactory trace idea, but physically separate identity from function: reserve a narrow trace rail beside the form on desktop and use a small in-flow index above the form on mobile. No decorative content may sit behind readable form text.
 
-Iteration 2 constraints:
+Implementation:
 
-- desktop trace stays outside the form footprint;
-- mobile trace participates in normal document flow, not absolute background layering;
-- only 01 Perfil / 02 Comunidad / 03 Discovery are used;
-- no large ghost typography;
-- no new copy or claims;
-- form remains the dominant focal object;
-- reject if the result becomes dashboard-like or generic premium-card styling.
+- removed all large ghost typography;
+- desktop uses a narrow 01/02/03 trace rail outside the form footprint;
+- mobile uses a compact in-flow `01 Perfil / 02 Comunidad / 03 Discovery` index;
+- form becomes an opaque functional foreground again;
+- original Club pillars, copy, waitlist functionality and metadata remain intact;
+- no new claims, statistics, visual clichés or decorative motion.
+
+### Technical result
+
+`OMNI Foundational Stacked Evidence` run #18: **SUCCESS**.
+
+Evidence artifact:
+
+- ID `9373976725`
+- digest `sha256:815c3b3c4764b4cdd16a6f7f9df0673535ceb1068386517cb177a09bb5e30923`
+- shared route/viewpoint harness passed.
+
+### Perceptual result
+
+**BETTER — INTERNALLY ACCEPTED.**
+
+Desktop now has a recognizable Aromia index/trail device without hiding the waitlist behind decoration. The trace creates a relationship between membership and the existing olfactory/index language used elsewhere in the product.
+
+Mobile corrects the decisive Iteration 1 failure: no ghosted or overlapping text remains. The identity index participates in normal flow and the form is again the dominant functional object.
+
+Criterion verdicts:
+
+- brand distinctiveness: **BETTER**;
+- focal hierarchy: **BETTER vs Iteration 1 and no worse than baseline**;
+- functional clarity: **PRESERVED**;
+- responsive composition: **BETTER**;
+- generic-luxury tells: **REDUCED**;
+- preservation: **PASS**.
+
+### Minor residual observation
+
+The compact mobile index repeats concepts already introduced above. This is a low-severity redundancy, not a material regression. A third creative iteration is forbidden by the trial contract and is not justified by the evidence. Record as **P3 / PARK**, not as an excuse for compulsive polishing.
+
+## VERDICT
+
+**INTERNAL FOUNDATIONAL VERDICT: BETTER / ACCEPTED ON ITERATION 2.**
+
+The rejected first attempt remains part of the evidence. Campaign-wide independent external perceptual review is still required before production consolidation.
