@@ -28,6 +28,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Detect import-candidate release intent
         id: release_intent
         shell: bash
@@ -43,9 +44,13 @@ jobs:
             git diff --name-only "$PUSH_BEFORE_SHA" "$GITHUB_SHA" > /tmp/catalog-changed-files.txt
           fi
           cat /tmp/catalog-changed-files.txt
-          IMPORT_PATH="$(grep -E '^catalog/imports/batch-[0-9]{3}\.csv$' /tmp/catalog-changed-files.txt | tail -n 1 || true)"
-          if [ -n "$IMPORT_PATH" ]; then
-            BATCH_ID="$(basename "$IMPORT_PATH" .csv)"
+          mapfile -t IMPORT_PATHS < <(grep -E '^catalog/imports/batch-[0-9]{3}\.csv$' /tmp/catalog-changed-files.txt || true)
+          if [ "${#IMPORT_PATHS[@]}" -gt 1 ]; then
+            echo "A release PR may contain at most one batch import CSV: ${IMPORT_PATHS[*]}" >&2
+            exit 1
+          fi
+          if [ "${#IMPORT_PATHS[@]}" -eq 1 ]; then
+            BATCH_ID="$(basename "${IMPORT_PATHS[0]}" .csv)"
             echo 'require_go=true' >> "$GITHUB_OUTPUT"
             echo "batch_id=$BATCH_ID" >> "$GITHUB_OUTPUT"
             echo "Import candidate detected for $BATCH_ID: batch release GO is mandatory."
@@ -54,20 +59,26 @@ jobs:
             echo 'batch_id=batch-003' >> "$GITHUB_OUTPUT"
             echo 'Tooling/research change only: NO_GO remains a valid safe outcome.'
           fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: scripts/catalog/package-lock.json
+
       - name: Install catalog tooling
         run: npm ci --prefix scripts/catalog
+
       - name: Run catalog regression suite
         run: npm --prefix scripts/catalog test
+
       - name: Run legacy expansion engine against real Batch 002
         run: node scripts/catalog/engine.mjs catalog/imports/batch-002.csv --limit 25
-      - name: Run Expansion Automation v2 selection
+
+      - name: Replay historical Batch 003 selection
         run: npm --prefix scripts/catalog run expand:v2
-      - name: Verify Expansion v2 selection contract
+
+      - name: Verify Batch 003 replay contract
         run: |
           test -s catalog/expansion/batch-003/candidate-manifest.csv
           test -s catalog/expansion/batch-003/source-discovery-queue.csv
@@ -84,6 +95,7 @@ jobs:
           if (r.guardrails?.mutates_raw_inputs !== false) throw new Error('raw input mutation guard violated');
           if (r.guardrails?.master_import !== false) throw new Error('master import guard violated');
           NODE
+
       - name: Dry-run Batch 004 selection against cumulative universe
         env:
           AROMIA_EXPANSION_BATCH: "batch-004"
@@ -101,34 +113,79 @@ jobs:
           if (new Set(r.selected_candidate_ids).size !== 100) throw new Error('batch-004 selected duplicate candidate ids');
           console.log('BATCH004_SELECTED_IDS=' + r.selected_candidate_ids.join(','));
           NODE
-      - name: Harvest official evidence for 100 selected candidates
+
+      - name: Harvest historical Batch 003 official evidence
         env:
           AROMIA_HARVEST_CONCURRENCY: "6"
         run: npm --prefix scripts/catalog run harvest:v2
-      - name: Preserve partial official provenance
+
+      - name: Preserve historical Batch 003 partial official provenance
         run: npm --prefix scripts/catalog run recover-evidence:v2
-      - name: Remediate unresolved evidence from trusted secondary sources
+
+      - name: Remediate historical Batch 003 from trusted secondary sources
         env:
           AROMIA_SECONDARY_CONCURRENCY: "5"
         run: npm --prefix scripts/catalog run secondary-enrich:v2
-      - name: Apply human-reviewed evidence with fail-closed guards
+
+      - name: Apply historical Batch 003 reviewed evidence
         run: npm --prefix scripts/catalog run reviewed-evidence:v2
-      - name: Route evidence through catalog readiness gate
+
+      - name: Route historical Batch 003 readiness
         run: npm --prefix scripts/catalog run enrich:v2
-      - name: Build catalog-ready draft batch
+
+      - name: Build historical Batch 003 prepared draft
         run: npm --prefix scripts/catalog run build-batch:v2
-      - name: Build remediation queue
+
+      - name: Build historical Batch 003 remediation queue
         run: npm --prefix scripts/catalog run remediation:v2
-      - name: Evaluate Expansion GO / NO-GO
+
+      - name: Evaluate historical Batch 003 GO / NO-GO
         id: expansion_gate
         continue-on-error: true
         run: npm --prefix scripts/catalog run gate:v2
+
+      - name: Rebuild release batch and require its own GO
+        if: steps.release_intent.outputs.require_go == 'true' && steps.release_intent.outputs.batch_id != 'batch-003'
+        env:
+          AROMIA_EXPANSION_BATCH: ${{ steps.release_intent.outputs.batch_id }}
+          AROMIA_HARVEST_CONCURRENCY: "6"
+          AROMIA_SECONDARY_CONCURRENCY: "5"
+        run: |
+          set -euo pipefail
+          BATCH="$AROMIA_EXPANSION_BATCH"
+          IMPORT="catalog/imports/${BATCH}.csv"
+          test -s "$IMPORT"
+          BEFORE_SHA="$(sha256sum "$IMPORT" | awk '{print $1}')"
+          npm --prefix scripts/catalog run expand:v2
+          npm --prefix scripts/catalog run harvest:v2
+          npm --prefix scripts/catalog run recover-evidence:v2
+          npm --prefix scripts/catalog run secondary-enrich:v2
+          npm --prefix scripts/catalog run reviewed-evidence:v2
+          npm --prefix scripts/catalog run enrich:v2
+          npm --prefix scripts/catalog run build-batch:v2
+          npm --prefix scripts/catalog run remediation:v2
+          npm --prefix scripts/catalog run gate:v2
+          AFTER_SHA="$(sha256sum "$IMPORT" | awk '{print $1}')"
+          test "$BEFORE_SHA" = "$AFTER_SHA"
+          node - <<'NODE'
+          const fs = require('fs');
+          const batch = process.env.AROMIA_EXPANSION_BATCH;
+          const path = `catalog/expansion/${batch}/go-no-go.json`;
+          const gate = JSON.parse(fs.readFileSync(path, 'utf8'));
+          if (gate.decision !== 'GO') throw new Error(`${batch} release gate is ${gate.decision}: ${gate.failed?.join(', ')}`);
+          if (Number(gate.observability?.prepared_rows || 0) < 10) throw new Error(`${batch} prepared rows below minimum`);
+          if (gate.checks?.postgres_writes !== true) throw new Error(`${batch} Postgres no-write guard failed`);
+          console.log(JSON.stringify({ batch, decision: gate.decision, prepared_rows: gate.observability.prepared_rows }, null, 2));
+          NODE
+
       - name: Run sourcing engine against economical seed pool
         run: node scripts/catalog/sourcing.mjs catalog/sourcing/pool-economico-001.csv --limit 10
-      - name: Verify protected inputs unchanged
+
+      - name: Verify protected historical inputs unchanged
         run: |
           git diff --exit-code -- PERFUMES_INITIAL_50.csv catalog/imports/batch-001.csv catalog/imports/batch-002.csv catalog/imports/batch-003.csv catalog/aromia-catalog-master.csv
-      - name: Verify expansion artifacts
+
+      - name: Verify historical expansion artifacts
         run: |
           test -s catalog/expansion/batch-003/harvest-report.json
           test -s catalog/expansion/batch-003/secondary-enrichment-report.json
@@ -143,22 +200,14 @@ jobs:
           test -f catalog/expansion/batch-003/blocked.csv
           test -f catalog/expansion/batch-003/batch-003-prepared.csv
           test -s catalog/expansion/batch-004/selection-report.json
-          echo '--- secondary ---'
-          cat catalog/expansion/batch-003/secondary-enrichment-report.json
-          echo '--- reviewed evidence ---'
-          cat catalog/expansion/batch-003/reviewed-evidence-report.json
-          echo '--- enrichment ---'
-          cat catalog/expansion/batch-003/enrichment-report.json
-          echo '--- remediation ---'
-          cat catalog/expansion/batch-003/remediation-report.json
-          echo '--- go/no-go ---'
-          cat catalog/expansion/batch-003/go-no-go.json
+
       - name: Verify legacy engine outputs
         run: |
           test -s catalog/reports/engine-batch-002.json
           test -s catalog/reports/engine-batch-002-selection.csv
           test -s catalog/reports/sourcing-economico-001.json
           test -s catalog/reports/sourcing-economico-001-selection.csv
+
       - name: Upload catalog engine artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -166,15 +215,15 @@ jobs:
           name: catalog-engine-artifacts
           path: |
             catalog/expansion/batch-003/
-            catalog/expansion/batch-004/selection-report.json
-            catalog/expansion/batch-004/candidate-manifest.csv
-            catalog/expansion/batch-004/source-discovery-queue.csv
+            catalog/expansion/batch-004/
+            catalog/expansion/${{ steps.release_intent.outputs.batch_id }}/
             catalog/reports/engine-batch-002.json
             catalog/reports/engine-batch-002-selection.csv
             catalog/reports/sourcing-economico-001.json
             catalog/reports/sourcing-economico-001-selection.csv
           if-no-files-found: error
           retention-days: 14
+
       - name: Enforce release GO only for import candidates
         if: always()
         env:
