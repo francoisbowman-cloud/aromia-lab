@@ -32,6 +32,7 @@ export function evidenceToDraft(row, options = {}) {
   const critical = { brand: clean(row.brand), name: clean(row.name), concentration: clean(row.concentration), gender: clean(row.gender) };
   const missingCritical = Object.entries(critical).filter(([, value]) => !value).map(([field]) => field);
   if (gate.state === EXPANSION_STATES.AUTO_READY && missingCritical.length) gate = { state: EXPANSION_STATES.REVIEW_REQUIRED, reason: `critical_metadata_missing:${missingCritical.join("|")}` };
+  if (gate.state === EXPANSION_STATES.AUTO_READY && notesStructure !== "PYRAMID") gate = { state: EXPANSION_STATES.REVIEW_REQUIRED, reason: `import_notes_incomplete:${notesStructure.toLowerCase()}` };
 
   const publication = publicationMetadata({ ...row, ...critical }, options);
   const pubGaps = publicationGaps(publication);
