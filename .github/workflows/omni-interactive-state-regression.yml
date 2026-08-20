@@ -1,0 +1,126 @@
+name: OMNI Interactive State Regression
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  observe-live-state:
+    if: github.head_ref == 'omni/interactive-state-regression'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bind Playwright to runner Chrome
+        shell: bash
+        run: |
+          mkdir -p /tmp/omni-interactive-regression
+          cd /tmp/omni-interactive-regression
+          npm init -y >/dev/null 2>&1
+          npm install playwright-core@1.55.0 >/dev/null
+          CHROME_PATH="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+      - name: Discover and inspect a live interactive state
+        shell: bash
+        run: |
+          cd /tmp/omni-interactive-regression
+          mkdir -p artifacts
+          cat > inspect.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright-core');
+
+          const alpha = (color) => {
+            if (!color || color === 'transparent') return 0;
+            const match = color.match(/rgba?\(([^)]+)\)/i);
+            if (!match) return 1;
+            const parts = match[1].split(',').map(x => x.trim());
+            return parts.length >= 4 ? Math.max(0, Math.min(1, Number(parts[3]) || 0)) : 1;
+          };
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH, args: ['--no-sandbox'] });
+            const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+            await page.goto('https://www.aromialab.com/', { waitUntil: 'networkidle', timeout: 60000 });
+
+            const candidate = await page.evaluate(() => {
+              const visible = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 2 && r.height > 2 && s.display !== 'none' && s.visibility !== 'hidden' && Number(s.opacity || 1) > 0.01; };
+              const nodes = Array.from(document.querySelectorAll('summary,button,[role="button"],[aria-expanded],[aria-controls],[aria-haspopup]'));
+              for (const el of nodes) {
+                if (!visible(el)) continue;
+                const tag = el.tagName.toLowerCase();
+                const expanded = el.getAttribute('aria-expanded');
+                const controls = el.getAttribute('aria-controls');
+                const haspopup = (el.getAttribute('aria-haspopup') || '').toLowerCase();
+                const stateful = tag === 'summary' || expanded !== null || Boolean(controls) || ['menu','listbox','dialog','tree','grid'].includes(haspopup);
+                if (!stateful) continue;
+                const parts = []; let node = el;
+                while (node && node.nodeType === 1 && node !== document.body) {
+                  const tagName = node.tagName.toLowerCase();
+                  const siblings = Array.from(node.parentElement?.children || []).filter(x => x.tagName === node.tagName);
+                  parts.unshift(`${tagName}:nth-of-type(${siblings.indexOf(node)+1})`);
+                  node = node.parentElement;
+                }
+                return { selector: `body > ${parts.join(' > ')}`, label: (el.getAttribute('aria-label') || el.textContent || tag).trim().slice(0,120) };
+              }
+              return null;
+            });
+            if (!candidate) throw new Error('No generic stateful control discovered');
+
+            await page.locator(candidate.selector).first.click();
+            await page.waitForTimeout(350);
+
+            const raw = await page.evaluate(({selector}) => {
+              const viewportArea = innerWidth * innerHeight;
+              const visible = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 2 && r.height > 2 && s.display !== 'none' && s.visibility !== 'hidden' && Number(s.opacity || 1) > 0.01; };
+              const clicked = document.querySelector(selector);
+              const candidates = [];
+              for (const el of Array.from(document.querySelectorAll('[role="dialog"],[role="menu"],[aria-modal="true"],[data-state="open"],nav,aside,ul'))) {
+                if (!visible(el)) continue;
+                const s = getComputedStyle(el); const r = el.getBoundingClientRect(); const area = r.width*r.height;
+                if (area/viewportArea < .15) continue;
+                const z = parseInt(s.zIndex || '0',10) || 0;
+                const affinity = clicked && (el.contains(clicked) || clicked.contains(el)) ? 1 : 0;
+                candidates.push({el,r,area,z,affinity});
+              }
+              candidates.sort((a,b)=>(b.affinity-a.affinity)||(b.z-a.z)||(b.area-a.area));
+              const chosen = candidates[0];
+              if (!chosen) return null;
+              const layer = chosen.el; const rect = chosen.r; const s = getComputedStyle(layer);
+              const text = [];
+              for (const el of Array.from(document.querySelectorAll('body *'))) {
+                if (el===layer || layer.contains(el) || !visible(el)) continue;
+                const r=el.getBoundingClientRect();
+                if (r.right<=rect.left||r.left>=rect.right||r.bottom<=rect.top||r.top>=rect.bottom) continue;
+                const t=(el.textContent||'').trim();
+                if (t && t.length<=180 && el.children.length===0) text.push(t);
+              }
+              return { backgroundColor:s.backgroundColor, areaRatio:chosen.area/viewportArea, textCount:text.length, rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height} };
+            }, candidate);
+            if (!raw) throw new Error('No resulting state layer found');
+
+            const bgAlpha = alpha(raw.backgroundColor);
+            let score = 0;
+            if (raw.areaRatio >= .18 && bgAlpha < .92 && raw.textCount >= 3) score += 3;
+            else if (bgAlpha < .92 && raw.textCount > 0) score += 1;
+            if (raw.areaRatio >= .75 && bgAlpha < .85) score += 1;
+            const risk = score >= 4 ? 'high' : score >= 2 ? 'medium' : score === 1 ? 'low' : 'none';
+            const report = { candidate, raw, backgroundAlpha:bgAlpha, structuralRisk:risk };
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report,null,2));
+            await page.screenshot({path:'artifacts/state.png', fullPage:false});
+            await browser.close();
+            console.log(JSON.stringify(report,null,2));
+            if (risk === 'none') process.exit(2);
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
+          CHROME_PATH="$CHROME_PATH" node inspect.cjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-interactive-state-regression
+          path: /tmp/omni-interactive-regression/artifacts
+          retention-days: 14
