@@ -27,16 +27,15 @@
   max-height: var(--product-max-h, 86%);
   max-width: var(--product-max-w, 82%);
   transform: translate(var(--product-x, 0), var(--product-y, 0)) scale(var(--product-scale, 1));
-  filter: saturate(.995) contrast(1.018) brightness(1.008);
-  transition: transform 520ms cubic-bezier(.2,.7,.2,1), filter 520ms ease;
+  transition: transform 520ms cubic-bezier(.2,.7,.2,1);
 }
 
 .group:hover .product-stage__image--card {
-  transform: translate(var(--product-x, 0), calc(var(--product-y, 0) - .6%)) scale(calc(var(--product-scale, 1) * 1.012));
+  transform: translate(var(--product-x, 0), calc(var(--product-y, 0) - .6%)) scale(var(--product-card-hover-scale, 1.012));
 }
 
 .product-stage__image--hero:hover {
-  transform: translate(var(--product-x, 0), calc(var(--product-y, 0) - .4%)) scale(calc(var(--product-scale, 1) * 1.006));
+  transform: translate(var(--product-x, 0), calc(var(--product-y, 0) - .4%)) scale(var(--product-hero-hover-scale, 1.006));
 }
 
 /* A family is not an illustration. It changes light, density and material rhythm. */
