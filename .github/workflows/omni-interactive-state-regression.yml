@@ -70,7 +70,7 @@ jobs:
             });
             if (!candidate) throw new Error('No generic stateful control discovered');
 
-            await page.locator(candidate.selector).first.click();
+            await page.locator(candidate.selector).first().click();
             await page.waitForTimeout(350);
 
             const raw = await page.evaluate(({selector}) => {
