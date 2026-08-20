@@ -8,15 +8,28 @@ const USER_AGENT = "Mozilla/5.0 (compatible; AromiaCatalogImage/3.1; +https://ww
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 9000;
 
-function officialProductPage(slug: string, concentration?: string | null) {
-  if (slug === "black-afgano") return "https://nasomatto.com/es/products/black-afgano";
-  if (slug === "acqua-di-gio-edt") return "https://www.giorgioarmanibeauty-usa.com/fragrances/mens-cologne/acqua-di-gio/acqua-di-gio-eau-de-toilette/A005.html?geo=false";
+function officialProductPages(slug: string, concentration?: string | null): string[] {
+  if (slug === "black-afgano") return ["https://nasomatto.com/es/products/black-afgano"];
+  if (slug === "acqua-di-gio-edt") return ["https://www.giorgioarmanibeauty-usa.com/fragrances/mens-cologne/acqua-di-gio/acqua-di-gio-eau-de-toilette/A005.html?geo=false"];
   if (slug === "chance-eau-tendre") {
-    return String(concentration ?? "").toLowerCase().includes("toilette") || String(concentration ?? "").toLowerCase() === "edt"
-      ? "https://www.chanel.com/us/fragrance/p/126320/chance-eau-tendre-eau-de-toilette-spray/"
-      : "https://www.chanel.com/us/fragrance/p/126260/chance-eau-tendre-eau-de-parfum-spray/";
+    const edt = String(concentration ?? "").toLowerCase().includes("toilette") || String(concentration ?? "").toLowerCase() === "edt";
+    return edt
+      ? [
+          "https://www.chanel.com/es/perfumes/p/126320/chance-eau-tendre-eau-de-toilette-vaporizador/",
+          "https://www.chanel.com/us/fragrance/p/126320/chance-eau-tendre-eau-de-toilette-spray/",
+        ]
+      : [
+          "https://www.chanel.com/es/perfumes/p/126260/chance-eau-tendre-eau-de-parfum-vaporizador/",
+          "https://www.chanel.com/us/fragrance/p/126260/chance-eau-tendre-eau-de-parfum-spray/",
+        ];
   }
-  return null;
+  if (slug === "flowerbomb") {
+    return [
+      "https://www.viktor-rolf.com/products/flowerbomb-eau-de-parfum-100ml",
+      "https://us.viktor-rolf.com/fragrance/flowerbomb-eau-de-parfum-by-viktor-rolf-VKR_002.html",
+    ];
+  }
+  return [];
 }
 
 function safeCatalogImageUrl(value: string | null | undefined): string | null {
@@ -166,13 +179,11 @@ export async function GET(_request: Request, { params }: { params: { slug: strin
   const perfume = await getPerfumeBySlug(params.slug);
   if (!perfume) return new Response("Not found", { status: 404 });
 
-  const officialPage = officialProductPage(perfume.slug, perfume.concentracion);
-  if (officialPage) {
+  for (const officialPage of officialProductPages(perfume.slug, perfume.concentracion)) {
     const officialImageUrl = await resolveOfficialPackshot(officialPage);
-    if (officialImageUrl) {
-      const officialImage = await fetchImage(officialImageUrl);
-      if (officialImage) return imageResponse(officialImage, "official-brand");
-    }
+    if (!officialImageUrl) continue;
+    const officialImage = await fetchImage(officialImageUrl);
+    if (officialImage) return imageResponse(officialImage, "official-brand");
   }
 
   const catalogUrl = safeCatalogImageUrl(perfume.imagen_url);
