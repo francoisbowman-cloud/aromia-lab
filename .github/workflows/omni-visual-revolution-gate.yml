@@ -1,0 +1,159 @@
+name: OMNI Visual Revolution Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  perceptual-contract:
+    if: startsWith(github.head_ref, 'feat/visual-') || startsWith(github.head_ref, 'agent/omni-visual-')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      API_URL: https://api-production-fe2f.up.railway.app
+      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+      - name: Bind Playwright to runner Chrome
+        shell: bash
+        run: |
+          mkdir -p /tmp/aromia-visual-gate
+          cd /tmp/aromia-visual-gate
+          npm init -y >/dev/null 2>&1
+          npm install playwright-core@1.55.0 >/dev/null
+          CHROME_PATH="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+      - name: Start Aromia branch
+        run: |
+          cd apps/web
+          npm run dev -- -p 3002 > /tmp/aromia-visual-gate.log 2>&1 &
+          for i in {1..90}; do
+            if curl -fsS http://127.0.0.1:3002/catalogo >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/aromia-visual-gate.log
+          exit 1
+      - name: Exercise catalog, Home and representative geometry classes
+        shell: bash
+        run: |
+          cd /tmp/aromia-visual-gate
+          mkdir -p artifacts
+          cat > gate.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright-core');
+
+          const representatives = [
+            { slug: 'acqua-di-gio-edt', geometry: 'tall' },
+            { slug: 'bleu-de-chanel-edp', geometry: 'standard' },
+            { slug: 'chance-eau-tendre', geometry: 'compact' },
+            { slug: 'flowerbomb', geometry: 'wide' },
+            { slug: 'good-girl', geometry: 'sculptural' },
+            { slug: 'angel-edp', geometry: 'sculptural' },
+          ];
+          const viewports = [
+            { name: 'mobile', width: 390, height: 844 },
+            { name: 'tablet', width: 768, height: 1024 },
+            { name: 'desktop', width: 1440, height: 1000 },
+          ];
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH, args: ['--no-sandbox'] });
+            const report = { representatives: {}, pages: {} };
+
+            for (const item of representatives) {
+              const imageResponse = await fetch(`http://127.0.0.1:3002/api/catalog-image/${item.slug}`);
+              const origin = imageResponse.headers.get('x-aromia-image-origin');
+              if (!imageResponse.ok || !String(imageResponse.headers.get('content-type')).startsWith('image/')) throw new Error(`${item.slug}: image unavailable`);
+              if (!origin || origin === 'placeholder') throw new Error(`${item.slug}: product image is not verified`);
+              report.representatives[item.slug] = { expectedGeometry: item.geometry, imageOrigin: origin, viewports: {} };
+
+              for (const viewport of viewports) {
+                const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+                const pageErrors = [];
+                page.on('pageerror', e => pageErrors.push(String(e.message || e)));
+                const response = await page.goto(`http://127.0.0.1:3002/catalogo/${item.slug}`, { waitUntil: 'networkidle', timeout: 60000 });
+                await page.waitForTimeout(300);
+                const metrics = await page.evaluate(() => {
+                  const stage = document.querySelector('[data-product-stage="true"]');
+                  const image = stage?.querySelector('[data-product-image="true"]');
+                  if (!stage || !image) return null;
+                  const s = stage.getBoundingClientRect();
+                  const i = image.getBoundingClientRect();
+                  const style = getComputedStyle(stage);
+                  return {
+                    geometry: stage.getAttribute('data-product-geometry'),
+                    stageWhite: style.backgroundColor === 'rgb(255, 255, 255)',
+                    maxAxisCoverage: Math.max(i.width / s.width, i.height / s.height),
+                    overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+                    brokenImages: Array.from(document.images).filter(img => img.complete && img.naturalWidth === 0).length,
+                  };
+                });
+                if (!metrics) throw new Error(`${item.slug}/${viewport.name}: product stage missing`);
+                report.representatives[item.slug].viewports[viewport.name] = { status: response?.status() ?? 0, pageErrors, ...metrics };
+                if ((response?.status() ?? 500) >= 400 || pageErrors.length || metrics.brokenImages || metrics.overflowX > 2 || !metrics.stageWhite) throw new Error(`${item.slug}/${viewport.name}: fidelity contract failed`);
+                if (metrics.geometry !== item.geometry) throw new Error(`${item.slug}: expected ${item.geometry}, got ${metrics.geometry}`);
+                if (metrics.maxAxisCoverage < .68 || metrics.maxAxisCoverage > .98) throw new Error(`${item.slug}/${viewport.name}: optical coverage ${metrics.maxAxisCoverage.toFixed(3)} outside contract`);
+                if (viewport.name !== 'tablet') await page.screenshot({ path: `artifacts/${item.slug}-${viewport.name}.png`, fullPage: true });
+                await page.close();
+              }
+            }
+
+            for (const viewport of viewports) {
+              const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+              const errors = [];
+              page.on('pageerror', e => errors.push(String(e.message || e)));
+              const home = await page.goto('http://127.0.0.1:3002/', { waitUntil: 'networkidle', timeout: 60000 });
+              const homeMetrics = await page.evaluate(() => ({
+                h1: document.querySelector('h1')?.textContent?.trim() || '',
+                productStages: document.querySelectorAll('[data-product-stage="true"]').length,
+                atmospheres: document.querySelectorAll('.aromia-atmosphere').length,
+                overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+                brokenImages: Array.from(document.images).filter(img => img.complete && img.naturalWidth === 0).length,
+              }));
+              if ((home?.status() ?? 500) >= 400 || errors.length || homeMetrics.brokenImages || homeMetrics.overflowX > 2 || homeMetrics.productStages < 2 || homeMetrics.atmospheres < 2) throw new Error(`Home/${viewport.name}: ${JSON.stringify({errors, homeMetrics})}`);
+              report.pages[`home-${viewport.name}`] = homeMetrics;
+              if (viewport.name !== 'tablet') await page.screenshot({ path: `artifacts/home-${viewport.name}.png`, fullPage: true });
+
+              const catalog = await page.goto('http://127.0.0.1:3002/catalogo', { waitUntil: 'networkidle', timeout: 60000 });
+              if ((catalog?.status() ?? 500) >= 400) throw new Error(`Catalog/${viewport.name}: HTTP failure`);
+              if (viewport.name === 'mobile') {
+                const details = page.locator('details').first();
+                await details.locator('summary').click();
+                if (!(await details.getAttribute('open')).includes?.('')) throw new Error('Mobile catalog filters did not open');
+                await page.getByRole('button', { name: /Borrar filtros/i }).click();
+              }
+              const catalogMetrics = await page.evaluate(() => ({
+                stages: document.querySelectorAll('[data-product-stage="true"]').length,
+                nonWhiteStages: Array.from(document.querySelectorAll('[data-product-stage="true"]')).filter(el => getComputedStyle(el).backgroundColor !== 'rgb(255, 255, 255)').length,
+                overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+              }));
+              if (catalogMetrics.stages < 4 || catalogMetrics.nonWhiteStages || catalogMetrics.overflowX > 2) throw new Error(`Catalog/${viewport.name}: ${JSON.stringify(catalogMetrics)}`);
+              report.pages[`catalog-${viewport.name}`] = catalogMetrics;
+              await page.close();
+            }
+
+            await browser.close();
+            fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
+            console.log(JSON.stringify(report, null, 2));
+          })().catch(error => { console.error(error); process.exit(1); });
+          NODE
+          CHROME_PATH="$CHROME_PATH" node gate.cjs
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-visual-revolution-evidence
+          path: /tmp/aromia-visual-gate/artifacts
+          retention-days: 14
+      - name: Print app log on failure
+        if: failure()
+        run: tail -n 220 /tmp/aromia-visual-gate.log || true
