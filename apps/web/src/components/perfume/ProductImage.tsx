@@ -17,7 +17,7 @@ type Props = {
  * Canonical product stage.
  *
  * Fidelity rules:
- * - source pixels are never redrawn, cropped or replaced;
+ * - source pixels are never redrawn, cropped, recolored or replaced;
  * - catalog/PDP backgrounds remain pure white;
  * - optical scale is geometry-aware instead of one global magic number;
  * - atypical silhouettes can receive explicit, reviewable overrides;
@@ -33,6 +33,8 @@ export function ProductImage({ slug, alt, mode = "card", className = "" }: Props
     "--product-x": `${frame.x}%`,
     "--product-y": `${frame.y}%`,
     "--product-scale": String(frame.scale),
+    "--product-card-hover-scale": String(frame.scale * 1.012),
+    "--product-hero-hover-scale": String(frame.scale * 1.006),
   } as CSSProperties;
 
   return (
