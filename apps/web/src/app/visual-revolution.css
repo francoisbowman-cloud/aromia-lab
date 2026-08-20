@@ -1,0 +1,155 @@
+/* Aromia Visual Revolution — product truth first, atmosphere second. */
+
+.product-stage {
+  isolation: isolate;
+  background: #fff !important;
+}
+
+.product-stage::after {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 5.5%;
+  height: 8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(33, 29, 23, .10) 0%, rgba(33, 29, 23, .035) 44%, transparent 72%);
+  filter: blur(9px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.product-stage__image {
+  position: relative;
+  z-index: 1;
+  width: auto;
+  height: auto;
+  max-height: var(--product-max-h, 86%);
+  max-width: var(--product-max-w, 82%);
+  transform: translate(var(--product-x, 0), var(--product-y, 0)) scale(var(--product-scale, 1));
+  filter: saturate(.995) contrast(1.018) brightness(1.008);
+  transition: transform 520ms cubic-bezier(.2,.7,.2,1), filter 520ms ease;
+}
+
+.group:hover .product-stage__image--card {
+  transform: translate(var(--product-x, 0), calc(var(--product-y, 0) - .6%)) scale(calc(var(--product-scale, 1) * 1.012));
+}
+
+.product-stage__image--hero:hover {
+  transform: translate(var(--product-x, 0), calc(var(--product-y, 0) - .4%)) scale(calc(var(--product-scale, 1) * 1.006));
+}
+
+/* A family is not an illustration. It changes light, density and material rhythm. */
+.aromia-atmosphere {
+  --atmo-light: rgba(214, 190, 145, .28);
+  --atmo-shadow: rgba(71, 53, 34, .10);
+  --atmo-line: rgba(96, 73, 44, .18);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #eee8dd;
+}
+
+.aromia-atmosphere::before,
+.aromia-atmosphere::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.aromia-atmosphere::before {
+  inset: -12%;
+  background:
+    radial-gradient(ellipse at 72% 23%, var(--atmo-light), transparent 43%),
+    radial-gradient(ellipse at 24% 78%, var(--atmo-shadow), transparent 48%);
+}
+
+.aromia-atmosphere::after {
+  inset: 0;
+  opacity: .42;
+  background-image: linear-gradient(112deg, transparent 0 47%, var(--atmo-line) 47.15% 47.28%, transparent 47.42% 100%);
+}
+
+.aromia-atmosphere[data-family="citrus"],
+.aromia-atmosphere[data-family="fresh"],
+.aromia-atmosphere[data-family="aquatic"] {
+  --atmo-light: rgba(255, 224, 119, .32);
+  --atmo-shadow: rgba(116, 155, 147, .12);
+  --atmo-line: rgba(255, 255, 255, .54);
+  background: linear-gradient(145deg, #f4f0dd, #dfe9e5 58%, #f8f5e9);
+}
+
+.aromia-atmosphere[data-family="woody"],
+.aromia-atmosphere[data-family="leather"] {
+  --atmo-light: rgba(184, 133, 81, .18);
+  --atmo-shadow: rgba(45, 34, 25, .28);
+  --atmo-line: rgba(107, 77, 46, .24);
+  background: linear-gradient(150deg, #c6b29c, #8e755f 64%, #6f5948);
+}
+
+.aromia-atmosphere[data-family="floral"] {
+  --atmo-light: rgba(247, 222, 218, .42);
+  --atmo-shadow: rgba(132, 96, 105, .12);
+  --atmo-line: rgba(255, 255, 255, .42);
+  background: linear-gradient(145deg, #efe8e4, #dfd2d3 54%, #f2ece7);
+}
+
+.aromia-atmosphere[data-family="amber"],
+.aromia-atmosphere[data-family="gourmand"] {
+  --atmo-light: rgba(231, 163, 79, .34);
+  --atmo-shadow: rgba(74, 36, 20, .24);
+  --atmo-line: rgba(236, 194, 133, .24);
+  background: linear-gradient(145deg, #c68d57, #8f5639 58%, #5a3427);
+}
+
+.aromia-atmosphere[data-family="aromatic"] {
+  --atmo-light: rgba(186, 211, 160, .28);
+  --atmo-shadow: rgba(43, 73, 55, .18);
+  --atmo-line: rgba(230, 239, 220, .30);
+  background: linear-gradient(145deg, #d9dfcf, #a7b6a0 58%, #738676);
+}
+
+.aromia-material-frame {
+  position: absolute;
+  inset: 8%;
+  border: 1px solid rgba(255,255,255,.42);
+  box-shadow: inset 0 0 0 1px rgba(33,29,23,.05), 0 38px 90px rgba(45,34,25,.12);
+  pointer-events: none;
+}
+
+.aromia-material-orbit {
+  position: absolute;
+  width: min(34vw, 430px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255,255,255,.38);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.aromia-material-orbit--a { right: -12%; top: -14%; }
+.aromia-material-orbit--b { left: -17%; bottom: -22%; width: min(28vw, 360px); }
+
+.aromia-rule {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(33,29,23,.18), rgba(33,29,23,.04), transparent);
+}
+
+[data-theme="dark"] .aromia-rule {
+  background: linear-gradient(90deg, rgba(242,235,221,.22), rgba(242,235,221,.05), transparent);
+}
+
+@media (max-width: 767px) {
+  .product-stage::after { left: 18%; right: 18%; bottom: 5%; }
+  .aromia-atmosphere::after { opacity: .26; }
+  .aromia-material-frame { inset: 6%; }
+  .aromia-material-orbit { width: 70vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-stage__image { transition: none; }
+  .group:hover .product-stage__image--card,
+  .product-stage__image--hero:hover {
+    transform: translate(var(--product-x, 0), var(--product-y, 0)) scale(var(--product-scale, 1));
+  }
+}
