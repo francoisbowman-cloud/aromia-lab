@@ -17,11 +17,12 @@ await requireText("docs/design/visual-upgrade/HYBRID-SIGNATURE-VISUAL-CONTRACT.m
   ["hybrid_contract_missing_pdp_sequence", /Identity.*Object.*Sensory anatomy.*Performance.*Story.*Commerce.*Community/is],
 ]);
 
-await requireText("apps/web/src/components/home/TasteLanding.tsx", [
-  ["home_hero_missing_real_catalog_product", /<ProductImage\s+slug=\{hero\.slug\}\s+imageUrl=\{hero\.imagen_url\}/],
-  ["home_hero_missing_catalog_identity", /Objeto del catálogo/],
-]);
 const home = await text("apps/web/src/components/home/TasteLanding.tsx");
+const directHeroProduct = /<ProductImage\s+slug=\{hero\.slug\}\s+imageUrl=\{hero\.imagen_url\}/.test(home);
+const sceneHeroProduct = /function\s+ProductScene[\s\S]*?<ProductImage\s+slug=\{perfume\.slug\}\s+imageUrl=\{perfume\.imagen_url\}/.test(home)
+  && /<ProductScene\s+perfume=\{hero\}/.test(home);
+if (!directHeroProduct && !sceneHeroProduct) failures.push("home_hero_missing_real_catalog_product apps/web/src/components/home/TasteLanding.tsx");
+if (!/(?:Objeto del catálogo|Producto real|Objeto 01 \/ Presencia)/i.test(home)) failures.push("home_hero_missing_catalog_identity apps/web/src/components/home/TasteLanding.tsx");
 if (/editorial\/cinematic-warm\.png/i.test(home)) failures.push("home_hero_anonymous_background_regression");
 
 await requireText("apps/web/src/components/perfume/ProductImage.tsx", [
