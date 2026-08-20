@@ -4,7 +4,7 @@ import { useState } from "react";
 import { subscribe } from "@/lib/api";
 import { trackEvent } from "@/lib/analytics";
 
-export function NewsletterForm({ fuente, mensajeExito = "Listo — te avisamos cuando haya bajadas de precio y contenido nuevo." }: { fuente: "home" | "quiz" | "club"; mensajeExito?: string }) {
+export function NewsletterForm({ fuente = "home", mensajeExito = "Listo — te avisamos cuando haya bajadas de precio y contenido nuevo." }: { fuente?: "home" | "quiz" | "club"; mensajeExito?: string }) {
   const [email, setEmail] = useState("");
   const [estado, setEstado] = useState<"idle" | "enviando" | "ok" | "error">("idle");
 
