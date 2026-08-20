@@ -79,9 +79,12 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
             {hero ? (
               <Link href={`/catalogo/${hero.slug}`} className="group relative flex h-full min-h-[500px] flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-6px] focus-visible:outline-gold lg:min-h-[calc(100vh-72px)]" aria-label={`Descubrir ${hero.nombre} de ${hero.marca}`}>
                 <div className="relative flex-1 p-7 sm:p-10 lg:p-12">
-                  <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" className="bg-transparent dark:bg-transparent" />
+                  <div aria-hidden="true" className="absolute inset-[10%] translate-x-[4%] translate-y-[4%] border border-[#c9b491]/35 bg-[#e6d8c4]/45 shadow-[0_28px_70px_rgba(71,53,34,.10)] dark:border-[#79623f]/35 dark:bg-[#241c14]/55 dark:shadow-[0_30px_80px_rgba(0,0,0,.28)] lg:-left-[1%] lg:right-[7%] lg:top-[11%] lg:bottom-[7%]" />
+                  <div className="relative h-full transition-transform duration-700 ease-out lg:-ml-[5%] lg:-translate-y-[1.5%] lg:scale-[1.045] lg:group-hover:-translate-y-[2.1%] lg:group-hover:scale-[1.052] motion-reduce:transition-none">
+                    <ProductImage slug={hero.slug} imageUrl={hero.imagen_url} alt={`${hero.nombre} de ${hero.marca}`} mode="hero" className="bg-transparent shadow-[0_26px_58px_rgba(58,44,29,.11)] dark:bg-transparent dark:shadow-[0_28px_64px_rgba(0,0,0,.24)]" />
+                  </div>
                 </div>
-                <div className="relative mx-6 mb-6 grid gap-4 bg-[#fbf8f3]/88 px-4 py-4 backdrop-blur-sm dark:bg-[#0d0b09]/88 sm:mx-8 sm:grid-cols-[1fr_auto] sm:items-end lg:mx-10">
+                <div className="relative z-20 mx-6 -mt-4 mb-6 grid gap-4 bg-[#fbf8f3]/92 px-4 py-4 shadow-[0_18px_45px_rgba(55,42,29,.07)] backdrop-blur-sm dark:bg-[#0d0b09]/92 dark:shadow-[0_18px_50px_rgba(0,0,0,.18)] sm:mx-8 sm:grid-cols-[1fr_auto] sm:items-end lg:mx-10 lg:-mt-9">
                   <div>
                     <p className="font-plex text-[8px] uppercase tracking-[.17em] text-gold-contrast">Objeto del catálogo · {publicText(hero.familia_olfativa) ?? "Selección"}</p>
                     <p className="mt-2 font-display text-[28px] leading-none tracking-[-.025em] text-ink">{hero.nombre}</p>
