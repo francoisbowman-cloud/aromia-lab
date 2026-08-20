@@ -43,12 +43,22 @@ export default function ClubPage() {
           </div>
         </div>
 
-        <div className="relative flex items-center px-6 py-12 lg:px-14 lg:py-16">
-          <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-            <div className="absolute right-[-18%] top-[7%] h-[44vw] max-h-[620px] w-[44vw] max-w-[620px] rounded-full border border-[#d8c8ae]/35 opacity-20 dark:border-[#5d4a31]" />
-            <div className="absolute bottom-[8%] left-[10%] h-36 w-36 rounded-full bg-[#d9b97c]/12 blur-2xl" />
+        <div className="relative px-6 py-12 lg:grid lg:grid-cols-[.34fr_.66fr] lg:items-center lg:gap-8 lg:px-10 lg:py-16 xl:gap-10 xl:px-14">
+          <div aria-hidden="true" className="mb-8 grid grid-cols-3 border-y border-[#b79a6b]/25 py-4 lg:mb-0 lg:block lg:border-y-0 lg:py-0">
+            {pillars.map(([number, title]) => (
+              <div key={number} className="min-w-0 text-center lg:relative lg:border-l lg:border-[#b79a6b]/30 lg:pb-10 lg:pl-5 lg:pt-3 lg:text-left dark:lg:border-[#806842]/35">
+                <span className="font-display text-sm text-gold-contrast">{number}</span>
+                <span className="ml-2 font-plex text-[9px] uppercase tracking-[.13em] text-muted lg:ml-0 lg:mt-3 lg:block">{title}</span>
+                <span className="hidden lg:absolute lg:-left-[3px] lg:top-[13px] lg:block lg:h-[5px] lg:w-[5px] lg:rounded-full lg:bg-gold-contrast" />
+              </div>
+            ))}
+            <p className="hidden lg:block lg:border-l lg:border-[#b79a6b]/30 lg:pl-5 lg:pt-2 font-plex text-[8px] uppercase leading-5 tracking-[.14em] text-muted dark:lg:border-[#806842]/35">
+              Identidad<br />rastro<br />afinidad
+            </p>
           </div>
-          <div className="relative w-full max-w-xl bg-[#fffdf8]/88 px-1 py-8 backdrop-blur-sm dark:bg-[#120f0c]/88 sm:px-8 sm:py-10">
+
+          <div className="relative w-full bg-[#fffdf8] py-8 dark:bg-[#120f0c] sm:px-8 sm:py-10 lg:px-7 xl:px-9">
+            <div aria-hidden="true" className="absolute left-0 top-0 h-px w-20 bg-gold-contrast/45" />
             <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Lista de espera</p>
             <h2 className="mt-4 max-w-[12ch] font-display text-[36px] font-medium leading-[1.02] tracking-[-.02em] text-ink sm:text-[42px] lg:text-[46px]">
               Entra antes de que abramos las puertas.

@@ -1,0 +1,131 @@
+name: OMNI Final Aromia Release Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  final-release:
+    if: github.head_ref == 'release/omni-aromia-final'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      API_URL: https://api-production-fe2f.up.railway.app
+      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout production baseline
+        run: git worktree add /tmp/aromia-before "$BASE_SHA"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install web dependencies
+        run: |
+          npm ci --prefix apps/web
+          npm ci --prefix /tmp/aromia-before/apps/web
+      - name: Bind Playwright to runner Chrome
+        shell: bash
+        run: |
+          mkdir -p /tmp/omni-final-release
+          cd /tmp/omni-final-release
+          npm init -y >/dev/null 2>&1
+          npm install playwright-core@1.55.0 >/dev/null
+          CHROME_PATH="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+      - name: Start BEFORE and AFTER
+        shell: bash
+        run: |
+          cd /tmp/aromia-before/apps/web
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3001 > /tmp/final-before.log 2>&1 &
+          cd "$GITHUB_WORKSPACE/apps/web"
+          API_URL="$API_URL" NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" npm run dev -- -p 3002 > /tmp/final-after.log 2>&1 &
+          for port in 3001 3002; do
+            ready=0
+            for i in {1..90}; do
+              if curl -fsS "http://127.0.0.1:${port}/" >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            test "$ready" -eq 1
+          done
+      - name: Capture routes and interactive states
+        shell: bash
+        run: |
+          cd /tmp/omni-final-release
+          mkdir -p artifacts
+          cat > capture.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright-core');
+          const origins = { before:'http://127.0.0.1:3001', after:'http://127.0.0.1:3002' };
+          const routes = ['/', '/catalogo', '/quiz', '/descubrir', '/academia', '/club', '/magazine', '/catalogo/loewe-001-man-edp'];
+          const viewports = [{name:'mobile',width:390,height:844},{name:'tablet',width:768,height:1024},{name:'desktop',width:1440,height:1000}];
+          const safe = r => r === '/' ? 'home' : r.replace(/^\//,'').replace(/[^a-z0-9-]+/gi,'-');
+          async function warm(page){
+            const h=await page.evaluate(()=>document.documentElement.scrollHeight);
+            for(let y=0;y<h;y+=600){await page.evaluate(v=>scrollTo(0,v),y);await page.waitForTimeout(90)}
+            await page.evaluate(()=>scrollTo(0,0)); await page.waitForTimeout(250);
+          }
+          async function inspect(browser,label,origin,route,vp){
+            const page=await browser.newPage({viewport:{width:vp.width,height:vp.height}});
+            const pe=[],ce=[],imageResponses=[];
+            page.on('pageerror',e=>pe.push(String(e.message||e)));
+            page.on('console',m=>{if(m.type()==='error')ce.push(m.text())});
+            page.on('response',r=>{if(r.url().includes('/api/catalog-image/')){const h=r.headers();imageResponses.push({status:r.status(),origin:h['x-aromia-image-origin']||null})}});
+            const response=await page.goto(origin+route,{waitUntil:'networkidle',timeout:60000});
+            await warm(page);
+            const m=await page.evaluate(()=>{
+              const imgs=[...document.images]; const product=imgs.filter(i=>(i.currentSrc||i.src).includes('/api/catalog-image/'));
+              const invisible=product.filter(i=>{if(!(i.complete&&i.naturalWidth>0))return false;const s=getComputedStyle(i),r=i.getBoundingClientRect();return s.visibility==='hidden'||s.display==='none'||Number(s.opacity)<.99||r.width<2||r.height<2});
+              return {h1:document.querySelectorAll('h1').length,overflowX:Math.max(0,document.documentElement.scrollWidth-innerWidth),brokenImages:imgs.filter(i=>i.complete&&i.naturalWidth===0).length,loadedButInvisible:invisible.length,hasMain:Boolean(document.querySelector('main'))};
+            });
+            Object.assign(m,{status:response?.status()||0,pageErrors:pe.length,consoleErrors:ce.length,realImageResponses:imageResponses.filter(x=>x.status<400&&x.origin&&x.origin!=='placeholder').length,failedImageResponses:imageResponses.filter(x=>x.status>=400).length});
+            await page.screenshot({path:`artifacts/${label}-${safe(route)}-${vp.name}.png`,fullPage:true}); await page.close(); return m;
+          }
+          async function interactiveAudit(browser){
+            const page=await browser.newPage({viewport:{width:390,height:844}});
+            await page.goto(origins.after+'/',{waitUntil:'networkidle',timeout:60000});
+            const controls=await page.evaluate(()=>[...document.querySelectorAll('summary,[aria-expanded],[aria-controls],[aria-haspopup]')].filter(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return r.width>2&&r.height>2&&s.display!=='none'&&s.visibility!=='hidden'}).slice(0,12).map((el,i)=>({i,tag:el.tagName.toLowerCase(),text:(el.getAttribute('aria-label')||el.textContent||'').trim().slice(0,80)})));
+            const findings=[];
+            for(let i=0;i<controls.length;i++){
+              await page.goto(origins.after+'/',{waitUntil:'networkidle',timeout:60000});
+              const loc=page.locator('summary,[aria-expanded],[aria-controls],[aria-haspopup]').filter({visible:true}).nth(i);
+              if(await loc.count()===0) continue;
+              try{await loc.click({timeout:5000});await page.waitForTimeout(250)}catch{continue}
+              const f=await page.evaluate(()=>{
+                const area=innerWidth*innerHeight, visible=el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return r.width>2&&r.height>2&&s.display!=='none'&&s.visibility!=='hidden'};
+                const alpha=c=>{if(!c||c==='transparent')return 0;const m=c.match(/rgba?\(([^)]+)\)/i);if(!m)return 1;const p=m[1].split(',');return p.length>3?Number(p[3])||0:1};
+                const candidates=[...document.querySelectorAll('[role="dialog"],[role="menu"],[aria-modal="true"],[data-state="open"],aside,ul')].filter(visible).map(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return {el,r,a:r.width*r.height,z:parseInt(s.zIndex||'0',10)||0,bg:alpha(s.backgroundColor)}}).filter(x=>x.a/area>=.15).sort((a,b)=>b.z-a.z||b.a-a.a);
+                const c=candidates[0]; if(!c)return null; let text=0; for(const el of document.querySelectorAll('body *')){if(el===c.el||c.el.contains(el)||!visible(el))continue;const r=el.getBoundingClientRect();if(r.right<=c.r.left||r.left>=c.r.right||r.bottom<=c.r.top||r.top>=c.r.bottom)continue;const t=(el.textContent||'').trim();if(t&&t.length<=180&&el.children.length===0)text++}
+                return {areaRatio:c.a/area,backgroundAlpha:c.bg,externalText:text};
+              });
+              if(f){const risk=(f.areaRatio>=.18&&f.backgroundAlpha<.92&&f.externalText>=3)?'high':'none';findings.push({...controls[i],...f,risk});await page.screenshot({path:`artifacts/interactive-${i+1}.png`,fullPage:false});}
+            }
+            await page.close(); return findings;
+          }
+          (async()=>{
+            const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH,args:['--no-sandbox']});
+            const report={before:{},after:{},checks:[],interactive:[]};
+            for(const vp of viewports)for(const route of routes){const k=`${vp.name}:${route}`,b=await inspect(browser,'before',origins.before,route,vp),a=await inspect(browser,'after',origins.after,route,vp);report.before[k]=b;report.after[k]=a;const failures=[];if(!a.status||a.status>=400)failures.push(`HTTP ${a.status}`);if(a.h1!==1)failures.push(`h1 ${a.h1}`);if(!a.hasMain)failures.push('missing main');if(a.overflowX>2)failures.push(`overflow ${a.overflowX}`);if(a.pageErrors)failures.push(`page errors ${a.pageErrors}`);if(a.consoleErrors>b.consoleErrors)failures.push(`console ${b.consoleErrors}->${a.consoleErrors}`);if(a.brokenImages>b.brokenImages)failures.push(`broken images ${b.brokenImages}->${a.brokenImages}`);if(a.loadedButInvisible)failures.push(`loaded invisible ${a.loadedButInvisible}`);if(a.failedImageResponses)failures.push(`failed catalog images ${a.failedImageResponses}`);if(a.realImageResponses<b.realImageResponses)failures.push(`real images ${b.realImageResponses}->${a.realImageResponses}`);report.checks.push({k,accepted:!failures.length,failures})}
+            report.interactive=await interactiveAudit(browser); await browser.close();
+            const badInteractive=report.interactive.filter(x=>x.risk==='high'); const failures=report.checks.filter(x=>!x.accepted); fs.writeFileSync('artifacts/report.json',JSON.stringify(report,null,2)); console.log(JSON.stringify({routeChecks:report.checks.length,failures,badInteractive,interactive:report.interactive},null,2)); if(failures.length||badInteractive.length)process.exit(1);
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          CHROME_PATH="$CHROME_PATH" node capture.cjs
+      - name: Upload final release evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-final-aromia-release-evidence
+          path: /tmp/omni-final-release/artifacts
+          retention-days: 30
+      - name: Print logs on failure
+        if: failure()
+        run: |
+          tail -n 160 /tmp/final-before.log || true
+          tail -n 160 /tmp/final-after.log || true
