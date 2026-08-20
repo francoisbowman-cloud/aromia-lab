@@ -43,6 +43,7 @@ const geometryBySlug: Record<string, ProductGeometry> = {
   "herod": "tall",
   "sauvage-edt": "tall",
   "terre-dhermes": "tall",
+  "terre-d-hermes-edt": "tall",
   "1-million": "standard",
   "aventus": "standard",
   "bleu-de-chanel-edp": "standard",
