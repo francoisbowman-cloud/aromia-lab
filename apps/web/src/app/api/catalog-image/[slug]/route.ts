@@ -7,6 +7,7 @@ export const runtime = "nodejs";
 const USER_AGENT = "Mozilla/5.0 (compatible; AromiaCatalogImage/3.1; +https://www.aromialab.com)";
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 9000;
+const PREFER_COMMERCE_PACKSHOT = new Set(["chance-eau-tendre", "flowerbomb"]);
 
 function officialProductPages(slug: string, concentration?: string | null): string[] {
   if (slug === "black-afgano") return ["https://nasomatto.com/es/products/black-afgano"];
@@ -22,12 +23,6 @@ function officialProductPages(slug: string, concentration?: string | null): stri
           "https://www.chanel.com/es/perfumes/p/126260/chance-eau-tendre-eau-de-parfum-vaporizador/",
           "https://www.chanel.com/us/fragrance/p/126260/chance-eau-tendre-eau-de-parfum-spray/",
         ];
-  }
-  if (slug === "flowerbomb") {
-    return [
-      "https://www.viktor-rolf.com/products/flowerbomb-eau-de-parfum-100ml",
-      "https://us.viktor-rolf.com/fragrance/flowerbomb-eau-de-parfum-by-viktor-rolf-VKR_002.html",
-    ];
   }
   return [];
 }
@@ -186,16 +181,28 @@ export async function GET(_request: Request, { params }: { params: { slug: strin
     if (officialImage) return imageResponse(officialImage, "official-brand");
   }
 
+  let amazonAttempted = false;
+  if (PREFER_COMMERCE_PACKSHOT.has(perfume.slug)) {
+    amazonAttempted = true;
+    const preferredAmazon = await resolveAmazonCatalogProduct(perfume);
+    if (preferredAmazon?.imageUrl) {
+      const preferredImage = await fetchImage(preferredAmazon.imageUrl);
+      if (preferredImage) return imageResponse(preferredImage, preferredAmazon.source);
+    }
+  }
+
   const catalogUrl = safeCatalogImageUrl(perfume.imagen_url);
   if (catalogUrl) {
     const catalogImage = await fetchImage(catalogUrl);
     if (catalogImage) return imageResponse(catalogImage, "catalog");
   }
 
-  const amazon = await resolveAmazonCatalogProduct(perfume);
-  if (amazon?.imageUrl) {
-    const image = await fetchImage(amazon.imageUrl);
-    if (image) return imageResponse(image, amazon.source);
+  if (!amazonAttempted) {
+    const amazon = await resolveAmazonCatalogProduct(perfume);
+    if (amazon?.imageUrl) {
+      const image = await fetchImage(amazon.imageUrl);
+      if (image) return imageResponse(image, amazon.source);
+    }
   }
 
   return placeholderResponse(perfume);
