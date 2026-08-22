@@ -3,18 +3,53 @@
 @tailwind utilities;
 
 :root {
+  /* DSI semantic layer — aliases remain below for backwards compatibility. */
+  --color-paper: #fbf8f3;
+  --color-surface: #ffffff;
+  --color-soft: #f5f0e6;
+  --color-ink: #211d17;
+  --color-muted: #8a8172;
+  --color-line: rgba(33, 29, 23, 0.1);
+  --color-accent: #a87f4a;
+  --color-accent-strong: #866526;
+  --color-focus: #a87f4a;
+  --color-danger: #b4443c;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  --radius-control: 0.65rem;
+  --radius-card: 2px;
+  --radius-table: 16px;
+  --radius-full: 999px;
+
+  --motion-fast: 150ms;
+  --motion-standard: 250ms;
+  --motion-slow: 700ms;
+
+  /* Legacy aliases consumed by existing components. */
   --background: #ffffff;
   --foreground: #171717;
-  --bg: #fbf8f3;
-  --surface: #ffffff;
-  --soft: #f5f0e6;
-  --text: #211d17;
-  --muted: #8a8172;
-  --line: rgba(33, 29, 23, 0.1);
-  --gold: #a87f4a;
+  --bg: var(--color-paper);
+  --surface: var(--color-surface);
+  --soft: var(--color-soft);
+  --text: var(--color-ink);
+  --muted: var(--color-muted);
+  --line: var(--color-line);
+  --gold: var(--color-accent);
   --gold-2: #c8a86b;
-  --gold-contrast: #866526;
-  --radius: 0.65rem;
+  --gold-contrast: var(--color-accent-strong);
+  --radius: var(--radius-control);
   --card: var(--surface);
   --card-foreground: var(--text);
   --popover: var(--surface);
@@ -26,44 +61,59 @@
   --muted-foreground: var(--muted);
   --accent: var(--soft);
   --accent-foreground: var(--text);
-  --destructive: #b4443c;
+  --destructive: var(--color-danger);
   --destructive-foreground: #ffffff;
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--gold);
+  --ring: var(--color-focus);
 }
 
 [data-theme="dark"] {
-  --bg: #0e0c0a;
-  --surface: #17120d;
-  --soft: #1c1610;
-  --text: #f2ebdd;
-  --muted: #a39a88;
-  --line: rgba(242, 235, 221, 0.14);
-  --gold: #c8a86b;
-  --gold-2: #a87f4a;
+  --color-paper: #0e0c0a;
+  --color-surface: #17120d;
+  --color-soft: #1c1610;
+  --color-ink: #f2ebdd;
+  --color-muted: #a39a88;
+  --color-line: rgba(242, 235, 221, 0.14);
+  --color-accent: #c8a86b;
+  --color-accent-strong: #d8bd8c;
+  --color-focus: #d8bd8c;
+  --color-danger: #d76b62;
+
   --background: #0a0a0a;
   --foreground: #ededed;
+  --bg: var(--color-paper);
+  --surface: var(--color-surface);
+  --soft: var(--color-soft);
+  --text: var(--color-ink);
+  --muted: var(--color-muted);
+  --line: var(--color-line);
+  --gold: var(--color-accent);
+  --gold-2: #d8bd8c;
+  --gold-contrast: var(--color-accent-strong);
   --card: var(--surface);
   --card-foreground: var(--text);
   --popover: var(--surface);
   --popover-foreground: var(--text);
   --primary: var(--gold-contrast);
+  --primary-foreground: #17120d;
   --secondary: var(--soft);
   --secondary-foreground: var(--text);
   --muted-foreground: var(--muted);
   --accent: var(--soft);
   --accent-foreground: var(--text);
+  --destructive: var(--color-danger);
+  --destructive-foreground: #17120d;
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--gold);
+  --ring: var(--color-focus);
 }
 
 html { scroll-behavior: smooth; }
 body { color: var(--text); background: var(--bg); font-family: var(--font-body), Inter, ui-sans-serif, system-ui, sans-serif; transition: background .3s ease, color .3s ease; }
 
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid var(--gold-2);
+  outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
 
@@ -101,7 +151,7 @@ body { color: var(--text); background: var(--bg); font-family: var(--font-body),
   .nav-link { position: relative; display: inline-flex; align-items: center; min-height: 40px; padding: 8px 1px; outline: none; }
   .nav-link::after { content: ""; position: absolute; left: 50%; right: 50%; bottom: 4px; height: 1px; background: var(--gold); transition: left .25s ease, right .25s ease; }
   .nav-link:hover::after, .nav-link[aria-current="page"]::after { left: 0; right: 0; }
-  .nav-link:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; border-radius: 2px; }
+  .nav-link:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 2px; }
 
   .aromia-scene-macro { background: radial-gradient(circle at 20% 30%, rgba(214,196,86,.55), transparent 42%), radial-gradient(circle at 78% 20%, rgba(224,168,84,.62), transparent 40%), radial-gradient(circle at 13% 68%, rgba(178,122,74,.5), transparent 42%), radial-gradient(circle at 80% 76%, rgba(255,250,240,.75), transparent 38%), radial-gradient(ellipse 60% 45% at 40% 22%, rgba(255,252,244,.65), transparent 60%), linear-gradient(155deg,#f7f2e6 0%,#efe6d2 55%,#f2ebda 100%); }
   [data-theme="dark"] .aromia-scene-macro { background: radial-gradient(circle at 20% 30%, rgba(196,181,84,.5), transparent 40%), radial-gradient(circle at 78% 20%, rgba(200,168,107,.5), transparent 40%), radial-gradient(circle at 13% 68%, rgba(122,70,48,.48), transparent 40%), radial-gradient(circle at 80% 76%, rgba(233,220,192,.34), transparent 38%), linear-gradient(160deg,#0e0c0a,#100b08); }
