@@ -12,23 +12,22 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        paper: "var(--bg)",
-        surface: "var(--surface)",
-        ink: "var(--text)",
-        muted: "var(--muted)",
-        line: "var(--line)",
-        soft: "var(--soft)",
+        paper: "var(--color-paper)",
+        surface: "var(--color-surface)",
+        ink: "var(--color-ink)",
+        muted: "var(--color-muted)",
+        line: "var(--color-line)",
+        soft: "var(--color-soft)",
         gold: {
-          DEFAULT: "var(--gold)",
+          DEFAULT: "var(--color-accent)",
           light: "#B68A44",
           dark: "#C8A86B",
-          contrast: "var(--gold-contrast)",
+          contrast: "var(--color-accent-strong)",
         },
-        // Tokens semánticos de shadcn/ui — alias sobre la paleta de arriba,
-        // usados por los componentes base en components/ui/*.
+        // Tokens semánticos de shadcn/ui — alias sobre la capa DSI.
         border: "var(--border)",
         input: "var(--input)",
-        ring: "var(--ring)",
+        ring: "var(--color-focus)",
         card: {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
@@ -71,21 +70,25 @@ const config: Config = {
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "Times New Roman", "serif"],
-        sans: ["var(--font-body)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        plex: ["var(--font-plex)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-body)", "Archivo", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        plex: ["var(--font-plex)", "IBM Plex Sans", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       borderRadius: {
-        // Sistema "Aromia Lujo" (dc.html importado 01/08): radio casi recto
-        // y deliberadamente sobrio en tarjetas/paneles — reemplaza el 28px
-        // anterior. Píldoras/chips/botones circulares siguen en rounded-full
-        // (999px), sin cambios.
-        card: "2px",
-        table: "16px",
+        control: "var(--radius-control)",
+        card: "var(--radius-card)",
+        table: "var(--radius-table)",
+        full: "var(--radius-full)",
+        // Backwards-compatible names.
         "admin-card": "14px",
       },
       boxShadow: {
         lux: "0 22px 70px rgba(30,23,13,.12)",
         admin: "0 10px 30px rgba(28,24,18,.08)",
+      },
+      transitionDuration: {
+        fast: "var(--motion-fast)",
+        standard: "var(--motion-standard)",
+        slow: "var(--motion-slow)",
       },
     },
   },
