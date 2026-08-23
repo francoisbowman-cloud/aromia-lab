@@ -9,11 +9,19 @@
   --surface: #ffffff;
   --soft: #f5f0e6;
   --text: #211d17;
-  --muted: #8a8172;
+  /* --muted oscurecido 23/08 (auditoría OMNI): #8a8172 medía 2.91-3.84:1 sobre
+     los fondos reales de la paleta clara (papel, tarjetas, bandas tintadas),
+     por debajo del mínimo AA de 4.5:1 en prácticamente todo el texto
+     secundario del sitio. Mismo matiz cálido, luminancia reducida —
+     4.61-6.36:1 contra esos mismos fondos. El tema oscuro no se toca (su
+     --muted ya pasaba AA). */
+  --muted: #675e52;
   --line: rgba(33, 29, 23, 0.1);
   --gold: #a87f4a;
   --gold-2: #c8a86b;
-  --gold-contrast: #866526;
+  /* --gold-contrast: mismo ajuste que --muted y por la misma razón —
+     4.08-4.47:1 sobre las bandas tintadas, por debajo de AA. */
+  --gold-contrast: #77571e;
   --radius: 0.65rem;
   --card: var(--surface);
   --card-foreground: var(--text);
@@ -42,6 +50,10 @@
   --line: rgba(242, 235, 221, 0.14);
   --gold: #c8a86b;
   --gold-2: #a87f4a;
+  /* Override explícito: sin esto heredaría el --gold-contrast oscurecido de
+     :root (pensado para fondos claros), que perdería contraste sobre fondos
+     oscuros. Se fija al valor histórico para no alterar el tema oscuro. */
+  --gold-contrast: #866526;
   --background: #0a0a0a;
   --foreground: #ededed;
   --card: var(--surface);
