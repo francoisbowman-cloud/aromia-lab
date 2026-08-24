@@ -14,33 +14,31 @@ export default async function CatalogoPage({ searchParams }: { searchParams: { f
   const perfumes = await getPerfumes();
 
   return (
-    <main className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]">
-      <section className="mx-auto w-full max-w-[1440px] px-6 pb-10 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
-        <div className="flex items-center justify-between font-plex text-xs uppercase tracking-[.14em] text-muted">
-          <span>Índice de fragancias</span>
-          <span>Aromia / 02</span>
-        </div>
-
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1.12fr_.88fr] lg:items-end">
+    <main className="min-h-screen bg-[#f7f5f0] text-ink dark:bg-[#0e1311]">
+      <section className="mx-auto w-full max-w-[1520px] px-5 pb-8 pt-12 sm:px-8 lg:px-12 lg:pb-14 lg:pt-20">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
           <div>
-            <p className="font-plex text-xs uppercase tracking-[.15em] text-gold-contrast">Fragancias</p>
-            <h1 className="mt-5 max-w-[12ch] font-display text-[44px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[54px] lg:text-[64px]">
-              Encuentra por instinto. Afina con criterio.
+            <h1 className="max-w-[10ch] font-display text-[52px] font-medium leading-[.88] tracking-[-.05em] text-ink sm:text-[68px] lg:text-[92px]">
+              Perfumes
             </h1>
-          </div>
-          <div className="lg:justify-self-end">
-            <p className="max-w-[40ch] font-sans text-base leading-7 text-muted">
-              Explora por familia, ocasión, precio o carácter y deja que el catálogo reduzca el ruido.
+            <p className="mt-6 max-w-[34ch] font-display text-[27px] leading-[1.08] tracking-[-.02em] text-[#5a6b54] sm:text-[32px]">
+              Un archivo para encontrar por instinto y afinar con criterio.
             </p>
-            <div className="mt-7 flex flex-wrap gap-x-8 gap-y-3 font-plex text-xs uppercase tracking-[.11em] text-muted">
-              <span><strong className="font-normal text-gold-contrast">{perfumes.length > 0 ? perfumes.length : "125"}</strong> fragancias</span>
-              <span>Familia → perfume</span>
+          </div>
+
+          <div className="lg:justify-self-end lg:pb-1">
+            <p className="max-w-[42ch] font-sans text-[15px] leading-7 text-muted">
+              Explora la colección real de Aromia por familia, ocasión, precio, carácter o nota. El objeto permanece al centro; los filtros solo reducen el ruido.
+            </p>
+            <div className="mt-8 flex items-center gap-8 border-t border-line pt-4 font-plex text-xs uppercase tracking-[.13em] text-muted">
+              <span><strong className="font-normal text-[#5a6b54] dark:text-[#b8c5b3]">{perfumes.length > 0 ? perfumes.length : "125"}</strong> fragancias</span>
+              <span>Archivo vivo</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-[1440px] px-6 pb-20 lg:px-10 lg:pb-28">
+      <section className="mx-auto w-full max-w-[1520px] px-5 pb-24 sm:px-8 lg:px-12 lg:pb-32">
         <ResilientPerfumesCatalog initialPerfumes={perfumes} initialFamilia={searchParams.familia} />
       </section>
     </main>
