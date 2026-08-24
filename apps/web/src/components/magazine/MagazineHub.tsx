@@ -48,37 +48,24 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
         <MagazineCategoryNav activeKey={activeKey} onSelect={setActiveKey} />
       </div>
 
-      <section className="mx-auto max-w-[1520px] px-5 pb-28 pt-10 sm:px-8 lg:px-12 lg:pt-16">
+      <section className="mx-auto max-w-[1520px] px-5 pb-28 pt-8 sm:px-8 lg:px-12 lg:pt-12">
         {!cover ? (
           <div className="flex min-h-[360px] items-center justify-center border-y border-line"><p className="font-sans text-base text-muted">No hay artículos disponibles en esta categoría.</p></div>
         ) : (
           <>
-            <div className="grid gap-9 border-b border-line pb-16 lg:grid-cols-[.32fr_1.68fr] lg:gap-14 lg:pb-24">
-              <aside className="flex flex-col justify-between gap-10 border-t border-line pt-4 lg:py-4">
-                <div>
-                  <p className="font-plex text-xs uppercase tracking-[.14em] text-[#5a6b54] dark:text-[#b8c5b3]">Portada</p>
-                  <p className="mt-5 font-display text-3xl leading-[1.05] tracking-[-.025em] text-ink">La historia principal cambia con el archivo, no con una plantilla.</p>
-                </div>
-                <div className="font-plex text-xs uppercase tracking-[.12em] text-muted"><span className="text-ink">{filtered.length}</span> lecturas en esta vista</div>
-              </aside>
+            <div className="border-b border-line pb-16 lg:pb-24">
+              <div className="mb-5 flex items-center justify-between gap-6 font-plex text-xs uppercase tracking-[.13em] text-muted"><span>Portada / Lectura 01</span><span>{String(filtered.length).padStart(2, "0")} historias</span></div>
               <MagazineCoverStory article={cover} linkRef={coverRef} />
             </div>
 
             {secondary.length > 0 ? (
               <aside className="pt-16 lg:pt-24">
                 <div className="mb-10 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
-                  <div>
-                    <p className="font-plex text-xs uppercase tracking-[.13em] text-[#5a6b54] dark:text-[#b8c5b3]">Archivo</p>
-                    <h2 className="mt-3 font-display text-[38px] font-medium leading-none tracking-[-.03em] text-ink lg:text-[48px]">Sigue leyendo sin perder el hilo.</h2>
-                  </div>
+                  <div><p className="font-plex text-xs uppercase tracking-[.13em] text-[#5a6b54] dark:text-[#b8c5b3]">Archivo</p><h2 className="mt-3 font-display text-[38px] font-medium leading-none tracking-[-.03em] text-ink lg:text-[48px]">Sigue leyendo sin perder el hilo.</h2></div>
                   <span className="font-plex text-xs uppercase tracking-[.12em] text-muted">{String(secondary.length).padStart(2, "0")} historias</span>
                 </div>
                 <div className="grid grid-cols-1 gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
-                  {secondary.map((article, index) => (
-                    <div key={article.slug} className={index % 3 === 1 ? "lg:translate-y-10" : ""}>
-                      <MagazineSecondaryStory article={article} isFirst={index === 0} />
-                    </div>
-                  ))}
+                  {secondary.map((article, index) => <div key={article.slug} className={index % 3 === 1 ? "lg:translate-y-10" : ""}><MagazineSecondaryStory article={article} isFirst={index === 0} /></div>)}
                 </div>
               </aside>
             ) : null}
