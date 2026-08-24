@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Perfume } from "@/lib/types";
-import { PerfumesCatalog } from "./PerfumesCatalog";
+import { PerfumesCatalogEditorial } from "./PerfumesCatalogEditorial";
 
 export function ResilientPerfumesCatalog({
   initialPerfumes,
@@ -42,7 +42,7 @@ export function ResilientPerfumesCatalog({
   }, [initialPerfumes]);
 
   if (perfumes.length > 0) {
-    return <PerfumesCatalog perfumes={perfumes} initialFamilia={initialFamilia} />;
+    return <PerfumesCatalogEditorial perfumes={perfumes} initialFamilia={initialFamilia} />;
   }
 
   return (
