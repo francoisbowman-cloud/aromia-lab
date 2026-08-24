@@ -9,11 +9,11 @@ permissions:
 
 jobs:
   render-compare:
-    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration'
+    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration' || github.head_ref == 'feat/aromia-visual-redesign-2026'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
-      AROMIA_BASELINE_SHA: 2f9220b8021c337c9761545012205b5af4aee9b7
+      AROMIA_BASELINE_SHA: 1ae35119da9c3c1a23afe14c3340590209fe9183
       API_URL: https://api-production-fe2f.up.railway.app
       NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
     steps:

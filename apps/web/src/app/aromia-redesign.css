@@ -1,0 +1,99 @@
+:root {
+  --background: #f7f5f0;
+  --foreground: #20231f;
+  --bg: #f7f5f0;
+  --surface: #fbfaf6;
+  --soft: #e6e8e4;
+  --text: #20231f;
+  --muted: #625f58;
+  --line: rgba(32, 35, 31, 0.14);
+  --gold: #c49a54;
+  --gold-2: #b88442;
+  --gold-contrast: #755d32;
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: #5a6b54;
+  --primary-foreground: #f7f5f0;
+  --secondary: #e6e8e4;
+  --secondary-foreground: #20231f;
+  --muted-foreground: #625f58;
+  --accent: #d9c8b1;
+  --accent-foreground: #20231f;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: #5a6b54;
+
+  --aromia-night: #0e1311;
+  --aromia-leaf: #5a6b54;
+  --aromia-sand: #d9c8b1;
+  --aromia-paper: #f7f5f0;
+  --aromia-mist: #e6e8e4;
+  --aromia-clay: #b35a3c;
+  --aromia-blue-haze: #3e5361;
+  --aromia-petal: #8a6d76;
+  --aromia-amber: #c49a54;
+  --aromia-burgundy: #4a1f24;
+}
+
+[data-theme="dark"] {
+  --background: #0e1311;
+  --foreground: #f7f5f0;
+  --bg: #0e1311;
+  --surface: #151c18;
+  --soft: #1c2621;
+  --text: #f4f1ea;
+  --muted: #b6b7af;
+  --line: rgba(247, 245, 240, 0.14);
+  --gold: #c49a54;
+  --gold-2: #d9b773;
+  --gold-contrast: #d9b773;
+  --primary: #b8c5b3;
+  --primary-foreground: #0e1311;
+  --secondary: #1c2621;
+  --secondary-foreground: #f4f1ea;
+  --muted-foreground: #b6b7af;
+  --accent: #27332d;
+  --accent-foreground: #f4f1ea;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: #b8c5b3;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+::selection {
+  background: rgba(90, 107, 84, 0.24);
+  color: var(--text);
+}
+
+.aromia-hairline {
+  border-color: var(--line);
+}
+
+.aromia-material-wash {
+  background:
+    radial-gradient(circle at 78% 18%, rgba(217, 200, 177, 0.38), transparent 34%),
+    radial-gradient(circle at 18% 76%, rgba(90, 107, 84, 0.12), transparent 36%),
+    var(--aromia-paper);
+}
+
+[data-theme="dark"] .aromia-material-wash {
+  background:
+    radial-gradient(circle at 78% 18%, rgba(74, 31, 36, 0.22), transparent 34%),
+    radial-gradient(circle at 18% 76%, rgba(90, 107, 84, 0.16), transparent 36%),
+    var(--aromia-night);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aromia-object-float {
+    transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+  }
+  .aromia-object-float:hover {
+    transform: translateY(-4px);
+  }
+}

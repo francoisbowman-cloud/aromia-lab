@@ -12,35 +12,36 @@ export const metadata: Metadata = {
 
 export default async function CatalogoPage({ searchParams }: { searchParams: { familia?: string } }) {
   const perfumes = await getPerfumes();
+  const count = perfumes.length > 0 ? perfumes.length : 125;
 
   return (
-    <main className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]">
-      <section className="mx-auto w-full max-w-[1440px] px-6 pb-10 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
-        <div className="flex items-center justify-between font-plex text-xs uppercase tracking-[.14em] text-muted">
-          <span>Índice de fragancias</span>
-          <span>Aromia / 02</span>
-        </div>
-
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1.12fr_.88fr] lg:items-end">
+    <main className="min-h-screen overflow-hidden bg-[#f7f5f0] text-ink dark:bg-[#0e1311]">
+      <section className="relative mx-auto w-full max-w-[1520px] px-5 pb-10 pt-12 sm:px-8 lg:px-12 lg:pb-16 lg:pt-20">
+        <div aria-hidden="true" className="pointer-events-none absolute right-[-4%] top-[5%] font-display text-[clamp(150px,24vw,360px)] leading-none tracking-[-.09em] text-ink/[.025]">{count}</div>
+        <div className="relative grid gap-10 lg:grid-cols-[1.25fr_.75fr] lg:items-end">
           <div>
-            <p className="font-plex text-xs uppercase tracking-[.15em] text-gold-contrast">Fragancias</p>
-            <h1 className="mt-5 max-w-[12ch] font-display text-[44px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[54px] lg:text-[64px]">
-              Encuentra por instinto. Afina con criterio.
+            <p className="font-plex text-[10px] uppercase tracking-[.16em] text-[#5a6b54] dark:text-[#b8c5b3]">Colección / archivo olfativo</p>
+            <h1 className="mt-6 max-w-[11ch] font-display text-[52px] font-medium leading-[.89] tracking-[-.05em] text-ink sm:text-[72px] lg:text-[94px]">
+              {count} fragancias. Una sola obsesión: lo extraordinario.
             </h1>
-          </div>
-          <div className="lg:justify-self-end">
-            <p className="max-w-[40ch] font-sans text-base leading-7 text-muted">
-              Explora por familia, ocasión, precio o carácter y deja que el catálogo reduzca el ruido.
+            <p className="mt-7 max-w-[38ch] font-sans text-[15px] leading-7 text-muted">
+              Explora la colección real de Aromia como una secuencia de objetos, familias y sensaciones. Cada fragancia ocupa su propio espacio; los filtros solo reducen el ruido.
             </p>
-            <div className="mt-7 flex flex-wrap gap-x-8 gap-y-3 font-plex text-xs uppercase tracking-[.11em] text-muted">
-              <span><strong className="font-normal text-gold-contrast">{perfumes.length > 0 ? perfumes.length : "125"}</strong> fragancias</span>
-              <span>Familia → perfume</span>
+          </div>
+
+          <div className="lg:justify-self-end lg:pb-1">
+            <p className="max-w-[34ch] font-display text-[24px] leading-[1.12] tracking-[-.02em] text-[#5a6b54] sm:text-[29px]">
+              No es una cuadrícula. Es una exposición que cambia de densidad mientras avanzas.
+            </p>
+            <div className="mt-8 flex items-center gap-8 border-t border-line pt-4 font-plex text-[10px] uppercase tracking-[.14em] text-muted">
+              <span><strong className="font-normal text-[#5a6b54] dark:text-[#b8c5b3]">{count}</strong> objetos</span>
+              <span>Archivo vivo</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-[1440px] px-6 pb-20 lg:px-10 lg:pb-28">
+      <section className="mx-auto w-full max-w-[1520px] px-5 pb-24 sm:px-8 lg:px-12 lg:pb-32">
         <ResilientPerfumesCatalog initialPerfumes={perfumes} initialFamilia={searchParams.familia} />
       </section>
     </main>
