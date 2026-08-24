@@ -16,32 +16,32 @@ export default async function CatalogoPage({ searchParams }: { searchParams: { f
 
   return (
     <main className="min-h-screen overflow-hidden bg-white text-ink">
-      <section className="relative mx-auto w-full max-w-[1520px] px-5 pb-10 pt-12 sm:px-8 lg:px-12 lg:pb-16 lg:pt-20">
-        <div aria-hidden="true" className="pointer-events-none absolute right-[-4%] top-[5%] font-display text-[clamp(150px,24vw,360px)] leading-none tracking-[-.09em] text-ink/[.018]">{count}</div>
-        <div className="relative grid gap-10 lg:grid-cols-[1.25fr_.75fr] lg:items-end">
+      <section className="relative mx-auto w-full max-w-[1520px] px-5 pb-10 pt-12 sm:px-8 lg:px-12 lg:pb-20 lg:pt-24">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-[5%] top-[-2%] font-display text-[clamp(170px,26vw,390px)] leading-none tracking-[-.09em] text-ink/[.014]">{count}</div>
+        <div className="relative grid gap-12 lg:grid-cols-[1.28fr_.72fr] lg:items-end">
           <div>
-            <p className="font-plex text-[10px] uppercase tracking-[.16em] text-[#5a6b54]">Colección / archivo olfativo</p>
-            <h1 className="mt-6 max-w-[11ch] font-display text-[52px] font-medium leading-[.89] tracking-[-.05em] text-ink sm:text-[72px] lg:text-[94px]">
-              {count} fragancias. Una sola obsesión: lo extraordinario.
+            <p className="font-plex text-[9px] uppercase tracking-[.18em] text-[#5a6b54]">Índice olfativo / {count} objetos</p>
+            <h1 className="mt-7 max-w-[9ch] font-display text-[58px] font-medium leading-[.84] tracking-[-.055em] text-ink sm:text-[82px] lg:text-[112px]">
+              El perfume como materia.
             </h1>
-            <p className="mt-7 max-w-[38ch] font-sans text-[15px] leading-7 text-muted">
-              Explora la colección real de Aromia como una secuencia de objetos, familias y sensaciones. El blanco funciona como un lienzo continuo: la composición sucede alrededor del perfume, no detrás de él.
+            <p className="mt-8 max-w-[36ch] font-display text-[20px] leading-[1.28] tracking-[-.015em] text-muted sm:text-[24px]">
+              Una colección para mirar despacio: vidrio, color, proporción, familia y memoria compartiendo el mismo lienzo.
             </p>
           </div>
 
-          <div className="lg:justify-self-end lg:pb-1">
-            <p className="max-w-[34ch] font-display text-[24px] leading-[1.12] tracking-[-.02em] text-[#5a6b54] sm:text-[29px]">
-              Primero unificamos la evidencia del producto. Después dejamos que la dirección editorial rompa la cuadrícula.
+          <div className="lg:justify-self-end lg:pb-2">
+            <p className="max-w-[31ch] font-display text-[25px] leading-[1.08] tracking-[-.025em] text-ink sm:text-[31px]">
+              Sin vitrinas. Sin una cuadrícula que obligue a todos los perfumes a parecer iguales.
             </p>
-            <div className="mt-8 flex items-center gap-8 border-t border-[#20231f]/12 pt-4 font-plex text-[10px] uppercase tracking-[.14em] text-muted">
-              <span><strong className="font-normal text-[#5a6b54]">{count}</strong> objetos</span>
-              <span>Fondo blanco normalizado</span>
+            <div className="mt-10 grid grid-cols-2 gap-6 border-t border-[#20231f]/10 pt-4 font-plex text-[9px] uppercase tracking-[.16em] text-muted">
+              <span><strong className="block font-normal text-[#5a6b54]">{count}</strong><span className="mt-1 block">fragancias</span></span>
+              <span><strong className="block font-normal text-ink">01—{String(count).padStart(3, "0")}</strong><span className="mt-1 block">archivo vivo</span></span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-[1520px] bg-white px-5 pb-24 sm:px-8 lg:px-12 lg:pb-32">
+      <section className="mx-auto w-full max-w-[1520px] bg-white px-5 pb-24 sm:px-8 lg:px-12 lg:pb-36">
         <ResilientPerfumesCatalog initialPerfumes={perfumes} initialFamilia={searchParams.familia} />
       </section>
     </main>
