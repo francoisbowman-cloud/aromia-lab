@@ -34,10 +34,10 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
 
   return (
     <section className="grid min-h-[72vh] border-y border-line lg:grid-cols-[1.07fr_.93fr]">
-      <div className="aromia-material-wash relative min-h-[520px] overflow-hidden lg:min-h-[72vh]">
+      <div className="aromia-material-wash relative min-h-[470px] overflow-hidden sm:min-h-[520px] lg:min-h-[72vh]">
         <div aria-hidden="true" className="absolute left-[12%] top-[10%] h-[72%] w-[72%] rounded-[50%] bg-[#d9c8b1]/42 blur-[90px] dark:bg-[#4a1f24]/18" />
-        <div className="absolute inset-[4%] sm:inset-[6%] lg:inset-[4%_8%_2%_6%]">
-          <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" />
+        <div className="absolute inset-[2%] sm:inset-[5%] lg:inset-[4%_8%_2%_6%]">
+          <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" surface="editorial" />
         </div>
         <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-5 border-t border-line pt-3 font-plex text-xs uppercase tracking-[.13em] text-muted sm:left-8 sm:right-8">
           <span>Objeto auténtico</span>
@@ -52,15 +52,15 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
             <span>{concentration ?? "Perfume"}</span>
           </div>
 
-          <p className="mt-12 font-plex text-xs uppercase tracking-[.15em] text-[#5a6b54] dark:text-[#b8c5b3]">{family ?? "Objeto olfativo"}</p>
-          <h1 className="mt-4 max-w-[10ch] font-display text-[52px] font-medium leading-[.88] tracking-[-.05em] text-ink sm:text-[66px] lg:text-[78px]">{perfume.nombre}</h1>
+          <p className="mt-10 font-plex text-xs uppercase tracking-[.15em] text-[#5a6b54] dark:text-[#b8c5b3] lg:mt-12">{family ?? "Objeto olfativo"}</p>
+          <h1 className="mt-4 max-w-[10ch] font-display text-[50px] font-medium leading-[.88] tracking-[-.05em] text-ink sm:text-[66px] lg:text-[78px]">{perfume.nombre}</h1>
           <p className="mt-4 font-sans text-sm uppercase tracking-[.08em] text-muted">{perfume.marca}</p>
 
           {publicText(perfume.descripcion_corta) ? (
-            <p className="mt-9 max-w-[42ch] font-display text-[25px] leading-[1.25] tracking-[-.015em] text-ink sm:text-[28px]">{publicText(perfume.descripcion_corta)}</p>
+            <p className="mt-8 max-w-[42ch] font-display text-[24px] leading-[1.25] tracking-[-.015em] text-ink sm:text-[28px]">{publicText(perfume.descripcion_corta)}</p>
           ) : null}
 
-          <dl className="mt-12 grid grid-cols-2 gap-x-8 gap-y-7 border-t border-line pt-6 font-sans text-sm">
+          <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-7 border-t border-line pt-6 font-sans text-sm lg:mt-12">
             <div><dt className="font-plex text-xs uppercase tracking-[.12em] text-muted">Género</dt><dd className="mt-2 capitalize text-ink">{perfume.genero}</dd></div>
             <div><dt className="font-plex text-xs uppercase tracking-[.12em] text-muted">Concentración</dt><dd className="mt-2 text-ink">{concentration ?? "No especificada"}</dd></div>
             {family ? <div className="col-span-2"><dt className="font-plex text-xs uppercase tracking-[.12em] text-muted">Familia</dt><dd className="mt-2 font-display text-xl capitalize text-ink">{family}</dd></div> : null}
@@ -84,7 +84,7 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
           </dl>
         </div>
 
-        <div className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-6">
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-6 lg:mt-12">
           <div><p className="font-plex text-xs uppercase tracking-[.12em] text-muted">Referencia</p><p className="mt-1 font-display text-2xl text-ink">{price ?? "Consultar"}</p></div>
           <a href={buyHref} target="_blank" rel="sponsored noopener noreferrer" onClick={trackBuy} className="inline-flex min-h-12 items-center border-b border-ink font-plex text-xs uppercase tracking-[.13em] text-ink transition hover:border-[#5a6b54] hover:text-[#5a6b54]">Ver disponibilidad <span aria-hidden="true" className="ml-4">↗</span></a>
         </div>
