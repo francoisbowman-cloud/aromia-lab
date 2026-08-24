@@ -12,10 +12,10 @@ type Layout = "standard" | "monument" | "quiet" | "compact";
 export function PerfumeCardSkeleton() {
   return (
     <div className="py-2 sm:py-4" aria-busy="true">
-      <div className="aspect-[4/5] animate-pulse bg-[#ebe8e1]/65 dark:bg-[#18201c]" />
+      <div className="aspect-[4/5] animate-pulse bg-[#f4f4f1] dark:bg-[#18201c]" />
       <div className="mt-4 space-y-2">
-        <div className="h-3 w-20 animate-pulse bg-[#dedbd4] dark:bg-[#223029]" />
-        <div className="h-6 w-3/4 animate-pulse bg-[#dedbd4] dark:bg-[#223029]" />
+        <div className="h-3 w-20 animate-pulse bg-[#ecece8] dark:bg-[#223029]" />
+        <div className="h-6 w-3/4 animate-pulse bg-[#ecece8] dark:bg-[#223029]" />
       </div>
     </div>
   );
@@ -42,11 +42,6 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
     : layout === "quiet"
       ? "text-[21px] sm:text-[26px] lg:text-[29px]"
       : "text-[22px] sm:text-[29px] lg:text-[32px]";
-  const wash = layout === "monument"
-    ? "left-[4%] top-[8%] h-[74%] w-[86%] bg-[#d9c8b1]/28"
-    : layout === "quiet"
-      ? "left-[18%] top-[12%] h-[62%] w-[68%] bg-[#dfe5db]/35"
-      : "left-[12%] top-[10%] h-[68%] w-[76%] bg-[#d9c8b1]/20";
 
   return (
     <article className="group relative flex min-w-0 flex-col py-2 sm:py-4 lg:py-6">
@@ -54,33 +49,32 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
         href={`/catalogo/${perfume.slug}`}
         onClick={trackOpen}
         aria-label={`Abrir ficha de ${perfume.nombre} de ${perfume.marca}`}
-        className={`relative block overflow-hidden bg-transparent outline-none ${mediaClass}`}
+        className={`relative block overflow-hidden bg-white outline-none ${mediaClass}`}
       >
-        <div aria-hidden="true" className={`absolute rounded-[50%] blur-[70px] transition-transform duration-700 group-hover:scale-110 ${wash}`} />
         {layout === "monument" && index != null ? (
-          <span aria-hidden="true" className="absolute -right-2 top-1/2 -translate-y-1/2 font-display text-[clamp(96px,16vw,220px)] leading-none tracking-[-.08em] text-ink/[.035]">
+          <span aria-hidden="true" className="absolute -right-2 top-1/2 z-0 -translate-y-1/2 font-display text-[clamp(96px,16vw,220px)] leading-none tracking-[-.08em] text-ink/[.028]">
             {String(index + 1).padStart(2, "0")}
           </span>
         ) : null}
-        <div className={layout === "monument" ? "absolute inset-[-2%]" : "absolute inset-[1%]"}>
+        <div className={layout === "monument" ? "absolute inset-[-2%] z-10" : "absolute inset-[1%] z-10"}>
           <ProductImage
             slug={perfume.slug}
             imageUrl={perfume.imagen_url}
             alt={`${perfume.nombre} de ${perfume.marca}`}
             mode="card"
-            surface="editorial"
+            surface="comparison"
           />
         </div>
         <span
           aria-hidden="true"
-          className="absolute bottom-3 right-3 hidden h-10 w-10 translate-y-2 place-items-center rounded-full bg-[rgba(247,245,240,.88)] font-display text-lg text-[#20231f] opacity-0 shadow-[0_8px_30px_rgba(14,19,17,.08)] backdrop-blur-sm transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 sm:grid dark:bg-[rgba(14,19,17,.90)] dark:text-[#f7f5f0]"
+          className="absolute bottom-3 right-3 z-20 hidden h-10 w-10 translate-y-2 place-items-center rounded-full bg-white/92 font-display text-lg text-[#20231f] opacity-0 shadow-[0_8px_30px_rgba(14,19,17,.08)] backdrop-blur-sm transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 sm:grid"
         >
           ↗
         </span>
       </Link>
 
-      <Link href={`/catalogo/${perfume.slug}`} onClick={trackOpen} className="flex flex-1 flex-col pt-3 outline-none sm:pt-5">
-        <div className="flex items-baseline justify-between gap-3 border-t border-line pt-3 font-plex text-[9px] uppercase tracking-[.13em] text-muted sm:text-[10px]">
+      <Link href={`/catalogo/${perfume.slug}`} onClick={trackOpen} className="flex flex-1 flex-col bg-white pt-3 outline-none sm:pt-5">
+        <div className="flex items-baseline justify-between gap-3 border-t border-[#20231f]/12 pt-3 font-plex text-[9px] uppercase tracking-[.13em] text-muted sm:text-[10px]">
           <span className="truncate">{perfume.marca}</span>
           <span>{index == null ? "Aromia" : String(index + 1).padStart(2, "0")}</span>
         </div>
@@ -89,7 +83,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
           {perfume.nombre}
         </h3>
 
-        <p className="mt-3 font-plex text-[9px] uppercase tracking-[.12em] text-[#5a6b54] sm:mt-4 sm:text-[10px] dark:text-[#b8c5b3]">
+        <p className="mt-3 font-plex text-[9px] uppercase tracking-[.12em] text-[#5a6b54] sm:mt-4 sm:text-[10px]">
           {family ?? perfume.concentracion ?? "Objeto olfativo"}
         </p>
 

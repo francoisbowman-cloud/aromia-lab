@@ -1,0 +1,63 @@
+name: Catalog White Replacement Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-replacements:
+    if: github.head_ref == 'feat/catalog-white-canvas-image-normalization'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install validator dependencies
+        run: |
+          mkdir -p /tmp/aromia-white-replacements
+          cd /tmp/aromia-white-replacements
+          npm init -y >/dev/null 2>&1
+          npm install sharp@0.33.5 >/dev/null
+      - name: Validate replacement candidates
+        shell: bash
+        run: |
+          cp catalog/reports/catalog-white-background-replacements.json /tmp/aromia-white-replacements/replacements.json
+          cd /tmp/aromia-white-replacements
+          cat > validate.mjs <<'NODE'
+          import fs from 'node:fs/promises';
+          import sharp from 'sharp';
+          const payload=JSON.parse(await fs.readFile('replacements.json','utf8'));
+          const edge=(pixels,width,height,channels)=>{const out=[];const push=(x,y)=>{const i=(y*width+x)*channels;out.push([pixels[i]??0,pixels[i+1]??0,pixels[i+2]??0])};const sx=Math.max(1,Math.floor(width/32)),sy=Math.max(1,Math.floor(height/32));for(let x=0;x<width;x+=sx){push(x,0);push(x,height-1)}for(let y=0;y<height;y+=sy){push(0,y);push(width-1,y)}return out};
+          const nearWhite=([r,g,b])=>Math.min(r,g,b)>=238&&Math.max(r,g,b)-Math.min(r,g,b)<=22;
+          const report=[];
+          for(const item of payload.candidates){
+            try{
+              const response=await fetch(item.url,{headers:{'user-agent':'Mozilla/5.0 AromiaCatalogAudit/1.0'}});
+              if(!response.ok){report.push({...item,result:`HTTP_${response.status}`,whiteEdgeRatio:0});continue}
+              const input=Buffer.from(await response.arrayBuffer());
+              const {data,info}=await sharp(input).rotate().resize({width:900,height:900,fit:'inside',withoutEnlargement:true}).removeAlpha().raw().toBuffer({resolveWithObject:true});
+              const samples=edge(data,info.width,info.height,info.channels);
+              const ratio=samples.filter(nearWhite).length/Math.max(1,samples.length);
+              report.push({...item,result:ratio>=.92?'PASS':'REJECT',whiteEdgeRatio:Number(ratio.toFixed(3)),width:info.width,height:info.height});
+            }catch(error){report.push({...item,result:'ERROR',whiteEdgeRatio:0,error:String(error)})}
+          }
+          const summary={total:report.length,pass:report.filter(x=>x.result==='PASS').length,reject:report.filter(x=>x.result==='REJECT').length,error:report.filter(x=>x.result==='ERROR'||x.result.startsWith('HTTP_')).length};
+          await fs.mkdir('artifacts',{recursive:true});
+          await fs.writeFile('artifacts/catalog-white-replacement-validation.json',JSON.stringify({summary,report},null,2));
+          console.log(JSON.stringify(summary,null,2));
+          for(const item of report.filter(x=>x.result!=='PASS')) console.log(`${item.result}\t${item.whiteEdgeRatio}\t${item.slug}\t${item.url}`);
+          if(summary.reject||summary.error) process.exitCode=1;
+          NODE
+          node validate.mjs
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog-white-replacement-validation
+          path: /tmp/aromia-white-replacements/artifacts
+          retention-days: 30
