@@ -45,6 +45,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
           imageUrl={perfume.imagen_url}
           alt={`${perfume.nombre} de ${perfume.marca}`}
           mode="card"
+          surface="editorial"
         />
         <span
           aria-hidden="true"
