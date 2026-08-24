@@ -5,22 +5,62 @@ import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
-  { href: "/catalogo", label: "Fragancias", section: "catalog" },
-  { href: "/academia", label: "Academia", section: "academia" },
-  { href: "/magazine", label: "Revista", section: "magazine" },
-  { href: "/quiz", label: "Quiz", section: "quiz" },
+  { href: "/catalogo", label: "Perfumes" },
+  { href: "/magazine", label: "Magazine" },
+  { href: "/descubrir", label: "Discovery" },
+  { href: "/academia", label: "Academia" },
+  { href: "/club", label: "Club" },
 ] as const;
-
-function IconLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
-  return <Link href={href} aria-label={label} className="grid h-11 w-11 place-items-center text-ink transition hover:text-gold-contrast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">{children}</Link>;
-}
 
 export default function NavBar() {
   const pathname = usePathname();
-  return <header className="sticky top-0 z-50 border-b border-line bg-[rgba(251,248,243,.94)] backdrop-blur-xl dark:bg-[rgba(14,12,10,.94)] print:hidden print:static"><nav className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-6 lg:px-10">
-    <Link href="/" className="inline-flex min-h-11 items-center font-display text-[26px] tracking-[.08em] text-ink lg:text-[30px]" aria-label="Aromia — Inicio">AROMIA</Link>
-    <ul className="hidden items-center gap-4 font-display text-[15px] lg:flex xl:gap-7">{links.map((link) => { const active = link.section === "catalog" ? pathname === "/catalogo" || pathname.startsWith("/catalogo/") : pathname === link.href || pathname.startsWith(`${link.href}/`); return <li key={link.label}><Link href={link.href} aria-current={active ? "page" : undefined} className={`nav-link inline-flex min-h-11 items-center border-b transition ${active ? "border-gold text-ink" : "border-transparent text-muted hover:text-ink"}`}>{link.label}</Link></li>; })}</ul>
-    <div className="hidden items-center gap-0.5 lg:flex"><IconLink href="/buscar" label="Buscar en Aromia"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></IconLink><IconLink href="/descubrir" label="Mi mapa olfativo"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><path d="M12 3 9.8 8.8 4 11l5.8 2.2L12 19l2.2-5.8L20 11l-5.8-2.2L12 3Z"/></svg></IconLink><IconLink href="/club" label="Club Aromia"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] fill-none stroke-current" strokeWidth="1.5"><path d="M20.8 5.8c-2-2-5.2-1.9-7.2.1L12 7.5l-1.6-1.6c-2-2-5.2-2.1-7.2-.1-2 2-2 5.2 0 7.2L12 21l8.8-8c2-2 2-5.2 0-7.2Z"/></svg></IconLink><ThemeToggle className="ml-1" /></div>
-    <div className="flex items-center gap-1 lg:hidden"><ThemeToggle /><details className="relative"><summary className="flex min-h-11 cursor-pointer list-none items-center px-2 font-plex text-[10px] uppercase tracking-[.16em] text-ink">Menú</summary><ul className="absolute right-0 z-10 mt-1 flex w-56 flex-col border border-line bg-[#fffdf8] p-3 font-display text-base shadow-lux dark:bg-[#120f0c]">{links.map((link) => <li key={`${link.label}-mobile`}><Link href={link.href} className="flex min-h-11 items-center px-2 text-ink">{link.label}</Link></li>)}<li><Link href="/buscar" className="flex min-h-11 items-center px-2 text-ink">Buscar</Link></li><li><Link href="/descubrir" className="flex min-h-11 items-center px-2 text-ink">Mi mapa olfativo</Link></li><li><Link href="/perfumistas" className="flex min-h-11 items-center px-2 text-muted">Perfumistas</Link></li><li><Link href="/club" className="flex min-h-11 items-center px-2 text-gold-contrast">Club Aromia</Link></li></ul></details></div>
-  </nav></header>;
+
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-line bg-[rgba(247,245,240,.94)] backdrop-blur-xl dark:bg-[rgba(14,19,17,.94)] print:static print:hidden">
+      <nav className="mx-auto flex h-[68px] max-w-[1520px] items-center justify-between px-5 sm:px-8 lg:px-12">
+        <Link href="/" className="inline-flex min-h-11 items-center font-display text-[25px] tracking-[.08em] text-ink lg:text-[28px]" aria-label="Aromia — Inicio">
+          AROMIA
+        </Link>
+
+        <ul className="hidden items-center gap-6 font-sans text-[13px] lg:flex xl:gap-8">
+          {links.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`inline-flex min-h-11 items-center border-b transition-colors ${active ? "border-[#5a6b54] text-ink" : "border-transparent text-muted hover:text-ink"}`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link href="/buscar" className="inline-flex min-h-11 items-center font-sans text-[13px] text-muted transition hover:text-ink">Buscar</Link>
+          <ThemeToggle />
+        </div>
+
+        <div className="flex items-center gap-1 lg:hidden">
+          <ThemeToggle />
+          <details className="relative">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center px-2 font-plex text-xs uppercase tracking-[.14em] text-ink">Menú</summary>
+            <div className="absolute right-0 z-10 mt-1 w-60 border border-line bg-[#f7f5f0] p-4 shadow-[0_20px_60px_rgba(14,19,17,.12)] dark:bg-[#0e1311]">
+              <ul className="font-display text-xl">
+                {links.map((link) => (
+                  <li key={`${link.href}-mobile`}><Link href={link.href} className="flex min-h-12 items-center border-b border-line text-ink">{link.label}</Link></li>
+                ))}
+                <li><Link href="/buscar" className="flex min-h-12 items-center text-muted">Buscar</Link></li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </nav>
+    </header>
+  );
 }
