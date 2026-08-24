@@ -15,6 +15,16 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   return <span className="block font-plex text-[10px] uppercase tracking-[.16em] text-muted">{children}</span>;
 }
 
+function editorialPlacement(index: number) {
+  const pattern = index % 6;
+  if (pattern === 0) return { span: "lg:col-span-5", shift: "", layout: "monument" as const };
+  if (pattern === 1) return { span: "lg:col-span-3", shift: "lg:translate-y-20", layout: "quiet" as const };
+  if (pattern === 2) return { span: "lg:col-span-4", shift: "lg:translate-y-6", layout: "standard" as const };
+  if (pattern === 3) return { span: "lg:col-span-3", shift: "", layout: "compact" as const };
+  if (pattern === 4) return { span: "lg:col-span-5", shift: "lg:translate-y-14", layout: "monument" as const };
+  return { span: "lg:col-span-4", shift: "lg:translate-y-3", layout: "quiet" as const };
+}
+
 export function PerfumesCatalogEditorial({ perfumes, initialFamilia }: { perfumes: Perfume[]; initialFamilia?: string }) {
   const [q, setQ] = useState("");
   const [genero, setGenero] = useState("");
@@ -126,10 +136,29 @@ export function PerfumesCatalogEditorial({ perfumes, initialFamilia }: { perfume
         <div className="grid min-h-[320px] place-items-center border-y border-line py-14 text-center"><div><p className="font-display text-[38px] leading-none tracking-[-.03em] text-ink">Amplía el mapa olfativo.</p><p className="mx-auto mt-4 max-w-[38ch] font-sans text-sm leading-6 text-muted">Retira una condición o vuelve al archivo completo.</p><button type="button" onClick={clear} className="mt-7 min-h-11 font-plex text-[10px] uppercase tracking-[.13em] text-[#5a6b54]">Ver colección completa</button></div></div>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-x-5 gap-y-9 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-16">
-            {visible.map((perfume, index) => <div key={perfume.slug} className={index % 6 === 1 || index % 6 === 4 ? "lg:translate-y-14" : ""}><PerfumeCard perfume={perfume} index={index} trackingContext="catalog" /></div>)}
+          <div className="mb-9 flex items-end justify-between gap-5 border-t border-line pt-5 lg:mb-14">
+            <div>
+              <p className="font-plex text-[10px] uppercase tracking-[.14em] text-[#5a6b54] dark:text-[#b8c5b3]">Capítulo {String(Math.max(1, Math.ceil(visible.length / 6))).padStart(2, "0")}</p>
+              <p className="mt-3 max-w-[14ch] font-display text-[28px] leading-[.98] tracking-[-.025em] text-ink sm:text-[36px]">Objeto, pausa, objeto.</p>
+            </div>
+            <p className="hidden max-w-[34ch] font-sans text-sm leading-6 text-muted md:block">La escala cambia para que el catálogo no se convierta en una pared de productos idénticos.</p>
           </div>
-          <div className="mt-20 flex flex-col gap-5 border-t border-line pt-7 sm:flex-row sm:items-end sm:justify-between lg:mt-24"><div><p className="font-plex text-[10px] uppercase tracking-[.14em] text-muted">Archivo en capítulos</p><p className="mt-3 font-display text-[30px] leading-none tracking-[-.025em] text-ink">{visible.length} de {filtrados.length} a la vista.</p></div>{hasMore ? <button type="button" onClick={() => setVisibleCount((count) => Math.min(count + CHAPTER_SIZE, filtrados.length))} className="inline-flex min-h-12 items-center gap-4 border-b border-ink font-plex text-[10px] uppercase tracking-[.14em] text-ink">Continuar el índice <span aria-hidden="true">↓</span></button> : <p className="font-plex text-[10px] uppercase tracking-[.14em] text-muted">Fin del archivo</p>}</div>
+
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-8 sm:gap-y-14 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-20">
+            {visible.map((perfume, index) => {
+              const placement = editorialPlacement(index);
+              return (
+                <div key={perfume.slug} className={`col-span-1 min-w-0 ${placement.span} ${placement.shift}`}>
+                  <PerfumeCard perfume={perfume} index={index} trackingContext="catalog" layout={placement.layout} />
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-24 flex flex-col gap-5 border-t border-line pt-8 sm:flex-row sm:items-end sm:justify-between lg:mt-36">
+            <div><p className="font-plex text-[10px] uppercase tracking-[.14em] text-muted">Archivo en capítulos</p><p className="mt-3 font-display text-[30px] leading-none tracking-[-.025em] text-ink">{visible.length} de {filtrados.length} a la vista.</p></div>
+            {hasMore ? <button type="button" onClick={() => setVisibleCount((count) => Math.min(count + CHAPTER_SIZE, filtrados.length))} className="inline-flex min-h-12 items-center gap-4 border-b border-ink font-plex text-[10px] uppercase tracking-[.14em] text-ink transition hover:border-[#5a6b54] hover:text-[#5a6b54]">Continuar el índice <span aria-hidden="true">↓</span></button> : <p className="font-plex text-[10px] uppercase tracking-[.14em] text-muted">Fin del archivo</p>}
+          </div>
         </>
       )}
     </div>
