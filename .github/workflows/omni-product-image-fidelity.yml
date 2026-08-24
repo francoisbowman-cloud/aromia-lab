@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   acqua-di-gio-fidelity:
-    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration' || github.head_ref == 'release/omni-aromia-final'
+    if: github.head_ref == 'agent/omni-render-gate-integration' || github.head_ref == 'agent/omni-aromia-closure-integration' || github.head_ref == 'release/omni-aromia-final' || github.head_ref == 'feat/aromia-visual-redesign-2026'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
@@ -42,7 +42,7 @@ jobs:
           done
           cat /tmp/aromia-image-fidelity.log
           exit 1
-      - name: Verify real image route and capture evidence
+      - name: Verify authentic image and borderless editorial treatment
         shell: bash
         run: |
           cd /tmp/omni-image-fidelity
@@ -70,7 +70,7 @@ jobs:
                 overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
                 productStageWhite: (() => {
                   const img = document.querySelector('img[alt*="Acqua" i]');
-                  if (!img?.parentElement) return false;
+                  if (!img?.parentElement) return null;
                   return getComputedStyle(img.parentElement).backgroundColor === 'rgb(255, 255, 255)';
                 })(),
               }));
@@ -81,7 +81,9 @@ jobs:
             await browser.close();
             fs.writeFileSync('artifacts/report.json', JSON.stringify(report, null, 2));
             for (const result of Object.values(report.viewports)) {
-              if (result.status >= 400 || result.pageErrors || result.brokenImages || result.overflowX > 2 || !result.productStageWhite) throw new Error(`Acqua di Gio fidelity regression: ${JSON.stringify(report)}`);
+              if (result.status >= 400 || result.pageErrors || result.brokenImages || result.overflowX > 2 || result.productStageWhite !== false) {
+                throw new Error(`Aromia editorial product-image fidelity regression: ${JSON.stringify(report)}`);
+              }
             }
             console.log(JSON.stringify(report, null, 2));
           })().catch(error => { console.error(error); process.exit(1); });
