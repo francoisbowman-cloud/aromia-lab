@@ -44,7 +44,7 @@ export function MagazineCoverStory({
           className="aromia-scene-editorial absolute inset-0 overflow-hidden border border-[#d7c39e]/40 bg-[#efe6d6] dark:border-[#6f5b3e]/40 dark:bg-[#17130f]"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,.86),transparent_28%),radial-gradient(circle_at_78%_76%,rgba(168,127,74,.22),transparent_34%)] dark:opacity-35" />
-          <div className="absolute inset-x-[7%] top-[7%] flex items-center justify-between border-b border-[#a77f4a]/35 pb-4 font-plex text-[9px] uppercase tracking-[.18em] text-[#8f6d41] dark:text-[#d3b27c]">
+          <div className="absolute inset-x-[7%] top-[7%] flex items-center justify-between border-b border-[#a77f4a]/35 pb-4 font-plex text-[9px] uppercase tracking-[.18em] text-gold-contrast dark:text-[#d3b27c]">
             <span>{category}</span>
             {year ? <span>{year}</span> : null}
           </div>

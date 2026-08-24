@@ -99,6 +99,7 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onBlur={() => q.trim() && trackEvent("internal_search", { context: "catalog", query_length: q.trim().length, results: filtrados.length })}
+            aria-label="Buscar perfumes"
             placeholder="Perfume, marca, familia o nota…"
             className="h-12 border-line/60 bg-[#fffdf8] shadow-none focus-visible:ring-0 dark:bg-[#14100c]"
           />
@@ -122,6 +123,7 @@ export function PerfumesCatalog({ perfumes, initialFamilia }: { perfumes: Perfum
               value={q}
               onChange={(e) => setQ(e.target.value)}
               onBlur={() => q.trim() && trackEvent("internal_search", { context: "catalog", query_length: q.trim().length, results: filtrados.length })}
+              aria-label="Buscar perfumes"
               placeholder="Perfume, marca, familia o nota…"
               className="h-11 border-0 bg-transparent shadow-none focus-visible:ring-0"
             />
