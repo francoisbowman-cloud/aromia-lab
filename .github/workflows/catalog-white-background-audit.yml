@@ -12,84 +12,55 @@ jobs:
     if: github.head_ref == 'feat/catalog-white-canvas-image-normalization'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    env:
-      API_URL: https://api-production-fe2f.up.railway.app
-      NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install web dependencies
-        run: npm ci --prefix apps/web
       - name: Install audit dependencies
         run: |
           mkdir -p /tmp/aromia-white-audit
           cd /tmp/aromia-white-audit
           npm init -y >/dev/null 2>&1
           npm install sharp@0.33.5 >/dev/null
-      - name: Audit every catalog source image
+      - name: Audit projected post-migration catalog state
         shell: bash
         run: |
+          cp catalog/reports/catalog-white-background-replacements.json /tmp/aromia-white-audit/replacements.json
           cd /tmp/aromia-white-audit
           cat > audit.mjs <<'NODE'
           import fs from 'node:fs/promises';
           import sharp from 'sharp';
 
-          const API = 'https://api-production-fe2f.up.railway.app';
-          const perfumesResponse = await fetch(`${API}/api/perfumes`);
-          if (!perfumesResponse.ok) throw new Error(`Perfume API HTTP ${perfumesResponse.status}`);
-          const perfumes = await perfumesResponse.json();
-          const report = [];
-          const edge = (pixels, width, height, channels) => {
-            const samples = [];
-            const push = (x,y) => {
-              const i=(y*width+x)*channels;
-              samples.push([pixels[i]??0,pixels[i+1]??0,pixels[i+2]??0]);
-            };
-            const sx=Math.max(1,Math.floor(width/32));
-            const sy=Math.max(1,Math.floor(height/32));
-            for(let x=0;x<width;x+=sx){push(x,0);push(x,height-1)}
-            for(let y=0;y<height;y+=sy){push(0,y);push(width-1,y)}
-            return samples;
-          };
-          const nearWhite = ([r,g,b]) => Math.min(r,g,b) >= 238 && Math.max(r,g,b)-Math.min(r,g,b) <= 22;
-
-          for (const perfume of perfumes) {
-            const slug = perfume.slug;
-            const url = `${API}/api/perfumes/${encodeURIComponent(slug)}`;
-            let imageUrl = perfume.imagen_url;
-            try {
-              if (!imageUrl) {
-                const detail = await fetch(url);
-                if (detail.ok) imageUrl = (await detail.json()).imagen_url;
-              }
-              if (!imageUrl) {
-                report.push({slug, nombre: perfume.nombre, marca: perfume.marca, status:'MISSING_IMAGE', whiteEdgeRatio:0});
-                continue;
-              }
-              const response = await fetch(imageUrl);
-              if (!response.ok) {
-                report.push({slug, nombre: perfume.nombre, marca: perfume.marca, status:`HTTP_${response.status}`, whiteEdgeRatio:0, imageUrl});
-                continue;
-              }
-              const input = Buffer.from(await response.arrayBuffer());
+          const API='https://api-production-fe2f.up.railway.app';
+          const payload=JSON.parse(await fs.readFile('replacements.json','utf8'));
+          const replacementBySlug=new Map(payload.candidates.map(item=>[item.slug,item.url]));
+          const perfumesResponse=await fetch(`${API}/api/perfumes`);
+          if(!perfumesResponse.ok)throw new Error(`Perfume API HTTP ${perfumesResponse.status}`);
+          const perfumes=await perfumesResponse.json();
+          const edge=(pixels,width,height,channels)=>{const out=[];const push=(x,y)=>{const i=(y*width+x)*channels;out.push([pixels[i]??0,pixels[i+1]??0,pixels[i+2]??0])};const sx=Math.max(1,Math.floor(width/32)),sy=Math.max(1,Math.floor(height/32));for(let x=0;x<width;x+=sx){push(x,0);push(x,height-1)}for(let y=0;y<height;y+=sy){push(0,y);push(width-1,y)}return out};
+          const nearWhite=([r,g,b])=>Math.min(r,g,b)>=238&&Math.max(r,g,b)-Math.min(r,g,b)<=22;
+          const report=[];
+          for(const perfume of perfumes){
+            const imageUrl=replacementBySlug.get(perfume.slug)??perfume.imagen_url;
+            const source=replacementBySlug.has(perfume.slug)?'replacement-manifest':'production-current';
+            if(!imageUrl){report.push({slug:perfume.slug,status:'MISSING_IMAGE',ratio:0,source});continue}
+            try{
+              const response=await fetch(imageUrl,{headers:{'user-agent':'Mozilla/5.0 AromiaCatalogAudit/1.0'}});
+              if(!response.ok){report.push({slug:perfume.slug,status:`HTTP_${response.status}`,ratio:0,imageUrl,source});continue}
+              const input=Buffer.from(await response.arrayBuffer());
               const {data,info}=await sharp(input).rotate().resize({width:900,height:900,fit:'inside',withoutEnlargement:true}).removeAlpha().raw().toBuffer({resolveWithObject:true});
               const samples=edge(data,info.width,info.height,info.channels);
               const ratio=samples.filter(nearWhite).length/Math.max(1,samples.length);
-              report.push({slug, nombre: perfume.nombre, marca: perfume.marca, status: ratio >= .92 ? 'PASS' : 'REPLACE', whiteEdgeRatio:Number(ratio.toFixed(3)), imageUrl});
-            } catch (error) {
-              report.push({slug, nombre: perfume.nombre, marca: perfume.marca, status:'ERROR', whiteEdgeRatio:0, error:String(error)});
-            }
+              report.push({slug:perfume.slug,status:ratio>=.92?'PASS':'FAIL',ratio:Number(ratio.toFixed(3)),imageUrl,source});
+            }catch(error){report.push({slug:perfume.slug,status:'ERROR',ratio:0,imageUrl,source,error:String(error)})}
           }
-          report.sort((a,b)=>a.status.localeCompare(b.status)||a.whiteEdgeRatio-b.whiteEdgeRatio);
-          const summary={total:report.length, pass:report.filter(x=>x.status==='PASS').length, replace:report.filter(x=>x.status==='REPLACE').length, missing:report.filter(x=>x.status==='MISSING_IMAGE').length, error:report.filter(x=>x.status==='ERROR'||x.status.startsWith('HTTP_')).length};
+          const summary={total:report.length,pass:report.filter(x=>x.status==='PASS').length,fail:report.filter(x=>x.status!=='PASS').length,replacements:report.filter(x=>x.source==='replacement-manifest').length};
           await fs.mkdir('artifacts',{recursive:true});
           await fs.writeFile('artifacts/catalog-white-background-report.json',JSON.stringify({summary,report},null,2));
-          const csv=['status,whiteEdgeRatio,slug,marca,nombre,imageUrl',...report.map(x=>[x.status,x.whiteEdgeRatio,x.slug,JSON.stringify(x.marca??''),JSON.stringify(x.nombre??''),JSON.stringify(x.imageUrl??'')].join(','))].join('\n');
-          await fs.writeFile('artifacts/catalog-white-background-report.csv',csv);
           console.log(JSON.stringify(summary,null,2));
-          if (summary.missing || summary.error) process.exitCode=1;
+          for(const item of report.filter(x=>x.status!=='PASS'))console.log(`${item.status}\t${item.ratio}\t${item.slug}\t${item.imageUrl??''}`);
+          if(summary.total!==125||summary.fail!==0||summary.replacements!==25)process.exitCode=1;
           NODE
           node audit.mjs
       - name: Upload audit
