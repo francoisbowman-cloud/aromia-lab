@@ -12,66 +12,73 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
   const coverRef = useRef<HTMLAnchorElement>(null);
 
   const filtered = useMemo(() => {
-    const tab = MAGAZINE_TABS.find((t) => t.key === activeKey);
+    const tab = MAGAZINE_TABS.find((item) => item.key === activeKey);
     if (!tab || tab.categorias === null) return articulos;
-    return articulos.filter((a) => tab.categorias!.includes(a.categoria));
+    return articulos.filter((article) => tab.categorias!.includes(article.categoria));
   }, [articulos, activeKey]);
 
   const cover = filtered[0];
-  const secondary = filtered.slice(1, 4);
+  const secondary = filtered.slice(1, 7);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     coverRef.current?.focus();
   }, [activeKey]);
 
   return (
-    <div className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]">
-      <header className="mx-auto max-w-[1440px] px-6 pb-10 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
-        <div className="flex flex-wrap items-center justify-between gap-3 font-plex text-xs uppercase tracking-[.13em] text-muted"><span>Aromia Magazine</span><span>Journal de parfum</span></div>
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
+    <div className="min-h-screen bg-[#f7f5f0] text-ink dark:bg-[#0e1311]">
+      <header className="mx-auto max-w-[1520px] px-5 pb-10 pt-12 sm:px-8 lg:px-12 lg:pb-14 lg:pt-20">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
           <div>
-            <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Edición 01 / Materia, memoria, deseo</p>
-            <h1 className="mt-5 max-w-[11ch] font-display text-[46px] font-medium leading-[.96] tracking-[-.04em] text-ink sm:text-[54px] lg:text-[64px]">Historias que cambian cómo hueles.</h1>
+            <h1 className="font-display text-[58px] font-medium leading-[.86] tracking-[-.055em] text-ink sm:text-[78px] lg:text-[104px]">Magazine</h1>
+            <p className="mt-6 max-w-[24ch] font-display text-[27px] leading-[1.08] tracking-[-.02em] text-[#5a6b54] sm:text-[32px]">Perfume leído como objeto, cultura y memoria.</p>
           </div>
           <div className="lg:justify-self-end">
-            <p className="max-w-[40ch] font-sans text-base leading-7 text-muted">Reseñas, cultura y guías para entender mejor lo que llevas puesto y lo que quieres descubrir después.</p>
-            <div className="mt-6 flex gap-6 font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{articulos.length} historias</span><span>Aromia / 2026</span></div>
+            <p className="max-w-[40ch] font-sans text-base leading-7 text-muted">Reseñas, comparativas y guías construidas desde datos reales del catálogo y una mirada editorial propia.</p>
+            <div className="mt-8 flex gap-7 border-t border-line pt-4 font-plex text-xs uppercase tracking-[.13em] text-muted"><span>{articulos.length} historias</span><span>Archivo vivo</span></div>
           </div>
         </div>
       </header>
 
-      <div className="sticky top-[64px] z-20 bg-[#fffdf8]/95 backdrop-blur-md dark:bg-[#12100d]/95"><MagazineCategoryNav activeKey={activeKey} onSelect={setActiveKey} /></div>
+      <div className="sticky top-[64px] z-20 border-y border-line bg-[rgba(247,245,240,.94)] backdrop-blur-md dark:bg-[rgba(14,19,17,.94)]">
+        <MagazineCategoryNav activeKey={activeKey} onSelect={setActiveKey} />
+      </div>
 
-      <section className="mx-auto max-w-[1440px] px-6 pb-24 pt-10 lg:px-10 lg:pt-14">
+      <section className="mx-auto max-w-[1520px] px-5 pb-28 pt-10 sm:px-8 lg:px-12 lg:pt-16">
         {!cover ? (
-          <div className="flex min-h-[360px] items-center justify-center"><p className="font-sans text-base text-muted">No hay artículos disponibles en esta categoría.</p></div>
+          <div className="flex min-h-[360px] items-center justify-center border-y border-line"><p className="font-sans text-base text-muted">No hay artículos disponibles en esta categoría.</p></div>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-10 pb-14 lg:grid-cols-[.62fr_1.38fr] lg:gap-14 lg:pb-20">
-              <div className="flex flex-col justify-between gap-12 lg:py-4">
+            <div className="grid gap-9 border-b border-line pb-16 lg:grid-cols-[.32fr_1.68fr] lg:gap-14 lg:pb-24">
+              <aside className="flex flex-col justify-between gap-10 border-t border-line pt-4 lg:py-4">
                 <div>
-                  <p className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">Portada / edición actual</p>
-                  <h2 className="mt-5 max-w-[10ch] font-display text-[38px] font-medium leading-[.98] tracking-[-.03em] text-ink sm:text-[44px] lg:text-[52px]">El perfume también es cultura material.</h2>
-                  <p className="mt-7 max-w-[38ch] font-sans text-base leading-7 text-muted">La botella, las materias y la firma olfativa cuentan una historia antes de llegar al catálogo.</p>
+                  <p className="font-plex text-xs uppercase tracking-[.14em] text-[#5a6b54] dark:text-[#b8c5b3]">Portada</p>
+                  <p className="mt-5 font-display text-3xl leading-[1.05] tracking-[-.025em] text-ink">La historia principal cambia con el archivo, no con una plantilla.</p>
                 </div>
-                <div className="flex gap-8 font-plex text-xs uppercase tracking-[.12em] text-muted">
-                  <span><span className="text-gold-contrast">Edición</span> 01</span>
-                  <span><span className="text-gold-contrast">Selección</span> {filtered.length} historias</span>
-                </div>
-              </div>
+                <div className="font-plex text-xs uppercase tracking-[.12em] text-muted"><span className="text-ink">{filtered.length}</span> lecturas en esta vista</div>
+              </aside>
               <MagazineCoverStory article={cover} linkRef={coverRef} />
             </div>
 
             {secondary.length > 0 ? (
-              <aside className="pt-14 lg:pt-20">
-                <div className="mb-10 flex items-end justify-between gap-6">
-                  <div><p className="font-plex text-xs uppercase tracking-[.13em] text-gold-contrast">Siguiente lectura</p><h3 className="mt-3 font-display text-[32px] font-medium leading-none text-ink lg:text-[40px]">Tres caminos para continuar.</h3></div>
-                  <span className="hidden font-plex text-xs uppercase tracking-[.12em] text-muted sm:block">Archivo / {String(secondary.length).padStart(2, "0")}</span>
+              <aside className="pt-16 lg:pt-24">
+                <div className="mb-10 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
+                  <div>
+                    <p className="font-plex text-xs uppercase tracking-[.13em] text-[#5a6b54] dark:text-[#b8c5b3]">Archivo</p>
+                    <h2 className="mt-3 font-display text-[38px] font-medium leading-none tracking-[-.03em] text-ink lg:text-[48px]">Sigue leyendo sin perder el hilo.</h2>
+                  </div>
+                  <span className="font-plex text-xs uppercase tracking-[.12em] text-muted">{String(secondary.length).padStart(2, "0")} historias</span>
                 </div>
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-10">
-                  {secondary.map((article, i) => <div key={article.slug}><MagazineSecondaryStory article={article} isFirst={i === 0} /></div>)}
+                <div className="grid grid-cols-1 gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+                  {secondary.map((article, index) => (
+                    <div key={article.slug} className={index % 3 === 1 ? "lg:translate-y-10" : ""}>
+                      <MagazineSecondaryStory article={article} isFirst={index === 0} />
+                    </div>
+                  ))}
                 </div>
               </aside>
             ) : null}
