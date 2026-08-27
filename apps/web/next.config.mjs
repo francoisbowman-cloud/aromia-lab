@@ -5,7 +5,7 @@ const nextConfig = {
   async redirects() {
     return [
       // Páginas raíz de v1 con equivalente directo
-      { source: "/catalogo.html", destination: "/catalogo", permanent: true },
+      { source: "/catalogo.html", destination: "/magazine", permanent: true },
       { source: "/magazine.html", destination: "/magazine", permanent: true },
       { source: "/lab.html", destination: "/quiz", permanent: true },
       { source: "/privacidad.html", destination: "/privacidad", permanent: true },
@@ -54,9 +54,16 @@ const nextConfig = {
       { source: "/articulos", destination: "/magazine", permanent: true },
       { source: "/articulos/:slug", destination: "/magazine/:slug", permanent: true },
 
-      // /perfumes reemplazado por /catalogo (21/07) — la ruta vieja pasa a redirect
-      { source: "/perfumes", destination: "/catalogo", permanent: true },
+      // /perfumes fue reemplazado por /catalogo (21/07); con el pivote a revista
+      // (decisión #103) el grid público desaparece — la landing va al Magazine.
+      // La ficha individual /catalogo/:slug sobrevive (destino del Quiz + long-tail).
+      { source: "/perfumes", destination: "/magazine", permanent: true },
       { source: "/perfumes/:slug", destination: "/catalogo/:slug", permanent: true },
+
+      // Retiro del catálogo público navegable (decisión #103, bloque 1.2):
+      // la landing con grid/buscador/filtros y el comparador cara a cara van al Magazine.
+      { source: "/catalogo", destination: "/magazine", permanent: true },
+      { source: "/comparar", destination: "/magazine", permanent: true },
 
       // Sin redirect todavía (pendiente de decisión/contenido — ver ESTADO-aromia.md):
       // /catalogo.html?p=ID — deep-links por ID numérico, sin mapeo a slug

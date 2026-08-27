@@ -37,7 +37,7 @@ export default async function QuizResultadoPage({ params }: { params: { perfil: 
         {recomendados.length > 0 ? (
           <div className="grid grid-cols-1 border-b border-line sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{recomendados.map((perfume, index) => <PerfumeCard key={perfume.slug} perfume={perfume} index={index} trackingContext="quiz_result" />)}</div>
         ) : (
-          <div className="border-y border-line py-16"><p className="font-display text-3xl text-ink">La selección todavía está abierta.</p><p className="mt-3 max-w-[40ch] font-sans text-sm leading-6 text-muted">Aún no hay fragancias publicadas que cumplan este perfil con suficiente confianza.</p><Link href="/catalogo" className="mt-6 inline-block border-b border-ink pb-1 font-plex text-[9px] uppercase tracking-[.14em] text-ink">Explorar catálogo →</Link></div>
+          <div className="border-y border-line py-16"><p className="font-display text-3xl text-ink">La selección todavía está abierta.</p><p className="mt-3 max-w-[40ch] font-sans text-sm leading-6 text-muted">Aún no hay fragancias publicadas que cumplan este perfil con suficiente confianza.</p><Link href="/magazine" className="mt-6 inline-block border-b border-ink pb-1 font-plex text-[9px] uppercase tracking-[.14em] text-ink">Leer el Magazine →</Link></div>
         )}
       </section>
 

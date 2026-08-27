@@ -11,7 +11,6 @@ export const ANALYTICS_EVENTS = {
   similarPerfumeClick: "similar_perfume_click",
   pdpGalleryInteraction: "pdp_gallery_interaction",
   intentionDiscovery: "intention_discovery",
-  compareStarted: "compare_started",
   discoveryProfileReset: "discovery_profile_reset",
 } as const;
 
