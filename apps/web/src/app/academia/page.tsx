@@ -130,8 +130,8 @@ export default function AcademiaPage() {
 
       <section className="rounded-card bg-ink px-8 py-14 text-center text-paper">
         <h2 className="font-display text-3xl font-semibold lg:text-4xl">¿Ya sabes qué buscas?</h2>
-        <p className="mx-auto mt-3 max-w-md font-sans text-base leading-7 text-paper/75">Vuelve al catálogo y explora con filtros de familia, ocasión y concentración.</p>
-        <Button asChild size="lg" className="mt-6"><Link href="/catalogo">Ir al catálogo →</Link></Button>
+        <p className="mx-auto mt-3 max-w-md font-sans text-base leading-7 text-paper/75">Seguí leyendo el Magazine: reseñas, comparativas y guías por ocasión y temporada.</p>
+        <Button asChild size="lg" className="mt-6"><Link href="/magazine">Ir al Magazine →</Link></Button>
       </section>
     </main>
   );

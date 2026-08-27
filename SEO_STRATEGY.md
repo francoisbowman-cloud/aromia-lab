@@ -1,5 +1,24 @@
 # Estrategia SEO inicial — Aromia v2.0 (Sprint 1)
 
+> **Actualización 2026-08-27 — pivote a revista (decisión #103).** Este documento
+> es de Sprint 1 y asumía el catálogo navegable (`/perfumes/` → `/catalogo/`) como
+> puerta de entrada SEO principal. **Ya no aplica ese supuesto.** Con el pivote a
+> revista editorial:
+> - La **puerta de entrada principal es el Magazine** (`/magazine/[slug]`): cada
+>   reseña, comparativa y guía es una landing de búsqueda, con links de afiliado
+>   de Amazon embebidos en el texto.
+> - El **grid público `/catalogo` se retiró** (bloque 1.2): la URL redirige 308 a
+>   `/magazine`. También `/perfumes` y `/comparar` → `/magazine`.
+> - La **ficha individual `/catalogo/[slug]` sigue siendo indexable** a propósito
+>   (sin `noindex`) como contenido long-tail: quien busca el nombre exacto de un
+>   perfume es tráfico de intención alta. Se lista en `sitemap.xml` (por perfume),
+>   la landing `/catalogo` ya no.
+> - La estructura de URLs de la sección 2 quedó obsoleta ya en 21/07 (`/articulos/`
+>   → `/magazine/`, `/perfumes/` → `/catalogo/`); se deja como registro histórico.
+>
+> El resto del documento (keywords, prioridad de intención, backlog de contenido)
+> sigue siendo válido y de hecho más central que antes.
+
 ## 1. Keywords objetivo iniciales
 
 Basadas en los 10 artículos producidos en este sprint. Volumen y dificultad

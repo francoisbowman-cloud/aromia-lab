@@ -11,7 +11,7 @@ export default function NotFound() {
           </div>
           <div className="lg:justify-self-end">
             <p className="max-w-[42ch] font-sans text-base leading-7 text-muted">La página pudo cambiar de dirección o todavía no formar parte del archivo.</p>
-            <div className="mt-7 flex flex-wrap gap-5 font-plex text-[9px] uppercase tracking-[.14em]"><Link href="/catalogo" className="text-ink transition hover:text-gold-contrast">Ir al catálogo →</Link><Link href="/buscar" className="text-muted transition hover:text-ink">Buscar en Aromia</Link></div>
+            <div className="mt-7 flex flex-wrap gap-5 font-plex text-[9px] uppercase tracking-[.14em]"><Link href="/magazine" className="text-ink transition hover:text-gold-contrast">Ir al Magazine →</Link><Link href="/buscar" className="text-muted transition hover:text-ink">Buscar en Aromia</Link></div>
           </div>
         </div>
       </section>

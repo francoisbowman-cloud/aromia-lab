@@ -40,9 +40,9 @@ await requireText("apps/web/src/app/catalogo/[slug]/page.tsx", [
   ["pdp_missing_not_found", /notFound\(\)/], ["pdp_missing_canonical", /canonical:\s*`\/catalogo\/\$\{perfume\.slug\}`/], ["pdp_missing_product_jsonld", /application\/ld\+json/], ["pdp_missing_hero", /<HeroHeader/], ["pdp_missing_sensory_anatomy", /<SkinEvolution/], ["pdp_missing_performance", /<PerformanceBars/], ["pdp_missing_story", /<EditorialMood/], ["pdp_missing_commerce", /<PriceTable/], ["pdp_missing_community", /<CommunityReviews/],
 ]);
 
-await requireText("apps/web/src/components/perfume/PerfumesCatalog.tsx", [
-  ["mobile_filters_must_be_collapsible", /<details[^>]+group/], ["mobile_filters_must_cap_height", /max-h-\[56vh\]/], ["desktop_filters_must_not_render_mobile", /hidden grid-cols[^\n]+lg:grid/],
-]);
+// PerfumesCatalog.tsx (grid público con buscador/filtros) se retiró con el
+// pivote a revista — bloque 1.2, decisión #103. La ficha /catalogo/[slug] y su
+// PerfumeCard siguen siendo el destino canónico y mantienen sus propias reglas.
 await requireText("apps/web/src/components/perfume/PerfumeCard.tsx", [["catalog_card_image_must_route_to_pdp", /href=\{`\/catalogo\/\$\{perfume\.slug\}`\}/]]);
 const card = await text("apps/web/src/components/perfume/PerfumeCard.tsx");
 if (/api\/catalog-buy/.test(card)) failures.push("catalog_card_direct_commerce_regression");

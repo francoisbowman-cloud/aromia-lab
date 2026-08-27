@@ -2,7 +2,6 @@ import Link from "next/link";
 
 const ECOSISTEMA = [
   { href: "/magazine", label: "Magazine" },
-  { href: "/catalogo", label: "Catálogo" },
   { href: "/academia", label: "Academia" },
   { href: "/perfumistas", label: "Perfumistas" },
 ];
