@@ -62,6 +62,14 @@ The question for ChatGPT is:
 
 ChatGPT may also decide that no image is the stronger solution.
 
+## Repository handoff rule
+
+The repository is the shared handoff surface between Claude, ChatGPT and OMNI.
+
+Claude must save each completed article and its `[AROMIA_VISUAL_OPPORTUNITY]` markers in the repo before handing off. ChatGPT will read them directly from the repository, produce or direct the visual work, and return the resulting assets or implementation through the project. The user should not need to copy and paste outputs between systems.
+
+Keep handoffs explicit and lightweight. Do not create a synchronization service, extra branch topology, schema or orchestration layer unless repeated real-world use proves it necessary.
+
 ## Production loop
 
 `IDEA → RESEARCH → STORY → EDITORIAL STRUCTURE → VISUAL OPPORTUNITIES → CHATGPT VISUAL DIRECTION/ASSETS → INTEGRATION → OMNI GATE → CORRECTION`
