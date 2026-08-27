@@ -61,6 +61,51 @@ ninguna. Si Cowork necesita volver a publicar vía `autopublish/*`, esa
 rama se recrea desde `main` en el momento, ya no es una rama persistente
 del repo (regla general del proyecto, no solo para esta herramienta).
 
+**Actualizado 2026-08-27 — segunda limpieza de ramas.** Entre agosto y el
+pivote a revista se acumularon 41 ramas sueltas en `origin` (casi todas
+experimentos de OMNI: `omni/*`, `agent/*`, línea catalog-scale). Se
+borraron en dos pasadas, cada una con "Kill" textual de Brey y tras
+verificar que ninguna tenía dato de perfumes sin respaldo en `main`
+(`ESTADO-aromia.md` decisión #104): primero 26, después las 13 restantes.
+**39 de 41 borradas.** Quedan solo **2 ramas no-`main`, ambas conservadas
+a propósito**: `feat/catalog-pipeline-500` (PR #10 / Fase 3, con worktree
+propio en `../aromia-catalog-pipeline`) y `feat/aromia-editorial-motion-skill`
+(worktree activo en `../aromia-editorial-motion-skill`) — más las ramas
+temporales de los PR abiertos. El repo vuelve a "una sola rama + temporales
+de PR".
+
+## Pivote a revista editorial (2026-08-27, decisión #103)
+
+Aromia deja de ser comparador/catálogo navegable y pasa a ser una
+**revista de perfumería con links de afiliado de Amazon embebidos en los
+artículos**. Documentos rectores en la raíz del repo:
+`decision-aromia-revista-sin-catalogo.md` (decisión de producto + mapa
+técnico), `ticket-transicion-editorial-code-cowork.md` (coordinación
+Code/Cowork), `ticket-lienzo-blanco-flotante.md` (rediseño visual),
+`brief-apertura-cowork-editorial.md`.
+
+- El grid público `/catalogo` (landing con buscador y filtros)
+  **desaparece** — retiro técnico pendiente (bloque 1.2 del ticket: aún
+  NO ejecutado al momento de esta nota). La ruta `apps/web/src/app/catalogo/[slug]/`
+  (ficha individual) **se queda** como destino del Quiz y contenido
+  long-tail indexable (sin `noindex`, a propósito).
+- **Scraper de precios Awin desactivado** (Brey, 25/08): las tres
+  variables `AWIN_*` se vaciaron en el servicio `api` de Railway — no-op
+  sin credenciales, sin cambio de código, reversible. La ficha muestra lo
+  cacheado en `retailers`; no se actualiza el precio en vivo.
+- **Cowork** escribe artículos nuevos como borradores en `drafts/` (raíz
+  del repo), en Markdown simple — **NO** en `apps/api/data/articles/*.md`
+  (esos `.md` no son la fuente real, ver sección "Artículos" más abajo).
+  Publicación real: Brey a mano vía `/admin/magazine`, o un script de
+  importación a evaluar con Code si el volumen lo justifica.
+- **Lienzo blanco (Opción A ya elegida por Brey)**: `--bg`/`--background`
+  a `#FFFFFF` / `#0A0A0A` puro en `aromia-redesign.css`; la definición
+  muerta de `--bg` en `globals.css` (`#fbf8f3`/`#0e0c0a`) se eliminó —
+  `--bg` vive ahora en un solo archivo. `ProductImage.tsx` aplica la
+  máscara radial + `mix-blend-multiply` en todos los modos (se eliminó la
+  prop `surface`/tipo `Surface`). Falta propagar y QA sobre Home / Ficha
+  / Magazine.
+
 ## Stack
 
 - **Frontend**: Next.js 14 (App Router) + TypeScript + Tailwind CSS —
@@ -197,6 +242,9 @@ docker compose up -d   # Postgres (5432) + Redis (6379)
   `SENDGRID_FROM_EMAIL` (newsletter — no-op sin setear),
   `AWIN_API_TOKEN` + `AWIN_MERCHANT_ID_DOUGLAS` + `AWIN_MERCHANT_ID_PRIMOR`
   (scraper de precios — no-op sin setear, ver sección Scraper abajo).
+  **Vaciadas en el servicio `api` de Railway el 25/08** (decisión #103,
+  pivote a revista) — el scraper vuelve a ser no-op en producción;
+  reversible recargando las tres.
 - Credenciales de producción (Railway): pedirlas a Code, no están en el
   repo. Para acceso directo a la Postgres de producción desde una
   terminal local: `railway link -p aromia-lab-v2` (elige servicio
@@ -364,6 +412,13 @@ sin marcadores de página). No hay sincronización entre el `.md` y la
 fila de Postgres después de la siembra inicial — si alguien edita el
 `.md`, eso **no** se refleja en el sitio; hay que editarlo desde
 `/admin/magazine`.
+
+**Actualizado 2026-08-27:** los artículos nuevos de la etapa editorial
+(decisión #103) **no** se escriben en `apps/api/data/articles/` — Cowork
+los deja como borradores Markdown en `drafts/` (raíz del repo) y Brey los
+publica a mano vía `/admin/magazine`. Esa carpeta `apps/api/data/articles/`
+queda congelada como insumo histórico (mezcla `.html` de v1 con `.md` de
+v2); no escribir ahí.
 
 11 archivos markdown (10 pedidos + 1 de más, señalado por Cowork como
 exceso menor — se dejó, no se borró contenido válido). Conviven con los

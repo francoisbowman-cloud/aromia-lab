@@ -42,7 +42,7 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
           {perfume.nombre}
         </div>
         <div className="absolute inset-[-2%] sm:inset-[1%] lg:inset-[-1%_5%_0%_1%]">
-          <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" surface="editorial" />
+          <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" />
         </div>
         <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-5 border-t border-line pt-3 font-plex text-[9px] uppercase tracking-[.15em] text-muted sm:left-8 sm:right-8 sm:text-[10px]">
           <span>Objeto auténtico</span>

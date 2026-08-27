@@ -84,7 +84,7 @@ export function AromiaHome2026({ perfumes, articulos, categorias }: { perfumes: 
             <div className="order-1 relative min-h-[500px] overflow-hidden bg-[#f7f5f0] lg:order-2 lg:min-h-[680px]">
               <div aria-hidden="true" className="absolute inset-[10%] rounded-[50%] bg-[#d9c8b1]/45 blur-[100px]" />
               <div className="absolute inset-[2%] sm:inset-[5%] lg:inset-[2%]">
-                <ProductImage slug={feature.slug} imageUrl={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} mode="hero" surface="editorial" />
+                <ProductImage slug={feature.slug} imageUrl={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} mode="hero" />
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@ export function AromiaHome2026({ perfumes, articulos, categorias }: { perfumes: 
           <div className="grid gap-x-9 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
             {selection.map((perfume, indexNumber) => (
               <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} className={`group block outline-none ${indexNumber === 1 ? "lg:translate-y-14" : ""}`}>
-                <div className="relative aspect-[4/5] overflow-hidden bg-transparent"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" surface="editorial" /></div>
+                <div className="relative aspect-[4/5] overflow-hidden bg-transparent"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" /></div>
                 <div className="mt-5 border-t border-line pt-4"><div className="flex justify-between gap-5 font-plex text-xs uppercase tracking-[.12em] text-muted"><span>0{indexNumber + 1}</span><span>{perfume.marca}</span></div><h3 className="mt-3 max-w-[11ch] font-display text-[34px] leading-[.92] tracking-[-.03em] text-ink transition-colors group-hover:text-[#5a6b54]">{perfume.nombre}</h3><p className="mt-4 font-sans text-sm text-muted">{publicText(perfume.familia_olfativa) ?? perfume.concentracion ?? "Objeto olfativo"}</p></div>
               </Link>
             ))}

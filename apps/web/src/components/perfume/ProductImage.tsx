@@ -1,14 +1,12 @@
 "use client";
 
 type Mode = "card" | "hero";
-type Surface = "comparison" | "editorial";
 
 type Props = {
   slug: string;
   alt: string;
   imageUrl?: string | null;
   mode?: Mode;
-  surface?: Surface;
   className?: string;
 };
 
@@ -18,23 +16,21 @@ type Props = {
  * extracts branded product pixels. Instead, the authentic source is blended
  * into Aromia's paper field and its outer photo boundary is softly feathered,
  * so the object can participate in the composition without becoming a card.
+ * This mask+blend treatment applies to every mode, not just hero surfaces —
+ * see ticket "Lienzo blanco absoluto" section 3, Option A.
  */
-export function ProductImage({ slug, alt, mode = "card", surface = "comparison", className = "" }: Props) {
+export function ProductImage({ slug, alt, mode = "card", className = "" }: Props) {
   const src = `/api/catalog-image/${encodeURIComponent(slug)}`;
-  const editorial = surface === "editorial";
-  const imageClass = `${editorial ? "max-h-[98%] max-w-[98%] mix-blend-multiply dark:mix-blend-normal" : "max-h-[84%] max-w-[84%]"} object-contain object-center transition-transform duration-500 ease-out ${
+  const imageClass = `${mode === "hero" ? "max-h-[98%] max-w-[98%]" : "max-h-[84%] max-w-[84%]"} object-contain object-center mix-blend-multiply transition-transform duration-500 ease-out dark:mix-blend-normal ${
     mode === "card" ? "group-hover:scale-[1.025]" : "hover:scale-[1.008]"
   }`;
-  const stageClass = editorial ? "bg-transparent" : "bg-white";
-  const editorialMask = editorial
-    ? {
-        WebkitMaskImage: "radial-gradient(ellipse 78% 84% at 50% 50%, #000 54%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 82%, transparent 100%)",
-        maskImage: "radial-gradient(ellipse 78% 84% at 50% 50%, #000 54%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 82%, transparent 100%)",
-      }
-    : undefined;
+  const editorialMask = {
+    WebkitMaskImage: "radial-gradient(ellipse 78% 84% at 50% 50%, #000 54%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 82%, transparent 100%)",
+    maskImage: "radial-gradient(ellipse 78% 84% at 50% 50%, #000 54%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 82%, transparent 100%)",
+  };
 
   return (
-    <div className={`relative flex h-full w-full items-center justify-center overflow-hidden ${stageClass} ${className}`}>
+    <div className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-transparent ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}

@@ -5,7 +5,6 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --bg: #fbf8f3;
   --surface: #ffffff;
   --soft: #f5f0e6;
   --text: #211d17;
@@ -42,7 +41,6 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0e0c0a;
   --surface: #17120d;
   --soft: #1c1610;
   --text: #f2ebdd;

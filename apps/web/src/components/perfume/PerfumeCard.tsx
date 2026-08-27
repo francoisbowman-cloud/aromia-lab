@@ -49,7 +49,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
         href={`/catalogo/${perfume.slug}`}
         onClick={trackOpen}
         aria-label={`Abrir ficha de ${perfume.nombre} de ${perfume.marca}`}
-        className={`relative block overflow-hidden bg-white outline-none ${mediaClass}`}
+        className={`relative block overflow-hidden outline-none ${mediaClass}`}
       >
         {layout === "monument" && index != null ? (
           <span aria-hidden="true" className="absolute -right-2 top-1/2 z-0 -translate-y-1/2 font-display text-[clamp(96px,16vw,220px)] leading-none tracking-[-.08em] text-ink/[.028]">
@@ -62,7 +62,6 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
             imageUrl={perfume.imagen_url}
             alt={`${perfume.nombre} de ${perfume.marca}`}
             mode="card"
-            surface="comparison"
           />
         </div>
         <span
@@ -73,7 +72,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
         </span>
       </Link>
 
-      <Link href={`/catalogo/${perfume.slug}`} onClick={trackOpen} className="flex flex-1 flex-col bg-white pt-3 outline-none sm:pt-5">
+      <Link href={`/catalogo/${perfume.slug}`} onClick={trackOpen} className="flex flex-1 flex-col pt-3 outline-none sm:pt-5">
         <div className="flex items-baseline justify-between gap-3 border-t border-[#20231f]/12 pt-3 font-plex text-[9px] uppercase tracking-[.13em] text-muted sm:text-[10px]">
           <span className="truncate">{perfume.marca}</span>
           <span>{index == null ? "Aromia" : String(index + 1).padStart(2, "0")}</span>

@@ -25,7 +25,12 @@ const home = await text("apps/web/src/components/home/TasteLanding.tsx");
 if (/editorial\/cinematic-warm\.png/i.test(home)) failures.push("home_hero_anonymous_background_regression");
 
 await requireText("apps/web/src/components/perfume/ProductImage.tsx", [
-  ["catalog_product_stage_must_be_white", /bg-white/],
+  // Pivote a revista, lienzo blanco Opción A (decisión #103/#104): el escenario
+  // del producto pasa de una caja `bg-white` a `bg-transparent` + máscara radial
+  // en todos los modos, para que el frasco flote sobre el `--bg` blanco puro de
+  // la página en vez de sobre su propia tarjeta. Antes exigía /bg-white/.
+  ["catalog_product_stage_must_be_transparent", /bg-transparent/],
+  ["catalog_product_stage_must_feather_edge", /maskImage/],
   ["catalog_product_must_preserve_contain", /object-contain/],
 ]);
 const productImage = await text("apps/web/src/components/perfume/ProductImage.tsx");
