@@ -64,15 +64,15 @@ del repo (regla general del proyecto, no solo para esta herramienta).
 **Actualizado 2026-08-27 — segunda limpieza de ramas.** Entre agosto y el
 pivote a revista se acumularon 41 ramas sueltas en `origin` (casi todas
 experimentos de OMNI: `omni/*`, `agent/*`, línea catalog-scale). Se
-borraron 26 con aprobación textual de Brey, tras verificar que ninguna
-tenía dato de perfumes sin respaldo en `main` (`ESTADO-aromia.md`
-decisión #104). Quedan 15 ramas no-`main`: **2 que se conservan a
-propósito** — `feat/catalog-pipeline-500` (PR #10 / Fase 3, con worktree
+borraron en dos pasadas, cada una con "Kill" textual de Brey y tras
+verificar que ninguna tenía dato de perfumes sin respaldo en `main`
+(`ESTADO-aromia.md` decisión #104): primero 26, después las 13 restantes.
+**39 de 41 borradas.** Quedan solo **2 ramas no-`main`, ambas conservadas
+a propósito**: `feat/catalog-pipeline-500` (PR #10 / Fase 3, con worktree
 propio en `../aromia-catalog-pipeline`) y `feat/aromia-editorial-motion-skill`
-(worktree activo en `../aromia-editorial-motion-skill`) — y 13
-experimentos de agosto pendientes de una segunda decisión. La regla de
-"sin ramas persistentes" sigue siendo la meta; esas 13 son deuda a
-resolver, no excepciones aprobadas.
+(worktree activo en `../aromia-editorial-motion-skill`) — más las ramas
+temporales de los PR abiertos. El repo vuelve a "una sola rama + temporales
+de PR".
 
 ## Pivote a revista editorial (2026-08-27, decisión #103)
 
