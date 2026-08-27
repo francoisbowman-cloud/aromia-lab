@@ -45,7 +45,7 @@ export function HomeHero({ perfume }: { perfume?: Perfume }) {
           {perfume ? (
             <div className="absolute inset-0 flex items-center justify-center lg:justify-end">
               <div className="relative h-[94%] w-[96%] max-w-[820px] sm:h-[90%] sm:w-[92%] lg:h-[92%] lg:w-[96%]">
-                <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" surface="editorial" />
+                <ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="hero" />
               </div>
             </div>
           ) : (

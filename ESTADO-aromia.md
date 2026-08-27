@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 8 de agosto de 2026 — por: Code (Claude Code). **Release Candidate del backlog de auditoría fusionado a `main` y desplegado a producción real** — PR #15 (merge commit `9e5d6f5`) integra los 7 PR del barrido general (#6, #7, #8, #9, #11, #12, #13), Railway (`web`+`api`) desplegó en verde, smoke test post-producción sin regresiones — decisión #102. Como parte del mismo cierre, el rename "Sauvage EDP" → "Sauvage EDT" (decisión #99) se aplicó por fin en la Postgres de producción, vía `/api/admin/perfumes` — decisión #99 queda totalmente cerrada. PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado, sesión paralela activa. Actualización previa (7/08): barrido autónomo del backlog general completado, 7 PR abiertos sin fusionar — decisión #100; hallazgo de PR #10 — decisión #101.
+Última actualización: 27 de agosto de 2026 — por: Code (Claude Code). **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloque 1.1 del ticket ejecutado hoy** — decisión #104: 26 de 41 ramas sueltas borradas en `origin` (clusters `omni/*`, `agent/*` y línea catalog-scale, verificado que no se perdía dato de perfumes), 10 preview huérfanas de Railway marcadas para borrado (staged, falta que Brey las aplique desde el dashboard), token `--bg` duplicado consolidado + WIP de OMNI plegado adelantando el lienzo blanco por Opción A. Bloques 1.2 (retiro técnico del catálogo) y 1.3/1.4 todavía pendientes. Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -15,9 +15,17 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 
 ## 2. Alcance actual (qué SÍ, qué NO)
 
+> **Reencuadre 27/08 (decisión #103):** desde el pivote a revista, Aromia
+> **ya no es un comparador/catálogo navegable**. La lista de "Sí" de abajo
+> quedó escrita para la etapa anterior — el comparador interactivo y el
+> catálogo público (`/catalogo` landing, buscador, filtros) están **en
+> retiro** (bloque 1.2 del ticket, aún no ejecutado). Sobreviven: la ficha
+> individual `/catalogo/[slug]` (como destino del Quiz y contenido
+> indexable), el Quiz, el Magazine, el admin y la tabla `perfumes`.
+
 **Sí:**
 - 1.0 debe seguir funcionando y generando ingresos mientras se construye 2.0 — sin downtime significativo.
-- 2.0: comparador interactivo, panel de administración, página de producto ("Anatomía de una fragancia"), catálogo con scroll infinito, magazine con hojeo interactivo y descarga PDF, home, listado de perfumes y quiz de matching.
+- 2.0: comparador interactivo, panel de administración, página de producto ("Anatomía de una fragancia"), catálogo con scroll infinito, magazine con hojeo interactivo y descarga PDF, home, listado de perfumes y quiz de matching. *(comparador + catálogo navegable: en retiro, ver reencuadre arriba)*
 - Analítica web: Cloudflare Web Analytics instalado en 1.0. GA4 en evaluación (pendiente, ver sección 13).
 - Image Toolkit / **OMNI** (herramienta genérica externa, `github.com/francoisbowman-cloud/image-toolkit`) para procesamiento de fotos/mockups — el servidor MCP está desplegado en Railway y **conectado directamente a esta sesión** desde el 11/07 (antes se documentaba como "uso manual vía ChatGPT Plus", desactualizado). Sigue sin automatización vía n8n. Ver decisión #93 para el primer uso planeado de las herramientas de recorte de fondo sobre el catálogo real de Aromia.
 - Copy en español: **neutro, sin voseo argentino** (ver decisión #32).
@@ -125,6 +133,8 @@ Aromia es un sitio de reseñas de perfumes con monetización por afiliados (Amaz
 | 100 | **Barrido autónomo del backlog general (2026-08-06/07)** — a pedido explícito de Brey ("continúa con autonomía operativa... no te detengas hasta haber terminado todos los bloques"), Code recorrió las 8 categorías pedidas (estabilidad/arquitectura, experiencia visual, SEO técnico, rendimiento, accesibilidad, confianza/legal, analítica/conversión, pruebas/documentación), cada una en su propia rama con commits trazables, verificación real (dev server, `next build`, tests en vivo — no solo lectura de código) antes de cada commit. Resultado: 7 PR (#6 accesibilidad + Fase 2/imágenes + sync de `PERFUMES_INITIAL_50.csv` + `next/image` parcial en `EditorialMood.tsx`; #7 SEO — `generateMetadata`/JSON-LD por producto + `metadataBase`; #8 rendimiento — preconnect a dominios de retailer + limpieza de deps; #9 legal — disclosure de afiliado junto al botón real, con dos hallazgos flaggeados sin resolver: contacto de sitio inexistente y ausencia de banner de consentimiento GA4; #11 analítica — eventos GA4 de afiliado/newsletter/quiz + primer test runner del repo, Vitest, 19 tests; #12 estabilidad — `global-error.tsx`; #13 experiencia visual — `loading.tsx` del resultado del quiz). **Los 7 PR fueron revisados e integrados en un solo release candidate y fusionados a `main` el 2026-08-08 — ver decisión #102.** Ninguno se fusionó individualmente; todos entraron juntos vía el RC | Brey (mandato de autonomía) / Code (ejecución) |
 | 101 | **PR #10 (Fase 3 — pipeline de catálogo, rama `feat/catalog-pipeline-500`) identificado como trabajo de una sesión paralela de Code**, no de esta. Fundación del pipeline de importación para la expansión a 500 perfumes (decisión #87): valida/normaliza/detecta duplicados/compara un batch CSV de Cowork contra el catálogo real, nunca escribe a Postgres (sin cliente de DB importado — garantía estructural). **Deliberadamente dejado fuera del release candidate de la decisión #102** — confirmado con Brey que esa sesión sigue activa (el PR se siguió actualizando después del cierre del RC), y se detectó un conflicto real (add/add) en el `package.json` de raíz entre este PR y el PR #6 ya fusionado: ambos agregaron su propio "package.json de tooling de raíz" con scripts no superpuestos (`images:audit-pilot` vs. `catalog:*`) — reconciliable, pero **no se resuelve unilateralmente desde ninguna sesión**, queda para cuando Fase 3 cierre su bloque | Code (sesión paralela, no verificada por esta sesión) |
 | 102 | **Release Candidate del backlog fusionado a `main` y desplegado a producción (2026-08-07/08)** — Code armó `integration/aromia-release-candidate-01` (worktree separado, partiendo de `main` real) e integró los 7 PR de la decisión #100 en orden de menor a mayor riesgo de conflicto (#12 → #13 → #9 → #8 → #7 → #6 → #11), resolviendo en el camino conflictos reales solo en `CHANGELOG-2.0.md` (documento append-only, se conservaron ambas entradas de cada par de PR) y en `apps/web/package-lock.json` (regenerado con `npm install` sobre el `package.json` ya fusionado). Ningún archivo de código de aplicación tuvo conflicto real pese a solaparse varios PR en `layout.tsx`, `NewsletterForm.tsx`, `PriceTable.tsx` y `catalogo/[slug]/page.tsx` — cada cambio vivía en una sección distinta del archivo. Verificado antes de abrir el RC: `tsc --noEmit` limpio en `apps/web`/`apps/api`, `next lint` sin warnings, Vitest 19/19, `next build` completo (22 rutas), smoke test visual local (servidor de producción apuntando a la API real, solo lecturas GET) sin regresiones. [PR #15](https://github.com/francoisbowman-cloud/aromia-lab/pull/15) abierto, con informe único de integración: **PR #10 evaluado y diferido** (decisión #101), no incluido. **El merge de PR #15 a `main` (commit `9e5d6f5`) ocurrió fuera de esta sesión de Code** (confirmado por Brey al reabrir el hilo) — Railway auto-desplegó `web` y `api` en verde a los pocos segundos del merge, sin tocar Postgres/Redis. Code verificó el deploy post-merge (logs de Railway limpios, ambos servicios `SUCCESS`) y corrió el mismo smoke test contra `aromialab.com` real: 11 rutas críticas + `/health` de la API en 200, metadata SEO por producto y disclosure de afiliado confirmados en vivo, sin errores de consola. Los 7 PR individuales quedaron auto-cerrados como `MERGED` por GitHub (mismos commits ya en `main`), sin necesidad de limpieza manual de ramas (`delete_branch_on_merge` ya las borró). **Como parte del mismo cierre, a pedido explícito de Brey**, se aplicó en la Postgres de producción real el rename pendiente de la decisión #99: `PATCH /api/admin/perfumes/2` con body exclusivo `{"nombre":"Sauvage EDT"}` (mecanismo administrativo existente, token obtenido vía `railway variables`, sin tocar la base directamente) — diff verificado antes/después: solo cambió `nombre` y `actualizado_en`; slug, imagen, enlaces de afiliado, precio, notas y retailers idénticos. Verificado en `/api/perfumes/sauvage-edp`, `/catalogo/sauvage-edp` y `/catalogo` en producción real. El ciclo auditoría → integración → RC → merge → deploy → post-deploy queda **cerrado**. Pendientes que NO se resolvieron en este cierre, por ser decisiones de producto/legal o fuera de alcance: consentimiento GDPR/GA4 (hallazgo de PR #9), `npm audit` (vulnerabilidades preexistentes, no introducidas por esta integración), reconciliación de `package.json` de raíz con PR #10 | Brey (autorización de merge + rename de producción) / Code (integración, verificación, ejecución del rename) |
+| 103 | **Pivote de producto: Aromia deja de ser comparador/catálogo navegable y pasa a ser una revista de perfumería con afiliados de Amazon embebidos en los artículos** (Brey en sesión con Chat, 24-25/08/2026 — documento rector `decision-aromia-revista-sin-catalogo.md`, incorporado a la raíz del repo en este commit junto con `ticket-transicion-editorial-code-cowork.md`, `ticket-lienzo-blanco-flotante.md` y `brief-apertura-cowork-editorial.md`). El grid público `/catalogo` (landing navegable con buscador y filtros) desaparece; la ficha individual `/catalogo/[slug]` **sobrevive** como destino del Quiz y como contenido long-tail indexable (sin `noindex`, decidido a propósito). Monetización: link de afiliado de Amazon dentro de cada artículo, no un comparador. **Ya ejecutado por Brey el 25/08 como parte de la decisión**: scraper de precios Awin desactivado — se vaciaron `AWIN_API_TOKEN`/`AWIN_MERCHANT_ID_DOUGLAS`/`AWIN_MERCHANT_ID_PRIMOR` en el servicio `api` de Railway (no-op sin credenciales, sin tocar código; la ficha muestra lo cacheado en Postgres, deja de actualizarse el precio en vivo; reversible recargando las 3 variables). Revierte parcialmente la decisión #94. La ejecución técnica del retiro del catálogo (rutas, nav, `HomeCatalogPreview`, redirect `/catalogo`→Magazine, `SEO_STRATEGY.md`) es el bloque 1.2 del ticket, **todavía no hecho** en este commit | Brey (decisión de producto, con Chat) / Code (asigna número, incorpora docs) |
+| 104 | **Housekeeping del ticket de transición ejecutado (bloque 1.1) — 2026-08-27, Code**. (a) **Ramas**: de 41 ramas sueltas además de `main` se borraron 26 en `origin` con aprobación textual de Brey — todos los clusters `omni/*` (11) y `agent/*` (9) de experimentos de OMNI, más la línea catalog-scale (`feat/catalog-expansion-automation-v1-batch-003`, `ops/catalog-import-batches-001-002`, `ci/catalog-expansion-v1-gate`) tras verificar que **ningún dato de perfumes se perdía** — `catalog/imports/batch-001/002/003.csv` y `apps/api/src/db/importCatalogBatch003.ts` ya están en `main`, y la copia de `batch-003.csv` en `main` está más enriquecida que la de las ramas. Quedan 15 ramas no-`main`: 2 que se conservan a propósito (`feat/catalog-pipeline-500` — PR #10, decisión #101, worktree propio; `feat/aromia-editorial-motion-skill` — worktree activo) y 13 experimentos OMNI/Brey de agosto pendientes de una segunda pasada de decisión. (b) **Railway** (`aromia-lab-v2`): las 10 preview huérfanas/stale (`web-aromia-redesign-preview`, `-preview-v2`, `web-omni-home-fire-test`, `web-taste-preview-01`, `web-mockup-fidelity-final`, `catalog-expansion-b003-validation`, `web-hybrid-signature-01`, `web-visual-preview-02`, `catalog-import-b001-b002`, `web-visual-preview`) quedaron **marcadas para borrado (staged)** vía el agente de Railway con aprobación de Brey — el commit final (`accept-deploy` sobre el entorno `production`, que además redeploya `web`/`api`) fue **bloqueado por el clasificador de seguridad de esta sesión**; falta que Brey aplique los cambios staged desde el dashboard de Railway. `web`/`api`/`Redis`/`Postgres-TdTp` sin tocar. (c) **Token `--bg` duplicado consolidado**: eliminada la definición muerta de `globals.css` (`#fbf8f3`/`#0e0c0a`), `--bg` queda solo en `aromia-redesign.css` (importado después en `layout.tsx`). Se plegó en el mismo commit, como WIP intencional aprobado por Brey, el trabajo no commiteado de OMNI que además adelanta el bloque 1.3 (lienzo blanco) por la **Opción A** del `ticket-lienzo-blanco-flotante.md`: `--bg`/`--background` a `#FFFFFF` / `#0A0A0A` puro, y `ProductImage.tsx` aplica la máscara radial + `mix-blend-multiply` en todos los modos (prop `surface` y tipo `Surface` eliminados, `bg-white` hardcodeado quitado de `PerfumeCard`, call sites de Home/Discovery/HeroHeader/HomeHero ajustados). `tsc --noEmit` y `next lint` limpios en `apps/web` | Brey (aprobación de cada acción) / Code (ejecución) |
 
 ---
 
@@ -154,6 +164,16 @@ hay ramas persistentes con nombre de herramienta o de versión. Railway
 despliega automáticamente en cada push a `main`. El estado final del v1
 estático (antes en `main`) quedó en el tag `legacy-static-v1-final`, no en
 una rama.
+
+**Limpieza 2026-08-27 (decisión #104):** entre agosto y el pivote se
+acumularon 41 ramas sueltas en `origin` (mayormente experimentos de OMNI).
+Se borraron 26 con aprobación de Brey (clusters `omni/*`, `agent/*`, y la
+línea catalog-scale, verificado antes que no se perdía dato de perfumes).
+Quedan 15 ramas no-`main`: **2 que se conservan a propósito** —
+`feat/catalog-pipeline-500` (PR #10 / Fase 3, decisión #101, con worktree
+propio en `../aromia-catalog-pipeline`) y `feat/aromia-editorial-motion-skill`
+(worktree activo) — y 13 experimentos de agosto (OMNI y Brey) pendientes de
+una segunda pasada de decisión, no borrados a ciegas.
 
 **Arquitectura anterior (histórico, ya no vigente):** `main` (v1
 estático) ← `feature/v2.0` (monorepo Next.js, rama de trabajo) ←
@@ -269,6 +289,32 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 
 ## 11. Próximo paso
 
+**Etapa activa desde el 27/08: transición a revista editorial (decisión
+#103), coordinada por `ticket-transicion-editorial-code-cowork.md` (raíz
+del repo).** Bloques de Code, en orden:
+- **1.1 Housekeeping — HECHO** (decisión #104): ramas y Railway auditados y
+  purgados con aprobación, token `--bg` consolidado, WIP de OMNI plegado
+  (lienzo blanco Opción A adelantado). Falta que Brey aplique en el
+  dashboard de Railway el borrado staged de las 10 preview huérfanas.
+- **1.2 Retiro técnico del catálogo público — PENDIENTE, próximo**: quitar
+  `/catalogo` como landing (grid, buscador, filtros: `PerfumesCatalog.tsx`,
+  `PerfumesCatalogEditorial.tsx`, `ResilientPerfumesCatalog.tsx`), quitar
+  "Fragancias" del nav, reescribir `HomeCatalogPreview.tsx` como preview de
+  artículos del Magazine, verificar comparador cara a cara y `/api/catalog-buy`,
+  redirect `/catalogo`→Magazine, actualizar `SEO_STRATEGY.md`. La ficha
+  `/catalogo/[slug]` y el Quiz se conservan.
+- **1.3 Lienzo blanco** (Opción A ya elegida por Brey y adelantada en el
+  WIP de #104) — pendiente de propagar/QA sobre Home, Ficha, Magazine.
+- **1.4 Rediseño de la ficha para tráfico frío desde buscadores** — sin
+  fecha, cuando haya banda.
+- En paralelo, **Cowork** produce artículos nuevos como borradores en
+  `drafts/` (raíz del repo), publicación manual de Brey vía `/admin/magazine`
+  — NO escribe en `apps/api/data/articles/` (esos `.md` no son la fuente
+  real). Retrofit pendiente de baja prioridad: los artículos ya publicados
+  no tienen link de afiliado de Amazon.
+
+---
+
 **El ciclo auditoría → integración → RC → merge → deploy → post-deploy
 queda CERRADO (2026-08-08, decisión #102).** Los 7 PR del backlog
 general están en `main` y en producción real; Sauvage EDT corregido en
@@ -372,7 +418,7 @@ que queda de rondas anteriores, sin cambios en este cierre:
 - ~~`link_afiliado` real~~ — **cerrado 18/07** (decisión #66): 50/50, 24 con ASIN directo, 26 con fallback de búsqueda.
 - **Fuente de imagen para los 26/50 perfumes sin foto real** — **cerrado 21/07** (decisiones #69-71): 14 resueltos vía Notino/Douglas; los 12 restantes (Le Labo, Frederic Malle, Creed, Aesop, Chanel, Dior Maison, Mugler, Ariana Grande, un SKU de Tom Ford) sin ficha en Notino/Douglas/FragranceX se **eliminaron del catálogo** por decisión de Brey, en vez de quedar en placeholder. Catálogo final: 38 perfumes, todos con foto real.
 - ~~Elegir proveedor de email~~ — **cerrado 18/07**: SendGrid, integrado y activo detrás de `SENDGRID_API_KEY`/`SENDGRID_FROM_EMAIL` (decisión #50) — falta que Brey genere y pase esas credenciales.
-- ~~Alcance del scraper de precios~~ — **scaffold técnico cerrado 18/07** (decisión #56), **activado en producción 31/07** (decisión #94): Brey se dio de alta en Awin y aplicó a Douglas/Primor, credenciales cargadas en Railway, cron diario corriendo. Queda ver si el feed ya trae datos reales antes de que ambas marcas aprueben la aplicación. Universo de retailers ampliado investigado (Perfumes Club, FragranceX, FragranceNet) queda como input para una fase posterior, sin decidir todavía.
+- ~~Alcance del scraper de precios~~ — scaffold técnico cerrado 18/07 (decisión #56), activado en producción 31/07 (decisión #94), y **desactivado por Brey el 25/08 como parte del pivote a revista** (decisión #103): `AWIN_API_TOKEN`/`AWIN_MERCHANT_ID_DOUGLAS`/`AWIN_MERCHANT_ID_PRIMOR` vaciadas en el servicio `api` de Railway — vuelve a ser no-op sin credenciales, sin cambio de código. La ficha muestra lo cacheado en Postgres; deja de actualizarse el precio en vivo. Reversible recargando las 3 variables.
 - ~~¿Se suma GA4?~~ — **cerrado 18/07**: sí, integrado y activo detrás de `NEXT_PUBLIC_GA_ID` (decisión #48/#53) — falta que Brey cree la property de GA4 y pase el Measurement ID.
 - Credenciales de Cloudflare (`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ZONE_ID`): sin sentido pedirlas todavía — `aromialab.com` no está agregado como zona en Cloudflare (usa nameservers del registrador), ver decisión #48.
 - **Decants** (decisión #57-58): research entregado (Scent Split, Scent Decant, Scentbird), pendiente de aprobación de Brey antes de que Code diseñe/implemente nada.
@@ -392,7 +438,15 @@ que queda de rondas anteriores, sin cambios en este cierre:
 - **PR #10 / Fase 3** (decisión #101) — pipeline de catálogo, sesión paralela activa, aislado hasta que cierre su bloque. Conflicto conocido en `package.json` de raíz con PR #6, sin reconciliar.
 - **Migración a `next/image` de `PerfumeCard`/`HeroEditorPick`** (hallazgo de PR #6) — su imagen real es un `background-image` alimentado por análisis de canvas para recortar fondo blanco; migrar exige rediseñar ese sistema, decisión de producto pendiente.
 - **Aromia — Visual & Conversion Upgrade** (sección 11) — próxima gran fase de producto, aprobada conceptualmente, sin arrancar.
-- **Catalog Expansion Engine** (sección 11) — automatización de la expansión a 500 perfumes, aprobada conceptualmente, no se activa hasta definir el nuevo estándar visual.
+- **Catalog Expansion Engine** (sección 11) — automatización de la expansión a 500 perfumes, aprobada conceptualmente, no se activa hasta definir el nuevo estándar visual. **Nota 27/08:** el pivote a revista (decisión #103) retira el catálogo público — reevaluar si esta expansión masiva sigue teniendo sentido, o si el foco pasa a fichas puntuales enlazadas desde artículos.
+
+**Transición a revista editorial (decisión #103-104), abierto:**
+- **10 preview huérfanas de Railway marcadas para borrado pero NO aplicadas** — el commit final (`accept-deploy` sobre `production`) lo bloqueó el clasificador de seguridad de la sesión. Brey debe aplicar los cambios staged desde el dashboard de Railway. Servicios core (`web`/`api`/`Redis`/`Postgres-TdTp`) intactos.
+- **13 ramas de experimentos de agosto sin borrar** — pendientes de una segunda pasada de decisión con Brey (OMNI: `feat/aromia-home-visual-polish-01/02`, `feat/aromia-product-fidelity-01`, `feat/visual-revolution-2026-08-20`, `feat/omni-*`, `chore/aromia-visual-final-gate`, `design/catalog-125-editorial-canvas`, `hotfix/catalog-amazon-image-*`; Brey: `feat/aromia-visual-conversion-upgrade`, `remove/ai-generated-editorial-images`, `docs/session-state-2026-08-07`).
+- **Bloque 1.2 (retiro técnico del catálogo)** — próximo bloque de Code, ver sección 11.
+- **Bloque 1.3/1.4 (lienzo blanco + ficha para tráfico frío)** — Opción A ya elegida y adelantada en el WIP de #104; falta propagar y QA (WCAG AA sobre `#FFFFFF` puro, 3 tipos de frasco, verificación en vivo en `aromialab.com`).
+- **Retrofit de links de afiliado en artículos ya publicados** — los publicados antes del pivote no los tienen; baja prioridad, no frena artículos nuevos.
+- **`next build` local no valida** en este entorno por falta de red a Google Fonts (`next/font` → `Newsreader`, `ENOTFOUND`) — `tsc --noEmit` y `next lint` sí corren limpios; el build real lo valida el CI en el PR.
 
 ---
 

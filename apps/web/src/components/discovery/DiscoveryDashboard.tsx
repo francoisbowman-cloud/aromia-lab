@@ -65,7 +65,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
             <div className="mt-9 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4 lg:gap-x-7">
               {atlasPreview.map((perfume, index) => (
                 <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} className={`group block outline-none ${index % 2 === 1 ? "sm:translate-y-6" : ""}`}>
-                  <div className="relative aspect-[4/5] overflow-hidden"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" surface="editorial" /></div>
+                  <div className="relative aspect-[4/5] overflow-hidden"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" /></div>
                   <div className="mt-3 border-t border-line pt-3"><p className="font-plex text-[10px] uppercase tracking-[.12em] text-muted">{perfume.marca}</p><h3 className="mt-2 font-display text-[21px] leading-[.98] tracking-[-.025em] text-ink transition-colors group-hover:text-[#5a6b54]">{perfume.nombre}</h3></div>
                 </Link>
               ))}
@@ -116,7 +116,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
         <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {ranked.map(({ perfume, reasons }, index) => (
             <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} onClick={() => trackEvent("similar_perfume_click", { source: "discovery_map", target_slug: perfume.slug, position: index + 1, reason_count: reasons.length })} className={`group block outline-none ${index % 3 === 1 ? "lg:translate-y-12" : ""}`}>
-              <div className="relative aspect-[4/5] overflow-hidden bg-transparent"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" surface="editorial" /></div>
+              <div className="relative aspect-[4/5] overflow-hidden bg-transparent"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" /></div>
               <div className="mt-5 border-t border-line pt-4"><div className="flex items-center justify-between font-plex text-xs uppercase tracking-[.12em] text-muted"><span>Ruta {String(index + 1).padStart(2, "0")}</span><span>{perfume.marca}</span></div><h3 className="mt-3 max-w-[11ch] font-display text-[31px] leading-[.94] tracking-[-.03em] text-ink transition-colors group-hover:text-[#5a6b54]">{perfume.nombre}</h3><p className="mt-4 max-w-[38ch] font-sans text-sm leading-6 text-muted">{reasons.length ? reasons.join(" · ") : perfume.familia_olfativa ?? "Una dirección distinta dentro de tu mapa."}</p><span className="mt-5 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-[#5a6b54] dark:text-[#b8c5b3]">Seguir esta pista →</span></div>
             </Link>
           ))}
