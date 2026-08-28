@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 27 de agosto de 2026 — por: Code (Claude Code). **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloque 1.1 del ticket ejecutado hoy** — decisión #104: 26 de 41 ramas sueltas borradas en `origin` (clusters `omni/*`, `agent/*` y línea catalog-scale, verificado que no se perdía dato de perfumes), 10 preview huérfanas de Railway marcadas para borrado (staged, falta que Brey las aplique desde el dashboard), token `--bg` duplicado consolidado + WIP de OMNI plegado adelantando el lienzo blanco por Opción A. Bloques 1.2 (retiro técnico del catálogo) y 1.3/1.4 todavía pendientes. Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
+Última actualización: 27 de agosto de 2026 — por: Code (Claude Code). **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloques 1.1, 1.2 y 1.2b ejecutados 2026-08-27** — decisión #104. 1.1 (PR #114, mergeado): 39 de 41 ramas sueltas borradas en `origin` en dos pasadas con "Kill" de Brey, token `--bg` consolidado, WIP de OMNI plegado (lienzo blanco Opción A adelantado). 1.2 (PR #115, mergeado): retiro del grid público `/catalogo`, del comparador `/comparar` y de `HomeCatalogPreview`; redirects 308 a `/magazine`; `sitemap`/`SEO_STRATEGY`/`omni-strict-audit` alineados; la ficha `/catalogo/[slug]` y el Quiz se conservan. 1.2b + 1.3 modo claro (rama `feat/ticket-1.3-lienzo-blanco`, en PR): links internos repuntados a `/buscar`/`/magazine`, fondos de Home/Ficha a token blanco puro. **Pendientes:** 10 preview de Railway (staged, requieren 2FA de Brey desde el dashboard); 1.3 modo oscuro (QA visual en vivo); 1.4 (ficha para tráfico frío). Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
 ---
@@ -295,21 +295,37 @@ Ver decisiones #15-18. Spike de validación conceptual ya corrido y aprobado (Ge
 **Etapa activa desde el 27/08: transición a revista editorial (decisión
 #103), coordinada por `ticket-transicion-editorial-code-cowork.md` (raíz
 del repo).** Bloques de Code, en orden:
-- **1.1 Housekeeping — HECHO** (decisión #104): ramas y Railway auditados y
-  purgados con aprobación, token `--bg` consolidado, WIP de OMNI plegado
-  (lienzo blanco Opción A adelantado). Falta que Brey aplique en el
-  dashboard de Railway el borrado staged de las 10 preview huérfanas.
-- **1.2 Retiro técnico del catálogo público — PENDIENTE, próximo**: quitar
-  `/catalogo` como landing (grid, buscador, filtros: `PerfumesCatalog.tsx`,
-  `PerfumesCatalogEditorial.tsx`, `ResilientPerfumesCatalog.tsx`), quitar
-  "Fragancias" del nav, reescribir `HomeCatalogPreview.tsx` como preview de
-  artículos del Magazine, verificar comparador cara a cara y `/api/catalog-buy`,
-  redirect `/catalogo`→Magazine, actualizar `SEO_STRATEGY.md`. La ficha
-  `/catalogo/[slug]` y el Quiz se conservan.
-- **1.3 Lienzo blanco** (Opción A ya elegida por Brey y adelantada en el
-  WIP de #104) — pendiente de propagar/QA sobre Home, Ficha, Magazine.
+- **1.1 Housekeeping — HECHO Y MERGEADO** (decisión #104, PR #114): ramas y
+  Railway auditados y purgados, token `--bg` consolidado, WIP de OMNI plegado
+  (lienzo blanco Opción A adelantado). Falta que Brey aplique en el dashboard
+  de Railway el borrado staged de las 10 preview huérfanas (requiere 2FA,
+  ni Code ni el agente de Railway pueden hacerlo por API).
+- **1.2 Retiro técnico del catálogo público — HECHO Y MERGEADO** (PR #115):
+  landing `/catalogo`, grid (`PerfumesCatalog*`, `ResilientPerfumesCatalog`),
+  comparador `/comparar` (era el "cara a cara" que sí existía en v2),
+  `HomeCatalogPreview` (estaba muerto) y links de nav eliminados; redirects
+  308 `/catalogo`,`/comparar`,`/perfumes` → `/magazine`; `sitemap.ts` y
+  `SEO_STRATEGY.md` actualizados; `omni-strict-audit` alineado al pivote.
+  `/api/catalog-buy` y `/api/catalog-image` se conservan (los usa la ficha).
+  Ficha `/catalogo/[slug]` y Quiz intactos.
+- **1.2b Links internos + 1.3 Lienzo blanco (modo claro) — EN PR (rama
+  `feat/ticket-1.3-lienzo-blanco`)**: links vivos a la landing repuntados
+  (`HomeHero` CTA → `/magazine`; chips del Índice olfativo y familias de
+  Discovery → `/buscar?q=`); fondos hardcodeados de la Ficha y del panel del
+  hero de Home pasados a token `--bg`/`bg-paper` (blanco puro). QA modo claro
+  OK (contrastes AA verificados). **Criterio de Code (scope 1.2b delegado):**
+  `/buscar` y `/perfumistas` se mantienen (búsqueda + contenido editorial, no
+  grid; el audit los exige); `/taste` y los componentes muertos
+  (`EcosystemGesture`, `OlfactiveIndex`, `EditorialSelection`) se dejan para
+  una limpieza aparte (el audit exige que `TasteLanding` exista).
+- **1.3 modo oscuro — PENDIENTE de QA visual en vivo**: en dark el
+  `ProductImage` usa `mix-blend-normal`, así que una foto con fondo blanco
+  de Amazon queda como un parche luminoso sobre `#0A0A0A`. Necesita captura
+  real + decisión de Brey (ticket §4.2/§4.3). También: 3 tipos de frasco,
+  glass de la subnav del Magazine sobre blanco puro, hairline de `PerfumeCard`.
 - **1.4 Rediseño de la ficha para tráfico frío desde buscadores** — sin
-  fecha, cuando haya banda.
+  fecha; incluye el breadcrumb "Inicio ／ Catálogo ／ …" que ya no tiene
+  destino real (sigue sin tocar).
 - En paralelo, **Cowork** produce artículos nuevos como borradores en
   `drafts/` (raíz del repo), publicación manual de Brey vía `/admin/magazine`
   — NO escribe en `apps/api/data/articles/` (esos `.md` no son la fuente
@@ -446,8 +462,9 @@ que queda de rondas anteriores, sin cambios en este cierre:
 **Transición a revista editorial (decisión #103-104), abierto:**
 - **10 preview huérfanas de Railway marcadas para borrado pero NO aplicadas** — el commit final (`accept-deploy` sobre `production`) lo bloqueó el clasificador de seguridad de la sesión. Brey debe aplicar los cambios staged desde el dashboard de Railway. Servicios core (`web`/`api`/`Redis`/`Postgres-TdTp`) intactos.
 - ~~13 ramas de experimentos de agosto sin borrar~~ — **borradas 2026-08-27** con "Kill" de Brey; el repo queda con `main` + 2 ramas conservadas a propósito + temporales de PR.
-- **Bloque 1.2 (retiro técnico del catálogo)** — **hecho en PR #115** (green): landing `/catalogo`, grid, comparador `/comparar`, `HomeCatalogPreview` y links de nav eliminados; redirects `/catalogo`,`/comparar`,`/perfumes` → `/magazine`; `sitemap.ts` y `SEO_STRATEGY.md` actualizados; gate de gobernanza alineado. Sin mergear todavía. Pendiente 1.2b (post-merge de #114): barrer links internos `/catalogo?familia=` en Home/Discovery; decidir `/buscar`, `/perfumistas`, `/taste` y componentes muertos.
-- **Bloque 1.3/1.4 (lienzo blanco + ficha para tráfico frío)** — Opción A ya elegida y adelantada en el WIP de #104; falta propagar y QA (WCAG AA sobre `#FFFFFF` puro, 3 tipos de frasco, verificación en vivo en `aromialab.com`).
+- ~~Bloque 1.2 (retiro técnico del catálogo)~~ — **mergeado** (PR #115).
+- **Bloque 1.2b + 1.3 (modo claro)** — en PR (`feat/ticket-1.3-lienzo-blanco`): links internos repuntados + lienzo blanco en Home/Ficha. **1.3 modo oscuro pendiente de QA visual en vivo** (frasco sobre `#0A0A0A`, 3 frascos, incógnito post-deploy) + decisión de Brey sobre el tratamiento dark del `ProductImage` y el hairline de `PerfumeCard`.
+- **Bloque 1.4 (ficha para tráfico frío)** — sin arrancar; incluye el breadcrumb "Catálogo" sin destino.
 - **Retrofit de links de afiliado en artículos ya publicados** — los publicados antes del pivote no los tienen; baja prioridad, no frena artículos nuevos.
 - **`next build` local no valida** en este entorno por falta de red a Google Fonts (`next/font` → `Newsreader`, `ENOTFOUND`) — `tsc --noEmit` y `next lint` sí corren limpios; el build real lo valida el CI en el PR.
 

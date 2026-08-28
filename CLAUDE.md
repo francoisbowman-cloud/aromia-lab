@@ -85,10 +85,16 @@ Code/Cowork), `ticket-lienzo-blanco-flotante.md` (rediseño visual),
 `brief-apertura-cowork-editorial.md`.
 
 - El grid público `/catalogo` (landing con buscador y filtros)
-  **desaparece** — retiro técnico pendiente (bloque 1.2 del ticket: aún
-  NO ejecutado al momento de esta nota). La ruta `apps/web/src/app/catalogo/[slug]/`
-  (ficha individual) **se queda** como destino del Quiz y contenido
-  long-tail indexable (sin `noindex`, a propósito).
+  **fue retirado** — bloque 1.2, PR #115 mergeado (2026-08-27): se
+  eliminaron `app/catalogo/page.tsx`, los 3 componentes del grid
+  (`PerfumesCatalog*`, `ResilientPerfumesCatalog`), el comparador
+  `app/comparar/` y `HomeCatalogPreview`. `/catalogo`, `/comparar` y
+  `/perfumes` redirigen 308 a `/magazine`. La ruta
+  `apps/web/src/app/catalogo/[slug]/` (ficha individual) **se queda** como
+  destino del Quiz y contenido long-tail indexable (sin `noindex`, a
+  propósito), y se lista por perfume en `sitemap.xml`. `/api/catalog-buy`
+  y `/api/catalog-image` siguen vivos (los usa la ficha). `/buscar` y
+  `/perfumistas` se conservan (búsqueda + índice editorial, no grid).
 - **Scraper de precios Awin desactivado** (Brey, 25/08): las tres
   variables `AWIN_*` se vaciaron en el servicio `api` de Railway — no-op
   sin credenciales, sin cambio de código, reversible. La ficha muestra lo
