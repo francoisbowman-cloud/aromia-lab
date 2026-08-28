@@ -56,7 +56,7 @@ export function AromiaHome2026({ perfumes, articulos, categorias }: { perfumes: 
 
           <div className="border-t border-line">
             {index.map((category, indexNumber) => (
-              <Link key={category.label} href={`/catalogo?familia=${encodeURIComponent(category.familias[0])}`} className="group grid min-h-[92px] grid-cols-[48px_1fr_auto] items-center gap-4 border-b border-line py-4 outline-none sm:grid-cols-[58px_1fr_1fr_auto] sm:gap-7">
+              <Link key={category.label} href={`/buscar?q=${encodeURIComponent(category.familias[0])}`} className="group grid min-h-[92px] grid-cols-[48px_1fr_auto] items-center gap-4 border-b border-line py-4 outline-none sm:grid-cols-[58px_1fr_1fr_auto] sm:gap-7">
                 <span className="font-plex text-xs text-muted">{String(indexNumber + 1).padStart(2, "0")}</span>
                 <span className="font-display text-[30px] leading-none tracking-[-.025em] text-ink transition group-hover:translate-x-1 sm:text-[38px]">{category.label}</span>
                 <span className="hidden max-w-[30ch] font-sans text-sm leading-6 text-muted sm:block">{familyCopy[category.label] ?? "Una ruta distinta dentro del catálogo."}</span>

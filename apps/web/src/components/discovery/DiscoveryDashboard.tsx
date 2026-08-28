@@ -73,7 +73,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
 
             <div className="mt-9 flex items-center justify-between gap-5 border-t border-line pt-4">
               <span className="font-plex text-[11px] uppercase tracking-[.13em] text-muted">{atlasFamily || "Colección completa"}</span>
-              <Link href={atlasFamily ? `/catalogo?familia=${encodeURIComponent(atlasFamily)}` : "/catalogo"} className="inline-flex min-h-11 items-center border-b border-ink font-plex text-[11px] uppercase tracking-[.13em] text-ink">Abrir índice →</Link>
+              <Link href={atlasFamily ? `/buscar?q=${encodeURIComponent(atlasFamily)}` : "/buscar"} className="inline-flex min-h-11 items-center border-b border-ink font-plex text-[11px] uppercase tracking-[.13em] text-ink">Abrir búsqueda →</Link>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
               <p className="font-plex text-xs uppercase tracking-[.14em] text-muted">Familias que regresan</p>
               <div className="mt-7 border-t border-line">
                 {families.length ? families.map(([name, score], index) => (
-                  <Link key={name} href={`/catalogo?familia=${encodeURIComponent(name)}`} onClick={() => trackEvent("intention_discovery", { signal_type: "family", value: name, position: index + 1 })} className="group flex min-h-16 items-center justify-between gap-5 border-b border-line py-3 outline-none"><span className="font-plex text-xs text-muted">0{index + 1}</span><span className="origin-right text-right font-display capitalize leading-none tracking-[-.025em] text-ink transition-transform group-hover:-translate-x-1" style={{ fontSize: `${24 + 12 * strength(score, familyMax)}px` }}>{label(name)}</span></Link>
+                  <Link key={name} href={`/buscar?q=${encodeURIComponent(name)}`} onClick={() => trackEvent("intention_discovery", { signal_type: "family", value: name, position: index + 1 })} className="group flex min-h-16 items-center justify-between gap-5 border-b border-line py-3 outline-none"><span className="font-plex text-xs text-muted">0{index + 1}</span><span className="origin-right text-right font-display capitalize leading-none tracking-[-.025em] text-ink transition-transform group-hover:-translate-x-1" style={{ fontSize: `${24 + 12 * strength(score, familyMax)}px` }}>{label(name)}</span></Link>
                 )) : <p className="py-6 font-sans text-sm leading-6 text-muted">Explora fragancias o completa el Quiz para empezar.</p>}
               </div>
             </div>
