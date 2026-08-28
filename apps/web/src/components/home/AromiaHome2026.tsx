@@ -81,7 +81,7 @@ export function AromiaHome2026({ perfumes, articulos, categorias }: { perfumes: 
               </div>
               <p className="max-w-[36ch] font-sans text-xs leading-5 text-[#9da39d]">La escena desaparece cuando el objeto necesita hablar con precisión.</p>
             </div>
-            <div className="order-1 relative min-h-[500px] overflow-hidden bg-[#f7f5f0] lg:order-2 lg:min-h-[680px]">
+            <div className="order-1 relative min-h-[500px] overflow-hidden bg-white lg:order-2 lg:min-h-[680px]">
               <div aria-hidden="true" className="absolute inset-[10%] rounded-[50%] bg-[#d9c8b1]/45 blur-[100px]" />
               <div className="absolute inset-[2%] sm:inset-[5%] lg:inset-[2%]">
                 <ProductImage slug={feature.slug} imageUrl={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} mode="hero" />
