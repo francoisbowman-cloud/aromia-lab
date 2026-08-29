@@ -98,13 +98,22 @@ Code/Cowork), `ticket-lienzo-blanco-flotante.md` (rediseño visual),
   (esos `.md` no son la fuente real, ver sección "Artículos" más abajo).
   Publicación real: Brey a mano vía `/admin/magazine`, o un script de
   importación a evaluar con Code si el volumen lo justifica.
-- **Lienzo blanco (Opción A ya elegida por Brey)**: `--bg`/`--background`
-  a `#FFFFFF` / `#0A0A0A` puro en `aromia-redesign.css`; la definición
-  muerta de `--bg` en `globals.css` (`#fbf8f3`/`#0e0c0a`) se eliminó —
-  `--bg` vive ahora en un solo archivo. `ProductImage.tsx` aplica la
-  máscara radial + `mix-blend-multiply` en todos los modos (se eliminó la
-  prop `surface`/tipo `Surface`). Falta propagar y QA sobre Home / Ficha
-  / Magazine.
+- **Lienzo blanco (Opción A)**: `--bg`/`--background` a `#FFFFFF` / `#0A0A0A`
+  puro en `aromia-redesign.css`; la definición muerta de `--bg` en
+  `globals.css` (`#fbf8f3`/`#0e0c0a`) se eliminó. Home/Ficha con fondos
+  hardcodeados pasados a token `bg-paper` (PR #116, modo claro verificado).
+- **Recortes sin fondo — decisión #105 (invierte la Opción A → B)**:
+  `ProductImage.tsx` es **cutout-first**. Si el slug está en
+  `apps/web/src/lib/perfumeCutouts.ts` → muestra
+  `public/perfumes/cutouts/<slug>.webp` (canal alfa, generado OFFLINE con
+  `remove_background` de OMNI, o imagen IA de alto detalle sin inventar
+  rasgos del frasco para los casos difíciles) con `drop-shadow()`, sin
+  máscara ni `mix-blend`. Si no está → fallback Opción A (máscara +
+  `mix-blend-multiply`). **Registro vacío por ahora** → comportamiento =
+  fallback total; se llena tras el piloto (`docs/images/CUTOUT-PILOT-PLAN.md`).
+  El recorte es 100% offline; el `omni-strict-audit` sigue prohibiendo
+  extracción de píxeles en runtime. Generación IA paga: pendiente de
+  aprobar monto/modelo con Brey.
 
 ## Stack
 

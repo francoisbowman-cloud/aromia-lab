@@ -25,15 +25,18 @@ const home = await text("apps/web/src/components/home/TasteLanding.tsx");
 if (/editorial\/cinematic-warm\.png/i.test(home)) failures.push("home_hero_anonymous_background_regression");
 
 await requireText("apps/web/src/components/perfume/ProductImage.tsx", [
-  // Pivote a revista, lienzo blanco Opción A (decisión #103/#104): el escenario
-  // del producto pasa de una caja `bg-white` a `bg-transparent` + máscara radial
-  // en todos los modos, para que el frasco flote sobre el `--bg` blanco puro de
-  // la página en vez de sobre su propia tarjeta. Antes exigía /bg-white/.
+  // Decisión #105 (revista editorial): ProductImage es "cutout-first" — si hay
+  // recorte sin fondo (`perfumeCutouts`) se muestra directo con drop-shadow;
+  // si no, cae al fallback Opción A (`bg-transparent` + máscara radial +
+  // `mix-blend-multiply`), heredado de las decisiones #103/#104.
+  ["catalog_product_must_prefer_cutout", /perfumeCutouts|hasCutout/],
   ["catalog_product_stage_must_be_transparent", /bg-transparent/],
-  ["catalog_product_stage_must_feather_edge", /maskImage/],
+  ["catalog_product_fallback_must_feather_edge", /maskImage/],
   ["catalog_product_must_preserve_contain", /object-contain/],
 ]);
 const productImage = await text("apps/web/src/components/perfume/ProductImage.tsx");
+// El recorte de fondo se hace OFFLINE (script + OMNI); el componente solo
+// consume el asset. Sigue prohibida cualquier extracción de píxeles en runtime.
 if (/removeConnectedBackground|createElement\(["']canvas["']\)|getImageData\(/.test(productImage)) failures.push("catalog_product_destructive_background_extraction_regression");
 
 await requireText("apps/web/src/app/catalogo/[slug]/page.tsx", [
