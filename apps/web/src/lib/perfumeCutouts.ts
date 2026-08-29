@@ -8,9 +8,9 @@
  *
  * Los frascos que el recorte automático no resuelve (vidrio transparente,
  * líquidos de color, tapas cromadas) o cuyas fotos traen packaging no
- * deseado se sustituyen por una imagen generada por IA de alto detalle,
- * con la regla dura de no inventar ningún rasgo del frasco — y también
- * entran acá una vez producidas.
+ * deseado se sustituyen por una imagen IA de alto detalle **generada por
+ * ChatGPT** (no por Code), con la regla dura de no inventar ningún rasgo
+ * del frasco. Code integra el archivo y registra el slug acá.
  *
  * Se llena a mano tras el piloto (ver `docs/images/CUTOUT-PILOT-PLAN.md`).
  */

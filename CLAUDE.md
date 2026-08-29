@@ -105,15 +105,15 @@ Code/Cowork), `ticket-lienzo-blanco-flotante.md` (rediseño visual),
 - **Recortes sin fondo — decisión #105 (invierte la Opción A → B)**:
   `ProductImage.tsx` es **cutout-first**. Si el slug está en
   `apps/web/src/lib/perfumeCutouts.ts` → muestra
-  `public/perfumes/cutouts/<slug>.webp` (canal alfa, generado OFFLINE con
-  `remove_background` de OMNI, o imagen IA de alto detalle sin inventar
-  rasgos del frasco para los casos difíciles) con `drop-shadow()`, sin
-  máscara ni `mix-blend`. Si no está → fallback Opción A (máscara +
+  `public/perfumes/cutouts/<slug>.webp` (canal alfa) con `drop-shadow()`,
+  sin máscara ni `mix-blend`. Si no está → fallback Opción A (máscara +
   `mix-blend-multiply`). **Registro vacío por ahora** → comportamiento =
   fallback total; se llena tras el piloto (`docs/images/CUTOUT-PILOT-PLAN.md`).
-  El recorte es 100% offline; el `omni-strict-audit` sigue prohibiendo
-  extracción de píxeles en runtime. Generación IA paga: pendiente de
-  aprobar monto/modelo con Brey.
+  El recorte automático lo hace **Code** con `remove_background` de OMNI
+  (offline, sin costo); las imágenes IA de los frascos difíciles las genera
+  **ChatGPT** (manual operativo: "Generación de imágenes | ChatGPT | Code
+  para publicación"), Code solo integra. El `omni-strict-audit` sigue
+  prohibiendo extracción de píxeles en runtime.
 
 ## Stack
 

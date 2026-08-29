@@ -2,11 +2,20 @@
 
 **Contexto.** Con el pivote a revista editorial (decisión #103) el perfume deja
 de mostrarse como foto hotlinkeada con máscara CSS y pasa a un **recorte con
-canal alfa** (PNG/WebP sin fondo) que se puede componer libremente. Brey
-autorizó además **sustituir por imagen generada por IA de alto detalle** los
-frascos que el recorte automático no resuelve, con la regla dura de **no
-inventar ningún rasgo del frasco** (forma, color, tapa, grabados, etiqueta,
-proporción, material). Catálogo real: **125 perfumes**.
+canal alfa** (PNG/WebP sin fondo) que se puede componer libremente. Catálogo
+real: **125 perfumes**.
+
+**Reparto (manual operativo, tabla de responsabilidades):**
+- **Code** → recorte automático (`remove_background` de OMNI), scripts/pipeline,
+  integración del asset (`public/perfumes/cutouts/` + registro), controles
+  técnicos (peso, `tsc`, `omni-strict-audit`, deploy de preview).
+- **ChatGPT** → genera las imágenes IA de alto detalle para los frascos que el
+  recorte automático no resuelve (usa la capacidad de imagen incluida en su
+  plan — Code NO genera imágenes). Regla dura: **no inventar ningún rasgo del
+  frasco** (forma, color, tapa, grabados, etiqueta, proporción, material).
+  Code recibe el archivo, lo mete en `public/perfumes/cutouts/<slug>.webp` y
+  registra el slug.
+- **Validación visual** → ChatGPT + Francois sobre una preview de Railway.
 
 ## Pipeline técnico (verificado a mano el 2026-08-29)
 
@@ -57,11 +66,11 @@ claro y oscuro). Recién ahí se decide procesar los 125.
 
 - [ ] **Cajas** — criterio de Code: la caja es lenguaje de retail, no de revista
       → los perfumes cuya foto trae caja entran al bucket "difícil" (recorte
-      solo-frasco o IA). Confirmar con Brey en el piloto.
-- [ ] **Generación IA** — `remove_background` es gratis; la **imagen IA de alto
-      detalle** para los frascos difíciles usa un modelo generativo pago →
-      requiere que Brey apruebe **monto y modelo** (gate de la decisión #18).
-      No se corre ninguna generación IA hasta eso.
+      solo-frasco, o imagen IA de ChatGPT). Confirmar con Brey en el piloto.
+- [ ] **Imágenes IA de los difíciles** — las genera **ChatGPT**, no Code. Code
+      arma y entrega la lista de slugs difíciles (con el motivo: caja / vidrio
+      transparente / líquido de color / cromado) para que ChatGPT las produzca;
+      después Code las integra.
 - [ ] **Peso** — 125 WebP con alfa @ ~620px ≈ 1.5–2 MB en total; encaja en el
       presupuesto de `IMAGE-ARCHITECTURE.md`. Confirmar al cerrar el piloto.
 - [ ] **`next/image`** — evaluar si los cutouts (assets locales, dimensiones
