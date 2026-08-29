@@ -56,7 +56,7 @@ export function AromiaHome2026({ perfumes, articulos, categorias }: { perfumes: 
 
           <div className="border-t border-line">
             {index.map((category, indexNumber) => (
-              <Link key={category.label} href={`/catalogo?familia=${encodeURIComponent(category.familias[0])}`} className="group grid min-h-[92px] grid-cols-[48px_1fr_auto] items-center gap-4 border-b border-line py-4 outline-none sm:grid-cols-[58px_1fr_1fr_auto] sm:gap-7">
+              <Link key={category.label} href={`/buscar?q=${encodeURIComponent(category.familias[0])}`} className="group grid min-h-[92px] grid-cols-[48px_1fr_auto] items-center gap-4 border-b border-line py-4 outline-none sm:grid-cols-[58px_1fr_1fr_auto] sm:gap-7">
                 <span className="font-plex text-xs text-muted">{String(indexNumber + 1).padStart(2, "0")}</span>
                 <span className="font-display text-[30px] leading-none tracking-[-.025em] text-ink transition group-hover:translate-x-1 sm:text-[38px]">{category.label}</span>
                 <span className="hidden max-w-[30ch] font-sans text-sm leading-6 text-muted sm:block">{familyCopy[category.label] ?? "Una ruta distinta dentro del catálogo."}</span>
@@ -81,7 +81,7 @@ export function AromiaHome2026({ perfumes, articulos, categorias }: { perfumes: 
               </div>
               <p className="max-w-[36ch] font-sans text-xs leading-5 text-[#9da39d]">La escena desaparece cuando el objeto necesita hablar con precisión.</p>
             </div>
-            <div className="order-1 relative min-h-[500px] overflow-hidden bg-[#f7f5f0] lg:order-2 lg:min-h-[680px]">
+            <div className="order-1 relative min-h-[500px] overflow-hidden bg-white lg:order-2 lg:min-h-[680px]">
               <div aria-hidden="true" className="absolute inset-[10%] rounded-[50%] bg-[#d9c8b1]/45 blur-[100px]" />
               <div className="absolute inset-[2%] sm:inset-[5%] lg:inset-[2%]">
                 <ProductImage slug={feature.slug} imageUrl={feature.imagen_url} alt={`${feature.nombre} de ${feature.marca}`} mode="hero" />

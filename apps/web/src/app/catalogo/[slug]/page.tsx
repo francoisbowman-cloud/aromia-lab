@@ -36,7 +36,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
   const verifiedNotes = [...(perfume.notas_salida ?? []), ...(perfume.notas_corazon ?? []), ...(perfume.notas_fondo ?? [])];
 
   return (
-    <main className="bg-[#f7f5f0] text-ink dark:bg-[#0e1311]" aria-live="polite">
+    <main className="bg-paper text-ink" aria-live="polite">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(perfume)) }} />
 
       <div className="mx-auto max-w-[1520px] px-5 pt-8 sm:px-8 lg:px-12 lg:pt-10">
@@ -55,7 +55,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
         </div>
       </section>
 
-      <section className="border-y border-line bg-[#e6e8e4]/40 dark:bg-[#151c18]">
+      <section className="border-y border-line bg-soft/40">
         <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
           <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[#5a6b54] dark:text-[#b8c5b3]">03 / Contexto</p><h2 className="mt-3 max-w-[14ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">El carácter detrás de las notas.</h2></div>
           <EditorialMood nombre={perfume.nombre} familia={perfume.familia_olfativa} notas={verifiedNotes} descripcion={perfume.descripcion_corta ?? perfume.resena_sintetizada}/>
@@ -71,7 +71,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
         <PriceTable retailers={perfume.retailers ?? []} directLink={catalogBuyUrl(perfume.slug)} perfumeSlug={perfume.slug} perfumeNombre={perfume.nombre}/>
       </section>
 
-      <section className="border-y border-line bg-[#f7f5f0] dark:bg-[#0e1311]">
+      <section className="border-y border-line bg-paper">
         <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
           <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[#5a6b54] dark:text-[#b8c5b3]">05 / Comunidad</p><h2 className="mt-3 max-w-[13ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">Cómo lo viven otras personas.</h2></div>
           <CommunityReviews ratingPromedio={perfume.rating_promedio} resenaSintetizada={perfume.resena_sintetizada}/>
