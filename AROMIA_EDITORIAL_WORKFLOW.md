@@ -2,6 +2,42 @@
 
 Aromia is evolving from catalog-first commerce into a fragrance magazine. Stories come first; products and affiliate links appear only when editorially justified.
 
+## Universal operating command
+
+The canonical instruction for any Aromia actor is:
+
+> **Continúa Aromia desde el repo.**
+
+This is a role-aware command, not a request for every actor to do everything. When an actor receives it, that actor must:
+
+1. enter `francoisbowman-cloud/aromia-lab` and inspect the current repository state;
+2. read the canonical Aromia documents relevant to its role before acting;
+3. identify work that is ready for its own domain, using publication state, editorial calendar and repository priority;
+4. advance as much eligible work as is reasonable without asking the human to select an article or manually carry a handoff;
+5. never silently perform another actor's unresolved responsibility merely because that actor has not arrived yet;
+6. preserve previously approved work unless new evidence requires a correction;
+7. update the repository state and leave completed work ready for the next actor;
+8. stop and escalate only for a real blocker, material risk, strategic/brand decision or missing prerequisite that cannot be resolved from the repository.
+
+The command therefore resolves differently by role:
+
+- **Cowork:** find editorial needs and eligible ideas/articles; research, write and advance them to `EDITORIAL: READY`.
+- **ChatGPT:** find `EDITORIAL: READY` work whose art direction is pending; read the complete piece, art-direct it, create/direct required assets and advance its visual states.
+- **Code:** find work whose editorial and art prerequisites are ready; implement, render, correct, run the required gates and publish when its state/calendar authorizes publication.
+- **OMNI:** find work awaiting quality review; evaluate only the relevant gate and return `PASSED` or `CHANGES_REQUIRED` with actionable evidence.
+
+### Code-only publication override
+
+Because **Code is the only production actor authorized to take a publication to `LIVE`**, there is one explicit operational override:
+
+> **Continúa Aromia desde el repo, sin publicar.**
+
+This modifier is intended for **Code**. It means: perform all eligible implementation, rendering, correction and verification work; a piece may reach `PUBLISHABLE`, but Code must not deploy/publish it or change `PUBLISH` to `LIVE`.
+
+For Cowork, ChatGPT and OMNI, `sin publicar` has no additional effect because those actors never have publication authority in the first place.
+
+Absent this override, the normal command allows Code to publish work that has passed all required gates and is authorized by its `PUBLISH` state and editorial schedule. Routine eligible publication does not require article-by-article human confirmation.
+
 ## Working model
 
 Aromia works asynchronously. No actor needs to wait for another actor to finish a batch or remain in the same conversation. The repository is the newsroom and shared source of truth: each actor reads the current state, advances only the work that belongs to its domain, records the new state, and leaves the work ready for the next actor whenever that next actor arrives.
