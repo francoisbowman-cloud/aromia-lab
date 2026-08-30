@@ -4,7 +4,8 @@
 
 ```text
 EDITORIAL: READY
-ART_DIRECTION: READY
+ART_DIRECTION: PENDING
+EARLY_OMNI: REFINE
 VISUAL_ASSETS: PENDING
 IMPLEMENTATION: PENDING
 QA: PENDING
@@ -15,6 +16,30 @@ TARGET_DATE: UNSCHEDULED
 **Source manuscript:** `drafts/el-coleccionista.md`  
 **Series:** Perfume como puerta  
 **Art Direction:** ChatGPT  
+
+## Current art-direction experiment
+
+The first Canva-generated study was rejected as insufficiently expert and too close to generic perfume/editorial template behavior. A second manual-layout experiment has now been created without Canva template generation or user selection:
+
+- **Canva design:** `DAHTzx3FGZ0`
+- **Title:** `Aromia — El Coleccionista · Editorial Artboard 04`
+- **View:** https://www.canva.com/d/c8AqiYGOr0H2GV2
+- **Edit:** https://www.canva.com/d/S4BukrZUGAjos4E
+
+This experiment is deliberately not marked final. It tests Canva as a rendering/artboard surface rather than as the source of design intelligence. The composition was constructed manually from the story logic and imported into Canva.
+
+### Early OMNI result
+
+`EARLY_OMNI: REFINE`
+
+Reasoning:
+- the new sequence is more authored and story-specific than the generated study;
+- accumulation, interruption and archival time are now explicit compositional behaviors rather than decorative themes;
+- no pseudo-real branded perfume imagery is used as documentary evidence;
+- the design still needs a stronger final photographic/material language before it can prove the level of visual expertise expected for Aromia;
+- Canva remains an experiment, not a required permanent part of the pipeline.
+
+If repeated tests show that Canva constrains the visual ceiling, Aromia may demote it to an occasional tool and develop the primary editorial design system through Claude Code / Design, coded prototypes and browser-based experiments. The criterion is the quality and distinctiveness of the publication, not loyalty to a tool.
 
 ## Editorial interpretation
 
@@ -153,7 +178,7 @@ Code should not implement a universal `ArticleTemplate` from this page.
 
 Build/reuse only the shared editorial infrastructure that is genuinely common (article shell, metadata, captions/credits, related navigation, disclosure/accessibility primitives). The accumulation behavior, density progression and Act IV reset belong specifically to `El Coleccionista`.
 
-Implementation may begin only after the required visual assets are resolved or explicitly marked `NOT_REQUIRED`.
+Implementation may begin only after the required visual assets are resolved or explicitly marked `NOT_REQUIRED` and `EARLY_OMNI` reaches `PASS`.
 
 ## Acceptance gate
 
@@ -167,5 +192,7 @@ Before moving `ART_DIRECTION` forward in implementation, verify:
 6. Does commercial treatment arrive after editorial value and remain subordinate?
 7. Does mobile preserve the narrative rhythm instead of merely stacking desktop blocks?
 8. Would the page still be recognizable as this story if the title were hidden?
+9. Does the composition demonstrate professional editorial craft rather than merely avoiding obvious AI aesthetics?
+10. Is Canva helping the visual ceiling rather than defining or lowering it?
 
-If #8 is no, the design is too generic.
+If #8, #9 or #10 is no, the design is not ready.
