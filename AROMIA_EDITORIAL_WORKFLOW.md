@@ -2,18 +2,70 @@
 
 Aromia is evolving from catalog-first commerce into a fragrance magazine. Stories come first; products and affiliate links appear only when editorially justified.
 
+## Universal operating command
+
+The canonical instruction for any Aromia actor is:
+
+> **Continúa Aromia desde el repo.**
+
+This is a role-aware command, not a request for every actor to do everything. When an actor receives it, that actor must:
+
+1. enter `francoisbowman-cloud/aromia-lab` and inspect the current repository state;
+2. read the canonical Aromia documents relevant to its role before acting;
+3. identify work that is ready for its own domain, using publication state, editorial calendar and repository priority;
+4. advance as much eligible work as is reasonable without asking the human to select an article or manually carry a handoff;
+5. never silently perform another actor's unresolved responsibility merely because that actor has not arrived yet;
+6. preserve previously approved work unless new evidence requires a correction;
+7. update the repository state and leave completed work ready for the next actor;
+8. stop and escalate only for a real blocker, material risk, strategic/brand decision or missing prerequisite that cannot be resolved from the repository.
+
+The command therefore resolves differently by role:
+
+- **Cowork:** find editorial needs and eligible ideas/articles; research, write and advance them to `EDITORIAL: READY`.
+- **ChatGPT:** find `EDITORIAL: READY` work whose art direction is pending; read the complete piece, art-direct it, create/direct required assets and advance its visual states.
+- **Code:** find work whose editorial and art prerequisites are ready; implement, render, correct, run the required gates and publish when its state/calendar authorizes publication.
+- **OMNI:** find work awaiting quality review; evaluate only the relevant gate and return `PASSED` or `CHANGES_REQUIRED` with actionable evidence.
+
+### Code-only publication override
+
+Because **Code is the only production actor authorized to take a publication to `LIVE`**, there is one explicit operational override:
+
+> **Continúa Aromia desde el repo, sin publicar.**
+
+This modifier is intended for **Code**. It means: perform all eligible implementation, rendering, correction and verification work; a piece may reach `PUBLISHABLE`, but Code must not deploy/publish it or change `PUBLISH` to `LIVE`.
+
+For Cowork, ChatGPT and OMNI, `sin publicar` has no additional effect because those actors never have publication authority in the first place.
+
+Absent this override, the normal command allows Code to publish work that has passed all required gates and is authorized by its `PUBLISH` state and editorial schedule. Routine eligible publication does not require article-by-article human confirmation.
+
 ## Working model
 
-**Claude = Editor + Editorial Architect**
+Aromia works asynchronously. No actor needs to wait for another actor to finish a batch or remain in the same conversation. The repository is the newsroom and shared source of truth: each actor reads the current state, advances only the work that belongs to its domain, records the new state, and leaves the work ready for the next actor whenever that next actor arrives.
+
+**Claude Cowork = Editor + Editorial Architect**
 
 For each publication Claude should:
 - research and fact-check the subject;
 - write the article as editorial content, not a product page;
 - structure the reading rhythm;
 - identify moments where visual expression can materially improve the story;
-- integrate the final visual assets back into the article.
+- identify contextual commercial opportunities without writing to justify them;
+- save completed editorial work in the repository and update its status.
 
-**ChatGPT = Visual Director + Image Composer**
+Claude may produce one article or a batch of articles independently. It does not need to wait for visual direction or implementation before continuing editorial production.
+
+**ChatGPT = Art Director + Visual Composer**
+
+ChatGPT owns the final art direction of each publication, not only image generation. After reading the complete piece, ChatGPT may define:
+- the visual concept;
+- episodic page color and material palette;
+- typographic hierarchy and scale;
+- composition, density, whitespace and rhythm;
+- image sequence, placement and treatment;
+- quotes, captions, marginalia, dividers and other editorial devices;
+- visual treatment of contextual commerce;
+- responsive intent for the article;
+- required visual assets, including the decision to use no image when stronger.
 
 Claude must leave creative room for ChatGPT rather than prescribing finished image prompts. ChatGPT decides which visual language best serves each moment and may combine, reinterpret, or reject techniques.
 
@@ -36,9 +88,29 @@ Available visual vocabulary includes, but is not limited to:
 
 These are tools, **not a checklist or closed menu**. Do not force a Hero Shot or product image when the story needs something else.
 
+**Code = Web Production + Publisher**
+
+Code owns technical implementation and publication once upstream work is ready. It should:
+- read the article and art direction from the repository;
+- implement the final web composition without silently inventing a different editorial or artistic direction;
+- preserve accessibility, responsive behavior, performance, SEO and authentic product identity;
+- implement contextual commercial links and measurement according to Aromia policy;
+- render and verify the real page;
+- correct implementation defects;
+- publish work that has passed the required gates and reached `PUBLISHABLE` or its scheduled publication time;
+- update repository state to `LIVE` after confirmed publication.
+
+Normal editorial publication should not require manual approval article by article once the operating model is established. Architecture changes, material brand changes, high-risk technical changes or exceptional editorial cases should still escalate to the human Publisher.
+
 **OMNI = Critic / Gate**
 
-OMNI evaluates whether the combined editorial and visual solution actually improves the experience. It should reject decoration, unnecessary complexity, AI-slop, weak authenticity, or visual work without perceptual/narrative gain.
+OMNI evaluates whether the combined editorial, visual and implemented solution actually improves the experience. It should reject decoration, unnecessary complexity, AI-slop, weak authenticity, visual work without perceptual/narrative gain, responsive regressions or commercial treatment that overwhelms the story.
+
+OMNI is a QA tool, not another production department and not a reason to create new OMNI modules.
+
+**Human = Publisher / Editor-in-Chief**
+
+The human sets the line, can override the calendar, approves major strategic or brand decisions and remains final authority. Routine coordination between actors should not depend on the human carrying outputs from one system to another.
 
 ## Visual opportunity handoff
 
@@ -64,17 +136,69 @@ ChatGPT may also decide that no image is the stronger solution.
 
 ## Repository handoff rule
 
-The repository is the shared handoff surface between Claude, ChatGPT and OMNI.
+The repository is the shared handoff surface between Cowork, ChatGPT, Code and OMNI.
 
-Claude must save each completed article and its `[AROMIA_VISUAL_OPPORTUNITY]` markers in the repo before handing off. ChatGPT will read them directly from the repository, produce or direct the visual work, and return the resulting assets or implementation through the project. The user should not need to copy and paste outputs between systems.
+The user should not need to copy and paste outputs between systems. An actor entering Aromia later should be able to inspect the repository, determine what is ready for its domain and continue from there.
 
-Keep handoffs explicit and lightweight. Do not create a synchronization service, extra branch topology, schema or orchestration layer unless repeated real-world use proves it necessary.
+Keep handoffs explicit and lightweight. Do not create a synchronization service, queue, extra branch topology, database workflow, schema or orchestration layer unless repeated real-world use proves it necessary.
+
+### Minimal publication state
+
+Each publication should expose a small human-readable state block:
+
+```text
+EDITORIAL: DRAFT | READY
+ART_DIRECTION: PENDING | READY
+VISUAL_ASSETS: PENDING | READY | NOT_REQUIRED
+IMPLEMENTATION: PENDING | READY
+QA: PENDING | PASSED | CHANGES_REQUIRED
+PUBLISH: PENDING | PUBLISHABLE | SCHEDULED | LIVE
+TARGET_DATE: YYYY-MM-DD | UNSCHEDULED
+```
+
+An actor advances only its own domain. Missing upstream work remains pending rather than being silently invented.
+
+This state is intentionally small. It is a coordination convention, not a workflow engine.
+
+## Asynchronous production model
+
+Work may progress in batches of different sizes:
+
+`Cowork writes 10 → ChatGPT art-directs 4 → Code implements 3 → QA passes 2 → Code publishes 2`
+
+Nothing requires the complete batch to finish. Production and publication are separate concerns. Aromia may maintain a substantial inventory of finished work and release it according to the editorial calendar.
 
 ## Production loop
 
-`IDEA → RESEARCH → STORY → EDITORIAL STRUCTURE → VISUAL OPPORTUNITIES → CHATGPT VISUAL DIRECTION/ASSETS → INTEGRATION → OMNI GATE → CORRECTION`
+For a publication:
 
-Keep the process lightweight. Do not create a branch, subsystem, schema, automation, or new framework merely to support this workflow unless a real recurring need proves it necessary.
+`IDEA → RESEARCH → STORY → EDITORIAL READY → ART DIRECTION → ASSETS → WEB COMPOSITION → QA → PUBLISHABLE → SCHEDULE/LIVE`
+
+The loop is asynchronous: the repository, not a live handoff meeting, carries state between stages.
+
+## Contextual commerce principle
+
+Aromia may create desire, curiosity and purchase intent, but commercial pressure must remain subordinate to editorial value.
+
+The preferred journey is:
+
+`INTEREST → KNOWLEDGE → IDENTIFICATION → DESIRE → EXPLORATION → OPTIONAL PURCHASE`
+
+not:
+
+`ARTICLE → BANNER → BUY`
+
+Aromia does not need to repeatedly tell the reader to visit a retailer. A contextual action such as `Ver opciones disponibles`, `Encontrarla` or `Seguir explorando` may lead to an affiliate destination when editorially justified.
+
+Commercial relationships must still be disclosed clearly where required. Subtlety applies to sales pressure, **not** to disclosure.
+
+Never:
+- write an article merely to justify an affiliate link;
+- alter an editorial conclusion to improve conversion;
+- turn every perfume mention into a CTA;
+- disguise advertising or an affiliate relationship as independent editorial information.
+
+The reader must be able to enjoy Aromia completely without buying anything.
 
 ## Editorial principle
 
