@@ -2,6 +2,14 @@
 
 Aromia is evolving from catalog-first commerce into a fragrance magazine. Stories come first; products and affiliate links appear only when editorially justified.
 
+## Editorial agenda and ideation
+
+The human Publisher is a primary source of Aromia topics and may propose a story at any time. Topic discovery is also a shared editorial responsibility rather than a human-only backlog.
+
+**ChatGPT, Claude and Cowork should proactively suggest story ideas** when research, current work, the archive, cultural context or gaps in the editorial calendar reveal something worth pursuing. ChatGPT has a particular responsibility to surface promising editorial territories and visual/story opportunities, while Cowork and Claude should contribute ideas from research, writing and product context.
+
+Suggestions are proposals, not automatic assignments. They should be judged by Aromia's editorial line and should avoid filling the calendar merely for volume or SEO. A strong idea can enter the editorial inventory whether it originated with the Publisher or an actor.
+
 ## Universal operating command
 
 The canonical instruction for any Aromia actor is:
@@ -110,7 +118,7 @@ OMNI is a QA tool, not another production department and not a reason to create 
 
 **Human = Publisher / Editor-in-Chief**
 
-The human sets the line, can override the calendar, approves major strategic or brand decisions and remains final authority. Routine coordination between actors should not depend on the human carrying outputs from one system to another.
+The human sets the line, can propose stories directly, can override the calendar, approves major strategic or brand decisions and remains final authority. Routine coordination between actors should not depend on the human carrying outputs from one system to another.
 
 ## Visual opportunity handoff
 
