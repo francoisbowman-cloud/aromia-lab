@@ -32,7 +32,7 @@ The command therefore resolves differently by role:
 - **Cowork:** find editorial needs and eligible ideas/articles; research, write and advance them to `EDITORIAL: READY`.
 - **ChatGPT:** find `EDITORIAL: READY` work whose art direction is pending; read the complete piece, art-direct it, create/direct required assets and advance its visual states.
 - **Code:** find work whose editorial and art prerequisites are ready; implement, render, correct, run the required gates and publish when its state/calendar authorizes publication.
-- **OMNI:** find work awaiting quality review; evaluate only the relevant gate and return `PASSED` or `CHANGES_REQUIRED` with actionable evidence.
+- **OMNI:** participate both as an early creative critic during art direction and as the final rendered-experience gate. It critiques; it does not take over authorship or implementation.
 
 ### Code-only publication override
 
@@ -96,6 +96,36 @@ Available visual vocabulary includes, but is not limited to:
 
 These are tools, **not a checklist or closed menu**. Do not force a Hero Shot or product image when the story needs something else.
 
+### Early OMNI creative critique
+
+OMNI does not need to wait for Code or a finished browser render. During Art Direction it may enter as a **critique loop** after a meaningful visual proposition exists: a Canva artboard, composition study, asset direction, or comparable visual specimen.
+
+The early loop is:
+
+`STORY → ART DIRECTION → VISUAL STUDY → OMNI CRITIQUE → REFINE / REJECT → ART DIRECTION READY`
+
+This is distinct from final QA. Its purpose is to raise the creative ceiling before implementation cost hardens weak decisions.
+
+Early OMNI should evaluate, with evidence where possible:
+- story-specificity: does the composition belong to this story rather than generic luxury/editorial design?
+- professional craft: does it demonstrate expert hierarchy, grid control, typography, cropping, pacing, spacing and image judgment rather than novice/template behavior?
+- authored humanity: does it feel intentionally directed without simulated scrapbook imperfection or decorative pseudo-humanity?
+- anti-AI character: are there recognizable generation defaults, over-symmetry, generic luxury signals, unnecessary visual effects or implausible imagery?
+- narrative gain: does the visual system deepen understanding, tension, atmosphere or pacing?
+- restraint: is complexity earned, and is simplicity sophisticated rather than underworked?
+- authenticity: are documentary/product identities factual and verifiable?
+- Aromia identity: does the proposal strengthen the publication's evolving visual memory without forcing a universal layout?
+
+OMNI may return:
+
+`EARLY_OMNI: PASS | REFINE | REJECT`
+
+`REFINE` must identify concrete weaknesses and desired perceptual/narrative improvement, not prescribe a replacement design. `REJECT` is appropriate when the concept is fundamentally generic, amateur, misleading or visually weak.
+
+**Authorship remains with ChatGPT.** OMNI is the demanding critic in the room, not a co-designer. It should not homogenize experimental work into safe patterns or convert critique into another template.
+
+A proposal should not advance to `ART_DIRECTION: READY` merely because it is clean or technically feasible. It should feel both authored and professionally resolved.
+
 **Code = Web Production + Publisher**
 
 Code owns technical implementation and publication once upstream work is ready. It should:
@@ -110,11 +140,16 @@ Code owns technical implementation and publication once upstream work is ready. 
 
 Normal editorial publication should not require manual approval article by article once the operating model is established. Architecture changes, material brand changes, high-risk technical changes or exceptional editorial cases should still escalate to the human Publisher.
 
-**OMNI = Critic / Gate**
+**OMNI = Early Creative Critic + Final Gate**
 
-OMNI evaluates whether the combined editorial, visual and implemented solution actually improves the experience. It should reject decoration, unnecessary complexity, AI-slop, weak authenticity, visual work without perceptual/narrative gain, responsive regressions or commercial treatment that overwhelms the story.
+OMNI has two deliberately different interventions:
 
-OMNI is a QA tool, not another production department and not a reason to create new OMNI modules.
+1. **Early creative critique:** challenges meaningful visual studies before implementation, looking for generic AI aesthetics, novice composition, weak story specificity, authenticity failures and insufficient craft.
+2. **Final rendered gate:** evaluates the combined editorial, visual and implemented experience after Code renders it, including responsive behavior, accessibility/performance-related visual consequences, implementation fidelity, commercial pressure and regressions.
+
+OMNI should reject decoration, unnecessary complexity, AI-slop, weak authenticity, visual work without perceptual/narrative gain, responsive regressions or commercial treatment that overwhelms the story.
+
+OMNI is a critic/QA system, not another production department and not a reason to create new OMNI modules.
 
 **Human = Publisher / Editor-in-Chief**
 
@@ -157,6 +192,7 @@ Each publication should expose a small human-readable state block:
 ```text
 EDITORIAL: DRAFT | READY
 ART_DIRECTION: PENDING | READY
+EARLY_OMNI: PENDING | PASS | REFINE | REJECT
 VISUAL_ASSETS: PENDING | READY | NOT_REQUIRED
 IMPLEMENTATION: PENDING | READY
 QA: PENDING | PASSED | CHANGES_REQUIRED
@@ -172,7 +208,7 @@ This state is intentionally small. It is a coordination convention, not a workfl
 
 Work may progress in batches of different sizes:
 
-`Cowork writes 10 → ChatGPT art-directs 4 → Code implements 3 → QA passes 2 → Code publishes 2`
+`Cowork writes 10 → ChatGPT art-directs 4 → early OMNI critiques 4 → ChatGPT resolves 3 → Code implements 3 → final QA passes 2 → Code publishes 2`
 
 Nothing requires the complete batch to finish. Production and publication are separate concerns. Aromia may maintain a substantial inventory of finished work and release it according to the editorial calendar.
 
@@ -180,7 +216,7 @@ Nothing requires the complete batch to finish. Production and publication are se
 
 For a publication:
 
-`IDEA → RESEARCH → STORY → EDITORIAL READY → ART DIRECTION → ASSETS → WEB COMPOSITION → QA → PUBLISHABLE → SCHEDULE/LIVE`
+`IDEA → RESEARCH → STORY → EDITORIAL READY → ART DIRECTION → VISUAL STUDY → EARLY OMNI → ART DIRECTION READY → ASSETS → WEB COMPOSITION → FINAL QA → PUBLISHABLE → SCHEDULE/LIVE`
 
 The loop is asynchronous: the repository, not a live handoff meeting, carries state between stages.
 
