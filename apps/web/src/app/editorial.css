@@ -1,0 +1,309 @@
+/* Aromia — Editorial Foundation
+ *
+ * Extracción del espécimen fundador "El Coleccionista" (design-lab, 2026-08-30).
+ * Solo se registran aquí las relaciones clasificadas AROMIA_FOUNDATION o
+ * REUSABLE_PRIMITIVE en:
+ *   - design-lab/el-coleccionista/VISUAL_GRAMMAR_SHEET.md
+ *   - design-lab/el-coleccionista/PRIMITIVE_INVENTORY.md
+ *   - design-lab/el-coleccionista/EARLY_OMNI_REVIEW.md  (promotion decision)
+ *
+ * Los gestos STORY_SPECIFIC (curva de densidad exacta, campo serial que se
+ * comprime, liberación de 300px, acento marino, titular partido, recorte de
+ * apertura) NO viven acá — son locales a cada historia. Ver STORY_SPECIFIC_LEDGER.
+ *
+ * Superficie clara única: el prototipo no pide tema oscuro de artículo y el
+ * Primitive Inventory lo excluye a propósito. No añadir overrides [data-theme].
+ */
+
+.editorial-root {
+  /* --- Color / material (Visual Grammar Sheet §4) --- */
+  --ed-paper: #faf8f4;          /* superficie base */
+  --ed-paper-lifted: #fdfcfa;   /* apenas más claro — no más blanco */
+  --ed-vellum: #efeae0;         /* superficie documental / archivo */
+  --ed-ink: #1f1b15;            /* negro cálido, nunca #000 */
+  --ed-muted: #6b6155;          /* secundario legible — AA sobre papel (5.71:1) y vitela (5.2:1) */
+  --ed-muted-strong: #4e463a;   /* caption sobre superficie rayada del espécimen */
+  --ed-line: rgba(31, 27, 21, 0.14);
+  --ed-line-strong: rgba(31, 27, 21, 0.35);
+  --ed-specimen-a: #dfd8c9;
+  --ed-specimen-b: #d5cdbb;
+
+  /* Contrato de legibilidad: NO existe un tercer gris más claro que --ed-muted.
+     La jerarquía terciaria se consigue con tamaño, tracking, mayúsculas,
+     posición y ritmo — nunca bajando la luminancia. (§2.1b del handoff:
+     #9a9083 medía ~2.62:1 sobre vitela y fue eliminado.) */
+
+  /* --- Tipografía (Visual Grammar Sheet §2) — escala verificada --- */
+  --ed-headline-size: clamp(44px, 11.5vw, 138px);
+  --ed-headline-lh: 0.86;
+  --ed-headline-tracking: -0.045em;
+  --ed-standfirst-size: clamp(21px, 0.9vw + 17px, 27px);
+  --ed-standfirst-lh: 1.48;
+  --ed-subhead-size: clamp(30px, 3vw, 46px);
+  --ed-subhead-lh: 1.02;
+  --ed-subhead-tracking: -0.03em;
+  --ed-body-size: clamp(18px, 0.55vw + 16px, 21px);
+  --ed-body-lh: 1.72;
+  --ed-note-size: 13px;
+  --ed-note-lh: 1.55;
+  --ed-label-size: 12px;        /* suelo absoluto — nada por debajo, ni en metadata */
+  --ed-label-tracking: 0.14em;
+
+  /* --- Espacio y ritmo (Visual Grammar Sheet §3) — la escala es fundacional;
+         qué paso usa cada fila es composición de la historia --- */
+  --ed-space-long: clamp(52px, 9vh, 110px);
+  --ed-space-normal: clamp(30px, 5vh, 56px);
+  --ed-space-compress: clamp(20px, 3.2vh, 36px);
+  --ed-space-saturate: clamp(12px, 1.8vh, 22px);
+
+  /* --- Fila editorial de tres zonas (Visual Grammar Sheet §1 · Primitive P-01) --- */
+  --ed-container-max: 1440px;
+  --ed-container-pad: clamp(20px, 5vw, 72px);
+  --ed-row-gap: clamp(24px, 3.5vw, 56px);
+  --ed-field-max: 640px;        /* el campo de lectura nunca supera esto con cuerpo */
+
+  background: var(--ed-paper);
+  color: var(--ed-ink);
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+}
+
+/* El prototipo mantiene el fondo cálido incluso cuando el sitio está en oscuro:
+   la superficie editorial es un papel, no un tema. */
+.editorial-root ::selection {
+  background: rgba(31, 27, 21, 0.14);
+  color: var(--ed-ink);
+}
+
+/* --- P-01 · Editorial Row -------------------------------------------------- */
+/* Una sola relación espacial. Las tres ranuras siempre existen; cualquiera
+   puede ir vacía (vacío = silencio editorial, no espacio sin usar).
+   Colapso intrínseco por flex-wrap — sin media queries. */
+.ed-container {
+  margin-inline: auto;
+  max-width: var(--ed-container-max);
+  padding-inline: var(--ed-container-pad);
+}
+
+.ed-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--ed-row-gap);
+}
+
+.ed-rail {
+  flex: 0 1 190px;
+  min-width: 170px;
+}
+
+.ed-field {
+  flex: 1 1 460px;
+  max-width: var(--ed-field-max);
+}
+
+.ed-margin {
+  flex: 1 1 170px;
+  min-width: 150px;
+}
+
+/* Al envolver por debajo de ~760px, carril y zona marginal preceden al campo
+   y se leen como interludios dentro del flujo, no como columnas apiladas. */
+@media (max-width: 760px) {
+  .ed-row {
+    gap: var(--ed-space-compress);
+  }
+  .ed-rail,
+  .ed-margin {
+    flex-basis: 100%;
+    max-width: var(--ed-field-max);
+  }
+}
+
+/* --- Tipografía fundacional --------------------------------------------------- */
+.ed-headline {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 300;
+  font-size: var(--ed-headline-size);
+  line-height: var(--ed-headline-lh);
+  letter-spacing: var(--ed-headline-tracking);
+  margin: 0;
+}
+
+.ed-standfirst {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: var(--ed-standfirst-size);
+  line-height: var(--ed-standfirst-lh);
+  margin: 0;
+}
+
+.ed-subhead {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: var(--ed-subhead-size);
+  line-height: var(--ed-subhead-lh);
+  letter-spacing: var(--ed-subhead-tracking);
+  max-width: 15ch;   /* se rompe en 2–3 líneas y funciona como bloque, no como banda */
+  margin: 0;
+}
+
+/* El cuerpo del ensayo va en Newsreader (serif), no en la sans de interfaz.
+   Es la distinción que separa "revista" de "sitio de producto" sin ornamento. */
+.ed-body {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: var(--ed-body-size);
+  line-height: var(--ed-body-lh);
+}
+.ed-body p {
+  margin: 0;
+}
+.ed-body p + p {
+  margin-top: 1.15em;
+}
+
+/* --- P-02 · Caption / Credit --------------------------------------------------- */
+/* Una sola voz de anotación para toda la publicación. Filete SUPERIOR (no
+   inferior, no caja) como señal. Vive en el carril o la zona marginal;
+   nunca dentro del campo de lectura. */
+.ed-caption {
+  border-top: 1px solid var(--ed-line-strong);
+  padding-top: 10px;
+  max-width: 240px;
+  font-family: var(--font-plex), Inter, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: var(--ed-note-size);
+  line-height: var(--ed-note-lh);
+  color: var(--ed-muted);
+}
+.ed-caption--on-specimen {
+  color: var(--ed-muted-strong);
+}
+.ed-label {
+  display: block;
+  font-family: var(--font-plex), Inter, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: var(--ed-label-size);
+  letter-spacing: var(--ed-label-tracking);
+  text-transform: uppercase;
+  color: var(--ed-muted);
+}
+.ed-caption .ed-label {
+  margin-bottom: 6px;
+}
+
+/* Nota marginal simple (carril / zona marginal). Al colapsar conserva el
+   filete y se convierte en interludio en línea. */
+.ed-note {
+  max-width: 240px;
+  font-family: var(--font-plex), Inter, system-ui, sans-serif;
+  font-size: var(--ed-note-size);
+  line-height: var(--ed-note-lh);
+  color: var(--ed-muted);
+}
+
+/* --- P-03 · Specimen Slot --------------------------------------------------- */
+/* Reserva y ESPECIFICA un activo visual inexistente sin fabricarlo ni dejar
+   un hueco gris. Se sustituye por la imagen real sin cambiar la caja. */
+.ed-specimen {
+  --_specimen-border: var(--ed-line-strong);
+  position: relative;
+  border: 1px solid var(--_specimen-border);
+  background-color: var(--ed-specimen-a);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 7px,
+    rgba(31, 27, 21, 0.05) 7px 8px
+  );
+  padding: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: clamp(200px, 34vw, 420px);
+}
+.ed-specimen--pendiente {
+  border-style: dashed;
+  opacity: 0.92;
+}
+/* El recorte lateral ("el objeto continúa fuera de página") es un gesto de
+   composición ancha. En columna estrecha el activo simplemente se apila. */
+.ed-specimen--bleed {
+  margin-right: calc(-1 * clamp(40px, 10vw, 180px));
+}
+@media (max-width: 760px) {
+  .ed-specimen--bleed {
+    margin-right: 0;
+  }
+}
+.ed-specimen__spec {
+  font-family: var(--font-plex), Inter, system-ui, sans-serif;
+  font-size: var(--ed-note-size);
+  line-height: var(--ed-note-lh);
+  color: var(--ed-muted-strong);
+  max-width: 42ch;
+}
+
+/* --- P-05 · Archive Surface --------------------------------------------------- */
+/* Cambia el registro emocional a documental mediante superficie, no ornamento.
+   Máximo una por artículo. Misma retícula, mismos tipos. */
+.ed-archive {
+  background: var(--ed-vellum);
+  border-top: 1px solid var(--ed-line-strong);
+  border-bottom: 1px solid var(--ed-line-strong);
+  padding-block: var(--ed-space-normal);
+}
+
+/* --- P-08 · Act Indicator (barra fija §8) --------------------------------- */
+.ed-act-indicator {
+  display: inline-block;
+  min-width: 14ch;
+  text-align: right;
+  font-family: var(--font-plex), Inter, system-ui, sans-serif;
+  font-size: var(--ed-label-size);
+  letter-spacing: var(--ed-label-tracking);
+  text-transform: uppercase;
+  color: var(--ed-muted);
+}
+
+/* En pantallas estrechas la barra suelta la sección y el indicador se aprieta
+   para que la barra no crezca de más. */
+@media (max-width: 620px) {
+  .editorial-root [data-ed-bar-section] {
+    display: none;
+  }
+  .ed-act-indicator {
+    min-width: 0;
+  }
+}
+
+/* --- Motion (Visual Grammar Sheet §9) --------------------------------------- */
+/* Un solo comportamiento en toda la página, y solo porque narra: la
+   aparición escalonada del campo serial. Sin parallax, sin scroll-jacking,
+   sin reveals genéricos por sección. El indicador de acto no anima: cambia. */
+@media (prefers-reduced-motion: no-preference) {
+  .ed-stagger-item {
+    opacity: 0;
+    transition: opacity 420ms ease;
+  }
+  .ed-stagger-item.is-in {
+    opacity: 1;
+  }
+}
+
+/* --- Accesibilidad / enlaces ---------------------------------------------------- */
+/* Enlace editorial: subrayado permanente (regla fundacional). El color usa el
+   acento EPISÓDICO de la historia — cada pieza deriva el suyo de su material
+   real (S-06: el marino de El Coleccionista NO es un token global). Sin acento
+   declarado, el enlace cae a tinta. */
+.editorial-root {
+  --ed-link: var(--ed-ink);
+}
+.editorial-root a[data-ed-link] {
+  color: var(--ed-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.editorial-root :where(a, button):focus-visible {
+  outline: 2px solid var(--ed-ink);
+  outline-offset: 3px;
+}

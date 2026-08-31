@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Archivo, IBM_Plex_Sans, Newsreader } from "next/font/google";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { ChromeGate } from "@/components/ChromeGate";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { RouteAnalytics } from "@/components/RouteAnalytics";
 import { WebVitals } from "@/components/WebVitals";
@@ -48,9 +49,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${archivo.variable} ${ibmPlexSans.variable} antialiased`}>
         <Suspense fallback={null}><RouteAnalytics /></Suspense>
         <WebVitals />
-        <NavBar />
+        <ChromeGate><NavBar /></ChromeGate>
         <div className="flex-1">{children}</div>
-        <Footer />
+        <ChromeGate><Footer /></ChromeGate>
       </body>
     </html>
   );
