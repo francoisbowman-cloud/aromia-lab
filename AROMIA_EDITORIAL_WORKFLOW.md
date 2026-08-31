@@ -30,9 +30,9 @@ This is a role-aware command, not a request for every actor to do everything. Wh
 The command therefore resolves differently by role:
 
 - **Cowork:** find editorial needs and eligible ideas/articles; research, write and advance them to `EDITORIAL: READY`.
-- **ChatGPT:** find `EDITORIAL: READY` work whose art direction is pending; read the complete piece, art-direct it, create/direct required assets and advance its visual states.
-- **Code:** find work whose editorial and art prerequisites are ready; implement, render, correct, run the required gates and publish when its state/calendar authorizes publication.
-- **OMNI:** participate both as an early creative critic during art direction and as the final rendered-experience gate. It critiques; it does not take over authorship or implementation.
+- **ChatGPT:** find `EDITORIAL: READY` work whose art direction is pending; read the complete piece, art-direct it, compose the visual language and create/direct required assets before advancing its visual states.
+- **Code:** find work whose editorial, art-direction, visual-composition and asset prerequisites are ready; implement, render, correct, run the required gates and publish when its state/calendar authorizes publication.
+- **OMNI:** participate both as an early creative critic during art direction / visual composition and as the final rendered-experience gate. It critiques; it does not take over authorship or implementation.
 
 ### Code-only publication override
 
@@ -50,6 +50,20 @@ Absent this override, the normal command allows Code to publish work that has pa
 
 Aromia works asynchronously. No actor needs to wait for another actor to finish a batch or remain in the same conversation. The repository is the newsroom and shared source of truth: each actor reads the current state, advances only the work that belongs to its domain, records the new state, and leaves the work ready for the next actor whenever that next actor arrives.
 
+### Repository write fallback
+
+An actor's inability to push because its current session is not authorized for the repository is an **operational connector limitation, not an editorial blocker**.
+
+When this happens:
+
+1. the actor must preserve the finished work as downloadable source files and report its local branch/commit when available;
+2. it must not pretend the work exists in GitHub;
+3. another repo-write-capable actor may ingest those exact files without changing authorship or silently rewriting them;
+4. the final repository state remains the only canonical shared state;
+5. the blocked actor should resume normal repo-based operation once its GitHub authorization is restored.
+
+This fallback exists to prevent lost work, but it should not become the normal workflow. The preferred state is that each newsroom actor can read the current repo and leave its own completed work there.
+
 **Claude Cowork = Editor + Editorial Architect**
 
 For each publication Claude should:
@@ -62,7 +76,33 @@ For each publication Claude should:
 
 Claude may produce one article or a batch of articles independently. It does not need to wait for visual direction or implementation before continuing editorial production.
 
-**ChatGPT = Art Director + Visual Composer**
+## Claude Design = sparse founding / R&D intervention
+
+Claude Design is **not** part of the routine article loop. It is a high-cost visual R&D instrument used only when the expected durable design learning justifies the intervention.
+
+Use Design for:
+- founding or revising Aromia Foundation;
+- discovering a genuinely new primitive family;
+- resolving a repeated visual limitation that normal composition cannot solve;
+- a major new publication surface;
+- an exceptional experiment whose learning can be extracted into durable web infrastructure.
+
+Do not use Design merely to design another article.
+
+A Design intervention should produce reusable design capital and classify meaningful decisions as:
+
+- `AROMIA_FOUNDATION`
+- `REUSABLE_PRIMITIVE`
+- `STORY_SPECIFIC`
+- `EXPERIMENT`
+
+After an accepted Design intervention, **Claude Code systematizes the accepted learning into editable web infrastructure and `/design-lab`**. Story-specific gestures remain local.
+
+The operating model is:
+
+> **Claude Design descubre. Claude Code sistematiza. ChatGPT compone. OMNI cuestiona.**
+
+## ChatGPT = Art Director + Visual Composer
 
 ChatGPT owns the final art direction of each publication, not only image generation. After reading the complete piece, ChatGPT may define:
 - the visual concept;
@@ -76,6 +116,25 @@ ChatGPT owns the final art direction of each publication, not only image generat
 - required visual assets, including the decision to use no image when stronger.
 
 Claude must leave creative room for ChatGPT rather than prescribing finished image prompts. ChatGPT decides which visual language best serves each moment and may combine, reinterpret, or reject techniques.
+
+### Visual Composition phase — mandatory when visual work is required
+
+**Art direction is not the same thing as visual composition, and visual composition is not the same thing as generating assets.**
+
+After the visual thesis exists, ChatGPT must translate it into story-specific compositions before Code implements the page. This phase may determine:
+
+- whether a passage receives one image, a sequence, typography only, archive material, object study, collage, material study or deliberate emptiness;
+- image scale, crop, position and relationship to text;
+- the occupation of rail / reading field / marginal field where the current Foundation supports it;
+- density and whitespace transitions;
+- episodic color behavior;
+- repetition, seriality, marginalia or documentary treatments;
+- which visual opportunities should be rejected because adding an image would weaken the story;
+- desktop and mobile compositional intent as related but not identical experiences.
+
+Visual Composition must never degrade into "filling image slots." It is the phase where the story receives its own visual behavior.
+
+When a composition requires original imagery, ChatGPT then creates or directs the **Visual Assets**. Generative imagery is interpretive; documentary/product identity must remain authentic and verifiable.
 
 Available visual vocabulary includes, but is not limited to:
 - Hero Shot
@@ -96,15 +155,25 @@ Available visual vocabulary includes, but is not limited to:
 
 These are tools, **not a checklist or closed menu**. Do not force a Hero Shot or product image when the story needs something else.
 
+The durable rule is:
+
+> **Foundation gives identity. Primitives give vocabulary. Composition gives originality. Visual assets give matter. Code turns all of it into experience.**
+
 ### Early OMNI creative critique
 
-OMNI does not need to wait for Code or a finished browser render. During Art Direction it may enter as a **critique loop** after a meaningful visual proposition exists: a Canva artboard, composition study, asset direction, or comparable visual specimen.
+OMNI does not need to wait for Code or a finished browser render. During Art Direction / Visual Composition it may enter as a **critique loop** after a meaningful visual proposition exists: a composition study, asset direction, browser-native specimen, founding Design prototype or comparable visual evidence.
 
-The early loop is:
+The routine early loop is:
 
-`STORY → ART DIRECTION → VISUAL STUDY → OMNI CRITIQUE → REFINE / REJECT → ART DIRECTION READY`
+`STORY → ART DIRECTION → VISUAL COMPOSITION → VISUAL STUDY → EARLY OMNI → REFINE / REJECT → ART DIRECTION + COMPOSITION READY`
 
-This is distinct from final QA. Its purpose is to raise the creative ceiling before implementation cost hardens weak decisions.
+When a rare Claude Design intervention is active, the founding loop may instead be:
+
+`STORY → ART DIRECTION → DESIGN INTERVENTION → EARLY OMNI → SYSTEM EXTRACTION → ROUTINE COMPOSITION`
+
+Canva is not a required or preferred canvas. Historical Canva studies may remain as evidence, but Aromia does not depend on Canva for routine design.
+
+Early OMNI is distinct from final QA. Its purpose is to raise the creative ceiling before implementation cost hardens weak decisions.
 
 Early OMNI should evaluate, with evidence where possible:
 - story-specificity: does the composition belong to this story rather than generic luxury/editorial design?
@@ -115,6 +184,7 @@ Early OMNI should evaluate, with evidence where possible:
 - restraint: is complexity earned, and is simplicity sophisticated rather than underworked?
 - authenticity: are documentary/product identities factual and verifiable?
 - Aromia identity: does the proposal strengthen the publication's evolving visual memory without forcing a universal layout?
+- anti-template behavior: would the exact arrangement still make sense if the next five articles simply swapped their nouns and images? If yes, the composition is too reusable.
 
 OMNI may return:
 
@@ -124,12 +194,12 @@ OMNI may return:
 
 **Authorship remains with ChatGPT.** OMNI is the demanding critic in the room, not a co-designer. It should not homogenize experimental work into safe patterns or convert critique into another template.
 
-A proposal should not advance to `ART_DIRECTION: READY` merely because it is clean or technically feasible. It should feel both authored and professionally resolved.
+A proposal should not advance to `ART_DIRECTION: READY` / `VISUAL_COMPOSITION: READY` merely because it is clean or technically feasible. It should feel both authored and professionally resolved.
 
-**Code = Web Production + Publisher**
+## Code = Web Production + Publisher
 
 Code owns technical implementation and publication once upstream work is ready. It should:
-- read the article and art direction from the repository;
+- read the article, art direction, visual composition and asset instructions from the repository;
 - implement the final web composition without silently inventing a different editorial or artistic direction;
 - preserve accessibility, responsive behavior, performance, SEO and authentic product identity;
 - implement contextual commercial links and measurement according to Aromia policy;
@@ -138,9 +208,11 @@ Code owns technical implementation and publication once upstream work is ready. 
 - publish work that has passed the required gates and reached `PUBLISHABLE` or its scheduled publication time;
 - update repository state to `LIVE` after confirmed publication.
 
+After an accepted founding Design intervention, Code also owns **system extraction**: translate accepted Foundation / primitives into maintainable editable web code and surface them in the permanent internal `/design-lab`. Code must not promote story-specific gestures into shared components merely because they are technically reusable.
+
 Normal editorial publication should not require manual approval article by article once the operating model is established. Architecture changes, material brand changes, high-risk technical changes or exceptional editorial cases should still escalate to the human Publisher.
 
-**OMNI = Early Creative Critic + Final Gate**
+## OMNI = Early Creative Critic + Final Gate
 
 OMNI has two deliberately different interventions:
 
@@ -151,7 +223,7 @@ OMNI should reject decoration, unnecessary complexity, AI-slop, weak authenticit
 
 OMNI is a critic/QA system, not another production department and not a reason to create new OMNI modules.
 
-**Human = Publisher / Editor-in-Chief**
+## Human = Publisher / Editor-in-Chief
 
 The human sets the line, can propose stories directly, can override the calendar, approves major strategic or brand decisions and remains final authority. Routine coordination between actors should not depend on the human carrying outputs from one system to another.
 
@@ -192,6 +264,7 @@ Each publication should expose a small human-readable state block:
 ```text
 EDITORIAL: DRAFT | READY
 ART_DIRECTION: PENDING | READY
+VISUAL_COMPOSITION: PENDING | READY | NOT_REQUIRED
 EARLY_OMNI: PENDING | PASS | REFINE | REJECT
 VISUAL_ASSETS: PENDING | READY | NOT_REQUIRED
 IMPLEMENTATION: PENDING | READY
@@ -199,6 +272,8 @@ QA: PENDING | PASSED | CHANGES_REQUIRED
 PUBLISH: PENDING | PUBLISHABLE | SCHEDULED | LIVE
 TARGET_DATE: YYYY-MM-DD | UNSCHEDULED
 ```
+
+`DESIGN_PROTOTYPE` and `DESIGN_SYSTEM_EXTRACTION` are **exceptional states** used only when a sparse Claude Design intervention is active. They are not required for every publication.
 
 An actor advances only its own domain. Missing upstream work remains pending rather than being silently invented.
 
@@ -208,15 +283,19 @@ This state is intentionally small. It is a coordination convention, not a workfl
 
 Work may progress in batches of different sizes:
 
-`Cowork writes 10 → ChatGPT art-directs 4 → early OMNI critiques 4 → ChatGPT resolves 3 → Code implements 3 → final QA passes 2 → Code publishes 2`
+`Cowork writes 10 → ChatGPT art-directs/composes 4 → early OMNI critiques 4 → ChatGPT resolves/assets 3 → Code implements 3 → final QA passes 2 → Code publishes 2`
 
 Nothing requires the complete batch to finish. Production and publication are separate concerns. Aromia may maintain a substantial inventory of finished work and release it according to the editorial calendar.
 
-## Production loop
+## Production loops
 
-For a publication:
+### Routine publication
 
-`IDEA → RESEARCH → STORY → EDITORIAL READY → ART DIRECTION → VISUAL STUDY → EARLY OMNI → ART DIRECTION READY → ASSETS → WEB COMPOSITION → FINAL QA → PUBLISHABLE → SCHEDULE/LIVE`
+`IDEA → RESEARCH → STORY → EDITORIAL READY → ART DIRECTION → VISUAL COMPOSITION → VISUAL STUDY → EARLY OMNI → ART DIRECTION + COMPOSITION READY → VISUAL ASSETS → WEB IMPLEMENTATION → BROWSER QA → FINAL OMNI → PUBLISHABLE → SCHEDULE/LIVE`
+
+### Exceptional system-founding intervention
+
+`REAL EDITORIAL NEED → CLAUDE DESIGN INTERVENTION → VISUAL GRAMMAR / PRIMITIVES / LEDGER → EARLY OMNI → CODE SYSTEM EXTRACTION → /design-lab → MULTIPLE REAL ARTICLES → OBSERVE LIMITS → OPTIONAL FUTURE DESIGN INTERVENTION`
 
 The loop is asynchronous: the repository, not a live handoff meeting, carries state between stages.
 
