@@ -73,6 +73,21 @@ Default gate behavior is deterministic:
 
 When blocked by another actor, the current actor must record `NEXT_ACTOR`, `NEXT_ACTION` and `BLOCKERS` in the repo and stop cleanly. It must not convert that handoff into a question for the human.
 
+## Execution-literal rule — never replace the requested deliverable with a representation of it
+
+When the current relay names concrete deliverables, the actor must produce **those exact deliverables**. It must not substitute a mockup, status board, explanatory composition, contact sheet, presentation, concept sheet, screenshot, or other representation unless the relay explicitly requests one.
+
+For visual work in particular:
+
+- if the repo requests individual production assets, create the individual production assets;
+- preserve the exact filenames, formats, slot purpose, crop intent and authenticity/interpretive classification declared by the handoff;
+- do not generate an image whose subject is the Aromia workflow, Gate status, handoff, repository state, or asset list unless such a meta-image is itself explicitly requested;
+- a generated preview or board does **not** satisfy an asset slot and must never be marked as Gate evidence for that slot;
+- before declaring a visual deliverable complete, verify that the actual file can enter the repo/implementation path expected by the next actor. If the current actor cannot place the binary in that path, it must preserve the real binary as a transferable artifact and record the exact ingestion requirement for Code; it must not pretend that merely displaying the image in chat completed the repository handoff;
+- accidental/meta generations that do not match the requested slot are discarded and must not alter Gate status.
+
+Concrete Editorial v1 example: if Gate 3 requests `ambroxan-resin-abstract-01.jpg`, `ropion-bordeaux-texture-01.jpg`, and `amouage-mineral-density-01.jpg`, ChatGPT must create those three individual interpretive assets. A single board showing or describing those three assets is not an acceptable substitute.
+
 ## Mandatory relay update
 
 At the end of any meaningful phase, the finishing actor must update `AROMIA_CURRENT_STATE.md` with at least:
@@ -123,8 +138,12 @@ Also incorrect:
 
 `finish phase → identify a deterministic next step → ask the human whether to do that next step`
 
+Also incorrect:
+
+`relay requests concrete assets → generate a board/mockup describing those assets → treat the board as completion`
+
 Correct behavior:
 
-`read current state → verify branch/head → inspect newer relay/checkpoint/commits → resolve role → continue → update current state for next actor`
+`read current state → verify branch/head → inspect newer relay/checkpoint/commits → resolve role → execute the literal deliverable → verify handoffability → update current state for next actor`
 
 This protocol supplements `AROMIA_EDITORIAL_WORKFLOW.md` and keeps the human interface deliberately simple.
