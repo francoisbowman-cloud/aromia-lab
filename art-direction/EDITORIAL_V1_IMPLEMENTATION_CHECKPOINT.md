@@ -90,6 +90,37 @@ placeholders / abstract CSS fields, as intended.
   (harmless; the live rule uses `.mineral`).
 
 ### 5. Final OMNI — NOT STARTED
-Blocked on F1 + approved assets.
+Blocked on approved assets (F1 now resolved).
 
 `PRODUCTION: HOLD` unchanged.
+
+---
+
+## Gate run — 2026-08-31 (Code) — F1/F2 fix + Gate 4 re-run
+
+Brey approved F1 option (a) + noindex. Changes on this branch (no push):
+
+- **`apps/web/src/app/editorial-v1/layout.tsx` (new).** Nested segment layout:
+  - `metadata.robots = { index: false, follow: false }` + `alternates.canonical
+    = "/"`, mirroring `app/taste/layout.tsx`. Applies to the whole
+    `/editorial-v1` subtree (home + `[slug]`).
+  - Renders a scoped `<style>` that sets `body > header, body > footer {
+    display: none !important }`. It mounts only while an `/editorial-v1` route
+    is active and unmounts on navigation away, so no other route loses its
+    chrome. Root `app/layout.tsx` is untouched — zero blast radius.
+- **`editorial-v1.css`** — removed the empty `.ev1-story.miniral{}` selector.
+
+### Gate 4 re-run — PASS (desktop 1440 + mobile 375)
+- Exactly one nav (`.ev1-nav`) and one footer (`.ev1-footer`) per route; global
+  `body > header` / `body > footer` computed `display:none`, height 0.
+- `<meta name="robots" content="noindex, nofollow">` present on `/editorial-v1`
+  and all three `/editorial-v1/[slug]` routes (curl-verified).
+- No horizontal overflow at 1440 or 375; no elements wider than viewport.
+- `docH` dropped ~560px on the home route (global footer gone); layout otherwise
+  unchanged.
+- Inverted story `section-2` still `rgb(42,13,22)` ground with cream text;
+  episodic palettes per story intact.
+- No console errors.
+
+Remaining before production: gate 3 (approved assets), full canonical-draft copy
+in `[slug]`, gate 5 (OMNI on rendered evidence). `PRODUCTION: HOLD`.
