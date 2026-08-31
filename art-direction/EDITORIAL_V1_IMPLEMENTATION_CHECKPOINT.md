@@ -124,3 +124,10 @@ Brey approved F1 option (a) + noindex. Changes on this branch (no push):
 
 Remaining before production: gate 3 (approved assets), full canonical-draft copy
 in `[slug]`, gate 5 (OMNI on rendered evidence). `PRODUCTION: HOLD`.
+
+### Relay left for the next actor
+`art-direction/EDITORIAL_V1_RELAY_CODE_TO_CHATGPT.md` — hands the surface to
+ChatGPT for art direction of the visual slots (Gate 3). It maps every named
+asset slot to its exact code location, restates the no-fabrication constraints,
+and lists the Code sequence to run once assets land (wire assets, swap in full
+canonical `drafts/` copy, re-run gates 2+4, then Gate 5 OMNI).
