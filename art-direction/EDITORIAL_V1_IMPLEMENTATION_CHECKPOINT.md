@@ -131,3 +131,76 @@ ChatGPT for art direction of the visual slots (Gate 3). It maps every named
 asset slot to its exact code location, restates the no-fabrication constraints,
 and lists the Code sequence to run once assets land (wire assets, swap in full
 canonical `drafts/` copy, re-run gates 2+4, then Gate 5 OMNI).
+
+---
+
+## Gate run — 2026-08-31 (Code) — canonical copy in + Gate 3 slot plumbing
+
+Reviewed `art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md` (locked at
+`d5fdbf3`). Its own status is `GATE_3: WAITING_FOR_REMOTE_BINARIES` — and
+confirmed: **no approved asset binary exists anywhere in the repo/branch**
+(`public/editorial-v1/` absent; nothing tracked or untracked). So Gate 3 stays
+blocked and Gate 5 cannot start. Code did the unblocked half:
+
+### Full canonical copy — DONE
+- `apps/web/src/app/editorial-v1/[slug]/page.tsx` rewritten: the condensed
+  placeholder copy is replaced with the **verbatim** text of the three
+  `drafts/*.md` (fact-checked, `estado: editorial_ready`). Each story now has a
+  drop-cap intro, its real subheads with full multi-paragraph prose, the
+  "Sí, pero" close, and a subordinate commerce block with the drafts' own
+  Amazon affiliate links (`tag=aromialab-20`, `rel="sponsored nofollow"`).
+- `generateStaticParams` added → the 3 routes prerender (SSG); unknown slug
+  still 404s.
+- Markdown emphasis markers from the drafts (`*cœur*`, `*The Gift of Kings*`,
+  `*Nota…*`) rendered as plain text, not literal asterisks.
+
+### Gate 3 slot plumbing — DONE (dormant until binaries land)
+- New `apps/web/src/app/editorial-v1/editorialV1Visuals.tsx`: a `VisualField`
+  component + `EDITORIAL_V1_SLOTS` registry encoding ChatGPT's locked decisions
+  (type, alt, caption, provenance line, placeholder label) for the six USE
+  slots. Every slot is `present: false` → renders the CSS placeholder box with
+  an explicit `role="img"` + descriptive `aria-label`; **no `next/image` is
+  emitted**, so a missing file cannot break the build. Wiring an approved asset
+  = drop the file under `apps/web/public/editorial-v1/`, set `present: true`
+  and `file`.
+- Slot placement (per the relay map + Gate 3 doc):
+  - Ámbar: hero `.story-visual` = `ambroxan-material-interpretive`;
+    section-2 interruption = `clary-sage-documentary`.
+  - Ropion: hero `.story-visual` = `ropion-overdose-interpretive`
+    (portrait + historical evidence = SKIP, so no interruption slot).
+  - Sultán: hero `.story-visual` = `amouage-material-density-interpretive`;
+    section-1 interruption = `frankincense-documentary`;
+    section-2 interruption = `oman-place-documentary`.
+  - Home `/editorial-v1`: `.ev1-resin` = `amouage-material-density-interpretive`
+    (marker kept); the two `.ev1-material` = ambroxan / ropion interpretive.
+- CSS: added drop-cap + `.story-intro` + `.story-commerce` styles, paragraph
+  spacing for multi-`<p>` sections, `position:relative;overflow:hidden` on the
+  image boxes, `.ev1-figcaption`, and a faint hatch on empty documentary slots
+  so reserved space reads as intentional.
+
+### Gate 2 + Gate 4 re-run — PASS (desktop 1440 + mobile 375)
+- Build / tsc / lint clean; 3 story routes prerender.
+- `noindex, nofollow` on all 4 routes; single nav + single footer; global
+  chrome still `display:none`.
+- No horizontal overflow at 1440 or 375; no elements wider than viewport.
+- Para counts match the drafts exactly (Ámbar 5 sections `[2,4,3,3,2]`,
+  Ropion 4, Sultán 4); drop cap renders; commerce links carry
+  `rel="sponsored nofollow"`.
+- Inverted Ropion `section-2`: cream `rgb(244,240,232)` on burgundy
+  `rgb(42,13,22)` — legible with full multi-paragraph copy.
+- Sultán's two consecutive interruption slots (~2000px apart) do not collide.
+- No console errors.
+
+### Still blocking
+1. **Gate 3 binaries** — one of:
+   - ChatGPT commits the 3 approved interpretive JPGs
+     (`ambroxan-resin-abstract-01`, `ropion-bordeaux-texture-01`,
+     `amouage-mineral-density-01`) under `apps/web/public/editorial-v1/`; and/or
+   - Brey authorises Code to download the 3 approved Wikimedia Commons
+     documentary files (Salvia sclarea / Jabal Akhdar / Boswellia sacra) from
+     the exact source pages in the Gate 3 doc, preserving CC BY-SA provenance.
+2. Then: flip the relevant `EDITORIAL_V1_SLOTS[...]` to `present: true`, run the
+   image authenticity/provenance audit, re-run Gate 4, then **Gate 5 OMNI** on
+   rendered evidence.
+
+`PRODUCTION: HOLD` unchanged. No merge, no deploy.
