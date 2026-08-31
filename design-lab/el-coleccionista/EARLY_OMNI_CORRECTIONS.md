@@ -2,51 +2,60 @@
 
 ## Source validation
 
-The two user-provided ZIP archives were compared byte-for-byte for the six core Design deliverables. The six core files are identical in both archives. The second archive only adds `.thumbnail` and `github.md`; it does not contain a newer revision of the six deliverables.
+The two user-provided ZIP archives were compared against the six core Design deliverables. The corrected package available to this workflow contains the contrast fix and the complete inspection overlay.
 
-The contrast correction described by Claude Design is already present in both copies: `--muted` / tertiary uses `#6B6155`, the striped-specimen caption uses `#4E463A`, and the handoff includes §2.1b prohibiting reintroduction of a third light gray. The historical mention of `#9A9083` in §2.1b is retained only as evidence of the rejected value.
+The contrast correction described by Claude Design is present: muted / tertiary uses `#6B6155`, the striped-specimen caption uses `#4E463A`, and the handoff includes §2.1b prohibiting reintroduction of a third light gray. The historical mention of `#9A9083` is retained only as evidence of the rejected value.
 
-## Corrections required before Early OMNI PASS
+## Resolved consistency corrections
 
-### C-01 — Verification overlay must expose all five unresolved facts
+### C-01 — Verification overlay
 
-The Ledger defines five publication facts requiring verification:
+**RESOLVED in the corrected prototype source.**
 
-1. Aventus launch year (`2010`).
-2. 30–40% flanker share.
-3. Nearly 4 in 10 U.S. households collecting something.
-4. Dsm-Firmenich perfumer paraphrase/attribution.
-5. Current Le Male line names cited in the prototype.
+Activating `showClassification` exposes five `VERIFICAR antes de publicar` markers corresponding to:
 
-The supplied prototype exposes only the Aventus item as a literal `VERIFICAR` overlay under `showClassification`.
+1. household-collection statistic;
+2. 30–40% flanker share;
+3. dsm-firmenich paraphrase / attribution;
+4. current Le Male line names;
+5. Aventus launch year.
 
-**Required correction:** add an inspection-only `VERIFICAR antes de publicar` marker adjacent to each of the other four claims, using the same visual treatment and the existing `tags`/classification toggle. These markers must not resolve or rewrite the facts; they only make unresolved editorial risk visible.
+The earlier observation that only the Aventus marker existed applied to an incomplete inspection of the first package and is no longer canonical.
 
-Acceptance: activating `showClassification` exposes exactly five unresolved verification markers corresponding to the Ledger.
+### C-02 — Asset-state accounting
 
-### C-02 — Asset-state count must distinguish story slots from identity asset
+**RESOLVED.**
 
-The supplied handoff states:
+Canonical accounting is:
 
-`VISUAL_ASSETS: PENDING (2 ranuras · 3 NOT_REQUIRED)`
-
-but the Ledger actually contains:
 - 2 editorial visual slots `PENDIENTE`: opening documentary image + conservation triptych;
 - 1 identity asset `PENDIENTE`: approved `A.` signature;
 - 2 explicit `NOT_REQUIRED` decisions: flanker field + Act IV image absence.
-
-**Canonical interpretation:** the signature is not a story visual slot. It is a stable identity asset tracked separately.
 
 Canonical state:
 
 `VISUAL_ASSETS: PENDING (2 ranuras editoriales + 1 asset de identidad · 2 NOT_REQUIRED)`
 
-Do not invent a third `NOT_REQUIRED` slot merely to preserve the earlier count.
+The signature is not a third story-image slot.
 
-## Status after documentation correction
+## Editorial fact-check result after package correction
+
+The five markers are an inspection layer, not proof that the underlying claims are valid. A separate source check found:
+
+- Aventus `2010`: supported by Creed's official site.
+- `30–40%` flanker share for major brands: supported as an attributed estimate by Johanna Monange in *Glossy* (2025), not as a universal industry statistic.
+- `casi 4 de cada 10 hogares`: not supported by the source search in that form; remove or rewrite rather than force a weak statistic.
+- dsm-firmenich portfolio claim: supported by *Glossy* through principal perfumer Dora Baghriche; attribution should name her and preserve the claim as an attributed statement.
+- Le Male family: the official Jean Paul Gaultier site confirms the line continues to expand, but the contemporary examples should be refreshed to products currently present in the official range rather than freezing an older lineup.
+
+These editorial corrections must be reflected in the manuscript and final composition before publication.
+
+## Status
 
 `DESIGN_PROTOTYPE: READY_FOR_EARLY_OMNI`
 
-`EARLY_OMNI: REFINE` until C-01 is applied to the actual prototype and the corrected asset accounting remains consistent across prototype, Ledger and handoff.
+`EARLY_OMNI: REFINE`
 
-No production implementation or publication is authorized by this correction note.
+The package-level inconsistencies are resolved. `REFINE` now refers to the substantive editorial / visual critique and the fact-driven composition updates, not to missing inspection controls.
+
+No production implementation or publication is authorized by this note.
