@@ -26,31 +26,33 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 3
+STATE_VERSION: 4
 UPDATED_AT: 2026-08-31
 LAST_ACTOR: ChatGPT
-LAST_ACTION: created the 3 locked interpretive Editorial v1 JPGs as individual 1600x900 production assets and left a SHA-256-verified relay for Code ingestion
+LAST_ACTION: committed the 3 locked interpretive Editorial v1 JPGs directly into the active implementation branch and updated the Code relay; no external artifact transport is required
 ACTIVE_OBJECTIVE: Editorial v1 implementation
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD: 1cf63c9875f242d1fb9a67e3cb62251b5bf8bc25
+VERIFIED_BRANCH_HEAD: e2842bbd1b85ed5567b81ce3b1d785ed5e6d6054
 PRODUCTION: HOLD
 NEXT_ACTOR: Code
-NEXT_ACTION: ingest the 3 interpretive JPGs into apps/web/public/editorial-v1/, verify hashes, set their slots present:true, rerun Gate 4 desktop/mobile, then advance automatically to OMNI Gate 5 if Gate 4 passes
-BLOCKERS: GitHub text connector cannot place the binary JPGs directly; Code must ingest the exact transferable artifact bundle. Gate 5 remains blocked only until that ingestion + Gate 4 PASS completes
+NEXT_ACTION: verify the 3 committed interpretive JPGs and hashes, set their visual slots present:true, rerun Gate 4 desktop/mobile with real assets, then advance automatically to OMNI Gate 5 if Gate 4 passes
+BLOCKERS: none before Code re-Gate 4; Gate 5 still waits for the real-asset Gate 4 result by contract
 PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Current asset bundle
+## Interpretive assets now versioned on the active branch
 
-Transfer artifact: `aromia-editorial-v1-gate3-interpretive-assets.zip`
-
-Expected members:
+All three exist under `apps/web/public/editorial-v1/`:
 
 - `ambroxan-resin-abstract-01.jpg` — 1600×900 — SHA-256 `99fe0c401aae30b77110c4848ff90ce199c8b551a84cee0e78e8457b0c17f1a7`
 - `ropion-bordeaux-texture-01.jpg` — 1600×900 — SHA-256 `8c49c083c67a31ce878880c50d5d7a223a44cf7dfbf29b2f3e2df33e23ac6a57`
 - `amouage-mineral-density-01.jpg` — 1600×900 — SHA-256 `5c12c2d99e8d593d04ea2f6f36aa5a91835c35146d66990a1e567ea3dffb304e`
+
+Binary commit: `5cf1702cb0a2cfc0a3fb27d81d3cea0752f9ba81`.
+
+The temporary chat ZIP is no longer operationally relevant. Code must pull from the repo; the human Publisher does not need to download or forward assets.
 
 These are interpretive assets, not documentary evidence. The earlier meta/status-board generations are discarded and are not Gate evidence.
 
@@ -58,7 +60,7 @@ These are interpretive assets, not documentary evidence. The earlier meta/status
 
 The next valid transition is:
 
-`Code ingests exact JPGs → present:true → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
+`Code verifies committed JPGs → present:true → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
 
 Code must not ask the human whether to run Gate 5 after a clean Gate 4; the repo already determines that transition.
 
