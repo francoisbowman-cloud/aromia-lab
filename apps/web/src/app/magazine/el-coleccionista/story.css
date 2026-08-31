@@ -30,13 +30,14 @@
   background: var(--ed-paper-lifted);
   padding-block: clamp(120px, 26vh, 300px);
 }
-/* título de sección REDUCIDO por debajo del cuerpo — intencional, no un error
-   de escala. */
+/* S-04 · título de sección REDUCIDO por debajo del cuerpo — intencional, no un
+   error de escala. La cota superior se mantiene por debajo del piso del cuerpo
+   (clamp del body: 20px…26px) en TODO el rango de viewport, no solo en desktop. */
 .cx-release-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
   font-style: italic;
-  font-size: clamp(24px, 4vw, 34px);
+  font-size: clamp(17px, 2.2vw, 23px);
   line-height: 1.1;
   color: var(--ed-muted);
   margin: 0;
