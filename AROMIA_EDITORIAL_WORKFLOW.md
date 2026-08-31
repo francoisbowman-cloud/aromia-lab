@@ -2,13 +2,15 @@
 
 Aromia is evolving from catalog-first commerce into a fragrance magazine. Stories come first; products and affiliate links appear only when editorially justified.
 
+This document is the canonical newsroom workflow for editorial production. It must be read together with `docs/operations/AROMIA_MANUAL_OPERATIVO_CODE_COWORK_CHATGPT.md`. When older wording conflicts with the security boundary defined here, the stricter repository-control rule wins: **Cowork prepares repository-ready work, but Code owns Git/GitHub integration.**
+
 ## Editorial agenda and ideation
 
 The human Publisher is a primary source of Aromia topics and may propose a story at any time. Topic discovery is also a shared editorial responsibility rather than a human-only backlog.
 
 **ChatGPT, Claude and Cowork should proactively suggest story ideas** when research, current work, the archive, cultural context or gaps in the editorial calendar reveal something worth pursuing. ChatGPT has a particular responsibility to surface promising editorial territories and visual/story opportunities, while Cowork and Claude should contribute ideas from research, writing and product context.
 
-Suggestions are proposals, not automatic assignments. They should be judged by Aromia's editorial line and should avoid filling the calendar merely for volume or SEO. A strong idea can enter the editorial inventory whether it originated with the Publisher or an actor.
+Suggestions are proposals, not automatic assignments. They should be judged by Aromia's editorial line and should avoid filling the calendar merely for volume or SEO.
 
 ## Universal operating command
 
@@ -16,220 +18,270 @@ The canonical instruction for any Aromia actor is:
 
 > **Continúa Aromia desde el repo.**
 
-This is a role-aware command, not a request for every actor to do everything. When an actor receives it, that actor must:
+This is role-aware. It does not authorize every actor to do everything.
 
-1. enter `francoisbowman-cloud/aromia-lab` and inspect the current repository state;
-2. read the canonical Aromia documents relevant to its role before acting;
-3. identify work that is ready for its own domain, using publication state, editorial calendar and repository priority;
-4. advance as much eligible work as is reasonable without asking the human to select an article or manually carry a handoff;
-5. never silently perform another actor's unresolved responsibility merely because that actor has not arrived yet;
-6. preserve previously approved work unless new evidence requires a correction;
-7. update the repository state and leave completed work ready for the next actor;
-8. stop and escalate only for a real blocker, material risk, strategic/brand decision or missing prerequisite that cannot be resolved from the repository.
+Every actor must:
 
-The command therefore resolves differently by role:
+1. inspect the current `francoisbowman-cloud/aromia-lab` state before acting;
+2. read the canonical documents relevant to its role;
+3. identify work ready for its own domain;
+4. advance as much eligible work as is reasonable without asking the human to manually select or shuttle routine handoffs;
+5. never silently take over another actor's unresolved responsibility;
+6. preserve approved work unless new evidence requires correction;
+7. leave explicit state/evidence for the next actor;
+8. escalate only for a genuine blocker, material risk, strategic/brand decision or missing prerequisite that cannot be resolved from the available project state.
 
-- **Cowork:** find editorial needs and eligible ideas/articles; research, write and advance them to `EDITORIAL: READY`.
-- **ChatGPT:** find `EDITORIAL: READY` work whose art direction is pending; read the complete piece, art-direct it, compose the visual language and create/direct required assets before advancing its visual states.
-- **Code:** find work whose editorial, art-direction, visual-composition and asset prerequisites are ready; implement, render, correct, run the required gates and publish when its state/calendar authorizes publication.
-- **OMNI:** participate both as an early creative critic during art direction / visual composition and as the final rendered-experience gate. It critiques; it does not take over authorship or implementation.
+Role resolution:
+
+- **Cowork:** research, fact-check, write, structure and prepare editorial work to `EDITORIAL: READY` in its staging workspace. It does **not** push or write to the remote repository.
+- **Code:** owns Git/GitHub integration of Cowork output, then later owns implementation, rendering, technical correction and publication.
+- **ChatGPT:** finds integrated `EDITORIAL: READY` work whose art direction is pending; art-directs it, composes its visual language and creates/directs required assets.
+- **OMNI:** enters as early creative critic and later as final rendered-experience gate.
 
 ### Code-only publication override
 
-Because **Code is the only production actor authorized to take a publication to `LIVE`**, there is one explicit operational override:
+Because Code is the only production actor authorized to take a publication to `LIVE`, there is one operational override:
 
 > **Continúa Aromia desde el repo, sin publicar.**
 
-This modifier is intended for **Code**. It means: perform all eligible implementation, rendering, correction and verification work; a piece may reach `PUBLISHABLE`, but Code must not deploy/publish it or change `PUBLISH` to `LIVE`.
+For Code this means: perform eligible integration/implementation/rendering/correction/verification, but stop before deployment/publication. A piece may reach `PUBLISHABLE`, never `LIVE`.
 
-For Cowork, ChatGPT and OMNI, `sin publicar` has no additional effect because those actors never have publication authority in the first place.
+For Cowork, ChatGPT and OMNI this modifier adds nothing because they never have publication authority.
 
-Absent this override, the normal command allows Code to publish work that has passed all required gates and is authorized by its `PUBLISH` state and editorial schedule. Routine eligible publication does not require article-by-article human confirmation.
+## Security and repository ownership
+
+The repository boundary is deliberate, not a missing permission to be fixed casually.
+
+Canonical responsibilities:
+
+- `main` remains the unique remote source of truth;
+- Code owns Git/GitHub operations, branches, commits, PRs, merges and deployment integration;
+- Cowork must not push, merge, publish to `main`, modify Railway or become the owner of a remote working branch;
+- ChatGPT may write project documentation or state through an explicitly authorized connector when available, but does not replace Code's responsibility for technical branch/merge/deploy control;
+- OMNI does not implement or publish.
+
+A `403` preventing Cowork from pushing is therefore consistent with the intended security model.
 
 ## Working model
 
-Aromia works asynchronously. No actor needs to wait for another actor to finish a batch or remain in the same conversation. The repository is the newsroom and shared source of truth: each actor reads the current state, advances only the work that belongs to its domain, records the new state, and leaves the work ready for the next actor whenever that next actor arrives.
+Aromia works asynchronously. Actors do not need to share a live conversation. The remote repository is the canonical newsroom **after integration**; Cowork's staging workspace is the deliberate exception before integration.
 
-### Repository write fallback
+### Cowork staging model
 
-An actor's inability to push because its current session is not authorized for the repository is an **operational connector limitation, not an editorial blocker**.
+> **Cowork produces repository-ready work, not repository writes.**
 
-When this happens:
+Cowork may use a temporary working copy/checkout of the current project in its own workspace in order to understand context and organize changes, provided it first confirms that the checkout derives from the current `main` or records the exact base SHA it used.
 
-1. the actor must preserve the finished work as downloadable source files and report its local branch/commit when available;
-2. it must not pretend the work exists in GitHub;
-3. another repo-write-capable actor may ingest those exact files without changing authorship or silently rewriting them;
-4. the final repository state remains the only canonical shared state;
-5. the blocked actor should resume normal repo-based operation once its GitHub authorization is restored.
+Cowork may create a local/staging branch such as:
 
-This fallback exists to prevent lost work, but it should not become the normal workflow. The preferred state is that each newsroom actor can read the current repo and leave its own completed work there.
+```text
+editorial/ambroxan-y-ropion
+```
 
-**Claude Cowork = Editor + Editorial Architect**
+That branch is **not a GitHub collaboration branch and not production state**. It is only a staging container inside Cowork's workspace.
 
-For each publication Claude should:
+Cowork may make local commits if its environment supports them. Their purpose is to group and preserve work, not to publish it remotely.
+
+Cowork must never attempt to make that staging branch authoritative.
+
+### Cowork handoff package
+
+When a Cowork batch is ready, leave enough information for deterministic ingestion:
+
+```text
+COWORK_STAGE: READY_FOR_CODE_INGEST
+BASE_MAIN_SHA: <sha or clearly recorded main state>
+STAGING_BRANCH: <local/staging name if applicable>
+EDITORIAL_ITEMS: <list>
+EDITORIAL_STATE: READY | DRAFT
+SOURCE_NOTES: <paths/files>
+VISUAL_OPPORTUNITIES: PRESENT | NONE
+KNOWN_ISSUES: <list or NONE>
+```
+
+The deliverable may be a workspace branch, commit/bundle, patch, downloadable files or an equivalent staging artifact supported by Cowork. It is not canonical until Code ingests it.
+
+### Code ingestion of Cowork work
+
+Code must:
+
+1. inspect the Cowork handoff and recorded base;
+2. compare it with current `main` and resolve staleness before integration;
+3. create or use a temporary objective-based Code branch from current `main`;
+4. ingest only the intended editorial artifacts and provenance/source material;
+5. preserve Cowork authorship/provenance rather than silently rewriting content during transport;
+6. place integrated work in the canonical repository locations;
+7. validate the publication state and source references;
+8. commit/push through normal Code-controlled Git/GitHub procedure;
+9. leave the work discoverable to ChatGPT/OMNI/Code through the remote repo;
+10. delete temporary branches after integration/discard according to the operating manual.
+
+Routine ingestion should not require the human to download and re-upload every file. If the current product environment cannot transfer Cowork staging automatically, a manual file handoff is an acceptable fallback, not the desired permanent architecture.
+
+## Cowork = Editor + Editorial Architect
+
+Cowork should:
+
 - research and fact-check the subject;
 - write the article as editorial content, not a product page;
-- structure the reading rhythm;
+- structure reading rhythm;
 - identify moments where visual expression can materially improve the story;
 - identify contextual commercial opportunities without writing to justify them;
-- save completed editorial work in the repository and update its status.
+- preserve sources/provenance;
+- prepare a repository-ready editorial handoff and mark it `READY_FOR_CODE_INGEST` when complete.
 
-Claude may produce one article or a batch of articles independently. It does not need to wait for visual direction or implementation before continuing editorial production.
+Cowork may produce one article or a batch independently and may continue preparing future stories without waiting for visual direction or implementation.
+
+Cowork must **not**:
+
+- push to GitHub;
+- publish directly to `main`;
+- merge branches;
+- modify Railway;
+- decide production architecture;
+- treat its staging checkout as canonical after `main` changes.
 
 ## Claude Design = sparse founding / R&D intervention
 
-Claude Design is **not** part of the routine article loop. It is a high-cost visual R&D instrument used only when the expected durable design learning justifies the intervention.
+Claude Design is **not** part of the routine article loop. It is a high-cost visual R&D instrument used only when durable design learning justifies the intervention.
 
 Use Design for:
-- founding or revising Aromia Foundation;
+
+- founding/revising Aromia Foundation;
 - discovering a genuinely new primitive family;
-- resolving a repeated visual limitation that normal composition cannot solve;
+- resolving a repeated visual limitation normal composition cannot solve;
 - a major new publication surface;
 - an exceptional experiment whose learning can be extracted into durable web infrastructure.
 
 Do not use Design merely to design another article.
 
-A Design intervention should produce reusable design capital and classify meaningful decisions as:
+A Design intervention classifies meaningful decisions as:
 
 - `AROMIA_FOUNDATION`
 - `REUSABLE_PRIMITIVE`
 - `STORY_SPECIFIC`
 - `EXPERIMENT`
 
-After an accepted Design intervention, **Claude Code systematizes the accepted learning into editable web infrastructure and `/design-lab`**. Story-specific gestures remain local.
-
-The operating model is:
+After accepted Design work, Claude Code systematizes the accepted learning into editable web infrastructure and `/design-lab`; story-specific gestures remain local.
 
 > **Claude Design descubre. Claude Code sistematiza. ChatGPT compone. OMNI cuestiona.**
 
 ## ChatGPT = Art Director + Visual Composer
 
-ChatGPT owns the final art direction of each publication, not only image generation. After reading the complete piece, ChatGPT may define:
-- the visual concept;
-- episodic page color and material palette;
+ChatGPT owns the final art direction of each publication, not only image generation. After reading the complete integrated piece, ChatGPT may define:
+
+- visual concept;
+- episodic page color/material palette;
 - typographic hierarchy and scale;
 - composition, density, whitespace and rhythm;
 - image sequence, placement and treatment;
-- quotes, captions, marginalia, dividers and other editorial devices;
+- quotes, captions, marginalia, dividers and editorial devices;
 - visual treatment of contextual commerce;
-- responsive intent for the article;
+- responsive intent;
 - required visual assets, including the decision to use no image when stronger.
 
-Claude must leave creative room for ChatGPT rather than prescribing finished image prompts. ChatGPT decides which visual language best serves each moment and may combine, reinterpret, or reject techniques.
+Cowork/Claude should leave creative room rather than prescribing finished image prompts.
 
 ### Visual Composition phase — mandatory when visual work is required
 
-**Art direction is not the same thing as visual composition, and visual composition is not the same thing as generating assets.**
+**Art direction is not visual composition, and visual composition is not asset generation.**
 
-After the visual thesis exists, ChatGPT must translate it into story-specific compositions before Code implements the page. This phase may determine:
+After the visual thesis exists, ChatGPT translates it into story-specific composition before Code implements the page.
+
+It may determine:
 
 - whether a passage receives one image, a sequence, typography only, archive material, object study, collage, material study or deliberate emptiness;
 - image scale, crop, position and relationship to text;
-- the occupation of rail / reading field / marginal field where the current Foundation supports it;
+- occupation of rail / reading field / marginal field when supported by Foundation;
 - density and whitespace transitions;
 - episodic color behavior;
-- repetition, seriality, marginalia or documentary treatments;
+- repetition, seriality, marginalia and documentary treatments;
 - which visual opportunities should be rejected because adding an image would weaken the story;
-- desktop and mobile compositional intent as related but not identical experiences.
+- desktop and mobile intent as related but non-identical experiences.
 
-Visual Composition must never degrade into "filling image slots." It is the phase where the story receives its own visual behavior.
+Visual Composition must never degrade into filling image slots.
 
-When a composition requires original imagery, ChatGPT then creates or directs the **Visual Assets**. Generative imagery is interpretive; documentary/product identity must remain authentic and verifiable.
+When original imagery is required, ChatGPT then creates or directs the **Visual Assets**. Generative imagery is interpretive; documentary/product identity must remain authentic and verifiable.
 
-Available visual vocabulary includes, but is not limited to:
-- Hero Shot
-- Conceptual Product Photography
-- Advertising Still Life
-- Lifestyle Product Photography
-- CGI Product Visualization
-- Commercial Beauty Photography
-- Ingredient-Driven Composition
-- editorial photography
-- material/macro studies
-- abstraction and metaphor
-- negative-space compositions
-- serial/repetition compositions
-- diptychs/triptychs
-- collage and typographic compositions
-- environmental/scenographic imagery
+Available vocabulary includes, but is not limited to: Hero Shot, Conceptual Product Photography, Advertising Still Life, Lifestyle Product Photography, CGI Product Visualization, Commercial Beauty Photography, Ingredient-Driven Composition, editorial photography, material/macro studies, abstraction/metaphor, negative space, serial/repetition, diptych/triptych, collage/typographic composition and environmental/scenographic imagery.
 
-These are tools, **not a checklist or closed menu**. Do not force a Hero Shot or product image when the story needs something else.
-
-The durable rule is:
+These are tools, not a checklist.
 
 > **Foundation gives identity. Primitives give vocabulary. Composition gives originality. Visual assets give matter. Code turns all of it into experience.**
 
-### Early OMNI creative critique
+## Early OMNI creative critique
 
-OMNI does not need to wait for Code or a finished browser render. During Art Direction / Visual Composition it may enter as a **critique loop** after a meaningful visual proposition exists: a composition study, asset direction, browser-native specimen, founding Design prototype or comparable visual evidence.
+OMNI may enter before Code after a meaningful visual proposition exists.
 
-The routine early loop is:
+Routine loop:
 
 `STORY → ART DIRECTION → VISUAL COMPOSITION → VISUAL STUDY → EARLY OMNI → REFINE / REJECT → ART DIRECTION + COMPOSITION READY`
 
-When a rare Claude Design intervention is active, the founding loop may instead be:
+Exceptional founding loop:
 
 `STORY → ART DIRECTION → DESIGN INTERVENTION → EARLY OMNI → SYSTEM EXTRACTION → ROUTINE COMPOSITION`
 
-Canva is not a required or preferred canvas. Historical Canva studies may remain as evidence, but Aromia does not depend on Canva for routine design.
+Canva is not required or preferred.
 
-Early OMNI is distinct from final QA. Its purpose is to raise the creative ceiling before implementation cost hardens weak decisions.
+Early OMNI evaluates:
 
-Early OMNI should evaluate, with evidence where possible:
-- story-specificity: does the composition belong to this story rather than generic luxury/editorial design?
-- professional craft: does it demonstrate expert hierarchy, grid control, typography, cropping, pacing, spacing and image judgment rather than novice/template behavior?
-- authored humanity: does it feel intentionally directed without simulated scrapbook imperfection or decorative pseudo-humanity?
-- anti-AI character: are there recognizable generation defaults, over-symmetry, generic luxury signals, unnecessary visual effects or implausible imagery?
-- narrative gain: does the visual system deepen understanding, tension, atmosphere or pacing?
-- restraint: is complexity earned, and is simplicity sophisticated rather than underworked?
-- authenticity: are documentary/product identities factual and verifiable?
-- Aromia identity: does the proposal strengthen the publication's evolving visual memory without forcing a universal layout?
-- anti-template behavior: would the exact arrangement still make sense if the next five articles simply swapped their nouns and images? If yes, the composition is too reusable.
+- story-specificity;
+- professional editorial craft;
+- authored humanity;
+- anti-AI character;
+- narrative gain;
+- restraint;
+- authenticity;
+- Aromia identity;
+- anti-template behavior.
 
-OMNI may return:
+Result:
 
 `EARLY_OMNI: PASS | REFINE | REJECT`
 
-`REFINE` must identify concrete weaknesses and desired perceptual/narrative improvement, not prescribe a replacement design. `REJECT` is appropriate when the concept is fundamentally generic, amateur, misleading or visually weak.
+`REFINE` identifies concrete weaknesses and the desired perceptual/narrative improvement. `REJECT` is appropriate when the concept is fundamentally generic, amateur, misleading or visually weak.
 
-**Authorship remains with ChatGPT.** OMNI is the demanding critic in the room, not a co-designer. It should not homogenize experimental work into safe patterns or convert critique into another template.
+**Authorship remains with ChatGPT.** OMNI is critic, not co-designer.
 
-A proposal should not advance to `ART_DIRECTION: READY` / `VISUAL_COMPOSITION: READY` merely because it is clean or technically feasible. It should feel both authored and professionally resolved.
+## Code = Editorial Integrator + Web Production + Publisher
 
-## Code = Web Production + Publisher
+Code has two distinct responsibilities.
 
-Code owns technical implementation and publication once upstream work is ready. It should:
-- read the article, art direction, visual composition and asset instructions from the repository;
-- implement the final web composition without silently inventing a different editorial or artistic direction;
-- preserve accessibility, responsive behavior, performance, SEO and authentic product identity;
-- implement contextual commercial links and measurement according to Aromia policy;
-- render and verify the real page;
-- correct implementation defects;
-- publish work that has passed the required gates and reached `PUBLISHABLE` or its scheduled publication time;
-- update repository state to `LIVE` after confirmed publication.
+### A. Editorial integration
 
-After an accepted founding Design intervention, Code also owns **system extraction**: translate accepted Foundation / primitives into maintainable editable web code and surface them in the permanent internal `/design-lab`. Code must not promote story-specific gestures into shared components merely because they are technically reusable.
+Code imports repository-ready Cowork staging into the canonical remote repo and validates freshness/provenance/state. This is a transport/integration responsibility; it should not silently redesign or rewrite the article merely because Code is performing the ingest.
 
-Normal editorial publication should not require manual approval article by article once the operating model is established. Architecture changes, material brand changes, high-risk technical changes or exceptional editorial cases should still escalate to the human Publisher.
+### B. Web production and publication
+
+Once upstream work is ready, Code:
+
+- reads the article, art direction, visual composition and asset instructions;
+- implements the final web composition without silently inventing a different editorial/artistic direction;
+- preserves accessibility, responsive behavior, performance, SEO and authentic product identity;
+- implements contextual commerce/measurement according to Aromia policy;
+- renders and verifies the real page;
+- corrects implementation defects;
+- publishes only when gates and publication state authorize it;
+- updates repository state to `LIVE` only after confirmed publication.
+
+After an accepted founding Design intervention, Code also owns **system extraction** into maintainable editable code and the permanent internal `/design-lab`.
 
 ## OMNI = Early Creative Critic + Final Gate
 
-OMNI has two deliberately different interventions:
+OMNI has two interventions:
 
-1. **Early creative critique:** challenges meaningful visual studies before implementation, looking for generic AI aesthetics, novice composition, weak story specificity, authenticity failures and insufficient craft.
-2. **Final rendered gate:** evaluates the combined editorial, visual and implemented experience after Code renders it, including responsive behavior, accessibility/performance-related visual consequences, implementation fidelity, commercial pressure and regressions.
+1. **Early creative critique:** challenges meaningful visual studies before implementation.
+2. **Final rendered gate:** evaluates the combined editorial, visual and implemented browser experience, including responsive behavior, implementation fidelity, commercial pressure and regressions.
 
-OMNI should reject decoration, unnecessary complexity, AI-slop, weak authenticity, visual work without perceptual/narrative gain, responsive regressions or commercial treatment that overwhelms the story.
-
-OMNI is a critic/QA system, not another production department and not a reason to create new OMNI modules.
+OMNI is a critic/QA system, not another production department.
 
 ## Human = Publisher / Editor-in-Chief
 
-The human sets the line, can propose stories directly, can override the calendar, approves major strategic or brand decisions and remains final authority. Routine coordination between actors should not depend on the human carrying outputs from one system to another.
+The human sets the line, can propose stories, can override the calendar, approves major strategic/brand decisions and remains final authority. Routine coordination should not require the human to carry every artifact from one system to another.
 
 ## Visual opportunity handoff
 
-When Claude finds a moment where visual work could add meaning, mark:
+When Cowork/Claude finds a moment where visual work could add meaning, mark:
 
 ```text
 [AROMIA_VISUAL_OPPORTUNITY]
@@ -241,25 +293,26 @@ Other hard constraints:
 Creative freedom: LOW | MEDIUM | HIGH
 ```
 
-Do **not** prescribe lens, lighting, exact camera, object positions, effects, complete set design, or a finished generation prompt unless the story genuinely requires a specific constraint.
+Do not prescribe a complete set design or finished generation prompt unless the story genuinely requires a hard constraint.
 
 The question for ChatGPT is:
 
 > What is the strongest visual way to make this moment felt or understood?
 
-ChatGPT may also decide that no image is the stronger solution.
+ChatGPT may decide that no image is stronger.
 
 ## Repository handoff rule
 
-The repository is the shared handoff surface between Cowork, ChatGPT, Code and OMNI.
+There are two surfaces with different authority:
 
-The user should not need to copy and paste outputs between systems. An actor entering Aromia later should be able to inspect the repository, determine what is ready for its domain and continue from there.
+1. **Cowork staging workspace:** temporary, non-canonical preparation surface.
+2. **GitHub `main` + Code-controlled temporary branches:** canonical integration/production surface.
 
-Keep handoffs explicit and lightweight. Do not create a synchronization service, queue, extra branch topology, database workflow, schema or orchestration layer unless repeated real-world use proves it necessary.
+Once Code integrates a Cowork batch, all downstream actors should ignore older staging copies and read the remote repo.
+
+Do not create a queue, database workflow, synchronization service or permanent tool-specific branch topology unless repeated real use proves it necessary.
 
 ### Minimal publication state
-
-Each publication should expose a small human-readable state block:
 
 ```text
 EDITORIAL: DRAFT | READY
@@ -273,37 +326,42 @@ PUBLISH: PENDING | PUBLISHABLE | SCHEDULED | LIVE
 TARGET_DATE: YYYY-MM-DD | UNSCHEDULED
 ```
 
-`DESIGN_PROTOTYPE` and `DESIGN_SYSTEM_EXTRACTION` are **exceptional states** used only when a sparse Claude Design intervention is active. They are not required for every publication.
+`DESIGN_PROTOTYPE` and `DESIGN_SYSTEM_EXTRACTION` are exceptional states used only for sparse Claude Design interventions.
 
-An actor advances only its own domain. Missing upstream work remains pending rather than being silently invented.
+Cowork's pre-integration staging may additionally use:
 
-This state is intentionally small. It is a coordination convention, not a workflow engine.
+```text
+COWORK_STAGE: DRAFT | READY_FOR_CODE_INGEST | INGESTED
+BASE_MAIN_SHA: <sha>
+```
+
+`COWORK_STAGE` is not a publication state and disappears from operational importance once Code has ingested the work.
 
 ## Asynchronous production model
 
-Work may progress in batches of different sizes:
+Example:
 
-`Cowork writes 10 → ChatGPT art-directs/composes 4 → early OMNI critiques 4 → ChatGPT resolves/assets 3 → Code implements 3 → final QA passes 2 → Code publishes 2`
+`Cowork prepares 10 → Code ingests 10 → ChatGPT art-directs/composes 4 → Early OMNI critiques 4 → ChatGPT resolves/assets 3 → Code implements 3 → Final OMNI passes 2 → Code publishes 2`
 
-Nothing requires the complete batch to finish. Production and publication are separate concerns. Aromia may maintain a substantial inventory of finished work and release it according to the editorial calendar.
+Nothing requires a full batch to finish before later eligible work advances.
 
 ## Production loops
 
 ### Routine publication
 
-`IDEA → RESEARCH → STORY → EDITORIAL READY → ART DIRECTION → VISUAL COMPOSITION → VISUAL STUDY → EARLY OMNI → ART DIRECTION + COMPOSITION READY → VISUAL ASSETS → WEB IMPLEMENTATION → BROWSER QA → FINAL OMNI → PUBLISHABLE → SCHEDULE/LIVE`
+`IDEA → RESEARCH → COWORK STAGING → CODE INGEST → EDITORIAL READY IN REPO → ART DIRECTION → VISUAL COMPOSITION → VISUAL STUDY → EARLY OMNI → ART DIRECTION + COMPOSITION READY → VISUAL ASSETS → WEB IMPLEMENTATION → BROWSER QA → FINAL OMNI → PUBLISHABLE → SCHEDULE/LIVE`
+
+If the story originates directly inside the canonical repo and requires no Cowork staging, the `COWORK STAGING → CODE INGEST` segment is simply skipped.
 
 ### Exceptional system-founding intervention
 
 `REAL EDITORIAL NEED → CLAUDE DESIGN INTERVENTION → VISUAL GRAMMAR / PRIMITIVES / LEDGER → EARLY OMNI → CODE SYSTEM EXTRACTION → /design-lab → MULTIPLE REAL ARTICLES → OBSERVE LIMITS → OPTIONAL FUTURE DESIGN INTERVENTION`
 
-The loop is asynchronous: the repository, not a live handoff meeting, carries state between stages.
-
 ## Contextual commerce principle
 
-Aromia may create desire, curiosity and purchase intent, but commercial pressure must remain subordinate to editorial value.
+Aromia may create desire, curiosity and purchase intent, but commercial pressure remains subordinate to editorial value.
 
-The preferred journey is:
+Preferred journey:
 
 `INTEREST → KNOWLEDGE → IDENTIFICATION → DESIRE → EXPLORATION → OPTIONAL PURCHASE`
 
@@ -311,15 +369,14 @@ not:
 
 `ARTICLE → BANNER → BUY`
 
-Aromia does not need to repeatedly tell the reader to visit a retailer. A contextual action such as `Ver opciones disponibles`, `Encontrarla` or `Seguir explorando` may lead to an affiliate destination when editorially justified.
-
-Commercial relationships must still be disclosed clearly where required. Subtlety applies to sales pressure, **not** to disclosure.
+Contextual actions such as `Ver opciones disponibles`, `Encontrarla` or `Seguir explorando` may lead to an affiliate destination when editorially justified. Commercial relationships must still be disclosed clearly.
 
 Never:
+
 - write an article merely to justify an affiliate link;
 - alter an editorial conclusion to improve conversion;
 - turn every perfume mention into a CTA;
-- disguise advertising or an affiliate relationship as independent editorial information.
+- disguise advertising or affiliate relationships as independent editorial information.
 
 The reader must be able to enjoy Aromia completely without buying anything.
 
