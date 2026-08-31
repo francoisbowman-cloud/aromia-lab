@@ -6,11 +6,12 @@ import Image from "next/image";
  * Decisions locked by ChatGPT in
  * `art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md`.
  *
- * Every slot renders its CSS placeholder until `present` is flipped to `true`
- * and the binary is committed under `apps/web/public/editorial-v1/`. Wiring an
- * approved asset is then: drop the file, set `present: true`, set `file`.
- * Interpretive slots are abstract fields, never presented as evidence.
- * Documentary slots must keep their `provenance` line and a visible caption.
+ * A slot with `present: false` renders its CSS placeholder box. A documentary
+ * slot (has `width`/`height`) renders as an intrinsic image with its
+ * provenance caption in normal flow below it. An interpretive slot renders as
+ * a `fill` cover image. Wiring an approved asset: drop the file under
+ * `apps/web/public/editorial-v1/`, set `present: true`, `file`, and — for
+ * documentary — `width`/`height` + `caption` + `provenance`.
  */
 
 export type SlotType = "interpretive" | "documentary";
@@ -20,6 +21,9 @@ export interface VisualSlot {
   type: SlotType;
   present: boolean;
   file: string | null;
+  /** intrinsic pixel size — required for documentary (intrinsic) rendering */
+  width?: number;
+  height?: number;
   alt: string;
   caption?: string;
   provenance?: string;
@@ -40,8 +44,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "clary-sage-documentary": {
     id: "clary-sage-documentary",
     type: "documentary",
-    present: false,
-    file: null,
+    present: true,
+    file: "/editorial-v1/clary-sage-documentary.jpg",
+    width: 1309,
+    height: 1746,
     alt: "Planta de Salvia sclarea (salvia romana), de cuyo esclareol deriva la ruta sintética del ambroxan.",
     caption:
       "Salvia sclarea (salvia romana). Foto: Llez, Wikimedia Commons, CC BY-SA 3.0.",
@@ -71,8 +77,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "oman-place-documentary": {
     id: "oman-place-documentary",
     type: "documentary",
-    present: false,
-    file: null,
+    present: true,
+    file: "/editorial-v1/oman-place-documentary.jpg",
+    width: 1920,
+    height: 1080,
     alt: "Paisaje de Jabal Akhdar, Omán: terreno calcáreo y vegetación de montaña.",
     caption:
       "Jabal Akhdar, Omán. Foto: Ontheroadom, Wikimedia Commons, CC BY-SA 4.0.",
@@ -84,8 +92,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "frankincense-documentary": {
     id: "frankincense-documentary",
     type: "documentary",
-    present: false,
-    file: null,
+    present: true,
+    file: "/editorial-v1/frankincense-documentary.jpg",
+    width: 1920,
+    height: 1440,
     alt: "Boswellia sacra, el árbol del incienso, en Wadi Dowkah, Dhofar, Omán.",
     caption:
       "Boswellia sacra, Wadi Dowkah, Dhofar, Omán. Foto: Krzysztof Ziarnek (Kenraiz), Wikimedia Commons, CC BY-SA 4.0.",
@@ -124,8 +134,26 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
+  // Documentary: intrinsic image, provenance caption in normal flow below.
+  if (slot.width && slot.height) {
+    return (
+      <figure className={`${className} ev1-doc-figure`} data-slot-type="documentary">
+        <Image
+          className="ev1-doc-img"
+          src={slot.file}
+          alt={slot.alt}
+          width={slot.width}
+          height={slot.height}
+          sizes={sizes ?? "100vw"}
+        />
+        {slot.caption ? <figcaption>{slot.caption}</figcaption> : null}
+      </figure>
+    );
+  }
+
+  // Interpretive: fill cover.
   return (
-    <figure className={className} data-slot-type={slot.type}>
+    <figure className={className} data-slot-type="interpretive">
       <Image
         src={slot.file}
         alt={slot.alt}
@@ -133,9 +161,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         sizes={sizes ?? "100vw"}
         style={{ objectFit: "cover" }}
       />
-      {slot.caption ? (
-        <figcaption className="ev1-figcaption">{slot.caption}</figcaption>
-      ) : null}
     </figure>
   );
 }

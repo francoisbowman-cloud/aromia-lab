@@ -204,3 +204,67 @@ blocked and Gate 5 cannot start. Code did the unblocked half:
    rendered evidence.
 
 `PRODUCTION: HOLD` unchanged. No merge, no deploy.
+
+---
+
+## Gate run — 2026-08-31 (Code) — documentary assets wired
+
+Brey authorised the download. The three approved Wikimedia Commons documentary
+files were fetched from the exact source pages in the Gate 3 doc and committed
+under `apps/web/public/editorial-v1/`:
+
+| file | source | author | licence | px |
+|---|---|---|---|---|
+| `clary-sage-documentary.jpg` | `File:Salvia_sclarea_001.JPG` | Llez | CC BY-SA 3.0 / GFDL | 1309×1746 |
+| `oman-place-documentary.jpg` | `File:Landscape_of_Jabal_Akhdar,_Oman.jpg` | Ontheroadom | CC BY-SA 4.0 | 1920×1080 |
+| `frankincense-documentary.jpg` | `File:Boswellia_sacra_kz05.jpg` | Krzysztof Ziarnek (Kenraiz) | CC BY-SA 4.0 | 1920×1440 |
+
+- `EDITORIAL_V1_SLOTS` for those three slots → `present: true` (+ `file`,
+  `width`/`height`, `caption`, `provenance`). `VisualField` now renders a
+  documentary slot as an intrinsic `next/image` with the provenance caption in
+  **normal flow below** the image (not the clipped overlay), so the attribution
+  is always fully legible. On desktop the documentary figure spans the full
+  section width (`grid-column: 1/-1`, `max-height: 72vh`, `object-fit: cover`);
+  on mobile it stays edge-to-edge.
+- The three **interpretive** slots (`ambroxan-material-interpretive`,
+  `ropion-overdose-interpretive`, `amouage-material-density-interpretive`) stay
+  `present: false` — ChatGPT's generated JPGs are not in the repo yet. They keep
+  rendering the CSS placeholder with `role="img"` + label.
+
+### Image authenticity / provenance audit — PASS (for the wired assets)
+- All three are real photographs of the named subject (identifiable
+  `Salvia sclarea`; `Boswellia sacra` resin macro in Dhofar; Jabal Akhdar
+  terrain — not a desert-cliché stock shot).
+- Each carries a visible caption naming subject + author + Wikimedia Commons +
+  licence; `provenance` (source URL + author + licence) is recorded in
+  `editorialV1Visuals.tsx`.
+- No fabricated portrait, packshot or historical scene introduced.
+
+### Gate 2 + Gate 4 re-run — PASS (desktop 1440 + mobile 375)
+- tsc / lint / build clean; 3 story routes prerender.
+- Documentary images load through `/_next/image` (verified 200/304); captions
+  legible and unclipped at both widths; clip-path removed on present figures.
+- `noindex, nofollow` on all 4 routes; single nav + single footer; global
+  chrome `display:none`.
+- No horizontal overflow at 1440 or 375; no elements wider than viewport.
+- Portrait clary-sage clamps to a 1166×648 band on desktop (`object-fit: cover`),
+  no runaway height; full-bleed on mobile with caption below.
+- Only console 404 is a dev-only HMR `hot-update.json` (not a page error).
+
+### Image-count status vs Gate 3 lock
+| story | locked | present now | missing |
+|---|---|---|---|
+| Ámbar | 2 | 1 (clary-sage) | hero interpretive |
+| Ropion | 1 | 0 | hero interpretive |
+| Sultán | 3 | 2 (frankincense, oman) | hero interpretive |
+
+### Still blocking
+1. **ChatGPT's 3 interpretive JPGs** — `ambroxan-resin-abstract-01`,
+   `ropion-bordeaux-texture-01`, `amouage-mineral-density-01` under
+   `apps/web/public/editorial-v1/`. Then flip those slots to `present: true`
+   and re-run Gate 4.
+2. **Gate 5 — final OMNI** on rendered evidence. Not run: it is an
+   approval-gated step (API spend) and is best run once the interpretive
+   fields are in, so OMNI reviews the intended composition, not 3 placeholders.
+
+`PRODUCTION: HOLD` unchanged. No merge, no deploy.
