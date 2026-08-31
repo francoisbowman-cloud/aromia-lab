@@ -26,31 +26,41 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 2
+STATE_VERSION: 3
 UPDATED_AT: 2026-08-31
-LAST_ACTOR: Code
-LAST_ACTION: wired the 3 approved documentary assets, reran Gate 2 + Gate 4 PASS, and left the 3 interpretive visual slots pending
+LAST_ACTOR: ChatGPT
+LAST_ACTION: created the 3 locked interpretive Editorial v1 JPGs as individual 1600x900 production assets and left a SHA-256-verified relay for Code ingestion
 ACTIVE_OBJECTIVE: Editorial v1 implementation
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD: d9427ef128cd174d593fd81199e151650be4176a
+VERIFIED_BRANCH_HEAD: 1cf63c9875f242d1fb9a67e3cb62251b5bf8bc25
 PRODUCTION: HOLD
-NEXT_ACTOR: ChatGPT
-NEXT_ACTION: create/deliver the 3 locked interpretive assets for ambroxan, Ropion and Amouage according to art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md; do not run Gate 5 against placeholders
-BLOCKERS: Gate 3 remains partial until the 3 interpretive JPGs are physically available to Code; Gate 5 waits for those assets because it is the final rendered-composition gate
-PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
-UPSTREAM_RELAY: art-direction/EDITORIAL_V1_RELAY_CODE_TO_CHATGPT.md
+NEXT_ACTOR: Code
+NEXT_ACTION: ingest the 3 interpretive JPGs into apps/web/public/editorial-v1/, verify hashes, set their slots present:true, rerun Gate 4 desktop/mobile, then advance automatically to OMNI Gate 5 if Gate 4 passes
+BLOCKERS: GitHub text connector cannot place the binary JPGs directly; Code must ingest the exact transferable artifact bundle. Gate 5 remains blocked only until that ingestion + Gate 4 PASS completes
+PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
+UPSTREAM_RELAY: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Deterministic decision already resolved
+## Current asset bundle
 
-**Do not run Gate 5 OMNI on the partial placeholder state.**
+Transfer artifact: `aromia-editorial-v1-gate3-interpretive-assets.zip`
+
+Expected members:
+
+- `ambroxan-resin-abstract-01.jpg` — 1600×900 — SHA-256 `99fe0c401aae30b77110c4848ff90ce199c8b551a84cee0e78e8457b0c17f1a7`
+- `ropion-bordeaux-texture-01.jpg` — 1600×900 — SHA-256 `8c49c083c67a31ce878880c50d5d7a223a44cf7dfbf29b2f3e2df33e23ac6a57`
+- `amouage-mineral-density-01.jpg` — 1600×900 — SHA-256 `5c12c2d99e8d593d04ea2f6f36aa5a91835c35146d66990a1e567ea3dffb304e`
+
+These are interpretive assets, not documentary evidence. The earlier meta/status-board generations are discarded and are not Gate evidence.
+
+## Deterministic transition
 
 The next valid transition is:
 
-`ChatGPT supplies 3 interpretive assets → Code sets present:true + reruns Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
+`Code ingests exact JPGs → present:true → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
 
-This is not a question for the human Publisher. It follows directly from the gate contract: Gate 5 judges the rendered composition, so known placeholder fields are a declared unmet prerequisite.
+Code must not ask the human whether to run Gate 5 after a clean Gate 4; the repo already determines that transition.
 
 ## Rules for every actor
 
