@@ -169,16 +169,63 @@ La ausencia de imagen en Acto IV es una decisión narrativa, no un hueco de prod
 EDITORIAL: READY
 ART_DIRECTION: READY
 DESIGN_PROTOTYPE: READY_FOR_EARLY_OMNI
-DESIGN_SYSTEM_EXTRACTION: PENDING
-EARLY_OMNI: PENDING
-VISUAL_ASSETS: PENDING (2 ranuras editoriales + 1 asset de identidad · 2 NOT_REQUIRED)
-IMPLEMENTATION: PENDING
-QA: PENDING
+DESIGN_SYSTEM_EXTRACTION: READY   (Code, 2026-08-30 — ver §11)
+EARLY_OMNI: PASS
+VISUAL_ASSETS: READY_WITH_CONSTRAINTS (2 ranuras como ficha de encargo · firma A. tipográfica · 2 NOT_REQUIRED)
+IMPLEMENTATION: READY_FOR_FINAL_OMNI   (Code, 2026-08-30 — rama local, sin publicar)
+QA: PENDING   (OMNI final — gate de experiencia renderizada)
 PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
 ```
 
-No avanzar `DESIGN_SYSTEM_EXTRACTION` a `READY` antes de que Early OMNI evalúe el espécimen.
+## 11. Extracción e implementación ejecutadas — Code, 2026-08-30
+
+Rama local `feat/el-coleccionista-design-lab` (sin push, sin deploy — modo
+`Continúa Aromia desde el repo, sin publicar`).
+
+**Sistema extraído** (solo lo clasificado `AROMIA_FOUNDATION` / `REUSABLE_PRIMITIVE`
+en el Visual Grammar Sheet, el Primitive Inventory y la promotion decision de
+Early OMNI):
+
+- `apps/web/src/app/editorial.css` — tokens de color/material, escala
+  tipográfica verificada, ritmo de espaciado (escala, no la curva), fila
+  editorial de 3 zonas (P-01), lenguaje de caption (§6), contrato de contraste
+  (sin tercer gris). Superficie clara única, sin tema oscuro de artículo.
+- `apps/web/src/components/editorial/` — `EditorialRow` (P-01), `CaptionCredit`
+  (P-02), `SpecimenSlot` (P-03), `ProportionMarks` (P-04), `ArchiveSurface`
+  (P-05), `TimeRuler` (P-06), `ContextualClose` (P-07), `ActIndicator` (P-08),
+  `EditorialBar` (§8). Código editable con variantes, no captura del prototipo.
+- `apps/web/src/app/design-lab/` — superficie de inspección permanente,
+  `noindex`, fuera de nav y sitemap.
+- P-09 (Density Curve) y P-10 (Compressing Serial Field) **no** se extrajeron:
+  quedan como `EXPERIMENT` / `STORY_SPECIFIC`, viven solo en la ruta del artículo.
+
+**El Coleccionista implementado** en ruta propia
+`apps/web/src/app/magazine/el-coleccionista/` — compuesto desde Foundation +
+primitivas + gestos locales (`story.css`, `SerialField.tsx`). NO es un
+`ArticleTemplate`. Todos los `STORY_SPECIFIC` del Ledger (S-01…S-09) quedan
+locales. `noindex`, `PUBLISH: PENDING`.
+
+Correcciones de fact-check ya incorporadas al render: el gráfico `4/10 hogares`
+no existe; el `30–40 %` va como banda de intervalo atribuida a Johanna Monange
+(Glossy 2025); Dora Baghriche nombrada como fuente sin cita inventada; primera
+banda del campo serial = 4 nombres verificados de Le Male con caption de
+honestidad; Aventus `2010` atribuido a Creed; regla temporal con nota de que
+las marcas intermedias no son reformulaciones fechadas.
+
+Pendiente antes de publicar (no bloquea a OMNI final):
+1. Activo de apertura: inspeccionar la candidata Unsplash (Tanya Barrow) a
+   resolución final o decidir publicar sin imagen. Hoy es `SpecimenSlot` como
+   ficha de encargo.
+2. El manuscrito de `drafts/el-coleccionista.md` debe reflejar las mismas
+   correcciones de fact-check antes de que exista una versión publicable.
+3. Decidir si la ruta bespoke reemplaza / redirige a un eventual
+   `/magazine/el-coleccionista` del pipeline de Postgres.
+
+`tsc --noEmit` y `next lint` limpios. Verificado en navegador desktop (1280) y
+mobile (375): sin scroll horizontal, colapso de carril/margen a interludios,
+liberación de "Sí, pero" perceptible en ambos, indicador de acto por
+IntersectionObserver, campo serial saliéndose por la derecha con recorte.
 
 ## 9. Qué debe hacer Claude Code después de Early OMNI
 
