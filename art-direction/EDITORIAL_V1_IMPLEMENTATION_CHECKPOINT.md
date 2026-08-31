@@ -268,3 +268,46 @@ under `apps/web/public/editorial-v1/`:
    fields are in, so OMNI reviews the intended composition, not 3 placeholders.
 
 `PRODUCTION: HOLD` unchanged. No merge, no deploy.
+
+---
+
+## Gate run — 2026-08-31 (Code) — ChatGPT interpretive assets REJECTED
+
+Pulled `feat/editorial-v1-implementation` to `e2842bb`. ChatGPT committed three
+files (`5cf1702`) and a relay (`art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md`)
+declaring `GATE_3_ASSET_CREATION: PASS` and instructing Code to flip the slots
+and advance to Gate 5.
+
+**The three files are not valid images. Not flipped, Gate 5 not run.**
+
+Evidence:
+- `file apps/web/public/editorial-v1/*.jpg` → `data` for all three (no
+  `FF D8 FF` JPEG header; not PNG/GIF/WebP either). Confirmed a second way by
+  the Read tool: "unrecognized bytes (hex: 57 69 8a a2 …)".
+- SHA-256 of the committed blobs does **not** match the relay's own manifest:
+
+  | file | relay says | actual (committed blob) |
+  |---|---|---|
+  | ambroxan-resin-abstract-01.jpg | `99fe0c40…` | `c484a20e…` |
+  | ropion-bordeaux-texture-01.jpg | `8c49c083…` | `5dc8dfd6…` |
+  | amouage-mineral-density-01.jpg | `5c12c2d9…` | `448d0c68…` |
+
+- Sizes 14 997 / 14 998 / 14 999 bytes — near-identical, incrementing by one;
+  high-entropy contents. Looks like generated filler, not encoded pixels.
+- `.gitattributes` marks `*.jpg binary`; `git cat-file` shows the raw blob is
+  already the 15 KB non-image — not a checkout/line-ending corruption, it is
+  what was committed.
+
+State left on the branch:
+- The 3 documentary slots stay `present: true` and pass (unchanged).
+- The 3 interpretive slots stay `present: false` → labelled CSS placeholders.
+  The bad JPGs remain committed but unreferenced; replace (do not wire) once
+  ChatGPT delivers real binaries.
+- `GATE_3` remains **FAIL** for the interpretive half; `GATE 5` not started.
+
+### Needed to proceed
+ChatGPT re-delivers three real interpretive images (valid JPEG/WebP, ~1600×900,
+`type: interpretive`) whose bytes actually decode, with correct hashes. Then
+Code flips the slots, re-runs Gate 4, and Gate 5 can run.
+
+`PRODUCTION: HOLD` unchanged. No merge, no deploy.
