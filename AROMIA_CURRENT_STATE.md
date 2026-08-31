@@ -26,21 +26,31 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 1
+STATE_VERSION: 2
 UPDATED_AT: 2026-08-31
-LAST_ACTOR: ChatGPT
-LAST_ACTION: Gate 3 art-direction decisions and provenance locked for Editorial v1
+LAST_ACTOR: Code
+LAST_ACTION: wired the 3 approved documentary assets, reran Gate 2 + Gate 4 PASS, and left the 3 interpretive visual slots pending
 ACTIVE_OBJECTIVE: Editorial v1 implementation
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD: d5fdbf32c390e9fd4eed9609c1c52b58e6981be8
+VERIFIED_BRANCH_HEAD: d9427ef128cd174d593fd81199e151650be4176a
 PRODUCTION: HOLD
-NEXT_ACTOR: Code
-NEXT_ACTION: ingest/restore approved Gate 3 binaries, wire approved visual slots, replace condensed route copy with canonical drafts, rerun desktop/mobile browser QA, then prepare final OMNI Gate 5
-BLOCKERS: approved asset binaries are not presently verifiable under public/editorial-v1/ on the remote branch; do not pretend Gate 3 is physically complete until Code resolves this
+NEXT_ACTOR: ChatGPT
+NEXT_ACTION: create/deliver the 3 locked interpretive assets for ambroxan, Ropion and Amouage according to art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md; do not run Gate 5 against placeholders
+BLOCKERS: Gate 3 remains partial until the 3 interpretive JPGs are physically available to Code; Gate 5 waits for those assets because it is the final rendered-composition gate
 PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_RELAY_CODE_TO_CHATGPT.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
+
+## Deterministic decision already resolved
+
+**Do not run Gate 5 OMNI on the partial placeholder state.**
+
+The next valid transition is:
+
+`ChatGPT supplies 3 interpretive assets → Code sets present:true + reruns Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
+
+This is not a question for the human Publisher. It follows directly from the gate contract: Gate 5 judges the rendered composition, so known placeholder fields are a declared unmet prerequisite.
 
 ## Rules for every actor
 
@@ -53,7 +63,9 @@ When receiving **Continúa Aromia desde el repo**:
 5. Execute only the work belonging to your role.
 6. At the end of your phase, update this file so `LAST_ACTOR`, `LAST_ACTION`, `NEXT_ACTOR`, `NEXT_ACTION`, branch/SHA, blockers and handoff paths describe the new reality.
 7. Do not ask the human to copy a relay message to the next actor. Put the relay here and in the appropriate detailed handoff/checkpoint.
-8. A short human-facing completion summary is enough; the repo carries operational detail.
+8. Do not ask the human to choose between routine next steps when the gate sequence, checkpoint, role order or repo state already determines the answer.
+9. Ask the human only for genuinely strategic, irreversible, legal/rights, credential, production/publication, or materially new/unbounded spending decisions not already governed by the repo.
+10. A short human-facing completion summary is enough; the repo carries operational detail.
 
 ## Authority hierarchy
 
@@ -69,4 +81,4 @@ The normal instruction remains exactly:
 
 > **Continúa Aromia desde el repo.**
 
-No article selection, branch name, actor-specific prompt or hand-carried handoff should be required for routine continuation.
+No article selection, branch name, actor-specific prompt, gate-routing choice or hand-carried handoff should be required for routine continuation.
