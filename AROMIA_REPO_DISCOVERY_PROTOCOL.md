@@ -52,6 +52,27 @@ Default editorial-production sequence:
 
 An actor may appear more than once because responsibilities differ by phase. The current relay tells which actor is next; the human should not need to remember or manually transport handoffs.
 
+## Autonomous decision rule — do not end routine phases with questions
+
+The human Publisher is not the router for routine workflow decisions.
+
+If the answer can be derived from the repository, the current gate contract, the active checkpoint, or the role order, the actor must decide and proceed or leave the next actor queued in `AROMIA_CURRENT_STATE.md`. It must **not** end with questions such as:
+
+- “Do I run the next gate now or wait for its declared prerequisites?”
+- “Which actor should continue?”
+- “Should I use the branch named by the current relay?”
+- “Should I preserve `PRODUCTION: HOLD`?”
+- “Should I hand this to ChatGPT/Code/OMNI?” when the gate sequence already answers it.
+
+Default gate behavior is deterministic:
+
+- do not run a final rendered-experience gate against known placeholders when the gate is explicitly intended to judge the completed composition;
+- wait for declared prerequisites, route the work to the actor who owns those prerequisites, then run the gate automatically when they are satisfied;
+- a standard gate already defined by the Aromia workflow is part of the approved workflow and should not require a fresh human routing decision merely because it consumes ordinary project tooling/API usage;
+- ask the human only for genuinely strategic, irreversible, legal/rights, credential, publication/production, or materially new/unbounded spending decisions that are not already governed by the repo.
+
+When blocked by another actor, the current actor must record `NEXT_ACTOR`, `NEXT_ACTION` and `BLOCKERS` in the repo and stop cleanly. It must not convert that handoff into a question for the human.
+
 ## Mandatory relay update
 
 At the end of any meaningful phase, the finishing actor must update `AROMIA_CURRENT_STATE.md` with at least:
@@ -97,6 +118,10 @@ Incorrect behavior:
 Also incorrect:
 
 `read current-state file → trust stale SHA without checking branch → act on obsolete relay`
+
+Also incorrect:
+
+`finish phase → identify a deterministic next step → ask the human whether to do that next step`
 
 Correct behavior:
 
