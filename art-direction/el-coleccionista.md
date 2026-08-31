@@ -6,12 +6,13 @@
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
-DESIGN_PROTOTYPE: READY_FOR_EXTRACTION
+DESIGN_PROTOTYPE: READY
 DESIGN_SYSTEM_EXTRACTION: READY   (Code 2026-08-30 → apps/web/src/app/editorial.css + components/editorial/* + app/design-lab)
 EARLY_OMNI: PASS
 VISUAL_ASSETS: READY_WITH_CONSTRAINTS
-IMPLEMENTATION: READY_FOR_FINAL_OMNI   (Code 2026-08-30 → app/magazine/el-coleccionista, rama local feat/el-coleccionista-design-lab, noindex, sin publicar)
-QA: PENDING   (OMNI final)
+IMPLEMENTATION: READY   (Code → app/magazine/el-coleccionista, branch feat/el-coleccionista-design-lab)
+FINAL_OMNI: PASS   (ChatGPT/OMNI final rendered gate, 2026-08-31)
+QA: PASSED_WITH_PUBLISHING_CONSTRAINTS
 PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
 ```
@@ -21,6 +22,7 @@ TARGET_DATE: UNSCHEDULED
 **Founding Design specimen:** `design-lab/el-coleccionista/`  
 **Composition study:** `art-direction/el-coleccionista-composition-study.md`  
 **Early OMNI:** `design-lab/el-coleccionista/EARLY_OMNI_REVIEW.md`  
+**Final OMNI:** `design-lab/el-coleccionista/FINAL_OMNI_REVIEW.md`  
 **Series:** Perfume como puerta  
 **Art Direction / Visual Composition:** ChatGPT
 
@@ -48,7 +50,7 @@ The page progressively tightens. The unsupported `4/10 households` mark is remov
 The register changes from multiplication to time. Use archive/vellum behavior and a sourced `2010 → hoy` temporal gesture for Aventus. Do not invent batches, reformulation dates, formula evidence, historical packaging or a documentary conservation triptych.
 
 ### Act IV — “Sí, pero”
-Release the pressure. Large near-white field, empty rail, minimal marginal activity. No image. The visual absence is content.
+Release the pressure. Large near-white field, empty rail, minimal marginal activity. No image. The visual absence is content. The story-specific S-04 gesture requires the `Sí, pero` title to remain smaller than the body; commit `5073124` corrected the responsive clamp and Final OMNI verified the result.
 
 ### Act V — Close
 Close editorially first. Then allow the restrained `Para quien quiera seguir oliendo` references to Le Male and Aventus with clear disclosure and no retail visual dominance.
@@ -99,27 +101,17 @@ Keep story-specific:
 
 Mobile is its own composition. Marginalia become inline interludes where useful; density becomes cadence and sequence rather than squeezed sidebars; deliberate overflow must remain legible; the `Sí, pero` release must be unmistakable; no carousel is introduced merely because the viewport is narrow.
 
-## Implementation handoff
+## Implementation result
 
-Early OMNI is now `PASS`. Code may begin system extraction and article implementation, but **must not publish**.
+Code completed system extraction and the article implementation without publishing. Final OMNI reviewed the rendered desktop and mobile evidence from `feat/el-coleccionista-design-lab` and returned `PASS`.
 
-Required command:
+No further visual redesign is requested.
 
-> **Continúa Aromia desde el repo, sin publicar.**
+Before publication, Code still owns normal production gates: CI/build in an environment with required fonts, preservation of responsive/browser behavior, conservative handling of the optional opening documentary asset, and publication only when explicitly authorized.
 
-Code must:
-1. read `AROMIA_DESIGN_PROTOTYPING_SYSTEM.md`, this file, the composition study, the founding Design deliverables and `EARLY_OMNI_REVIEW.md`;
-2. extract only approved Foundation/primitives into the permanent `/design-lab`;
-3. avoid a universal `ArticleTemplate` and preserve story-specific gestures locally;
-4. implement *El Coleccionista* from Foundation + primitives + this composition;
-5. resolve the opening image conservatively: authentic/licensed and lived-in, or no image;
-6. render desktop and mobile;
-7. compare the browser result against narrative intent and implementation fidelity;
-8. leave the work for final OMNI with `PUBLISH` still `PENDING`.
+## Final browser gate — completed
 
-## Final browser gate
-
-After implementation, final OMNI must verify:
+Final OMNI verified:
 - density actually accumulates in the rendered experience;
 - `Sí, pero` visibly releases it;
 - mobile preserves equivalent narrative tension;
@@ -128,3 +120,5 @@ After implementation, final OMNI must verify:
 - typography/grid/caption/contrast behavior matches the approved system;
 - contextual commerce remains subordinate;
 - the page feels like *El Coleccionista*, not an Aromia article template with different nouns.
+
+Result: `FINAL_OMNI: PASS`.
