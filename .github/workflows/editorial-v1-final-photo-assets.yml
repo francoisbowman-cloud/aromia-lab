@@ -1,0 +1,104 @@
+name: Editorial v1 final photographic assets
+
+on:
+  push:
+    branches:
+      - feat/editorial-v1-implementation
+    paths:
+      - .github/workflows/editorial-v1-final-photo-assets.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-final-photo-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout active branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/editorial-v1-implementation
+
+      - name: Install Pillow
+        run: python -m pip install --quiet pillow
+
+      - name: Download locked photographic master and extract final assets
+        env:
+          SOURCE_URL: "https://s3.amazonaws.com/document-export.canva.com/Ozs7o/DAHT7ZOzs7o/1/thumbnail/0001.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4GDRW44L%2F20260831%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260831T125649Z&X-Amz-Expires=61996&X-Amz-Signature=67bf3edd778a44d78ba74d6d85fa82f6e6251e3598eb6203a21744ef9895f77d&X-Amz-SignedHeaders=host&response-expires=Tue%2C%2001%20Sep%202026%2006%3A10%3A05%20GMT"
+        run: |
+          python - <<'PY'
+          from PIL import Image, ImageEnhance, ImageFilter
+          from pathlib import Path
+          import urllib.request, hashlib, json, os, io
+
+          url = os.environ['SOURCE_URL']
+          raw = urllib.request.urlopen(url, timeout=60).read()
+          src = Image.open(io.BytesIO(raw)).convert('RGB')
+          W, H = src.size
+          if W < 900 or H < 450:
+              raise SystemExit(f'Canva export unexpectedly small: {W}x{H}')
+
+          out = Path('apps/web/public/editorial-v1')
+          out.mkdir(parents=True, exist_ok=True)
+
+          # Relative panel boundaries from the locked, text-free 3-panel master.
+          panels = {
+              'ambroxan-resin-abstract-01.jpg': (0.0000, 0.3278, 0.56),
+              'ropion-bordeaux-texture-01.jpg': (0.3319, 0.6591, 0.49),
+              'amouage-mineral-density-01.jpg': (0.6627, 1.0000, 0.52),
+          }
+
+          manifest = {
+              'source': 'Canva design DAHT7ZOzs7o — locked text-free photographic master',
+              'classification': 'interpretive, not documentary',
+              'master_dimensions': [W, H],
+              'outputs': {}
+          }
+
+          for name, (x0r, x1r, bias) in panels.items():
+              x0, x1 = round(W*x0r), round(W*x1r)
+              panel = src.crop((x0, 0, x1, H))
+              pw, ph = panel.size
+              crop_h = round(pw / (16/9))
+              crop_h = min(crop_h, ph)
+              cy = round(ph*bias)
+              top = max(0, min(ph-crop_h, cy-crop_h//2))
+              crop = panel.crop((0, top, pw, top+crop_h))
+              crop = crop.resize((1600, 900), Image.Resampling.LANCZOS)
+              crop = ImageEnhance.Contrast(crop).enhance(1.03)
+              crop = ImageEnhance.Color(crop).enhance(0.97)
+              crop = crop.filter(ImageFilter.UnsharpMask(radius=1.0, percent=65, threshold=3))
+              path = out/name
+              crop.save(path, 'JPEG', quality=88, optimize=True, progressive=True)
+              data = path.read_bytes()
+              if data[:3] != b'\xff\xd8\xff':
+                  raise SystemExit(f'{name}: invalid JPEG magic')
+              check = Image.open(path)
+              if check.size != (1600,900):
+                  raise SystemExit(f'{name}: wrong dimensions {check.size}')
+              manifest['outputs'][name] = {
+                  'width': 1600,
+                  'height': 900,
+                  'bytes': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest()
+              }
+
+          mpath = Path('art-direction/EDITORIAL_V1_FINAL_PHOTO_ASSETS.json')
+          mpath.write_text(json.dumps(manifest, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
+          print(json.dumps(manifest, indent=2))
+          PY
+
+      - name: Commit validated final photographic assets
+        run: |
+          git config user.name "AROMIA Asset Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add apps/web/public/editorial-v1/ambroxan-resin-abstract-01.jpg \
+                  apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg \
+                  apps/web/public/editorial-v1/amouage-mineral-density-01.jpg \
+                  art-direction/EDITORIAL_V1_FINAL_PHOTO_ASSETS.json
+          if git diff --cached --quiet; then
+            echo "No asset changes to commit"
+          else
+            git commit -m "art(editorial-v1): install locked final photographic rasters"
+            git push origin HEAD:feat/editorial-v1-implementation
+          fi
