@@ -544,3 +544,39 @@ Correction applied on-branch (no push yet at write time):
    approved baseline and treat the photographic pass as a follow-up, or hold for it.
 
 `PRODUCTION: HOLD` unchanged. No merge, no deploy.
+
+---
+
+## Publisher decision — 2026-09-01 — no cutover; photo-asset block registered
+
+Brey's instruction: *"No hagas cutover todavía: d6dd6a1 queda invalidado como
+transporte fotográfico. Mantén PRODUCTION: HOLD y registra el bloqueo de los tres
+assets finales."*
+
+Recorded, no code change this pass:
+
+- **No cutover.** The option-A path (ship the OMNI-approved gen-2 baseline now) is
+  declined for the moment. The branch stays at `c06fa06`.
+- **`d6dd6a1` invalidated as a photographic transport.** Not just "rejected once"
+  — the raw-binary-paste approach and the `ba931219` expiring-signed-URL CI job
+  are both banned as transports for this objective. Third failed attempt
+  (`5cf1702` → `d6dd6a1` → CI job).
+- **BLOCK-PHOTO-ASSETS** registered in `AROMIA_CURRENT_STATE.md` (v11): the 3
+  final photographic interpretive assets are undelivered; this blocks the
+  photographic-upgrade track only, not the branch's renderability.
+- `PRODUCTION: HOLD` held. `NEXT_ACTOR: ChatGPT` — re-deliver the 3 assets as
+  valid decodable 1600×900 JPEGs (commit real encoded files after local
+  magic/dimension/SHA verification) or as an updated deterministic SVG source
+  under `art-direction/interpretive-source/` for Code to rasterise (the path that
+  produced the currently-approved gen-2 baseline).
+
+While Code was drafting this, OMNI/ChatGPT independently pushed `e16a80b`
+("invalidate failed photo handoff and restore deterministic relay"), which set
+`AROMIA_CURRENT_STATE.md` to v11 with the same conclusion: `d6dd6a1` invalid,
+`PRODUCTION: HOLD`, `NEXT_ACTOR: ChatGPT`, no Publisher A/B decision until the
+photographic upgrade re-gates, plus a 5-check binary-acceptance gate
+(`FF D8 FF` → decode → 1600×900 → canonical filename → served `image/jpeg`) and
+an anti-stale rule. Code reset onto `e16a80b` and kept only this checkpoint
+entry; the redundant v11 draft of the state file was dropped in favour of OMNI's.
+
+`PRODUCTION: HOLD` unchanged. No merge, no deploy, no cutover PR.
