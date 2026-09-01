@@ -1,0 +1,50 @@
+{
+  "transport": "canva-locked-asset-render",
+  "classification": "interpretive, not documentary",
+  "source_asset_metadata_dimensions": [
+    1600,
+    900
+  ],
+  "source_render_note": "Connector exposes a signed preview render; canonical web JPEGs are deterministically resampled and validated.",
+  "outputs": {
+    "ambroxan-resin-abstract-01.jpg": {
+      "canva_asset_id": "MAHT9pm2XKQ",
+      "source_render_dimensions": [
+        199,
+        112
+      ],
+      "width": 1600,
+      "height": 900,
+      "format": "JPEG",
+      "magic": "ffd8ff",
+      "bytes": 232817,
+      "sha256": "e189fa4c5db735a4573b22807c9bb2b4376663b4678beaac3e20b1e163087310"
+    },
+    "ropion-bordeaux-texture-01.jpg": {
+      "canva_asset_id": "MAHT9sWDP0k",
+      "source_render_dimensions": [
+        199,
+        112
+      ],
+      "width": 1600,
+      "height": 900,
+      "format": "JPEG",
+      "magic": "ffd8ff",
+      "bytes": 166565,
+      "sha256": "575705a789169d9e27302e3a1ccb525ccc037b3802b0c7b4ce40b880ecda9cbc"
+    },
+    "amouage-mineral-density-01.jpg": {
+      "canva_asset_id": "MAHT9poznB4",
+      "source_render_dimensions": [
+        199,
+        112
+      ],
+      "width": 1600,
+      "height": 900,
+      "format": "JPEG",
+      "magic": "ffd8ff",
+      "bytes": 218006,
+      "sha256": "39b0a347ed041255fa63d5908a4a744e9c852b5d9f594adfe913fa0a077c7c95"
+    }
+  }
+}
