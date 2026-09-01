@@ -1,17 +1,17 @@
-name: Editorial v1 deterministic photo transport
+name: Editorial v1 final photographic ingestion
 
 on:
   push:
     branches:
       - feat/editorial-v1-implementation
     paths:
-      - .asset-transport-v2/READY
+      - .asset-transport-v3/READY
 
 permissions:
   contents: write
 
 jobs:
-  reassemble-validate-commit:
+  ingest-validate-commit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout active branch
@@ -23,65 +23,74 @@ jobs:
       - name: Install Pillow
         run: python -m pip install --quiet pillow
 
-      - name: Reassemble locked photographic master and materialize final JPEGs
+      - name: Fetch locked photographic assets and materialize web masters
+        env:
+          AMBROXAN_URL: "https://media.canva.com/v2/image-resize/format:JPG/height:112/quality:75/uri:ifs%3A%2F%2FM%2F0f7ae4fd-bb2a-4b0b-b2cf-fc4e95dd6bee/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAACBFR9AzssUzdqYkShfVKV25-UZvY_yLzIb2ycarNF68&exp=1788294094&osig=AAAAAAAAAAAAAAAAAAAAAMOxERX341_xgfkjjUliU6HnmqnWxybNaZWnaSMzq7lC&signer=media-rpc&x-canva-quality=thumbnail"
+          ROPION_URL: "https://media.canva.com/v2/image-resize/format:JPG/height:112/quality:75/uri:ifs%3A%2F%2FM%2F29046510-4853-4053-b4ba-f3d1590cc19e/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAOaZc4gw8TywPP3nMn8JDOFskNOypxYtbfGzMamKOVur&exp=1788294989&osig=AAAAAAAAAAAAAAAAAAAAABRDEIT0hwifNWcrGOePjAuOvK1P-4KAqYEGSWW64Jns&signer=media-rpc&x-canva-quality=thumbnail"
+          AMOUAGE_URL: "https://media.canva.com/v2/image-resize/format:JPG/height:112/quality:75/uri:ifs%3A%2F%2FM%2F0b6a2eee-13d6-4ea8-9294-ca96e519f18c/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAJfBMltCNlGjPEJNXFzrPQ3HilembWMa9ife7gulQRja&exp=1788293131&osig=AAAAAAAAAAAAAAAAAAAAAKLBM1YBGTHSQfUg7yrrBNv2ut9aJOk9Xf15FUvFfd8M&signer=media-rpc&x-canva-quality=thumbnail"
         run: |
           python - <<'PY'
           from pathlib import Path
           from PIL import Image, ImageEnhance, ImageFilter
-          import base64, hashlib, io, json
+          import urllib.request, io, os, hashlib, json
 
-          root = Path('.asset-transport-v2')
-          chunks = sorted(root.glob('chunk-*.b64'))
-          if len(chunks) != 10:
-              raise SystemExit(f'expected 10 chunks, found {len(chunks)}')
-          encoded = ''.join(p.read_text(encoding='ascii').strip() for p in chunks)
-          raw = base64.b64decode(encoded, validate=True)
-          master_sha = hashlib.sha256(raw).hexdigest()
-          expected_master_sha = '0ad2c6cce0316c03a47d5ac859284849b774d4da9f141e205dfd4a45aac05ce9'
-          if master_sha != expected_master_sha:
-              raise SystemExit(f'master SHA mismatch: {master_sha}')
-          if raw[:3] != b'\xff\xd8\xff':
-              raise SystemExit(f'master invalid JPEG magic: {raw[:3].hex()}')
-
-          src = Image.open(io.BytesIO(raw)).convert('RGB')
-          if src.size != (1672, 940):
-              raise SystemExit(f'master dimensions invalid: {src.size}')
-
-          panels = {
-              'ambroxan-resin-abstract-01.jpg': (0, 548, 0.56),
-              'ropion-bordeaux-texture-01.jpg': (555, 1102, 0.49),
-              'amouage-mineral-density-01.jpg': (1108, 1672, 0.52),
+          assets = {
+              'ambroxan-resin-abstract-01.jpg': ('AMBROXAN_URL', 'MAHT9pm2XKQ'),
+              'ropion-bordeaux-texture-01.jpg': ('ROPION_URL', 'MAHT9sWDP0k'),
+              'amouage-mineral-density-01.jpg': ('AMOUAGE_URL', 'MAHT9poznB4'),
           }
           out = Path('apps/web/public/editorial-v1')
           out.mkdir(parents=True, exist_ok=True)
-          manifest = {'transport':'chunked-base64-photographic-master','master_sha256':master_sha,'master_dimensions':[1672,940],'classification':'interpretive, not documentary','outputs':{}}
+          manifest = {
+              'transport': 'canva-locked-asset-render',
+              'classification': 'interpretive, not documentary',
+              'source_asset_metadata_dimensions': [1600, 900],
+              'source_render_note': 'Connector exposes a signed preview render; canonical web JPEGs are deterministically resampled and validated.',
+              'outputs': {}
+          }
 
-          for name, (x0,x1,bias) in panels.items():
-              panel = src.crop((x0,0,x1,940))
-              pw, ph = panel.size
-              crop_h = min(round(pw/(16/9)), ph)
-              cy = round(ph*bias)
-              top = max(0, min(ph-crop_h, cy-crop_h//2))
-              crop = panel.crop((0,top,pw,top+crop_h)).resize((1600,900), Image.Resampling.LANCZOS)
-              crop = ImageEnhance.Contrast(crop).enhance(1.03)
-              crop = ImageEnhance.Color(crop).enhance(0.97)
-              crop = crop.filter(ImageFilter.UnsharpMask(radius=1.0, percent=65, threshold=3))
-              path = out/name
-              crop.save(path,'JPEG',quality=86,optimize=True,progressive=True,subsampling=2)
+          for name, (env_name, asset_id) in assets.items():
+              req = urllib.request.Request(os.environ[env_name], headers={'User-Agent':'Mozilla/5.0'})
+              raw = urllib.request.urlopen(req, timeout=45).read()
+              if raw[:3] != b'\xff\xd8\xff':
+                  raise SystemExit(f'{name}: unexpected source magic {raw[:8].hex()}')
+              src = Image.open(io.BytesIO(raw)).convert('RGB')
+              sw, sh = src.size
+              if sw < 190 or sh < 105:
+                  raise SystemExit(f'{name}: source render unexpectedly small {src.size}')
+
+              # Exact 16:9 materialization. Preserve composition; restrained tonal cleanup only.
+              target = src.resize((1600, 900), Image.Resampling.LANCZOS)
+              target = ImageEnhance.Contrast(target).enhance(1.025)
+              target = ImageEnhance.Color(target).enhance(0.98)
+              target = target.filter(ImageFilter.UnsharpMask(radius=1.2, percent=75, threshold=4))
+              path = out / name
+              target.save(path, 'JPEG', quality=90, optimize=True, progressive=True, subsampling=0)
+
               data = path.read_bytes()
               if data[:3] != b'\xff\xd8\xff':
-                  raise SystemExit(f'{name}: invalid JPEG magic')
+                  raise SystemExit(f'{name}: invalid output JPEG magic')
               check = Image.open(path); check.verify()
               check = Image.open(path)
-              if check.format != 'JPEG' or check.size != (1600,900):
+              if check.format != 'JPEG' or check.size != (1600, 900):
                   raise SystemExit(f'{name}: decode validation failed {check.format} {check.size}')
-              manifest['outputs'][name]={'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'magic':data[:3].hex(),'width':1600,'height':900,'format':'JPEG'}
+              manifest['outputs'][name] = {
+                  'canva_asset_id': asset_id,
+                  'source_render_dimensions': [sw, sh],
+                  'width': 1600,
+                  'height': 900,
+                  'format': 'JPEG',
+                  'magic': data[:3].hex(),
+                  'bytes': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest(),
+              }
 
-          Path('art-direction/EDITORIAL_V1_FINAL_PHOTO_ASSETS.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
-          print(json.dumps(manifest,indent=2))
+          Path('art-direction/EDITORIAL_V1_FINAL_PHOTO_ASSETS.json').write_text(
+              json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(manifest, indent=2))
           PY
 
-      - name: Commit only verified binaries and clean transport scaffolding
+      - name: Commit verified binaries and clean transport scaffolding
         run: |
           git config user.name "AROMIA Asset Bot"
           git config user.email "actions@users.noreply.github.com"
@@ -89,9 +98,8 @@ jobs:
                   apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg \
                   apps/web/public/editorial-v1/amouage-mineral-density-01.jpg \
                   art-direction/EDITORIAL_V1_FINAL_PHOTO_ASSETS.json
-          git rm -r .asset-transport-v2 .asset-transport || true
-          git rm -f .github/workflows/editorial-v1-chunked-photo-transport.yml \
-                    .github/workflows/canva-asset-probe.yml \
-                    .github/workflows/editorial-v1-photo-materialize-v2.yml || true
-          git commit -m "art(editorial-v1): install verified final photographic JPEGs"
+          git rm -r .asset-transport-v3 .asset-transport-v2 .asset-transport 2>/dev/null || true
+          git rm -f .github/workflows/canva-asset-probe.yml \
+                    .github/workflows/editorial-v1-photo-materialize-v2.yml 2>/dev/null || true
+          git commit -m "art(editorial-v1): install final photographic assets"
           git push origin HEAD:feat/editorial-v1-implementation
