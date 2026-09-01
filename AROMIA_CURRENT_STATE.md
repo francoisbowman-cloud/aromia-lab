@@ -26,43 +26,43 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 4
+STATE_VERSION: 5
 UPDATED_AT: 2026-08-31
 LAST_ACTOR: ChatGPT
-LAST_ACTION: committed the 3 locked interpretive Editorial v1 JPGs directly into the active implementation branch and updated the Code relay; no external artifact transport is required
+LAST_ACTION: repaired the failed binary handoff by committing three deterministic 1600x900 SVG interpretive source compositions and a Code materialization relay
 ACTIVE_OBJECTIVE: Editorial v1 implementation
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD: e2842bbd1b85ed5567b81ce3b1d785ed5e6d6054
+VERIFIED_BRANCH_HEAD: ab13e5834b6bef9dac78bb8d55a528ee1c31f8c9
 PRODUCTION: HOLD
 NEXT_ACTOR: Code
-NEXT_ACTION: verify the 3 committed interpretive JPGs and hashes, set their visual slots present:true, rerun Gate 4 desktop/mobile with real assets, then advance automatically to OMNI Gate 5 if Gate 4 passes
-BLOCKERS: none before Code re-Gate 4; Gate 5 still waits for the real-asset Gate 4 result by contract
+NEXT_ACTION: rasterize the three canonical SVG sources to the exact JPG filenames at 1600x900, validate JPEG magic/dimensions/hashes, replace the invalid prior blobs, set interpretive slots present:true, rerun Gate 4, then advance automatically to OMNI Gate 5 if Gate 4 passes
+BLOCKERS: none before Code materialization; the prior 5cf1702 JPG blobs are invalid and must not be wired
 PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Interpretive assets now versioned on the active branch
+## Important correction
 
-All three exist under `apps/web/public/editorial-v1/`:
+Code correctly rejected commit `5cf1702cb0a2cfc0a3fb27d81d3cea0752f9ba81`: its three `.jpg` blobs did not decode as images and did not match the declared hashes. That failure is preserved as evidence and must not be treated as Gate 3 completion.
 
-- `ambroxan-resin-abstract-01.jpg` — 1600×900 — SHA-256 `99fe0c401aae30b77110c4848ff90ce199c8b551a84cee0e78e8457b0c17f1a7`
-- `ropion-bordeaux-texture-01.jpg` — 1600×900 — SHA-256 `8c49c083c67a31ce878880c50d5d7a223a44cf7dfbf29b2f3e2df33e23ac6a57`
-- `amouage-mineral-density-01.jpg` — 1600×900 — SHA-256 `5c12c2d99e8d593d04ea2f6f36aa5a91835c35146d66990a1e567ea3dffb304e`
+The current authoritative interpretive sources are now versioned as text-safe SVGs under:
 
-Binary commit: `5cf1702cb0a2cfc0a3fb27d81d3cea0752f9ba81`.
+`art-direction/interpretive-source/`
 
-The temporary chat ZIP is no longer operationally relevant. Code must pull from the repo; the human Publisher does not need to download or forward assets.
+- `ambroxan-resin-abstract-01.svg` — 1600×900 source
+- `ropion-bordeaux-texture-01.svg` — 1600×900 source
+- `amouage-mineral-density-01.svg` — 1600×900 source
 
-These are interpretive assets, not documentary evidence. The earlier meta/status-board generations are discarded and are not Gate evidence.
+Code owns deterministic raster materialization to the exact required JPG names. This avoids external ZIP transport and avoids another fragile binary connector handoff.
 
 ## Deterministic transition
 
 The next valid transition is:
 
-`Code verifies committed JPGs → present:true → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
+`Code rasterizes SVG sources → validates real JPGs → present:true → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
 
-Code must not ask the human whether to run Gate 5 after a clean Gate 4; the repo already determines that transition.
+Code must not ask the human whether to perform these routine steps; the repo already determines the transition.
 
 ## Rules for every actor
 
