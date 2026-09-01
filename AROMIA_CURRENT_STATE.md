@@ -23,7 +23,7 @@ LAST_ACTOR: ChatGPT (Art Director + Visual Composer)
 LAST_ACTION: selected the next eligible editorial-ready story, "El coleccionista", and completed its story-specific art direction + visual composition. The draft frontmatter now records ART_DIRECTION/COMPOSITION ready and points to the canonical handoff.
 ACTIVE_OBJECTIVE: El coleccionista — routine editorial publication pipeline
 ACTIVE_BRANCH: main
-MAIN_HEAD_AFTER_CHATGPT_DOC_WRITES: 3863189383293bb6b598e721c3b6e347dea1a48e
+CHATGPT_HANDOFF_COMMIT: 3863189383293bb6b598e721c3b6e347dea1a48e
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
