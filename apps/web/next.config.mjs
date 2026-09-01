@@ -54,6 +54,13 @@ const nextConfig = {
       { source: "/articulos", destination: "/magazine", permanent: true },
       { source: "/articulos/:slug", destination: "/magazine/:slug", permanent: true },
 
+      // Cutover editorial: la superficie aislada /editorial-v1 pasó a ser la Home
+      // ("/") y las historias viven en /historias/:slug.
+      { source: "/editorial-v1", destination: "/", permanent: true },
+      // :slug sin punto — no captura los assets estáticos que aún viven en
+      // /public/editorial-v1/*.jpg (referenciados solo por editorialVisuals.tsx).
+      { source: "/editorial-v1/:slug([^.]+)", destination: "/historias/:slug", permanent: true },
+
       // /perfumes fue reemplazado por /catalogo (21/07); con el pivote a revista
       // (decisión #103) el grid público desaparece — la landing va al Magazine.
       // La ficha individual /catalogo/:slug sobrevive (destino del Quiz + long-tail).

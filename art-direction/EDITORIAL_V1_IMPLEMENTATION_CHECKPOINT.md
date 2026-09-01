@@ -580,3 +580,84 @@ an anti-stale rule. Code reset onto `e16a80b` and kept only this checkpoint
 entry; the redundant v11 draft of the state file was dropped in favour of OMNI's.
 
 `PRODUCTION: HOLD` unchanged. No merge, no deploy, no cutover PR.
+
+---
+
+## Gate run — 2026-09-01 (Code) — PRODUCTION CUTOVER: "/" now serves the editorial home
+
+PR #120 (`87861db`, merged, Railway `SUCCESS`) shipped the editorial experience
+**only** as the isolated `/editorial-v1` surface: `layout.tsx` still set
+`robots: noindex, nofollow` + `canonical "/"`, global chrome was hidden, the
+`.ev1-nav` links were dead in-page anchors, and `apps/web/src/app/page.tsx` still
+rendered `AromiaHome2026`. Nothing linked to `/editorial-v1`. The v12 state file
+called this "CLOSED / LIVE" — premature: the cutover never happened.
+
+Publisher scoped the fix (this session): **home swap only** — `/` renders the
+living cover, stories move to `/historias/[slug]`, existing NavBar + `/magazine`
+`/club` `/academia` `/descubrir` stay reachable, `AromiaHome2026` preserved in git.
+
+### Changes on `feat/editorial-v1-home-cutover` (from `72970bf`)
+
+- **Route group `apps/web/src/app/(editorial)/`** (parens → no URL segment):
+  - `layout.tsx` — was `editorial-v1/layout.tsx`. `robots` flipped to
+    `index: true, follow: true`; the `body > header/footer { display:none }`
+    chrome-hide `<style>` kept. Per-route canonical moved out of the layout.
+  - `page.tsx` — was `editorial-v1/page.tsx`, now resolves to **`/`**. Added
+    `metadata` (absolute title, description, `canonical "/"`, OG). Nav rewritten
+    from dead `#perfumes/#materia/#personas` anchors to real targets:
+    `Portada (#historias) · Magazine · Saber (/academia) · Discovery (/descubrir)
+    · Club`. Story links `/editorial-v1/<slug>` → `/historias/<slug>`.
+  - `historias/[slug]/page.tsx` — was `editorial-v1/[slug]/page.tsx`. Import
+    paths fixed (`../../editorial.css`, `../../editorialVisuals`). Added
+    `generateMetadata` (absolute title `"<title> | Aromia"`, description = deck,
+    `canonical /historias/<slug>`, OG `article`). Three `/editorial-v1` nav/return
+    links → `/`.
+  - `editorial.css` (was `editorial-v1.css`), `editorialVisuals.tsx` (was
+    `editorialV1Visuals.tsx`), `historias/[slug]/story.css` — moved, unchanged.
+- **`apps/web/src/app/page.tsx` deleted** — old `AromiaHome2026` home. Component
+  file kept in `src/components/home/`, just unreferenced.
+- **`next.config.mjs`** — added `301` redirects:
+  `/editorial-v1 → /` and `/editorial-v1/:slug([^.]+) → /historias/:slug`.
+  The `([^.]+)` guard keeps the redirect off the static assets still living at
+  `public/editorial-v1/*.jpg` (dir rename to `public/historias/` was blocked by
+  an OS file lock this session; asset URLs unchanged — cosmetic follow-up).
+- **`sitemap.ts`** — added the 3 `/historias/<slug>` URLs. `robots.ts`
+  untouched (already `allow: "/"`).
+
+### Local gates — PASS (apps/web)
+
+- `npx tsc --noEmit` clean · `next lint` clean · `vitest run` 31/31.
+- `next build`: `○ /` (static, was `ƒ` dynamic), `● /historias/[slug]` SSG ×3,
+  **no `/editorial-v1` route** in the manifest, all other public routes intact.
+  (First build hit `EPERM .next/trace` from a day-old stray `next dev` holding
+  the lock; killed it, `rm -rf .next`, rebuild clean.)
+
+### Browser QA — PASS (desktop 1440 + mobile 375, dev server)
+
+- `/` renders the living cover; **single chrome** — global `body > header/footer`
+  computed `display:none`, only `.ev1-nav` / `.ev1-footer` visible. Nav links
+  resolve. Lead + 2 counterpoints + Discovery interruption + footer present.
+- `/historias/{sultan,ambar,perfumista}` all `200`; `<title>` per story;
+  `<meta name="robots" content="index, follow">`; `<link rel="canonical">`
+  per route. Interpretive + documentary images load `200/304` via `/_next/image`.
+- `/editorial-v1` → `308` → `/`; `/editorial-v1/el-ambar-…` → `308` →
+  `/historias/el-ambar-…`; `/editorial-v1/amouage-mineral-density-01.jpg` → `200`
+  (asset, not redirected).
+- `/magazine` keeps the sticky global NavBar + Footer; no `.ev1-nav`.
+- No new console errors after server restart; no horizontal overflow at either
+  width. (Mobile `.ev1-nav` collapses its links with no menu — pre-existing
+  `.ev1` behaviour, now a known follow-up since this is the site home.)
+
+### OMNI Gate 5 — NOT RERUN
+
+Composition, canonical copy, imagery and interpretive/documentary classification
+are byte-identical to the `0.9661` FINAL_PHOTO_GATE_5 release. Only route
+location, canonical nav targets and indexation changed. A re-run is optional and
+is the Publisher's call.
+
+### Status
+
+`CUTOVER: IMPLEMENTED on feat/editorial-v1-home-cutover`. Local gates + browser
+QA green. **No push, no PR, no merge, no deploy yet** — those await explicit
+Publisher approval. `NEXT_ACTOR: Publisher (Brey)` — see `AROMIA_CURRENT_STATE.md`
+v13.
