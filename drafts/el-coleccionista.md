@@ -10,7 +10,8 @@ art_direction: ready
 visual_composition: ready
 early_omni: pass
 early_omni_review: "art-direction/el-coleccionista-early-omni-review.md"
-visual_assets: pending
+visual_assets: ready_as_spec
+visual_assets_handoff: "art-direction/el-coleccionista-visual-assets-handoff.md"
 implementation: pending
 qa: pending
 publish: pending
