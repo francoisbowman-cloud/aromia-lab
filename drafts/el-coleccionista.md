@@ -8,7 +8,8 @@ estado: editorial_ready
 fact_check: "research/el-coleccionista-fact-check.md"
 art_direction: ready
 visual_composition: ready
-early_omni: pending
+early_omni: pass
+early_omni_review: "art-direction/el-coleccionista-early-omni-review.md"
 visual_assets: pending
 implementation: pending
 qa: pending
