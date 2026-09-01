@@ -17,13 +17,14 @@ Routine editorial loop is governed by `AROMIA_EDITORIAL_WORKFLOW.md`. `main` is 
 ## Current relay
 
 ```text
-STATE_VERSION: 18
+STATE_VERSION: 19
 UPDATED_AT: 2026-09-01
 LAST_ACTOR: Code (implementation)
-LAST_ACTION: implemented El coleccionista as a story-specific route under the Editorial v1 Foundation — new static page + CSS at (editorial)/historias/el-coleccionista/, Asset A slot registered present:false, sitemap entry added. Prose ingested verbatim from the draft. Composition follows the locked art direction: asymmetric quiet opening, growing accumulation rail through "El objeto tiene la culpa", Le Male TYPOGRAPHIC lineage (Asset B fallback, verified names only, no bottle imagery/dates/CTA), abrupt whitespace transition, steel-gray preservation register solved with layout only (Asset C not reopened), hard visual reset at "Sí, pero", contextual affiliate footnotes. tsc + next lint + next build all clean; /historias/el-coleccionista prerenders as static. Local desktop+mobile browser QA green (no horizontal overflow, clean heading order, visible focus, aria-hidden decorative devices, rel="sponsored nofollow" on affiliate links). NOT pushed — main is protected and publication is Publisher-gated.
-ACTIVE_OBJECTIVE: El coleccionista — implementation (code done; Asset A + Final OMNI pending)
-ACTIVE_BRANCH: local feat/el-coleccionista-implementation (committed locally, not pushed)
+LAST_ACTION: ingested Asset A and completed the El coleccionista implementation. ChatGPT produced the opening image; the Publisher placed the binary at apps/web/public/editorial-v1/coleccionista-shelf-01.jpg (1400x1800 JPEG, ~90 KB — a chat-pasted image could not be transported through the connector, so Code could not fetch it directly). Slot coleccionista-shelf-interpretive flipped to present:true with alt text; figure margin zeroed and object-position biased to 50% 64% so the wide bottle band is not clipped (container ratio ~0.80 ≈ asset 0.778, so cover crops only ~10-25 px). tsc + next lint + next build clean; route still prerenders static. Desktop + mobile verified by JS measurement (image loads, correct optimized src, no subject clip, no horizontal overflow, no console errors). Branch feat/el-coleccionista-implementation pushed to origin with Publisher authorization — no merge, no deploy.
+ACTIVE_OBJECTIVE: El coleccionista — implementation COMPLETE; awaiting Final OMNI
+ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
 BASE_MAIN_SHA: efd319a
+BRANCH_HEAD: pushed — 2 commits ahead of origin/main (375b167 implementation + Asset A pass)
 EARLY_OMNI_COMMIT: 3b7d4775355ef8aee2d50b0afaf7ed2700a878bf
 ASSET_HANDOFF_COMMIT: 212c76ab637933897169880c8430250974feb51e
 DRAFT_STATE_COMMIT: 1989b61cd081dfe54b400a8bbe1581ad1c7f077a
@@ -31,10 +32,10 @@ EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-VISUAL_ASSETS: TYPOGRAPHIC_LINEAGE_DONE; ASSET_A_PENDING (needs ChatGPT generation); ASSET_C_NOT_REQUIRED
-IMPLEMENTATION: READY_PENDING_ASSET_A
-QA: LOCAL_PASS — Final OMNI pending
-PUBLISH: PENDING — not pushed; no PR; Railway auto-deploys from main on merge, so merge = publication
+VISUAL_ASSETS: DONE — Asset A ingested; Le Male typographic lineage (Asset B fallback); Asset C not required
+IMPLEMENTATION: READY
+QA: LOCAL_PASS (build + JS-measured desktop/mobile) — browser-pane screenshot capture failed session-wide; rendered PNG capture left to OMNI Render. Final OMNI pending.
+PUBLISH: PENDING — branch pushed only; no PR; merge to main triggers Railway deploy, so merge = publication (Publisher-gated)
 TARGET_DATE: UNSCHEDULED
 PRIMARY_STORY: drafts/el-coleccionista.md
 FACT_CHECK: research/el-coleccionista-fact-check.md
@@ -42,9 +43,9 @@ ART_DIRECTION_HANDOFF: art-direction/el-coleccionista-art-direction-and-composit
 EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
 VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
-NEXT_ACTOR: ChatGPT (Asset A) — then Code (wire + QA) — then OMNI (Final gate)
-NEXT_ACTION: ChatGPT creates Asset A (opening domestic collection scene) from the locked spec in art-direction/el-coleccionista-visual-assets-handoff.md §"Asset A" and returns the binary + ingestion note. Code then drops it at apps/web/public/editorial-v1/coleccionista-shelf-01.jpg, flips the slot to present:true in editorialVisuals.tsx, re-runs desktop/mobile QA, and leaves rendered evidence for Final OMNI. Publisher authorization is required before any push/PR/merge/deploy.
-BLOCKERS: Asset A cannot be produced by Code — this environment has no image-generation capability (OMNI image tools are refinement/audit of existing images only). Routed to ChatGPT per the manual operativo. Everything else in the implementation is complete.
+NEXT_ACTOR: OMNI (Final rendered gate) — then Code (corrections, if any) — then Publisher (merge/deploy)
+NEXT_ACTION: OMNI runs the Final rendered-experience gate on /historias/el-coleccionista (desktop + mobile) from branch feat/el-coleccionista-implementation: implementation fidelity to the locked art direction, the accumulation-to-withdrawal arc, Asset A crop/tone in context, near-zero commercial pressure until the close, responsive integrity. Corrections (if any) go back to Code on the same branch. No merge/deploy without Publisher authorization.
+BLOCKERS: none. Implementation is complete; only the Final OMNI gate and Publisher merge remain.
 ```
 
 ## Creative lock — El coleccionista

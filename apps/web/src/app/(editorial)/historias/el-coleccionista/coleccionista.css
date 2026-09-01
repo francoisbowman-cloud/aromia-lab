@@ -30,11 +30,15 @@
   font-size:clamp(19px,1.6vw,27px);line-height:1.45;max-width:640px;margin:0;
 }
 .coll-shelf{
-  position:relative;overflow:hidden;min-height:560px;
+  position:relative;overflow:hidden;min-height:560px;margin:0;
   background:
     linear-gradient(163deg,#e7e6de 0 34%,rgba(138,150,144,.28) 35% 55%,#dcdbd2 100%),
     linear-gradient(0deg,rgba(107,81,56,.10),rgba(107,81,56,0) 42%);
 }
+/* Asset A sits in a wide band in the vertical middle of the source frame;
+   bias the crop down so the bottle tops and shelf line are never clipped
+   and the empty upper paper is what gets lost instead. */
+.coll-shelf img{object-position:center 64%}
 .coll-shelf span{
   position:absolute;left:20px;bottom:18px;right:20px;
   font-size:9px;letter-spacing:.16em;text-transform:uppercase;

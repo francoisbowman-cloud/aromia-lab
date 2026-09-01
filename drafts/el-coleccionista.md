@@ -10,9 +10,9 @@ art_direction: ready
 visual_composition: ready
 early_omni: pass
 early_omni_review: "art-direction/el-coleccionista-early-omni-review.md"
-visual_assets: typographic_lineage_done_asset_a_pending
+visual_assets: done
 visual_assets_handoff: "art-direction/el-coleccionista-visual-assets-handoff.md"
-implementation: ready_pending_asset_a
+implementation: ready
 implementation_checkpoint: "art-direction/el-coleccionista-implementation-checkpoint.md"
 qa: local_pass_final_omni_pending
 publish: pending

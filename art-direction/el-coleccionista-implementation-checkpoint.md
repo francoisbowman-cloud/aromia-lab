@@ -1,9 +1,9 @@
 # EL COLECCIONISTA — IMPLEMENTATION CHECKPOINT (Code)
 
-IMPLEMENTATION: READY (pending Asset A)
-QA: LOCAL_PASS — desktop + mobile browser QA green; Final OMNI pending
-PUBLISH: PENDING — not pushed; `main` is protected, entry is via PR + Publisher authorization
-DATE: 2026-09-01
+IMPLEMENTATION: READY — Asset A ingested and wired
+QA: LOCAL_PASS — desktop + mobile verified; Final OMNI pending
+PUBLISH: PENDING — pushed to the feature branch only; `main` is protected, merge = deploy, Publisher-gated
+DATE: 2026-09-01 (Asset A wired in a later pass, same day)
 
 Sources honoured:
 - `drafts/el-coleccionista.md` (prose ingested verbatim; only straight→curly quote normalisation)
@@ -71,23 +71,35 @@ drops every device.
   `aria-hidden="true"` — decorative, out of reading order.
 - Affiliate links carry `rel="sponsored nofollow"` and the disclosure line.
 - No console errors.
+- Asset A pass (later, same day): image loads on desktop + mobile, correct Next-optimized
+  src, `object-fit:cover` + `object-position:50% 64%`, subject not clipped, marker span
+  gone, no horizontal overflow, no console errors — all JS-measured. Browser-pane
+  **screenshot capture was failing session-wide** (also on `/magazine`), an environment
+  fault unrelated to the page; the rendered PNG capture is left to OMNI Render at the
+  Final gate, whose job that is.
 
-## BLOCKER — Asset A (opening domestic collection scene)
+## Asset A (opening domestic collection scene) — RESOLVED
 
-Code has **no image-generation capability** in this environment. OMNI's image tools are
-refinement/composition/audit of *existing* images only (`get_omni_status`,
-`get_image_refinement_capabilities` confirm; generative ops are blocked by design). Per the
-manual operativo, generated imagery is a ChatGPT responsibility; Code integrates.
+ChatGPT produced Asset A; the Publisher placed the binary in the repo (the connector could
+not transport a chat-pasted image, so Code could not ingest it directly — a transport
+limitation, not a generation one).
 
-State: slot `coleccionista-shelf-interpretive` is wired with `present: false`, so the page
-renders its honest placeholder box (`role="img"` + descriptive label) — the same
-first-ship pattern Editorial v1 used before its assets landed. Full locked spec is already
-in `art-direction/el-coleccionista-visual-assets-handoff.md` §"Asset A".
+- `apps/web/public/editorial-v1/coleccionista-shelf-01.jpg` — baseline JPEG, 1400×1800,
+  ~90 KB. Interpretive flat illustration: a tight row of ~17 unbranded fragrance-like
+  bottles of varied silhouette/height, one low tray/dish at left, uneven spacing, muted
+  sage/taupe/gray on warm paper, no gold, no smoke/marble/reflections, no readable marks.
+  Matches the locked Asset A spec; reads as recognition, not desire.
+- `editorialVisuals.tsx`: slot `coleccionista-shelf-interpretive` → `present: true`,
+  `file: "/editorial-v1/coleccionista-shelf-01.jpg"`, alt updated to describe the crowded
+  unbranded shelf (no mood/luxury adjectives). Rendered interpretive (`fill` + `cover`).
+- `coleccionista.css`: `figure.coll-shelf{margin:0}` (kill the default `<figure>` margin
+  inside the grid) and `.coll-shelf img{object-position:center 64%}` — the source subject
+  sits in a wide band in the vertical middle, so the crop is biased down to drop empty
+  upper paper rather than clip bottle tops or the shelf line.
 
-INGESTION when the asset exists: drop the file at
-`apps/web/public/editorial-v1/coleccionista-shelf-01.jpg` (or `.webp`), then in
-`editorialVisuals.tsx` set the slot `present: true` and `file` to that path. Interpretive
-(fill) rendering; no width/height needed. Alt text is already written in the slot.
+Crop check (JS-measured): the container ratio (~0.80 desktop, ~0.80 mobile) is within
+~0.02 of the asset ratio (0.778), so `cover` clips only ~10–25 px total on either axis —
+the bottle band and shelf are fully visible at both breakpoints.
 
 ## Non-blocking follow-ups
 
@@ -100,6 +112,9 @@ INGESTION when the asset exists: drop the file at
 
 ## Handoff
 
-`NEXT_ACTOR: ChatGPT` — create Asset A from the locked spec and hand the binary + ingestion
-note back to Code. Code then wires the slot, re-runs desktop/mobile QA, and leaves the
-result for Final OMNI. No push/merge/deploy has occurred; publication remains Publisher-gated.
+`NEXT_ACTOR: OMNI` — Final rendered-experience gate on `/historias/el-coleccionista`
+(desktop + mobile): implementation fidelity to the locked art direction, the accumulation
+→ withdrawal arc, the Asset A crop/tone in context, commercial pressure (should be ~zero
+until the close), and responsive integrity. Branch `feat/el-coleccionista-implementation`
+is pushed (`origin`); `main` is untouched. No merge/deploy — publication stays
+Publisher-gated. If OMNI returns corrections, Code applies them on the same branch.
