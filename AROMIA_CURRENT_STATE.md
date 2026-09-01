@@ -26,61 +26,61 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 12
+STATE_VERSION: 13
 UPDATED_AT: 2026-09-01
-LAST_ACTOR: Production
-LAST_ACTION: released Editorial v1 with the approved photographic lead assets through PR #120, canonical release gating, merge to main, and successful Railway production deployment
-ACTIVE_OBJECTIVE: Editorial v1 photographic release — CLOSED
+LAST_ACTOR: ChatGPT
+LAST_ACTION: audited the production result after Publisher reported that Aromia still looked old; confirmed the Editorial v1 implementation was deployed but the public root `/` still serves the legacy Home, so the prior release closure was incomplete
+ACTIVE_OBJECTIVE: Editorial v1 public cutover correction — make the approved editorial experience the real public Aromia entry point
 ACTIVE_BRANCH: main
-VERIFIED_RELEASE_COMMIT: 87861db8271eb2d77b3dfad8333751a8df201dea
+LAST_RELEASE_COMMIT: 87861db8271eb2d77b3dfad8333751a8df201dea
+STATE_REPAIR_COMMIT: pending current commit
+PRODUCTION: LIVE_BUT_INCOMPLETE
 RELEASE_PR: #120 — MERGED
-PRODUCTION: LIVE
-GATE_4: PASS — run 33528075236 / job 99923918960
-FINAL_PHOTO_GATE_5: PASS — run 33529763705 / job 99929653299 — score 0.9661016949 / threshold 0.82 — blockers 0 — evidence artifact 9809294886
-CANONICAL_RELEASE_GATE: PASS — run 33530273538 / job 99931373862
-RAILWAY_DEPLOYMENT: 0b588bc5-a29f-4572-9bc5-96ae9fad846e — SUCCESS — web production — commit 87861db8271eb2d77b3dfad8333751a8df201dea
-NEXT_ACTOR: Maintenance
-NEXT_ACTION: routine monitoring and future editorial batches; do not reopen Editorial v1 art direction unless a new product/editorial objective explicitly requires it
-BLOCKERS: none
+GATE_4: PASS on Editorial v1 implementation — run 33528075236 / job 99923918960
+FINAL_PHOTO_GATE_5: PASS on Editorial v1 implementation — run 33529763705 / job 99929653299 — score 0.9661016949 / threshold 0.82 — blockers 0
+CANONICAL_RELEASE_GATE: PASS on the release candidate — run 33530273538 / job 99931373862
+PUBLIC_CUTOVER_DEFECT: `/` still renders the legacy Home; Editorial v1 currently lives under `/editorial-v1` and is not yet the canonical public entry experience
+NEXT_ACTOR: Code
+NEXT_ACTION: read the current repo and fix the public cutover without reopening approved art direction. Make the approved Editorial v1 experience the canonical public Aromia entry at `/`, then audit and correct primary navigation and public-route behavior so users are no longer routed through the legacy catalog-first architecture as the default experience. Validate the real production-facing routes, including `/`, `/magazine`, `/descubrir`, `/buscar`, and the three Editorial v1 story routes at desktop and mobile. Run the relevant technical/browser regression checks and OMNI rendered gate against the actual public URLs/route behavior. If blockers are found, fix them automatically within Code/ChatGPT/OMNI role boundaries and rerun. Update this relay with exact branch/SHA/gate evidence. Do not ask the Publisher to carry context or choose routine next steps.
+BLOCKERS: public-home cutover only; approved Editorial v1 art direction and final photographic assets are not reopened
 PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Editorial v1 release closure
+## Explicit defect diagnosis
 
-The final photographic direction is implemented and published. The three canonical interpretive assets are real JPEG binaries at exactly `1600×900`, were decoded and hash-validated in Gate 4, rendered in the final browser gate, and remain explicitly classified as interpretive rather than documentary evidence:
+The previous release was technically deployed, but it did not complete the intended product cutover. The new editorial implementation exists and its dedicated routes render, while the canonical public root `/` still serves the legacy Aromia Home. Therefore `PRODUCTION: LIVE` does not mean the editorial transformation is complete.
 
-- `apps/web/public/editorial-v1/ambroxan-resin-abstract-01.jpg`
-- `apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg`
-- `apps/web/public/editorial-v1/amouage-mineral-density-01.jpg`
+This is a release-correction task, not a new creative-direction phase.
 
-Documentary imagery keeps its separate provenance treatment. No generated interpretive image should be relabeled as documentary evidence.
+Code must treat the following as the deterministic correction sequence:
 
-## Release evidence
+`read repo state → inspect current public root/navigation architecture → make Editorial v1 the canonical `/` experience → remove/redirect legacy catalog-first entry behavior where appropriate → validate public navigation/routes → desktop/mobile browser QA → OMNI rendered gate on public experience → fix blockers automatically → update relay → production verification`
 
-- Final photo asset integration commit before release: `f9026587c25e0408941eb1b1aa88c4005223b63e`.
-- Gate 4: `PASS`, workflow run `33528075236`, job `99923918960`.
-- Final-photo OMNI Gate 5: `PASS`, workflow run `33529763705`, job `99929653299`, score `0.9661016949152542` against `0.82`, zero blockers. The two reported `PRESENT` metadata findings were non-blocking substring false positives in reader copy, not implementation metadata.
-- Canonical OMNI Final Aromia Release Gate: `PASS`, workflow run `33530273538`, job `99931373862`.
-- Release PR `#120` merged to `main` as `87861db8271eb2d77b3dfad8333751a8df201dea`.
-- Railway production web deployment `0b588bc5-a29f-4572-9bc5-96ae9fad846e` reached `SUCCESS`; startup preflight reported catalog source `private`, count `125`, and Next.js reached `Ready`.
+The approved visual direction, article copy, photographic assets, documentary provenance, and Gate 3 decisions remain locked unless a concrete regression proves that a bounded correction is required.
 
-## Deterministic transition
+## Actor-substitution rule
 
-Editorial v1 is no longer an in-flight release. Routine continuation now begins from `main` and should discover the next editorial objective from the repo rather than reopening this completed gate sequence.
+The normal actor responsibilities remain unchanged. An actor may exceptionally execute a bounded task normally owned by the next actor only when all of the following are true:
 
-`Production LIVE → Maintenance / next editorial batch`
+1. the necessary connected tools and permissions are available;
+2. the human has already authorized the operation or the repo workflow deterministically authorizes it;
+3. the action does not bypass a required strategic, legal, rights, credential, or publication decision;
+4. the substitution is explicitly recorded in the relay;
+5. the actor does not permanently redefine the workflow roles.
+
+This rule exists to preserve autonomy without blurring ownership. It does not create a new actor such as `Maintenance`.
 
 ## Rules for every actor
 
 When receiving **Continúa Aromia desde el repo**:
 
 1. Read this file first.
-2. Verify `ACTIVE_BRANCH` and the latest relevant `main` head against GitHub before trusting the relay.
+2. Verify `ACTIVE_BRANCH` and the latest relevant remote head against GitHub before trusting the relay.
 3. Inspect the referenced handoff/checkpoint and any newer relevant commits.
 4. If the state is stale, repair this file from the newest verifiable repository evidence before continuing.
-5. Execute only the work belonging to your role.
+5. Execute only the work belonging to your role, except for a bounded substitution allowed by the actor-substitution rule above.
 6. At the end of your phase, update this file so `LAST_ACTOR`, `LAST_ACTION`, `NEXT_ACTOR`, `NEXT_ACTION`, branch/SHA, blockers and handoff paths describe the new reality.
 7. Do not ask the human to copy a relay message to the next actor. Put the relay here and in the appropriate detailed handoff/checkpoint.
 8. Do not ask the human to choose between routine next steps when the gate sequence, checkpoint, role order or repo state already determines the answer.
@@ -93,7 +93,7 @@ If sources disagree, resolve in this order:
 
 `verifiable Git branch/head + newest checkpoint/relay → this file → older handoffs → conversational memory`
 
-`main` is the production baseline.
+`main` is the production baseline unless a newer active working branch is explicitly recorded here.
 
 ## Human interface
 
