@@ -1,6 +1,20 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import "./editorial-v1.css";
-import { VisualField } from "./editorialV1Visuals";
+import "./editorial.css";
+import { VisualField } from "./editorialVisuals";
+
+export const metadata: Metadata = {
+  title: { absolute: "Aromia — Una fragancia, una historia" },
+  description:
+    "Revista de perfumería: las materias, las historias y las personas detrás de las fragancias.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Aromia — Una fragancia, una historia",
+    description:
+      "Revista de perfumería: las materias, las historias y las personas detrás de las fragancias.",
+    type: "website",
+  },
+};
 
 const stories = [
   {
@@ -21,7 +35,7 @@ const stories = [
   },
 ];
 
-export default function EditorialV1Page() {
+export default function EditorialHome() {
   return (
     <main className="ev1">
       <header className="ev1-nav">
@@ -29,12 +43,11 @@ export default function EditorialV1Page() {
           AROMIA
         </Link>
         <nav aria-label="Navegación editorial">
-          <a href="#historias">Historias</a>
-          <a href="#perfumes">Perfumes</a>
-          <a href="#materia">Materia</a>
-          <a href="#personas">Personas</a>
-          <a href="#saber">Saber</a>
-          <a href="#discovery">Discovery</a>
+          <a href="#historias">Portada</a>
+          <Link href="/magazine">Magazine</Link>
+          <Link href="/academia">Saber</Link>
+          <Link href="/descubrir">Discovery</Link>
+          <Link href="/club">Club</Link>
         </nav>
         <Link href="/buscar" aria-label="Buscar">
           ⌕
@@ -56,7 +69,7 @@ export default function EditorialV1Page() {
           </p>
           <Link
             className="ev1-read"
-            href="/editorial-v1/el-perfume-que-encargo-un-sultan"
+            href="/historias/el-perfume-que-encargo-un-sultan"
           >
             Leer historia <span>→</span>
           </Link>
@@ -81,7 +94,7 @@ export default function EditorialV1Page() {
               <p className="ev1-kicker">{s.kicker}</p>
               <h2>{s.title}</h2>
               <p>{s.note}</p>
-              <Link className="ev1-read" href={`/editorial-v1/${s.slug}`}>
+              <Link className="ev1-read" href={`/historias/${s.slug}`}>
                 Leer historia <span>→</span>
               </Link>
             </div>

@@ -1,8 +1,9 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import "../editorial-v1.css";
+import "../../editorial.css";
 import "./story.css";
-import { VisualField } from "../editorialV1Visuals";
+import { VisualField } from "../../editorialVisuals";
 
 interface StorySection {
   h: string;
@@ -220,6 +221,21 @@ export function generateStaticParams() {
   return Object.keys(data).map((slug) => ({ slug }));
 }
 
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const s = data[params.slug];
+  if (!s) return {};
+  return {
+    title: { absolute: `${s.title} | Aromia` },
+    description: s.deck,
+    alternates: { canonical: `/historias/${params.slug}` },
+    openGraph: {
+      title: s.title,
+      description: s.deck,
+      type: "article",
+    },
+  };
+}
+
 export default function Story({ params }: { params: { slug: string } }) {
   const s = data[params.slug];
   if (!s) notFound();
@@ -227,11 +243,11 @@ export default function Story({ params }: { params: { slug: string } }) {
   return (
     <main className={`ev1 story-page ${s.heroSlot.split("-")[0]}`}>
       <header className="ev1-nav">
-        <Link href="/editorial-v1" className="ev1-brand">
+        <Link href="/" className="ev1-brand">
           AROMIA
         </Link>
         <nav>
-          <Link href="/editorial-v1">Portada</Link>
+          <Link href="/">Portada</Link>
           <span>{s.territory}</span>
         </nav>
         <Link href="/buscar" aria-label="Buscar">
@@ -298,7 +314,7 @@ export default function Story({ params }: { params: { slug: string } }) {
             El perfume puede ser el final de una compra. Aquí preferimos que sea
             el principio de otra pregunta.
           </p>
-          <Link href="/editorial-v1" className="ev1-read">
+          <Link href="/" className="ev1-read">
             Volver a la portada →
           </Link>
         </aside>

@@ -12,6 +12,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // El grid público /catalogo se retiró con el pivote a revista (decisión #103);
     // la ficha individual /catalogo/:slug sí se lista, más abajo (paginasPerfumes).
     { url: `${SITE_URL}/magazine`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/historias/el-perfume-que-encargo-un-sultan`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/historias/el-ambar-que-nunca-toco-una-ballena`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/historias/el-perfumista-que-no-teme-exagerar`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/buscar`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/descubrir`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/perfumistas`, changeFrequency: "monthly", priority: 0.8 },

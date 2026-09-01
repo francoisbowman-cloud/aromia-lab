@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  robots: { index: false, follow: false },
-  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
 };
 
 const HIDE_GLOBAL_CHROME = `
@@ -12,7 +11,7 @@ body > footer {
 }
 `;
 
-export default function EditorialV1Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function EditorialLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: HIDE_GLOBAL_CHROME }} />
