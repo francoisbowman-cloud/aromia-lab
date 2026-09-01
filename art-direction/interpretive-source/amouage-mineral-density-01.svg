@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#23272a"/>
+      <stop offset=".38" stop-color="#777b7c"/>
+      <stop offset=".7" stop-color="#d7d4cb"/>
+      <stop offset="1" stop-color="#3a3b3b"/>
+    </linearGradient>
+    <linearGradient id="resin" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6e4a29"/>
+      <stop offset=".5" stop-color="#b98443"/>
+      <stop offset="1" stop-color="#49311f"/>
+    </linearGradient>
+    <filter id="strata" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.023" numOctaves="5" seed="51" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="86" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".16" numOctaves="3" seed="12"/>
+      <feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .14 0"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="#202426"/>
+  <g filter="url(#strata)">
+    <path d="M-80 40c238 110 372 54 556 118 250 87 340 189 572 172 191-13 339-98 632-2v248c-262-81-463-12-639 34-246 65-432-47-626-75-195-29-322 27-495-25Z" fill="url(#stone)"/>
+    <path d="M-20 520c223-45 412 64 609 54 238-12 386-119 620-91 179 21 277 100 391 145v272H-20Z" fill="#9c9d98" opacity=".88"/>
+  </g>
+  <path d="M180 820C380 610 482 532 622 421c169-133 260-218 466-330" fill="none" stroke="url(#resin)" stroke-width="42" stroke-linecap="round" opacity=".88"/>
+  <path d="M360 900c108-169 204-256 330-357 109-87 182-159 290-291" fill="none" stroke="#c29a61" stroke-width="11" stroke-linecap="round" opacity=".58"/>
+  <g fill="#e7e2d8" fill-opacity=".35">
+    <polygon points="1180,170 1340,238 1295,390 1120,350"/>
+    <polygon points="980,520 1150,468 1235,620 1090,715 930,650"/>
+    <polygon points="260,230 410,170 520,300 390,430 230,365"/>
+  </g>
+  <rect width="1600" height="900" filter="url(#grain)"/>
+</svg>
