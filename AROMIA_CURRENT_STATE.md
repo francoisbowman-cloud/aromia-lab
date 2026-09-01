@@ -26,47 +26,49 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 8
+STATE_VERSION: 9
 UPDATED_AT: 2026-09-01
 LAST_ACTOR: ChatGPT
-LAST_ACTION: corrected the premature publication relay and locked the already-approved final photographic replacement direction for the 3 interpretive lead images; exploratory generation is closed and the existing gen-2 rasters remain only as a technical safety baseline
-ACTIVE_OBJECTIVE: Editorial v1 final photographic asset replacement
+LAST_ACTION: extracted the locked text-free photographic master into 3 individual 1600x900 JPEGs, committed the binaries directly through Git objects at d6dd6a1a902fb9bdb55c29c329b3c2812d0a327e, and verified the canonical paths resolve from the active branch
+ACTIVE_OBJECTIVE: Editorial v1 final photographic asset integration and re-gate
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD_BEFORE_CHATGPT_LOCK: e7e91e79b33ddae7ccf0aaff6e779b98f9c64286
-CHATGPT_DIRECTION_LOCK_COMMIT: 4fd3c6323958c00d8ac5a745903dd8d8979e8d31
+FINAL_PHOTO_ASSET_COMMIT: d6dd6a1a902fb9bdb55c29c329b3c2812d0a327e
 PRODUCTION: HOLD
-NEXT_ACTOR: Code after final photographic JPGs are present in-repo; until then ChatGPT owns asset completion, not further art-direction exploration
-NEXT_ACTION: preserve the green implementation as baseline; ingest/verify the 3 final photographic JPGs at their canonical filenames when available, then Gate 4 at 1440/375 and automatically OMNI Gate 5 because imagery replacement is material
-BLOCKERS: final higher-craft photographic JPG binaries are not yet verified in-repo; current gen-2 rasters are approved baseline but are not the final desired visual assets
+NEXT_ACTOR: Code
+NEXT_ACTION: pull the active branch; verify all 3 canonical JPEGs (JPEG magic, dimensions 1600x900, integrity); render them in the existing interpretive slots without changing classification/copy; run Gate 4 at desktop 1440 and mobile 375; if Gate 4 passes, automatically submit OMNI Gate 5 because all 3 lead interpretive images materially changed
+BLOCKERS: none before Code Gate 4. Do not use the failed temporary GitHub Actions transport attempt as evidence; the binaries were ultimately committed directly through Git blobs/tree/commit.
 PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_POST_GATE_VISUAL_POLISH.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Locked final imagery direction
+## Final photographic assets now in repo
 
-Art direction is closed. Do not generate or request further exploratory mockups, triptychs, comparison boards or alternate directions.
+Canonical paths on `feat/editorial-v1-implementation`:
+- `apps/web/public/editorial-v1/ambroxan-resin-abstract-01.jpg`
+- `apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg`
+- `apps/web/public/editorial-v1/amouage-mineral-density-01.jpg`
 
-Final interpretive slots remain:
-- `ambroxan-resin-abstract-01.jpg` — recognizable translucent/resinous material still life; tactile, optically plausible, explicitly interpretive rather than literal ambroxan evidence.
-- `ropion-bordeaux-texture-01.jpg` — recognizable burgundy floral matter expressing controlled excess; organic petal variation, no fabricated Ropion evidence.
-- `amouage-mineral-density-01.jpg` — incense/resin/wood/mineral/smoke still life; dense but materially legible, no fabricated branded/historical evidence.
+All three were prepared as individual 16:9 JPEGs at 1600 × 900 from the already-approved, text-free photographic master. No new exploratory generation was performed in this transport phase.
 
-Craft target: `recognizable material → authored photographic composition → editorial integration → invisible retouching`, with physical micro-detail and controlled imperfection. No abstract texture requiring explanation, no generic AI-luxury gold accent, no technical metadata in reader UI.
+Interpretive classification remains locked:
+- Ambroxan: recognizable translucent/resinous material still life; not literal ambroxan evidence.
+- Ropion: recognizable burgundy floral matter expressing controlled excess; not fabricated Ropion evidence.
+- Amouage: incense/resin/wood/mineral/smoke still life; not branded or historical evidence.
+
+Craft target remains `recognizable material → authored photographic composition → editorial integration → invisible retouching`, with physical micro-detail and controlled imperfection. No abstract texture requiring explanation, no generic AI-luxury gold accent, no technical metadata in reader UI.
 
 ## Gate context
 
-Before this final photographic replacement request, all five Editorial v1 gates were green. OMNI Gate 5 returned `APPROVED_WITH_NON_BLOCKING_REFINEMENTS`, confidence `0.844`, zero blockers, and Code applied the approved palette/rhythm cleanup at `e7e91e79b33ddae7ccf0aaff6e779b98f9c64286`.
+Before this final photographic replacement, all five Editorial v1 gates were green. OMNI Gate 5 returned `APPROVED_WITH_NON_BLOCKING_REFINEMENTS`, confidence `0.844`, zero blockers, and Code applied the approved palette/rhythm cleanup at `e7e91e79b33ddae7ccf0aaff6e779b98f9c64286`.
 
-That green implementation is the safety baseline. It is not authorization to publish while the Publisher-approved final photographic replacement pass remains incomplete.
+That implementation remains the safety baseline. Replacing the three interpretive images is a material rendered-experience change, so Code must run Gate 4 again and then OMNI Gate 5 again before publication approval.
 
 ## Deterministic transition
 
-The next valid transition is:
+`Code verifies committed photographic JPGs → Gate 4 1440/375 → OMNI Gate 5 → Code fixes if required → Publisher production approval`
 
-`ChatGPT final photographic JPGs in repo → Code validates/integrates → Gate 4 → OMNI Gate 5 → Code fixes if required → Publisher production approval`
-
-Replacing all three interpretive lead images is a material rendered-experience change, so OMNI Gate 5 must run again after Code's Gate 4 pass.
+`PRODUCTION: HOLD` remains active. No merge/deploy without explicit Publisher approval after the final photographic pass.
 
 ## Rules for every actor
 
