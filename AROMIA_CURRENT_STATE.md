@@ -17,12 +17,13 @@ Routine editorial loop is governed by `AROMIA_EDITORIAL_WORKFLOW.md`. `main` is 
 ## Current relay
 
 ```text
-STATE_VERSION: 17
+STATE_VERSION: 18
 UPDATED_AT: 2026-09-01
-LAST_ACTOR: ChatGPT executing Publisher-authorized Early OMNI + post-gate asset specification
-LAST_ACTION: Early OMNI passed El coleccionista; the gate deliberately reduced the asset package. ChatGPT then finalized a production asset specification and rejected an accidental generated review-sheet image as non-story/non-repo material.
-ACTIVE_OBJECTIVE: El coleccionista — implementation
-ACTIVE_BRANCH: main
+LAST_ACTOR: Code (implementation)
+LAST_ACTION: implemented El coleccionista as a story-specific route under the Editorial v1 Foundation — new static page + CSS at (editorial)/historias/el-coleccionista/, Asset A slot registered present:false, sitemap entry added. Prose ingested verbatim from the draft. Composition follows the locked art direction: asymmetric quiet opening, growing accumulation rail through "El objeto tiene la culpa", Le Male TYPOGRAPHIC lineage (Asset B fallback, verified names only, no bottle imagery/dates/CTA), abrupt whitespace transition, steel-gray preservation register solved with layout only (Asset C not reopened), hard visual reset at "Sí, pero", contextual affiliate footnotes. tsc + next lint + next build all clean; /historias/el-coleccionista prerenders as static. Local desktop+mobile browser QA green (no horizontal overflow, clean heading order, visible focus, aria-hidden decorative devices, rel="sponsored nofollow" on affiliate links). NOT pushed — main is protected and publication is Publisher-gated.
+ACTIVE_OBJECTIVE: El coleccionista — implementation (code done; Asset A + Final OMNI pending)
+ACTIVE_BRANCH: local feat/el-coleccionista-implementation (committed locally, not pushed)
+BASE_MAIN_SHA: efd319a
 EARLY_OMNI_COMMIT: 3b7d4775355ef8aee2d50b0afaf7ed2700a878bf
 ASSET_HANDOFF_COMMIT: 212c76ab637933897169880c8430250974feb51e
 DRAFT_STATE_COMMIT: 1989b61cd081dfe54b400a8bbe1581ad1c7f077a
@@ -30,19 +31,20 @@ EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-VISUAL_ASSETS: READY_AS_SPEC
-IMPLEMENTATION: PENDING
-QA: PENDING
-PUBLISH: PENDING
+VISUAL_ASSETS: TYPOGRAPHIC_LINEAGE_DONE; ASSET_A_PENDING (needs ChatGPT generation); ASSET_C_NOT_REQUIRED
+IMPLEMENTATION: READY_PENDING_ASSET_A
+QA: LOCAL_PASS — Final OMNI pending
+PUBLISH: PENDING — not pushed; no PR; Railway auto-deploys from main on merge, so merge = publication
 TARGET_DATE: UNSCHEDULED
 PRIMARY_STORY: drafts/el-coleccionista.md
 FACT_CHECK: research/el-coleccionista-fact-check.md
 ART_DIRECTION_HANDOFF: art-direction/el-coleccionista-art-direction-and-composition.md
 EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
 VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
-NEXT_ACTOR: Code (implementation)
-NEXT_ACTION: implement El coleccionista against Editorial v1 Foundation; produce/select the single required opening domestic collection image from the locked spec; use typographic Le Male lineage unless publication-safe authentic product imagery is available; attempt preservation/time with layout before adding another image; render desktop/mobile and leave browser evidence for Final OMNI. Do not silently change article thesis/art direction.
-BLOCKERS: none for implementation. Product-image rights/provenance are not a blocker because a truthful typographic fallback is already approved.
+IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
+NEXT_ACTOR: ChatGPT (Asset A) — then Code (wire + QA) — then OMNI (Final gate)
+NEXT_ACTION: ChatGPT creates Asset A (opening domestic collection scene) from the locked spec in art-direction/el-coleccionista-visual-assets-handoff.md §"Asset A" and returns the binary + ingestion note. Code then drops it at apps/web/public/editorial-v1/coleccionista-shelf-01.jpg, flips the slot to present:true in editorialVisuals.tsx, re-runs desktop/mobile QA, and leaves rendered evidence for Final OMNI. Publisher authorization is required before any push/PR/merge/deploy.
+BLOCKERS: Asset A cannot be produced by Code — this environment has no image-generation capability (OMNI image tools are refinement/audit of existing images only). Routed to ChatGPT per the manual operativo. Everything else in the implementation is complete.
 ```
 
 ## Creative lock — El coleccionista

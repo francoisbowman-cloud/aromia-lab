@@ -1,0 +1,230 @@
+/* El coleccionista — story-specific composition.
+ * Foundation: `.ev1` shell + nav + typography from ../../editorial.css.
+ * STORY_SPECIFIC per art-direction/el-coleccionista-art-direction-and-composition.md:
+ * controlled accumulation that grows with the argument and withdraws at "Sí, pero".
+ * These gestures stay local to this route; they are not promoted to Foundation. */
+
+.coll{
+  /* episodic accents — perceptual targets, not global tokens */
+  --coll-tobacco:#6b5138;
+  --coll-glass:#8a9690;
+  --coll-steel:#6f767c;
+  --coll-steel-wash:#eceef1;
+}
+
+/* ── opening / domestic recognition ─────────────────────────────
+   asymmetric: copy holds ~52% of the field, image offset into the rest */
+.coll-open{
+  min-height:calc(100vh - 72px);
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  border-bottom:1px solid var(--line);
+}
+.coll-open-copy{
+  padding:clamp(54px,8vw,120px) clamp(24px,7vw,110px);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.coll-open-copy h1{max-width:760px}
+.coll-deck{
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(19px,1.6vw,27px);line-height:1.45;max-width:640px;margin:0;
+}
+.coll-shelf{
+  position:relative;overflow:hidden;min-height:560px;
+  background:
+    linear-gradient(163deg,#e7e6de 0 34%,rgba(138,150,144,.28) 35% 55%,#dcdbd2 100%),
+    linear-gradient(0deg,rgba(107,81,56,.10),rgba(107,81,56,0) 42%);
+}
+.coll-shelf span{
+  position:absolute;left:20px;bottom:18px;right:20px;
+  font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--coll-steel);
+}
+
+/* ── lead / first silence ──────────────────────────────────────── */
+.coll-intro{
+  padding:clamp(40px,7vw,96px) clamp(24px,7vw,110px);
+  max-width:960px;border-bottom:1px solid var(--line);
+}
+.coll-intro p{
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(21px,1.9vw,30px);line-height:1.5;margin:0 0 1.15em;
+}
+.coll-intro p:last-child{margin-bottom:0}
+.coll-intro p:first-child::first-letter{
+  float:left;font-family:var(--font-display,Georgia,serif);
+  font-size:5em;line-height:.78;padding:.06em .12em 0 0;
+}
+.coll-intro .coll-alone{margin:0 0 1.5em}
+
+/* private inventory notation — never a badge, filter or card */
+.coll-tick{
+  display:block;margin-top:1.4em;
+  font-size:11px;letter-spacing:.34em;color:var(--coll-steel);
+  font-family:var(--font-sans,Arial,sans-serif);
+}
+
+/* ── sections ──────────────────────────────────────────────────── */
+.coll-section{
+  padding:clamp(64px,9vw,140px) clamp(24px,9vw,150px);
+  display:grid;
+  grid-template-columns:64px minmax(300px,680px) 1fr;
+  gap:clamp(20px,4vw,64px);
+  align-items:start;border-bottom:1px solid var(--line);
+}
+.coll-rail{
+  font-size:10px;letter-spacing:.2em;color:var(--coll-steel);
+  line-height:1.9;white-space:pre;
+  font-family:var(--font-sans,Arial,sans-serif);
+}
+.coll-section h2{
+  font-size:clamp(38px,4.6vw,68px);line-height:1.02;
+  letter-spacing:-.035em;margin:0 0 28px;max-width:640px;
+}
+.coll-body>p{
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(19px,1.5vw,24px);line-height:1.62;margin:0 0 1.1em;
+}
+.coll-body>p:last-child{margin-bottom:0}
+.coll-body em{font-style:italic}
+
+.coll-note{
+  font-size:12px;line-height:1.5;color:var(--coll-steel);
+  border-top:1px solid var(--line);padding-top:12px;max-width:220px;
+  font-family:var(--font-sans,Arial,sans-serif);
+}
+
+/* density grows through "El objeto tiene la culpa" */
+.coll-section.multiplying{background:#efeee7}
+.coll-section.multiplying .coll-rail{color:var(--coll-tobacco)}
+
+/* Le Male typographic lineage — Asset B fallback, approved as the stronger
+   truthful solution. No bottle imagery, no price, no CTA. */
+.coll-lineage{
+  grid-column:2/-1;margin-top:clamp(28px,4vw,52px);
+  border-top:1px solid var(--ink);padding-top:18px;
+}
+.coll-lineage h3{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  margin:0 0 16px;font-family:var(--font-sans,Arial,sans-serif);
+}
+.coll-lineage ol{list-style:none;margin:0;padding:0}
+.coll-lineage li{
+  display:grid;grid-template-columns:64px 1fr;gap:16px;
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(17px,1.5vw,22px);line-height:1.7;
+  border-bottom:1px solid var(--line);padding:8px 0;
+}
+.coll-lineage li:last-child{border-bottom:0}
+.coll-lineage li .yr{
+  font-family:var(--font-sans,Arial,sans-serif);
+  font-size:12px;letter-spacing:.06em;color:var(--coll-steel);
+  align-self:center;
+}
+.coll-lineage figcaption{
+  margin-top:14px;font-size:11px;line-height:1.5;color:var(--coll-steel);
+  font-family:var(--font-sans,Arial,sans-serif);max-width:560px;
+}
+
+/* ── abrupt whitespace transition before scarcity ─────────────── */
+.coll-gap{
+  min-height:clamp(28vh,40vh,52vh);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:flex-end;
+  padding:0 clamp(24px,9vw,150px) 22px;
+}
+.coll-gap hr{
+  width:100%;border:0;border-top:1px solid var(--line);margin:0;
+}
+
+/* ── preservation / time — steel-gray register, layout only ───── */
+.coll-section.preserving{background:var(--coll-steel-wash)}
+.coll-section.preserving .coll-rail{color:var(--coll-steel)}
+.coll-timenote{
+  border-top:1px solid var(--line);padding-top:12px;max-width:220px;
+  font-family:var(--font-sans,Arial,sans-serif);
+}
+.coll-timenote ul{list-style:none;margin:0 0 10px;padding:0}
+.coll-timenote li{
+  font-size:13px;line-height:1.9;letter-spacing:.02em;color:var(--ink);
+}
+.coll-timenote li::before{content:"— ";color:var(--coll-steel)}
+.coll-timenote small{font-size:10px;letter-spacing:.04em;color:var(--coll-steel)}
+
+/* compositional peak — decorative only, hidden from AT */
+.coll-converge{
+  grid-column:2/-1;margin-top:28px;
+  display:flex;gap:18px;align-items:center;
+  font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--coll-steel);font-family:var(--font-sans,Arial,sans-serif);
+}
+.coll-converge span:nth-child(2){flex:1;border-top:1px solid var(--line)}
+
+/* ── Sí, pero / release — hard reset, no devices ──────────────── */
+.coll-reset{
+  padding:clamp(80px,11vw,170px) clamp(24px,14vw,220px);
+  max-width:900px;border-bottom:1px solid var(--line);
+}
+.coll-reset h2{
+  font-size:clamp(22px,2vw,30px);line-height:1.2;margin:0 0 40px;
+  letter-spacing:-.01em;
+}
+.coll-reset p{
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(20px,1.7vw,26px);line-height:1.62;margin:0 0 1.3em;
+}
+.coll-reset p.coll-breath{margin:1.9em 0}
+.coll-reset p:last-child{margin-bottom:0}
+
+/* ── commerce close — quieter than captions, affiliation disclosed ─ */
+.coll-commerce{
+  padding:clamp(48px,7vw,96px) clamp(24px,9vw,150px);
+  border-bottom:1px solid var(--line);
+}
+.coll-commerce-note{
+  font-size:12px;letter-spacing:.04em;color:var(--coll-steel);
+  margin:0 0 18px;max-width:640px;
+  font-family:var(--font-sans,Arial,sans-serif);
+}
+.coll-commerce ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.coll-commerce li{
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(15px,1.2vw,18px);line-height:1.5;max-width:720px;
+}
+.coll-commerce a{color:inherit;text-underline-offset:3px}
+
+.coll-close{
+  padding:clamp(72px,11vw,160px) clamp(24px,16vw,260px);
+  min-height:52vh;display:flex;flex-direction:column;justify-content:center;
+}
+.coll-close>p:not(.ev1-kicker){
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(28px,3.4vw,52px);line-height:1.12;max-width:940px;margin:0 0 42px;
+}
+
+/* ── mobile: accumulation becomes vertical rhythm ─────────────── */
+@media(max-width:800px){
+  .coll-open{grid-template-columns:1fr;min-height:auto}
+  .coll-open-copy{padding:60px 20px 46px}
+  .coll-shelf{min-height:58vh}
+  .coll-intro{padding:44px 20px}
+  .coll-section{
+    grid-template-columns:1fr;gap:14px;padding:64px 20px;
+  }
+  .coll-rail{
+    white-space:normal;letter-spacing:.3em;border-bottom:1px solid var(--line);
+    padding-bottom:10px;line-height:1.4;
+  }
+  .coll-section h2{font-size:38px}
+  .coll-note,.coll-timenote{max-width:none;margin-top:8px}
+  .coll-lineage,.coll-converge{grid-column:1}
+  .coll-lineage li{grid-template-columns:52px 1fr;gap:12px}
+  .coll-gap{min-height:34vh;padding:0 20px 18px}
+  .coll-reset{padding:76px 20px}
+  .coll-reset h2{margin-bottom:32px}
+  .coll-commerce,.coll-close{padding-left:20px;padding-right:20px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .coll *{animation:none!important;transition:none!important}
+}
