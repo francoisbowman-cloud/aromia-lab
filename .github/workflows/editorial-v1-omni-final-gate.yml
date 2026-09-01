@@ -57,14 +57,17 @@ jobs:
 
       - name: OMNI rendered editorial inspection
         working-directory: apps/web
+        env:
+          ARTIFACT_DIR: ${{ github.workspace }}/apps/web/artifacts/omni-final
         run: |
-          mkdir -p artifacts/omni-final
+          mkdir -p "$ARTIFACT_DIR"
           cat > /tmp/omni-editorial-v1/gate.cjs <<'NODE'
           const fs = require('fs');
           const { chromium } = require('playwright');
           const path = require('path');
 
           const origin = 'http://127.0.0.1:3000';
+          const artifactDir = process.env.ARTIFACT_DIR;
           const routes = [
             '/editorial-v1',
             '/editorial-v1/el-ambar-que-nunca-toco-una-ballena',
@@ -82,7 +85,6 @@ jobs:
           ];
           const forbiddenReaderMetadata = ['PRESENT', 'PRODUCTION: HOLD', 'gate 3', 'gate 4', 'gate 5', 'branch:', 'sha:', 'data-slot-type'];
           const report = { gate: 5, mode: 'rendered-final-photography', minScore: Number(process.env.OMNI_MIN_SCORE || 0.82), routes: {}, checks: [], blockers: [] };
-
           const safe = (r) => r === '/editorial-v1' ? 'index' : r.split('/').pop();
           const add = (key, ok, detail) => report.checks.push({ key, ok, detail });
 
@@ -133,29 +135,28 @@ jobs:
                 add(`${vp.name}:${route}:runtime`, metrics.pageErrors === 0, `${metrics.pageErrors} page errors`);
                 add(`${vp.name}:${route}:metadata`, metrics.metadataHits.length === 0, metrics.metadataHits.join(', ') || 'clean');
                 add(`${vp.name}:${route}:placeholders`, metrics.placeholders === 0, `${metrics.placeholders}`);
-                await page.screenshot({ path: path.join(process.cwd(), 'artifacts/omni-final', `${vp.name}-${safe(route)}.png`), fullPage: true });
+                await page.screenshot({ path: path.join(artifactDir, `${vp.name}-${safe(route)}.png`), fullPage: true });
                 await page.close();
               }
             }
             await browser.close();
-
             const indexDesktop = report.routes['desktop:/editorial-v1'];
             for (const file of locked) {
               const present = indexDesktop.imageSrcs.some(src => src.includes(file));
               add(`locked-asset:${file}`, present, present ? 'rendered on editorial index' : 'missing from rendered editorial index');
             }
-
             const passed = report.checks.filter(c => c.ok).length;
             report.score = passed / report.checks.length;
+            report.failedChecks = report.checks.filter(c => !c.ok);
             report.passed = report.score >= report.minScore && report.checks.every(c => !c.key.endsWith(':http') || c.ok) && report.checks.filter(c => c.key.startsWith('locked-asset:')).every(c => c.ok);
             report.blockers = report.checks.filter(c => !c.ok && (c.key.endsWith(':http') || c.key.startsWith('locked-asset:') || c.key.endsWith(':images') || c.key.endsWith(':runtime')));
-            fs.writeFileSync(path.join(process.cwd(), 'artifacts/omni-final/report.json'), JSON.stringify(report, null, 2));
-            console.log(JSON.stringify({ score: report.score, minScore: report.minScore, passed: report.passed, checks: report.checks.length, failedChecks: report.checks.length - passed, blockers: report.blockers }, null, 2));
+            fs.writeFileSync(path.join(artifactDir, 'report.json'), JSON.stringify(report, null, 2));
+            console.log(JSON.stringify({ score: report.score, minScore: report.minScore, passed: report.passed, checks: report.checks.length, failedChecks: report.failedChecks, blockers: report.blockers }, null, 2));
             if (!report.passed) process.exit(1);
           })().catch(err => { console.error(err); process.exit(1); });
           NODE
           cd /tmp/omni-editorial-v1
-          OMNI_MIN_SCORE="${OMNI_MIN_SCORE}" node gate.cjs
+          ARTIFACT_DIR="$ARTIFACT_DIR" OMNI_MIN_SCORE="${OMNI_MIN_SCORE}" node gate.cjs
 
       - name: Upload OMNI Gate 5 evidence
         if: always()
