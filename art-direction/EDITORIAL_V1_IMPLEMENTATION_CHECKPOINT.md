@@ -358,3 +358,45 @@ spend and needs explicit human go-ahead — not started. Everything upstream of 
 is now green with the real (if rough) assets in place.
 
 `PRODUCTION: HOLD` unchanged. No merge, no deploy.
+
+---
+
+## Gate 5 — OMNI release review: BLOCKED (2026-08-31, Brey authorised the run)
+
+`omni_review_release` → `omni_release_gate` on Code's Gate 4 evidence.
+Result: **BLOCKED**, overall confidence 0.763.
+Dimensions: visual = blocked · functional/brand/experience = needs-refinement ·
+commercial = clear.
+
+### Must fix now (release blocker)
+- **ev1-01 — interpretive hero/lead imagery is below the luxury-editorial bar.**
+  The 3 rasterised interpretive fields (ambroxan-resin-abstract-01,
+  ropion-bordeaux-texture-01, amouage-mineral-density-01) read as flat
+  vector/gradient with weak texture; amouage polygons look clip-art-ish; edges
+  read as torn paper, not material. They fill the single most prominent slot on
+  every route, so they set the first impression. `important` severity,
+  confidence 0.85. **Remediation:** new interpretive assets from ChatGPT/Design
+  (photographic-grade material studies or richer generative texture), or demote
+  them from hero to secondary until upgraded. **Verify:** re-observe all 4
+  routes at 1440 + 375; hero imagery must read as a premium material study.
+
+### Polish later (non-blocking)
+- **ev1-02** — documentary interruption scale/crop was plumbed, not
+  art-directed; portrait clary-sage is centre-cropped to a 1166×648 band.
+  Art-director pass on per-section crop (consider 60/40 for the botanical pivot).
+- **ev1-03** — no `:focus-visible` style; keyboard focus relied on the faint
+  default ring. **FIXED this pass:** added
+  `.ev1 a:focus-visible,.ev1 button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}`
+  in `editorial-v1.css`. tsc/lint/build clean. Re-verify by tabbing each route.
+- **ev1-04** — `noindex,nofollow` is correct now; revisit at cutover (real
+  per-route metadata + canonicals).
+- **ev1-05** (positive) — documentary imagery authentic + CC BY-SA provenance
+  captions legible; keep intact through any crop change.
+- **ev1-06** (positive) — full canonical copy, drop-cap intro, episodic
+  palettes, subordinate commerce, isolated chrome, zero placeholders, clean
+  build/console — the reading experience passes.
+
+### Status
+`GATE_5: BLOCKED` on ev1-01. `PRODUCTION: HOLD` stays. No merge, no deploy.
+Next actor: **ChatGPT/Design** — deliver higher-craft interpretive assets for
+the 3 hero/lead slots, then Code re-wires, re-runs Gate 4, and re-submits Gate 5.
