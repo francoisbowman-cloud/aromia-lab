@@ -26,66 +26,79 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 10
+STATE_VERSION: 11
 UPDATED_AT: 2026-09-01
-LAST_ACTOR: Code
-LAST_ACTION: rejected the "final photographic" binary handoff — commit d6dd6a1 overwrote the 3 OMNI-approved gen-2 interpretive rasters with 10-15 KB non-image "data" blobs (no FF D8 FF magic, not decodable); third failure of this same transport (prior: 5cf1702 rejected at dfa761b). Restored the 3 valid gen-2 rasters from e7e91e7 (the named safety baseline), removed the failed external-URL CI transport workflow, and re-verified the branch (tsc/lint clean, 4 routes 200, optimiser serves all 3 JPEGs as image/jpeg, noindex intact, no metadata leak)
-ACTIVE_OBJECTIVE: Editorial v1 — publication decision on the approved baseline; optional final photographic asset upgrade
+LAST_ACTOR: ChatGPT
+LAST_ACTION: accepted Code's binary-integrity finding, explicitly invalidated d6dd6a1 as a photographic delivery, and corrected the relay so the Publisher is no longer asked to choose an already-resolved A/B branch. The approved photographic direction remains wanted; publication must not cut over on gen-2 merely to bypass the failed transport.
+ACTIVE_OBJECTIVE: Editorial v1 — complete the already-approved final photographic upgrade before publication
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-LAST_GOOD_ASSET_COMMIT: e7e91e79b33ddae7ccf0aaff6e779b98f9c64286 (gen-2 interpretive rasters, OMNI Gate 5 = 0.844)
-REJECTED_ASSET_COMMIT: d6dd6a1a902fb9bdb55c29c329b3c2812d0a327e
+SAFETY_BASELINE: e7e91e79b33ddae7ccf0aaff6e779b98f9c64286 (gen-2 interpretive rasters; OMNI Gate 5 = 0.844; zero blockers)
+REJECTED_ASSET_COMMIT: d6dd6a1a902fb9bdb55c29c329b3c2812d0a327e (INVALID TRANSPORT; never treat as image evidence)
 PRODUCTION: HOLD
-NEXT_ACTOR: Publisher (Brey), then ChatGPT if the photographic upgrade is still wanted
-NEXT_ACTION: Publisher decides — (A) lift PRODUCTION: HOLD and cut over to main on the OMNI-approved gen-2 baseline now, treating the photographic upgrade as an optional follow-up; or (B) hold for ChatGPT to re-deliver the 3 final photographic 1600x900 JPEGs through a transport that lands valid decodable binaries (commit the real encoded files after verifying FF D8 FF + 1600x900 locally, or hand Code a deterministic source to rasterise/fetch — NOT raw paste, NOT an expiring signed URL in CI), after which Code re-wires, runs Gate 4, and re-submits OMNI Gate 5
-BLOCKERS: none technical — the branch is at the OMNI-approved rendered state. The photographic upgrade is blocked on a working asset transport. Publication is Publisher-gated.
-PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md (2026-09-01 entry)
+NEXT_ACTOR: ChatGPT
+NEXT_ACTION: establish a demonstrably valid transport/source for the 3 already-approved photographic assets. Acceptance requires real JPEG bytes, FF D8 FF magic, successful decode, exactly 1600x900, and one individual production asset per canonical slot. Do not regenerate/reopen art direction merely because transport failed. Once a valid deterministic source or file handoff exists, set NEXT_ACTOR=Code for integration + Gate 4 1440/375 + automatic OMNI Gate 5.
+BLOCKERS: final photographic asset transport only. No publication decision is requested from the Publisher while this bounded implementation task remains unfinished.
+PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Interpretive assets currently in repo (restored)
+## Current valid safety baseline
 
-Canonical paths on `feat/editorial-v1-implementation`, restored byte-identical to
-`e7e91e7`:
-- `apps/web/public/editorial-v1/ambroxan-resin-abstract-01.jpg` — valid JPEG, progressive, 1600×900, 603 KB
-- `apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg` — valid JPEG, progressive, 1600×900, 401 KB
-- `apps/web/public/editorial-v1/amouage-mineral-density-01.jpg` — valid JPEG, progressive, 1600×900, 275 KB
+The active branch has Code's restored, valid gen-2 JPEGs at the canonical paths:
+- `apps/web/public/editorial-v1/ambroxan-resin-abstract-01.jpg`
+- `apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg`
+- `apps/web/public/editorial-v1/amouage-mineral-density-01.jpg`
 
-These are the gen-2 rasters (from ChatGPT's upgraded SVG sources, rasterised
-locally by Code) that OMNI Gate 5 approved at confidence `0.844`, zero blockers.
-The 3 documentary slots (clary-sage / oman-place / frankincense, CC BY-SA) are
-untouched and still pass.
+They remain a rollback/safety baseline only. They are not the intended final photographic upgrade.
 
-### Failed "final photographic" transport — do not retry as-is
+## Invalid photographic transport
 
-`d6dd6a1` ("install locked final photographic rasters") committed 10 652 /
-14 997 / 14 999-byte blobs with no image magic — the same failure mode as the
-rejected `5cf1702`. `ba931219` added
-`.github/workflows/editorial-v1-final-photo-assets.yml`, which fetched from a
-signed Canva URL (`exp=1788254593`) with `contents: write`; it produced nothing
-usable. Code removed that workflow. A photographic upgrade needs a transport that
-demonstrably lands decodable bytes.
+`d6dd6a1` is explicitly rejected. Its three supposed `.jpg` blobs are not decodable JPEGs and lack the required JPEG magic. Their presence in Git history or successful path resolution is NOT proof of a valid image delivery.
+
+Do not repeat any transport based on raw/base64 text pasted into Git blobs, and do not use expiring signed URLs in CI as the production handoff.
+
+A photographic asset is accepted only after Code can verify locally:
+
+`JPEG magic FF D8 FF → decoder succeeds → dimensions 1600x900 → canonical filename → browser serves image/jpeg`
+
+All five conditions are mandatory before the relay may claim the asset is delivered.
+
+## Locked photographic direction — do not reopen
+
+The creative decision is already made:
+
+`recognizable material → authored photographic composition → editorial integration → invisible retouching`
+
+- **Ambroxan** — translucent/mineral/resin-like recognizable matter on stone/steel/travertine; raking light; real micro-imperfections; interpretive, never literal ambroxan evidence.
+- **Ropion** — dark/burgundy rose or compressed floral matter with restrained patchouli/wood/earth cues; controlled excess made physically legible; no fake portrait/history/lab evidence.
+- **Amouage** — incense/resins/wood/mineral/ash/organic smoke; dense material still life; no crown, palace, fake calligraphy, bottle or branded fabrication.
+
+No text, labels, logos, borders, triptych/contact-sheet treatment or technical overlays inside the individual production images.
 
 ## Gate context
 
-All five Editorial v1 gates are green on the restored baseline. OMNI Gate 5
-returned `APPROVED_WITH_NON_BLOCKING_REFINEMENTS`, confidence `0.844`, zero
-blockers, at `e7e91e7`. The branch is currently at exactly that rendered
-experience — no composition, copy or classification change since.
+The restored gen-2 baseline is technically safe: all five Editorial v1 gates were green and OMNI Gate 5 returned `APPROVED_WITH_NON_BLOCKING_REFINEMENTS`, confidence `0.844`, zero blockers.
 
-Polish-later (non-blocking), for the cutover PR or a follow-up:
-- documentary interruption crop/scale art direction (`ev1-02`);
-- flip `noindex` + real per-route metadata/canonicals at cutover (`ev1-04`);
-- optional: integrate the Amouage resin strokes into the textured ground;
-- optional: the final photographic interpretive upgrade (needs a working transport).
+That approval does NOT automatically approve the final photographic replacement. Once the three final photographic assets are validly integrated, Code must run Gate 4 again at desktop 1440 and mobile 375, then automatically submit OMNI Gate 5 because the three lead interpretive images materially changed.
 
 ## Deterministic transition
 
-`Publisher decides (A cut over now / B hold for photographic upgrade)`
-· if B: `ChatGPT re-delivers valid photographic binaries → Code Gate 4 1440/375 → OMNI Gate 5 → Code fixes if required → Publisher production approval`
-· if A: `Code opens cutover PR to main (noindex flip + per-route metadata) → deploy on Publisher approval`
+`ChatGPT establishes valid photo transport/source → Code verifies all 5 binary acceptance checks → Code integrates → Gate 4 1440/375 → OMNI Gate 5 → Code fixes if required → Publisher production approval → cutover`
 
-`PRODUCTION: HOLD` remains active. No merge/deploy without explicit Publisher approval.
+There is no Publisher A/B decision before this sequence completes. `PRODUCTION: HOLD` remains active.
+
+## Anti-stale rule
+
+Before asking the Publisher any question or offering any production choice, every actor MUST:
+
+1. fetch/compare the remote `ACTIVE_BRANCH` against its local HEAD;
+2. read the newest `AROMIA_CURRENT_STATE.md` from that remote branch;
+3. inspect newer relevant checkpoints/relays;
+4. synchronize if local state is behind;
+5. suppress any question already resolved by the remote relay or deterministic gate sequence.
+
+A stale local checkout is never a valid basis for a Publisher decision.
 
 ## Rules for every actor
 
