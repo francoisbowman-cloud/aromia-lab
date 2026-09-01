@@ -6,6 +6,15 @@ perfumes_mencionados: ["Le Male", "Aventus"]
 keyword_objetivo: "por que coleccionar perfumes"
 estado: editorial_ready
 fact_check: "research/el-coleccionista-fact-check.md"
+art_direction: ready
+visual_composition: ready
+early_omni: pending
+visual_assets: pending
+implementation: pending
+qa: pending
+publish: pending
+target_date: unscheduled
+art_direction_handoff: "art-direction/el-coleccionista-art-direction-and-composition.md"
 ---
 
 # El coleccionista
