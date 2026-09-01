@@ -1,0 +1,170 @@
+name: Editorial v1 OMNI Final Gate 5
+
+on:
+  push:
+    branches:
+      - feat/editorial-v1-implementation
+    paths:
+      - .gate5/READY
+
+permissions:
+  contents: read
+
+jobs:
+  omni-final-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OMNI_MIN_SCORE: "0.82"
+    steps:
+      - name: Checkout active branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/editorial-v1-implementation
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install web dependencies
+        working-directory: apps/web
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: |
+          mkdir -p /tmp/omni-editorial-v1
+          cd /tmp/omni-editorial-v1
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Start editorial branch
+        working-directory: apps/web
+        env:
+          API_URL: https://api-production-fe2f.up.railway.app
+          NEXT_PUBLIC_API_URL: https://api-production-fe2f.up.railway.app
+        run: |
+          npm run dev -- --hostname 127.0.0.1 -p 3000 > /tmp/aromia-editorial-v1.log 2>&1 &
+          for i in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:3000/editorial-v1 >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/aromia-editorial-v1.log
+          exit 1
+
+      - name: OMNI rendered editorial inspection
+        working-directory: apps/web
+        run: |
+          mkdir -p artifacts/omni-final
+          cat > /tmp/omni-editorial-v1/gate.cjs <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+          const path = require('path');
+
+          const origin = 'http://127.0.0.1:3000';
+          const routes = [
+            '/editorial-v1',
+            '/editorial-v1/el-ambar-que-nunca-toco-una-ballena',
+            '/editorial-v1/el-perfumista-que-no-teme-exagerar',
+            '/editorial-v1/el-perfume-que-encargo-un-sultan',
+          ];
+          const viewports = [
+            { name: 'mobile', width: 390, height: 844 },
+            { name: 'desktop', width: 1440, height: 1000 },
+          ];
+          const locked = [
+            'ambroxan-resin-abstract-01.jpg',
+            'ropion-bordeaux-texture-01.jpg',
+            'amouage-mineral-density-01.jpg',
+          ];
+          const forbiddenReaderMetadata = ['PRESENT', 'PRODUCTION: HOLD', 'gate 3', 'gate 4', 'gate 5', 'branch:', 'sha:', 'data-slot-type'];
+          const report = { gate: 5, mode: 'rendered-final-photography', minScore: Number(process.env.OMNI_MIN_SCORE || 0.82), routes: {}, checks: [], blockers: [] };
+
+          const safe = (r) => r === '/editorial-v1' ? 'index' : r.split('/').pop();
+          const add = (key, ok, detail) => report.checks.push({ key, ok, detail });
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            for (const vp of viewports) {
+              for (const route of routes) {
+                const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 1 });
+                const consoleErrors = [];
+                const pageErrors = [];
+                page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+                page.on('pageerror', e => pageErrors.push(String(e.message || e)));
+                const res = await page.goto(origin + route, { waitUntil: 'networkidle', timeout: 60000 });
+                await page.waitForTimeout(500);
+                const metrics = await page.evaluate((forbidden) => {
+                  const bodyText = document.body.innerText || '';
+                  const images = [...document.images];
+                  const visible = el => {
+                    const r = el.getBoundingClientRect();
+                    const s = getComputedStyle(el);
+                    return r.width > 0 && r.height > 0 && s.display !== 'none' && s.visibility !== 'hidden';
+                  };
+                  const main = document.querySelector('main');
+                  const all = main ? [...main.querySelectorAll('*')].filter(visible) : [];
+                  const textEls = all.filter(el => el.children.length === 0 && (el.textContent || '').trim());
+                  const tiny = textEls.filter(el => parseFloat(getComputedStyle(el).fontSize) < 12).length;
+                  const placeholders = [...document.querySelectorAll('[aria-label]')].filter(el => /pendiente|reservado para imagen|área visual interpretativa/i.test(el.getAttribute('aria-label') || '') && el.tagName !== 'IMG').length;
+                  return {
+                    statusText: document.title,
+                    overflowX: Math.max(0, document.documentElement.scrollWidth - innerWidth),
+                    h1Count: document.querySelectorAll('h1').length,
+                    brokenImages: images.filter(i => i.complete && i.naturalWidth === 0).length,
+                    imageSrcs: images.map(i => i.currentSrc || i.src),
+                    tinyText: tiny,
+                    placeholders,
+                    metadataHits: forbidden.filter(t => bodyText.toLowerCase().includes(t.toLowerCase())),
+                    mainExists: Boolean(main),
+                  };
+                }, forbiddenReaderMetadata);
+                metrics.http = res?.status() || 0;
+                metrics.consoleErrors = consoleErrors.length;
+                metrics.pageErrors = pageErrors.length;
+                report.routes[`${vp.name}:${route}`] = metrics;
+                add(`${vp.name}:${route}:http`, metrics.http > 0 && metrics.http < 400, `HTTP ${metrics.http}`);
+                add(`${vp.name}:${route}:overflow`, metrics.overflowX <= 2, `${metrics.overflowX}px`);
+                add(`${vp.name}:${route}:h1`, metrics.h1Count === 1, `${metrics.h1Count}`);
+                add(`${vp.name}:${route}:images`, metrics.brokenImages === 0, `${metrics.brokenImages} broken`);
+                add(`${vp.name}:${route}:runtime`, metrics.pageErrors === 0, `${metrics.pageErrors} page errors`);
+                add(`${vp.name}:${route}:metadata`, metrics.metadataHits.length === 0, metrics.metadataHits.join(', ') || 'clean');
+                add(`${vp.name}:${route}:placeholders`, metrics.placeholders === 0, `${metrics.placeholders}`);
+                await page.screenshot({ path: path.join(process.cwd(), 'artifacts/omni-final', `${vp.name}-${safe(route)}.png`), fullPage: true });
+                await page.close();
+              }
+            }
+            await browser.close();
+
+            const indexDesktop = report.routes['desktop:/editorial-v1'];
+            for (const file of locked) {
+              const present = indexDesktop.imageSrcs.some(src => src.includes(file));
+              add(`locked-asset:${file}`, present, present ? 'rendered on editorial index' : 'missing from rendered editorial index');
+            }
+
+            const passed = report.checks.filter(c => c.ok).length;
+            report.score = passed / report.checks.length;
+            report.passed = report.score >= report.minScore && report.checks.every(c => !c.key.endsWith(':http') || c.ok) && report.checks.filter(c => c.key.startsWith('locked-asset:')).every(c => c.ok);
+            report.blockers = report.checks.filter(c => !c.ok && (c.key.endsWith(':http') || c.key.startsWith('locked-asset:') || c.key.endsWith(':images') || c.key.endsWith(':runtime')));
+            fs.writeFileSync(path.join(process.cwd(), 'artifacts/omni-final/report.json'), JSON.stringify(report, null, 2));
+            console.log(JSON.stringify({ score: report.score, minScore: report.minScore, passed: report.passed, checks: report.checks.length, failedChecks: report.checks.length - passed, blockers: report.blockers }, null, 2));
+            if (!report.passed) process.exit(1);
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
+          cd /tmp/omni-editorial-v1
+          OMNI_MIN_SCORE="${OMNI_MIN_SCORE}" node gate.cjs
+
+      - name: Upload OMNI Gate 5 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: editorial-v1-omni-final-${{ github.sha }}
+          path: apps/web/artifacts/omni-final/
+          retention-days: 14
+
+      - name: Print app logs on failure
+        if: failure()
+        run: tail -n 180 /tmp/aromia-editorial-v1.log || true
