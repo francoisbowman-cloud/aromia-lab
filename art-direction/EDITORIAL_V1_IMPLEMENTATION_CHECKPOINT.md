@@ -661,3 +661,28 @@ is the Publisher's call.
 QA green. **No push, no PR, no merge, no deploy yet** — those await explicit
 Publisher approval. `NEXT_ACTOR: Publisher (Brey)` — see `AROMIA_CURRENT_STATE.md`
 v13.
+
+---
+
+## 2026-09-01 (Code) — CUTOVER LANDED + production-verified
+
+- PR #121 rebased onto `efcc6df` (OMNI's "reopen for cutover" relay), CI green
+  (`web`, `api`, `code-and-governance`), squash-merged to `main` as
+  **`d7db02c`**; feature branch deleted.
+- Railway `web` production deploy **`fcb010e1` — SUCCESS** (commit `d7db02c`);
+  prior deploy rolled off.
+- Verified on `https://www.aromialab.com`:
+  - `/` → 200, `<title> "Aromia — Una fragancia, una historia"`,
+    `robots: index, follow`, `.ev1-nav` present, no `AromiaHome`.
+  - `/editorial-v1` → `308` → `/`;
+    `/editorial-v1/el-ambar-…` → `308` → `/historias/el-ambar-…`.
+  - `/historias/{sultan,ambar,perfumista}` → 200; per-story `<title>`;
+    `robots: index, follow`; `canonical https://aromialab.com/historias/<slug>`.
+  - `/editorial-v1/amouage-mineral-density-01.jpg` → 200 (asset, not redirected).
+  - `/magazine` `/descubrir` `/buscar` → 200, legacy global chrome intact.
+  - `sitemap.xml` lists the 3 `/historias/<slug>` URLs; `robots.txt` allows all.
+
+`CUTOVER: DONE`. `PRODUCTION: LIVE` with `/` = the editorial living cover.
+Relay → `AROMIA_CURRENT_STATE.md` v15. Non-blocking follow-ups (asset dir
+rename, mobile editorial menu, nav unification, unbuilt territories) are listed
+in the relay and are not a reopening of Editorial v1 art direction.

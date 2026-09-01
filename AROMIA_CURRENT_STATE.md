@@ -26,25 +26,31 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 14
+STATE_VERSION: 15
 UPDATED_AT: 2026-09-01
 LAST_ACTOR: Code (correction/production)
-LAST_ACTION: implemented the Editorial v1 public cutover on feat/editorial-v1-home-cutover — the approved editorial living cover now serves "/" and the three stories moved to /historias/[slug]; PR #120 had only added the isolated noindex /editorial-v1 surface and left "/" on the pre-editorial AromiaHome2026. Publisher approved push + PR + merge + deploy.
-ACTIVE_OBJECTIVE: Editorial v1 public cutover correction — make the approved editorial experience the canonical public Aromia entry at "/"
-ACTIVE_BRANCH: feat/editorial-v1-home-cutover
-CUTOVER_PR: #121 — OPEN against main (rebased onto efcc6df)
-LAST_RELEASE_COMMIT: 87861db8271eb2d77b3dfad8333751a8df201dea
-PRODUCTION: LIVE_BUT_INCOMPLETE — "/" still serves the legacy Home until PR #121 deploys
-RELEASE_PR: #120 — MERGED
-GATE_4: PASS on Editorial v1 implementation — run 33528075236 / job 99923918960
-FINAL_PHOTO_GATE_5: PASS on Editorial v1 implementation — run 33529763705 / job 99929653299 — score 0.9661016949 / threshold 0.82 — blockers 0
-CANONICAL_RELEASE_GATE: PASS on the release candidate — run 33530273538 / job 99931373862
-LOCAL_GATES (cutover): PASS — apps/web: npx tsc --noEmit clean · next lint clean · vitest 31/31 · next build (○ / static, ● /historias/[slug] SSG x3, no /editorial-v1 route)
-BROWSER_QA (cutover): PASS — desktop 1440 + mobile 375: "/" renders the living cover with single chrome (global NavBar/Footer hidden via the (editorial) layout), /historias/[slug] x3 render, interpretive + documentary images 200 through /_next/image, /editorial-v1 -> 308 -> /, /editorial-v1/:slug -> 308 -> /historias/:slug, /editorial-v1/*.jpg still 200, /magazine keeps the global chrome
-OMNI_GATE_5 (cutover): NOT RERUN — composition/copy/imagery/interpretive-vs-documentary classification byte-identical to the 0.9661 approved release; only route location, canonical nav targets and indexation changed. Optional re-run is the Publisher's call.
-NEXT_ACTOR: Code (correction/production)
-NEXT_ACTION: land PR #121 — confirm CI green on the branch, merge to main, verify the Railway web production deployment reaches SUCCESS, then verify the public URLs (/, /historias/<3 slugs>, /editorial-v1 + /editorial-v1/<slug> redirects, /magazine, /descubrir, /buscar) on the deployed origin and record the deployment id + commit here.
-BLOCKERS: none. Merge + deploy authorized by Publisher on 2026-09-01.
+LAST_ACTION: landed the Editorial v1 public cutover — PR #121 merged to main as d7db02c, Railway web production deploy fcb010e1 reached SUCCESS, and the deployed origin was verified: "/" now serves the editorial living cover, the three stories live at /historias/[slug], /editorial-v1[/*] 301-redirect into the new paths.
+ACTIVE_OBJECTIVE: Editorial v1 public cutover correction — DONE. "/" is the editorial experience.
+ACTIVE_BRANCH: main
+CUTOVER_PR: #121 — MERGED as d7db02cf59861f1acdb55087a5fabfc4e694b3c4
+LAST_RELEASE_COMMIT: d7db02cf59861f1acdb55087a5fabfc4e694b3c4
+PRODUCTION: LIVE — "/" = editorial living cover; verified on https://www.aromialab.com
+RELEASE_PR: #120 — MERGED (shipped only the isolated /editorial-v1 surface; #121 completed the cutover)
+CI (PR #121): PASS — web (test+lint+typecheck+build), api (lint+typecheck), code-and-governance
+RAILWAY_DEPLOYMENT: fcb010e1-8a00-4c68-82ae-17813a32f94e — SUCCESS — service web — commit d7db02c
+PROD_URL_VERIFICATION (2026-09-01, www.aromialab.com):
+  - / → 200, <title> "Aromia — Una fragancia, una historia", robots index,follow, .ev1-nav present, no AromiaHome
+  - /editorial-v1 → 308 → /
+  - /editorial-v1/el-ambar-que-nunca-toco-una-ballena → 308 → /historias/el-ambar-que-nunca-toco-una-ballena
+  - /historias/{el-perfume-que-encargo-un-sultan,el-ambar-que-nunca-toco-una-ballena,el-perfumista-que-no-teme-exagerar} → 200; per-story <title>; robots index,follow; canonical https://aromialab.com/historias/<slug>
+  - /editorial-v1/amouage-mineral-density-01.jpg → 200 (asset, not redirected)
+  - /magazine, /descubrir, /buscar → 200 (legacy global chrome intact)
+  - sitemap.xml lists the 3 /historias/<slug> URLs; robots.txt allows all
+GATE_4 / FINAL_PHOTO_GATE_5 / CANONICAL_RELEASE_GATE: PASS on the Editorial v1 implementation (unchanged from the #120 release evidence)
+OMNI_GATE_5 (cutover): NOT RERUN — composition/copy/imagery/interpretive-vs-documentary classification byte-identical to the 0.9661 approved release; only route location, canonical nav targets and indexation changed.
+NEXT_ACTOR: Maintenance / next editorial objective
+NEXT_ACTION: routine monitoring; pick the next editorial batch from drafts/ + AROMIA_EDITORIAL_CALENDAR.md. The KNOWN_FOLLOWUPS below are non-blocking cleanup, not a reopening of Editorial v1 art direction.
+BLOCKERS: none.
 KNOWN_FOLLOWUPS:
   - public/editorial-v1/ could not be renamed to public/historias/ this session (OS file lock); asset URLs stay /editorial-v1/*.jpg and the /editorial-v1/:slug redirect is scoped to dot-free slugs ([^.]+) to protect them. Cosmetic rename is a later chore.
   - Mobile editorial nav (.ev1-nav) hides its links with no menu; on mobile "/" the header exposes only AROMIA + search. Recommend a mobile menu (ChatGPT/Design).
@@ -81,7 +87,9 @@ Local gates + desktop/mobile browser QA green. Publisher approved merge + Railwa
 
 ## Deterministic transition
 
-`PR #120 released the isolated surface → PR #121 completes the cutover → CI green → merge to main → Railway deploy SUCCESS → verify public URLs on the deployed origin → PRODUCTION: LIVE with "/" = the editorial home`
+`PR #120 released the isolated surface → PR #121 completed the cutover → CI green → merged to main (d7db02c) → Railway web deploy fcb010e1 SUCCESS → public URLs verified on www.aromialab.com → PRODUCTION: LIVE with "/" = the editorial home.`
+
+Routine continuation now begins from `main` and discovers the next editorial objective from the repo. Do not reopen Editorial v1 art direction unless a new objective requires it.
 
 ## Actor-substitution rule
 
