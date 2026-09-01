@@ -37,7 +37,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
-    alt: "Campo abstracto de tonos ámbar cálidos con materia translúcida bajo luz lateral. Ilustración interpretativa, no una fotografía de ambroxan ni un diagrama científico.",
+    alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
     placeholderLabel:
       "Área visual interpretativa: estudio material del ambroxan. No representa evidencia documental.",
   },
@@ -61,7 +61,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
-    alt: "Franjas de materia burdeos saturada con un trazo intenso y un margen oscuro reservado. Ilustración interpretativa de la técnica de la sobredosis, no una fotografía de producto.",
+    alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
     placeholderLabel:
       "Área visual interpretativa: exceso floral controlado. No representa evidencia documental.",
   },
@@ -70,7 +70,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/amouage-mineral-density-01.jpg",
-    alt: "Estratos minerales grises con facetas translúcidas y trazos resinosos cálidos. Ilustración interpretativa de la densidad de una fórmula compleja, sin iconografía real ni el frasco.",
+    alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
     placeholderLabel:
       "Área visual interpretativa: densidad material. No representa evidencia documental.",
   },
