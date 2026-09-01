@@ -311,3 +311,50 @@ ChatGPT re-delivers three real interpretive images (valid JPEG/WebP, ~1600×900,
 Code flips the slots, re-runs Gate 4, and Gate 5 can run.
 
 `PRODUCTION: HOLD` unchanged. No merge, no deploy.
+
+---
+
+## Gate run — 2026-08-31 (Code) — interpretive SVG sources rasterised + wired
+
+ChatGPT's recovery (`ab13e58`): instead of binaries it committed three
+**SVG** source compositions under `art-direction/interpretive-source/` (valid
+UTF-8, no transport corruption) and asked Code to rasterise them locally.
+
+- **Rasterised** with `scripts/images/rasterize-editorial-v1.mjs` (sharp 0.35.3,
+  librsvg 2.62.3): each SVG → 1600×900 JPEG, `mozjpeg` q88, 4:4:4, white
+  flatten. Filters (`feTurbulence` / `feDisplacementMap` / grain) render.
+- **Validation** (all three): `file` → `JPEG image data … 1600x900`; magic
+  `ff d8 ff`; dimensions 1600×900. SHA-256 of the produced JPGs recorded:
+
+  | file | sha256 |
+  |---|---|
+  | ambroxan-resin-abstract-01.jpg | `89f82715c11ffe8ee05d45359ef39872a0f0810c76aca36dd3fc57529daee63f` |
+  | ropion-bordeaux-texture-01.jpg | `5b823709ee18f4e436a854f421e6287ae41c5e6ebb4cdb61741afe384dbd96a6` |
+  | amouage-mineral-density-01.jpg | `ab0d617b5ce9e27d87ae2a603d6b38f7333610448ef93181799691ea5d254b20` |
+
+  These overwrite the invalid 15 KB blobs from `5cf1702`.
+- **Authenticity audit**: all three are abstract vector/filter fields, clearly
+  `interpretive` — no whale/ocean/chemistry/bottle (Ámbar), no portrait/lab/
+  product gloss (Ropion), no crown/throne/palace/calligraphy/bottle (Amouage).
+  They are crude (flat shapes, weak grain) but on-brief; final aesthetic call
+  belongs to OMNI Gate 5.
+- **Wired**: the 3 interpretive `EDITORIAL_V1_SLOTS` entries → `present: true`
+  (fill/cover render, no caption). They fill the story hero `.story-visual` and,
+  on the home surface, `.ev1-resin` (lead) + the two `.ev1-material` counterpoints.
+
+### Gate 2 + Gate 4 re-run — PASS (desktop 1440 + mobile 375)
+- tsc / lint / build clean; 3 story routes prerender.
+- **Zero `role="img"` placeholders remain** on any route (relay step 7).
+- Image-count lock met per story: Ámbar 2/2, Ropion 1/1, Sultán 3/3.
+- Interpretive images load via `/_next/image`; documentary captions still
+  legible/unclipped; `noindex` on all 4; single nav + single footer; global
+  chrome `display:none`.
+- No horizontal overflow at 1440 or 375; no elements wider than viewport.
+- No page console errors.
+
+### Gate 5 — final OMNI: NOT RUN (approval-gated)
+The relay says "advance automatically to OMNI Gate 5". OMNI review is an API
+spend and needs explicit human go-ahead — not started. Everything upstream of it
+is now green with the real (if rough) assets in place.
+
+`PRODUCTION: HOLD` unchanged. No merge, no deploy.

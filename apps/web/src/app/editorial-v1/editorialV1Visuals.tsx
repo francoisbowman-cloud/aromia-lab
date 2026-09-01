@@ -35,9 +35,9 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ambroxan-material-interpretive": {
     id: "ambroxan-material-interpretive",
     type: "interpretive",
-    present: false,
-    file: null,
-    alt: "Estudio material abstracto que evoca la textura cálida y translúcida del ambroxan. No es una fotografía de cristal de ambroxan ni un diagrama científico.",
+    present: true,
+    file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
+    alt: "Campo abstracto de tonos ámbar cálidos con materia translúcida bajo luz lateral. Ilustración interpretativa, no una fotografía de ambroxan ni un diagrama científico.",
     placeholderLabel:
       "Área visual interpretativa: estudio material del ambroxan. No representa evidencia documental.",
   },
@@ -59,18 +59,18 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ropion-overdose-interpretive": {
     id: "ropion-overdose-interpretive",
     type: "interpretive",
-    present: false,
-    file: null,
-    alt: "Campo floral denso y saturado que encarna la técnica de la sobredosis en perfumería. No es una fotografía de producto ni un gráfico de medición.",
+    present: true,
+    file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
+    alt: "Franjas de materia burdeos saturada con un trazo intenso y un margen oscuro reservado. Ilustración interpretativa de la técnica de la sobredosis, no una fotografía de producto.",
     placeholderLabel:
       "Área visual interpretativa: exceso floral controlado. No representa evidencia documental.",
   },
   "amouage-material-density-interpretive": {
     id: "amouage-material-density-interpretive",
     type: "interpretive",
-    present: false,
-    file: null,
-    alt: "Bodegón material de densidad que evoca la ambición de una fórmula compleja. No representa literalmente los ingredientes de Gold Man.",
+    present: true,
+    file: "/editorial-v1/amouage-mineral-density-01.jpg",
+    alt: "Estratos minerales grises con facetas translúcidas y trazos resinosos cálidos. Ilustración interpretativa de la densidad de una fórmula compleja, sin iconografía real ni el frasco.",
     placeholderLabel:
       "Área visual interpretativa: densidad material. No representa evidencia documental.",
   },
