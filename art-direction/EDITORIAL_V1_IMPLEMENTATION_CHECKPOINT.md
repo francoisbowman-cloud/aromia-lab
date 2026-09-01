@@ -446,3 +446,44 @@ now green. **`PRODUCTION: HOLD` still in force** — lifting the hold, opening a
 PR to `main`, and deploying are Brey's decision, not an OMNI output. The
 polish-later items (ev1-02 crop, ev1-04 cutover metadata, optional ev1-01
 amouage-stroke polish) can be handled in the cutover PR or a follow-up.
+
+---
+
+## Post-gate visual polish (2026-08-31) — non-blocking, no OMNI re-run
+
+Applied the Publisher-approved bounded polish from
+`art-direction/EDITORIAL_V1_POST_GATE_VISUAL_POLISH.md` + relay `1759589`.
+Changes are not material to composition/layout/imagery/typography, so recorded
+here as a polish validation rather than a new OMNI submission (per the polish
+doc, step 7).
+
+- **Reader-facing metadata leak removed.** `page.tsx` footer
+  `Editorial v1 · superficie aislada` → `Materias e historias, con contexto`.
+- **DOM technical flags dropped.** `data-slot-type` attributes removed from both
+  `<figure>` branches in `editorialV1Visuals.tsx` (no CSS depended on them).
+- **De-gold.** `story.css` `.amouage .section-1` background `#d9cfbc` → stone
+  `#d8d4cb` (ink text on it ≈ 14:1 contrast, AA pass). Confirmed there is no
+  gold/yellow semantic accent anywhere in the UI layer — arrows, kickers,
+  section numbers and nav links all inherit ink; chromatic rhythm already
+  varies per story (ivory → burgundy inverted → stone → ivory).
+- Documentary imagery, provenance captions, canonical copy, routes, `noindex`
+  and the `:focus-visible` fix all preserved.
+
+### QA (desktop 1440 + fetch checks on all 4 routes)
+- tsc / lint / build clean; 3 story routes prerender.
+- `noindex, nofollow` on all 4 routes; page HTML carries no `PRESENT` / gate /
+  branch / sha / path / "superficie aislada" / `data-slot-type` strings.
+- No horizontal overflow at 1440; 0 wide elements; 0 placeholders; global chrome
+  `none/none`; 1 `.ev1-nav`; `:focus-visible` rule present.
+- Gen-2 interpretive rasters confirmed serving via the Next optimiser
+  (amouage w=828 → granular mineral strata, not the gen-1 flat field). NB: the
+  local dev image cache (`apps/web/.next/cache/images`) must be cleared after
+  replacing an asset at the same path or the old raster keeps serving; the
+  browser-pane also lazy-loads `next/image` unreliably, so pane screenshots of
+  the heroes can show the CSS placeholder — the committed + optimiser-served
+  bytes are the source of truth.
+
+### Repo relay
+`AROMIA_CURRENT_STATE.md` was brought onto this branch and updated to
+STATE_VERSION 7: `NEXT_ACTOR: Publisher (Brey)`, `NEXT_ACTION:` decide on
+lifting `PRODUCTION: HOLD` / cutover PR / deploy. No technical blockers remain.

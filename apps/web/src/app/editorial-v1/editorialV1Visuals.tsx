@@ -137,7 +137,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
   // Documentary: intrinsic image, provenance caption in normal flow below.
   if (slot.width && slot.height) {
     return (
-      <figure className={`${className} ev1-doc-figure`} data-slot-type="documentary">
+      <figure className={`${className} ev1-doc-figure`}>
         <Image
           className="ev1-doc-img"
           src={slot.file}
@@ -153,7 +153,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
 
   // Interpretive: fill cover.
   return (
-    <figure className={className} data-slot-type="interpretive">
+    <figure className={className}>
       <Image
         src={slot.file}
         alt={slot.alt}

@@ -104,7 +104,7 @@ export default function EditorialV1Page() {
       <footer className="ev1-footer">
         <span>AROMIA</span>
         <p>Una fragancia, una historia.</p>
-        <small>Editorial v1 · superficie aislada</small>
+        <small>Materias e historias, con contexto</small>
       </footer>
     </main>
   );
