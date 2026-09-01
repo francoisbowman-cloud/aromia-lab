@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs>
+  <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#171a1b"/><stop offset=".27" stop-color="#4d5151"/><stop offset=".57" stop-color="#b9b4a9"/><stop offset=".79" stop-color="#67635c"/><stop offset="1" stop-color="#252626"/></linearGradient>
+  <linearGradient id="resin" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#4a2d18"/><stop offset=".46" stop-color="#b97932"/><stop offset=".72" stop-color="#d3a35e"/><stop offset="1" stop-color="#5c3a21"/></linearGradient>
+  <filter id="mineral" x="-18%" y="-18%" width="136%" height="136%">
+    <feTurbulence type="fractalNoise" baseFrequency=".004 .019" numOctaves="6" seed="73" result="coarse"/>
+    <feTurbulence type="turbulence" baseFrequency=".031 .057" numOctaves="3" seed="26" result="fine"/>
+    <feBlend in="coarse" in2="fine" mode="overlay" result="rock"/>
+    <feDisplacementMap in="SourceGraphic" in2="rock" scale="112" xChannelSelector="R" yChannelSelector="B" result="distort"/>
+    <feSpecularLighting in="fine" surfaceScale="5" specularConstant=".31" specularExponent="20" lighting-color="#e8dfc9" result="spec"><feDistantLight azimuth="210" elevation="38"/></feSpecularLighting>
+    <feBlend in="distort" in2="spec" mode="screen"/>
+  </filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".22" numOctaves="3" seed="14"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .08 0"/></filter>
+  <radialGradient id="shade" cx="26%" cy="31%" r="86%"><stop offset="0" stop-color="#efe9db" stop-opacity=".24"/><stop offset=".55" stop-color="#303235" stop-opacity="0"/><stop offset="1" stop-color="#111314" stop-opacity=".68"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="#171a1b"/>
+<g filter="url(#mineral)">
+  <path d="M-140 74c257 111 400 53 605 126 221 78 366 184 583 156 208-27 349-120 692-13v263c-278-81-464-38-650 25-229 78-411-1-619-59-201-56-356-22-611 42Z" fill="url(#stone)"/>
+  <path d="M-130 545c241-74 424 19 620 17 230-3 387-103 595-83 189 18 317 95 555 164v300H-130Z" fill="#8b8982" opacity=".86"/>
+  <path d="M-22 793c184-92 335-122 501-93 180 31 323 93 498 55 192-42 292-131 561-119" fill="none" stroke="#d1cec4" stroke-opacity=".23" stroke-width="84" stroke-linecap="round"/>
+</g>
+<path d="M156 853C336 662 479 560 633 443c163-123 280-226 503-348" fill="none" stroke="url(#resin)" stroke-width="48" stroke-linecap="round" opacity=".78"/>
+<path d="M320 900c121-170 241-274 356-358 103-76 193-165 313-315" fill="none" stroke="#c3a16e" stroke-opacity=".48" stroke-width="8" stroke-linecap="round"/>
+<g fill="none" stroke="#d9d2c3" stroke-opacity=".21" stroke-width="3">
+  <path d="M1110 120l154 62-47 132-168-45z"/>
+  <path d="M933 511l182-49 83 137-153 108-164-61z"/>
+  <path d="M214 248l146-72 126 112-102 148-170-51z"/>
+</g>
+<rect width="1600" height="900" fill="url(#shade)"/>
+<rect width="1600" height="900" filter="url(#grain)" opacity=".72" style="mix-blend-mode:soft-light"/>
+</svg>

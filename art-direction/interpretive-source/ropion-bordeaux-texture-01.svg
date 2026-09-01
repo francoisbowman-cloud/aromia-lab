@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1b090d"/><stop offset=".42" stop-color="#551022"/><stop offset=".77" stop-color="#2a0a13"/><stop offset="1" stop-color="#0e080a"/></linearGradient>
+  <radialGradient id="wine" cx="35%" cy="44%" r="73%"><stop offset="0" stop-color="#b42f4d"/><stop offset=".34" stop-color="#7a1730"/><stop offset=".72" stop-color="#42101d"/><stop offset="1" stop-color="#16090d"/></radialGradient>
+  <filter id="petal" x="-18%" y="-18%" width="136%" height="136%">
+    <feTurbulence type="fractalNoise" baseFrequency=".005 .021" numOctaves="5" seed="61" result="large"/>
+    <feTurbulence type="turbulence" baseFrequency=".024 .071" numOctaves="3" seed="12" result="small"/>
+    <feBlend in="large" in2="small" mode="multiply" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="126" xChannelSelector="R" yChannelSelector="G" result="folded"/>
+    <feGaussianBlur in="folded" stdDeviation=".5" result="soft"/>
+    <feSpecularLighting in="small" surfaceScale="6" specularConstant=".36" specularExponent="22" lighting-color="#d65d75" result="spec"><feDistantLight azimuth="235" elevation="33"/></feSpecularLighting>
+    <feBlend in="soft" in2="spec" mode="screen"/>
+  </filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".29" numOctaves="2" seed="8"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .08 0"/></filter>
+  <linearGradient id="quiet" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#16090d" stop-opacity="0"/><stop offset=".36" stop-color="#13090c" stop-opacity=".18"/><stop offset="1" stop-color="#0f090a" stop-opacity=".98"/></linearGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<g filter="url(#petal)">
+  <path d="M-130 180C102 53 328 84 492 153c168 71 246 181 397 172 129-8 221-94 396-116 117-15 211 3 346 61v230c-195-56-326-38-456 26-151 75-303 86-459 18-182-78-335-117-486-68-145 47-244 125-360 197Z" fill="url(#wine)" opacity=".98"/>
+  <path d="M-80 556c176-102 333-108 493-61 157 46 255 131 414 126 147-5 249-91 411-121 128-24 247 2 393 69v292c-174-74-315-84-449-36-151 54-273 103-438 72-161-30-258-110-421-98-145 11-266 76-403 118Z" fill="#6d1429" opacity=".87"/>
+  <path d="M54 733c183-109 318-228 475-261 177-37 298 41 429 30 146-12 244-104 405-134" fill="none" stroke="#c84d69" stroke-opacity=".30" stroke-width="70" stroke-linecap="round"/>
+</g>
+<rect x="1185" y="0" width="415" height="900" fill="url(#quiet)"/>
+<rect width="1600" height="900" filter="url(#grain)" opacity=".75" style="mix-blend-mode:soft-light"/>
+<rect width="1600" height="900" fill="#16090d" opacity=".08"/>
+</svg>
