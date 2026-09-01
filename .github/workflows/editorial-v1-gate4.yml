@@ -1,0 +1,67 @@
+name: Editorial v1 Gate 4 Technical QA
+
+on:
+  push:
+    branches:
+      - feat/editorial-v1-implementation
+    paths:
+      - .gate4/READY
+
+permissions:
+  contents: read
+
+jobs:
+  gate4:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/editorial-v1-implementation
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm ci
+        working-directory: apps/web
+
+      - name: Validate final photographic assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json, hashlib
+          manifest = json.loads(Path('art-direction/EDITORIAL_V1_FINAL_PHOTO_ASSETS.json').read_text())
+          root = Path('apps/web/public/editorial-v1')
+          for name, meta in manifest['outputs'].items():
+              p = root / name
+              if not p.exists(): raise SystemExit(f'missing {p}')
+              data = p.read_bytes()
+              if data[:3] != b'\xff\xd8\xff': raise SystemExit(f'{name}: bad JPEG magic')
+              im = Image.open(p); im.verify()
+              im = Image.open(p)
+              if im.size != (1600,900) or im.format != 'JPEG': raise SystemExit(f'{name}: {im.format} {im.size}')
+              if hashlib.sha256(data).hexdigest() != meta['sha256']: raise SystemExit(f'{name}: SHA mismatch')
+              print(name, im.format, im.size, len(data), meta['sha256'])
+          PY
+
+      - name: TypeScript
+        run: npx tsc --noEmit
+        working-directory: apps/web
+
+      - name: Lint
+        run: npm run lint
+        working-directory: apps/web
+
+      - name: Unit tests
+        run: npm test -- --passWithNoTests
+        working-directory: apps/web
+
+      - name: Production build
+        run: npm run build
+        working-directory: apps/web
