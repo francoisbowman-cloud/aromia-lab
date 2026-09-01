@@ -14,29 +14,14 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Pillow
-        run: python -m pip install --quiet pillow
-
-      - name: Probe signed Canva asset URLs
+      - name: Probe Canva view URL
         shell: bash
         run: |
           set -euxo pipefail
-          python - <<'PY'
-          import urllib.request, io
-          from PIL import Image
-
-          urls = {
-            'ambroxan_thumb': 'https://media.canva.com/v2/image-resize/format:JPG/height:112/quality:75/uri:ifs%3A%2F%2FM%2F0f7ae4fd-bb2a-4b0b-b2cf-fc4e95dd6bee/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAKKEtrxngPIBxZu7Lr4DJN2cjjKvqPfD6-89npvIpa7s&exp=1788290494&osig=AAAAAAAAAAAAAAAAAAAAAJHSPaqN98VorpBTdwTJAP2oE3O8C_VX0roMpB8vhZi4&signer=media-rpc&x-canva-quality=thumbnail',
-            'ambroxan_full_try': 'https://media.canva.com/v2/image-resize/format:JPG/height:900/quality:100/uri:ifs%3A%2F%2FM%2F0f7ae4fd-bb2a-4b0b-b2cf-fc4e95dd6bee/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAKKEtrxngPIBxZu7Lr4DJN2cjjKvqPfD6-89npvIpa7s&exp=1788290494&osig=AAAAAAAAAAAAAAAAAAAAAJHSPaqN98VorpBTdwTJAP2oE3O8C_VX0roMpB8vhZi4&signer=media-rpc&x-canva-quality=thumbnail',
-          }
-
-          for name, url in urls.items():
-              try:
-                  req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
-                  raw = urllib.request.urlopen(req, timeout=30).read()
-                  print(name, 'bytes', len(raw), 'magic', raw[:3].hex())
-                  im = Image.open(io.BytesIO(raw))
-                  print(name, 'decoded', im.format, im.size)
-              except Exception as e:
-                  print(name, 'FAILED', repr(e))
-          PY
+          curl -L --max-time 45 -A 'Mozilla/5.0' -D /tmp/headers.txt -o /tmp/page.html 'https://www.canva.com/d/8ZZZUbqx_jXlbpE'
+          echo '--- final headers ---'
+          tail -40 /tmp/headers.txt
+          echo '--- bytes ---'
+          wc -c /tmp/page.html
+          echo '--- title/canonical hints ---'
+          grep -Eio '<title>[^<]*|https://[^" ]+|DAHT7ZOzs7o|657717806' /tmp/page.html | head -80 || true
