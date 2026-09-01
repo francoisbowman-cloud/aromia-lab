@@ -19,56 +19,66 @@ Meaning:
 - **ChatGPT** — art direction, visual composition and visual asset decisions/creation.
 - **Code (implementation)** — wire assets and canonical copy, render and run technical/browser QA.
 - **OMNI** — final rendered-experience gate.
-- **Code (correction/production)** — correct failures, reach publishable state, and only merge/deploy when authorized.
+- **Code (correction/production)** — correct failures, reach publishable state, and merge/deploy when publication is authorized.
 
 The human Publisher does not carry routine handoffs between actors. The repo carries them.
 
 ## Current relay
 
 ```text
-STATE_VERSION: 6
-UPDATED_AT: 2026-08-31
-LAST_ACTOR: ChatGPT
-LAST_ACTION: responded to OMNI Gate 5 blocker ev1-01 by replacing all three interpretive SVG sources with higher-craft material studies and leaving a deterministic re-raster/re-gate relay
-ACTIVE_OBJECTIVE: Editorial v1 implementation
-ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD: d2b50f31a9bb2b2aad3d0fbc45cef4e69d326d18
-PRODUCTION: HOLD
-NEXT_ACTOR: Code
-NEXT_ACTION: rasterize the upgraded interpretive sources to the same 3 JPG names, validate fresh JPEGs/hashes, rerun Gate 4 at 1440/375, then resubmit automatically to OMNI Gate 5
-BLOCKERS: Gate 5 remains blocked only until Code renders and OMNI evaluates the upgraded sources; previous raster JPGs from the earlier flat sources are obsolete
-PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
+STATE_VERSION: 12
+UPDATED_AT: 2026-09-01
+LAST_ACTOR: Production
+LAST_ACTION: released Editorial v1 with the approved photographic lead assets through PR #120, canonical release gating, merge to main, and successful Railway production deployment
+ACTIVE_OBJECTIVE: Editorial v1 photographic release — CLOSED
+ACTIVE_BRANCH: main
+VERIFIED_RELEASE_COMMIT: 87861db8271eb2d77b3dfad8333751a8df201dea
+RELEASE_PR: #120 — MERGED
+PRODUCTION: LIVE
+GATE_4: PASS — run 33528075236 / job 99923918960
+FINAL_PHOTO_GATE_5: PASS — run 33529763705 / job 99929653299 — score 0.9661016949 / threshold 0.82 — blockers 0 — evidence artifact 9809294886
+CANONICAL_RELEASE_GATE: PASS — run 33530273538 / job 99931373862
+RAILWAY_DEPLOYMENT: 0b588bc5-a29f-4572-9bc5-96ae9fad846e — SUCCESS — web production — commit 87861db8271eb2d77b3dfad8333751a8df201dea
+NEXT_ACTOR: Maintenance
+NEXT_ACTION: routine monitoring and future editorial batches; do not reopen Editorial v1 art direction unless a new product/editorial objective explicitly requires it
+BLOCKERS: none
+PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Latest verified Gate 5 context
+## Editorial v1 release closure
 
-The active branch advanced beyond the previous state file. Code successfully rasterized the first SVG source set, wired all slots, passed Gate 4 and ran OMNI Gate 5. OMNI returned `BLOCKED` on `ev1-01` because the three interpretive hero/lead images read too flat/vector-like for Aromia's luxury-editorial bar.
+The final photographic direction is implemented and published. The three canonical interpretive assets are real JPEG binaries at exactly `1600×900`, were decoded and hash-validated in Gate 4, rendered in the final browser gate, and remain explicitly classified as interpretive rather than documentary evidence:
 
-ChatGPT has now remediated that exact blocker by upgrading the three canonical sources under `art-direction/interpretive-source/`:
+- `apps/web/public/editorial-v1/ambroxan-resin-abstract-01.jpg`
+- `apps/web/public/editorial-v1/ropion-bordeaux-texture-01.jpg`
+- `apps/web/public/editorial-v1/amouage-mineral-density-01.jpg`
 
-- `ambroxan-resin-abstract-01.svg`
-- `ropion-bordeaux-texture-01.svg`
-- `amouage-mineral-density-01.svg`
+Documentary imagery keeps its separate provenance treatment. No generated interpretive image should be relabeled as documentary evidence.
 
-The updated compositions use multi-scale turbulence, displacement, specular-lighting, grain and more natural tonal depth. They preserve all existing no-fabrication constraints.
+## Release evidence
+
+- Final photo asset integration commit before release: `f9026587c25e0408941eb1b1aa88c4005223b63e`.
+- Gate 4: `PASS`, workflow run `33528075236`, job `99923918960`.
+- Final-photo OMNI Gate 5: `PASS`, workflow run `33529763705`, job `99929653299`, score `0.9661016949152542` against `0.82`, zero blockers. The two reported `PRESENT` metadata findings were non-blocking substring false positives in reader copy, not implementation metadata.
+- Canonical OMNI Final Aromia Release Gate: `PASS`, workflow run `33530273538`, job `99931373862`.
+- Release PR `#120` merged to `main` as `87861db8271eb2d77b3dfad8333751a8df201dea`.
+- Railway production web deployment `0b588bc5-a29f-4572-9bc5-96ae9fad846e` reached `SUCCESS`; startup preflight reported catalog source `private`, count `125`, and Next.js reached `Ready`.
 
 ## Deterministic transition
 
-The next valid transition is:
+Editorial v1 is no longer an in-flight release. Routine continuation now begins from `main` and should discover the next editorial objective from the repo rather than reopening this completed gate sequence.
 
-`Code rasterizes upgraded sources → validates JPGs → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
-
-Code must not ask the human whether to perform these routine steps. If Gate 5 remains blocked, the specific visual finding routes back to ChatGPT/Design automatically. If it clears, Code continues production preparation while preserving `PRODUCTION: HOLD` until explicit publication approval.
+`Production LIVE → Maintenance / next editorial batch`
 
 ## Rules for every actor
 
 When receiving **Continúa Aromia desde el repo**:
 
 1. Read this file first.
-2. Verify `ACTIVE_BRANCH` and `VERIFIED_BRANCH_HEAD` against GitHub before trusting the relay.
-3. Inspect the referenced handoff/checkpoint and any newer relevant branch commits.
+2. Verify `ACTIVE_BRANCH` and the latest relevant `main` head against GitHub before trusting the relay.
+3. Inspect the referenced handoff/checkpoint and any newer relevant commits.
 4. If the state is stale, repair this file from the newest verifiable repository evidence before continuing.
 5. Execute only the work belonging to your role.
 6. At the end of your phase, update this file so `LAST_ACTOR`, `LAST_ACTION`, `NEXT_ACTOR`, `NEXT_ACTION`, branch/SHA, blockers and handoff paths describe the new reality.
@@ -83,7 +93,7 @@ If sources disagree, resolve in this order:
 
 `verifiable Git branch/head + newest checkpoint/relay → this file → older handoffs → conversational memory`
 
-`main` remains the production baseline, but an active Code-controlled remote branch under `PRODUCTION: HOLD` may be the authoritative working surface for an in-flight objective.
+`main` is the production baseline.
 
 ## Human interface
 
