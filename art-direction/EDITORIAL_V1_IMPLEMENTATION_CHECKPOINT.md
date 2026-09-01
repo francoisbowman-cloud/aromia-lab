@@ -400,3 +400,49 @@ commercial = clear.
 `GATE_5: BLOCKED` on ev1-01. `PRODUCTION: HOLD` stays. No merge, no deploy.
 Next actor: **ChatGPT/Design** — deliver higher-craft interpretive assets for
 the 3 hero/lead slots, then Code re-wires, re-runs Gate 4, and re-submits Gate 5.
+
+---
+
+## Gate 5 — re-submitted: APPROVED_WITH_NON_BLOCKING_REFINEMENTS (2026-08-31)
+
+ChatGPT's remediation (`1e9b43b` / `96125b3` / `b13ec06` + relay `d2b50f3`)
+replaced the 3 interpretive SVG sources with higher-craft versions (multi-scale
+blended turbulence, higher displacement, specular-lighting passes). Code
+re-rasterised via `scripts/images/rasterize-editorial-v1.mjs`:
+
+| file | gen-2 size | gen-2 sha256 |
+|---|---|---|
+| ambroxan-resin-abstract-01.jpg | 603 KB | `fadde29d6755b71aad8fccddca44b14fe0e65ff75e897affd90d44cd162801fc` |
+| ropion-bordeaux-texture-01.jpg | 401 KB | `3150389d16161459f2976a354938d67045928c8fe5533b52eb29c324272e3062` |
+| amouage-mineral-density-01.jpg | 275 KB | `e30646964a244849c1edebcae7014dce5fb9ecc5993929e5ba0b6caf6e007aa2` |
+
+Note for local dev: the Next image optimiser caches by URL, so after replacing a
+file at the same path you must `rm -rf apps/web/.next/cache/images` and restart
+the dev server, or the old raster keeps serving.
+
+### OMNI Gate 5 result
+`omni_release_gate` → **APPROVED_WITH_NON_BLOCKING_REFINEMENTS**, overall
+confidence 0.844. **0 blockers, 0 must-fix-now, 0 should-fix-soon.**
+All 6 findings are `cosmetic` / polish-later:
+- **ev1-01** — cleared. Heroes now read as deliberate material studies
+  (granular amber / folded burgundy / mineral strata). Residual: the amouage
+  brass strokes still read graphic against the textured ground — optional
+  future polish.
+- **ev1-02** — documentary crop still plumbed not art-directed (60/40 for the
+  botanical pivot suggested).
+- **ev1-03** — RESOLVED (`:focus-visible` outline added).
+- **ev1-04** — indexation: flip `noindex` + real per-route metadata at cutover.
+- **ev1-05 / ev1-06** — positive (documentary provenance; editorial composition).
+
+### Gate 4 re-run (gen-2) — PASS
+All 3 story heroes wired to their gen-2 file; `noindex` on all routes; no
+horizontal overflow; 0 placeholders; global chrome hidden; 1 nav; tsc/lint/build
+clean. Gen-2 texture confirmed rendering at desktop (Ámbar + Sultán heroes)
+after clearing the image cache.
+
+### Status
+`GATE_5: PASS (approved with non-blocking refinements)`. All 5 Next-gates are
+now green. **`PRODUCTION: HOLD` still in force** — lifting the hold, opening a
+PR to `main`, and deploying are Brey's decision, not an OMNI output. The
+polish-later items (ev1-02 crop, ev1-04 cutover metadata, optional ev1-01
+amouage-stroke polish) can be handled in the cutover PR or a follow-up.
