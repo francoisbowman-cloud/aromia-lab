@@ -26,43 +26,41 @@ The human Publisher does not carry routine handoffs between actors. The repo car
 ## Current relay
 
 ```text
-STATE_VERSION: 5
+STATE_VERSION: 6
 UPDATED_AT: 2026-08-31
 LAST_ACTOR: ChatGPT
-LAST_ACTION: repaired the failed binary handoff by committing three deterministic 1600x900 SVG interpretive source compositions and a Code materialization relay
+LAST_ACTION: responded to OMNI Gate 5 blocker ev1-01 by replacing all three interpretive SVG sources with higher-craft material studies and leaving a deterministic re-raster/re-gate relay
 ACTIVE_OBJECTIVE: Editorial v1 implementation
 ACTIVE_BRANCH: feat/editorial-v1-implementation
-VERIFIED_BRANCH_HEAD: ab13e5834b6bef9dac78bb8d55a528ee1c31f8c9
+VERIFIED_BRANCH_HEAD: d2b50f31a9bb2b2aad3d0fbc45cef4e69d326d18
 PRODUCTION: HOLD
 NEXT_ACTOR: Code
-NEXT_ACTION: rasterize the three canonical SVG sources to the exact JPG filenames at 1600x900, validate JPEG magic/dimensions/hashes, replace the invalid prior blobs, set interpretive slots present:true, rerun Gate 4, then advance automatically to OMNI Gate 5 if Gate 4 passes
-BLOCKERS: none before Code materialization; the prior 5cf1702 JPG blobs are invalid and must not be wired
+NEXT_ACTION: rasterize the upgraded interpretive sources to the same 3 JPG names, validate fresh JPEGs/hashes, rerun Gate 4 at 1440/375, then resubmit automatically to OMNI Gate 5
+BLOCKERS: Gate 5 remains blocked only until Code renders and OMNI evaluates the upgraded sources; previous raster JPGs from the earlier flat sources are obsolete
 PRIMARY_HANDOFF: art-direction/EDITORIAL_V1_RELAY_CHATGPT_TO_CODE.md
 UPSTREAM_RELAY: art-direction/EDITORIAL_V1_GATE3_CHATGPT_DECISIONS.md
 CHECKPOINT: art-direction/EDITORIAL_V1_IMPLEMENTATION_CHECKPOINT.md
 ```
 
-## Important correction
+## Latest verified Gate 5 context
 
-Code correctly rejected commit `5cf1702cb0a2cfc0a3fb27d81d3cea0752f9ba81`: its three `.jpg` blobs did not decode as images and did not match the declared hashes. That failure is preserved as evidence and must not be treated as Gate 3 completion.
+The active branch advanced beyond the previous state file. Code successfully rasterized the first SVG source set, wired all slots, passed Gate 4 and ran OMNI Gate 5. OMNI returned `BLOCKED` on `ev1-01` because the three interpretive hero/lead images read too flat/vector-like for Aromia's luxury-editorial bar.
 
-The current authoritative interpretive sources are now versioned as text-safe SVGs under:
+ChatGPT has now remediated that exact blocker by upgrading the three canonical sources under `art-direction/interpretive-source/`:
 
-`art-direction/interpretive-source/`
+- `ambroxan-resin-abstract-01.svg`
+- `ropion-bordeaux-texture-01.svg`
+- `amouage-mineral-density-01.svg`
 
-- `ambroxan-resin-abstract-01.svg` — 1600×900 source
-- `ropion-bordeaux-texture-01.svg` — 1600×900 source
-- `amouage-mineral-density-01.svg` — 1600×900 source
-
-Code owns deterministic raster materialization to the exact required JPG names. This avoids external ZIP transport and avoids another fragile binary connector handoff.
+The updated compositions use multi-scale turbulence, displacement, specular-lighting, grain and more natural tonal depth. They preserve all existing no-fabrication constraints.
 
 ## Deterministic transition
 
 The next valid transition is:
 
-`Code rasterizes SVG sources → validates real JPGs → present:true → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
+`Code rasterizes upgraded sources → validates JPGs → Gate 4 → OMNI Gate 5 → Code fixes if required → production approval`
 
-Code must not ask the human whether to perform these routine steps; the repo already determines the transition.
+Code must not ask the human whether to perform these routine steps. If Gate 5 remains blocked, the specific visual finding routes back to ChatGPT/Design automatically. If it clears, Code continues production preparation while preserving `PRODUCTION: HOLD` until explicit publication approval.
 
 ## Rules for every actor
 
