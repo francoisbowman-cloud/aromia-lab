@@ -487,3 +487,60 @@ doc, step 7).
 `AROMIA_CURRENT_STATE.md` was brought onto this branch and updated to
 STATE_VERSION 7: `NEXT_ACTOR: Publisher (Brey)`, `NEXT_ACTION:` decide on
 lifting `PRODUCTION: HOLD` / cutover PR / deploy. No technical blockers remain.
+
+---
+
+## Gate run — 2026-09-01 (Code) — "final photographic" binary handoff REJECTED, baseline restored
+
+Pulled `feat/editorial-v1-implementation` to `251bbc4`. State file (v9) instructed
+Code to verify 3 "locked final photographic" JPEGs installed by `d6dd6a1`
+("install locked final photographic rasters"), wire them, run Gate 4, then Gate 5.
+
+**The three files are not valid images. Not wired, no Gate 4 against them, no Gate 5.**
+This is the **third** iteration of the same failed binary transport
+(`5cf1702` → rejected `dfa761b`; `d6dd6a1` → rejected here).
+
+Evidence:
+- `file apps/web/public/editorial-v1/{ambroxan-resin-abstract-01,ropion-bordeaux-texture-01,amouage-mineral-density-01}.jpg`
+  → `data` for all three. No `FF D8 FF` JPEG magic (first bytes `c9 f7 24 dc`,
+  `ff 73 fc 3e`, `6e 6e 81 10`); high-entropy, not decodable.
+- Sizes 14 999 / 10 652 / 14 997 bytes — a photographic 1600×900 JPEG is
+  ~150–600 KB. The pre-`d6dd6a1` files at `e7e91e7` were valid
+  (`JPEG … 1600x900`, 603 / 401 / 275 KB).
+- `d6dd6a1` diff: `Bin 603515 -> 14999`, `Bin 401226 -> 10652`,
+  `Bin 274976 -> 14997` — it overwrote the OMNI-approved gen-2 rasters with the
+  15 KB non-images.
+- The CI transport (`ba93121`, `.github/workflows/editorial-v1-final-photo-assets.yml`)
+  fetched from a signed Canva media URL with `exp=1788254593` and `contents: write`;
+  it produced nothing usable and the state file itself flags it as failed.
+
+Correction applied on-branch (no push yet at write time):
+- `git checkout e7e91e7 -- <the 3 .jpg>` — restored the OMNI Gate-5-approved gen-2
+  interpretive rasters (valid `JPEG … progressive … 1600x900`, 603 / 401 / 275 KB).
+  This is the safety baseline the state file itself names.
+- Removed `.github/workflows/editorial-v1-final-photo-assets.yml` — failed
+  external-URL transport with write permission; dead scaffolding.
+- Interpretive `EDITORIAL_V1_SLOTS` entries unchanged (still `present: true`,
+  same filenames) — the restore is byte-identical to the approved state.
+
+### Verification of the restored branch — PASS
+- `tsc --noEmit` clean; `next lint` clean (apps/web).
+- All 4 routes 200 (`/editorial-v1` + 3 `[slug]`).
+- Next image optimiser serves all 3 interpretive JPEGs: `200 image/jpeg`
+  (`?w=1920&q=75` → 215 / 188 / 142 KB) — would 500 on the corrupt bytes.
+- `noindex` present on `/editorial-v1` and the Sultán route; no `PRESENT` /
+  `gate` / branch / 40-hex / `placeholder` strings in page HTML.
+- No composition/copy/classification change — rendered experience is exactly the
+  one OMNI approved at 0.844.
+
+### Still blocking
+1. **ChatGPT** must deliver the 3 final photographic 1600×900 JPEGs through a
+   transport that lands valid, decodable binaries in the repo — e.g. commit the
+   actual encoded files (verified `FF D8 FF` + `identify` 1600×900 before
+   committing), or hand Code a source Code can rasterise/fetch deterministically.
+   Not raw paste, not an expiring signed URL in CI.
+2. Because the current heroes are the already-approved gen-2 rasters, publication
+   is **not** blocked on the photographic upgrade — Brey may cut over on the
+   approved baseline and treat the photographic pass as a follow-up, or hold for it.
+
+`PRODUCTION: HOLD` unchanged. No merge, no deploy.
