@@ -7,9 +7,9 @@ import Footer from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { RouteAnalytics } from "@/components/RouteAnalytics";
 import { WebVitals } from "@/components/WebVitals";
-import "./design-tokens.css";
 import "./globals.css";
 import "./aromia-redesign.css";
+import "./design-tokens.css";
 
 const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
 const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
