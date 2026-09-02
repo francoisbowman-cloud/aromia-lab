@@ -17,25 +17,22 @@ Routine editorial loop is governed by `AROMIA_EDITORIAL_WORKFLOW.md`. `main` is 
 ## Current relay
 
 ```text
-STATE_VERSION: 19
+STATE_VERSION: 20
 UPDATED_AT: 2026-09-01
-LAST_ACTOR: Code (implementation)
-LAST_ACTION: ingested Asset A and completed the El coleccionista implementation. ChatGPT produced the opening image; the Publisher placed the binary at apps/web/public/editorial-v1/coleccionista-shelf-01.jpg (1400x1800 JPEG, ~90 KB — a chat-pasted image could not be transported through the connector, so Code could not fetch it directly). Slot coleccionista-shelf-interpretive flipped to present:true with alt text; figure margin zeroed and object-position biased to 50% 64% so the wide bottle band is not clipped (container ratio ~0.80 ≈ asset 0.778, so cover crops only ~10-25 px). tsc + next lint + next build clean; route still prerenders static. Desktop + mobile verified by JS measurement (image loads, correct optimized src, no subject clip, no horizontal overflow, no console errors). Branch feat/el-coleccionista-implementation pushed to origin with Publisher authorization — no merge, no deploy.
-ACTIVE_OBJECTIVE: El coleccionista — implementation COMPLETE; awaiting Final OMNI
+LAST_ACTOR: OMNI (Final gate, executed by ChatGPT with Publisher-authorized OMNI usage)
+LAST_ACTION: Final OMNI reviewed El coleccionista against the locked art direction, implementation checkpoint, TSX/CSS and the actual ingested Asset A. Technical implementation, accumulation→withdrawal arc, Le Male typographic lineage, preservation treatment, commerce restraint and responsive evidence pass. Asset A fails the authored-humanity / recognition test: it is a flat illustrative lineup on an abstract beige field rather than a convincingly observed domestic shelf. FINAL_OMNI: REFINE. Review recorded at art-direction/el-coleccionista-final-omni-review.md. No conceptual redesign requested.
+ACTIVE_OBJECTIVE: El coleccionista — replace Asset A only, then re-QA and Final OMNI re-check
 ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
 BASE_MAIN_SHA: efd319a
-BRANCH_HEAD: pushed — 2 commits ahead of origin/main (375b167 implementation + Asset A pass)
-EARLY_OMNI_COMMIT: 3b7d4775355ef8aee2d50b0afaf7ed2700a878bf
-ASSET_HANDOFF_COMMIT: 212c76ab637933897169880c8430250974feb51e
-DRAFT_STATE_COMMIT: 1989b61cd081dfe54b400a8bbe1581ad1c7f077a
+FINAL_OMNI_REVIEW_COMMIT: e28d13dbc05af266dabc7a1f677bab5169f3770c
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-VISUAL_ASSETS: DONE — Asset A ingested; Le Male typographic lineage (Asset B fallback); Asset C not required
-IMPLEMENTATION: READY
-QA: LOCAL_PASS (build + JS-measured desktop/mobile) — browser-pane screenshot capture failed session-wide; rendered PNG capture left to OMNI Render. Final OMNI pending.
-PUBLISH: PENDING — branch pushed only; no PR; merge to main triggers Railway deploy, so merge = publication (Publisher-gated)
+VISUAL_ASSETS: CHANGES_REQUIRED — Asset A v2 only
+IMPLEMENTATION: READY — preserve existing composition/code unless new crop requires a minor adjustment
+QA: CHANGES_REQUIRED — visual asset issue only; technical QA remains green
+PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
 PRIMARY_STORY: drafts/el-coleccionista.md
 FACT_CHECK: research/el-coleccionista-fact-check.md
@@ -43,29 +40,27 @@ ART_DIRECTION_HANDOFF: art-direction/el-coleccionista-art-direction-and-composit
 EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
 VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
-NEXT_ACTOR: OMNI (Final rendered gate) — then Code (corrections, if any) — then Publisher (merge/deploy)
-NEXT_ACTION: OMNI runs the Final rendered-experience gate on /historias/el-coleccionista (desktop + mobile) from branch feat/el-coleccionista-implementation: implementation fidelity to the locked art direction, the accumulation-to-withdrawal arc, Asset A crop/tone in context, near-zero commercial pressure until the close, responsive integrity. Corrections (if any) go back to Code on the same branch. No merge/deploy without Publisher authorization.
-BLOCKERS: none. Implementation is complete; only the Final OMNI gate and Publisher merge remain.
+FINAL_OMNI_REVIEW: art-direction/el-coleccionista-final-omni-review.md
+NEXT_ACTOR: ChatGPT (Asset A v2)
+NEXT_ACTION: regenerate/replace only apps/web/public/editorial-v1/coleccionista-shelf-01.jpg with a photographic or convincingly photographic ordinary domestic collection scene that passes the narrative test “yo conozco ese estante”; then Code ingests/re-QAs desktop+mobile and OMNI performs the final re-check. Preserve prose, section architecture, density states, Le Male typography, preservation notation, Sí-pero reset and commerce treatment.
+BLOCKERS: none except completion/transport of Asset A v2. No merge/deploy until Final OMNI passes and Publisher authorizes publication.
 ```
 
-## Creative lock — El coleccionista
+## Final OMNI correction lock — El coleccionista
 
-Governing thesis:
+The existing implementation is not being reopened. Final OMNI returned **REFINE** for one material reason only: Asset A is visually too diagrammatic and generic for the story's opening recognition beat.
 
-> **Una colección no se ve grande. Se siente como algo que ya dejó de tener un final claro.**
+Asset A v2 must feel like an observed ordinary domestic shelf/drawer/ledge, not an abstract representation of perfume collecting. Keep it unbranded, imperfect, plausible and quiet. One mundane domestic trace is enough. Avoid luxury styling, perfume-ad lighting, marble, smoke, splashes, gold grading, showroom symmetry and recognizable branded bottle geometry.
 
-Early OMNI result: **PASS**.
+Narrative test:
 
-The gate challenged story-specificity, anti-template behavior, authored humanity, narrative gain, restraint, authenticity, commercial pressure, Aromia identity and responsive integrity. The proposition passed without requiring conceptual redesign.
+> **“Yo conozco ese estante.”**
 
-Post-gate reduction:
+Not:
 
-- Asset A / domestic opening: required for implementation study.
-- Asset B / Le Male family: conditional documentary evidence only; typographic lineage is the approved default fallback when rights/provenance are unresolved.
-- Asset C / preservation-time still life: not required by default; first solve with layout/typography.
-- `Sí, pero`: hard visual reset; no image, inventory ticks or ornamental residue.
+> “Esto representa una colección.”
 
-An image accidentally generated while recording the Early OMNI turn was a review-sheet graphic, not an Aromia publication asset. It is rejected and is not part of the repository or implementation handoff.
+Preserve everything else unless re-QA finds a genuine implementation defect.
 
 ## Production baseline retained
 
@@ -77,10 +72,6 @@ Editorial v1 public cutover is closed and remains the production baseline:
 - `/` serves the editorial living cover and released stories live at `/historias/[slug]`.
 
 Existing platform follow-ups remain separate and non-blocking: mobile editorial menu, chrome unification, missing architecture territories and cosmetic asset-directory rename.
-
-## Actor-substitution record
-
-The Publisher explicitly authorized ChatGPT to execute Early OMNI through ChatGPT/OMNI. This was a bounded substitution for the early creative gate only. It does not redefine workflow ownership. Code remains responsible for implementation/rendering and later production actions; Final OMNI must evaluate the rendered browser result.
 
 ## Continuation rules
 
