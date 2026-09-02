@@ -1,8 +1,8 @@
 # Editorial Home — Soft Image QA Finding
 
 DATE: 2026-09-02
-ACTOR: ChatGPT / visual QA
-STATUS: CHANGES_REQUIRED
+ACTOR: ChatGPT / temporary Code-role takeover
+STATUS: CORRECTION_IN_BRANCH — rendered verification pending
 SOURCE_EVIDENCE: Publisher-provided rendered screenshot, desktop
 
 ## Finding
@@ -15,32 +15,54 @@ The current Editorial v1 home composition is working rhythmically, but its three
 
 The screenshot shows the softness across the image information rather than as a controlled shallow-depth-of-field cue. It is especially noticeable because the adjacent editorial typography is crisp. This should not be treated as an intentional aesthetic without stronger evidence.
 
-## Code inspection
+## Diagnosis
 
-`editorialVisuals.tsx` renders all three as interpretive `next/image` fill assets with `objectFit: cover`; no CSS blur/filter is applied to the image element.
+`editorialVisuals.tsx` renders all three as interpretive `next/image` fill assets with `objectFit: cover`; no CSS blur/filter is applied to the image elements.
 
-`editorial.css` does contain `filter: blur(18px)` on `.ev1-resin:after`, but that pseudo-element is an atmospheric overlay and cannot explain the global softness visible in all three different source images. Therefore the primary suspect is source-asset sharpness / source-scale suitability rather than a shared CSS blur bug.
+`editorial.css` does contain `filter: blur(18px)` on `.ev1-resin:after`, but that pseudo-element is an atmospheric overlay and cannot explain the global softness visible in all three different source images.
 
-Current repo sizes:
-- `ambroxan-resin-abstract-01.jpg`: 232,817 B
-- `amouage-mineral-density-01.jpg`: 218,006 B
-- `ropion-bordeaux-texture-01.jpg`: 166,565 B
+Intrinsic dimensions were recovered from the JPEG SOF headers through the repository connector:
 
-Binary dimensions are not exposed by the current GitHub text connector, so Code must inspect intrinsic dimensions locally before replacement.
+- `ambroxan-resin-abstract-01.jpg`: **1600×900**, 232,817 B
+- `amouage-mineral-density-01.jpg`: **1600×900**, 218,006 B
+- `ropion-bordeaux-texture-01.jpg`: **1600×900**, 166,565 B
+
+The current desktop slots do not grossly upscale these images in CSS pixels. The hero can approach the source ceiling on high-DPR displays, but the two counterpoint slots remain below the source dimensions. Therefore **layout-scale alone cannot explain the softness across all three images**.
+
+The remaining likely causes are:
+
+1. the interpretive source images themselves have broad/global softness or insufficient resolved microtexture;
+2. Next/Image's default re-encoding quality is compounding the softness, particularly in resin/floral/mineral microtexture;
+3. high-DPR delivery may make the hero weakness more visible, but it is not a sufficient explanation for the two lower images.
+
+## Applied correction — delivery quality
+
+Commit `bc3fed3dc825d6571cd501dfd18d8624a6cae798` adds an optional per-slot `quality` field to `VisualSlot` and sets **quality: 95** only for the three affected home interpretive slots.
+
+This is deliberately conservative:
+
+- no layout/grid/rhythm changes;
+- no sharpening filter;
+- no CSS blur compensation;
+- no artificial upscale;
+- no change to `El coleccionista` Asset A v2;
+- documentary assets remain unchanged.
+
+The purpose is to remove avoidable Next/Image recompression loss before deciding that the source art itself must be replaced.
 
 ## Locked correction strategy
 
-Do **not** redesign the home. Preserve the current rhythm, grid, copy, spacing and crop roles.
+Preserve the current home rhythm, grid, copy, spacing and crop roles.
 
-For each of the three assets:
+After the quality-95 pass is rendered:
 
-1. inspect intrinsic pixel dimensions and source at 100%;
-2. if the source itself is soft, replace with a sharper high-resolution interpretive source following the existing Gate 3 art direction;
-3. if the source is sharp but rendered soft, diagnose Next/Image sizing, browser DPR and crop/upscale behavior before touching the asset;
-4. do not use artificial sharpening as the first fix and do not upscale a fundamentally soft image merely to increase pixel dimensions;
-5. validate desktop and mobile at rendered size after correction.
+1. inspect desktop and mobile at actual rendered size;
+2. if the three images now have an adequately resolved focal plane and microtexture, close this finding;
+3. if they still read globally soft, classify the source art as inadequate and replace the three sources rather than adding artificial sharpening;
+4. replacement generation must happen from clean visual-only contexts under `docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`;
+5. do not reopen the composition itself.
 
-### Visual intent that must remain
+### Visual intent that must remain if replacement is required
 
 **Amouage material density** — tactile resin/mineral/wood material density; broad landscape crop; no crown, throne, gold bars, fake calligraphy or pseudo-palace luxury.
 
@@ -50,14 +72,10 @@ For each of the three assets:
 
 All replacements must have a clearly resolved plane of focus and enough microtexture to survive the actual rendered slot. Background depth may fall off naturally; the principal material subject may not be globally blurred.
 
-## Generation safety
-
-If replacement generation is required, obey `docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`. This operational conversation is not a clean generation context. Prepare visual-only capsules and generate in a clean visual context, then quarantine before Code ingestion.
-
 ## Gate impact
 
 This is a visual-quality finding on the existing Editorial v1 home, not a rejection of `El coleccionista` Asset A v2.
 
 `El coleccionista` implementation remains intact.
 
-Final publication/OMNI gate should not silently bless the three visibly soft home images. Correct them or explicitly scope the El coleccionista gate away from the home while keeping this finding open as a platform follow-up.
+Final publication/OMNI remains pending until the quality-95 render is visually checked. If the render remains soft, source replacement becomes the only remaining corrective path.
