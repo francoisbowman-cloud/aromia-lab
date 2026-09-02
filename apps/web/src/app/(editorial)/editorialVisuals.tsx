@@ -37,7 +37,9 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ambroxan-material-interpretive": {
     id: "ambroxan-material-interpretive",
     type: "interpretive",
-    present: true,
+    // Source art is intentionally disabled until a sharper replacement exists.
+    // The established CSS fallback preserves the approved slot geometry/rhythm.
+    present: false,
     file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
     quality: 95,
     alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
@@ -62,7 +64,9 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ropion-overdose-interpretive": {
     id: "ropion-overdose-interpretive",
     type: "interpretive",
-    present: true,
+    // Source art is intentionally disabled until a sharper replacement exists.
+    // The established CSS fallback preserves the approved slot geometry/rhythm.
+    present: false,
     file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
     quality: 95,
     alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
@@ -72,7 +76,9 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "amouage-material-density-interpretive": {
     id: "amouage-material-density-interpretive",
     type: "interpretive",
-    present: true,
+    // Source art is intentionally disabled until a sharper replacement exists.
+    // The established CSS fallback preserves the approved slot geometry/rhythm.
+    present: false,
     file: "/editorial-v1/amouage-mineral-density-01.jpg",
     quality: 95,
     alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
