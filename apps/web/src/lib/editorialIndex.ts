@@ -10,6 +10,7 @@ export interface EditorialIndexItem {
   territory: EditorialTerritory;
   source: "story" | "magazine";
   publishedAt?: string;
+  relatedPerfumerSlug?: string;
 }
 
 export const EDITORIAL_STORIES: EditorialIndexItem[] = [
@@ -44,6 +45,7 @@ export const EDITORIAL_STORIES: EditorialIndexItem[] = [
     summary: "Dominique Ropion y la disciplina que hace posible llevar una materia al límite sin perder precisión.",
     territory: "Personas",
     source: "story",
+    relatedPerfumerSlug: "dominique-ropion",
   },
 ];
 
@@ -70,9 +72,8 @@ export function buildEditorialIndex(articles: Article[]) {
   const seen = new Set<string>();
   const combined = [...EDITORIAL_STORIES, ...articles.filter((article) => article.categoria !== "academia").map(magazineArticleToIndexItem)];
   return combined.filter((item) => {
-    const key = item.href;
-    if (seen.has(key)) return false;
-    seen.add(key);
+    if (seen.has(item.href)) return false;
+    seen.add(item.href);
     return true;
   });
 }
