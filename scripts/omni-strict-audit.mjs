@@ -25,32 +25,26 @@ const home = await text("apps/web/src/components/home/TasteLanding.tsx");
 if (/editorial\/cinematic-warm\.png/i.test(home)) failures.push("home_hero_anonymous_background_regression");
 
 await requireText("apps/web/src/components/perfume/ProductImage.tsx", [
-  // Decisión #105 (revista editorial): ProductImage es "cutout-first" — si hay
-  // recorte sin fondo (`perfumeCutouts`) se muestra directo con drop-shadow;
-  // si no, cae al fallback Opción A (`bg-transparent` + máscara radial +
-  // `mix-blend-multiply`), heredado de las decisiones #103/#104.
   ["catalog_product_must_prefer_cutout", /perfumeCutouts|hasCutout/],
   ["catalog_product_stage_must_be_transparent", /bg-transparent/],
   ["catalog_product_fallback_must_feather_edge", /maskImage/],
   ["catalog_product_must_preserve_contain", /object-contain/],
 ]);
 const productImage = await text("apps/web/src/components/perfume/ProductImage.tsx");
-// El recorte de fondo se hace OFFLINE (script + OMNI); el componente solo
-// consume el asset. Sigue prohibida cualquier extracción de píxeles en runtime.
 if (/removeConnectedBackground|createElement\(["']canvas["']\)|getImageData\(/.test(productImage)) failures.push("catalog_product_destructive_background_extraction_regression");
 
 await requireText("apps/web/src/app/catalogo/[slug]/page.tsx", [
   ["pdp_missing_not_found", /notFound\(\)/], ["pdp_missing_canonical", /canonical:\s*`\/catalogo\/\$\{perfume\.slug\}`/], ["pdp_missing_product_jsonld", /application\/ld\+json/], ["pdp_missing_hero", /<HeroHeader/], ["pdp_missing_sensory_anatomy", /<SkinEvolution/], ["pdp_missing_performance", /<PerformanceBars/], ["pdp_missing_story", /<EditorialMood/], ["pdp_missing_commerce", /<PriceTable/], ["pdp_missing_community", /<CommunityReviews/],
 ]);
 
-// PerfumesCatalog.tsx (grid público con buscador/filtros) se retiró con el
-// pivote a revista — bloque 1.2, decisión #103. La ficha /catalogo/[slug] y su
-// PerfumeCard siguen siendo el destino canónico y mantienen sus propias reglas.
 await requireText("apps/web/src/components/perfume/PerfumeCard.tsx", [["catalog_card_image_must_route_to_pdp", /href=\{`\/catalogo\/\$\{perfume\.slug\}`\}/]]);
 const card = await text("apps/web/src/components/perfume/PerfumeCard.tsx");
 if (/api\/catalog-buy/.test(card)) failures.push("catalog_card_direct_commerce_regression");
 
-await requireText("apps/web/src/app/perfumistas/page.tsx", [["perfumer_index_missing", /Autores del aroma/]]);
+// The public territory evolved from the technical label "Perfumistas" to the
+// editorial label "Personas". Either the current territory label or the legacy
+// phrase is sufficient evidence that the reviewed attribution index is exposed.
+await requireText("apps/web/src/app/perfumistas/page.tsx", [["perfumer_index_missing", /Personas|Autores del aroma/]]);
 await requireText("apps/web/src/app/perfumistas/[slug]/page.tsx", [
   ["perfumer_detail_missing_works", /Obras en Aromia/],
   ["perfumer_discovery_signal_missing", /DiscoverySignal/],
