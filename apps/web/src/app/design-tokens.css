@@ -8,6 +8,7 @@
   --aromia-line: rgba(23, 23, 21, .18);
   --aromia-chrome-bg: rgba(247, 245, 240, .94);
   --aromia-chrome-shadow: rgba(14, 19, 17, .12);
+  --aromia-editorial-accent: #5a6b54;
 
   /* Editorial material study — resin */
   --aromia-resin-paper: #d9c8aa;
@@ -59,4 +60,5 @@
   --aromia-paper-clean: #100d0a;
   --aromia-paper-soft: #15110d;
   --aromia-chrome-bg: rgba(14, 19, 17, .94);
+  --aromia-editorial-accent: #b8c5b3;
 }
