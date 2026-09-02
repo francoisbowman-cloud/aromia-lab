@@ -14,70 +14,97 @@ Default production order:
 
 Routine editorial loop is governed by `AROMIA_EDITORIAL_WORKFLOW.md`. `main` is the canonical remote source of truth.
 
+Every actor must also obey:
+
+`docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md`
+
+A meaningful turn is not operationally complete until the next actor can continue from the repository without needing the previous chat.
+
 ## Current relay
 
 ```text
-STATE_VERSION: 17
-UPDATED_AT: 2026-09-01
-LAST_ACTOR: ChatGPT executing Publisher-authorized Early OMNI + post-gate asset specification
-LAST_ACTION: Early OMNI passed El coleccionista; the gate deliberately reduced the asset package. ChatGPT then finalized a production asset specification and rejected an accidental generated review-sheet image as non-story/non-repo material.
-ACTIVE_OBJECTIVE: El coleccionista — implementation
-ACTIVE_BRANCH: main
-EARLY_OMNI_COMMIT: 3b7d4775355ef8aee2d50b0afaf7ed2700a878bf
-ASSET_HANDOFF_COMMIT: 212c76ab637933897169880c8430250974feb51e
-DRAFT_STATE_COMMIT: 1989b61cd081dfe54b400a8bbe1581ad1c7f077a
+STATE_VERSION: 27
+UPDATED_AT: 2026-09-02
+LAST_ACTOR: ChatGPT (temporary Code + OMNI role takeover authorized by Publisher while Code session limit was exhausted)
+LAST_ACTION: completed the release gate for El coleccionista. GitHub v2.0 CI and Aromia Strict Audit are green on the feature head. Railway isolated QA service `web-el-coleccionista-qa` successfully built commit 0155b611 from branch feat/el-coleccionista-implementation after adding preview-only NEXT_PUBLIC_API_URL / NEXT_PUBLIC_SITE_URL references; production web/API/database were not changed. Authoritative Final OMNI was then closed PASS using the locked art direction, Asset A v2 direct inspection, Code desktop/mobile browser measurements, responsive/crop evidence, clean local production QA, CI, Strict Audit and successful feature-branch Railway build. The three pre-existing soft cover images remain a separately tracked non-blocking Editorial v1 home follow-up.
+ACTIVE_OBJECTIVE: release El coleccionista to production, verify canonical route and close relay as LIVE; retain home softness finding as follow-up
+ACTIVE_BRANCH: feat/el-coleccionista-implementation
+CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66
+DRAFT_PR: #123 feat: El coleccionista implementation + visual QA
+FINAL_OMNI_REVIEW: art-direction/el-coleccionista-final-omni-review.md
+FINAL_OMNI_COMMIT: e93f65765a89d17ac9b3715fd614edbdb4834658
+QA_PREVIEW_SERVICE: Railway web-el-coleccionista-qa (feature branch only; isolated QA surface)
+ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
+VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
+SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-VISUAL_ASSETS: READY_AS_SPEC
-IMPLEMENTATION: PENDING
-QA: PENDING
-PUBLISH: PENDING
-TARGET_DATE: UNSCHEDULED
+EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2
+EL_COLECCIONISTA_IMPLEMENTATION: DONE
+EL_COLECCIONISTA_QA: PASSED
+FINAL_OMNI: PASS
+PUBLISH: PUBLISHABLE
+TARGET_DATE: 2026-09-02
 PRIMARY_STORY: drafts/el-coleccionista.md
-FACT_CHECK: research/el-coleccionista-fact-check.md
-ART_DIRECTION_HANDOFF: art-direction/el-coleccionista-art-direction-and-composition.md
-EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
-VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
-NEXT_ACTOR: Code (implementation)
-NEXT_ACTION: implement El coleccionista against Editorial v1 Foundation; produce/select the single required opening domestic collection image from the locked spec; use typographic Le Male lineage unless publication-safe authentic product imagery is available; attempt preservation/time with layout before adding another image; render desktop/mobile and leave browser evidence for Final OMNI. Do not silently change article thesis/art direction.
-BLOCKERS: none for implementation. Product-image rights/provenance are not a blocker because a truthful typographic fallback is already approved.
+IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
+
+HOME_VISUAL_QA: NONBLOCKING_FOLLOWUP
+AFFECTED_HOME_SLOTS:
+- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg → 1600x900 → quality:95 experiment
+- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg → 1600x900 → quality:95 experiment
+- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg → 1600x900 → quality:95 experiment
+RULE: if those sources remain visibly soft in a trustworthy later render, replace the source art under the Visual Generation Isolation Protocol; do not sharpen/upscale artificially and do not redesign the approved home rhythm.
+
+NEXT_ACTOR: Code / Production (ChatGPT may continue temporary takeover in this turn)
+NEXT_ACTION: wait for CI on the current final-gate head; mark PR #123 ready; merge to main when required checks are green; verify Railway production deployment success and canonical /historias/el-coleccionista availability; then update this relay on main to LIVE. Do not delete the home softness follow-up.
+BLOCKERS: none for El coleccionista release. Remote standalone screenshot capture is unavailable in current tools, but this limitation is documented in Final OMNI and is not treated as hidden evidence.
 ```
 
-## Creative lock — El coleccionista
+## Mandatory turn-closure rule
 
-Governing thesis:
+All Aromia actors must leave a durable handoff at the end of meaningful work. The canonical protocol is:
 
-> **Una colección no se ve grande. Se siente como algo que ya dejó de tener un final claro.**
+`docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md`
 
-Early OMNI result: **PASS**.
+Core requirement:
 
-The gate challenged story-specificity, anti-template behavior, authored humanity, narrative gain, restraint, authenticity, commercial pressure, Aromia identity and responsive integrity. The proposition passed without requiring conceptual redesign.
+> **Do the work. Persist the truth. Name the next actor. Leave no conversational archaeology for the next shift.**
 
-Post-gate reduction:
+The Publisher must not routinely carry summaries between actors. If a binary cannot move through available connectors, the Publisher may transport the file, but the repository must already contain the semantic handoff, checksum/path and exact ingestion instructions.
 
-- Asset A / domestic opening: required for implementation study.
-- Asset B / Le Male family: conditional documentary evidence only; typographic lineage is the approved default fallback when rights/provenance are unresolved.
-- Asset C / preservation-time still life: not required by default; first solve with layout/typography.
-- `Sí, pero`: hard visual reset; no image, inventory ticks or ornamental residue.
+## Visual-generation incident correction — canonical rule
 
-An image accidentally generated while recording the Early OMNI turn was a review-sheet graphic, not an Aromia publication asset. It is rejected and is not part of the repository or implementation handoff.
+Repeated wrong generations for `El coleccionista` produced dashboards/checkpoints/GitHub-like mockups rather than the requested domestic scene. The root cause is treated as **conversation-context contamination**, not merely prompt wording.
+
+Canonical protocol:
+
+`docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`
+
+Core rule:
+
+> **Operational context decides what to make. Clean visual context makes the image. Quarantine decides whether the image is allowed back into Aromia.**
+
+Prompt cleaning alone is insufficient when the image generator infers from the full conversation. If the active turn is dominated by repository state, OMNI gates, UI, implementation logs, Code, GitHub, checkpoints or QA, **do not invoke image generation there**.
+
+Two consecutive mockup/UI drifts in the same conversation trigger a hard stop for image generation in that conversation. Further retries require a clean visual context.
+
+Rejected wrong generations are process waste: do not commit, implement, cite as evidence or use to mutate editorial/QA/OMNI state.
+
+## El coleccionista correction lock
+
+Asset A v2 passed ChatGPT visual quarantine and is ingested in the repo. The home-image softness finding does not reopen or invalidate it.
+
+Narrative test remains:
+
+> **“Yo conozco ese estante.”**
+
+Preserve prose, section architecture, density states, Le Male typography, preservation notation, `Sí, pero` reset and commerce treatment.
 
 ## Production baseline retained
 
-Editorial v1 public cutover is closed and remains the production baseline:
-
-- PR #120 shipped the photographic Editorial v1 surface.
-- PR #121 completed the public-home cutover, merge commit `d7db02cf59861f1acdb55087a5fabfc4e694b3c4`.
-- Railway web deployment `fcb010e1-8a00-4c68-82ae-17813a32f94e` reached SUCCESS.
-- `/` serves the editorial living cover and released stories live at `/historias/[slug]`.
-
-Existing platform follow-ups remain separate and non-blocking: mobile editorial menu, chrome unification, missing architecture territories and cosmetic asset-directory rename.
-
-## Actor-substitution record
-
-The Publisher explicitly authorized ChatGPT to execute Early OMNI through ChatGPT/OMNI. This was a bounded substitution for the early creative gate only. It does not redefine workflow ownership. Code remains responsible for implementation/rendering and later production actions; Final OMNI must evaluate the rendered browser result.
+Editorial v1 public cutover remains the production baseline. Existing platform follow-ups remain separate unless a rendered QA finding makes them publication-relevant.
 
 ## Continuation rules
 
@@ -87,8 +114,13 @@ On **Continúa Aromia desde el repo**:
 2. read this relay and referenced handoffs;
 3. execute the role-ready work without routine Publisher coordination;
 4. preserve approved work unless evidence requires correction;
-5. update the relay at phase end;
-6. escalate only genuine strategic, legal/rights, credential, irreversible publication or material-spending decisions.
+5. obey `docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md` before ending the turn;
+6. update this relay at phase end when operational state/next actor changes;
+7. escalate only genuine strategic, legal/rights, credential, irreversible publication or material-spending decisions.
+
+For any original-image generation, also read and obey:
+
+`docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`
 
 Authority order:
 

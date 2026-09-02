@@ -24,6 +24,8 @@ export interface VisualSlot {
   /** intrinsic pixel size — required for documentary (intrinsic) rendering */
   width?: number;
   height?: number;
+  /** Next/Image delivery quality. Raise selectively for texture-critical interpretive art. */
+  quality?: number;
   alt: string;
   caption?: string;
   provenance?: string;
@@ -37,6 +39,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
+    quality: 95,
     alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
     placeholderLabel:
       "Área visual interpretativa: estudio material del ambroxan. No representa evidencia documental.",
@@ -61,6 +64,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
+    quality: 95,
     alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
     placeholderLabel:
       "Área visual interpretativa: exceso floral controlado. No representa evidencia documental.",
@@ -70,6 +74,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/amouage-mineral-density-01.jpg",
+    quality: 95,
     alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
     placeholderLabel:
       "Área visual interpretativa: densidad material. No representa evidencia documental.",
@@ -88,6 +93,19 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
       "https://commons.wikimedia.org/wiki/File:Landscape_of_Jabal_Akhdar,_Oman.jpg — autor: Ontheroadom — CC BY-SA 4.0",
     placeholderLabel:
       "Espacio reservado para imagen documental de Jabal Akhdar (Omán), pendiente de descarga con procedencia.",
+  },
+  // El coleccionista — Asset A v2 (opening domestic collection scene).
+  // Spec locked in art-direction/el-coleccionista-visual-assets-handoff.md;
+  // v2 passed ChatGPT visual quarantine (relay v22) — an observed crowded
+  // domestic shelf, not a campaign still. Interpretive, not documentary.
+  "coleccionista-shelf-interpretive": {
+    id: "coleccionista-shelf-interpretive",
+    type: "interpretive",
+    present: true,
+    file: "/editorial-v1/coleccionista-shelf-01.jpg",
+    alt: "Fotografía de un estante doméstico con una veintena de frascos de perfume de siluetas y alturas distintas agrupados sin espacio libre sobre un mueble claro; un paño azulado a un lado y cajas de guardado debajo. Ninguna marca es legible.",
+    placeholderLabel:
+      "Área visual interpretativa pendiente: estante doméstico que ya no tiene espacio. Imagen no generada; especificación en el handoff de assets.",
   },
   "frankincense-documentary": {
     id: "frankincense-documentary",
@@ -144,6 +162,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
           alt={slot.alt}
           width={slot.width}
           height={slot.height}
+          quality={slot.quality}
           sizes={sizes ?? "100vw"}
         />
         {slot.caption ? <figcaption>{slot.caption}</figcaption> : null}
@@ -158,6 +177,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         src={slot.file}
         alt={slot.alt}
         fill
+        quality={slot.quality}
         sizes={sizes ?? "100vw"}
         style={{ objectFit: "cover" }}
       />
