@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./editorial-sharp.css";
 
 export const metadata: Metadata = {
   robots: { index: true, follow: true },
