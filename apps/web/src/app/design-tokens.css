@@ -10,6 +10,25 @@
   --aromia-chrome-shadow: rgba(14, 19, 17, .12);
   --aromia-editorial-accent: #5a6b54;
 
+  /* Compatibility bridge: Tailwind/global aliases resolve through the semantic layer. */
+  --bg: var(--aromia-paper);
+  --background: var(--aromia-paper);
+  --foreground: var(--aromia-ink);
+  --surface: var(--aromia-paper-clean);
+  --soft: var(--aromia-paper-soft);
+  --text: var(--aromia-ink);
+  --line: var(--aromia-line);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --secondary: var(--soft);
+  --secondary-foreground: var(--text);
+  --accent: var(--soft);
+  --accent-foreground: var(--text);
+  --border: var(--line);
+  --input: var(--line);
+
   /* Editorial material study — resin */
   --aromia-resin-paper: #d9c8aa;
   --aromia-resin-sand: #8f7d64;
