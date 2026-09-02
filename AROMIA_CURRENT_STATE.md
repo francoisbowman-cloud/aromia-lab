@@ -23,50 +23,40 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 23
+STATE_VERSION: 24
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: Code
-LAST_ACTION: ingested approved Asset A v2. Copied the external JPEG into apps/web/public/editorial-v1/coleccionista-shelf-01.jpg on feat/el-coleccionista-implementation and verified SHA256 05d1e9fd… against this relay (byte-identical, 260801 B, 1122x1402). Updated the visual slot alt to a photographic description (no longer "ilustración") and biased the opening crop from `center 64%` to `center 52%` — the v2 source ratio (0.800) now matches the slot, so `cover` trims only a few px and the old downward bias would have pulled in the storage bins. Branch was already reconciled with current main by merge f33d184 (Voice Bible only, no conflicts). tsc --noEmit, next lint and next build all clean. Rendered QA on :3100 at desktop 1280 and mobile 375.
-ACTIVE_OBJECTIVE: El coleccionista — authoritative Final OMNI on the rendered experience, then PR/publication gate
+LAST_ACTOR: ChatGPT (visual QA)
+LAST_ACTION: reviewed Publisher desktop screenshot after Code completed Asset A v2 ingestion. Confirmed a separate visual-quality issue on the Editorial v1 home: the three interpretive home images (Amouage material density, Ambroxan material, Ropion overdose) read globally soft/unintentionally out of focus at rendered size. Inspected implementation: all three are next/image fill + objectFit cover; there is no shared CSS filter on the image elements. The .ev1-resin:after blur is only an atmospheric pseudo-element and cannot explain softness across all three sources. Persisted the finding and correction strategy in art-direction/editorial-home-soft-image-qa.md. El coleccionista Asset A v2 is not implicated and remains approved/ingested.
+ACTIVE_OBJECTIVE: correct the three soft Editorial v1 home interpretive images without changing the approved page rhythm; then resume authoritative Final OMNI for El coleccionista and publication gate
 ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
-BASE_MAIN_SHA: efd319a1a176e45c9a8bed68410a1ffe06fad5e7
 CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66
-BRANCH_STATUS: reconciled with current main via merge f33d184; Code's ingest commit sits on top
+BRANCH_STATUS: reconciled with current main via merge f33d184; Asset A v2 ingest and QA handoffs on top
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
+SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
 PROVISIONAL_VISUAL_REVIEW: art-direction/el-coleccionista-final-omni-review.md
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-VISUAL_ASSETS: INGESTED — Asset A v2 in repo, SHA256 verified, rendered at both breakpoints
-IMPLEMENTATION: DONE — opening asset wired; prose, section architecture, density states, Le Male lineage, preservation notation, Sí-pero reset and commerce treatment all untouched
-QA: LOCAL_PASS — desktop 1280 + mobile 375: correct v2 image served (probe 1122x1402), no horizontal overflow, crop keeps the full bottle cluster, no console errors, heading order H1→H2→H2→H3→H2→H2. Browser-pane PNG capture is still intermittently blank beyond the fold (session-wide environment fault, same as the prior Code pass) — full rendered PNG evidence is OMNI Render's job at the Final gate.
-FINAL_OMNI: PENDING — must use rendered desktop/mobile evidence
+EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2 SHA256 verified and rendered
+EL_COLECCIONISTA_IMPLEMENTATION: DONE
+HOME_VISUAL_QA: CHANGES_REQUIRED — three existing interpretive sources visibly soft in Publisher screenshot
+QA: CHANGES_REQUIRED — home visual-quality finding must be diagnosed/corrected or explicitly scoped as separate platform follow-up before publication decision
+FINAL_OMNI: PENDING
 PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
 PRIMARY_STORY: drafts/el-coleccionista.md
-FACT_CHECK: research/el-coleccionista-fact-check.md
-ART_DIRECTION_HANDOFF: art-direction/el-coleccionista-art-direction-and-composition.md
-EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
-VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
 
-EXTERNAL_ARTIFACT_STATUS: INGESTED (2026-09-02, Code)
-FILE_NAME: coleccionista-shelf-01-v2.jpg (external) → apps/web/public/editorial-v1/coleccionista-shelf-01.jpg (in repo)
-FORMAT: JPEG, progressive, quality 92, metadata stripped during conversion
-DIMENSIONS: 1122x1402
-SIZE_BYTES: 260801
-SHA256: 05d1e9fdb57e9de3d10bd5ab68d4692541c572ba73f4d58479629115bedc4e3c (verified in repo)
-SOURCE: clean visual-only ChatGPT generation supplied by Publisher back into operational chat
-TARGET_PATH: apps/web/public/editorial-v1/coleccionista-shelf-01.jpg
-QUARANTINE_STATE: PASS
-NARRATIVE_TEST: PASS — reads as an observed crowded domestic shelf, not a perfume campaign or abstract collection diagram
-AUTHENTICITY_NOTES: no readable brands/logos relied upon; domestic interpretation only; not documentary evidence
+AFFECTED_HOME_SLOTS:
+- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg
+- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg
+- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg
 
-NEXT_ACTOR: OMNI
-NEXT_ACTION: authoritative Final rendered-experience gate on /historias/el-coleccionista (desktop + mobile) against the locked art direction: the accumulation → withdrawal arc, the Asset A v2 crop and tone in context (recognition, not desire), commercial pressure at ~zero until the close, responsive integrity, and rendered PNG evidence (which this environment could not capture beyond the fold). If corrections return, Code applies them on the same branch. No merge/deploy — publication stays Publisher-gated.
-BLOCKERS: NONE. Binary transported and verified; branch reconciled and pushed. No merge/deploy until Final OMNI passes and the Publisher authorizes publication.
+NEXT_ACTOR: Code
+NEXT_ACTION: inspect intrinsic dimensions and the three source binaries locally at 100%; determine whether softness is intrinsic source quality or rendered scaling/DPR behavior. Preserve the current home composition/rhythm. If sources are intrinsically soft, do not artificially sharpen/upscale as the primary fix: hand back to ChatGPT with three clean visual-only replacement capsules under the Visual Generation Isolation Protocol. If sources are sharp, fix sizing/render behavior, run desktop/mobile rendered QA, push, update relay, then return to Final OMNI. Do not touch El coleccionista Asset A v2 unless evidence shows a separate defect.
+BLOCKERS: none for diagnosis. Replacement generation, if required, must occur in a clean visual context per protocol. No merge/deploy until visual QA + Final OMNI publication gate.
 ```
 
 ## Mandatory turn-closure rule
@@ -101,11 +91,9 @@ Rejected wrong generations are process waste: do not commit, implement, cite as 
 
 ## El coleccionista correction lock
 
-The existing implementation is not being reopened.
+Asset A v2 passed ChatGPT visual quarantine and is ingested in the repo. The new home-image softness finding does not reopen or invalidate it.
 
-Asset A v2 passed ChatGPT visual quarantine and, since 2026-09-02, is ingested in the repo — it replaces the previously rejected flat/diagrammatic opening asset.
-
-Narrative test:
+Narrative test remains:
 
 > **“Yo conozco ese estante.”**
 
@@ -113,14 +101,7 @@ Preserve prose, section architecture, density states, Le Male typography, preser
 
 ## Production baseline retained
 
-Editorial v1 public cutover is closed and remains the production baseline:
-
-- PR #120 shipped the photographic Editorial v1 surface.
-- PR #121 completed the public-home cutover, merge commit `d7db02cf59861f1acdb55087a5fabfc4e694b3c4`.
-- Railway web deployment `fcb010e1-8a00-4c68-82ae-17813a32f94e` reached SUCCESS.
-- `/` serves the editorial living cover and released stories live at `/historias/[slug]`.
-
-Existing platform follow-ups remain separate and non-blocking: mobile editorial menu, chrome unification, missing architecture territories and cosmetic asset-directory rename.
+Editorial v1 public cutover remains the production baseline. Existing platform follow-ups remain separate unless a rendered QA finding makes them publication-relevant.
 
 ## Continuation rules
 
