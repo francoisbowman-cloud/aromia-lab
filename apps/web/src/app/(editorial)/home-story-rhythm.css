@@ -4,6 +4,11 @@
  * which visually merged assets that belong to different stories. Each story is
  * now one editorial band: image + its own copy. The second band reverses the
  * sides to preserve Aromia's asymmetry without breaking image/story ownership.
+ *
+ * Mobile also needs the lead story to follow the same ownership rhythm. Without
+ * this override the base layout renders lead copy -> lead image -> next image,
+ * producing two consecutive images from different stories. On narrow screens we
+ * therefore render every story as image -> its own copy.
  */
 
 .ev1-counterpoints {
@@ -54,6 +59,19 @@
 }
 
 @media (max-width: 800px) {
+  .ev1-lead {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ev1-lead .ev1-resin {
+    order: 1;
+  }
+
+  .ev1-lead .ev1-lead-copy {
+    order: 2;
+  }
+
   .ev1-counterpoints .ev1-story,
   .ev1-counterpoints .ev1-story:nth-child(even) {
     min-height: auto;
