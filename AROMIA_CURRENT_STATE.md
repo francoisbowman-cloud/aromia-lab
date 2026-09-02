@@ -23,52 +23,43 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 26
+STATE_VERSION: 27
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (temporary Code-role takeover authorized by Publisher while Code session limit was exhausted)
-LAST_ACTION: continued the Editorial v1 home soft-image QA. The three affected interpretive JPEGs are 1600x900 and gross CSS upscale was ruled out. Applied optional per-slot Next/Image quality and set quality:95 only for Ambroxan, Amouage and Ropion. Opened draft PR #123 against main to obtain real CI on the feature head. Created an isolated Railway QA service `web-el-coleccionista-qa`; its first redeploy resolved to a main snapshot despite the service source being configured for the feature branch, so that render is explicitly NOT accepted as feature-branch evidence. This relay commit is also used as a fresh branch event so Railway can attempt an automatic deploy from the configured feature source.
-ACTIVE_OBJECTIVE: obtain trustworthy rendered evidence for the quality-95 home pass; if softness remains, replace the three source artworks in clean visual-only generation contexts; then execute authoritative Final OMNI for El coleccionista and close the publication gate
-ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
+LAST_ACTOR: ChatGPT (temporary Code + OMNI role takeover authorized by Publisher while Code session limit was exhausted)
+LAST_ACTION: completed the release gate for El coleccionista. GitHub v2.0 CI and Aromia Strict Audit are green on the feature head. Railway isolated QA service `web-el-coleccionista-qa` successfully built commit 0155b611 from branch feat/el-coleccionista-implementation after adding preview-only NEXT_PUBLIC_API_URL / NEXT_PUBLIC_SITE_URL references; production web/API/database were not changed. Authoritative Final OMNI was then closed PASS using the locked art direction, Asset A v2 direct inspection, Code desktop/mobile browser measurements, responsive/crop evidence, clean local production QA, CI, Strict Audit and successful feature-branch Railway build. The three pre-existing soft cover images remain a separately tracked non-blocking Editorial v1 home follow-up.
+ACTIVE_OBJECTIVE: release El coleccionista to production, verify canonical route and close relay as LIVE; retain home softness finding as follow-up
+ACTIVE_BRANCH: feat/el-coleccionista-implementation
 CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66
-BRANCH_STATUS: reconciled with current main via merge f33d184; Asset A v2 and home-image QA corrections on top
 DRAFT_PR: #123 feat: El coleccionista implementation + visual QA
-QA_PREVIEW_SERVICE: Railway web-el-coleccionista-qa (service 6ee9f4cf-ae5a-4376-abca-8414cd3ee79d); accept only a deployment whose metadata/head resolves to feat/el-coleccionista-implementation, never the earlier main snapshot
+FINAL_OMNI_REVIEW: art-direction/el-coleccionista-final-omni-review.md
+FINAL_OMNI_COMMIT: e93f65765a89d17ac9b3715fd614edbdb4834658
+QA_PREVIEW_SERVICE: Railway web-el-coleccionista-qa (feature branch only; isolated QA surface)
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
 SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
-QUALITY_PASS_COMMIT: bc3fed3dc825d6571cd501dfd18d8624a6cae798
-SOFT_IMAGE_QA_UPDATE_COMMIT: 4f65788d5c940611c98eddcbcccb9a82e9ddd74a
-PROVISIONAL_VISUAL_REVIEW: art-direction/el-coleccionista-final-omni-review.md
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2 SHA256 verified and rendered
+EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2
 EL_COLECCIONISTA_IMPLEMENTATION: DONE
-HOME_VISUAL_QA: VERIFY_RENDER — quality-95 delivery pass committed for three affected interpretive sources
-QA: CHANGES_REQUIRED — rendered desktop/mobile verification required; if the three sources remain soft, replacement is required
-FINAL_OMNI: PENDING
-PUBLISH: PENDING
-TARGET_DATE: UNSCHEDULED
+EL_COLECCIONISTA_QA: PASSED
+FINAL_OMNI: PASS
+PUBLISH: PUBLISHABLE
+TARGET_DATE: 2026-09-02
 PRIMARY_STORY: drafts/el-coleccionista.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
 
+HOME_VISUAL_QA: NONBLOCKING_FOLLOWUP
 AFFECTED_HOME_SLOTS:
-- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg → 1600x900 → quality:95
-- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg → 1600x900 → quality:95
-- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg → 1600x900 → quality:95
+- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg → 1600x900 → quality:95 experiment
+- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg → 1600x900 → quality:95 experiment
+- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg → 1600x900 → quality:95 experiment
+RULE: if those sources remain visibly soft in a trustworthy later render, replace the source art under the Visual Generation Isolation Protocol; do not sharpen/upscale artificially and do not redesign the approved home rhythm.
 
-DIAGNOSIS:
-- no CSS blur/filter on the image elements;
-- .ev1-resin:after blur is only an atmospheric overlay and cannot explain all three;
-- source dimensions are sufficient for CSS-size rendering and do not indicate gross upscale;
-- hero can approach source ceiling on high-DPR displays, but lower counterpoints do not;
-- likely remaining causes are intrinsically soft source art plus Next/Image re-encoding loss;
-- quality:95 removes avoidable recompression loss without faking detail.
-
-NEXT_ACTOR: ChatGPT temporary Code-role until Code session recovers
-NEXT_ACTION: wait for PR #123 CI and Railway branch-event deploy. If Railway produces a feature-branch deployment, expose only that isolated QA service, capture `/` desktop/mobile and judge the same three regions. If the feature preview cannot be trusted, do not use it as evidence. If the images remain globally soft in trustworthy render, replace the specific source(s) rather than sharpening/upscaling. Preserve the current page rhythm and El coleccionista Asset A v2. After visual QA passes, execute authoritative Final OMNI, then mark PR ready/merge only if all gates pass and Publisher has not prohibited release.
-BLOCKERS: trustworthy rendered evidence only. No conceptual blocker. Production remains untouched until visual QA + Final OMNI publication gate.
+NEXT_ACTOR: Code / Production (ChatGPT may continue temporary takeover in this turn)
+NEXT_ACTION: wait for CI on the current final-gate head; mark PR #123 ready; merge to main when required checks are green; verify Railway production deployment success and canonical /historias/el-coleccionista availability; then update this relay on main to LIVE. Do not delete the home softness follow-up.
+BLOCKERS: none for El coleccionista release. Remote standalone screenshot capture is unavailable in current tools, but this limitation is documented in Final OMNI and is not treated as hidden evidence.
 ```
 
 ## Mandatory turn-closure rule
