@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { getArticulos } from "@/lib/api";
-import { MagazineHub } from "@/components/magazine/MagazineHub";
+import { buildEditorialIndex } from "@/lib/editorialIndex";
+import { EditorialArchive } from "@/components/magazine/EditorialArchive";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Magazine de perfumería",
-  description: "Reseñas, guías, cultura y análisis de perfumes con una mirada editorial.",
+  title: "Historias — Archivo Aromia",
+  description: "Archivo de historias, materias, personas, guías y reflexiones publicadas en Aromia.",
   alternates: { canonical: "/magazine" },
 };
 
 export default async function MagazinePage() {
   const articulos = await getArticulos();
-  const articulosSinAcademia = articulos.filter((a) => a.categoria !== "academia");
-  return <main><MagazineHub articulos={articulosSinAcademia} /></main>;
+  const items = buildEditorialIndex(articulos);
+  return <main><EditorialArchive items={items} /></main>;
 }
