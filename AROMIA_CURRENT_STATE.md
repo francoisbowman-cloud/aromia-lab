@@ -17,21 +17,24 @@ Routine editorial loop is governed by `AROMIA_EDITORIAL_WORKFLOW.md`. `main` is 
 ## Current relay
 
 ```text
-STATE_VERSION: 20
-UPDATED_AT: 2026-09-01
-LAST_ACTOR: OMNI (Final gate, executed by ChatGPT with Publisher-authorized OMNI usage)
-LAST_ACTION: Final OMNI reviewed El coleccionista against the locked art direction, implementation checkpoint, TSX/CSS and the actual ingested Asset A. Technical implementation, accumulation→withdrawal arc, Le Male typographic lineage, preservation treatment, commerce restraint and responsive evidence pass. Asset A fails the authored-humanity / recognition test: it is a flat illustrative lineup on an abstract beige field rather than a convincingly observed domestic shelf. FINAL_OMNI: REFINE. Review recorded at art-direction/el-coleccionista-final-omni-review.md. No conceptual redesign requested.
-ACTIVE_OBJECTIVE: El coleccionista — replace Asset A only, then re-QA and Final OMNI re-check
+STATE_VERSION: 21
+UPDATED_AT: 2026-09-02
+LAST_ACTOR: Code (Publisher-authorized temporary role substitution by ChatGPT)
+LAST_ACTION: diagnosed repeated wrong image generations as conversation-context contamination, added a canonical Visual Generation Isolation Protocol, and corrected the premature Final OMNI state. The previous Asset A source critique remains valid, but FINAL_OMNI is restored to PENDING because authoritative rendered desktop/mobile screenshot evidence was not available. Dashboard/checkpoint/GitHub-style generations are explicitly rejected process artifacts and cannot affect publication state.
+ACTIVE_OBJECTIVE: El coleccionista — create Asset A v2 in clean visual-only context, then ingest/render/re-QA and run authoritative Final OMNI
 ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
-BASE_MAIN_SHA: efd319a
-FINAL_OMNI_REVIEW_COMMIT: e28d13dbc05af266dabc7a1f677bab5169f3770c
+BASE_MAIN_SHA: efd319a1a176e45c9a8bed68410a1ffe06fad5e7
+CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66 (main advanced by one Voice Bible commit; feature branch currently diverged)
+VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
+PROVISIONAL_VISUAL_REVIEW: art-direction/el-coleccionista-final-omni-review.md
 EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
 VISUAL_ASSETS: CHANGES_REQUIRED — Asset A v2 only
 IMPLEMENTATION: READY — preserve existing composition/code unless new crop requires a minor adjustment
-QA: CHANGES_REQUIRED — visual asset issue only; technical QA remains green
+QA: CHANGES_REQUIRED — visual asset issue only; prior technical QA remains green, rendered re-QA required after replacement
+FINAL_OMNI: PENDING
 PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
 PRIMARY_STORY: drafts/el-coleccionista.md
@@ -40,15 +43,34 @@ ART_DIRECTION_HANDOFF: art-direction/el-coleccionista-art-direction-and-composit
 EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
 VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
-FINAL_OMNI_REVIEW: art-direction/el-coleccionista-final-omni-review.md
-NEXT_ACTOR: ChatGPT (Asset A v2)
-NEXT_ACTION: regenerate/replace only apps/web/public/editorial-v1/coleccionista-shelf-01.jpg with a photographic or convincingly photographic ordinary domestic collection scene that passes the narrative test “yo conozco ese estante”; then Code ingests/re-QAs desktop+mobile and OMNI performs the final re-check. Preserve prose, section architecture, density states, Le Male typography, preservation notation, Sí-pero reset and commerce treatment.
-BLOCKERS: none except completion/transport of Asset A v2. No merge/deploy until Final OMNI passes and Publisher authorizes publication.
+NEXT_ACTOR: ChatGPT (Asset A v2, CLEAN VISUAL CONTEXT REQUIRED)
+NEXT_ACTION: generate Asset A v2 only from the physical-scene capsule in a clean visual-only context. Do not invoke image generation from an operational GitHub/OMNI/Code/checkpoint turn. After quarantine PASS, hand binary to Code; Code ingests, reconciles feature branch with current main, runs rendered desktop/mobile QA, then OMNI runs the authoritative Final rendered-experience gate.
+BLOCKERS: Asset A v2 only. No merge/deploy until rendered QA + authoritative Final OMNI pass and Publisher publication authorization.
 ```
 
-## Final OMNI correction lock — El coleccionista
+## Visual-generation incident correction — canonical rule
 
-The existing implementation is not being reopened. Final OMNI returned **REFINE** for one material reason only: Asset A is visually too diagrammatic and generic for the story's opening recognition beat.
+Repeated wrong generations for `El coleccionista` produced dashboards/checkpoints/GitHub-like mockups rather than the requested domestic scene. The root cause is now treated as **conversation-context contamination**, not merely prompt wording.
+
+Canonical protocol:
+
+`docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`
+
+Core rule:
+
+> **Operational context decides what to make. Clean visual context makes the image. Quarantine decides whether the image is allowed back into Aromia.**
+
+Prompt cleaning alone is insufficient when the image generator infers from the full conversation. If the active turn is dominated by repository state, OMNI gates, UI, implementation logs, Code, GitHub, checkpoints or QA, **do not invoke image generation there**.
+
+Two consecutive mockup/UI drifts in the same conversation trigger a hard stop for image generation in that conversation. Further retries require a clean visual context.
+
+Rejected wrong generations are process waste: do not commit, implement, cite as evidence or use to mutate editorial/QA/OMNI state.
+
+## El coleccionista correction lock
+
+The existing implementation is not being reopened.
+
+The actual ingested Asset A source remains too flat/diagrammatic for the opening recognition beat. This is a valid source-asset critique, but the previous document is now explicitly a **provisional visual review**, not a completed Final OMNI gate.
 
 Asset A v2 must feel like an observed ordinary domestic shelf/drawer/ledge, not an abstract representation of perfume collecting. Keep it unbranded, imperfect, plausible and quiet. One mundane domestic trace is enough. Avoid luxury styling, perfume-ad lighting, marble, smoke, splashes, gold grading, showroom symmetry and recognizable branded bottle geometry.
 
@@ -60,7 +82,7 @@ Not:
 
 > “Esto representa una colección.”
 
-Preserve everything else unless re-QA finds a genuine implementation defect.
+Preserve prose, section architecture, density states, Le Male typography, preservation notation, `Sí, pero` reset and commerce treatment.
 
 ## Production baseline retained
 
@@ -83,6 +105,10 @@ On **Continúa Aromia desde el repo**:
 4. preserve approved work unless evidence requires correction;
 5. update the relay at phase end;
 6. escalate only genuine strategic, legal/rights, credential, irreversible publication or material-spending decisions.
+
+For any original-image generation, also read and obey:
+
+`docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`
 
 Authority order:
 
