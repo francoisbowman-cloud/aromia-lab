@@ -23,17 +23,19 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 24
+STATE_VERSION: 25
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (visual QA)
-LAST_ACTION: reviewed Publisher desktop screenshot after Code completed Asset A v2 ingestion. Confirmed a separate visual-quality issue on the Editorial v1 home: the three interpretive home images (Amouage material density, Ambroxan material, Ropion overdose) read globally soft/unintentionally out of focus at rendered size. Inspected implementation: all three are next/image fill + objectFit cover; there is no shared CSS filter on the image elements. The .ev1-resin:after blur is only an atmospheric pseudo-element and cannot explain softness across all three sources. Persisted the finding and correction strategy in art-direction/editorial-home-soft-image-qa.md. El coleccionista Asset A v2 is not implicated and remains approved/ingested.
-ACTIVE_OBJECTIVE: correct the three soft Editorial v1 home interpretive images without changing the approved page rhythm; then resume authoritative Final OMNI for El coleccionista and publication gate
+LAST_ACTOR: ChatGPT (temporary Code-role takeover authorized by Publisher while Code session limit was exhausted)
+LAST_ACTION: continued the Editorial v1 home soft-image QA. Recovered intrinsic JPEG dimensions from the three affected repository binaries: Ambroxan 1600x900, Amouage 1600x900, Ropion 1600x900. Compared those dimensions with the existing home slot geometry and confirmed that gross CSS upscale cannot explain softness across all three images. Applied a conservative rendering correction in editorialVisuals.tsx: added optional per-slot Next/Image quality and set quality:95 only for the three affected texture-critical interpretive slots. No sharpening filters, artificial upscale, layout/grid/rhythm changes, or source replacements were made. Updated art-direction/editorial-home-soft-image-qa.md with the diagnosis and staged decision rule. Browser-capable rendered verification is still required before closing the finding.
+ACTIVE_OBJECTIVE: verify the quality-95 home render; if softness remains, replace the three source artworks in clean visual-only generation contexts; then resume authoritative Final OMNI for El coleccionista and publication gate
 ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
 CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66
-BRANCH_STATUS: reconciled with current main via merge f33d184; Asset A v2 ingest and QA handoffs on top
+BRANCH_STATUS: reconciled with current main via merge f33d184; Asset A v2 and home-image QA corrections on top
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
 SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
+QUALITY_PASS_COMMIT: bc3fed3dc825d6571cd501dfd18d8624a6cae798
+SOFT_IMAGE_QA_UPDATE_COMMIT: 4f65788d5c940611c98eddcbcccb9a82e9ddd74a
 PROVISIONAL_VISUAL_REVIEW: art-direction/el-coleccionista-final-omni-review.md
 EDITORIAL: READY
 ART_DIRECTION: READY
@@ -41,8 +43,8 @@ VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
 EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2 SHA256 verified and rendered
 EL_COLECCIONISTA_IMPLEMENTATION: DONE
-HOME_VISUAL_QA: CHANGES_REQUIRED — three existing interpretive sources visibly soft in Publisher screenshot
-QA: CHANGES_REQUIRED — home visual-quality finding must be diagnosed/corrected or explicitly scoped as separate platform follow-up before publication decision
+HOME_VISUAL_QA: VERIFY_RENDER — quality-95 delivery pass committed for three affected interpretive sources
+QA: CHANGES_REQUIRED — rendered desktop/mobile verification required; if the three sources remain soft, replacement is required
 FINAL_OMNI: PENDING
 PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
@@ -50,13 +52,21 @@ PRIMARY_STORY: drafts/el-coleccionista.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
 
 AFFECTED_HOME_SLOTS:
-- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg
-- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg
-- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg
+- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg → 1600x900 → quality:95
+- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg → 1600x900 → quality:95
+- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg → 1600x900 → quality:95
 
-NEXT_ACTOR: Code
-NEXT_ACTION: inspect intrinsic dimensions and the three source binaries locally at 100%; determine whether softness is intrinsic source quality or rendered scaling/DPR behavior. Preserve the current home composition/rhythm. If sources are intrinsically soft, do not artificially sharpen/upscale as the primary fix: hand back to ChatGPT with three clean visual-only replacement capsules under the Visual Generation Isolation Protocol. If sources are sharp, fix sizing/render behavior, run desktop/mobile rendered QA, push, update relay, then return to Final OMNI. Do not touch El coleccionista Asset A v2 unless evidence shows a separate defect.
-BLOCKERS: none for diagnosis. Replacement generation, if required, must occur in a clean visual context per protocol. No merge/deploy until visual QA + Final OMNI publication gate.
+DIAGNOSIS:
+- no CSS blur/filter on the image elements;
+- .ev1-resin:after blur is only an atmospheric overlay and cannot explain all three;
+- source dimensions are sufficient for CSS-size rendering and do not indicate gross upscale;
+- hero can approach source ceiling on high-DPR displays, but lower counterpoints do not;
+- likely remaining causes are intrinsically soft source art plus Next/Image re-encoding loss;
+- quality:95 removes avoidable recompression loss without faking detail.
+
+NEXT_ACTOR: Code when its session is available again, or another browser-capable production actor
+NEXT_ACTION: pull feat/el-coleccionista-implementation and render `/` at desktop and mobile after commit bc3fed3d. Compare the same three image regions against the Publisher screenshot. If the images now show a resolved focal plane and adequate microtexture, mark HOME_VISUAL_QA: PASSED and continue to authoritative Final OMNI. If any remains globally soft, do not add sharpening/upscale; hand that specific source back to ChatGPT with a clean visual-only replacement capsule under the Visual Generation Isolation Protocol. Preserve the current page rhythm and El coleccionista Asset A v2.
+BLOCKERS: browser-capable rendered verification only. No conceptual blocker. No merge/deploy until visual QA + Final OMNI publication gate.
 ```
 
 ## Mandatory turn-closure rule
@@ -91,7 +101,7 @@ Rejected wrong generations are process waste: do not commit, implement, cite as 
 
 ## El coleccionista correction lock
 
-Asset A v2 passed ChatGPT visual quarantine and is ingested in the repo. The new home-image softness finding does not reopen or invalidate it.
+Asset A v2 passed ChatGPT visual quarantine and is ingested in the repo. The home-image softness finding does not reopen or invalidate it.
 
 Narrative test remains:
 
