@@ -1,39 +1,36 @@
 /*
  * Editorial v1 crisp material overrides.
  *
- * These three slots intentionally render as resolution-independent CSS fields
- * while their retired raster sources remain disabled. The goal is to make the
- * abstraction visibly deliberate — textured and graphic — rather than read as
- * an out-of-focus photograph. Geometry and page rhythm are unchanged.
+ * Values are sourced from the shared Aromia design tokens. These three slots
+ * intentionally render as resolution-independent CSS fields while their
+ * retired raster sources remain disabled. Geometry and page rhythm are unchanged.
  */
 
-/* Lead / resin field: remove atmospheric blur and introduce hard material seams. */
 .ev1-resin {
   background:
-    linear-gradient(118deg, transparent 0 18%, rgba(246, 239, 226, .28) 18.2% 18.8%, transparent 19% 100%),
-    linear-gradient(164deg, transparent 0 45%, rgba(189, 142, 80, .34) 45.2% 46%, transparent 46.2% 100%),
-    radial-gradient(circle at 62% 66%, #c89b5b 0 2.4%, #7b5633 2.6% 5.6%, #2a2118 5.8% 12%, transparent 12.2%),
-    radial-gradient(ellipse at 72% 75%, #4a3525 0 12%, #211914 12.4% 26%, transparent 26.4%),
-    linear-gradient(132deg, #d9c8aa 0 17%, #8f7d64 17.4% 19%, #3b3731 19.4% 52%, #171614 52.4% 100%);
+    linear-gradient(118deg, transparent 0 18%, var(--aromia-resin-seam-light) 18.2% 18.8%, transparent 19% 100%),
+    linear-gradient(164deg, transparent 0 45%, var(--aromia-resin-seam-warm) 45.2% 46%, transparent 46.2% 100%),
+    radial-gradient(circle at 62% 66%, var(--aromia-resin-amber) 0 2.4%, var(--aromia-resin-bark) 2.6% 5.6%, var(--aromia-resin-core) 5.8% 12%, transparent 12.2%),
+    radial-gradient(ellipse at 72% 75%, var(--aromia-resin-earth) 0 12%, var(--aromia-resin-deep) 12.4% 26%, transparent 26.4%),
+    linear-gradient(132deg, var(--aromia-resin-paper) 0 17%, var(--aromia-resin-sand) 17.4% 19%, var(--aromia-resin-smoke) 19.4% 52%, var(--aromia-resin-night) 52.4% 100%);
 }
 
 .ev1-resin::after {
   inset: 0;
   filter: none;
   transform: none;
-  opacity: .62;
+  opacity: var(--aromia-texture-medium);
   background:
-    repeating-linear-gradient(102deg, rgba(255,255,255,.09) 0 1px, transparent 1px 13px),
-    repeating-linear-gradient(12deg, rgba(0,0,0,.14) 0 1px, transparent 1px 19px),
-    linear-gradient(90deg, transparent 0 63%, rgba(243,232,211,.12) 63.2% 63.8%, transparent 64%);
+    repeating-linear-gradient(102deg, var(--aromia-resin-grain-light) 0 1px, transparent 1px 13px),
+    repeating-linear-gradient(12deg, var(--aromia-resin-grain-dark) 0 1px, transparent 1px 19px),
+    linear-gradient(90deg, transparent 0 63%, var(--aromia-resin-glint) 63.2% 63.8%, transparent 64%);
 }
 
-/* Mineral field: hard crystalline planes instead of soft radial bloom. */
 .ev1-story.mineral .ev1-material {
   background:
-    linear-gradient(28deg, transparent 0 47%, rgba(255,255,255,.78) 47.2% 48.2%, transparent 48.4% 100%),
-    linear-gradient(132deg, transparent 0 31%, rgba(115,127,125,.42) 31.2% 32%, transparent 32.2% 100%),
-    linear-gradient(54deg, #eff0eb 0 21%, #cfd5d3 21.3% 40%, #aeb9b7 40.3% 58%, #e7e8e2 58.3% 76%, #bec8c6 76.3% 100%);
+    linear-gradient(28deg, transparent 0 47%, var(--aromia-mineral-cut-light) 47.2% 48.2%, transparent 48.4% 100%),
+    linear-gradient(132deg, transparent 0 31%, var(--aromia-mineral-cut-dark) 31.2% 32%, transparent 32.2% 100%),
+    linear-gradient(54deg, var(--aromia-mineral-01) 0 21%, var(--aromia-mineral-02) 21.3% 40%, var(--aromia-mineral-03) 40.3% 58%, var(--aromia-mineral-04) 58.3% 76%, var(--aromia-mineral-05) 76.3% 100%);
 }
 
 .ev1-story.mineral .ev1-material::after {
@@ -41,18 +38,17 @@
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(145deg, rgba(63,73,71,.15) 0 1px, transparent 1px 17px),
-    repeating-linear-gradient(35deg, rgba(255,255,255,.35) 0 1px, transparent 1px 23px);
+    repeating-linear-gradient(145deg, var(--aromia-mineral-grain-dark) 0 1px, transparent 1px 17px),
+    repeating-linear-gradient(35deg, var(--aromia-mineral-grain-light) 0 1px, transparent 1px 23px);
   mix-blend-mode: multiply;
-  opacity: .48;
+  opacity: var(--aromia-texture-soft);
   pointer-events: none;
 }
 
-/* Ropion field: explicit petal/cut-paper geometry, not optical softness. */
 .ev1-story.ropion .ev1-material {
   background:
-    conic-gradient(from 22deg at 67% 62%, #8f2842 0 13%, #4b1425 13% 28%, #bc5e78 28% 41%, #651b32 41% 58%, #d79aaa 58% 72%, #3f101f 72% 100%),
-    linear-gradient(135deg, #2c0d17 0 38%, #5a162a 38.3% 62%, #1d0910 62.3% 100%);
+    conic-gradient(from 22deg at 67% 62%, var(--aromia-floral-01) 0 13%, var(--aromia-floral-02) 13% 28%, var(--aromia-floral-03) 28% 41%, var(--aromia-floral-04) 41% 58%, var(--aromia-floral-05) 58% 72%, var(--aromia-floral-06) 72% 100%),
+    linear-gradient(135deg, var(--aromia-floral-ground-01) 0 38%, var(--aromia-floral-ground-02) 38.3% 62%, var(--aromia-floral-ground-03) 62.3% 100%);
 }
 
 .ev1-story.ropion .ev1-material::after {
@@ -60,8 +56,8 @@
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(74deg, rgba(255,255,255,.075) 0 1px, transparent 1px 11px),
-    linear-gradient(148deg, transparent 0 44%, rgba(238,186,199,.3) 44.2% 45%, transparent 45.2% 100%);
-  opacity: .72;
+    repeating-linear-gradient(74deg, var(--aromia-floral-grain) 0 1px, transparent 1px 11px),
+    linear-gradient(148deg, transparent 0 44%, var(--aromia-floral-glint) 44.2% 45%, transparent 45.2% 100%);
+  opacity: var(--aromia-texture-strong);
   pointer-events: none;
 }
