@@ -1,11 +1,11 @@
 :root {
-  /* Aromia editorial surfaces */
-  --aromia-paper: #f4f0e8;
+  /* Aromia editorial surfaces — canonical semantic layer */
+  --aromia-paper: #f7f5f0;
   --aromia-paper-clean: #fffdf8;
   --aromia-paper-soft: #f7f1e8;
-  --aromia-ink: #171715;
-  --aromia-ink-rgb: 23, 23, 21;
-  --aromia-line: rgba(23, 23, 21, .18);
+  --aromia-ink: #20231f;
+  --aromia-ink-rgb: 32, 35, 31;
+  --aromia-line: rgba(32, 35, 31, .14);
   --aromia-chrome-bg: rgba(247, 245, 240, .94);
   --aromia-chrome-shadow: rgba(14, 19, 17, .12);
   --aromia-editorial-accent: #5a6b54;
@@ -57,8 +57,11 @@
 }
 
 [data-theme="dark"] {
+  --aromia-paper: #0e1311;
   --aromia-paper-clean: #100d0a;
   --aromia-paper-soft: #15110d;
+  --aromia-ink: #f4f1ea;
+  --aromia-line: rgba(247, 245, 240, .14);
   --aromia-chrome-bg: rgba(14, 19, 17, .94);
   --aromia-editorial-accent: #b8c5b3;
 }
