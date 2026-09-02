@@ -1,0 +1,62 @@
+:root {
+  /* Aromia editorial surfaces */
+  --aromia-paper: #f4f0e8;
+  --aromia-paper-clean: #fffdf8;
+  --aromia-paper-soft: #f7f1e8;
+  --aromia-ink: #171715;
+  --aromia-ink-rgb: 23, 23, 21;
+  --aromia-line: rgba(23, 23, 21, .18);
+  --aromia-chrome-bg: rgba(247, 245, 240, .94);
+  --aromia-chrome-shadow: rgba(14, 19, 17, .12);
+
+  /* Editorial material study — resin */
+  --aromia-resin-paper: #d9c8aa;
+  --aromia-resin-sand: #8f7d64;
+  --aromia-resin-smoke: #3b3731;
+  --aromia-resin-night: #171614;
+  --aromia-resin-amber: #c89b5b;
+  --aromia-resin-bark: #7b5633;
+  --aromia-resin-core: #2a2118;
+  --aromia-resin-earth: #4a3525;
+  --aromia-resin-deep: #211914;
+  --aromia-resin-seam-light: rgba(246, 239, 226, .28);
+  --aromia-resin-seam-warm: rgba(189, 142, 80, .34);
+  --aromia-resin-grain-light: rgba(255, 255, 255, .09);
+  --aromia-resin-grain-dark: rgba(0, 0, 0, .14);
+  --aromia-resin-glint: rgba(243, 232, 211, .12);
+
+  /* Editorial material study — mineral */
+  --aromia-mineral-01: #eff0eb;
+  --aromia-mineral-02: #cfd5d3;
+  --aromia-mineral-03: #aeb9b7;
+  --aromia-mineral-04: #e7e8e2;
+  --aromia-mineral-05: #bec8c6;
+  --aromia-mineral-cut-light: rgba(255, 255, 255, .78);
+  --aromia-mineral-cut-dark: rgba(115, 127, 125, .42);
+  --aromia-mineral-grain-dark: rgba(63, 73, 71, .15);
+  --aromia-mineral-grain-light: rgba(255, 255, 255, .35);
+
+  /* Editorial material study — floral / Ropion */
+  --aromia-floral-01: #8f2842;
+  --aromia-floral-02: #4b1425;
+  --aromia-floral-03: #bc5e78;
+  --aromia-floral-04: #651b32;
+  --aromia-floral-05: #d79aaa;
+  --aromia-floral-06: #3f101f;
+  --aromia-floral-ground-01: #2c0d17;
+  --aromia-floral-ground-02: #5a162a;
+  --aromia-floral-ground-03: #1d0910;
+  --aromia-floral-grain: rgba(255, 255, 255, .075);
+  --aromia-floral-glint: rgba(238, 186, 199, .3);
+
+  /* Reusable editorial texture strengths */
+  --aromia-texture-strong: .72;
+  --aromia-texture-medium: .62;
+  --aromia-texture-soft: .48;
+}
+
+[data-theme="dark"] {
+  --aromia-paper-clean: #100d0a;
+  --aromia-paper-soft: #15110d;
+  --aromia-chrome-bg: rgba(14, 19, 17, .94);
+}
