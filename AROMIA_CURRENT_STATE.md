@@ -23,40 +23,28 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 28
+STATE_VERSION: 29
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (temporary Code + OMNI + Production takeover authorized by Publisher while Code session limit was exhausted)
-LAST_ACTION: closed El coleccionista end-to-end. Final OMNI PASS was persisted. The original draft PR #123 was closed only because the connector's Mark Ready mutation was broken; replacement non-draft PR #124 carried the exact same head and was merged successfully. main merge commit e292548000a150c7194b48e579b652abffbe8bd1 triggered Railway production deployment 4cf92514-b0b2-44a9-8065-a29add0a7f2b on the canonical web service, which reached SUCCESS. Production build manifest includes the static route /historias/el-coleccionista. The three pre-existing soft Editorial v1 cover images remain a separately tracked non-blocking follow-up.
-ACTIVE_OBJECTIVE: resume normal Aromia editorial production from a clean post-release baseline; separately resolve the three soft Editorial v1 cover sources when a trustworthy visual-QA pass is available
-ACTIVE_BRANCH: main
-CURRENT_MAIN_SHA: e292548000a150c7194b48e579b652abffbe8bd1 (story release merge; this relay update is a later docs-only main commit)
-RELEASE_PR: #124 feat: publish El coleccionista — MERGED
-SUPERSEDED_DRAFT_PR: #123 — CLOSED, not merged; replaced only due connector Mark Ready bug
-PRODUCTION_DEPLOYMENT: Railway 4cf92514-b0b2-44a9-8065-a29add0a7f2b — SUCCESS — main@e292548000a150c7194b48e579b652abffbe8bd1
-CANONICAL_ROUTE: /historias/el-coleccionista
-FINAL_OMNI_REVIEW: art-direction/el-coleccionista-final-omni-review.md
+LAST_ACTOR: ChatGPT (temporary Code-role takeover authorized by Publisher)
+LAST_ACTION: resolved the separate Editorial v1 home soft-image follow-up without reopening El coleccionista. The three affected 1600x900 interpretive raster sources were classified as insufficiently resolved for their prominent cover roles after source-dimension/code diagnosis and the earlier quality:95 delivery experiment. Created branch fix/editorial-home-crisp-fallback and disabled only those three raster slots (present:false), causing VisualField to use the existing resolution-independent CSS artwork already authored for the exact same boxes. Composition, copy, spacing, mobile/desktop geometry, documentary assets and El coleccionista remain untouched. art-direction/editorial-home-soft-image-qa.md now records STATUS: RESOLVED_BY_CRISP_FALLBACK. Future sharper raster replacements are optional and must pass the Visual Generation Isolation Protocol before reactivation.
+ACTIVE_OBJECTIVE: integrate the crisp home fallback after CI; then resume normal Aromia editorial production from main
+ACTIVE_BRANCH: fix/editorial-home-crisp-fallback
+BASE_BRANCH: main
+EL_COLECCIONISTA: LIVE — CLOSED — DO NOT REOPEN CASUALLY
 FINAL_OMNI: PASS
-EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2
-EL_COLECCIONISTA_IMPLEMENTATION: DONE
-EL_COLECCIONISTA_QA: PASSED
 PUBLISH: LIVE
-PUBLISHED_AT: 2026-09-02
-PRIMARY_STORY: drafts/el-coleccionista.md
-IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
-ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
-VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
-
-HOME_VISUAL_QA: NONBLOCKING_FOLLOWUP
+HOME_VISUAL_QA: RESOLVED_BY_CRISP_FALLBACK
 SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
+HOME_FALLBACK_CODE_COMMIT: 368d3b87a912b14f4a66ada4e95f80fe6fb99210
+HOME_FALLBACK_QA_COMMIT: 221abc8ee992e82e2fbb95fe989c99c2ab716d85
 AFFECTED_HOME_SLOTS:
-- amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg → 1600x900 → quality:95 experiment
-- ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg → 1600x900 → quality:95 experiment
-- ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg → 1600x900 → quality:95 experiment
-RULE: if those sources remain visibly soft in a trustworthy later render, replace the source art under the Visual Generation Isolation Protocol; do not sharpen/upscale artificially and do not redesign the approved home rhythm.
-
-NEXT_ACTOR: Cowork / next editorial story, unless Publisher explicitly chooses the home-softness follow-up first
-NEXT_ACTION: continue the editorial calendar/workflow from main. El coleccionista is closed and must not be reopened casually. Preserve its prose, composition, Asset A v2, Le Male typographic lineage, preservation notation, Sí, pero reset and contextual commerce. Keep the home-softness finding open as a separate platform/editorial-cover task.
-BLOCKERS: none for El coleccionista. Remote standalone screenshot capture remains unavailable in the current toolset and is documented; it did not block release because source inspection, Code browser measurements, CI, Strict Audit, isolated branch build and production deployment all passed.
+- amouage-material-density-interpretive → raster disabled; existing ev1-resin CSS artwork active
+- ambroxan-material-interpretive → raster disabled; existing ev1-story.mineral CSS artwork active
+- ropion-overdose-interpretive → raster disabled; existing ev1-story.ropion CSS artwork active
+RULE: future raster replacements are optional. Do not sharpen/upscale the old JPEGs. Any new original art must be created in a clean visual context, quarantined, and only then set present:true.
+NEXT_ACTOR: Code/CI integration, then Cowork / next editorial story
+NEXT_ACTION: open PR for fix/editorial-home-crisp-fallback, run required CI/Strict Audit, merge if green, verify production deploy success, then return Aromia to normal editorial-calendar flow. Preserve El coleccionista release lock.
+BLOCKERS: none. No image generation is required to close the softness defect.
 ```
 
 ## Mandatory turn-closure rule
@@ -98,6 +86,12 @@ Narrative test for Asset A remains:
 > **“Yo conozco ese estante.”**
 
 Do not reopen or redesign the story without new evidence or explicit Publisher direction.
+
+## Editorial home softness resolution
+
+The three raster cover artworks reported as unintentionally soft by the Publisher are no longer active. Their existing CSS fallbacks now occupy the same approved slots. This closes the raster-focus defect without altering the page rhythm.
+
+The retired raster files remain in the repository for traceability but must not be re-enabled unless a deliberate review reverses this decision. Future replacement art must follow the visual-isolation protocol.
 
 ## Production baseline retained
 
