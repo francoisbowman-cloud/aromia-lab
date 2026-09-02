@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { RouteAnalytics } from "@/components/RouteAnalytics";
 import { WebVitals } from "@/components/WebVitals";
+import "./design-tokens.css";
 import "./globals.css";
 import "./aromia-redesign.css";
 
