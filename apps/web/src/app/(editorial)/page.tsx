@@ -77,7 +77,6 @@ export default function EditorialHome() {
         <VisualField
           slotId="amouage-material-density-interpretive"
           className="ev1-resin"
-          marker="RESINA · TERRITORIO · ENCUENTRO"
           sizes="(max-width: 800px) 100vw, 60vw"
         />
       </section>
