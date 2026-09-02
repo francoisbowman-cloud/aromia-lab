@@ -18,12 +18,13 @@ const archivo = Archivo({ subsets: ["latin"], weight: ["400", "500", "600", "700
 const ibmPlexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-plex" });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_DESCRIPTION = "Historias, materias, personas y rutas para entender el perfume con más contexto y menos ruido.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "Aromia", template: "%s | Aromia" },
-  description: "Descubre, compara y entiende perfumes a través de notas, historias y recomendaciones editoriales.",
-  openGraph: { siteName: "Aromia", title: "Aromia", description: "Descubre, compara y entiende perfumes a través de notas, historias y recomendaciones editoriales.", type: "website" },
+  description: SITE_DESCRIPTION,
+  openGraph: { siteName: "Aromia", title: "Aromia", description: SITE_DESCRIPTION, type: "website" },
   twitter: { card: "summary_large_image" },
 };
 
