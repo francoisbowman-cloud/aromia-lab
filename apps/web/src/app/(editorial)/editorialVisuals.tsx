@@ -21,15 +21,12 @@ export interface VisualSlot {
   type: SlotType;
   present: boolean;
   file: string | null;
-  /** intrinsic pixel size — required for documentary (intrinsic) rendering */
   width?: number;
   height?: number;
-  /** Next/Image delivery quality. Raise selectively for texture-critical interpretive art. */
   quality?: number;
   alt: string;
   caption?: string;
   provenance?: string;
-  /** aria-label used on the placeholder while `present` is false */
   placeholderLabel: string;
 }
 
@@ -37,9 +34,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ambroxan-material-interpretive": {
     id: "ambroxan-material-interpretive",
     type: "interpretive",
-    // Source art is intentionally disabled until a sharper replacement exists.
-    // The established CSS fallback preserves the approved slot geometry/rhythm.
-    present: false,
+    present: true,
     file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
     quality: 95,
     alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
@@ -64,9 +59,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ropion-overdose-interpretive": {
     id: "ropion-overdose-interpretive",
     type: "interpretive",
-    // Source art is intentionally disabled until a sharper replacement exists.
-    // The established CSS fallback preserves the approved slot geometry/rhythm.
-    present: false,
+    present: true,
     file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
     quality: 95,
     alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
@@ -76,9 +69,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "amouage-material-density-interpretive": {
     id: "amouage-material-density-interpretive",
     type: "interpretive",
-    // Source art is intentionally disabled until a sharper replacement exists.
-    // The established CSS fallback preserves the approved slot geometry/rhythm.
-    present: false,
+    present: true,
     file: "/editorial-v1/amouage-mineral-density-01.jpg",
     quality: 95,
     alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
@@ -100,10 +91,6 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     placeholderLabel:
       "Espacio reservado para imagen documental de Jabal Akhdar (Omán), pendiente de descarga con procedencia.",
   },
-  // El coleccionista — Asset A v2 (opening domestic collection scene).
-  // Spec locked in art-direction/el-coleccionista-visual-assets-handoff.md;
-  // v2 passed ChatGPT visual quarantine (relay v22) — an observed crowded
-  // domestic shelf, not a campaign still. Interpretive, not documentary.
   "coleccionista-shelf-interpretive": {
     id: "coleccionista-shelf-interpretive",
     type: "interpretive",
@@ -133,16 +120,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
 interface VisualFieldProps {
   slotId: string;
   className: string;
-  /** decorative label shown inside the placeholder (e.g. the resin marker) */
   marker?: string;
   sizes?: string;
 }
 
-/**
- * Renders an approved asset when present, otherwise the CSS placeholder box.
- * While no slot is `present`, no `next/image` is emitted, so a missing binary
- * cannot break the build.
- */
 export function VisualField({ slotId, className, marker, sizes }: VisualFieldProps) {
   const slot = EDITORIAL_V1_SLOTS[slotId];
 
@@ -158,7 +139,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
-  // Documentary: intrinsic image, provenance caption in normal flow below.
   if (slot.width && slot.height) {
     return (
       <figure className={`${className} ev1-doc-figure`}>
@@ -176,9 +156,8 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
-  // Interpretive: fill cover.
   return (
-    <figure className={className}>
+    <figure className={`${className} ev1-photo`}>
       <Image
         src={slot.file}
         alt={slot.alt}

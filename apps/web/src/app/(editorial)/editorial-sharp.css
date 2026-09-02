@@ -1,9 +1,10 @@
 /*
- * Editorial v1 crisp material overrides.
+ * Editorial v1 material fallbacks.
  *
- * Values are sourced from the shared Aromia design tokens. These three slots
- * intentionally render as resolution-independent CSS fields while their
- * retired raster sources remain disabled. Geometry and page rhythm are unchanged.
+ * These fields preserve geometry and a meaningful fallback when an interpretive
+ * asset is unavailable. When a real approved photo is present, `.ev1-photo`
+ * suppresses the synthetic field and its pseudo-texture so the image reads as
+ * photography rather than as a CSS material study.
  */
 
 .ev1-resin {
@@ -60,4 +61,14 @@
     linear-gradient(148deg, transparent 0 44%, var(--aromia-floral-glint) 44.2% 45%, transparent 45.2% 100%);
   opacity: var(--aromia-texture-strong);
   pointer-events: none;
+}
+
+/* Approved interpretive photography wins over the synthetic fallback. */
+.ev1-photo {
+  background: none !important;
+}
+
+.ev1-photo::after {
+  content: none !important;
+  display: none !important;
 }
