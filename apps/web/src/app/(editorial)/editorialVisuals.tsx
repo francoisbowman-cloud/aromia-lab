@@ -8,10 +8,13 @@ import Image from "next/image";
  *
  * A slot with `present: false` renders its CSS placeholder box. A documentary
  * slot (has `width`/`height`) renders as an intrinsic image with its
- * provenance caption in normal flow below it. An interpretive slot renders as
- * a `fill` cover image. Wiring an approved asset: drop the file under
- * `apps/web/public/editorial-v1/`, set `present: true`, `file`, and — for
- * documentary — `width`/`height` + `caption` + `provenance`.
+ * provenance caption in normal flow below it. An interpretive/hero slot
+ * renders as a `fill` cover image.
+ *
+ * Important production rule: image-quality concerns must be solved by replacing
+ * the source, not by hiding photography behind a CSS fallback. The three hero
+ * slots below intentionally point at sharp photographic sources rather than the
+ * earlier soft interpretive rasters.
  */
 
 export type SlotType = "interpretive" | "documentary";
@@ -35,9 +38,11 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "ambroxan-material-interpretive",
     type: "interpretive",
     present: true,
-    file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
+    file: "/editorial-v1/clary-sage-documentary.jpg",
     quality: 95,
-    alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
+    alt: "Salvia sclarea en fotografía botánica, materia vegetal vinculada a la ruta sintética moderna del ambroxan.",
+    provenance:
+      "https://commons.wikimedia.org/wiki/File:Salvia_sclarea_001.JPG — autor: Llez — CC BY-SA 3.0 / GFDL",
     placeholderLabel:
       "Área visual interpretativa: estudio material del ambroxan. No representa evidencia documental.",
   },
@@ -60,9 +65,11 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "ropion-overdose-interpretive",
     type: "interpretive",
     present: true,
-    file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
+    file: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Blood-red_rose_up_close_%28Unsplash%29.jpg",
     quality: 95,
-    alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
+    alt: "Primer plano fotográfico de una rosa rojo profundo, usada como imagen editorial del volumen floral asociado a Dominique Ropion.",
+    provenance:
+      "https://commons.wikimedia.org/wiki/File:Blood-red_rose_up_close_(Unsplash).jpg — Jez Timms — CC0 1.0",
     placeholderLabel:
       "Área visual interpretativa: exceso floral controlado. No representa evidencia documental.",
   },
@@ -70,9 +77,11 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "amouage-material-density-interpretive",
     type: "interpretive",
     present: true,
-    file: "/editorial-v1/amouage-mineral-density-01.jpg",
+    file: "/editorial-v1/oman-place-documentary.jpg",
     quality: 95,
-    alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
+    alt: "Paisaje montañoso de Jabal Akhdar, Omán, contexto geográfico de la historia de la perfumería omaní contemporánea.",
+    provenance:
+      "https://commons.wikimedia.org/wiki/File:Landscape_of_Jabal_Akhdar,_Oman.jpg — autor: Ontheroadom — CC BY-SA 4.0",
     placeholderLabel:
       "Área visual interpretativa: densidad material. No representa evidencia documental.",
   },
