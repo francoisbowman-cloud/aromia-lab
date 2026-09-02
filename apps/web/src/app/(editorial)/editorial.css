@@ -8,6 +8,9 @@
 .ev1 figure.ev1-resin,.ev1 figure.ev1-material{margin:0}
 .ev1-figcaption{position:absolute;left:0;right:0;bottom:0;margin:0;padding:8px 14px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:rgba(244,240,229,.88);color:#171715;z-index:2}
 
+/* External interpretive photography: preserve the exact existing crop roles without Next/Image re-encoding. */
+.ev1-interpretive-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
 /* documentary slots: intrinsic image + provenance caption in normal flow */
 figure.ev1-doc-figure{margin:0 0 8px!important;display:block;border:0!important;background:none!important;clip-path:none!important;height:auto!important;min-height:0!important;overflow:visible!important;align-self:start}
 figure.ev1-doc-figure .ev1-doc-img{display:block;width:100%;height:auto}
