@@ -23,31 +23,36 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 31
+STATE_VERSION: 32
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (editorial voice evolution)
-LAST_ACTION: dissected the Publisher conversation as a canonical voice-evolution source and promoted the supported findings into AROMIA_VOICE_BIBLE.md v0.3. Added research/aromia-voice-chat-analysis-2026-09-02.md to preserve the reasoning evidence without treating raw voice transcription as finished prose. Voice v0.3 now formalizes: live reasoning over polished template logic; completing supported unfinished thoughts without inventing biography; contradiction as a change of pressure rather than repetitive `sí, pero`; small ordinary incidents as legitimate essay origins; the asymmetry between the wearer's own perception and other people's experience of a fragrance; survival of ordinary social language; domestic realism over automatic luxury framing; and new editorial tests for origin pressure, honest thought completion, contradiction variety, scene survival and perception gaps.
-ACTIVE_OBJECTIVE: resume normal Aromia editorial production using Voice Bible v0.3 as the canonical voice contract
+LAST_ACTOR: ChatGPT (temporary Code-role takeover authorized by Publisher)
+LAST_ACTION: investigated why the Publisher still perceived the three Editorial v1 home fields as blurred after the earlier raster-disable fix. Verified that main already had the three raster slots set present:false, but the active CSS fallback itself still used soft radial fields and, in the lead resin field, filter: blur(18px). This meant the functional replacement reached main but did not visually solve the reported softness. Added apps/web/src/app/(editorial)/editorial-sharp.css with crisp, resolution-independent material fields for the same three boxes, removed optical blur from the active appearance through overrides, added hard material seams/microcontrast, and imported the override from the editorial layout. Geometry, copy, spacing, responsive rhythm, documentary assets and El coleccionista remain unchanged.
+ACTIVE_OBJECTIVE: verify the latest main production deployment for the crisp Editorial v1 material overrides, then resume normal editorial production
 ACTIVE_BRANCH: main
 VOICE_BIBLE: AROMIA_VOICE_BIBLE.md — v0.3
 VOICE_SOURCE_ANALYSIS: research/aromia-voice-chat-analysis-2026-09-02.md
 VOICE_EVOLUTION_COMMIT: 7d7095c288e2e88aae516b43b3b3178ec71c7dca
-HOME_FIX_PR: #126 — MERGED
-HOME_FIX_MERGE: 1b3cad8575e6b7281feef05589352f63c0ddce35
-HOME_FIX_DEPLOYMENT: Railway 90ad55bb-4444-41fb-8009-208d43bba0d6 — SUCCESS
-HOME_VISUAL_QA: RESOLVED_BY_CRISP_FALLBACK
+HOME_CRISP_STYLE_COMMIT: 53326209a00852e3a4e372f990b3ed209ebd136b
+HOME_CRISP_IMPORT_COMMIT: 4a0ef4ad0ecfef2a0d4d51c54ea3e573c3269961
+HOME_CRISP_STYLESHEET: apps/web/src/app/(editorial)/editorial-sharp.css
+HOME_CRISP_DEPLOYMENT: Railway web deployment 4b08221a-8390-4044-8f47-4c341d0f7c90 — BUILDING at turn close; build has compiled successfully and static generation completed, final deployment status still requires verification
+AFFECTED_HOME_FIELDS:
+- lead resin field → active CSS override removes blur and uses hard seams / fine linear texture
+- mineral field → active CSS override uses crystalline planes / line microtexture rather than soft radial bloom
+- ropion field → active CSS override uses explicit cut-paper/petal geometry / line texture rather than photographic softness
+OLD_RASTERS: remain disabled; do not re-enable or sharpen/upscale them
+HOME_VISUAL_QA: TECHNICAL_CAUSE_CORRECTED_IN_MAIN — production visual confirmation pending latest Railway deployment success
 EL_COLECCIONISTA: LIVE — CLOSED — DO NOT REOPEN CASUALLY
 EL_COLECCIONISTA_FINAL_OMNI: PASS
 EL_COLECCIONISTA_PUBLISH: LIVE
 EDITORIAL_VOICE_RULE: study how the Publisher thinks, not the surface artifacts of voice transcription. Complete the thought when direction is supported; never fabricate the life behind it.
 CONTRADICTION_RULE: `sí, pero` is not a branded catchphrase. Vary or remove contradiction mechanisms so the reader feels thought changing direction rather than a repeated editorial device.
-PERCEPTION_RULE: when relevant, consider the gap between wearer intention/self-perception and how fragrance is experienced by other people; do not force this into etiquette advice.
 ORDINARY_SCENE_RULE: preserve domestic and social specificity. Do not automatically elevate everyday perfume life into luxury advertising language or perfume jargon.
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
-NEXT_ACTOR: Cowork / next editorial story
-NEXT_ACTION: continue the editorial calendar/workflow from main. Cowork must read AROMIA_VOICE_BIBLE.md v0.3 plus the canonical source analysis before drafting the next story. Treat El coleccionista and the home-softness correction as closed baselines unless new evidence or explicit Publisher direction requires reopening them.
-BLOCKERS: none.
+NEXT_ACTOR: Code/ChatGPT verification, then Cowork / next editorial story
+NEXT_ACTION: verify Railway deployment 4b08221a-8390-4044-8f47-4c341d0f7c90 reaches SUCCESS and inspect the live home. If the Publisher still perceives softness after this exact commit is live, treat that as new visual evidence and refine the three CSS fields only; do not alter page rhythm. Once verified, continue the editorial calendar using Voice Bible v0.3.
+BLOCKERS: no code blocker. Only latest production deployment completion/visual confirmation remains.
 ```
 
 ## Mandatory turn-closure rule
@@ -78,6 +83,14 @@ Voice-mode restarts, filler, malformed speech and accidental repetition are not 
 
 The recurring `sí, pero` correction is also canonical: contradiction belongs to Aromia, but no single wording owns that function.
 
+## Editorial home softness correction
+
+The first softness fix correctly disabled the three weak 1600×900 raster sources, but the Publisher's subsequent live observation revealed that the CSS fallbacks themselves still read as blurred imagery. Investigation confirmed the lead fallback contained `filter: blur(18px)` and the supporting fields relied on broad soft radial gradients.
+
+`apps/web/src/app/(editorial)/editorial-sharp.css` now overrides only those three approved boxes with crisp, resolution-independent material studies. It does not change their dimensions or their place in the editorial composition.
+
+The retired raster files remain traceability artifacts and must not be re-enabled without a new deliberate visual review.
+
 ## Visual-generation incident correction — canonical rule
 
 Repeated wrong generations for `El coleccionista` produced dashboards/checkpoints/GitHub-like mockups rather than the requested domestic scene. The root cause is treated as **conversation-context contamination**, not merely prompt wording.
@@ -105,12 +118,6 @@ Narrative test for Asset A remains:
 > **“Yo conozco ese estante.”**
 
 Do not reopen or redesign the story without new evidence or explicit Publisher direction.
-
-## Editorial home softness resolution
-
-The three raster cover artworks reported as unintentionally soft by the Publisher are no longer active. Their existing CSS fallbacks now occupy the same approved slots. This closes the raster-focus defect without altering the page rhythm.
-
-The retired raster files remain in the repository for traceability but must not be re-enabled unless a deliberate review reverses this decision. Future replacement art must follow the visual-isolation protocol.
 
 ## Production baseline retained
 
