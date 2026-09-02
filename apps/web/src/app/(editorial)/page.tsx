@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./editorial.css";
+import "./home-story-rhythm.css";
 import { VisualField } from "./editorialVisuals";
 
 export const metadata: Metadata = {
@@ -87,7 +88,7 @@ export default function EditorialHome() {
             <VisualField
               slotId={s.slot}
               className="ev1-material"
-              sizes="(max-width: 800px) 100vw, 50vw"
+              sizes="(max-width: 800px) 100vw, 58vw"
             />
             <div className="ev1-story-copy">
               <p className="ev1-kicker">{s.kicker}</p>
