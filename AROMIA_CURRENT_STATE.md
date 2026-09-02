@@ -23,15 +23,16 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 34
+STATE_VERSION: 35
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT acting as Cowork + Code + ChatGPT + OMNI + Production under explicit Publisher authorization for this UX/UI consolidation
-LAST_ACTION: completed the 2026-09-02 Aromia UX/UI/information-architecture consolidation directly in main. Established one navigation model; moved Home and /historias routes onto the shared global shell; restored complete mobile navigation; made /magazine the unified Historias archive; introduced a canonical editorial story index consumed by archive/search/sitemap; reframed Search around fragancias + historias rather than catálogo + Magazine; evolved /academia into the public Saber territory; promoted /perfumistas to Personas and connected Dominique Ropion to the canonical related story; integrated Quiz as Discovery onboarding and returned quiz results into the Discovery map; reframed /catalogo/[slug] as an Aromia/Discovery reference page instead of a child of the retired public Catalog; made Club explicitly subordinate/in preparation; migrated touched UI to canonical semantic design tokens; updated the strict governance audit to recognize the intentional Personas taxonomy evolution; aligned legacy /magazine/[slug] reading routes with the Historias mental model. Functional head 92e8bda8ccdb38e3a263823773bcf825edd0b273 passed v2.0 CI and Aromia Strict Audit and was deployed successfully to Railway production.
-ACTIVE_OBJECTIVE: resume editorial production from the unified Aromia product baseline; perform screenshot-based visual/browser regression QA when a Browser-capable surface is available, treating any finding as new evidence rather than reopening the architecture speculatively
+LAST_ACTOR: ChatGPT acting as Code + OMNI + Production under explicit Publisher instruction to carry the rendered QA cycle through to completion
+LAST_ACTION: completed real-browser OMNI Render QA against production after the 2026-09-02 UX/UI consolidation. Built and merged reusable product-neutral OMNI Render QA improvements in image-toolkit (#75/#76/#77), corrected three evidence-backed Aromia issues in PR #127, deployed Aromia commit 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409 to Railway, then ran the final verified Chromium/Playwright gate over 11 public routes at mobile 390x844 and desktop 1280x900. Final OMNI result: PASS 11, REVIEW 0, FAIL 0. Discovery's three mobile lazy-image findings were independently verified against their same-origin image endpoints and all returned reachable image responses. No publication imagery was generated or reopened.
+ACTIVE_OBJECTIVE: resume editorial production from the unified, deployed and browser-verified Aromia baseline; treat any future rendered finding as new evidence rather than reopening this closed QA cycle speculatively
 ACTIVE_BRANCH: main
-FUNCTIONAL_BASELINE_SHA: 92e8bda8ccdb38e3a263823773bcf825edd0b273
+FUNCTIONAL_BASELINE_SHA: 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
 UX_UI_CLOSEOUT: audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md
 UX_UI_SOURCE_AUDIT: audits/AROMIA_UX_UI_INFORMATION_ARCHITECTURE_AUDIT_2026-09-02.md
+RENDER_QA_CLOSEOUT: audits/AROMIA_RENDER_QA_CLOSEOUT_2026-09-02.md
 DESIGN_SYSTEM_CONTRACT: AROMIA_DESIGN_SYSTEM.md — v1.0
 DESIGN_TOKENS: apps/web/src/app/design-tokens.css
 NAVIGATION_MODEL: apps/web/src/lib/siteNavigation.ts
@@ -47,21 +48,25 @@ CLUB_ROLE: future continuation / waitlist, explicitly in preparation
 SEARCH_ROLE: cross-search of fragancias + unified editorial archive
 P0_STATUS: RESOLVED — shared shell, complete mobile nav, canonical story discovery, dead Catalog breadcrumb removed
 P1_STATUS: RESOLVED FOR CURRENT BASELINE — Personas surfaced, Saber naming standardized, Quiz integrated into Discovery, Search reframed, Magazine assigned archive role, repeated touched accent/surface semantics migrated to tokens
-V2_CI: run 33645935860 — SUCCESS on functional head 92e8bda8ccdb38e3a263823773bcf825edd0b273
-STRICT_AUDIT: run 33645935867 — SUCCESS on functional head 92e8bda8ccdb38e3a263823773bcf825edd0b273; OMNI strict audit failures=0 warnings=0
-RAILWAY_WEB_DEPLOYMENT: a7f30f84-eb46-4f2b-83b6-3214d72ac768 — SUCCESS — functional head 92e8bda8ccdb38e3a263823773bcf825edd0b273
-RAILWAY_RUNTIME: private catalog preflight PASS count=125; Next.js ready in 306ms
+AROMIA_QA_FIX_PR: #127 — MERGED — production commit 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
+V2_CI: run 33660677100 — SUCCESS on corrective head 83f9bfb710ec723b24041e41799b657586213f45
+STRICT_AUDIT: run 33660677741 — SUCCESS on corrective head 83f9bfb710ec723b24041e41799b657586213f45
+RAILWAY_WEB_DEPLOYMENT: d33eaf73-2805-49cd-a1c9-3e495ef43bb5 — SUCCESS — production commit 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
+RAILWAY_RUNTIME: private catalog preflight PASS count=125; Next.js ready in 524ms
 BUILD_EVIDENCE: compiled successfully; static generation 29/29; relevant public routes present
-BROWSER_QA: NOT CLAIMED — Browser plugin/attached Playwright runtime unavailable in this session; no screenshot, DOM-interaction, or browser-console evidence was fabricated
-KNOWN_NONBLOCKING_TECH_DEBT: Next.js build reports non-fatal Newsreader font-override warning; dependency installs report existing audit vulnerabilities. Neither blocked build/deploy and neither was introduced as part of the UX/UI IA change set.
+OMNI_RENDER_QA: VERIFIED_BROWSER_PASS — Railway deployment 509bee11-a90a-4f5b-8efc-ae37953a7b6b — 11 PASS / 0 REVIEW / 0 FAIL over 22 viewport observations; every route produced screenshot evidence; no horizontal overflow, clipped text, console errors or page errors gated the final run
+OMNI_RENDER_QA_TOOLING: image-toolkit PR #75 merged eac35cb82d74bbf543dd87a0846236417ad1c362; PR #76 merged d73f7133eb9593ef22305db2cdf8ee007817507e; PR #77 merged 2f709e88b47613ed6cdbd2459c88c1aaaffb5069
+DISCOVERY_MEDIA_VERIFICATION: PASS — /api/catalog-image/loewe-001-woman-edp, /api/catalog-image/1-million and /api/catalog-image/212-vip-edp independently returned reachable image responses; mobile DOM non-load state was not a broken origin asset
+BROWSER_QA_BOUNDARY: real Chromium/Playwright rendered QA IS CLAIMED for technical browser evidence. Generated PNGs were not manually inspected one-by-one for aesthetic excellence in this session; screenshot existence is evidence, not a substitute for Taste/human art-direction review.
+KNOWN_NONBLOCKING_TECH_DEBT: Next.js build reports non-fatal Newsreader font-override warning; dependency installs report existing audit vulnerabilities. Neither blocked build/deploy/browser QA and neither was introduced by this correction set.
 VOICE_BIBLE: AROMIA_VOICE_BIBLE.md — v0.3
-EL_COLECCIONISTA: LIVE — CLOSED — DO NOT REOPEN CASUALLY
-EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 (100-story exploration batch) and any later calendar work; it was not reverted by this consolidation
+EL_COLECCIONISTA: LIVE — CLOSED — browser technical gate PASS after local contrast correction — DO NOT REOPEN CASUALLY
+EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 (100-story exploration batch) and any later calendar work; it was not reverted by this QA cycle
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
-NEXT_ACTOR: Cowork / next editorial story; Publisher or a Browser-capable Code session may run rendered UX/UI regression inspection at any time without needing to reconstruct this chat
-NEXT_ACTION: continue the editorial calendar from main using Voice Bible v0.3 and the unified navigation/content model. When Browser tooling is available, smoke-test Home → Historias/Saber/Personas/Discovery/Club/Search, mobile menu, archive → story, Search → story/perfume, Discovery → Quiz → result → map, perfume → Discovery/Historias, Personas → story/perfume, and footer paths. Only change the baseline if rendered evidence reveals a concrete regression.
-BLOCKERS: none for code, governance, build or deployment. Screenshot-based rendered QA remains an evidence limitation of this session, not a production blocker.
+NEXT_ACTOR: Cowork / next editorial story
+NEXT_ACTION: continue the editorial calendar from main using Voice Bible v0.3, the unified navigation/content model and the verified production baseline. Browser regression QA is now available through OMNI Render and should be rerun after meaningful frontend changes, not as a reason to reopen already-closed surfaces without new evidence.
+BLOCKERS: NONE for editorial continuation, code, governance, production deployment or technical rendered/browser QA.
 ```
 
 ## Mandatory turn-closure rule
@@ -104,6 +109,10 @@ Implementation closeout:
 
 `audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md`
 
+Rendered/browser QA closeout:
+
+`audits/AROMIA_RENDER_QA_CLOSEOUT_2026-09-02.md`
+
 Primary principle:
 
 > **Every click should preserve orientation, editorial context and a plausible next move.**
@@ -122,23 +131,29 @@ The technical routes `/magazine`, `/academia`, `/perfumistas`, `/quiz` and `/cat
 
 ## Verification evidence
 
-Functional head:
+Production baseline:
 
-`92e8bda8ccdb38e3a263823773bcf825edd0b273`
+`7315d3f2fd94b037c73dd047cd8f5e13fbcb0409`
 
-GitHub v2.0 CI run `33645935860`: **SUCCESS**.
+GitHub v2.0 CI run `33660677100`: **SUCCESS**.
 
-GitHub Aromia Strict Audit run `33645935867`: **SUCCESS**. Strict governance output: `failures=0 warnings=0`.
+GitHub Aromia Strict Audit run `33660677741`: **SUCCESS**.
 
-Railway production deployment `a7f30f84-eb46-4f2b-83b6-3214d72ac768`: **SUCCESS**.
+Railway production deployment `d33eaf73-2805-49cd-a1c9-3e495ef43bb5`: **SUCCESS**.
 
-Railway runtime preflight reported private catalog count 125 and Next.js ready in 306ms. Production build compiled and generated 29/29 static pages.
+Railway runtime preflight reported private catalog count 125 and Next.js ready in 524ms. Production build compiled and generated 29/29 static pages.
 
-### Rendered evidence boundary
+### Rendered/browser evidence
 
-The Browser plugin and an attached Playwright/browser runtime were unavailable in this session. Therefore no actor may reinterpret this handoff as screenshot-based visual QA. Desktop/mobile screenshots, DOM interaction evidence and browser-console inspection remain a future regression-inspection step when a capable surface is available.
+The browser evidence gap is closed for this baseline.
 
-A passing build does not prove visual fidelity. Conversely, the absence of browser screenshots here does not invalidate the verified code/governance/deployment baseline. New visual changes require concrete rendered evidence.
+OMNI verified Render QA deployment `509bee11-a90a-4f5b-8efc-ae37953a7b6b` observed production with Chromium/Playwright at 390×844 and 1280×900 across 11 public routes. Final summary: **11 PASS, 0 REVIEW, 0 FAIL**.
+
+The final technical gate reported no blocking horizontal overflow, clipped text, console errors or page errors. Every route produced screenshot evidence. Context-sensitive composition heuristics remain in the evidence ledger but do not change a strict technical release state without Taste/human interpretation.
+
+Discovery's three mobile lazy-image DOM findings were independently checked against their same-origin endpoints and all three returned reachable image responses. They therefore did not represent missing origin assets.
+
+This is real browser/runtime QA, but it is not a claim that every generated screenshot received a manual aesthetic critique in this session. Future art-direction review should use the screenshots as visual evidence where relevant.
 
 ## Voice evolution — canonical source
 
@@ -166,7 +181,7 @@ Do not generate publication imagery from an operationally contaminated repo/QA c
 
 ## El coleccionista release lock
 
-`El coleccionista` is LIVE. Final OMNI passed and production deployment succeeded.
+`El coleccionista` is LIVE. Its corrected local annotation contrast passes the verified technical OMNI browser gate in both tested viewports.
 
 Narrative test for Asset A remains:
 
