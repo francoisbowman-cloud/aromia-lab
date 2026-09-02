@@ -1,0 +1,67 @@
+/*
+ * Editorial v1 crisp material overrides.
+ *
+ * These three slots intentionally render as resolution-independent CSS fields
+ * while their retired raster sources remain disabled. The goal is to make the
+ * abstraction visibly deliberate — textured and graphic — rather than read as
+ * an out-of-focus photograph. Geometry and page rhythm are unchanged.
+ */
+
+/* Lead / resin field: remove atmospheric blur and introduce hard material seams. */
+.ev1-resin {
+  background:
+    linear-gradient(118deg, transparent 0 18%, rgba(246, 239, 226, .28) 18.2% 18.8%, transparent 19% 100%),
+    linear-gradient(164deg, transparent 0 45%, rgba(189, 142, 80, .34) 45.2% 46%, transparent 46.2% 100%),
+    radial-gradient(circle at 62% 66%, #c89b5b 0 2.4%, #7b5633 2.6% 5.6%, #2a2118 5.8% 12%, transparent 12.2%),
+    radial-gradient(ellipse at 72% 75%, #4a3525 0 12%, #211914 12.4% 26%, transparent 26.4%),
+    linear-gradient(132deg, #d9c8aa 0 17%, #8f7d64 17.4% 19%, #3b3731 19.4% 52%, #171614 52.4% 100%);
+}
+
+.ev1-resin::after {
+  inset: 0;
+  filter: none;
+  transform: none;
+  opacity: .62;
+  background:
+    repeating-linear-gradient(102deg, rgba(255,255,255,.09) 0 1px, transparent 1px 13px),
+    repeating-linear-gradient(12deg, rgba(0,0,0,.14) 0 1px, transparent 1px 19px),
+    linear-gradient(90deg, transparent 0 63%, rgba(243,232,211,.12) 63.2% 63.8%, transparent 64%);
+}
+
+/* Mineral field: hard crystalline planes instead of soft radial bloom. */
+.ev1-story.mineral .ev1-material {
+  background:
+    linear-gradient(28deg, transparent 0 47%, rgba(255,255,255,.78) 47.2% 48.2%, transparent 48.4% 100%),
+    linear-gradient(132deg, transparent 0 31%, rgba(115,127,125,.42) 31.2% 32%, transparent 32.2% 100%),
+    linear-gradient(54deg, #eff0eb 0 21%, #cfd5d3 21.3% 40%, #aeb9b7 40.3% 58%, #e7e8e2 58.3% 76%, #bec8c6 76.3% 100%);
+}
+
+.ev1-story.mineral .ev1-material::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(145deg, rgba(63,73,71,.15) 0 1px, transparent 1px 17px),
+    repeating-linear-gradient(35deg, rgba(255,255,255,.35) 0 1px, transparent 1px 23px);
+  mix-blend-mode: multiply;
+  opacity: .48;
+  pointer-events: none;
+}
+
+/* Ropion field: explicit petal/cut-paper geometry, not optical softness. */
+.ev1-story.ropion .ev1-material {
+  background:
+    conic-gradient(from 22deg at 67% 62%, #8f2842 0 13%, #4b1425 13% 28%, #bc5e78 28% 41%, #651b32 41% 58%, #d79aaa 58% 72%, #3f101f 72% 100%),
+    linear-gradient(135deg, #2c0d17 0 38%, #5a162a 38.3% 62%, #1d0910 62.3% 100%);
+}
+
+.ev1-story.ropion .ev1-material::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(74deg, rgba(255,255,255,.075) 0 1px, transparent 1px 11px),
+    linear-gradient(148deg, transparent 0 44%, rgba(238,186,199,.3) 44.2% 45%, transparent 45.2% 100%);
+  opacity: .72;
+  pointer-events: none;
+}
