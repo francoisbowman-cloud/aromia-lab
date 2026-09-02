@@ -1,9 +1,9 @@
 # EL COLECCIONISTA — IMPLEMENTATION CHECKPOINT (Code)
 
-IMPLEMENTATION: READY — Asset A ingested and wired
+IMPLEMENTATION: DONE — Asset A **v2** ingested and wired
 QA: LOCAL_PASS — desktop + mobile verified; Final OMNI pending
 PUBLISH: PENDING — pushed to the feature branch only; `main` is protected, merge = deploy, Publisher-gated
-DATE: 2026-09-01 (Asset A wired in a later pass, same day)
+DATE: 2026-09-01 (Asset A wired same day); 2026-09-02 (Asset A v2 swap + crop adjust, relay v23)
 
 Sources honoured:
 - `drafts/el-coleccionista.md` (prose ingested verbatim; only straight→curly quote normalisation)
@@ -78,28 +78,35 @@ drops every device.
   fault unrelated to the page; the rendered PNG capture is left to OMNI Render at the
   Final gate, whose job that is.
 
-## Asset A (opening domestic collection scene) — RESOLVED
+## Asset A (opening domestic collection scene) — RESOLVED (v2, 2026-09-02)
 
-ChatGPT produced Asset A; the Publisher placed the binary in the repo (the connector could
-not transport a chat-pasted image, so Code could not ingest it directly — a transport
-limitation, not a generation one).
+ChatGPT produced Asset A v2 in a clean visual-only conversation and passed it through
+post-generation quarantine (relay v22). The Publisher transported the binary; Code copied
+it into the repo and verified the checksum (the connector still cannot upload a chat-pasted
+image — a transport limitation, not a generation one).
 
-- `apps/web/public/editorial-v1/coleccionista-shelf-01.jpg` — baseline JPEG, 1400×1800,
-  ~90 KB. Interpretive flat illustration: a tight row of ~17 unbranded fragrance-like
-  bottles of varied silhouette/height, one low tray/dish at left, uneven spacing, muted
-  sage/taupe/gray on warm paper, no gold, no smoke/marble/reflections, no readable marks.
-  Matches the locked Asset A spec; reads as recognition, not desire.
+- `apps/web/public/editorial-v1/coleccionista-shelf-01.jpg` — v2 JPEG, **1122×1402**,
+  260801 B, SHA256 `05d1e9fd…` (verified in repo). Photographic, not illustrated: an
+  ordinary built-in shelf/cabinet corner with ~20 unbranded perfume bottles of varied
+  silhouette/height packed with no free space, a blue-green cloth trace at left, storage
+  bins below, plain wall behind, plausible domestic light. No readable brands, no gold, no
+  smoke/marble/reflections. Reads as recognition, not desire — narrative test *"Yo conozco
+  ese estante"* passes.
 - `editorialVisuals.tsx`: slot `coleccionista-shelf-interpretive` → `present: true`,
-  `file: "/editorial-v1/coleccionista-shelf-01.jpg"`, alt updated to describe the crowded
-  unbranded shelf (no mood/luxury adjectives). Rendered interpretive (`fill` + `cover`).
-- `coleccionista.css`: `figure.coll-shelf{margin:0}` (kill the default `<figure>` margin
-  inside the grid) and `.coll-shelf img{object-position:center 64%}` — the source subject
-  sits in a wide band in the vertical middle, so the crop is biased down to drop empty
-  upper paper rather than clip bottle tops or the shelf line.
+  `file: "/editorial-v1/coleccionista-shelf-01.jpg"`, alt rewritten as a photographic
+  description (drops "Ilustración"; no mood/luxury adjectives). Rendered interpretive
+  (`fill` + `cover`).
+- `coleccionista.css`: `figure.coll-shelf{margin:0}` unchanged; crop moved from
+  `object-position:center 64%` to **`center 52%`** — the v2 source ratio (0.800) now
+  matches the slot, so `cover` trims only a few px and the old downward bias would have
+  pulled the storage bins into frame instead of the bottle mass.
 
-Crop check (JS-measured): the container ratio (~0.80 desktop, ~0.80 mobile) is within
-~0.02 of the asset ratio (0.778), so `cover` clips only ~10–25 px total on either axis —
-the bottle band and shelf are fully visible at both breakpoints.
+Crop check (JS-measured, relay v23): desktop slot 601×827 (ratio 0.726) and mobile slot
+375×471 (ratio 0.796) both sit at or below the asset ratio 0.800, so `cover` clips only
+~30 px horizontally on desktop and ~nothing on mobile — the full bottle cluster and shelf
+edge are visible at both breakpoints, and `object-position` vertical is effectively a
+no-op. A served-image probe returned 1122×1402 at both sizes; no horizontal overflow; no
+console errors.
 
 ## Non-blocking follow-ups
 
@@ -112,9 +119,11 @@ the bottle band and shelf are fully visible at both breakpoints.
 
 ## Handoff
 
-`NEXT_ACTOR: OMNI` — Final rendered-experience gate on `/historias/el-coleccionista`
-(desktop + mobile): implementation fidelity to the locked art direction, the accumulation
-→ withdrawal arc, the Asset A crop/tone in context, commercial pressure (should be ~zero
-until the close), and responsive integrity. Branch `feat/el-coleccionista-implementation`
-is pushed (`origin`); `main` is untouched. No merge/deploy — publication stays
-Publisher-gated. If OMNI returns corrections, Code applies them on the same branch.
+`NEXT_ACTOR: OMNI` — authoritative Final rendered-experience gate on
+`/historias/el-coleccionista` (desktop + mobile): implementation fidelity to the locked art
+direction, the accumulation → withdrawal arc, the **Asset A v2** crop/tone in context
+(recognition, not desire), commercial pressure (should be ~zero until the close), and
+responsive integrity. OMNI must supply the rendered PNG evidence this environment could not
+capture beyond the fold. Branch `feat/el-coleccionista-implementation` is pushed (`origin`);
+`main` is untouched. No merge/deploy — publication stays Publisher-gated. If OMNI returns
+corrections, Code applies them on the same branch.

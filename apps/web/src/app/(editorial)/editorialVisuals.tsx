@@ -89,16 +89,16 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     placeholderLabel:
       "Espacio reservado para imagen documental de Jabal Akhdar (Omán), pendiente de descarga con procedencia.",
   },
-  // El coleccionista — Asset A (opening domestic collection scene).
-  // Spec locked in art-direction/el-coleccionista-visual-assets-handoff.md.
-  // Generation is a ChatGPT capability, not Code's; until the asset lands this
-  // slot renders its placeholder box (same first-ship pattern as Editorial v1).
+  // El coleccionista — Asset A v2 (opening domestic collection scene).
+  // Spec locked in art-direction/el-coleccionista-visual-assets-handoff.md;
+  // v2 passed ChatGPT visual quarantine (relay v22) — an observed crowded
+  // domestic shelf, not a campaign still. Interpretive, not documentary.
   "coleccionista-shelf-interpretive": {
     id: "coleccionista-shelf-interpretive",
     type: "interpretive",
     present: true,
     file: "/editorial-v1/coleccionista-shelf-01.jpg",
-    alt: "Ilustración de un estante doméstico con una fila apretada de frascos de fragancia de siluetas y alturas variadas, sin marca legible, y casi sin espacio libre.",
+    alt: "Fotografía de un estante doméstico con una veintena de frascos de perfume de siluetas y alturas distintas agrupados sin espacio libre sobre un mueble claro; un paño azulado a un lado y cajas de guardado debajo. Ninguna marca es legible.",
     placeholderLabel:
       "Área visual interpretativa pendiente: estante doméstico que ya no tiene espacio. Imagen no generada; especificación en el handoff de assets.",
   },

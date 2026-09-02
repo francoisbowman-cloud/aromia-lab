@@ -23,15 +23,15 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 22
+STATE_VERSION: 23
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (Art Director / Visual Asset quarantine; temporary Code-role coordination authorized by Publisher)
-LAST_ACTION: received Asset A v2 from a clean visual-only conversation and passed it through post-generation quarantine. The image now meets the domestic-recognition objective: ordinary middle-class built-in shelf/cabinet context, lived-in cloth trace, imperfect bottle overlap/density, plausible light, no UI/mockup contamination, no luxury campaign staging. Prepared a publication JPEG copy outside the repo because the GitHub connector cannot upload local binary files. Also established the mandatory Actor Turn Handoff Protocol for all Aromia actors.
-ACTIVE_OBJECTIVE: El coleccionista — ingest approved Asset A v2, reconcile branch with current main, rendered re-QA, authoritative Final OMNI, then PR/publication gate
+LAST_ACTOR: Code
+LAST_ACTION: ingested approved Asset A v2. Copied the external JPEG into apps/web/public/editorial-v1/coleccionista-shelf-01.jpg on feat/el-coleccionista-implementation and verified SHA256 05d1e9fd… against this relay (byte-identical, 260801 B, 1122x1402). Updated the visual slot alt to a photographic description (no longer "ilustración") and biased the opening crop from `center 64%` to `center 52%` — the v2 source ratio (0.800) now matches the slot, so `cover` trims only a few px and the old downward bias would have pulled in the storage bins. Branch was already reconciled with current main by merge f33d184 (Voice Bible only, no conflicts). tsc --noEmit, next lint and next build all clean. Rendered QA on :3100 at desktop 1280 and mobile 375.
+ACTIVE_OBJECTIVE: El coleccionista — authoritative Final OMNI on the rendered experience, then PR/publication gate
 ACTIVE_BRANCH: feat/el-coleccionista-implementation (pushed to origin; NOT merged)
 BASE_MAIN_SHA: efd319a1a176e45c9a8bed68410a1ffe06fad5e7
 CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66
-BRANCH_STATUS: diverged from current main by the Voice Bible commit; Code must reconcile before final PR
+BRANCH_STATUS: reconciled with current main via merge f33d184; Code's ingest commit sits on top
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
 PROVISIONAL_VISUAL_REVIEW: art-direction/el-coleccionista-final-omni-review.md
@@ -39,9 +39,9 @@ EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PASS
-VISUAL_ASSETS: READY_FOR_INGEST — Asset A v2 approved in quarantine; binary still external to repo
-IMPLEMENTATION: READY — preserve existing composition/code unless new crop requires a minor adjustment
-QA: CHANGES_REQUIRED — rendered re-QA required after Asset A v2 ingestion
+VISUAL_ASSETS: INGESTED — Asset A v2 in repo, SHA256 verified, rendered at both breakpoints
+IMPLEMENTATION: DONE — opening asset wired; prose, section architecture, density states, Le Male lineage, preservation notation, Sí-pero reset and commerce treatment all untouched
+QA: LOCAL_PASS — desktop 1280 + mobile 375: correct v2 image served (probe 1122x1402), no horizontal overflow, crop keeps the full bottle cluster, no console errors, heading order H1→H2→H2→H3→H2→H2. Browser-pane PNG capture is still intermittently blank beyond the fold (session-wide environment fault, same as the prior Code pass) — full rendered PNG evidence is OMNI Render's job at the Final gate.
 FINAL_OMNI: PENDING — must use rendered desktop/mobile evidence
 PUBLISH: PENDING
 TARGET_DATE: UNSCHEDULED
@@ -52,21 +52,21 @@ EARLY_OMNI_REVIEW: art-direction/el-coleccionista-early-omni-review.md
 VISUAL_ASSET_HANDOFF: art-direction/el-coleccionista-visual-assets-handoff.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
 
-EXTERNAL_ARTIFACT_STATUS: READY_FOR_INGEST
-FILE_NAME: coleccionista-shelf-01-v2.jpg
+EXTERNAL_ARTIFACT_STATUS: INGESTED (2026-09-02, Code)
+FILE_NAME: coleccionista-shelf-01-v2.jpg (external) → apps/web/public/editorial-v1/coleccionista-shelf-01.jpg (in repo)
 FORMAT: JPEG, progressive, quality 92, metadata stripped during conversion
 DIMENSIONS: 1122x1402
 SIZE_BYTES: 260801
-SHA256: 05d1e9fdb57e9de3d10bd5ab68d4692541c572ba73f4d58479629115bedc4e3c
+SHA256: 05d1e9fdb57e9de3d10bd5ab68d4692541c572ba73f4d58479629115bedc4e3c (verified in repo)
 SOURCE: clean visual-only ChatGPT generation supplied by Publisher back into operational chat
 TARGET_PATH: apps/web/public/editorial-v1/coleccionista-shelf-01.jpg
 QUARANTINE_STATE: PASS
 NARRATIVE_TEST: PASS — reads as an observed crowded domestic shelf, not a perfume campaign or abstract collection diagram
 AUTHENTICITY_NOTES: no readable brands/logos relied upon; domestic interpretation only; not documentary evidence
 
-NEXT_ACTOR: Code
-NEXT_ACTION: obtain the approved external JPEG from the Publisher/chat handoff and replace apps/web/public/editorial-v1/coleccionista-shelf-01.jpg on feat/el-coleccionista-implementation; verify SHA256 when practical; reconcile branch with current main so the Voice Bible update is not lost; inspect desktop/mobile crop and adjust object-position only if needed; run tsc/lint/build and real rendered browser QA with screenshots/console evidence; commit + push; update this relay and implementation checkpoint; then hand to OMNI for authoritative Final rendered-experience gate. Preserve prose, section architecture, density states, Le Male typographic lineage, preservation notation, Sí-pero reset and commerce treatment.
-BLOCKERS: binary transport only — GitHub connector in ChatGPT cannot upload the local JPEG. No conceptual/editorial blocker. No merge/deploy until rendered QA + authoritative Final OMNI pass and Publisher publication authorization.
+NEXT_ACTOR: OMNI
+NEXT_ACTION: authoritative Final rendered-experience gate on /historias/el-coleccionista (desktop + mobile) against the locked art direction: the accumulation → withdrawal arc, the Asset A v2 crop and tone in context (recognition, not desire), commercial pressure at ~zero until the close, responsive integrity, and rendered PNG evidence (which this environment could not capture beyond the fold). If corrections return, Code applies them on the same branch. No merge/deploy — publication stays Publisher-gated.
+BLOCKERS: NONE. Binary transported and verified; branch reconciled and pushed. No merge/deploy until Final OMNI passes and the Publisher authorizes publication.
 ```
 
 ## Mandatory turn-closure rule
@@ -103,7 +103,7 @@ Rejected wrong generations are process waste: do not commit, implement, cite as 
 
 The existing implementation is not being reopened.
 
-Asset A v2 has passed ChatGPT visual quarantine and replaces the previously rejected flat/diagrammatic opening asset once Code ingests the binary.
+Asset A v2 passed ChatGPT visual quarantine and, since 2026-09-02, is ingested in the repo — it replaces the previously rejected flat/diagrammatic opening asset.
 
 Narrative test:
 
