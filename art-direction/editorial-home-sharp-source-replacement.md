@@ -43,12 +43,25 @@ The correction therefore replaces the three soft sources rather than sharpening 
 
 `editorial.css` adds only `.ev1-interpretive-img` absolute fill + `object-fit: cover`, preserving the exact existing slot/crop behavior.
 
+## QA preview
+
+Railway isolated service:
+
+- Project: `aromia-lab-v2`
+- Service: `web-editorial-home-sharp-qa`
+- Service ID: `38bc940c-e3d2-4593-85cc-3cf8f5819a24`
+- Source branch configured: `fix/editorial-home-sharp-sources`
+- Root directory: `/apps/web`
+- Healthcheck: `/`
+
+This checkpoint commit is intentionally after preview-service creation so Railway's branch watcher has a fresh branch event to deploy, avoiding the known initial-service snapshot race that can incorrectly label the first build as `main`.
+
 ## QA gates
 
 Before merge:
 
 1. CI: test + lint + typecheck + build must pass.
-2. Isolated branch preview must build successfully.
+2. Isolated branch preview must build successfully from `fix/editorial-home-sharp-sources`.
 3. Verify `/` and the three external image requests return successfully from the preview/runtime.
 4. Preserve `El coleccionista` and all released story routes unchanged.
 5. No merge if an external source fails, if crop breaks, or if the home rhythm changes materially.
