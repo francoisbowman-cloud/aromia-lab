@@ -8,10 +8,8 @@ import Image from "next/image";
  *
  * A slot with `present: false` renders its CSS placeholder box. A documentary
  * slot (has `width`/`height`) renders as an intrinsic image with its
- * provenance caption in normal flow below it. An interpretive slot renders as
- * a `fill` cover image. Wiring an approved asset: drop the file under
- * `apps/web/public/editorial-v1/`, set `present: true`, `file`, and — for
- * documentary — `width`/`height` + `caption` + `provenance`.
+ * provenance caption in normal flow below it. Interpretive slots may use
+ * either local Next/Image assets or approved external editorial photography.
  */
 
 export type SlotType = "interpretive" | "documentary";
@@ -24,7 +22,7 @@ export interface VisualSlot {
   /** intrinsic pixel size — required for documentary (intrinsic) rendering */
   width?: number;
   height?: number;
-  /** Next/Image delivery quality. Raise selectively for texture-critical interpretive art. */
+  /** Next/Image delivery quality for local assets. */
   quality?: number;
   alt: string;
   caption?: string;
@@ -38,9 +36,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "ambroxan-material-interpretive",
     type: "interpretive",
     present: true,
-    file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
-    quality: 95,
-    alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
+    file: "https://images.unsplash.com/photo-1760651913943-0208e0fef0bc?auto=format&fit=crop&w=3000&q=90",
+    alt: "Macro editorial de cristales claros creciendo sobre una superficie mineral oscura, con planos de foco definidos y textura geológica visible.",
+    provenance:
+      "Unsplash — Albert Hyseni — Close-up of clear crystals growing on metallic rock — free under the Unsplash License — https://unsplash.com/photos/close-up-of-clear-crystals-growing-on-metallic-rock-CINUF3Rwoaw",
     placeholderLabel:
       "Área visual interpretativa: estudio material del ambroxan. No representa evidencia documental.",
   },
@@ -63,9 +62,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "ropion-overdose-interpretive",
     type: "interpretive",
     present: true,
-    file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
-    quality: 95,
-    alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
+    file: "https://images.unsplash.com/photo-1579135010601-a1f2548b5502?auto=format&fit=crop&w=3000&q=90",
+    alt: "Macro editorial de una rosa roja intensa, con pétalos definidos y textura floral visible en el plano principal.",
+    provenance:
+      "Unsplash — Pedro Vit — Macro photography of blooming red rose flower — free under the Unsplash License — https://unsplash.com/photos/macro-photography-of-blooming-red-rose-flower-N2PK1ghtlkg",
     placeholderLabel:
       "Área visual interpretativa: exceso floral controlado. No representa evidencia documental.",
   },
@@ -73,9 +73,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "amouage-material-density-interpretive",
     type: "interpretive",
     present: true,
-    file: "/editorial-v1/amouage-mineral-density-01.jpg",
-    quality: 95,
-    alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
+    file: "https://images.unsplash.com/photo-1773165896916-e13ff8e0f801?auto=format&fit=crop&w=3000&q=90",
+    alt: "Macro editorial de una gota de resina ámbar sobre madera erosionada, con veta, corteza y materia orgánica nítidas.",
+    provenance:
+      "Unsplash — Mohammed Rahimov — A drop of golden resin on weathered wood — free under the Unsplash License — https://unsplash.com/photos/a-drop-of-golden-resin-on-weathered-wood-aAPZ0lazesk",
     placeholderLabel:
       "Área visual interpretativa: densidad material. No representa evidencia documental.",
   },
@@ -94,10 +95,6 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     placeholderLabel:
       "Espacio reservado para imagen documental de Jabal Akhdar (Omán), pendiente de descarga con procedencia.",
   },
-  // El coleccionista — Asset A v2 (opening domestic collection scene).
-  // Spec locked in art-direction/el-coleccionista-visual-assets-handoff.md;
-  // v2 passed ChatGPT visual quarantine (relay v22) — an observed crowded
-  // domestic shelf, not a campaign still. Interpretive, not documentary.
   "coleccionista-shelf-interpretive": {
     id: "coleccionista-shelf-interpretive",
     type: "interpretive",
@@ -127,16 +124,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
 interface VisualFieldProps {
   slotId: string;
   className: string;
-  /** decorative label shown inside the placeholder (e.g. the resin marker) */
   marker?: string;
   sizes?: string;
 }
 
-/**
- * Renders an approved asset when present, otherwise the CSS placeholder box.
- * While no slot is `present`, no `next/image` is emitted, so a missing binary
- * cannot break the build.
- */
 export function VisualField({ slotId, className, marker, sizes }: VisualFieldProps) {
   const slot = EDITORIAL_V1_SLOTS[slotId];
 
@@ -152,7 +143,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
-  // Documentary: intrinsic image, provenance caption in normal flow below.
   if (slot.width && slot.height) {
     return (
       <figure className={`${className} ev1-doc-figure`}>
@@ -170,17 +160,28 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
-  // Interpretive: fill cover.
+  const isExternal = slot.file.startsWith("https://");
+
   return (
     <figure className={className}>
-      <Image
-        src={slot.file}
-        alt={slot.alt}
-        fill
-        quality={slot.quality}
-        sizes={sizes ?? "100vw"}
-        style={{ objectFit: "cover" }}
-      />
+      {isExternal ? (
+        <img
+          className="ev1-interpretive-img"
+          src={slot.file}
+          alt={slot.alt}
+          loading={slot.id === "amouage-material-density-interpretive" ? "eager" : "lazy"}
+          decoding="async"
+        />
+      ) : (
+        <Image
+          src={slot.file}
+          alt={slot.alt}
+          fill
+          quality={slot.quality}
+          sizes={sizes ?? "100vw"}
+          style={{ objectFit: "cover" }}
+        />
+      )}
     </figure>
   );
 }
