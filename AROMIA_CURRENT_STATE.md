@@ -23,30 +23,30 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 30
+STATE_VERSION: 31
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (temporary Code + Production-role takeover authorized by Publisher)
-LAST_ACTION: closed the Editorial v1 home softness follow-up end-to-end. PR #126 (`fix: replace soft Editorial v1 cover art with crisp fallbacks`) passed v2.0 CI and Aromia Strict Audit, then merged to main as 1b3cad8575e6b7281feef05589352f63c0ddce35. The canonical Railway web deployment 90ad55bb-4444-41fb-8009-208d43bba0d6 reached SUCCESS. The three previously soft 1600x900 interpretive raster cover slots are now disabled and their existing resolution-independent CSS artwork renders in the same approved geometry. No page rhythm, copy, spacing, responsive structure, documentary asset, or El coleccionista release content was changed.
-ACTIVE_OBJECTIVE: resume normal Aromia editorial production from a clean post-release/post-QA baseline
+LAST_ACTOR: ChatGPT (editorial voice evolution)
+LAST_ACTION: dissected the Publisher conversation as a canonical voice-evolution source and promoted the supported findings into AROMIA_VOICE_BIBLE.md v0.3. Added research/aromia-voice-chat-analysis-2026-09-02.md to preserve the reasoning evidence without treating raw voice transcription as finished prose. Voice v0.3 now formalizes: live reasoning over polished template logic; completing supported unfinished thoughts without inventing biography; contradiction as a change of pressure rather than repetitive `sí, pero`; small ordinary incidents as legitimate essay origins; the asymmetry between the wearer's own perception and other people's experience of a fragrance; survival of ordinary social language; domestic realism over automatic luxury framing; and new editorial tests for origin pressure, honest thought completion, contradiction variety, scene survival and perception gaps.
+ACTIVE_OBJECTIVE: resume normal Aromia editorial production using Voice Bible v0.3 as the canonical voice contract
 ACTIVE_BRANCH: main
-CURRENT_MAIN_SHA: 1b3cad8575e6b7281feef05589352f63c0ddce35 (functional home fix merge; this relay is a later docs-only main commit)
+VOICE_BIBLE: AROMIA_VOICE_BIBLE.md — v0.3
+VOICE_SOURCE_ANALYSIS: research/aromia-voice-chat-analysis-2026-09-02.md
+VOICE_EVOLUTION_COMMIT: 7d7095c288e2e88aae516b43b3b3178ec71c7dca
 HOME_FIX_PR: #126 — MERGED
 HOME_FIX_MERGE: 1b3cad8575e6b7281feef05589352f63c0ddce35
 HOME_FIX_DEPLOYMENT: Railway 90ad55bb-4444-41fb-8009-208d43bba0d6 — SUCCESS
 HOME_VISUAL_QA: RESOLVED_BY_CRISP_FALLBACK
-SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
 EL_COLECCIONISTA: LIVE — CLOSED — DO NOT REOPEN CASUALLY
 EL_COLECCIONISTA_FINAL_OMNI: PASS
 EL_COLECCIONISTA_PUBLISH: LIVE
-AFFECTED_HOME_SLOTS:
-- amouage-material-density-interpretive → old raster disabled; existing ev1-resin CSS artwork active
-- ambroxan-material-interpretive → old raster disabled; existing ev1-story.mineral CSS artwork active
-- ropion-overdose-interpretive → old raster disabled; existing ev1-story.ropion CSS artwork active
-RULE: future sharper raster replacements are optional. Do not sharpen/upscale the retired JPEGs. Any new original art must be created in a clean visual context, quarantined, and only then set present:true.
+EDITORIAL_VOICE_RULE: study how the Publisher thinks, not the surface artifacts of voice transcription. Complete the thought when direction is supported; never fabricate the life behind it.
+CONTRADICTION_RULE: `sí, pero` is not a branded catchphrase. Vary or remove contradiction mechanisms so the reader feels thought changing direction rather than a repeated editorial device.
+PERCEPTION_RULE: when relevant, consider the gap between wearer intention/self-perception and how fragrance is experienced by other people; do not force this into etiquette advice.
+ORDINARY_SCENE_RULE: preserve domestic and social specificity. Do not automatically elevate everyday perfume life into luxury advertising language or perfume jargon.
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
 NEXT_ACTOR: Cowork / next editorial story
-NEXT_ACTION: continue the editorial calendar/workflow from main. Treat El coleccionista and the home-softness correction as closed baselines unless new evidence or explicit Publisher direction requires reopening them.
+NEXT_ACTION: continue the editorial calendar/workflow from main. Cowork must read AROMIA_VOICE_BIBLE.md v0.3 plus the canonical source analysis before drafting the next story. Treat El coleccionista and the home-softness correction as closed baselines unless new evidence or explicit Publisher direction requires reopening them.
 BLOCKERS: none.
 ```
 
@@ -61,6 +61,22 @@ Core requirement:
 > **Do the work. Persist the truth. Name the next actor. Leave no conversational archaeology for the next shift.**
 
 The Publisher must not routinely carry summaries between actors. If a binary cannot move through available connectors, the Publisher may transport the file, but the repository must already contain the semantic handoff, checksum/path and exact ingestion instructions.
+
+## Voice evolution — canonical source
+
+The Publisher conversation analyzed on 2026-09-02 is now a canonical **method** source for Aromia voice evolution.
+
+Source analysis:
+
+`research/aromia-voice-chat-analysis-2026-09-02.md`
+
+The central distinction is:
+
+> **Preserve live reasoning, not transcription artifacts. Complete the thought. Never invent the life that supposedly produced it.**
+
+Voice-mode restarts, filler, malformed speech and accidental repetition are not style requirements. What matters is the behavior underneath: reformulation, changing angle, ordinary observations opening larger questions, visible self-correction and conclusions that can remain provisional.
+
+The recurring `sí, pero` correction is also canonical: contradiction belongs to Aromia, but no single wording owns that function.
 
 ## Visual-generation incident correction — canonical rule
 
