@@ -23,43 +23,40 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 27
+STATE_VERSION: 28
 UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT (temporary Code + OMNI role takeover authorized by Publisher while Code session limit was exhausted)
-LAST_ACTION: completed the release gate for El coleccionista. GitHub v2.0 CI and Aromia Strict Audit are green on the feature head. Railway isolated QA service `web-el-coleccionista-qa` successfully built commit 0155b611 from branch feat/el-coleccionista-implementation after adding preview-only NEXT_PUBLIC_API_URL / NEXT_PUBLIC_SITE_URL references; production web/API/database were not changed. Authoritative Final OMNI was then closed PASS using the locked art direction, Asset A v2 direct inspection, Code desktop/mobile browser measurements, responsive/crop evidence, clean local production QA, CI, Strict Audit and successful feature-branch Railway build. The three pre-existing soft cover images remain a separately tracked non-blocking Editorial v1 home follow-up.
-ACTIVE_OBJECTIVE: release El coleccionista to production, verify canonical route and close relay as LIVE; retain home softness finding as follow-up
-ACTIVE_BRANCH: feat/el-coleccionista-implementation
-CURRENT_MAIN_SHA: ea586ba30e22f680756b8764934685c4dc21ce66
-DRAFT_PR: #123 feat: El coleccionista implementation + visual QA
+LAST_ACTOR: ChatGPT (temporary Code + OMNI + Production takeover authorized by Publisher while Code session limit was exhausted)
+LAST_ACTION: closed El coleccionista end-to-end. Final OMNI PASS was persisted. The original draft PR #123 was closed only because the connector's Mark Ready mutation was broken; replacement non-draft PR #124 carried the exact same head and was merged successfully. main merge commit e292548000a150c7194b48e579b652abffbe8bd1 triggered Railway production deployment 4cf92514-b0b2-44a9-8065-a29add0a7f2b on the canonical web service, which reached SUCCESS. Production build manifest includes the static route /historias/el-coleccionista. The three pre-existing soft Editorial v1 cover images remain a separately tracked non-blocking follow-up.
+ACTIVE_OBJECTIVE: resume normal Aromia editorial production from a clean post-release baseline; separately resolve the three soft Editorial v1 cover sources when a trustworthy visual-QA pass is available
+ACTIVE_BRANCH: main
+CURRENT_MAIN_SHA: e292548000a150c7194b48e579b652abffbe8bd1 (story release merge; this relay update is a later docs-only main commit)
+RELEASE_PR: #124 feat: publish El coleccionista — MERGED
+SUPERSEDED_DRAFT_PR: #123 — CLOSED, not merged; replaced only due connector Mark Ready bug
+PRODUCTION_DEPLOYMENT: Railway 4cf92514-b0b2-44a9-8065-a29add0a7f2b — SUCCESS — main@e292548000a150c7194b48e579b652abffbe8bd1
+CANONICAL_ROUTE: /historias/el-coleccionista
 FINAL_OMNI_REVIEW: art-direction/el-coleccionista-final-omni-review.md
-FINAL_OMNI_COMMIT: e93f65765a89d17ac9b3715fd614edbdb4834658
-QA_PREVIEW_SERVICE: Railway web-el-coleccionista-qa (feature branch only; isolated QA surface)
-ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
-VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
-SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
-EDITORIAL: READY
-ART_DIRECTION: READY
-VISUAL_COMPOSITION: READY
-EARLY_OMNI: PASS
+FINAL_OMNI: PASS
 EL_COLECCIONISTA_VISUAL_ASSETS: INGESTED — Asset A v2
 EL_COLECCIONISTA_IMPLEMENTATION: DONE
 EL_COLECCIONISTA_QA: PASSED
-FINAL_OMNI: PASS
-PUBLISH: PUBLISHABLE
-TARGET_DATE: 2026-09-02
+PUBLISH: LIVE
+PUBLISHED_AT: 2026-09-02
 PRIMARY_STORY: drafts/el-coleccionista.md
 IMPLEMENTATION_CHECKPOINT: art-direction/el-coleccionista-implementation-checkpoint.md
+ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
+VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
 
 HOME_VISUAL_QA: NONBLOCKING_FOLLOWUP
+SOFT_IMAGE_QA: art-direction/editorial-home-soft-image-qa.md
 AFFECTED_HOME_SLOTS:
 - amouage-material-density-interpretive → /editorial-v1/amouage-mineral-density-01.jpg → 1600x900 → quality:95 experiment
 - ambroxan-material-interpretive → /editorial-v1/ambroxan-resin-abstract-01.jpg → 1600x900 → quality:95 experiment
 - ropion-overdose-interpretive → /editorial-v1/ropion-bordeaux-texture-01.jpg → 1600x900 → quality:95 experiment
 RULE: if those sources remain visibly soft in a trustworthy later render, replace the source art under the Visual Generation Isolation Protocol; do not sharpen/upscale artificially and do not redesign the approved home rhythm.
 
-NEXT_ACTOR: Code / Production (ChatGPT may continue temporary takeover in this turn)
-NEXT_ACTION: wait for CI on the current final-gate head; mark PR #123 ready; merge to main when required checks are green; verify Railway production deployment success and canonical /historias/el-coleccionista availability; then update this relay on main to LIVE. Do not delete the home softness follow-up.
-BLOCKERS: none for El coleccionista release. Remote standalone screenshot capture is unavailable in current tools, but this limitation is documented in Final OMNI and is not treated as hidden evidence.
+NEXT_ACTOR: Cowork / next editorial story, unless Publisher explicitly chooses the home-softness follow-up first
+NEXT_ACTION: continue the editorial calendar/workflow from main. El coleccionista is closed and must not be reopened casually. Preserve its prose, composition, Asset A v2, Le Male typographic lineage, preservation notation, Sí, pero reset and contextual commerce. Keep the home-softness finding open as a separate platform/editorial-cover task.
+BLOCKERS: none for El coleccionista. Remote standalone screenshot capture remains unavailable in the current toolset and is documented; it did not block release because source inspection, Code browser measurements, CI, Strict Audit, isolated branch build and production deployment all passed.
 ```
 
 ## Mandatory turn-closure rule
@@ -92,19 +89,19 @@ Two consecutive mockup/UI drifts in the same conversation trigger a hard stop fo
 
 Rejected wrong generations are process waste: do not commit, implement, cite as evidence or use to mutate editorial/QA/OMNI state.
 
-## El coleccionista correction lock
+## El coleccionista release lock
 
-Asset A v2 passed ChatGPT visual quarantine and is ingested in the repo. The home-image softness finding does not reopen or invalidate it.
+`El coleccionista` is LIVE. Final OMNI passed and production deployment succeeded.
 
-Narrative test remains:
+Narrative test for Asset A remains:
 
 > **“Yo conozco ese estante.”**
 
-Preserve prose, section architecture, density states, Le Male typography, preservation notation, `Sí, pero` reset and commerce treatment.
+Do not reopen or redesign the story without new evidence or explicit Publisher direction.
 
 ## Production baseline retained
 
-Editorial v1 public cutover remains the production baseline. Existing platform follow-ups remain separate unless a rendered QA finding makes them publication-relevant.
+Editorial v1 remains the production baseline. Existing platform follow-ups remain separate unless a rendered QA finding makes them publication-relevant.
 
 ## Continuation rules
 
