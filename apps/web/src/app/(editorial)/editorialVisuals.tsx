@@ -148,6 +148,8 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
+  const isExternal = /^https?:\/\//.test(slot.file);
+
   if (slot.width && slot.height) {
     return (
       <figure className={`${className} ev1-doc-figure`}>
@@ -159,6 +161,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
           height={slot.height}
           quality={slot.quality}
           sizes={sizes ?? "100vw"}
+          unoptimized={isExternal}
         />
         {slot.caption ? <figcaption>{slot.caption}</figcaption> : null}
       </figure>
@@ -173,6 +176,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         fill
         quality={slot.quality}
         sizes={sizes ?? "100vw"}
+        unoptimized={isExternal}
         style={{ objectFit: "cover" }}
       />
     </figure>
