@@ -1,0 +1,78 @@
+/* Home-only editorial rhythm.
+ *
+ * The previous counterpoint grid placed the two story images beside each other,
+ * which visually merged assets that belong to different stories. Each story is
+ * now one editorial band: image + its own copy. The second band reverses the
+ * sides to preserve Aromia's asymmetry without breaking image/story ownership.
+ */
+
+.ev1-counterpoints {
+  display: block;
+  border-bottom: 1px solid var(--line);
+}
+
+.ev1-counterpoints .ev1-story {
+  min-height: clamp(620px, 72vh, 820px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr);
+  grid-template-rows: none;
+  grid-template-areas: "media copy";
+  border-bottom: 1px solid var(--line);
+}
+
+.ev1-counterpoints .ev1-story:nth-child(even) {
+  grid-template-columns: minmax(340px, .85fr) minmax(0, 1.15fr);
+  grid-template-areas: "copy media";
+}
+
+.ev1-counterpoints .ev1-story:first-child {
+  border-right: 0;
+}
+
+.ev1-counterpoints .ev1-story:last-child {
+  border-bottom: 0;
+}
+
+.ev1-counterpoints .ev1-material {
+  grid-area: media;
+  min-height: 100%;
+  height: 100%;
+}
+
+.ev1-counterpoints .ev1-story-copy {
+  grid-area: copy;
+  border-top: 0;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ev1-counterpoints .ev1-story:nth-child(even) .ev1-story-copy {
+  border-left: 0;
+  border-right: 1px solid var(--line);
+}
+
+@media (max-width: 800px) {
+  .ev1-counterpoints .ev1-story,
+  .ev1-counterpoints .ev1-story:nth-child(even) {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "media"
+      "copy";
+  }
+
+  .ev1-counterpoints .ev1-material {
+    min-height: 58vh;
+    height: auto;
+  }
+
+  .ev1-counterpoints .ev1-story-copy,
+  .ev1-counterpoints .ev1-story:nth-child(even) .ev1-story-copy {
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+}
