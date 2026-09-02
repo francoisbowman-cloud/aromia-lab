@@ -5,9 +5,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const HIDE_GLOBAL_CHROME = `
-body > header,
-body > footer {
+const RETIRE_DUPLICATE_CHROME = `
+.ev1 > .ev1-nav,
+.ev1 > .ev1-footer {
   display: none !important;
 }
 `;
@@ -15,7 +15,7 @@ body > footer {
 export default function EditorialLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: HIDE_GLOBAL_CHROME }} />
+      <style dangerouslySetInnerHTML={{ __html: RETIRE_DUPLICATE_CHROME }} />
       {children}
     </>
   );
