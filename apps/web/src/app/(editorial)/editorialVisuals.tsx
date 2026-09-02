@@ -24,6 +24,8 @@ export interface VisualSlot {
   /** intrinsic pixel size — required for documentary (intrinsic) rendering */
   width?: number;
   height?: number;
+  /** Next/Image delivery quality. Raise selectively for texture-critical interpretive art. */
+  quality?: number;
   alt: string;
   caption?: string;
   provenance?: string;
@@ -37,6 +39,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/ambroxan-resin-abstract-01.jpg",
+    quality: 95,
     alt: "Naturaleza muerta editorial de materia translúcida cálida sobre una superficie mineral. Imagen interpretativa de la sensación material del ambroxan; el objeto no pretende ser ambroxan real.",
     placeholderLabel:
       "Área visual interpretativa: estudio material del ambroxan. No representa evidencia documental.",
@@ -61,6 +64,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/ropion-bordeaux-texture-01.jpg",
+    quality: 95,
     alt: "Naturaleza muerta editorial de una rosa burdeos oscura y materia floral densa. Imagen interpretativa del exceso floral controlado asociado a la técnica de sobredosis.",
     placeholderLabel:
       "Área visual interpretativa: exceso floral controlado. No representa evidencia documental.",
@@ -70,6 +74,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     type: "interpretive",
     present: true,
     file: "/editorial-v1/amouage-mineral-density-01.jpg",
+    quality: 95,
     alt: "Naturaleza muerta editorial de resinas, madera, materia mineral y humo. Imagen interpretativa de la densidad material de una fórmula compleja; no representa una fórmula ni un producto literal.",
     placeholderLabel:
       "Área visual interpretativa: densidad material. No representa evidencia documental.",
@@ -157,6 +162,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
           alt={slot.alt}
           width={slot.width}
           height={slot.height}
+          quality={slot.quality}
           sizes={sizes ?? "100vw"}
         />
         {slot.caption ? <figcaption>{slot.caption}</figcaption> : null}
@@ -171,6 +177,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         src={slot.file}
         alt={slot.alt}
         fill
+        quality={slot.quality}
         sizes={sizes ?? "100vw"}
         style={{ objectFit: "cover" }}
       />
