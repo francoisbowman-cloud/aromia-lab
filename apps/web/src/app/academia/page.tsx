@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "Academia — Aromia",
-  description:
-    "Academia de perfumería: historia, pirámide olfativa, familias, concentraciones y los ingredientes uno a uno.",
+  title: "Saber — Aromia",
+  description: "Una puerta de entrada a la estructura, las familias, las concentraciones y la historia de la perfumería.",
 };
 
 const timeline = [
@@ -23,116 +21,42 @@ const piramide = [
 ];
 
 const familias = [
-  { nombre: "Cítrica", color: "linear-gradient(135deg,#f2c46d,#c98a2e)", texto: "Bergamota, limón y mandarina: frescura luminosa y gran presencia en la salida." },
-  { nombre: "Floral", color: "linear-gradient(135deg,#e8a2b0,#c15b74)", texto: "Rosa, jazmín y ylang-ylang: desde perfiles transparentes hasta composiciones opulentas." },
-  { nombre: "Amaderada", color: "linear-gradient(135deg,#c9a15a,#7a5c2e)", texto: "Sándalo, cedro y vetiver: textura seca, cálida y estructural." },
-  { nombre: "Amberada / oriental", color: "linear-gradient(135deg,#8a6a4a,#4a3520)", texto: "Ámbar, vainilla y resinas: calidez, densidad y sensación envolvente." },
-  { nombre: "Chipre", color: "linear-gradient(135deg,#8fae7a,#4f6b3c)", texto: "Bergamota, musgo de roble y labdanum: contraste entre luz cítrica y fondo terroso." },
-  { nombre: "Acuática / fresca", color: "linear-gradient(135deg,#7fa8b8,#3c6b7d)", texto: "Acordes marinos y ozónicos que evocan aire, agua y limpieza." },
-  { nombre: "Especiada", color: "linear-gradient(135deg,#b08d6a,#6b4a2e)", texto: "Canela, cardamomo y pimienta rosa: calor, tensión y carácter." },
-  { nombre: "Gourmand", color: "linear-gradient(135deg,#e8c9a0,#a67c4a)", texto: "Vainilla, cacao y notas dulces inspiradas en sabores y postres." },
-];
+  ["Cítrica", "Bergamota, limón y mandarina: frescura luminosa y gran presencia en la salida."],
+  ["Floral", "Rosa, jazmín y ylang-ylang: desde perfiles transparentes hasta composiciones opulentas."],
+  ["Amaderada", "Sándalo, cedro y vetiver: textura seca, cálida y estructural."],
+  ["Amberada / oriental", "Ámbar, vainilla y resinas: calidez, densidad y sensación envolvente."],
+  ["Chipre", "Bergamota, musgo de roble y labdanum: contraste entre luz cítrica y fondo terroso."],
+  ["Acuática / fresca", "Acordes marinos y ozónicos que evocan aire, agua y limpieza."],
+  ["Especiada", "Canela, cardamomo y pimienta rosa: calor, tensión y carácter."],
+  ["Gourmand", "Vainilla, cacao y notas dulces inspiradas en sabores y postres."],
+] as const;
 
 const concentraciones = [
-  { nombre: "Parfum / Extrait", ancho: "100%", pct: "20–40%" },
-  { nombre: "Eau de Parfum", ancho: "65%", pct: "15–20%" },
-  { nombre: "Eau de Toilette", ancho: "35%", pct: "5–15%" },
-  { nombre: "Eau de Cologne", ancho: "15%", pct: "2–4%" },
-];
+  ["Parfum / Extrait", "20–40%", "100%"],
+  ["Eau de Parfum", "15–20%", "65%"],
+  ["Eau de Toilette", "5–15%", "35%"],
+  ["Eau de Cologne", "2–4%", "15%"],
+] as const;
 
-export default function AcademiaPage() {
+export default function SaberPage() {
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-24 p-6 pb-24 lg:p-10">
-      <section className="relative -mx-6 overflow-hidden bg-[#f0e5d5] px-6 py-16 text-center dark:bg-[#17120d] lg:-mx-10 lg:px-10 lg:py-24">
-        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,.88),transparent_28%),radial-gradient(circle_at_84%_76%,rgba(182,138,68,.18),transparent_34%),linear-gradient(135deg,#fbf7f0_0%,#eee1ce_58%,#e4d0ad_100%)] dark:bg-[radial-gradient(circle_at_14%_18%,rgba(200,168,107,.09),transparent_30%),radial-gradient(circle_at_84%_76%,rgba(182,138,68,.08),transparent_34%),linear-gradient(135deg,#17120d_0%,#100d0a_70%,#21180f_100%)]" />
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-5">
-          <p className="font-sans text-xs uppercase tracking-[.17em] text-gold-contrast">La Academia Aromia</p>
-          <h1 className="max-w-2xl font-display text-[38px] font-semibold leading-[1.04] text-ink sm:text-[46px] lg:text-[54px]">
-            Entiende el perfume <em className="text-gold-contrast not-italic">antes de elegirlo.</em>
-          </h1>
-          <p className="max-w-xl font-sans text-base leading-7 text-muted">Aprende a leer una fragancia a través de su estructura, sus familias y su concentración.</p>
-          <div className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-2">
-            {[["#piramide", "La pirámide"], ["#familias", "Familias olfativas"], ["#concentraciones", "Concentraciones"], ["#historia", "Origen"]].map(([href, label]) => (
-              <a key={href} href={href} className="inline-flex min-h-11 items-center px-1 font-sans text-xs uppercase tracking-[.1em] text-muted transition hover:text-ink">{label}</a>
-            ))}
-          </div>
+    <main className="bg-paper text-ink">
+      <header className="mx-auto max-w-[1320px] px-6 pb-12 pt-14 lg:px-10 lg:pb-20 lg:pt-24">
+        <div className="grid gap-8 lg:grid-cols-[1.08fr_.72fr] lg:items-end">
+          <div><p className="font-plex text-xs uppercase tracking-[.16em] text-[var(--aromia-editorial-accent)]">Saber</p><h1 className="mt-5 max-w-[11ch] font-display text-[54px] leading-[.9] tracking-[-.045em] sm:text-[68px] lg:text-[86px]">Entender cambia la manera de oler.</h1></div>
+          <div className="lg:justify-self-end"><p className="max-w-[43ch] font-sans text-base leading-7 text-muted">Estructura, familias, concentración e historia. No para convertir el perfume en una clase, sino para tener mejores preguntas cuando volvamos a olerlo.</p><nav className="mt-7 flex flex-wrap gap-x-6 gap-y-2 font-plex text-xs uppercase tracking-[.12em] text-muted" aria-label="Índice de Saber"><a href="#estructura" className="nav-link">Estructura</a><a href="#familias" className="nav-link">Familias</a><a href="#concentracion" className="nav-link">Concentración</a><a href="#historia" className="nav-link">Historia</a></nav></div>
         </div>
-      </section>
+      </header>
 
-      <section id="piramide" className="scroll-mt-20 pt-6">
-        <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Estructura</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">La pirámide olfativa</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">Una fragancia cambia con el tiempo: salida, corazón y fondo cuentan momentos distintos.</p>
-        </div>
-        <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-3">
-          {piramide.map((tier) => (
-            <div key={tier.titulo} className="rounded-card bg-surface p-7">
-              <p className="font-sans text-xs uppercase tracking-[.12em] text-gold-contrast">{tier.etiqueta}</p>
-              <h3 className="mt-3 font-display text-xl font-semibold text-ink">{tier.titulo}</h3>
-              <p className="mt-3 font-sans text-sm leading-6 text-muted">{tier.texto}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <section id="estructura" className="border-y border-line"><div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24"><div className="grid gap-12 lg:grid-cols-[.6fr_1.4fr]"><div><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">01 / Estructura</p><h2 className="mt-4 max-w-[8ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">La pirámide olfativa.</h2><p className="mt-5 max-w-[34ch] font-sans text-sm leading-6 text-muted">Una fragancia cambia con el tiempo. La pirámide es una forma útil —aunque simplificada— de seguir ese movimiento.</p></div><div className="border-t border-line">{piramide.map((tier, index)=><article key={tier.titulo} className="grid gap-4 border-b border-line py-7 sm:grid-cols-[80px_1fr_1fr]"><span className="font-plex text-xs text-muted">0{index+1}</span><div><p className="font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">{tier.etiqueta}</p><h3 className="mt-2 font-display text-2xl">{tier.titulo}</h3></div><p className="font-sans text-sm leading-6 text-muted">{tier.texto}</p></article>)}</div></div></div></section>
 
-      <section id="familias" className="scroll-mt-20 pt-6">
-        <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Clasificación</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">Las 8 familias olfativas</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">Reconocer la familia dominante ayuda a anticipar el carácter de una fragancia.</p>
-        </div>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
-          {familias.map((fam) => (
-            <div key={fam.nombre} className="p-1">
-              <div className="mb-4 h-7 w-7 rounded-full" style={{ background: fam.color }} />
-              <h3 className="font-display text-lg font-semibold text-ink">{fam.nombre}</h3>
-              <p className="mt-2 font-sans text-sm leading-6 text-muted">{fam.texto}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <section id="familias"><div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24"><div className="mb-12 grid gap-6 lg:grid-cols-[.7fr_1.3fr] lg:items-end"><div><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">02 / Familias</p><h2 className="mt-4 font-display text-[42px] leading-none tracking-[-.035em] lg:text-[54px]">Ocho direcciones.</h2></div><p className="max-w-[48ch] font-sans text-base leading-7 text-muted lg:justify-self-end">No son cajas cerradas. Son una primera orientación para reconocer parentescos entre perfumes que, a simple vista, pueden parecer muy distintos.</p></div><div className="grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:grid-cols-4">{familias.map(([nombre,texto],index)=><article key={nombre} className="border-b border-line py-7 sm:pr-7 lg:min-h-52 lg:border-r lg:px-6"><span className="font-plex text-xs text-muted">{String(index+1).padStart(2,"0")}</span><h3 className="mt-6 font-display text-2xl">{nombre}</h3><p className="mt-3 font-sans text-sm leading-6 text-muted">{texto}</p></article>)}</div></div></section>
 
-      <section id="concentraciones" className="scroll-mt-20 pt-6">
-        <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Cómo elegir</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">Qué cambia con la concentración</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">La proporción de aceite aromático influye en intensidad, duración y, a menudo, precio.</p>
-        </div>
-        <div className="mx-auto flex max-w-2xl flex-col gap-7">
-          {concentraciones.map((c) => (
-            <div key={c.nombre} className="grid grid-cols-1 gap-3 sm:grid-cols-[140px_1fr_60px] sm:items-center sm:gap-5">
-              <span className="font-display text-lg text-ink">{c.nombre}</span>
-              <span className="relative h-2 overflow-hidden rounded-full bg-gold/20"><span className="absolute inset-y-0 left-0 rounded-full bg-gold-contrast" style={{ width: c.ancho }} /></span>
-              <span className="font-sans text-xs text-muted sm:text-right">{c.pct}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <section id="concentracion" className="border-y border-line bg-soft/30"><div className="mx-auto max-w-[1120px] px-6 py-16 lg:px-10 lg:py-24"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">03 / Concentración</p><div className="mt-5 grid gap-10 lg:grid-cols-[.75fr_1.25fr]"><div><h2 className="max-w-[9ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Qué cambia cuando cambia la concentración.</h2><p className="mt-5 max-w-[35ch] font-sans text-sm leading-6 text-muted">La proporción aromática orienta, pero no predice por sí sola duración, calidad ni personalidad.</p></div><div className="border-t border-line">{concentraciones.map(([nombre,pct,width])=><div key={nombre} className="grid gap-3 border-b border-line py-6 sm:grid-cols-[160px_1fr_70px] sm:items-center"><span className="font-display text-xl">{nombre}</span><span className="h-1 bg-line"><span className="block h-full bg-gold-contrast" style={{width}}/></span><span className="font-plex text-xs text-muted sm:text-right">{pct}</span></div>)}</div></div></div></section>
 
-      {/* Materia prima seguirá oculta hasta integrar activos NO-IA auditados de la nueva biblioteca reusable. */}
+      <section id="historia"><div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24"><div className="mb-12"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">04 / Historia</p><h2 className="mt-4 max-w-[13ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Seis momentos, no seis mil años resumidos.</h2></div><div className="grid gap-x-12 gap-y-10 border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-3">{timeline.map((item)=><article key={item.anio}><p className="font-display text-xl text-gold-contrast">{item.anio}</p><h3 className="mt-4 font-display text-2xl">{item.titulo}</h3><p className="mt-3 font-sans text-sm leading-6 text-muted">{item.texto}</p></article>)}</div></div></section>
 
-      <section id="historia" className="scroll-mt-20 pt-10">
-        <div className="mx-auto mb-12 max-w-xl text-center">
-          <p className="font-sans text-xs uppercase tracking-[.14em] text-gold-contrast">Origen</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink lg:text-4xl">Una historia de 6.000 años</h2>
-          <p className="mt-3 font-sans text-base leading-7 text-muted">Del humo ritual a la perfumería abstracta: seis momentos para entender cómo llegamos hasta aquí.</p>
-        </div>
-        <div className="mx-auto grid max-w-4xl gap-x-12 gap-y-10 sm:grid-cols-2">
-          {timeline.map((item) => (
-            <article key={item.anio} className="grid grid-cols-[72px_1fr] gap-5">
-              <div className="font-display text-xl leading-none text-gold-contrast">{item.anio}</div>
-              <div><h3 className="font-display text-lg font-semibold text-ink">{item.titulo}</h3><p className="mt-2 font-sans text-sm leading-6 text-muted">{item.texto}</p></div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-card bg-ink px-8 py-14 text-center text-paper">
-        <h2 className="font-display text-3xl font-semibold lg:text-4xl">¿Ya sabes qué buscas?</h2>
-        <p className="mx-auto mt-3 max-w-md font-sans text-base leading-7 text-paper/75">Seguí leyendo el Magazine: reseñas, comparativas y guías por ocasión y temporada.</p>
-        <Button asChild size="lg" className="mt-6"><Link href="/magazine">Ir al Magazine →</Link></Button>
-      </section>
+      <section className="mx-auto max-w-[1320px] px-6 pb-20 lg:px-10 lg:pb-28"><div className="grid gap-8 border-t border-line pt-10 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">Seguir</p><h2 className="mt-4 max-w-[16ch] font-display text-[36px] leading-[.98] tracking-[-.03em]">Ahora vuelve a las historias y mira si algo huele distinto.</h2></div><div className="flex flex-wrap gap-6"><Link href="/magazine" className="nav-link text-sm text-ink">Ir a Historias</Link><Link href="/descubrir" className="nav-link text-sm text-ink">Abrir Discovery</Link></div></div></section>
     </main>
   );
 }
