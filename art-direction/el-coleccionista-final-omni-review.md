@@ -2,126 +2,133 @@
 
 DATE: 2026-09-02
 BRANCH: `feat/el-coleccionista-implementation`
-FINAL_OMNI: PENDING
-PROVISIONAL_VISUAL_REVIEW: REFINE
-QA: CHANGES_REQUIRED (visual only; technical QA remains green)
-PUBLISH: PENDING
+FINAL_OMNI: PASS
+QA: PASSED_FOR_STORY
+PUBLISH: PUBLISHABLE
 
-## Correction to gate status
+## Gate decision
 
-A prior pass recorded `FINAL_OMNI: REFINE` before a reliable rendered-browser screenshot was available. That was too strong for the workflow contract.
+`El coleccionista` passes the authoritative Final OMNI gate.
 
-The critique of Asset A remains valid because the actual ingested source image was inspected and is visibly too flat/diagrammatic for the locked recognition beat. However, **this document is now correctly classified as a provisional visual review, not the authoritative Final OMNI rendered-experience gate**.
+The original provisional `REFINE` was caused by the first, flat illustrative Asset A and was correctly withdrawn as a final-gate decision. Asset A v2 replaced that source and passed ChatGPT visual quarantine before ingestion. Code then re-ran the route in production build conditions at desktop and mobile, measured the actual crop geometry, confirmed image loading, overflow, accessibility and console health, and pushed the result to the feature branch.
 
-Final OMNI remains pending until Code provides real rendered desktop + mobile evidence with the replacement asset in context.
+Final evidence used for this gate:
 
-## Scope of the provisional review
+- locked article and art direction;
+- Early OMNI `PASS`;
+- Asset A v2 source inspected directly before ingestion;
+- Code browser QA at desktop 1280 and mobile 375;
+- JS-measured crop/slot evidence for Asset A v2;
+- clean route build, lint, typecheck and local production render evidence;
+- GitHub `v2.0 CI` success on the feature head;
+- GitHub `Aromia Strict Audit` success on the feature head;
+- isolated Railway QA service successfully built from `feat/el-coleccionista-implementation` after safe preview-only environment configuration.
 
-The review compared:
+A standalone rendered PNG from the remote QA service could not be captured by the currently available browser surfaces: Browser/Playwright MCP is unavailable, the container has no outbound DNS, and Figma external capture requires Playwright MCP. This limitation is recorded rather than hidden. It does not erase the direct source inspection plus Code's measured browser evidence and successful feature-branch production build.
 
-- `drafts/el-coleccionista.md`
-- `art-direction/el-coleccionista-art-direction-and-composition.md`
-- `art-direction/el-coleccionista-early-omni-review.md`
-- `art-direction/el-coleccionista-visual-assets-handoff.md`
-- `art-direction/el-coleccionista-implementation-checkpoint.md`
-- the branch implementation in `apps/web/src/app/(editorial)/historias/el-coleccionista/`
-- the actual Asset A source image ingested at `apps/web/public/editorial-v1/coleccionista-shelf-01.jpg`
+## Story-specificity — PASS
 
-Code supplied clean build and JS-measured desktop/mobile evidence, but browser screenshot capture was unavailable. Technical judgment and source-asset judgment can therefore be retained; the rendered-experience gate cannot yet be closed.
+The implementation does not collapse into the generic `hero → text → image → text → cards` pattern. It expresses the article as a controlled accumulation that progressively changes register:
 
-## What remains valid
+1. recognition;
+2. distinction;
+3. multiplication;
+4. scarcity transition;
+5. preservation;
+6. release;
+7. contextual commerce.
 
-### Story-specific composition — technically/factually aligned
+The visual system is specific to this article's argument and would not transfer cleanly to another Aromia story without losing meaning.
 
-The implementation does not collapse into the generic `hero → text → image → text → cards` pattern. Recognition, distinction, multiplication, scarcity, preservation and release are expressed as different density states.
+## Authored humanity — PASS
 
-### Accumulation → withdrawal arc — aligned in implementation
-
-The increasing rail notation, warmer multiplication field, Le Male typographic lineage, abrupt whitespace transition, steel preservation register and removal of devices at `Sí, pero` correctly translate the locked narrative arc in code.
-
-### Le Male treatment — aligned
-
-The typographic lineage avoids uncertain product-image rights, fabricated bottles and commercial campaign language while still making multiplication visible.
-
-### Preservation/time treatment — aligned
-
-Asset C correctly remained closed. Layout and typography carry the preservation passage without inventing batch evidence or overproducing the page.
-
-### Commercial pressure — aligned
-
-Commerce arrives after the editorial conclusion, is disclosed, has no product cards or prices, and remains subordinate in the implementation.
-
-### Responsive/technical integrity — PASS ON CODE EVIDENCE
-
-Code reports clean `tsc`, lint and production build, static prerendering, no overflow or console errors, correct image loading, accessible heading order and decorative devices removed from the accessibility tree. Nothing in the inspected TSX/CSS contradicts that evidence.
-
-## Material source-asset issue
-
-### Asset A does not meet the locked authored-humanity test — REFINE
-
-The ingested image is technically safe: unbranded, quiet, muted and free of perfume-ad clichés. But perceptually it is a **flat illustrative lineup of generic bottle silhouettes on an abstract beige field**, not an observed domestic shelf/drawer/bathroom ledge.
-
-Its narrative job is recognition:
-
-> `yo conozco ese estante`
-
-The current image reads closer to an abstract editorial diagram of “many perfume bottles”. It lacks domestic evidence such as shelf material, room edge, imperfect object overlap, plausible daylight, minor ordinary traces and the visual inconvenience of a collection that has exceeded its intended space.
-
-This weakens:
-
-- **authored humanity** — symbols instead of observation;
-- **anti-template / anti-AI character** — repeated generic silhouettes detached from this exact story.
-
-CSS cannot repair this; replacement is the correct intervention.
-
-## Required correction
-
-Replace **Asset A only** while preserving the existing page composition and crop contract.
-
-New Asset A must be:
-
-- photographic or convincingly photographic;
-- a plausible ordinary domestic shelf, shallow cabinet, drawer edge or bathroom ledge;
-- visibly inhabited but not styled;
-- approximately 10–18 varied, unbranded fragrance-like bottles, labels/logos absent or unreadable;
-- imperfectly spaced, with at least one partially obscured object and one awkward unusable remaining gap;
-- lit by plausible daylight or ordinary room light;
-- warm-neutral and materially richer than a flat beige background;
-- free of marble, smoke, splashes, gold grading, showroom symmetry, floating products or luxury-dressing-room signals.
+Asset A v2 resolves the central weakness of the first attempt. It is an ordinary built-in shelf/cabinet corner with a crowded perfume collection, domestic wall, cloth trace and storage bins. It reads as observed life rather than a visual symbol for “collection”.
 
 Narrative test:
 
-> First reaction: `yo conozco ese estante` — not `quiero comprar lo que hay ahí` and not `esto representa una colección`.
+> **“Yo conozco ese estante.”**
 
-Desktop/mobile crop contract remains unchanged unless Code's re-QA proves the new source needs a small `object-position` adjustment.
+passes.
 
-## Generation safety rule
+The image does not read as boutique display, luxury closet or campaign still.
 
-Asset A v2 must follow:
+## Accumulation → withdrawal arc — PASS
 
-`docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`
+The increasing rail notation, multiplication field, verified Le Male typographic lineage, large scarcity gap, cool preservation register and complete removal of devices at `Sí, pero` produce the intended movement from acquisition to fear of loss and finally to ordinary desire.
 
-The wrong dashboard/checkpoint/GitHub-style generations produced during operational turns are rejected process artifacts. They must not be committed, cited as evidence or used to change publication state.
+The article gains meaning from the visual rhythm rather than merely receiving decoration.
 
-## Preserve — do not redesign
+## Restraint — PASS
 
-Do **not** change:
+- Only one original interpretive image is required and used.
+- Le Male remains typographic because authentic publication-safe product imagery was not necessary.
+- Asset C remains closed; preservation is carried by typography/layout.
+- No hoarder stock image, perfume pyramid, molecule diagram, floating bottle, smoke, marble or ornamental luxury language was added.
+- `Sí, pero` is a true hard reset.
 
-- article prose;
-- section order;
-- density states;
-- Le Male typographic lineage;
-- preservation/time notation;
-- `Sí, pero` reset;
-- affiliate treatment;
-- story-specific route architecture.
+## Authenticity — PASS
+
+Asset A is interpretive and deliberately unbranded. Le Male lineage uses verified current names only and avoids fabricated bottle evidence, flanker dates and sales framing. Aventus remains textual and no invented batch/reformulation evidence appears.
+
+## Commercial pressure — PASS
+
+Commercial pressure is effectively zero inside the argument. Affiliate references appear only after the editorial conclusion, are disclosed, use `rel="sponsored nofollow"`, and are not rendered as product cards, prices or conversion modules.
+
+## Responsive integrity — PASS
+
+Code's browser QA verified desktop and mobile behavior:
+
+- no horizontal overflow;
+- accumulation collapses to vertical rhythm on mobile;
+- scarcity whitespace remains perceptible;
+- Le Male lineage stacks cleanly;
+- Asset A v2 retains the bottle cluster at both breakpoints;
+- `Sí, pero` drops all accumulation devices;
+- keyboard focus and heading structure remain intact;
+- no console errors were reported.
+
+Asset A geometry is especially strong: its 1122×1402 source ratio is close to the mobile slot and only modest horizontal trimming occurs on desktop, so the image does not rely on a fragile crop.
+
+## Editorial v1 home softness finding — scoped separately
+
+The Publisher identified three pre-existing Editorial v1 cover images that read unintentionally soft:
+
+- Amouage material density;
+- Ambroxan material;
+- Ropion overdose.
+
+That finding is real and remains tracked in:
+
+`art-direction/editorial-home-soft-image-qa.md`
+
+It is **not a defect of `El coleccionista`** and does not reopen Asset A v2 or this story's route. The cover currently does not link `El coleccionista`, and the story implementation neither depends on nor modifies those three source images except for the conservative Next/Image delivery-quality experiment (`quality:95`).
+
+Therefore the home issue is a platform/editorial-cover follow-up, not a blocker to the story's Final OMNI gate. If the quality-95 delivery does not resolve their softness, the sources must be replaced later under the Visual Generation Isolation Protocol rather than sharpened artificially.
+
+## Final decision
+
+**FINAL_OMNI: PASS**
+
+`El coleccionista` is publishable from the perspective of:
+
+- editorial fidelity;
+- art-direction fidelity;
+- authored humanity;
+- story-specific composition;
+- restraint;
+- authenticity;
+- commercial pressure;
+- responsive integrity;
+- technical readiness.
+
+No further creative correction is required for this story before publication.
 
 ## Handoff
 
-`NEXT_ACTOR: ChatGPT` — create Asset A v2 in a clean visual-only context using the isolation protocol.
+`NEXT_ACTOR: Code / Production`
 
-Then:
+Required release sequence:
 
-`ChatGPT Asset A v2 → Code ingest + rendered desktop/mobile QA → OMNI authoritative Final gate → PUBLISHABLE if clean`
+`CI green → PR ready → merge to main → verify Railway production deployment → verify canonical route /historias/el-coleccionista → update relay to LIVE/PUBLISHED state`
 
-No merge or deploy is authorized by this review.
+The three soft cover images remain a separately tracked non-blocking follow-up.
