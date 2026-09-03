@@ -3,14 +3,17 @@
 STATUS: CANONICAL OPERATING SAFETY RULE
 APPLIES_TO: ChatGPT original-image generation for Aromia
 DATE_ADOPTED: 2026-09-02
+LAST_HARDENED: 2026-09-03
 
 ## Why this protocol exists
 
 Aromia had repeated generation failures in which a request for an editorial image produced a workflow/dashboard/mockup instead. The failure was not primarily an art-direction problem. It was **context contamination**: the image generator inferred from an operationally dense conversation containing terms such as GitHub, Code, OMNI, checkpoint, implementation, relay, branch and QA, and visualized the workflow rather than the intended photographic scene.
 
+A second failure class was confirmed on 2026-09-03: a valid editorial capsule for a human domestic scene drifted into generic perfume ingredient still lifes (bergamot, flowers, woods, resins and spa/product styling). This is also a quarantine failure even when no UI/mockup appears, because the generated image no longer serves the story-specific narrative test.
+
 The important technical lesson is:
 
-> **Prompt cleaning alone is not a reliable fix when the image generator infers from the surrounding conversation. Isolation must happen at the conversation/task context level.**
+> **Prompt cleaning alone is not a reliable fix when the image generator infers from the surrounding conversation. Isolation must happen at the conversation/task context level, and every result must also pass a story-specific semantic gate before generation continues.**
 
 ## Hard rule
 
@@ -78,6 +81,15 @@ For any requested photographic or editorial scene, the visual capsule must expli
 - mockups of the article or website;
 - invented brand marks unless specifically required and authentic.
 
+When the requested scene is human, domestic, environmental or documentary, also reject **generic perfume-semantic fallback imagery** unless the capsule explicitly asks for it:
+
+- isolated citrus/flowers/herbs arranged as a beauty still life;
+- woods/resins/amber presented as aromatherapy or spa props;
+- centered ingredient collections on beige studio backgrounds;
+- generic fragrance bottles introduced without narrative need;
+- luxury product lighting or cosmetic-campaign staging;
+- decorative botanical compositions that merely signal “perfume.”
+
 ## Pre-generation contamination test
 
 Before invoking image generation, ChatGPT asks internally:
@@ -85,6 +97,12 @@ Before invoking image generation, ChatGPT asks internally:
 > **If a visual model read only the immediately active context, could it reasonably think I am asking it to visualize the project/workflow instead of the physical scene?**
 
 If YES or MAYBE: **do not generate in that context.** Isolate first.
+
+Then ask a second question:
+
+> **Could the capsule be reduced by the model to a generic “perfume” visual instead of the specific story event, person, object relationship or material argument?**
+
+If YES or MAYBE: strengthen the physical scene and negative lock before generation.
 
 ## Post-generation quarantine gate
 
@@ -97,16 +115,31 @@ Before handoff to Code, ChatGPT must inspect the result and reject it if any of 
 3. It looks like a presentation of the idea instead of the idea made physical/photographic.
 4. It violates authenticity constraints (recognizable invented bottles, fake logos, fabricated documentary evidence).
 5. It fails the story-specific narrative test recorded in the art direction.
+6. It substitutes generic perfume shorthand—ingredients, flowers, woods, resins, spa/product tableaux, luxury bottle imagery—for the actual requested scene.
+7. Its visual grammar contradicts the capsule even if the individual objects are plausible.
 
 Rejected generations are **process waste**:
 - do not commit them;
-- do not reference them as evidence;
+- do not reference them as publication evidence;
 - do not let them change editorial/OMNI state;
-- do not ask Code to ingest them.
+- do not ask Code to ingest them;
+- record the rejection in the active visual-generation quarantine ledger when the failure is part of a production batch.
+
+## One-asset-at-a-time semantic gate
+
+For batch generation, continuation is sequential:
+
+1. Generate the current asset only.
+2. Inspect it against the exact capsule and narrative test.
+3. Mark `PASS` or `REJECT`.
+4. **Do not advance to the next asset unless the current asset passes.**
+5. A rejected asset must be regenerated from a clean context; it cannot be “balanced out” by generating later slots.
+
+This prevents a wrong semantic attractor from propagating across an entire batch.
 
 ## Two-strike rule
 
-If two consecutive generations in the same conversation drift into mockups/UI/workflow imagery:
+If two consecutive generations in the same conversation drift into mockups/UI/workflow imagery **or into the same unrelated perfume-semantic fallback**:
 
 > **STOP generating in that conversation.**
 
@@ -146,6 +179,18 @@ The repeated wrong generations for `El coleccionista` are the canonical example 
 
 The correct Asset A task is a physical domestic scene. Its generation context must contain only the physical scene specification and its photographic constraints.
 
+## Sub-batch-01 semantic-drift incident record — 2026-09-03
+
+While beginning `art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md`, the first requested asset was a close observational post-shower human scene for **Antes del perfume ya olíamos**. The produced outputs instead became generic botanical/ingredient and woods/resins still lifes.
+
+Those outputs are canonically **REJECTED**. They do not satisfy the requested subject, visual grammar or narrative test and must never be committed or ingested.
+
+The batch must restart from Opportunity 01A in a clean visual-only context. The pass condition remains:
+
+> **A body exists here before perfume enters the story.**
+
+No later sub-batch asset may be generated until 01A passes quarantine.
+
 ## Short version
 
-> **Operational context decides what to make. Clean visual context makes the image. Quarantine decides whether the image is allowed back into Aromia.**
+> **Operational context decides what to make. Clean visual context makes the image. Quarantine decides whether the image is allowed back into Aromia. Narrative fidelity decides whether generation may continue.**
