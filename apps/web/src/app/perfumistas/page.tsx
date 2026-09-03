@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getPerfumes } from "@/lib/api";
 import { PERFUMERS } from "@/lib/perfumers";
+import { PerfumerPortrait } from "@/components/perfume/PerfumerPortrait";
 
 export const metadata: Metadata = { title: "Personas — Aromia", description: "Las personas detrás de las fragancias y las obras revisadas en Aromia." };
 
@@ -18,9 +19,10 @@ export default async function PerfumistasPage() {
       </div>
 
       <div className="grid grid-cols-1 border-t border-line md:grid-cols-2 lg:grid-cols-3">
-        {profiles.map((profile, index) => <Link key={profile.slug} href={`/perfumistas/${profile.slug}`} className="group min-h-64 border-b border-line py-8 outline-none md:pr-8 lg:px-7">
+        {profiles.map((profile, index) => <Link key={profile.slug} href={`/perfumistas/${profile.slug}`} className="group flex flex-col border-b border-line py-8 outline-none md:pr-8 lg:px-7">
           <div className="flex justify-between font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{String(index + 1).padStart(2,"0")}</span><span>{profile.visibleCount} obras</span></div>
-          <p className="mt-10 font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">{profile.era}</p>
+          <div className="mt-6 transition group-hover:opacity-90"><PerfumerPortrait name={profile.name} portrait={profile.portrait} era={profile.era} variant="card" /></div>
+          <p className="mt-7 font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">{profile.era}</p>
           <h2 className="mt-3 font-display text-[32px] leading-[.98] transition group-hover:opacity-70">{profile.name}</h2>
           <p className="mt-5 max-w-[32ch] font-sans text-sm leading-6 text-muted">{profile.signature}</p>
           <span className="mt-7 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-[var(--aromia-editorial-accent)]">Explorar →</span>
