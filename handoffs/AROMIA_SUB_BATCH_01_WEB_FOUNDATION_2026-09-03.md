@@ -16,8 +16,10 @@ Implemented on `main`:
 - explicit routes for all nine sub-batch-01 stories;
 - draft-to-page parser that reads canonical `drafts/*.md`, removes operational metadata/fences, preserves article structure and converts `[AROMIA_VISUAL_OPPORTUNITY]` positions into web visual beats;
 - 01A is wired to its canonical quarantined binary through `/api/editorial-asset/01A-antes-del-perfume-ya-oliamos.jpg`;
+- 01A uses the quarantine-approved accessibility intent rather than a generic image alt;
 - photographic opportunities without a PASS asset render nothing rather than showing fake placeholders or workflow UI;
-- native non-photographic decisions are already implemented for 01B, 05B, 06B and 08B.
+- native non-photographic decisions are already implemented for 01B, 05B, 06B and 08B;
+- all nine sub-batch routes emit `robots: noindex, nofollow` while visual implementation and rendered QA are incomplete. This protection must be removed story-by-story only at publication readiness.
 
 ## Nine routed stories
 
@@ -37,7 +39,7 @@ Approved photography must be ingested under:
 
 `assets/visual/editorial/sub-batch-01/`
 
-Then add the filename to `visualAssets` in `subBatch01Story.tsx` for the exact story + visual index.
+Then add the filename to `visualAssets` in `subBatch01Story.tsx` for the exact story + visual index, and add its approved alt intent to `visualAlts`.
 
 Do not introduce a visible placeholder while waiting. The page remains editorially readable and the missing photographic beat stays absent until quarantine PASS.
 
@@ -51,6 +53,19 @@ Do not introduce a visible placeholder while waiting. The page remains editorial
 - 08B: native language interruption implemented.
 - remaining photographic/material-study slots: implementation-ready but deliberately absent until their source passes quarantine.
 
+## Verification evidence
+
+First full implementation head `7dc805a26df0db3cd18078e1f8cfe0394ddc4623`:
+
+- v2.0 CI run `33804632426`: API SUCCESS; web tests 31/31 SUCCESS; lint SUCCESS; TypeScript SUCCESS; Next production build SUCCESS.
+- Aromia Strict Audit run `33804632376`: code-and-governance job SUCCESS, including root tooling, Fase 3 verification, OMNI strict governance, API build and web lint/typecheck/production build. Its separate production-catalog observation continued independently.
+
+Final publication-protection commit:
+
+`c4ab6828dfdcdd6528aaa7b77c06dffe44147260`
+
+This adds `noindex, nofollow` and the specific approved 01A alt intent. CI and Strict Audit were automatically re-triggered for this final head. Railway production automatically began building the web deployment `c9589c41-96de-45d4-ac03-26c24bff4270` for the same push cycle; verify SUCCESS before claiming the routes are production-ready.
+
 ## Non-negotiable rule
 
 > An image is not the deliverable. A rendered, authored Aromia page is the deliverable.
@@ -59,6 +74,6 @@ Generation remains isolated from repo/QA conversations. This implementation does
 
 ## Next actor
 
-`ChatGPT Visual Assets` in a genuinely clean visual-only context for 02A, followed by Code integration through the already-established web path.
+`ChatGPT Visual Assets` in a genuinely clean visual-only context for 02A, followed immediately by Code integration through the already-established web path.
 
-After each PASS asset, update `visualAssets`, verify the exact page at mobile + desktop, and only then advance its web state.
+After each PASS asset, update `visualAssets` + `visualAlts`, verify the exact page at mobile + desktop, and only then advance its web state. Do not remove `noindex` until the story itself is fully art-directed and passes rendered QA.
