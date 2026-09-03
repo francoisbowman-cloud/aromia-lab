@@ -37,7 +37,7 @@ export default async function PerfumerDetailPage({ params }: { params: { slug: s
     <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
       <div className="mb-5 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted"><Link href="/perfumistas" className="transition hover:text-ink">Personas</Link><span>／</span><span>{profile.era}</span></div>
       <div className="grid gap-9 pb-12 lg:grid-cols-[.5fr_1.5fr] lg:items-start">
-        <PerfumerPortrait name={profile.name} portrait={profile.portrait} era={profile.era} variant="detail" />
+        <PerfumerPortrait name={profile.name} portrait={profile.portrait} portraitCredit={profile.portraitCredit} portraitCreditHref={profile.portraitCreditHref} era={profile.era} variant="detail" />
         <div>
           <h1 className="max-w-[12ch] font-display text-[48px] leading-[.94] tracking-[-.04em] sm:text-[58px] lg:text-[70px]">{profile.name}</h1>
           <p className="mt-6 font-display text-2xl italic leading-snug text-ink">{profile.signature}</p>
