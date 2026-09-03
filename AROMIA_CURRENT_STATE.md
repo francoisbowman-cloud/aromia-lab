@@ -23,10 +23,10 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 35
-UPDATED_AT: 2026-09-02
-LAST_ACTOR: ChatGPT acting as Code + OMNI + Production under explicit Publisher instruction to carry the rendered QA cycle through to completion
-LAST_ACTION: completed real-browser OMNI Render QA against production after the 2026-09-02 UX/UI consolidation. Built and merged reusable product-neutral OMNI Render QA improvements in image-toolkit (#75/#76/#77), corrected three evidence-backed Aromia issues in PR #127, deployed Aromia commit 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409 to Railway, then ran the final verified Chromium/Playwright gate over 11 public routes at mobile 390x844 and desktop 1280x900. Final OMNI result: PASS 11, REVIEW 0, FAIL 0. Discovery's three mobile lazy-image findings were independently verified against their same-origin image endpoints and all returned reachable image responses. No publication imagery was generated or reopened.
+STATE_VERSION: 36
+UPDATED_AT: 2026-09-03
+LAST_ACTOR: Code
+LAST_ACTION: ingested Cowork editorial sub-batch `sub-batch-01-territorios` (9 pieces) into `drafts/` on branch `editorial/sub-batch-01-territorios` (based on origin/main @ 9cdd59c, matching the bundle's base_main_sha). Cowork could not push its own branch (session git proxy 403: repo not in authorized set), so ingest was done from the portable bundle `aromia-sub-batch-01-territorios.tar.gz`. All 9 `.md` copied byte-identical and each verified against its SHA-256 in MANIFEST.json (9/9 OK). Pieces cover AROMIA_EDITORIAL_BATCH_100.md items 1, 15, 39, 42, 51, 61, 76, 89, 97 (item 11 / ambroxán already covered by drafts/el-ambar-que-nunca-toco-una-ballena.md from the prior batch, substituted per Brey). Each piece is EDITORIAL: READY with ART_DIRECTION: PENDING and carries its own fact-check, sources, "No verificado y dejado fuera a propósito" section, 2 [AROMIA_VISUAL_OPPORTUNITY] blocks and 1 non-mandatory [AUTHOR_INPUT_OPPORTUNITY]. Voice Bible v0.3 anti-intercambiabilidad QA passed (opening variety, no "Sí, pero" repetition, one deliberate ironic "evocadora" in item 39 kept). No visual composition prescribed or content invented for open blocks. Delivered as a PR against main; no push/merge performed on Cowork's behalf. Cumulative batch-100 progress: 12 / 100.
 ACTIVE_OBJECTIVE: resume editorial production from the unified, deployed and browser-verified Aromia baseline; treat any future rendered finding as new evidence rather than reopening this closed QA cycle speculatively
 ACTIVE_BRANCH: main
 FUNCTIONAL_BASELINE_SHA: 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
@@ -64,8 +64,8 @@ EL_COLECCIONISTA: LIVE — CLOSED — browser technical gate PASS after local co
 EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 (100-story exploration batch) and any later calendar work; it was not reverted by this QA cycle
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
-NEXT_ACTOR: Cowork / next editorial story
-NEXT_ACTION: continue the editorial calendar from main using Voice Bible v0.3, the unified navigation/content model and the verified production baseline. Browser regression QA is now available through OMNI Render and should be rerun after meaningful frontend changes, not as a reason to reopen already-closed surfaces without new evidence.
+NEXT_ACTOR: Art Direction (primary) — process the 2 [AROMIA_VISUAL_OPPORTUNITY] blocks in each of the 9 sub-batch-01-territorios pieces once the PR merges (18 opportunities total); do not treat the marked blocks as final composition briefs, they are entry points. Cowork continues in parallel with the next sub-batch of AROMIA_EDITORIAL_BATCH_100.md (88 items remaining).
+NEXT_ACTION: merge PR `editorial/sub-batch-01-territorios` after CI (v2-CI + Strict Audit) passes, then advance each ingested piece through the ART_DIRECTION → VISUAL_ASSETS → IMPLEMENTATION → QA → PUBLISH pipeline. Publication into the live magazine stays manual via /admin/magazine per decision #103; open [AUTHOR_INPUT_OPPORTUNITY] questions are for Brey and none are mandatory. Continue the editorial calendar from main using Voice Bible v0.3, the unified navigation/content model and the verified production baseline; rerun OMNI Render QA after meaningful frontend changes only.
 BLOCKERS: NONE for editorial continuation, code, governance, production deployment or technical rendered/browser QA.
 ```
 
