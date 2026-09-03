@@ -8,10 +8,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/club" },
 };
 
-const pillars = [
-  ["01", "Perfil", "Una identidad olfativa que pueda cambiar contigo."],
-  ["02", "Comunidad", "Reseñas y experiencias de personas, sin convertirlas en una puntuación vacía."],
-  ["03", "Continuidad", "Guardar historias, perfumes y rutas para poder volver a ellas."],
+const meanwhile = [
+  ["01", "Tu mapa olfativo", "Una identidad que ya cambia con lo que exploras.", "/descubrir"],
+  ["02", "Las personas", "Quién está detrás del olor, con autoría revisada.", "/perfumistas"],
+  ["03", "El archivo", "Vuelve a cualquier historia o materia publicada.", "/magazine"],
 ] as const;
 
 export default function ClubPage() {
@@ -24,8 +24,9 @@ export default function ClubPage() {
             <h1 className="mt-12 max-w-[11ch] font-display text-[50px] font-medium leading-[.94] tracking-[-.04em] text-ink sm:text-[62px] lg:text-[78px]">El perfume también se comparte.</h1>
             <p className="mt-7 max-w-[47ch] font-sans text-base leading-7 text-muted">Club será el lugar para continuar después de una lectura o una fragancia: recordar, comparar experiencias y volver a una pista sin convertir Aromia en una red social genérica.</p>
 
-            <div className="mt-14 grid border-t border-line sm:grid-cols-3">
-              {pillars.map(([number,title,copy])=><article key={number} className="border-b border-line py-7 sm:min-h-52 sm:border-r sm:pr-6"><span className="font-plex text-xs text-gold-contrast">{number}</span><h2 className="mt-6 font-display text-2xl">{title}</h2><p className="mt-3 font-sans text-sm leading-6 text-muted">{copy}</p></article>)}
+            <p className="mt-14 font-plex text-xs uppercase tracking-[.14em] text-muted">Mientras tanto, ya puedes</p>
+            <div className="mt-5 grid border-t border-line sm:grid-cols-3">
+              {meanwhile.map(([number,title,copy,href])=><Link key={number} href={href} className="group border-b border-line py-7 sm:min-h-52 sm:border-r sm:pr-6"><span className="font-plex text-xs text-gold-contrast">{number}</span><h2 className="mt-6 font-display text-2xl transition group-hover:opacity-70">{title}</h2><p className="mt-3 font-sans text-sm leading-6 text-muted">{copy}</p><span className="mt-5 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-[var(--aromia-editorial-accent)]">Abrir →</span></Link>)}
             </div>
           </div>
 

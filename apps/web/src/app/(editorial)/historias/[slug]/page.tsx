@@ -4,6 +4,7 @@ import Link from "next/link";
 import "../../editorial.css";
 import "./story.css";
 import { VisualField } from "../../editorialVisuals";
+import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
 
 interface StorySection {
   h: string;
@@ -240,21 +241,15 @@ export default function Story({ params }: { params: { slug: string } }) {
   const s = data[params.slug];
   if (!s) notFound();
 
+  const indexEntry = EDITORIAL_STORIES.find((entry) => entry.slug === params.slug);
+  const others = EDITORIAL_STORIES.filter((entry) => entry.slug !== params.slug);
+  const sameTerritory = indexEntry
+    ? others.filter((entry) => entry.territory === indexEntry.territory)
+    : [];
+  const related = (sameTerritory.length ? sameTerritory : others).slice(0, 2);
+
   return (
     <main className={`ev1 story-page ${s.heroSlot.split("-")[0]}`}>
-      <header className="ev1-nav">
-        <Link href="/" className="ev1-brand">
-          AROMIA
-        </Link>
-        <nav>
-          <Link href="/">Portada</Link>
-          <span>{s.territory}</span>
-        </nav>
-        <Link href="/buscar" aria-label="Buscar">
-          ⌕
-        </Link>
-      </header>
-
       <article>
         <header className="story-hero">
           <div>
@@ -309,13 +304,23 @@ export default function Story({ params }: { params: { slug: string } }) {
         </section>
 
         <aside className="story-close">
-          <p className="ev1-kicker">Seguir explorando</p>
+          <p className="ev1-kicker">Seguir leyendo</p>
           <p>
             El perfume puede ser el final de una compra. Aquí preferimos que sea
             el principio de otra pregunta.
           </p>
-          <Link href="/" className="ev1-read">
-            Volver a la portada →
+          <ul className="story-close-related">
+            {related.map((entry) => (
+              <li key={entry.slug}>
+                <Link href={entry.href}>
+                  <span className="story-close-related-kicker">{entry.territory}</span>
+                  <span className="story-close-related-title">{entry.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link href="/magazine" className="ev1-read">
+            Ver todo el archivo →
           </Link>
         </aside>
       </article>

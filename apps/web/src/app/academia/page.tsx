@@ -31,11 +31,13 @@ const familias = [
   ["Gourmand", "Vainilla, cacao y notas dulces inspiradas en sabores y postres."],
 ] as const;
 
+// La barra representa el punto medio del rango real de concentrado, normalizado
+// al del Parfum (~30%) — no un valor decorativo.
 const concentraciones = [
   ["Parfum / Extrait", "20–40%", "100%"],
-  ["Eau de Parfum", "15–20%", "65%"],
-  ["Eau de Toilette", "5–15%", "35%"],
-  ["Eau de Cologne", "2–4%", "15%"],
+  ["Eau de Parfum", "15–20%", "58%"],
+  ["Eau de Toilette", "5–15%", "33%"],
+  ["Eau de Cologne", "2–4%", "10%"],
 ] as const;
 
 export default function SaberPage() {
@@ -52,7 +54,7 @@ export default function SaberPage() {
 
       <section id="familias"><div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24"><div className="mb-12 grid gap-6 lg:grid-cols-[.7fr_1.3fr] lg:items-end"><div><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">02 / Familias</p><h2 className="mt-4 font-display text-[42px] leading-none tracking-[-.035em] lg:text-[54px]">Ocho direcciones.</h2></div><p className="max-w-[48ch] font-sans text-base leading-7 text-muted lg:justify-self-end">No son cajas cerradas. Son una primera orientación para reconocer parentescos entre perfumes que, a simple vista, pueden parecer muy distintos.</p></div><div className="grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:grid-cols-4">{familias.map(([nombre,texto],index)=><article key={nombre} className="border-b border-line py-7 sm:pr-7 lg:min-h-52 lg:border-r lg:px-6"><span className="font-plex text-xs text-muted">{String(index+1).padStart(2,"0")}</span><h3 className="mt-6 font-display text-2xl">{nombre}</h3><p className="mt-3 font-sans text-sm leading-6 text-muted">{texto}</p></article>)}</div></div></section>
 
-      <section id="concentracion" className="border-y border-line bg-soft/30"><div className="mx-auto max-w-[1120px] px-6 py-16 lg:px-10 lg:py-24"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">03 / Concentración</p><div className="mt-5 grid gap-10 lg:grid-cols-[.75fr_1.25fr]"><div><h2 className="max-w-[9ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Qué cambia cuando cambia la concentración.</h2><p className="mt-5 max-w-[35ch] font-sans text-sm leading-6 text-muted">La proporción aromática orienta, pero no predice por sí sola duración, calidad ni personalidad.</p></div><div className="border-t border-line">{concentraciones.map(([nombre,pct,width])=><div key={nombre} className="grid gap-3 border-b border-line py-6 sm:grid-cols-[160px_1fr_70px] sm:items-center"><span className="font-display text-xl">{nombre}</span><span className="h-1 bg-line"><span className="block h-full bg-gold-contrast" style={{width}}/></span><span className="font-plex text-xs text-muted sm:text-right">{pct}</span></div>)}</div></div></div></section>
+      <section id="concentracion" className="border-y border-line bg-soft/30"><div className="mx-auto max-w-[1120px] px-6 py-16 lg:px-10 lg:py-24"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">03 / Concentración</p><div className="mt-5 grid gap-10 lg:grid-cols-[.75fr_1.25fr]"><div><h2 className="max-w-[9ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Qué cambia cuando cambia la concentración.</h2><p className="mt-5 max-w-[35ch] font-sans text-sm leading-6 text-muted">La proporción aromática orienta, pero no predice por sí sola duración, calidad ni personalidad. La barra sigue el punto medio de cada rango; el porcentaje exacto varía por fórmula.</p></div><div className="border-t border-line">{concentraciones.map(([nombre,pct,width])=><div key={nombre} className="grid gap-3 border-b border-line py-6 sm:grid-cols-[160px_1fr_70px] sm:items-center"><span className="font-display text-xl">{nombre}</span><span className="block h-1 bg-line" role="img" aria-label={`Concentrado aproximado: ${pct}`}><span className="block h-full bg-gold-contrast" style={{width}}/></span><span className="font-plex text-xs text-muted sm:text-right">{pct}</span></div>)}</div></div></div></section>
 
       <section id="historia"><div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24"><div className="mb-12"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">04 / Historia</p><h2 className="mt-4 max-w-[13ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Seis momentos, no seis mil años resumidos.</h2></div><div className="grid gap-x-12 gap-y-10 border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-3">{timeline.map((item)=><article key={item.anio}><p className="font-display text-xl text-gold-contrast">{item.anio}</p><h3 className="mt-4 font-display text-2xl">{item.titulo}</h3><p className="mt-3 font-sans text-sm leading-6 text-muted">{item.texto}</p></article>)}</div></div></section>
 
