@@ -24,9 +24,8 @@ export default function QuizPage() {
             <span>6 preguntas</span><span>≈ 2 minutos</span><span>Quiz → mapa → exploración</span>
           </div>
         </div>
-        <div className="relative flex items-center px-6 py-12 lg:px-14 lg:py-16">
-          <div aria-hidden="true" className="absolute inset-0 overflow-hidden"><div className="absolute right-[-12%] top-[8%] h-[42vw] max-h-[620px] w-[42vw] max-w-[620px] rounded-full border border-line opacity-40"/><div className="absolute bottom-[9%] left-[6%] h-32 w-32 rounded-full bg-gold/10 blur-2xl"/></div>
-          <div className="relative w-full"><QuizFlow /></div>
+        <div className="flex items-center px-6 py-12 lg:px-14 lg:py-16">
+          <div className="w-full"><QuizFlow /></div>
         </div>
       </section>
     </main>
