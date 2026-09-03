@@ -47,10 +47,11 @@ Do not introduce a visible placeholder while waiting. The page remains editorial
 
 - 01A: PASS, wired into real web page.
 - 01B: native material field implemented.
-- 02A: still current quarantine gate; no image wired because no PASS binary exists.
+- 02A: RESOLVED as a web-native editorial composition (sample/experience vs bottle/possession); no generated photography required.
 - 05B: native typographic/material pause implemented.
 - 06B: native marginal markers implemented.
 - 08B: native language interruption implemented.
+- 02B: RESOLVED as a web-native dual-shelf composition (used-down levels vs nearly-full collection), preserving a neutral non-judgmental read.
 - remaining photographic/material-study slots: implementation-ready but deliberately absent until their source passes quarantine.
 
 ## Verification evidence
