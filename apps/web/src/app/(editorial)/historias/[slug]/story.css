@@ -27,3 +27,97 @@ figure.story-visual img,figure.story-interruption img{object-fit:cover}
 .story-close-related-title{font-family:var(--font-display,Georgia,serif);font-size:clamp(24px,3vw,40px);line-height:1.04;letter-spacing:-.02em}
 .story-close-related a:hover .story-close-related-title{opacity:.7}
 @media(max-width:800px){.story-close-related{margin-bottom:36px}.story-close-related a{padding:18px 0}}
+
+
+/* Visual UX closeout — Ropion S5: documentary materials + omission pause */
+.ropion-material-diptych{
+  grid-column:3;
+  align-self:start;
+  display:grid;
+  gap:18px;
+  margin-top:8px
+}
+.ropion-material-diptych figure{
+  margin:0;
+  border:1px solid var(--line);
+  background:var(--paper);
+  overflow:hidden
+}
+.ropion-material-diptych figure:first-child{
+  width:100%
+}
+.ropion-material-diptych figure:last-child{
+  width:82%;
+  justify-self:end
+}
+.ropion-material-diptych img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:4/3;
+  object-fit:cover
+}
+.ropion-material-diptych figcaption{
+  padding:9px 11px 11px;
+  font-size:10px;
+  line-height:1.4;
+  letter-spacing:.02em;
+  color:var(--ink);
+  opacity:.7
+}
+.ropion-omission-pause{
+  grid-column:3;
+  align-self:center;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:28px 0 30px
+}
+.ropion-omission-label{
+  margin:0 0 22px;
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  opacity:.6
+}
+.ropion-omission-terms{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(34px,4vw,58px);
+  line-height:.98;
+  letter-spacing:-.035em
+}
+.ropion-omission-pause>p:last-child{
+  margin:24px 0 0;
+  max-width:34ch;
+  font-family:var(--font-display,Georgia,serif);
+  font-size:17px;
+  line-height:1.55
+}
+@media(max-width:800px){
+  .ropion-material-diptych,
+  .ropion-omission-pause{
+    grid-column:1/3;
+    width:calc(100% + 40px);
+    margin-left:-20px;
+    margin-right:-20px
+  }
+  .ropion-material-diptych{
+    gap:0;
+    margin-top:48px
+  }
+  .ropion-material-diptych figure,
+  .ropion-material-diptych figure:last-child{
+    width:100%;
+    border-left:0;
+    border-right:0
+  }
+  .ropion-material-diptych figure+figure{
+    border-top:0
+  }
+  .ropion-omission-pause{
+    margin-top:48px;
+    padding:34px 20px 38px
+  }
+}
