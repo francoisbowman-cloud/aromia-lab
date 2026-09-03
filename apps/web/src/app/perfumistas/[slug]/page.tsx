@@ -6,6 +6,7 @@ import { getPerfumerProfile } from "@/lib/perfumers";
 import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
 import type { Perfume } from "@/lib/types";
 import { PerfumeCard } from "@/components/perfume/PerfumeCard";
+import { PerfumerPortrait } from "@/components/perfume/PerfumerPortrait";
 import { DiscoverySignal } from "@/components/discovery/DiscoverySignal";
 import { PersonalizedDiscoveryRail } from "@/components/discovery/PersonalizedDiscoveryRail";
 
@@ -27,6 +28,7 @@ export default async function PerfumerDetailPage({ params }: { params: { slug: s
   if (!profile) notFound();
   const catalog = await getPerfumes();
   const works = profile.perfumeSlugs.map((slug) => catalog.find((p) => p.slug === slug)).filter((p): p is Perfume => Boolean(p));
+  const houses = Array.from(new Set(works.map((work) => work.marca).filter(Boolean))).sort();
   const stories = EDITORIAL_STORIES.filter((story) => story.relatedPerfumerSlug === profile.slug);
 
   return <main className="bg-paper text-ink">
@@ -34,9 +36,19 @@ export default async function PerfumerDetailPage({ params }: { params: { slug: s
     <DiscoverySignal perfumerSlug={profile.slug} />
     <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
       <div className="mb-5 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted"><Link href="/perfumistas" className="transition hover:text-ink">Personas</Link><span>／</span><span>{profile.era}</span></div>
-      <div className="grid gap-9 pb-12 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
-        <h1 className="max-w-[12ch] font-display text-[48px] leading-[.94] tracking-[-.04em] sm:text-[58px] lg:text-[70px]">{profile.name}</h1>
-        <div><p className="font-display text-2xl italic leading-snug text-ink">{profile.signature}</p><p className="mt-5 max-w-[46ch] font-sans text-base leading-7 text-muted">{profile.bio}</p></div>
+      <div className="grid gap-9 pb-12 lg:grid-cols-[.5fr_1.5fr] lg:items-start">
+        <PerfumerPortrait name={profile.name} portrait={profile.portrait} era={profile.era} variant="detail" />
+        <div>
+          <h1 className="max-w-[12ch] font-display text-[48px] leading-[.94] tracking-[-.04em] sm:text-[58px] lg:text-[70px]">{profile.name}</h1>
+          <p className="mt-6 font-display text-2xl italic leading-snug text-ink">{profile.signature}</p>
+          <p className="mt-5 max-w-[46ch] font-sans text-base leading-7 text-muted">{profile.bio}</p>
+          {houses.length ? (
+            <div className="mt-7 border-t border-line pt-5">
+              <p className="font-plex text-xs uppercase tracking-[.12em] text-muted">Casas relacionadas</p>
+              <p className="mt-2 font-display text-lg leading-snug text-ink">{houses.join(" · ")}</p>
+            </div>
+          ) : null}
+        </div>
       </div>
     </section>
 

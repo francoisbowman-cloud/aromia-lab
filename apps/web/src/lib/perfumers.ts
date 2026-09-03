@@ -5,6 +5,8 @@ export interface PerfumerProfile {
   signature: string;
   bio: string;
   perfumeSlugs: string[];
+  /** Path to a reviewed portrait photograph under /public, when one exists. */
+  portrait?: string;
 }
 
 /**
