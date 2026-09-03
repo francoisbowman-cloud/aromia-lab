@@ -23,13 +23,14 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 38
+STATE_VERSION: 39
 UPDATED_AT: 2026-09-03
-LAST_ACTOR: ChatGPT / Visual Assets Quarantine
-LAST_ACTION: hardened the canonical visual-generation isolation protocol after a confirmed semantic-drift failure. The first requested sub-batch-01 asset (Antes del perfume ya olíamos / Opportunity A) was a close observational post-shower human scene, but generated outputs drifted into generic botanical, citrus, ingredient-grid, woods/resins and spa/product still lifes. All such outputs are explicitly REJECTED process waste and must not enter the repo as binaries, Code ingest, OMNI evidence or publication. A durable quarantine ledger now exists at art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md. The canonical protocol now blocks generic perfume-semantic fallback imagery and enforces a one-asset-at-a-time semantic gate: no later asset may be generated until the active asset passes its exact capsule and narrative test.
-ACTIVE_OBJECTIVE: restart sub-batch-01 visual asset generation correctly from 01A, pass quarantine sequentially, then hand only passed assets plus implementation-native directions to Code for implementation and rendered QA
+LAST_ACTOR: ChatGPT / Visual Assets
+LAST_ACTION: generated and manually quarantined the first correct sub-batch-01 publication asset, 01A for Antes del perfume ya olíamos. The accepted post-shower observational photograph passed its exact narrative test and was ingested as a real JPEG binary at assets/visual/editorial/sub-batch-01/01A-antes-del-perfume-ya-oliamos.jpg in commit 1a3de3c9db311ea441555bf7df2ff00f92a397f0. After advancing to 02A, two consecutive generation attempts from the same operationally contaminated conversation produced fabricated GitHub/repository interfaces instead of the requested physical object scene. Both outputs are REJECTED process waste and were not committed. Per the canonical two-strike rule, that conversation is permanently locked from further publication-image generation. The quarantine ledger now records 01A PASS, the repository/UI failures, the context lock and the exact clean 02A generation capsule.
+ACTIVE_OBJECTIVE: continue sub-batch-01 visual asset generation sequentially from 02A in a genuinely clean visual-only context, pass each original-image task through quarantine, then hand only passed binaries plus implementation-native directions to Code for implementation and rendered QA
 ACTIVE_BRANCH: main
 FUNCTIONAL_BASELINE_SHA: 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
+LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
 UX_UI_CLOSEOUT: audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md
 UX_UI_SOURCE_AUDIT: audits/AROMIA_UX_UI_INFORMATION_ARCHITECTURE_AUDIT_2026-09-02.md
 RENDER_QA_CLOSEOUT: audits/AROMIA_RENDER_QA_CLOSEOUT_2026-09-02.md
@@ -63,13 +64,14 @@ VOICE_BIBLE: AROMIA_VOICE_BIBLE.md — v0.3
 EL_COLECCIONISTA: LIVE — CLOSED — browser technical gate PASS after local contrast correction — DO NOT REOPEN CASUALLY
 EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 (100-story exploration batch) and any later calendar work; it was not reverted by this QA cycle
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
-VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md — HARDENED 2026-09-03 for generic perfume-semantic drift + sequential pass gate
+VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md — HARDENED 2026-09-03 for generic perfume-semantic drift + sequential pass gate + two-strike context lock
 SUB_BATCH_01_ART_DIRECTION: art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md — ART_DIRECTION READY / VISUAL_COMPOSITION READY / 18 of 18 opportunities resolved
-SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / all failed-start outputs REJECTED / current slot 01A
-VISUAL_ASSET_01A_STATUS: NOT READY — RESTART REQUIRED — expected scene is ordinary adult immediately post-shower in modest bathroom; narrative test: a body exists here before perfume enters the story
-NEXT_ACTOR: ChatGPT Visual Assets in a genuinely clean visual-only generation context, starting only with 01A; do not continue to any later asset until 01A passes quarantine. Cowork continues independently with the next editorial sub-batch.
-NEXT_ACTION: regenerate only 01A from the exact clean capsule persisted in the quarantine ledger, inspect against the story-specific narrative test, mark PASS or REJECT, and advance sequentially only after PASS. Once the original-image set passes quarantine, hand passed binaries and implementation-native visual directions to Code. Code then implements the 9 pieces, runs browser QA and advances them toward manual publication via /admin/magazine per decision #103.
-BLOCKERS: VISUAL_GENERATION_SEMANTIC_DRIFT — operationally contained; generation may resume only from a clean visual-only context and only at slot 01A.
+SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / 01A PASS / current slot 02A / repository-UI drift rejected / contaminated conversation locked
+VISUAL_ASSET_01A_STATUS: READY — assets/visual/editorial/sub-batch-01/01A-antes-del-perfume-ya-oliamos.jpg — narrative test PASS
+CURRENT_GENERATION_CONTEXT: DISQUALIFIED AFTER TWO CONSECUTIVE REPOSITORY/UI DRIFTS — DO NOT CALL IMAGE GENERATION FROM THAT CONVERSATION AGAIN
+NEXT_ACTOR: ChatGPT Visual Assets in a NEW genuinely clean visual-only generation context, starting only with 02A from the persisted capsule; do not continue to any later asset until 02A passes quarantine. Cowork continues independently with the next editorial sub-batch.
+NEXT_ACTION: in a clean visual-only context, generate only 02A from the exact physical-scene capsule persisted in art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md; inspect against its narrative test; if PASS, ingest the real binary under assets/visual/editorial/sub-batch-01/, update the quarantine ledger and advance to the next original-image task. Continue this sequentially through the canonical art-direction file. After all required original-image tasks pass, hand passed binaries and implementation-native visual directions to Code. Code implements the 9 pieces, runs browser QA and advances them toward manual publication via /admin/magazine per decision #103.
+BLOCKERS: NO PROJECT BLOCKER. CURRENT_CHAT_ONLY_BLOCKER: generation context contamination; resolved operationally by continuing in a new clean visual-only context. 01A is safely persisted and work resumes at 02A.
 ```
 
 ## Mandatory turn-closure rule
@@ -180,7 +182,7 @@ Core rule:
 
 > **Operational context decides what to make. Clean visual context makes the image. Quarantine decides whether the image is allowed back into Aromia. Narrative fidelity decides whether generation may continue.**
 
-Do not generate publication imagery from an operationally contaminated repo/QA conversation. Do not treat generic perfume shorthand as a valid substitute for a story-specific scene. Batch generation advances only after the current asset passes its exact narrative test.
+Do not generate publication imagery from an operationally contaminated repo/QA conversation. Do not treat generic perfume shorthand as a valid substitute for a story-specific scene. Batch generation advances only after the current asset passes its exact narrative test. Two consecutive UI/workflow drifts permanently disqualify that conversation from further generation.
 
 ## El coleccionista release lock
 
