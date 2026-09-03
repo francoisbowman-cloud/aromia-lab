@@ -95,6 +95,35 @@ Reason for rejection:
 
 Two consecutive generation attempts in this operational conversation produced repository/UI imagery. Therefore this conversation is permanently disqualified from further publication-image generation. Do not retry image generation here.
 
+
+### Reject group D — unintended continuation from a blocked Art Direction context (2026-09-03)
+
+After the context lock was already canonical, additional image-generation outputs appeared in the same operationally dense conversation. They were not generated from the active sequential capsule and therefore are rejected regardless of aesthetic quality.
+
+Observed outputs:
+- driftwood / resin / mineral still life;
+- tuberose / beaker / blotter perfume-lab still life;
+- ivory floral macro with blotters;
+- dark perfumer-notebook laboratory still life;
+- generated olfactory-pyramid infographic;
+- generated olfactory-family infographic;
+- labeled botanical moodboard.
+
+Reason for rejection:
+- generation occurred from a conversation already disqualified by the two-strike rule;
+- none was the active 02A physical scene;
+- several are explicitly forbidden output classes (infographic, moodboard, conceptual perfume shorthand);
+- attractive resemblance to later editorial needs does not authorize reassignment;
+- they must not be committed, ingested, cited as QA evidence or treated as substitutes for licensed documentary material / implementation-native diagrams.
+
+Disposition:
+`QUARANTINE_DECISION: REJECT — DO NOT REPURPOSE`
+
+The Art Direction closeout for current UX visual integration is recorded separately in:
+`art-direction/AROMIA_VISUAL_UX_ART_DIRECTION_CLOSEOUT_2026-09-03.md`
+
+That closeout intentionally replaces new generation with approved visual reuse, licensed documentary sources and semantic HTML/CSS where possible.
+
 ## Hard disposition
 
 All rejected outputs:
