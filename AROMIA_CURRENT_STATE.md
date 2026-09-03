@@ -23,11 +23,11 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 36
+STATE_VERSION: 37
 UPDATED_AT: 2026-09-03
-LAST_ACTOR: Code
-LAST_ACTION: ingested Cowork editorial sub-batch `sub-batch-01-territorios` (9 pieces) into `drafts/` on branch `editorial/sub-batch-01-territorios` (based on origin/main @ 9cdd59c, matching the bundle's base_main_sha). Cowork could not push its own branch (session git proxy 403: repo not in authorized set), so ingest was done from the portable bundle `aromia-sub-batch-01-territorios.tar.gz`. All 9 `.md` copied byte-identical and each verified against its SHA-256 in MANIFEST.json (9/9 OK). Pieces cover AROMIA_EDITORIAL_BATCH_100.md items 1, 15, 39, 42, 51, 61, 76, 89, 97 (item 11 / ambroxán already covered by drafts/el-ambar-que-nunca-toco-una-ballena.md from the prior batch, substituted per Brey). Each piece is EDITORIAL: READY with ART_DIRECTION: PENDING and carries its own fact-check, sources, "No verificado y dejado fuera a propósito" section, 2 [AROMIA_VISUAL_OPPORTUNITY] blocks and 1 non-mandatory [AUTHOR_INPUT_OPPORTUNITY]. Voice Bible v0.3 anti-intercambiabilidad QA passed (opening variety, no "Sí, pero" repetition, one deliberate ironic "evocadora" in item 39 kept). No visual composition prescribed or content invented for open blocks. Delivered as a PR against main; no push/merge performed on Cowork's behalf. Cumulative batch-100 progress: 12 / 100.
-ACTIVE_OBJECTIVE: resume editorial production from the unified, deployed and browser-verified Aromia baseline; treat any future rendered finding as new evidence rather than reopening this closed QA cycle speculatively
+LAST_ACTOR: ChatGPT / Art Direction
+LAST_ACTION: completed art direction and visual composition for all 18 [AROMIA_VISUAL_OPPORTUNITY] entry points across the 9 integrated sub-batch-01-territorios drafts. Canonical direction is persisted at art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md. The batch deliberately avoids a repeated perfume-hero template: 18 opportunities resolve into a mix of observed human photography, domestic/object studies, environmental/history imagery, material studies, documentary/typographic moments and one abstract material field. Several opportunities are intentionally implementation-native rather than generated photographs. Clean visual-only generation capsules are included for every original-image task. No publication imagery was generated in this operational repo/QA turn because docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md explicitly forbids generation from contaminated operational context. AUTHOR_INPUT_OPPORTUNITY blocks remain nonblocking. Cumulative batch-100 editorial progress remains 12 / 100 while Cowork continues the next sub-batch in parallel.
+ACTIVE_OBJECTIVE: advance the 9 sub-batch-01-territorios pieces from completed art direction through isolated visual-asset generation/quarantine, Code implementation, rendered QA and manual publication while preserving the unified Aromia baseline
 ACTIVE_BRANCH: main
 FUNCTIONAL_BASELINE_SHA: 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
 UX_UI_CLOSEOUT: audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md
@@ -64,9 +64,10 @@ EL_COLECCIONISTA: LIVE — CLOSED — browser technical gate PASS after local co
 EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 (100-story exploration batch) and any later calendar work; it was not reverted by this QA cycle
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md
-NEXT_ACTOR: Art Direction (primary) — process the 2 [AROMIA_VISUAL_OPPORTUNITY] blocks in each of the 9 sub-batch-01-territorios pieces once the PR merges (18 opportunities total); do not treat the marked blocks as final composition briefs, they are entry points. Cowork continues in parallel with the next sub-batch of AROMIA_EDITORIAL_BATCH_100.md (88 items remaining).
-NEXT_ACTION: merge PR `editorial/sub-batch-01-territorios` after CI (v2-CI + Strict Audit) passes, then advance each ingested piece through the ART_DIRECTION → VISUAL_ASSETS → IMPLEMENTATION → QA → PUBLISH pipeline. Publication into the live magazine stays manual via /admin/magazine per decision #103; open [AUTHOR_INPUT_OPPORTUNITY] questions are for Brey and none are mandatory. Continue the editorial calendar from main using Voice Bible v0.3, the unified navigation/content model and the verified production baseline; rerun OMNI Render QA after meaningful frontend changes only.
-BLOCKERS: NONE for editorial continuation, code, governance, production deployment or technical rendered/browser QA.
+SUB_BATCH_01_ART_DIRECTION: art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md — ART_DIRECTION READY / VISUAL_COMPOSITION READY / 18 of 18 opportunities resolved
+NEXT_ACTOR: ChatGPT Visual Assets in a clean visual-only generation context for the photographic/material tasks defined in the sub-batch art-direction file; passed outputs return through quarantine before Code ingest. Cowork continues independently with the next editorial sub-batch.
+NEXT_ACTION: generate only the original-image tasks whose capsules are defined in art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md from a clean visual context, quarantine/reject failures, then hand passed assets plus implementation-native visual directions to Code. Code implements the 9 pieces, runs browser QA and advances them toward manual publication via /admin/magazine per decision #103. Do not reopen the closed baseline without new rendered evidence.
+BLOCKERS: NONE. Visual generation is intentionally separated by protocol, not blocked.
 ```
 
 ## Mandatory turn-closure rule
