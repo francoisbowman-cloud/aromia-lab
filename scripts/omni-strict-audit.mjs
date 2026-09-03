@@ -34,7 +34,7 @@ const productImage = await text("apps/web/src/components/perfume/ProductImage.ts
 if (/removeConnectedBackground|createElement\(["']canvas["']\)|getImageData\(/.test(productImage)) failures.push("catalog_product_destructive_background_extraction_regression");
 
 await requireText("apps/web/src/app/catalogo/[slug]/page.tsx", [
-  ["pdp_missing_not_found", /notFound\(\)/], ["pdp_missing_canonical", /canonical:\s*`\/catalogo\/\$\{perfume\.slug\}`/], ["pdp_missing_product_jsonld", /application\/ld\+json/], ["pdp_missing_hero", /<HeroHeader/], ["pdp_missing_sensory_anatomy", /<SkinEvolution/], ["pdp_missing_performance", /<PerformanceBars/], ["pdp_missing_story", /<EditorialMood/], ["pdp_missing_commerce", /<PriceTable/], ["pdp_missing_community", /<CommunityReviews/],
+  ["pdp_missing_not_found", /notFound\(\)/], ["pdp_missing_canonical", /canonical:\s*`\/catalogo\/\$\{perfume\.slug\}`/], ["pdp_missing_product_jsonld", /application\/ld\+json/], ["pdp_missing_hero", /<HeroHeader/], ["pdp_missing_sensory_anatomy", /<SkinEvolution/], ["pdp_missing_performance", /<PerformanceBars/], ["pdp_missing_story_context", /<RelatedEditorial/], ["pdp_missing_commerce", /<PriceTable/], ["pdp_missing_community", /<CommunityReviews/],
 ]);
 
 await requireText("apps/web/src/components/perfume/PerfumeCard.tsx", [["catalog_card_image_must_route_to_pdp", /href=\{`\/catalogo\/\$\{perfume\.slug\}`\}/]]);
