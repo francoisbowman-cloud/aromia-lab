@@ -4,10 +4,13 @@ STATUS: ACTIVE
 DATE: 2026-09-03
 SOURCE_ART_DIRECTION: `art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md`
 CANONICAL_PROTOCOL: `docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md`
+WEB_IMPLEMENTATION_CONTRACT: `art-direction/AROMIA_SUB_BATCH_01_WEB_IMPLEMENTATION_CONTRACT.md`
 
 ## Purpose
 
 This ledger records generation failures that must not be treated as Aromia publication assets or handed to Code, and the sequential pass state for accepted assets.
+
+A quarantined PASS is an intermediate state, not the final deliverable. The final deliverable is the authored, responsive, browser-verified web story. Every accepted asset must continue through the web implementation contract before its story can be considered visually complete.
 
 ## Accepted outputs
 
@@ -34,6 +37,8 @@ Why it passes:
 
 CROP_INTENT: portrait master; preserve neck/shoulder/hairline and bathroom seam on mobile.
 ALT_INTENT: close observational view of a damp shoulder, upper back and neck immediately after a shower in an ordinary bathroom.
+
+WEB_STATUS: NOT YET COMPLETE — must be integrated into the real story renderer and pass responsive/browser QA under the web implementation contract.
 
 ## Current batch gate
 
@@ -124,3 +129,7 @@ NARRATIVE TEST: experience and possession are different desires
 02A may be marked `PASS` only if the image visibly expresses the physical difference between a handled small sample and a nearly untouched full-size generic bottle in an ordinary domestic setting, without advertising or repository/UI shorthand.
 
 Only after 02A passes may generation continue to the next original-image task in the canonical art-direction file.
+
+## End-to-end continuation rule
+
+Do not stop the workflow at `PASS` or at repository ingestion. Once the required visual set for a story is ready, Code must immediately continue through renderer integration, story composition, responsive crop verification and browser QA. The final evidence for visual completion is the rendered article itself.
