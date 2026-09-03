@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import "../../editorial.css";
@@ -24,6 +25,58 @@ interface Story {
   sections: StorySection[];
   commerceNote: string;
   commerce: { label: string; href: string; note: string }[];
+}
+
+const ROPION_MATERIALS = [
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/d/dc/Red_rose_close-up.jpg",
+    alt: "Primer plano documental de una rosa roja.",
+    width: 2160,
+    height: 1440,
+    caption: "Rosa. Foto: Vatadoshu Phyto, Wikimedia Commons, CC0 1.0.",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Patchouli.jpg",
+    alt: "Planta de pachulí, Pogostemon cablin, fotografiada en Seychelles.",
+    width: 640,
+    height: 427,
+    caption: "Pachulí (Pogostemon cablin). Foto: Joe Laurence / Seychelles News Agency, CC BY 4.0.",
+  },
+] as const;
+
+function RopionMaterialDiptych() {
+  return (
+    <div className="ropion-material-diptych" aria-label="Referencias documentales de rosa y pachulí">
+      {ROPION_MATERIALS.map((material) => (
+        <figure key={material.src}>
+          <Image
+            src={material.src}
+            alt={material.alt}
+            width={material.width}
+            height={material.height}
+            sizes="(max-width: 800px) 100vw, 24vw"
+            unoptimized
+          />
+          <figcaption>{material.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  );
+}
+
+function RopionOmissionPause() {
+  return (
+    <aside className="ropion-omission-pause" aria-label="Materiales omitidos de la fórmula">
+      <p className="ropion-omission-label">La decisión también fue quitar.</p>
+      <div className="ropion-omission-terms">
+        <span>Hedione</span>
+        <span>Iso E Super</span>
+      </div>
+      <p>
+        No porque fueran malos materiales, sino porque esa fórmula concreta no los necesitaba.
+      </p>
+    </aside>
+  );
 }
 
 const data: Record<string, Story> = {
@@ -285,6 +338,12 @@ export default function Story({ params }: { params: { slug: string } }) {
                 className={section.slotClass ?? "story-inline-visual"}
                 sizes="(max-width: 800px) 100vw, 33vw"
               />
+            ) : null}
+            {params.slug === "el-perfumista-que-no-teme-exagerar" && i === 1 ? (
+              <RopionMaterialDiptych />
+            ) : null}
+            {params.slug === "el-perfumista-que-no-teme-exagerar" && i === 2 ? (
+              <RopionOmissionPause />
             ) : null}
           </section>
         ))}
