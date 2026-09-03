@@ -17,19 +17,16 @@ interface ParsedStory {
   blocks: StoryBlock[];
 }
 
-const SUB_BATCH_01 = [
-  "antes-del-perfume-ya-oliamos",
-  "comprar-para-oler-o-comprar-para-tener",
-  "cuando-ya-no-hueles-tu-perfume",
-  "fougere-no-significa-viejo",
-  "huele-sintetico-que-estamos-diciendo",
-  "lavanda-limpia-medicinal-barata-elegante",
-  "nos-perfumamos-para-nosotros-o-para-los-demas",
-  "podemos-describir-un-olor-sin-compararlo",
-  "por-que-una-lista-de-notas-no-te-dice-como-huele",
-] as const;
-
-export type SubBatch01Slug = (typeof SUB_BATCH_01)[number];
+export type SubBatch01Slug =
+  | "antes-del-perfume-ya-oliamos"
+  | "comprar-para-oler-o-comprar-para-tener"
+  | "cuando-ya-no-hueles-tu-perfume"
+  | "fougere-no-significa-viejo"
+  | "huele-sintetico-que-estamos-diciendo"
+  | "lavanda-limpia-medicinal-barata-elegante"
+  | "nos-perfumamos-para-nosotros-o-para-los-demas"
+  | "podemos-describir-un-olor-sin-compararlo"
+  | "por-que-una-lista-de-notas-no-te-dice-como-huele";
 
 const visualAssets: Partial<Record<SubBatch01Slug, Partial<Record<number, string>>>> = {
   "antes-del-perfume-ya-oliamos": {
@@ -86,8 +83,7 @@ function parseStory(slug: SubBatch01Slug): ParsedStory {
   };
 
   for (let i = 0; i < lines.length; i += 1) {
-    const raw = lines[i];
-    const line = raw.trim();
+    const line = lines[i].trim();
 
     if (line.startsWith("```")) {
       flushParagraph();
