@@ -71,7 +71,7 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
           <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-7 border-t border-line pt-6 font-sans text-sm lg:mt-12">
             <div><dt className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">Género</dt><dd className="mt-2 capitalize text-ink">{perfume.genero}</dd></div>
             <div><dt className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">Concentración</dt><dd className="mt-2 text-ink">{concentration ?? "No especificada"}</dd></div>
-            {family ? <div className="col-span-2"><dt className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">Familia</dt><dd className="mt-2 font-display text-xl capitalize text-ink">{family}</dd></div> : null}
+            {family ? <div className="col-span-2"><dt className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">Familia</dt><dd className="mt-2"><Link href={`/buscar?q=${encodeURIComponent(family)}`} className="inline-flex min-h-11 items-center font-display text-xl capitalize text-ink transition hover:text-[#5a6b54]">{family} <span aria-hidden="true" className="ml-3 text-sm text-muted">→</span></Link></dd></div> : null}
             {perfumers.length ? (
               <div className="col-span-2">
                 <dt className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">Perfumista{perfumers.length > 1 ? "s" : ""}</dt>

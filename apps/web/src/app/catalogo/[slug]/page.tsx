@@ -8,7 +8,6 @@ import { PriceTable } from "@/components/perfume/PriceTable";
 import { PerformanceBars } from "@/components/perfume/PerformanceBars";
 import { SkinEvolution } from "@/components/perfume/SkinEvolution";
 import { CommunityReviews } from "@/components/perfume/CommunityReviews";
-import { EditorialMood } from "@/components/perfume/EditorialMood";
 import { SimilarPerfumes } from "@/components/perfume/SimilarPerfumes";
 import { RelatedEditorial } from "@/components/perfume/RelatedEditorial";
 
@@ -34,7 +33,6 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
   const [perfumes, articulos] = await Promise.all([getPerfumes(), getArticulos()]);
   const similares = getSimilarPerfumes(perfume, perfumes, 6);
   const relacionados = articulos.filter((article) => article.perfumes_relacionados?.includes(perfume.id));
-  const verifiedNotes = [...(perfume.notas_salida ?? []), ...(perfume.notas_corazon ?? []), ...(perfume.notas_fondo ?? [])];
 
   return (
     <main className="bg-paper text-ink" aria-live="polite">
@@ -58,15 +56,8 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
         </div>
       </section>
 
-      <section className="border-y border-line bg-soft/40">
-        <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-          <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">03 / Contexto</p><h2 className="mt-3 max-w-[14ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">El carácter detrás de las notas.</h2></div>
-          <EditorialMood nombre={perfume.nombre} familia={perfume.familia_olfativa} notas={verifiedNotes} descripcion={perfume.descripcion_corta ?? perfume.resena_sintetizada}/>
-        </div>
-      </section>
-
       <section id="precios" className="mx-auto max-w-[1240px] scroll-mt-24 px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-        <p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">04 / Compra informada</p>
+        <p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">03 / Compra informada</p>
         <div className="mb-10 mt-3 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_.72fr] lg:items-end">
           <h2 className="max-w-[12ch] font-display text-[40px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[50px]">Dónde encontrarlo.</h2>
           <p className="max-w-[40ch] font-sans text-base leading-7 text-muted lg:justify-self-end">Compara disponibilidad y precio sin perder de vista la identidad real del perfume.</p>
@@ -76,7 +67,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
 
       <section className="border-y border-line bg-paper">
         <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-          <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">05 / Comunidad</p><h2 className="mt-3 max-w-[13ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">Cómo lo viven otras personas.</h2></div>
+          <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">04 / Comunidad</p><h2 className="mt-3 max-w-[13ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">Cómo lo viven otras personas.</h2></div>
           <CommunityReviews ratingPromedio={perfume.rating_promedio} resenaSintetizada={perfume.resena_sintetizada}/>
         </div>
       </section>
