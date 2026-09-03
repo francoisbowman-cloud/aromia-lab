@@ -34,6 +34,12 @@ const visualAssets: Partial<Record<SubBatch01Slug, Partial<Record<number, string
   },
 };
 
+const visualAlts: Partial<Record<SubBatch01Slug, Partial<Record<number, string>>>> = {
+  "antes-del-perfume-ya-oliamos": {
+    0: "Vista cercana y observacional de un hombro, la espalda alta y el cuello húmedos inmediatamente después de una ducha en un baño cotidiano.",
+  },
+};
+
 function draftDirectory() {
   const candidates = [
     path.join(process.cwd(), "drafts"),
@@ -141,6 +147,7 @@ export function makeSubBatchMetadata(slug: SubBatch01Slug): Metadata {
     description: story.deck,
     alternates: { canonical: `/historias/${slug}` },
     openGraph: { title: story.title, description: story.deck, type: "article" },
+    robots: { index: false, follow: false },
   };
 }
 
@@ -185,7 +192,7 @@ function StoryVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/api/editorial-asset/${filename}`}
-          alt="Vista editorial observacional que acompaña la historia."
+          alt={visualAlts[slug]?.[index] ?? "Vista editorial observacional que acompaña la historia."}
           loading={index === 0 ? "eager" : "lazy"}
         />
         <figcaption className={styles.visualCaption}>Fotografía editorial · Aromia</figcaption>
