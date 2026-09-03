@@ -6,6 +6,7 @@ import { ProductImage } from "@/components/perfume/ProductImage";
 import type { Perfume } from "@/lib/types";
 import { PERFUMERS } from "@/lib/perfumers";
 import { clearDiscoveryProfile, DISCOVERY_PROFILE_EVENT, loadDiscoveryProfile, topSignals } from "@/lib/discoveryProfile";
+import { familiesForValue } from "@/lib/olfactiveFamilies";
 import { rankPersonalizedPerfumes } from "@/lib/personalization";
 import { trackEvent } from "@/lib/analytics";
 
@@ -62,7 +63,7 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
               {atlasPreview.map((perfume, index) => <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} className={`group block outline-none ${index % 2 === 1 ? "sm:translate-y-6" : ""}`}><div className="relative aspect-[4/5] overflow-hidden"><ProductImage slug={perfume.slug} imageUrl={perfume.imagen_url} alt={`${perfume.nombre} de ${perfume.marca}`} mode="card" /></div><div className="mt-3 border-t border-line pt-3"><p className="font-plex text-xs uppercase tracking-[.12em] text-muted">{perfume.marca}</p><h3 className="mt-2 font-display text-[21px] leading-[.98] tracking-[-.025em] text-ink transition-opacity group-hover:opacity-70">{perfume.nombre}</h3></div></Link>)}
             </div>
 
-            <div className="mt-9 flex items-center justify-between gap-5 border-t border-line pt-4"><span className="font-plex text-xs uppercase tracking-[.12em] text-muted">{atlasFamily || "Colección completa"}</span><Link href={atlasFamily ? `/buscar?q=${encodeURIComponent(atlasFamily)}` : "/buscar"} className="inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">Abrir búsqueda →</Link></div>
+            <div className="mt-9 flex items-center justify-between gap-5 border-t border-line pt-4"><span className="font-plex text-xs uppercase tracking-[.12em] text-muted">{atlasFamily || "Colección completa"}</span>{(() => { const guide = atlasFamily ? familiesForValue(atlasFamily)[0] : null; return <Link href={guide ? `/descubrir/familias/${guide.slug}` : atlasFamily ? `/buscar?q=${encodeURIComponent(atlasFamily)}` : "/descubrir/familias"} className="inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">{guide ? "Ver la familia →" : atlasFamily ? "Abrir búsqueda →" : "Ver las diez familias →"}</Link>; })()}</div>
           </div>
         </div>
       </section>

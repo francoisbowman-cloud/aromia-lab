@@ -22,7 +22,10 @@ export default async function DescubrirPage() {
           </div>
           <div className="lg:justify-self-end">
             <p className="max-w-[42ch] font-sans text-base leading-7 text-muted">Familias, notas, autorías y perfumes se ordenan como un atlas vivo. Sin puntuaciones inventadas ni perfiles genéricos.</p>
-            <Link href="/quiz" className="mt-6 inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">¿Empiezas de cero? Haz el Quiz →</Link>
+            <div className="mt-6 flex flex-col gap-3">
+              <Link href="/descubrir/familias" className="inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">Explorar las diez familias →</Link>
+              <Link href="/quiz" className="inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-muted transition hover:text-ink">¿Empiezas de cero? Haz el Quiz →</Link>
+            </div>
           </div>
         </div>
         <DiscoveryDashboard perfumes={perfumes} />
