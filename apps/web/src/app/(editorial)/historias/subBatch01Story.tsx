@@ -152,6 +152,58 @@ export function makeSubBatchMetadata(slug: SubBatch01Slug): Metadata {
 }
 
 function NativeVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) {
+  if (slug === "comprar-para-oler-o-comprar-para-tener" && index === 0) {
+    return (
+      <figure className={`${styles.visual} ${styles.ownershipSplit}`}>
+        <div className={styles.sampleSide}>
+          <span className={styles.objectLabel}>oler</span>
+          <div className={styles.sampleVial} aria-hidden="true">
+            <span />
+          </div>
+          <p>Una experiencia puede caber en unos mililitros.</p>
+        </div>
+        <div className={styles.bottleSide}>
+          <span className={styles.objectLabel}>tener</span>
+          <div className={styles.fullBottle} aria-hidden="true">
+            <span />
+          </div>
+          <p>La posesión ocupa espacio incluso cuando no se usa.</p>
+        </div>
+        <figcaption className={styles.visualCaption}>
+          Dos deseos distintos detrás de una misma compra.
+        </figcaption>
+      </figure>
+    );
+  }
+
+  if (slug === "comprar-para-oler-o-comprar-para-tener" && index === 1) {
+    return (
+      <figure className={`${styles.visual} ${styles.shelfComparison}`}>
+        <div className={styles.shelfPanel}>
+          <span className={styles.objectLabel}>usar</span>
+          <div className={styles.usedShelf} aria-hidden="true">
+            <i style={{ ["--level" as string]: "38%" }} />
+            <i style={{ ["--level" as string]: "64%" }} />
+            <i style={{ ["--level" as string]: "22%" }} />
+            <i style={{ ["--level" as string]: "51%" }} />
+            <i style={{ ["--level" as string]: "16%" }} />
+          </div>
+          <p>Niveles distintos. El objeto cambia porque la vida pasa por él.</p>
+        </div>
+        <div className={styles.shelfPanel}>
+          <span className={styles.objectLabel}>conservar</span>
+          <div className={styles.keptShelf} aria-hidden="true">
+            <i /><i /><i /><i /><i />
+          </div>
+          <p>Casi llenos. El conjunto importa tanto como lo que contienen.</p>
+        </div>
+        <figcaption className={styles.visualCaption}>
+          Dos relaciones legítimas con los mismos objetos.
+        </figcaption>
+      </figure>
+    );
+  }
+
   if (slug === "antes-del-perfume-ya-oliamos" && index === 1) {
     return <div className={`${styles.visual} ${styles.materialField}`} aria-hidden="true" />;
   }
