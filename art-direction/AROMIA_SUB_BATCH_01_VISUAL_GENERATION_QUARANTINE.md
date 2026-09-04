@@ -40,12 +40,48 @@ ALT_INTENT: close observational view of a damp shoulder, upper back and neck imm
 
 WEB_STATUS: NOT YET COMPLETE — must be integrated into the real story renderer and pass responsive/browser QA under the web implementation contract.
 
+
+### 02A — Comprar para oler o comprar para tener / opening
+
+`QUARANTINE_DECISION: PASS`
+
+Publisher approval:
+`APPROVED 2026-09-04`
+
+External approved binary:
+`02A-comprar-para-oler-o-comprar-para-tener.jpg`
+
+Canonical target path after Code ingestion:
+`assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg`
+
+SHA256:
+`04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4`
+
+Dimensions:
+`1448 × 1086 px`
+
+Narrative test:
+`One object contains the experience; the other contains ownership.`
+
+Why it passes:
+- tiny anonymous sample vial is visibly handled and closer to camera;
+- nearly-full generic bottle sits farther back and occupies more physical space;
+- ordinary lived-in wooden dresser/shelf context;
+- soft domestic side daylight with no glossy hero treatment;
+- no readable branding, logo, interface, diagram, document, mockup or perfume-ingredient shorthand;
+- preserves the intended ambiguity: experience and possession read as different relationships, not a moral ranking.
+
+CROP_INTENT: landscape master; keep both objects separable in a narrow/mobile crop.
+ALT_INTENT: a visibly used anonymous perfume sample vial closer to camera beside a nearly full generic fragrance bottle farther back on an ordinary lived-in wooden dresser.
+
+WEB_STATUS: READY_FOR_INGEST — binary remains external until Code verifies checksum and commits it. See `handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md`.
+
 ## Current batch gate
 
-CURRENT_SLOT: `02 — Comprar para oler o comprar para tener / Opportunity A`
-EXPECTED_MODE: original lived-in object photography
-EXPECTED_NARRATIVE_TEST: `One object contains the experience; the other contains ownership.`
-BATCH_CONTINUATION: BLOCKED UNTIL 02A PASSES
+CURRENT_SLOT: `02 — Comprar para oler o comprar para tener / Opportunity B`
+EXPECTED_MODE: diptych of two lived-in shelves
+EXPECTED_NARRATIVE_TEST: `Both shelves are legitimate; they reveal different relationships to the same objects.`
+BATCH_CONTINUATION: PAUSED BY PUBLISHER — 02A PASSED; do not generate 02B yet. Code must first ingest and integrate approved 02A.
 
 ## Rejected outputs
 
