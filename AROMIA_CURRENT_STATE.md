@@ -23,12 +23,12 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 42
+STATE_VERSION: 43
 UPDATED_AT: 2026-09-04
-LAST_ACTOR: ChatGPT / Visual Assets
-LAST_ACTION: generated SubBatch 01 asset 02A for “Comprar para oler o comprar para tener”; Publisher explicitly approved it. Quarantine now records 02A PASS. A deterministic handoff with filename, dimensions, SHA256, target path, crop/alt intent and exact Code ingestion steps is persisted at handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md. The JPEG remains external because the available GitHub connector cannot transport local binaries. 02B was explicitly not generated and remains paused by Publisher direction.
-ACTIVE_OBJECTIVE: preserve the production baseline and integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener”. Do not advance visual generation to 02B yet.
-ACTIVE_BRANCH: main
+LAST_ACTOR: Code / ChatGPT
+LAST_ACTION: verified the Publisher-transported 02A JPEG (1536×1152, SHA256 a07de6e766bb518463d8108e3cd08642fece2902474c666b2716b2d549c2e35d), ingested it at the canonical asset path, replaced the story's provisional 02A illustration with the approved photograph and added a dedicated responsive 4:3 treatment. Web tests 31/31, lint, TypeScript, 49-page production build and OMNI Strict Audit pass. Browser QA remains pending because the integrated browser blocked localhost and the fallback browser download timed out; no visual PASS is claimed without evidence. 02B remains paused.
+ACTIVE_OBJECTIVE: complete branch-preview browser QA for Publisher-approved 02A at desktop and mobile without advancing 02B or modifying production.
+ACTIVE_BRANCH: feat/sub-batch-01-02a-integration
 FUNCTIONAL_BASELINE_SHA: e408cf20396fc5ca37d882bc41eca99358027f16
 LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
 UX_UI_CLOSEOUT: audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md
@@ -71,12 +71,12 @@ VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_P
 SUB_BATCH_01_ART_DIRECTION: art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md — 18 of 18 opportunities resolved
 SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / 01A PASS / 02A PASS / 02B paused by Publisher
 VISUAL_ASSET_01A_STATUS: READY — assets/visual/editorial/sub-batch-01/01A-antes-del-perfume-ya-oliamos.jpg — narrative test PASS
-VISUAL_ASSET_02A_STATUS: PUBLISHER_APPROVED / PASS / READY_FOR_INGEST — external JPEG 1448×1086 — SHA256 04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4 — target assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg
+VISUAL_ASSET_02A_STATUS: PUBLISHER_APPROVED / PASS / INGESTED_ON_BRANCH / BROWSER_QA_PENDING — JPEG 1536×1152 — SHA256 a07de6e766bb518463d8108e3cd08642fece2902474c666b2716b2d549c2e35d — target assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg
 VISUAL_ASSET_02A_HANDOFF: handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md
 CURRENT_GENERATION_CONTEXT: 02A generation completed and approved; no further generation authorized in this turn. 02B is explicitly paused.
-NEXT_ACTOR: Code
-NEXT_ACTION: read handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md; obtain the approved JPEG, verify the recorded SHA256, ingest it at the canonical asset path, integrate it into the article “Comprar para oler o comprar para tener”, preserve the intended landscape/mobile crop relationship, and run browser QA. Do not generate or implement 02B yet.
-BLOCKERS: 02A binary transport only — the approved JPEG is external to the repository and must be transported to Code, then checksum-verified. No creative blocker. 02B remains intentionally paused. Separate rights blockers for uncleared perfumer portraits remain unchanged.
+NEXT_ACTOR: Code or OMNI with branch-preview browser access
+NEXT_ACTION: render the PR branch for “Comprar para oler o comprar para tener” at 1440×1000 and 390×844; confirm the approved 02A loads without console/framework errors and that the sample vial plus full bottle remain visible, distinct and narratively related. If PASS, update QA state. Do not merge, deploy, generate or implement 02B yet.
+BLOCKERS: browser-render evidence only — implementation and code gates pass, but both available local browser paths were blocked before rendering. No creative or binary-transport blocker. 02B remains intentionally paused. Separate rights blockers for uncleared perfumer portraits remain unchanged.
 ```
 
 ## Mandatory turn-closure rule

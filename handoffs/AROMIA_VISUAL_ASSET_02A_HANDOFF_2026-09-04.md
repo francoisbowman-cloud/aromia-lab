@@ -1,6 +1,6 @@
 # Aromia — Visual Asset Handoff — 02A
 
-STATUS: READY_FOR_INGEST / PUBLISHER_APPROVED
+STATUS: INGESTED_ON_BRANCH / PUBLISHER_APPROVED / BROWSER_QA_PENDING
 DATE: 2026-09-04
 ARTICLE: Comprar para oler o comprar para tener
 SLUG: comprar-para-oler-o-comprar-para-tener
@@ -19,17 +19,20 @@ GENERATION_CONTINUATION: PAUSED BY PUBLISHER — do not generate 02B yet.
 
 ## External binary
 
-EXTERNAL_ARTIFACT_STATUS: READY_FOR_INGEST
+EXTERNAL_ARTIFACT_STATUS: INGESTED_ON_BRANCH
 FILE_NAME: 02A-comprar-para-oler-o-comprar-para-tener.jpg
 FORMAT: JPEG
-DIMENSIONS: 1448 × 1086 px
-SIZE: 475474 bytes
-SHA256: 04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4
+DIMENSIONS: 1536 × 1152 px
+SIZE: 273581 bytes
+SHA256: a07de6e766bb518463d8108e3cd08642fece2902474c666b2716b2d549c2e35d
 TARGET_PATH: assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg
 SOURCE_MODE: generated interpretive
 APPROVAL / QUARANTINE_STATE: PUBLISHER_APPROVED / PASS
 
-The binary still exists outside the repository because the available GitHub connector cannot ingest local binary files. Do not claim it is ingested until Code verifies the exact checksum after adding it to the repository.
+The Publisher transported the approved image as `1000268553.jpg`. This delivered
+representation has the same approved composition but differs from the metadata
+recorded for the earlier external copy. The actual delivered bytes above are now
+authoritative and were verified before repository ingestion.
 
 ## Visual intent
 
@@ -46,15 +49,15 @@ AUTHENTICITY_NOTES:
 
 ## Exact Code ingestion action
 
-1. Obtain the approved external binary named above.
-2. Verify SHA256 exactly:
-   `04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4`.
-3. Ingest it at:
+1. Obtained the Publisher-approved transported binary.
+2. Verified SHA256 exactly:
+   `a07de6e766bb518463d8108e3cd08642fece2902474c666b2716b2d549c2e35d`.
+3. Ingested it at:
    `assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg`.
-4. Wire it into the real story renderer for `comprar-para-oler-o-comprar-para-tener` following the web implementation contract.
-5. Render as the wide horizontal opening interruption with unequal object distances.
-6. Verify desktop and mobile crops preserve both objects and their relationship.
-7. Run browser QA and only then mark the web slot implemented.
+4. Wired it into the real story renderer for `comprar-para-oler-o-comprar-para-tener` following the web implementation contract.
+5. Implemented a wide 4:3 opening interruption; mobile preserves the complete 4:3 relationship instead of forcing the portrait crop used by 01A.
+6. Static implementation checks verify the source dimensions, alt text, route and responsive CSS contract.
+7. Browser QA remains pending because the integrated cloud browser blocked localhost and the local Playwright browser download timed out. Do not mark QA complete until a branch preview or browser-capable actor verifies both viewports.
 8. Do **not** generate, implement, or substitute 02B as part of this handoff.
 
 ## Publication states
@@ -63,21 +66,21 @@ EDITORIAL: READY
 ART_DIRECTION: READY
 VISUAL_COMPOSITION: READY
 EARLY_OMNI: PENDING
-VISUAL_ASSETS: 02A PASS / external binary READY_FOR_INGEST
-IMPLEMENTATION: PENDING
-QA: PENDING
+VISUAL_ASSETS: 02A PASS / INGESTED_ON_BRANCH
+IMPLEMENTATION: 02A COMPLETE_ON_BRANCH
+QA: CODE_GATES_PASS / BROWSER_QA_PENDING
 FINAL_OMNI: PENDING
 PUBLISH: PENDING
 
-LAST_ACTOR: ChatGPT / Visual Assets
-LAST_ACTION: generated and quarantined 02A; Publisher approved it; prepared deterministic binary handoff.
-ACTIVE_OBJECTIVE: ingest and integrate approved 02A into the live article renderer without advancing to 02B.
-ACTIVE_BRANCH / BASE_REF: main
-STATE / GATES: 02A PASS; 02B paused by Publisher.
-DELIVERABLES: this handoff + external approved JPEG.
-EVIDENCE: Publisher approval + checksum + canonical art-direction narrative test.
-TEMPORARY_OR_EXTERNAL_ARTIFACTS: approved JPEG remains outside repo pending Code ingestion.
-NEXT_ACTOR: Code
-NEXT_ACTION: ingest checksum-matched 02A, integrate into article, verify responsive crop and browser QA.
-BLOCKERS: binary transport only; no creative blocker.
+LAST_ACTOR: Code / ChatGPT
+LAST_ACTION: verified and ingested the Publisher-delivered 02A binary, replaced the provisional opening treatment with the approved photograph, and implemented a dedicated responsive 4:3 composition.
+ACTIVE_OBJECTIVE: complete branch-preview browser QA without advancing to 02B.
+ACTIVE_BRANCH / BASE_REF: feat/sub-batch-01-02a-integration / main
+STATE / GATES: tests, lint, TypeScript, production build and Strict Audit PASS; browser QA PENDING; 02B paused by Publisher.
+DELIVERABLES: canonical JPEG + renderer integration + responsive CSS + updated handoff/quarantine/relay.
+EVIDENCE: Publisher approval; delivered checksum; 31/31 web tests; lint; TypeScript; 49-page build; Strict Audit 0/0.
+TEMPORARY_OR_EXTERNAL_ARTIFACTS: local QA screenshots unavailable because both browser paths were blocked before rendering.
+NEXT_ACTOR: Code or OMNI with branch-preview browser access
+NEXT_ACTION: render the PR branch at 1440×1000 and 390×844, verify both objects remain visible and distinct, then mark QA complete. Do not merge or deploy without that evidence.
+BLOCKERS: browser runtime access only; no implementation or creative blocker.
 PUBLICATION_AUTHORITY / RISK NOTES: 02A is approved. Do not reinterpret, regenerate, or replace it without new Publisher direction. Do not generate 02B yet.

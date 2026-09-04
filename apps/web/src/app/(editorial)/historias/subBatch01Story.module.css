@@ -117,6 +117,21 @@
   object-fit: cover;
 }
 
+.photoOpeningLandscape {
+  width: min(1040px, 92%);
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.photoOpeningLandscape img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
 .visualCaption {
   margin-top: 10px;
   font-size: 10px;
@@ -254,6 +269,16 @@
     max-height: none;
     aspect-ratio: 4 / 5;
     object-position: 48% 44%;
+  }
+
+  .photoOpeningLandscape {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .photoOpeningLandscape img {
+    aspect-ratio: 4 / 3;
+    object-position: 50% 50%;
   }
 
   .materialField,
