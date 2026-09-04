@@ -23,17 +23,20 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 40
-UPDATED_AT: 2026-09-03
-LAST_ACTOR: ChatGPT / Art Direction
-LAST_ACTION: completed the visual-UX Art Direction closeout after merges #133/#134/#135/#139/#140. Persisted `art-direction/AROMIA_VISUAL_UX_ART_DIRECTION_CLOSEOUT_2026-09-03.md` with implementation-ready decisions for Magazine M3/M4, Ropion S5, Saber SB2/SB3/SB5 and Personas portrait policy; explicitly prohibited filler generation; identified reusable documentary sources and two rights-cleared real portraits (Alberto Morillas, Christine Nagel). Updated the quarantine ledger to reject all unintended images produced from the already-disqualified operational context, including generated still lifes, moodboards and infographics. No rejected image was committed as a publication asset.
-ACTIVE_OBJECTIVE: Code implements the visual-UX Art Direction closeout using only approved story visuals, licensed documentary sources and semantic HTML/CSS; in parallel, the separate sub-batch-01 visual-generation stream remains gated at 02A and must resume only in a genuinely clean visual-only context. continue sub-batch-01 visual asset generation sequentially from 02A in a genuinely clean visual-only context, pass each original-image task through quarantine, then hand only passed binaries plus implementation-native directions to Code for implementation and rendered QA
+STATE_VERSION: 41
+UPDATED_AT: 2026-09-04
+LAST_ACTOR: ChatGPT — Art Direction / Code / QA / Integration / Production
+LAST_ACTION: completed the visual-UX implementation end-to-end. PR #142 merged the Magazine M3/M4 hierarchy, Ropion S5 documentary interruptions + omission pause, Saber SB2/SB3/SB5 semantic diagrams/material strip/timeline, and rights-cleared Personas portraits for Alberto Morillas + Christine Nagel without ingesting quarantined generated imagery. PR #143 then closed a pre-existing Railway build-context blocker by mirroring the nine consumed SubBatch 01 Markdown sources into apps/web/drafts while keeping repository-level drafts canonical. GitHub CI and Strict Audit passed and Railway production deployment 550b7cee-9cf8-466a-b3e2-40ef5ee393f2 succeeded on commit e408cf20396fc5ca37d882bc41eca99358027f16.
+ACTIVE_OBJECTIVE: visual-UX closeout is COMPLETE and production-verified. Preserve this baseline. The only separate unfinished visual stream is SubBatch 01 original-image generation, still gated at slot 02A and permitted only from a genuinely clean visual-only context under the visual-generation isolation protocol.
 ACTIVE_BRANCH: main
-FUNCTIONAL_BASELINE_SHA: 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
+FUNCTIONAL_BASELINE_SHA: e408cf20396fc5ca37d882bc41eca99358027f16
 LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
 UX_UI_CLOSEOUT: audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md
 UX_UI_SOURCE_AUDIT: audits/AROMIA_UX_UI_INFORMATION_ARCHITECTURE_AUDIT_2026-09-02.md
 RENDER_QA_CLOSEOUT: audits/AROMIA_RENDER_QA_CLOSEOUT_2026-09-02.md
+VISUAL_UX_FINAL_CLOSEOUT: audits/AROMIA_VISUAL_UX_FINAL_IMPLEMENTATION_CLOSEOUT_2026-09-03.md — CLOSED / IMPLEMENTED / MERGED / DEPLOYED / PRODUCTION-VERIFIED
+VISUAL_UX_IMPLEMENTATION_PR: #142 — MERGED — squash b7ea63366858fa93b8555793495afffb58d99189
+RAILWAY_BUILD_CONTEXT_FIX_PR: #143 — MERGED — squash e408cf20396fc5ca37d882bc41eca99358027f16
 DESIGN_SYSTEM_CONTRACT: AROMIA_DESIGN_SYSTEM.md — v1.0
 DESIGN_TOKENS: apps/web/src/app/design-tokens.css
 NAVIGATION_MODEL: apps/web/src/lib/siteNavigation.ts
@@ -47,32 +50,31 @@ DISCOVERY_JOURNEY: Discovery → optional Quiz onboarding → result → map →
 PERFUME_ROUTE_ROLE: /catalogo/[slug] = reference/context object; public /catalogo grid remains retired
 CLUB_ROLE: future continuation / waitlist, explicitly in preparation
 SEARCH_ROLE: cross-search of fragancias + unified editorial archive
-P0_STATUS: RESOLVED — shared shell, complete mobile nav, canonical story discovery, dead Catalog breadcrumb removed
-P1_STATUS: RESOLVED FOR CURRENT BASELINE — Personas surfaced, Saber naming standardized, Quiz integrated into Discovery, Search reframed, Magazine assigned archive role, repeated touched accent/surface semantics migrated to tokens
-AROMIA_QA_FIX_PR: #127 — MERGED — production commit 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
-V2_CI: run 33660677100 — SUCCESS on corrective head 83f9bfb710ec723b24041e41799b657586213f45
-STRICT_AUDIT: run 33660677741 — SUCCESS on corrective head 83f9bfb710ec723b24041e41799b657586213f45
-RAILWAY_WEB_DEPLOYMENT: d33eaf73-2805-49cd-a1c9-3e495ef43bb5 — SUCCESS — production commit 7315d3f2fd94b037c73dd047cd8f5e13fbcb0409
-RAILWAY_RUNTIME: private catalog preflight PASS count=125; Next.js ready in 524ms
-BUILD_EVIDENCE: compiled successfully; static generation 29/29; relevant public routes present
-OMNI_RENDER_QA: VERIFIED_BROWSER_PASS — Railway deployment 509bee11-a90a-4f5b-8efc-ae37953a7b6b — 11 PASS / 0 REVIEW / 0 FAIL over 22 viewport observations; every route produced screenshot evidence; no horizontal overflow, clipped text, console errors or page errors gated the final run
-OMNI_RENDER_QA_TOOLING: image-toolkit PR #75 merged eac35cb82d74bbf543dd87a0846236417ad1c362; PR #76 merged d73f7133eb9593ef22305db2cdf8ee007817507e; PR #77 merged 2f709e88b47613ed6cdbd2459c88c1aaaffb5069
-DISCOVERY_MEDIA_VERIFICATION: PASS — /api/catalog-image/loewe-001-woman-edp, /api/catalog-image/1-million and /api/catalog-image/212-vip-edp independently returned reachable image responses; mobile DOM non-load state was not a broken origin asset
-BROWSER_QA_BOUNDARY: real Chromium/Playwright rendered QA IS CLAIMED for technical browser evidence. Generated PNGs were not manually inspected one-by-one for aesthetic excellence in this session; screenshot existence is evidence, not a substitute for Taste/human art-direction review.
-KNOWN_NONBLOCKING_TECH_DEBT: Next.js build reports non-fatal Newsreader font-override warning; dependency installs report existing audit vulnerabilities. Neither blocked build/deploy/browser QA and neither was introduced by this correction set.
+P0_STATUS: RESOLVED
+P1_STATUS: RESOLVED FOR CURRENT BASELINE
+V2_CI: run 33818390798 — SUCCESS on PR #143 head 4f14b0cbc4ea224cb3def0fa30d49c7b97318413
+STRICT_AUDIT: run 33818390703 — SUCCESS on PR #143 head 4f14b0cbc4ea224cb3def0fa30d49c7b97318413
+RAILWAY_WEB_DEPLOYMENT: 550b7cee-9cf8-466a-b3e2-40ef5ee393f2 — SUCCESS — production commit e408cf20396fc5ca37d882bc41eca99358027f16
+RAILWAY_RUNTIME: production build succeeded after draft-context fix; all nine SubBatch 01 routes prerendered successfully
+BUILD_EVIDENCE: web tests, lint, TypeScript and production build PASS; API build PASS; OMNI strict governance PASS
+PRODUCTION_ROUTE_CHECKS: PASS — HTTP 200 verified after deploy for /perfumistas/alberto-morillas, /perfumistas/christine-nagel and /descubrir; production build includes /magazine, /academia, Ropion story, Personas and Discovery family routes
+PERSONAS_RIGHTS_READY: Alberto Morillas + Christine Nagel use real reusable portraits with visible attribution
+PERSONAS_RIGHTS_BLOCKED: Francis Kurkdjian, Jacques Polge, Olivier Polge, Dominique Ropion, Anne Flipo, Quentin Bisch, Olivier Cresp, Nathalie Lorson, Frank Voelkl and Alessandro Gualtieri remain on deliberate monogram fallback until a reusable source is verified
+GENERATED_IMAGE_QUARANTINE: ENFORCED — no rejected still life, laboratory scene, moodboard, infographic or synthetic portrait from the disqualified operational context was ingested
+BROWSER_QA_BOUNDARY: production HTTP/runtime and build evidence are verified for this closeout; do not equate route reachability with a new exhaustive manual aesthetic review of every viewport screenshot
+KNOWN_NONBLOCKING_TECH_DEBT: non-fatal Newsreader font-override warning and existing dependency audit vulnerabilities remain; neither was introduced by this visual-UX closeout
 VOICE_BIBLE: AROMIA_VOICE_BIBLE.md — v0.3
-EL_COLECCIONISTA: LIVE — CLOSED — browser technical gate PASS after local contrast correction — DO NOT REOPEN CASUALLY
-EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 (100-story exploration batch) and any later calendar work; it was not reverted by this QA cycle
+EL_COLECCIONISTA: LIVE — CLOSED — DO NOT REOPEN CASUALLY
+EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 and any later calendar work
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
-VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md — HARDENED 2026-09-03 for generic perfume-semantic drift + sequential pass gate + two-strike context lock
-SUB_BATCH_01_ART_DIRECTION: art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md — ART_DIRECTION READY / VISUAL_COMPOSITION READY / 18 of 18 opportunities resolved
-SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / 01A PASS / current slot 02A / repository-UI drift rejected / contaminated conversation locked
+VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md — HARDENED 2026-09-03
+SUB_BATCH_01_ART_DIRECTION: art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md — 18 of 18 opportunities resolved
+SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / 01A PASS / current slot 02A
 VISUAL_ASSET_01A_STATUS: READY — assets/visual/editorial/sub-batch-01/01A-antes-del-perfume-ya-oliamos.jpg — narrative test PASS
-CURRENT_GENERATION_CONTEXT: DISQUALIFIED — DO NOT CALL IMAGE GENERATION FROM THIS OPERATIONAL CONVERSATION. Additional unintended outputs were explicitly quarantined in commit ca6aa050a412b69cdbc3a03f8295d573426f0066.
-VISUAL_UX_ART_DIRECTION_CLOSEOUT: art-direction/AROMIA_VISUAL_UX_ART_DIRECTION_CLOSEOUT_2026-09-03.md — ART_DIRECTION READY / Code handoff ready / no new generation required for M3/M4, S5-B, SB2, SB5; licensed documentary sources specified for S5-A/SB3; portraits rights-ready for Alberto Morillas + Christine Nagel only.
-NEXT_ACTOR: Code for visual-UX implementation. Separate sub-batch-01 generation remains a later ChatGPT Visual Assets task in a NEW clean context, starting only at 02A.
-NEXT_ACTION: Code reads art-direction/AROMIA_VISUAL_UX_ART_DIRECTION_CLOSEOUT_2026-09-03.md and implements Magazine M3/M4, Ropion S5-A/S5-B, Saber SB2/SB3/SB5 and the two rights-cleared Personas portraits; run responsive browser QA and verify provenance. Do not generate filler when a reviewed source is absent. Do not ingest any quarantined output. After Code closeout, OMNI performs rendered-experience gate. Separately, resume sub-batch-01 at 02A only from a clean visual-only generation context.
-BLOCKERS: NO PROJECT BLOCKER for the visual-UX implementation. Rights blocker remains for real portraits of Francis Kurkdjian, Jacques Polge, Olivier Polge, Dominique Ropion, Anne Flipo, Quentin Bisch, Olivier Cresp, Nathalie Lorson, Frank Voelkl and Alessandro Gualtieri; keep the existing monogram fallback until a reusable source is verified. Sub-batch-01 generation is context-blocked only in this conversation and remains gated at 02A.
+CURRENT_GENERATION_CONTEXT: DISQUALIFIED — DO NOT CALL IMAGE GENERATION FROM THIS OPERATIONAL CONVERSATION
+NEXT_ACTOR: ChatGPT / Visual Assets in a NEW clean visual-only context when the SubBatch 01 stream is resumed; otherwise no actor is required for the completed visual-UX closeout
+NEXT_ACTION: preserve the production baseline. When intentionally resuming SubBatch 01, start only at 02A in a new clean visual-only context, pass the asset through quarantine before continuing sequentially, and hand only passed binaries plus implementation-native directions back to Code/QA
+BLOCKERS: NO BLOCKER for the completed visual-UX release. Separate rights blockers remain for uncleared perfumer portraits. SubBatch 01 generation is context-blocked only in this conversation and remains gated at 02A.
 ```
 
 ## Mandatory turn-closure rule
