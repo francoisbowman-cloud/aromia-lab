@@ -23,11 +23,11 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 41
+STATE_VERSION: 42
 UPDATED_AT: 2026-09-04
-LAST_ACTOR: ChatGPT — Art Direction / Code / QA / Integration / Production
-LAST_ACTION: completed the visual-UX implementation end-to-end. PR #142 merged the Magazine M3/M4 hierarchy, Ropion S5 documentary interruptions + omission pause, Saber SB2/SB3/SB5 semantic diagrams/material strip/timeline, and rights-cleared Personas portraits for Alberto Morillas + Christine Nagel without ingesting quarantined generated imagery. PR #143 then closed a pre-existing Railway build-context blocker by mirroring the nine consumed SubBatch 01 Markdown sources into apps/web/drafts while keeping repository-level drafts canonical. GitHub CI and Strict Audit passed and Railway production deployment 550b7cee-9cf8-466a-b3e2-40ef5ee393f2 succeeded on commit e408cf20396fc5ca37d882bc41eca99358027f16.
-ACTIVE_OBJECTIVE: visual-UX closeout is COMPLETE and production-verified. Preserve this baseline. The only separate unfinished visual stream is SubBatch 01 original-image generation, still gated at slot 02A and permitted only from a genuinely clean visual-only context under the visual-generation isolation protocol.
+LAST_ACTOR: ChatGPT / Visual Assets
+LAST_ACTION: generated SubBatch 01 asset 02A for “Comprar para oler o comprar para tener”; Publisher explicitly approved it. Quarantine now records 02A PASS. A deterministic handoff with filename, dimensions, SHA256, target path, crop/alt intent and exact Code ingestion steps is persisted at handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md. The JPEG remains external because the available GitHub connector cannot transport local binaries. 02B was explicitly not generated and remains paused by Publisher direction.
+ACTIVE_OBJECTIVE: preserve the production baseline and integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener”. Do not advance visual generation to 02B yet.
 ACTIVE_BRANCH: main
 FUNCTIONAL_BASELINE_SHA: e408cf20396fc5ca37d882bc41eca99358027f16
 LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
@@ -69,12 +69,14 @@ EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8
 ACTOR_HANDOFF_PROTOCOL: docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md
 VISUAL_GENERATION_PROTOCOL: docs/operations/AROMIA_VISUAL_GENERATION_ISOLATION_PROTOCOL.md — HARDENED 2026-09-03
 SUB_BATCH_01_ART_DIRECTION: art-direction/AROMIA_SUB_BATCH_01_TERRITORIOS_VISUAL_DIRECTION.md — 18 of 18 opportunities resolved
-SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / 01A PASS / current slot 02A
+SUB_BATCH_01_QUARANTINE: art-direction/AROMIA_SUB_BATCH_01_VISUAL_GENERATION_QUARANTINE.md — ACTIVE / 01A PASS / 02A PASS / 02B paused by Publisher
 VISUAL_ASSET_01A_STATUS: READY — assets/visual/editorial/sub-batch-01/01A-antes-del-perfume-ya-oliamos.jpg — narrative test PASS
-CURRENT_GENERATION_CONTEXT: DISQUALIFIED — DO NOT CALL IMAGE GENERATION FROM THIS OPERATIONAL CONVERSATION
-NEXT_ACTOR: ChatGPT / Visual Assets in a NEW clean visual-only context when the SubBatch 01 stream is resumed; otherwise no actor is required for the completed visual-UX closeout
-NEXT_ACTION: preserve the production baseline. When intentionally resuming SubBatch 01, start only at 02A in a new clean visual-only context, pass the asset through quarantine before continuing sequentially, and hand only passed binaries plus implementation-native directions back to Code/QA
-BLOCKERS: NO BLOCKER for the completed visual-UX release. Separate rights blockers remain for uncleared perfumer portraits. SubBatch 01 generation is context-blocked only in this conversation and remains gated at 02A.
+VISUAL_ASSET_02A_STATUS: PUBLISHER_APPROVED / PASS / READY_FOR_INGEST — external JPEG 1448×1086 — SHA256 04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4 — target assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg
+VISUAL_ASSET_02A_HANDOFF: handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md
+CURRENT_GENERATION_CONTEXT: 02A generation completed and approved; no further generation authorized in this turn. 02B is explicitly paused.
+NEXT_ACTOR: Code
+NEXT_ACTION: read handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md; obtain the approved JPEG, verify the recorded SHA256, ingest it at the canonical asset path, integrate it into the article “Comprar para oler o comprar para tener”, preserve the intended landscape/mobile crop relationship, and run browser QA. Do not generate or implement 02B yet.
+BLOCKERS: 02A binary transport only — the approved JPEG is external to the repository and must be transported to Code, then checksum-verified. No creative blocker. 02B remains intentionally paused. Separate rights blockers for uncleared perfumer portraits remain unchanged.
 ```
 
 ## Mandatory turn-closure rule
