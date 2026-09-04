@@ -32,11 +32,17 @@ const visualAssets: Partial<Record<SubBatch01Slug, Partial<Record<number, string
   "antes-del-perfume-ya-oliamos": {
     0: "01A-antes-del-perfume-ya-oliamos.jpg",
   },
+  "comprar-para-oler-o-comprar-para-tener": {
+    0: "02A-comprar-para-oler-o-comprar-para-tener.jpg",
+  },
 };
 
 const visualAlts: Partial<Record<SubBatch01Slug, Partial<Record<number, string>>>> = {
   "antes-del-perfume-ya-oliamos": {
     0: "Vista cercana y observacional de un hombro, la espalda alta y el cuello húmedos inmediatamente después de una ducha en un baño cotidiano.",
+  },
+  "comprar-para-oler-o-comprar-para-tener": {
+    0: "Un vial de muestra de perfume anónimo y visiblemente usado se encuentra más cerca de la cámara, junto a un frasco genérico casi lleno situado más atrás sobre una cómoda doméstica de madera.",
   },
 };
 
@@ -152,30 +158,6 @@ export function makeSubBatchMetadata(slug: SubBatch01Slug): Metadata {
 }
 
 function NativeVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) {
-  if (slug === "comprar-para-oler-o-comprar-para-tener" && index === 0) {
-    return (
-      <figure className={`${styles.visual} ${styles.ownershipSplit}`}>
-        <div className={styles.sampleSide}>
-          <span className={styles.objectLabel}>oler</span>
-          <div className={styles.sampleVial} aria-hidden="true">
-            <span />
-          </div>
-          <p>Una experiencia puede caber en unos mililitros.</p>
-        </div>
-        <div className={styles.bottleSide}>
-          <span className={styles.objectLabel}>tener</span>
-          <div className={styles.fullBottle} aria-hidden="true">
-            <span />
-          </div>
-          <p>La posesión ocupa espacio incluso cuando no se usa.</p>
-        </div>
-        <figcaption className={styles.visualCaption}>
-          Dos deseos distintos detrás de una misma compra.
-        </figcaption>
-      </figure>
-    );
-  }
-
   if (slug === "comprar-para-oler-o-comprar-para-tener" && index === 1) {
     return (
       <figure className={`${styles.visual} ${styles.shelfComparison}`}>
@@ -238,8 +220,18 @@ function NativeVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) 
 function StoryVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) {
   const filename = visualAssets[slug]?.[index];
   if (filename) {
+    const isOwnershipOpening =
+      slug === "comprar-para-oler-o-comprar-para-tener" && index === 0;
     return (
-      <figure className={`${styles.visual} ${index === 0 ? styles.photoOpening : ""}`}>
+      <figure
+        className={`${styles.visual} ${
+          isOwnershipOpening
+            ? styles.photoOpeningLandscape
+            : index === 0
+              ? styles.photoOpening
+              : ""
+        }`}
+      >
         {/* Canonical binary is served directly from the quarantined repo asset directory. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

@@ -48,17 +48,17 @@ WEB_STATUS: NOT YET COMPLETE — must be integrated into the real story renderer
 Publisher approval:
 `APPROVED 2026-09-04`
 
-External approved binary:
+Approved binary ingested on branch:
 `02A-comprar-para-oler-o-comprar-para-tener.jpg`
 
 Canonical target path after Code ingestion:
 `assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg`
 
 SHA256:
-`04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4`
+`a07de6e766bb518463d8108e3cd08642fece2902474c666b2716b2d549c2e35d`
 
 Dimensions:
-`1448 × 1086 px`
+`1536 × 1152 px`
 
 Narrative test:
 `One object contains the experience; the other contains ownership.`
@@ -74,7 +74,7 @@ Why it passes:
 CROP_INTENT: landscape master; keep both objects separable in a narrow/mobile crop.
 ALT_INTENT: a visibly used anonymous perfume sample vial closer to camera beside a nearly full generic fragrance bottle farther back on an ordinary lived-in wooden dresser.
 
-WEB_STATUS: READY_FOR_INGEST — binary remains external until Code verifies checksum and commits it. See `handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md`.
+WEB_STATUS: IMPLEMENTED_ON_BRANCH / CODE_GATES_PASS / BROWSER_QA_PENDING — the Publisher-delivered representation is ingested and wired into the real story renderer. See `handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md`.
 
 ## Current batch gate
 
