@@ -7,6 +7,10 @@ export interface PerfumerProfile {
   perfumeSlugs: string[];
   /** Path to a reviewed portrait photograph under /public, when one exists. */
   portrait?: string;
+  /** Visible credit line for `portrait`. Required whenever `portrait` is set. */
+  portraitCredit?: string;
+  /** Full provenance (source page + license) for `portrait`, kept for the record. */
+  portraitProvenance?: string;
 }
 
 /**
@@ -70,6 +74,10 @@ export const PERFUMERS: PerfumerProfile[] = [
     signature: "aire · limpieza · difusión",
     bio: "Maestro de la difusión y la sensación de espacio, con un repertorio que abarca frescos transparentes, florales y maderas pulidas.",
     perfumeSlugs: ["daisy-edt", "acqua-di-gio-edt", "flower-by-kenzo"],
+    portrait: "/personas/alberto-morillas.jpg",
+    portraitCredit: "Foto: Mizensir, vía Wikimedia Commons (CC BY-SA 4.0).",
+    portraitProvenance:
+      "https://commons.wikimedia.org/wiki/File:Alberto_Morillas.jpg — autor: Mizensir — CC BY-SA 4.0",
   },
   {
     slug: "olivier-cresp",
@@ -102,6 +110,10 @@ export const PERFUMERS: PerfumerProfile[] = [
     signature: "materia · contraste · intimidad",
     bio: "Su obra explora la materia con una mirada táctil y narrativa, construyendo tensión entre ingredientes familiares y giros inesperados.",
     perfumeSlugs: ["for-her-edp", "h24-edt", "h24-edp"],
+    portrait: "/personas/christine-nagel.jpg",
+    portraitCredit: "Foto: Comparfums1, vía Wikimedia Commons (CC BY-SA 4.0).",
+    portraitProvenance:
+      "https://commons.wikimedia.org/wiki/File:Christine_Nagel.jpg — autor: Comparfums1 — CC BY-SA 4.0",
   },
   {
     slug: "alessandro-gualtieri",

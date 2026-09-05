@@ -12,6 +12,16 @@ interface StorySection {
   /** Gate 3 visual slot rendered after the section body, if any */
   slot?: string;
   slotClass?: string;
+  /**
+   * Implementation-native typographic pause (no photograph). Used where the
+   * art direction wants absence made visible without fake science imagery.
+   */
+  pause?: { terms: string[]; line: string };
+  /**
+   * Documentary material diptych: two independently licensed photographs shown
+   * as separate frames, never a merged collage. Each entry is a slot id.
+   */
+  diptych?: [string, string];
 }
 
 interface Story {
@@ -115,6 +125,10 @@ const data: Record<string, Story> = {
       },
       {
         h: "La técnica tiene nombre: sobredosis",
+        diptych: [
+          "rose-portrait-of-a-lady-documentary",
+          "patchouli-portrait-of-a-lady-documentary",
+        ],
         paras: [
           `En perfumería, "overdose" no es un accidente ni una sobreactuación. Es una decisión deliberada: tomar un ingrediente y usarlo en una concentración mucho más alta de lo habitual, apostando a que esa exageración es exactamente lo que la composición necesita para tener carácter.`,
           `Es un recurso antiguo — el jazmín de Chanel N°5, en 1921, ya lo usaba — pero no todos los perfumistas lo abrazan con la misma comodidad. Ropion sí. Frédéric Malle, la casa para la que compuso Portrait of a Lady en 2010, lo describe sin rodeos: alguien que suele "equilibrar dosis excesivas de ingredientes potentes con acordes medidos con precisión milimétrica, hasta que la composición se sostiene por sí sola."`,
@@ -123,6 +137,10 @@ const data: Record<string, Story> = {
       },
       {
         h: "Lo que decidió no usar",
+        pause: {
+          terms: ["Hedione", "Iso E Super"],
+          line: "No las evitó porque fueran malas. Las evitó porque esa composición específica no las necesitaba.",
+        },
         paras: [
           `Lo más revelador, sin embargo, no es lo que Ropion decidió exagerar. Es lo que decidió dejar afuera.`,
           `Para Portrait of a Lady evitó, a propósito, dos de los ingredientes sintéticos más usados en la perfumería contemporánea: Hedione e Iso E Super — moléculas que, en palabras de una crítica que analizó la fórmula, "olidas por separado, son deliciosas, pero no aportaron nada a esta fórmula en particular." No las evitó porque fueran malas. Las evitó porque esa composición específica no las necesitaba.`,
@@ -278,6 +296,16 @@ export default function Story({ params }: { params: { slug: string } }) {
               {section.paras.map((p, j) => (
                 <p key={j}>{p}</p>
               ))}
+              {section.pause ? (
+                <div className="story-pause" role="group" aria-label="Materias que quedaron fuera de la fórmula">
+                  <ul className="story-pause-terms">
+                    {section.pause.terms.map((term) => (
+                      <li key={term}>{term}</li>
+                    ))}
+                  </ul>
+                  <p className="story-pause-line">{section.pause.line}</p>
+                </div>
+              ) : null}
             </div>
             {section.slot ? (
               <VisualField
@@ -285,6 +313,12 @@ export default function Story({ params }: { params: { slug: string } }) {
                 className={section.slotClass ?? "story-inline-visual"}
                 sizes="(max-width: 800px) 100vw, 33vw"
               />
+            ) : null}
+            {section.diptych ? (
+              <div className="story-diptych">
+                <VisualField slotId={section.diptych[0]} className="story-diptych-a" sizes="(max-width: 800px) 100vw, 42vw" />
+                <VisualField slotId={section.diptych[1]} className="story-diptych-b" sizes="(max-width: 800px) 100vw, 34vw" />
+              </div>
             ) : null}
           </section>
         ))}

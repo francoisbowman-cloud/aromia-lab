@@ -109,6 +109,35 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     placeholderLabel:
       "Área visual interpretativa pendiente: estante doméstico que ya no tiene espacio. Imagen no generada; especificación en el handoff de assets.",
   },
+  "rose-portrait-of-a-lady-documentary": {
+    id: "rose-portrait-of-a-lady-documentary",
+    type: "documentary",
+    present: true,
+    file: "/editorial-v1/rose-red-documentary.jpg",
+    width: 1600,
+    height: 1067,
+    alt: "Rosal en flor junto a una casa de campo.",
+    caption: "Rosa. Foto: Vatadoshu Phyto, Wikimedia Commons, CC0.",
+    provenance:
+      "https://commons.wikimedia.org/wiki/File:Red_rose_close-up.jpg — autor: User:Vatadoshu Phyto — CC0 1.0",
+    placeholderLabel:
+      "Espacio reservado para imagen documental de una rosa, pendiente de descarga con procedencia.",
+  },
+  "patchouli-portrait-of-a-lady-documentary": {
+    id: "patchouli-portrait-of-a-lady-documentary",
+    type: "documentary",
+    present: true,
+    file: "/editorial-v1/patchouli-documentary.jpg",
+    width: 640,
+    height: 427,
+    alt: "Planta de pachulí (Pogostemon cablin) creciendo al aire libre.",
+    caption:
+      "Pachulí (Pogostemon cablin). Foto: Joe Laurence / Seychelles News Agency, Wikimedia Commons, CC BY 4.0.",
+    provenance:
+      "https://commons.wikimedia.org/wiki/File:Patchouli.jpg — Joe Laurence, Seychelles News Agency — CC BY 4.0",
+    placeholderLabel:
+      "Espacio reservado para imagen documental de pachulí, pendiente de descarga con procedencia.",
+  },
   "frankincense-documentary": {
     id: "frankincense-documentary",
     type: "documentary",

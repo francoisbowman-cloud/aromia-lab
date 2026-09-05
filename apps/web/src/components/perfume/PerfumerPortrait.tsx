@@ -18,25 +18,32 @@ function initials(name: string) {
 export function PerfumerPortrait({
   name,
   portrait,
+  credit,
   era,
   variant = "card",
 }: {
   name: string;
   portrait?: string;
+  credit?: string;
   era?: string;
   variant?: "card" | "detail";
 }) {
   if (portrait) {
     return (
-      <div className="relative aspect-[4/5] overflow-hidden border border-line">
-        <Image
-          src={portrait}
-          alt={`Retrato de ${name}`}
-          fill
-          sizes={variant === "detail" ? "(max-width: 900px) 100vw, 34vw" : "(max-width: 768px) 100vw, 30vw"}
-          style={{ objectFit: "cover" }}
-        />
-      </div>
+      <figure className="m-0">
+        <div className="relative aspect-[4/5] overflow-hidden border border-line">
+          <Image
+            src={portrait}
+            alt={`Retrato fotográfico de ${name}.`}
+            fill
+            sizes={variant === "detail" ? "(max-width: 900px) 100vw, 34vw" : "(max-width: 768px) 100vw, 30vw"}
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+        {credit && variant === "detail" ? (
+          <figcaption className="mt-2 font-plex text-[10px] leading-snug tracking-[.04em] text-muted">{credit}</figcaption>
+        ) : null}
+      </figure>
     );
   }
 
