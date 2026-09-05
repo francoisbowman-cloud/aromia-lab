@@ -23,11 +23,11 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 42
+STATE_VERSION: 43
 UPDATED_AT: 2026-09-04
-LAST_ACTOR: ChatGPT / Visual Assets
-LAST_ACTION: generated SubBatch 01 asset 02A for “Comprar para oler o comprar para tener”; Publisher explicitly approved it. Quarantine now records 02A PASS. A deterministic handoff with filename, dimensions, SHA256, target path, crop/alt intent and exact Code ingestion steps is persisted at handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md. The JPEG remains external because the available GitHub connector cannot transport local binaries. 02B was explicitly not generated and remains paused by Publisher direction.
-ACTIVE_OBJECTIVE: preserve the production baseline and integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener”. Do not advance visual generation to 02B yet.
+LAST_ACTOR: Code
+LAST_ACTION: ingested Cowork editorial sub-batches 03 and 04 (territorios) into `drafts/` — 21 pieces total (10 + 11), from portable bundles `aromia-sub-batch-03-territorios.tar.gz` and `aromia-sub-batch-04-territorios.tar.gz` (same session git-proxy 403 push block as prior sub-batches; base_main_sha e408cf2, matching current baseline). All 21 `.md` copied byte-identical, verified against each bundle's SHA256SUMS.txt via `sha256sum -c` (21/21 OK). Sub-batch 03 covers batch-100 items 6, 13, 19, 30, 45, 54, 67, 78, 91, 98. Sub-batch 04 covers items 3, 8, 21, 24, 33, 41, 56, 74, 81, 93, 99. No editorial content, COWORK_STAGE footer or [AROMIA_VISUAL_OPPORTUNITY]/[AUTHOR_INPUT_OPPORTUNITY] marks modified. Anti-intercambiabilidad QA already run by Cowork per each bundle's README (opening-paragraph variety, banned-word grep, "sí, pero" usage checked). Cumulative batch-100 progress: 33 / 100 (12 prior + 21 this ingest). This is a separate, non-blocking track from the visual-UX/sub-batch-01-asset work below — nothing in that track was touched.
+ACTIVE_OBJECTIVE: preserve the production baseline; integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener” (do not advance visual generation to 02B yet); separately, advance sub-batches 03/04 through ART_DIRECTION once merged, and let Cowork continue with the next sub-batch (batch-100 has 67 items left unwritten).
 ACTIVE_BRANCH: main
 FUNCTIONAL_BASELINE_SHA: e408cf20396fc5ca37d882bc41eca99358027f16
 LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
@@ -74,7 +74,8 @@ VISUAL_ASSET_01A_STATUS: READY — assets/visual/editorial/sub-batch-01/01A-ante
 VISUAL_ASSET_02A_STATUS: PUBLISHER_APPROVED / PASS / READY_FOR_INGEST — external JPEG 1448×1086 — SHA256 04ed9613baab4f4a4b23c7b5714558dfbacb97635eeb242b3dd17d6f73b5c6a4 — target assets/visual/editorial/sub-batch-01/02A-comprar-para-oler-o-comprar-para-tener.jpg
 VISUAL_ASSET_02A_HANDOFF: handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md
 CURRENT_GENERATION_CONTEXT: 02A generation completed and approved; no further generation authorized in this turn. 02B is explicitly paused.
-NEXT_ACTOR: Code
+EDITORIAL_SUBBATCHES_INGESTED: 01 (9, PR #136 merged), 03 (10), 04 (11) — 03/04 ingested to drafts/ pending merge, EDITORIAL: READY / ART_DIRECTION: PENDING, not yet art-directed. Batch-100 items covered so far: 1, 3, 6, 8, 11, 13, 15, 19, 21, 24, 30, 33, 39, 41, 42, 45, 51, 54, 56, 61, 67, 74, 76, 78, 81, 89, 91, 93, 97, 98, 99 (33/100). Cowork's own instruction on each bundle: do not re-propose these items.
+NEXT_ACTOR: Code for the 02A visual-asset ingest (primary, see below). In parallel, non-blocking: Art Direction for sub-batches 03/04 once merged; Cowork may continue with the next sub-batch (67 items of batch-100 remain unwritten).
 NEXT_ACTION: read handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md; obtain the approved JPEG, verify the recorded SHA256, ingest it at the canonical asset path, integrate it into the article “Comprar para oler o comprar para tener”, preserve the intended landscape/mobile crop relationship, and run browser QA. Do not generate or implement 02B yet.
 BLOCKERS: 02A binary transport only — the approved JPEG is external to the repository and must be transported to Code, then checksum-verified. No creative blocker. 02B remains intentionally paused. Separate rights blockers for uncleared perfumer portraits remain unchanged.
 ```
