@@ -14,6 +14,14 @@ Core principle:
 
 > **Composition may vary. Identity does not reset.**
 
+## 1.1 Composition authority
+
+The compact composition and art-direction rules are canonical in:
+
+`AROMIA_VISUAL_DIRECTION_SYSTEM.md`
+
+This document remains the token/component contract; the Visual Direction System governs how those primitives are composed into publication surfaces.
+
 ## 2. Architecture
 
 Aromia visual decisions use three layers.

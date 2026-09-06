@@ -30,6 +30,8 @@ jobs:
         run: npm run catalog:test
       - name: OMNI strict governance audit
         run: npm run audit:omni
+      - name: Internal link integrity
+        run: npm run audit:links
       - name: API build
         working-directory: apps/api
         run: npm ci && npm run build

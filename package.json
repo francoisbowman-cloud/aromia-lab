@@ -18,7 +18,8 @@
     "catalog:sourcing": "node scripts/catalog/sourcing.mjs",
     "catalog:test": "npm --prefix scripts/catalog test",
     "catalog:audit:ccl": "node scripts/catalog/ccl-production-audit.mjs",
-    "audit:omni": "node scripts/omni-strict-audit.mjs"
+    "audit:omni": "node scripts/omni-strict-audit.mjs",
+    "audit:links": "node scripts/audit-internal-links.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

@@ -62,7 +62,7 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link href="/quiz" className="inline-flex min-h-12 items-center justify-center border border-ink bg-ink px-5 font-plex text-[9px] uppercase tracking-[.17em] text-[#fbf8f3] transition duration-300 hover:bg-gold-contrast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold dark:border-[#f2ebdd] dark:bg-[#f2ebdd] dark:text-[#0d0b09]">Encontrar mi firma</Link>
-                  <Link href="/catalogo" className="inline-flex min-h-12 items-center justify-center px-3 font-plex text-[9px] uppercase tracking-[.17em] text-ink transition duration-300 hover:text-gold-contrast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Explorar catálogo →</Link>
+                  <Link href="/descubrir" className="inline-flex min-h-12 items-center justify-center px-3 font-plex text-[9px] uppercase tracking-[.17em] text-ink transition duration-300 hover:text-gold-contrast focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">Explorar Discovery →</Link>
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
 
             <div className="space-y-1">
               {index.map((category, indexNumber) => (
-                <Link key={category.label} href={`/catalogo?familia=${encodeURIComponent(category.familias[0])}`} className="group grid grid-cols-[42px_1fr_auto] items-center gap-4 py-5 transition duration-300 hover:translate-x-1 sm:grid-cols-[58px_1fr_1fr_auto] sm:gap-7">
+                <Link key={category.label} href={`/buscar?q=${encodeURIComponent(category.label)}`} className="group grid grid-cols-[42px_1fr_auto] items-center gap-4 py-5 transition duration-300 hover:translate-x-1 sm:grid-cols-[58px_1fr_1fr_auto] sm:gap-7">
                   <span className="font-display text-[17px] text-gold-contrast">{String(indexNumber + 1).padStart(2, "0")}</span>
                   <span className="font-display text-[30px] leading-none tracking-[-.025em] text-ink sm:text-[38px]">{category.label}</span>
                   <span className="hidden max-w-[28ch] font-sans text-sm leading-6 text-muted sm:block">{familyCopy[category.label] ?? "Una ruta distinta dentro del catálogo."}</span>
