@@ -102,7 +102,8 @@
   line-height: 1.4;
   letter-spacing: .13em;
   text-transform: uppercase;
-  color: rgba(var(--aromia-ink-rgb), .62);
+  color: var(--ink);
+  opacity: .62;
 }
 
 .ev1-cover-lead-copy {
@@ -244,7 +245,8 @@
   font-family: var(--font-plex, Arial, sans-serif);
   font-size: 10px;
   letter-spacing: .14em;
-  color: rgba(var(--aromia-ink-rgb), .58);
+  color: var(--ink);
+  opacity: .58;
 }
 
 .ev1-cover-index-label {
@@ -257,7 +259,8 @@
   max-width: 44ch;
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(var(--aromia-ink-rgb), .68);
+  color: var(--ink);
+  opacity: .68;
 }
 
 .ev1-cover-index-arrow {
