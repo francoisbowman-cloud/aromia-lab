@@ -33,19 +33,26 @@ export function PerfumerPortrait({
   if (portrait) {
     const external = /^https?:\/\//.test(portrait);
     return (
-      <figure className="relative aspect-[4/5] overflow-hidden border border-line bg-soft">
-        <Image
-          src={portrait}
-          alt={`Retrato fotográfico de ${name}.`}
-          fill
-          sizes={variant === "detail" ? "(max-width: 900px) 100vw, 34vw" : "(max-width: 768px) 100vw, 30vw"}
-          unoptimized={external}
-          style={{ objectFit: "cover" }}
-        />
+      <figure className="m-0">
+        <div className="relative aspect-[4/5] overflow-hidden border border-line bg-soft">
+          <Image
+            src={portrait}
+            alt={`Retrato fotográfico de ${name}.`}
+            fill
+            sizes={variant === "detail" ? "(max-width: 900px) 100vw, 34vw" : "(max-width: 768px) 100vw, 30vw"}
+            unoptimized={external}
+            style={{ objectFit: "cover" }}
+          />
+        </div>
         {portraitCredit ? (
-          <figcaption className="absolute inset-x-0 bottom-0 bg-[rgba(244,240,232,.9)] px-3 py-2 font-sans text-[9px] leading-4 text-ink backdrop-blur-sm">
+          <figcaption className="border-x border-b border-line px-3 py-2 font-sans text-[9px] leading-4 text-muted">
             {portraitCreditHref ? (
-              <a href={portraitCreditHref} target="_blank" rel="noreferrer" className="underline decoration-line underline-offset-2">
+              <a
+                href={portraitCreditHref}
+                target="_blank"
+                rel="noreferrer"
+                className="underline decoration-line underline-offset-2 transition hover:text-ink"
+              >
                 {portraitCredit}
               </a>
             ) : portraitCredit}
