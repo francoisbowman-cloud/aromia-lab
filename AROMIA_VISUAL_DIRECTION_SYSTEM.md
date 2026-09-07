@@ -209,6 +209,35 @@ Aromia needs four repeated roles:
 
 Avoid adding new type styles to solve one page.
 
+### The scale exists as tokens
+
+Added 2026-09-06 in `apps/web/src/app/design-tokens.css`:
+
+```
+--type-display-1   clamp(54px, 6.8vw, 112px)   hero / portada
+--type-display-2   clamp(42px, 5vw, 76px)      titular de historia y de sección
+--type-display-3   clamp(30px, 4vw, 58px)      subsección
+--type-display-4   clamp(24px, 2.2vw, 34px)    título de índice o ficha
+--type-deck        clamp(19px, 1.6vw, 27px)
+--type-body        clamp(16px, 1.1vw, 18px)
+--type-metadata    11px
+```
+
+These steps were derived from the sizes already dominant on each surface, not invented.
+
+### Measured state — this rule was not being followed
+
+The 2026-09-06 audit measured, in the implementation:
+
+- **36 distinct `clamp()` font-size formulas** in CSS;
+- **37 distinct arbitrary `text-[Npx]` values at 28px or above** in TSX;
+- duplicate formulas differing only by whitespace (`clamp(34px,4vw,58px)` and `clamp(34px, 4vw, 58px)`);
+- pairs that are visually indistinguishable at the same viewport (105.1/104, 77.8/76, 74.9/72, 34/33, 31/30).
+
+That is roughly 73 independent type-size decisions where this document asks for four roles.
+
+**Collapsing them is not a refactor.** It changes how the publication looks and is an art-direction decision, not a purity exercise — and `AROMIA_DESIGN_SYSTEM.md` explicitly forbids mass token replacement for its own sake. The tokens above exist so that new work and touched surfaces converge; a deliberate migration needs Publisher/Design sign-off on the visual result.
+
 ---
 
 ## 5. Spacing rhythm

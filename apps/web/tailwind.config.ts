@@ -1,11 +1,19 @@
+import path from "node:path";
+
 import type { Config } from "tailwindcss";
+
+// Los globs de `content` se resuelven contra el CWD del proceso, no contra este
+// archivo. Railway construye con root apps/web, pero lanzar el dev server desde
+// la raíz del monorepo (next dev apps/web) dejaba el escaneo vacío y el sitio
+// salía sin ninguna utilidad de Tailwind. Anclarlos acá los vuelve hermético.
+const src = path.join(__dirname, "src");
 
 const config: Config = {
   darkMode: ["selector", '[data-theme="dark"]'],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    path.join(src, "pages/**/*.{js,ts,jsx,tsx,mdx}"),
+    path.join(src, "components/**/*.{js,ts,jsx,tsx,mdx}"),
+    path.join(src, "app/**/*.{js,ts,jsx,tsx,mdx}"),
   ],
   theme: {
     extend: {

@@ -29,6 +29,8 @@ export interface VisualSlot {
   quality?: number;
   alt: string;
   caption?: string;
+  /** Atribucion visible para el lector. CC BY / BY-SA la exigen; provenance sola no alcanza porque nunca se renderiza. */
+  credit?: string;
   provenance?: string;
   placeholderLabel: string;
 }
@@ -36,6 +38,7 @@ export interface VisualSlot {
 export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ambroxan-material-interpretive": {
     id: "ambroxan-material-interpretive",
+    credit: "Salvia sclarea. Foto: Llez · Wikimedia Commons · CC BY-SA 3.0",
     type: "interpretive",
     present: true,
     file: "/editorial-v1/clary-sage-documentary.jpg",
@@ -63,9 +66,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   },
   "ropion-overdose-interpretive": {
     id: "ropion-overdose-interpretive",
+    credit: "Foto: Jez Timms · Wikimedia Commons · CC0 1.0",
     type: "interpretive",
     present: true,
-    file: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Blood-red_rose_up_close_%28Unsplash%29.jpg",
+    file: "/editorial-v1/red-rose-interpretive.jpg",
     quality: 95,
     alt: "Primer plano fotográfico de una rosa rojo profundo, usada como imagen editorial del volumen floral asociado a Dominique Ropion.",
     provenance:
@@ -75,6 +79,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   },
   "amouage-material-density-interpretive": {
     id: "amouage-material-density-interpretive",
+    credit: "Jabal Akhdar, Omán. Foto: Ontheroadom · Wikimedia Commons · CC BY-SA 4.0",
     type: "interpretive",
     present: true,
     file: "/editorial-v1/oman-place-documentary.jpg",
@@ -126,6 +131,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   },
 };
 
+export function visualCredit(slotId: string) {
+  return EDITORIAL_V1_SLOTS[slotId]?.credit ?? null;
+}
+
 interface VisualFieldProps {
   slotId: string;
   className: string;
@@ -148,8 +157,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
-  const isExternal = /^https?:\/\//.test(slot.file);
-
   if (slot.width && slot.height) {
     return (
       <figure className={`${className} ev1-doc-figure`}>
@@ -161,7 +168,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
           height={slot.height}
           quality={slot.quality}
           sizes={sizes ?? "100vw"}
-          unoptimized={isExternal}
         />
         {slot.caption ? <figcaption>{slot.caption}</figcaption> : null}
       </figure>
@@ -176,7 +182,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         fill
         quality={slot.quality}
         sizes={sizes ?? "100vw"}
-        unoptimized={isExternal}
         style={{ objectFit: "cover" }}
       />
     </figure>

@@ -41,10 +41,10 @@ export function MagazineCoverStory({ article, linkRef }: { article: Article; lin
       <Link ref={linkRef} href={`/magazine/${article.slug}`} className="group flex flex-col justify-between bg-transparent px-1 py-8 outline-none sm:px-7 lg:px-10 lg:py-12">
         <div>
           <div className="flex items-center justify-between gap-5 font-plex text-xs uppercase tracking-[.14em] text-muted"><span>{category}</span>{year ? <span>{year}</span> : null}</div>
-          <h2 className="mt-10 max-w-[10ch] font-display text-[43px] leading-[.9] tracking-[-.045em] text-ink transition-colors group-hover:text-[#5a6b54] sm:text-[54px] lg:text-[62px]">{article.titulo}</h2>
+          <h2 className="mt-10 max-w-[10ch] font-display text-[43px] leading-[.9] tracking-[-.045em] text-ink transition-colors group-hover:text-[var(--aromia-editorial-accent)] sm:text-[54px] lg:text-[62px]">{article.titulo}</h2>
           {article.meta_description ? <p className="mt-8 max-w-[42ch] font-sans text-base leading-7 text-muted">{article.meta_description}</p> : null}
         </div>
-        <span className="mt-10 inline-flex min-h-12 items-center self-start border-b border-ink font-plex text-xs uppercase tracking-[.13em] text-ink transition group-hover:border-[#5a6b54] group-hover:text-[#5a6b54]">Leer artículo <span aria-hidden="true" className="ml-4">↗</span></span>
+        <span className="mt-10 inline-flex min-h-12 items-center self-start border-b border-ink font-plex text-xs uppercase tracking-[.13em] text-ink transition group-hover:border-[#5a6b54] group-hover:text-[var(--aromia-editorial-accent)]">Leer artículo <span aria-hidden="true" className="ml-4">↗</span></span>
       </Link>
     </article>
   );

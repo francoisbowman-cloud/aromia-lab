@@ -20,7 +20,7 @@ export function HomeHero({ perfume }: { perfume?: Perfume }) {
               Objetos reales, materia olfativa y contexto editorial para descubrir con criterio.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link href="/magazine" className="inline-flex min-h-12 items-center border-b border-ink font-plex text-[10px] uppercase tracking-[.15em] text-ink transition hover:border-[#5a6b54] hover:text-[#5a6b54]">
+              <Link href="/magazine" className="inline-flex min-h-12 items-center border-b border-ink font-plex text-[10px] uppercase tracking-[.15em] text-ink transition hover:border-[#5a6b54] hover:text-[var(--aromia-editorial-accent)]">
                 Leer el Magazine <span aria-hidden="true" className="ml-4">↗</span>
               </Link>
               <Link href="/descubrir" className="inline-flex min-h-12 items-center font-plex text-[10px] uppercase tracking-[.15em] text-muted transition hover:text-ink">
@@ -35,7 +35,7 @@ export function HomeHero({ perfume }: { perfume?: Perfume }) {
                 <p className="font-plex text-[10px] uppercase tracking-[.15em] text-muted">Objeto en foco</p>
                 <p className="mt-2 font-display text-[24px] leading-none tracking-[-.02em] text-ink">{perfume.nombre}</p>
               </div>
-              <p className="font-plex text-[10px] uppercase tracking-[.15em] text-[#5a6b54] dark:text-[#b8c5b3]">{perfume.marca}</p>
+              <p className="font-plex text-[10px] uppercase tracking-[.15em] text-[var(--aromia-editorial-accent)]">{perfume.marca}</p>
             </div>
           ) : null}
         </div>

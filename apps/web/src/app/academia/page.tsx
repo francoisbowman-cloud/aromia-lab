@@ -37,7 +37,7 @@ const materialStrip = [
     name: "Bergamota",
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
-    src: "https://upload.wikimedia.org/wikipedia/commons/7/77/Bergamotfruit.jpg",
+    src: "/editorial-v1/bergamot-documentary.jpg",
     alt: "Fruto de bergamota de Calabria.",
     credit: "Xenocryst / Antares Scorpii · CC BY-SA 2.0",
   },
@@ -45,7 +45,7 @@ const materialStrip = [
     name: "Rosa",
     family: "Floral",
     href: "/descubrir/familias/floral",
-    src: "https://upload.wikimedia.org/wikipedia/commons/2/26/Pretty_Pink_Rose_Closeup.jpg",
+    src: "/editorial-v1/pink-rose-documentary.jpg",
     alt: "Primer plano documental de una rosa rosada.",
     credit: "Jon Sullivan · CC0 1.0",
   },
@@ -53,7 +53,7 @@ const materialStrip = [
     name: "Sándalo",
     family: "Amaderada",
     href: "/descubrir/familias/amaderada",
-    src: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Santalum_album.jpg",
+    src: "/editorial-v1/sandalwood-documentary.jpg",
     alt: "Santalum album, árbol de sándalo.",
     credit: "Shyamal · CC BY-SA 4.0",
   },
@@ -77,7 +77,7 @@ const materialStrip = [
     name: "Pachulí",
     family: "Amaderada",
     href: "/descubrir/familias/amaderada",
-    src: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Patchouli.jpg",
+    src: "/editorial-v1/patchouli-documentary.jpg",
     alt: "Pogostemon cablin, planta de pachulí.",
     credit: "Joe Laurence / Seychelles News Agency · CC BY 4.0",
   },
@@ -137,11 +137,14 @@ export default function SaberPage() {
 
           <div className="grid grid-cols-2 border-y border-line sm:grid-cols-3 lg:grid-cols-6">
             {materialStrip.map((material,index)=> {
-              const external = /^https?:\/\//.test(material.src);
               return <Link key={material.name} href={material.href} className={`group min-w-0 border-line py-4 ${index % 2 === 0 ? "pr-2" : "pl-2"} sm:px-2 lg:border-r lg:px-3 lg:last:border-r-0`}>
                 <figure>
-                  <div className="relative aspect-[4/5] overflow-hidden bg-soft">
-                    <Image src={material.src} alt={material.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" unoptimized={external} style={{objectFit:"cover"}} />
+                  {/* Cuadrado y no 4/5: la tira mezcla fuentes apaisadas (bergamota 1.33,
+                      pachuli 1.50) con una vertical (salvia 0.75). El marco vertical
+                      descartaba hasta el 47% del ancho de las apaisadas; el cuadrado
+                      reparte el recorte y ninguna pierde su motivo. */}
+                  <div className="relative aspect-square overflow-hidden bg-soft">
+                    <Image src={material.src} alt={material.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" style={{objectFit:"cover"}} />
                   </div>
                   <figcaption className="pt-3">
                     <span className="block font-display text-lg leading-none text-ink transition group-hover:opacity-70">{material.name}</span>

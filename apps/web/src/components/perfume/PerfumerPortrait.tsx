@@ -31,7 +31,6 @@ export function PerfumerPortrait({
   variant?: "card" | "detail";
 }) {
   if (portrait) {
-    const external = /^https?:\/\//.test(portrait);
     return (
       <figure className="m-0">
         <div className="relative aspect-[4/5] overflow-hidden border border-line bg-soft">
@@ -40,7 +39,6 @@ export function PerfumerPortrait({
             alt={`Retrato fotográfico de ${name}.`}
             fill
             sizes={variant === "detail" ? "(max-width: 900px) 100vw, 34vw" : "(max-width: 768px) 100vw, 30vw"}
-            unoptimized={external}
             style={{ objectFit: "cover" }}
           />
         </div>

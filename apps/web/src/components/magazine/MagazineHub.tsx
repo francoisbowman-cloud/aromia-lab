@@ -35,7 +35,7 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
         <div className="grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
           <div>
             <h1 className="font-display text-[58px] font-medium leading-[.86] tracking-[-.055em] text-ink sm:text-[78px] lg:text-[104px]">Magazine</h1>
-            <p className="mt-6 max-w-[24ch] font-display text-[27px] leading-[1.08] tracking-[-.02em] text-[#5a6b54] sm:text-[32px]">Perfume leído como objeto, cultura y memoria.</p>
+            <p className="mt-6 max-w-[24ch] font-display text-[27px] leading-[1.08] tracking-[-.02em] text-[var(--aromia-editorial-accent)] sm:text-[32px]">Perfume leído como objeto, cultura y memoria.</p>
           </div>
           <div className="lg:justify-self-end">
             <p className="max-w-[40ch] font-sans text-base leading-7 text-muted">Reseñas, comparativas y guías construidas desde datos reales del catálogo y una mirada editorial propia.</p>
@@ -61,7 +61,7 @@ export function MagazineHub({ articulos }: { articulos: Article[] }) {
             {secondary.length > 0 ? (
               <aside className="pt-16 lg:pt-24">
                 <div className="mb-10 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
-                  <div><p className="font-plex text-xs uppercase tracking-[.13em] text-[#5a6b54] dark:text-[#b8c5b3]">Archivo</p><h2 className="mt-3 font-display text-[38px] font-medium leading-none tracking-[-.03em] text-ink lg:text-[48px]">Sigue leyendo sin perder el hilo.</h2></div>
+                  <div><p className="font-plex text-xs uppercase tracking-[.13em] text-[var(--aromia-editorial-accent)]">Archivo</p><h2 className="mt-3 font-display text-[38px] font-medium leading-none tracking-[-.03em] text-ink lg:text-[48px]">Sigue leyendo sin perder el hilo.</h2></div>
                   <span className="font-plex text-xs uppercase tracking-[.12em] text-muted">{String(secondary.length).padStart(2, "0")} historias</span>
                 </div>
                 <div className="grid grid-cols-1 gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-3">

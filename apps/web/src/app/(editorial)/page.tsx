@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./editorial.css";
 import "./home-story-rhythm.css";
-import { VisualField } from "./editorialVisuals";
+import { VisualField, visualCredit } from "./editorialVisuals";
 import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
 
 export const metadata: Metadata = {
@@ -113,17 +113,22 @@ export default function EditorialHome() {
             sizes="(max-width: 800px) 100vw, 58vw"
           />
           <p className="ev1-cover-media-note">Mascate · Omán · 1982</p>
+          <p className="ev1-cover-media-credit">{visualCredit(lead.slot)}</p>
         </div>
 
         <div className="ev1-cover-lead-copy">
           <p className="ev1-kicker">{lead.kicker}</p>
-          <h2>{lead.title}</h2>
+          <h2>
+            <Link className="ev1-story-link" href={lead.href}>
+              {lead.title}
+            </Link>
+          </h2>
           <p className="ev1-deck">
             En 1982, un perfumista francés subió a un avión rumbo a Mascate. No
             iba de vacaciones. Iba a componer un perfume por encargo directo de
             un sultán.
           </p>
-          <Link className="ev1-read" href={lead.href}>
+          <Link className="ev1-read" href={lead.href} aria-label={`Leer «${lead.title}»`}>
             Leer historia <span>→</span>
           </Link>
         </div>
@@ -136,9 +141,13 @@ export default function EditorialHome() {
               <span>02</span>
               <span>{materialStory.kicker}</span>
             </div>
-            <h2>{materialStory.title}</h2>
+            <h2>
+              <Link className="ev1-story-link" href={materialStory.href}>
+                {materialStory.title}
+              </Link>
+            </h2>
             <p>{materialStory.summary}</p>
-            <Link className="ev1-read" href={materialStory.href}>
+            <Link className="ev1-read" href={materialStory.href} aria-label={`Leer «${materialStory.title}»`}>
               Leer historia <span>→</span>
             </Link>
           </div>
@@ -149,6 +158,7 @@ export default function EditorialHome() {
               sizes="(max-width: 800px) 100vw, 62vw"
             />
             <p className="ev1-cover-media-note">Materia · origen · transformación</p>
+            <p className="ev1-cover-media-credit">{visualCredit(materialStory.slot)}</p>
           </div>
         </article>
 
@@ -160,15 +170,20 @@ export default function EditorialHome() {
               sizes="(max-width: 800px) 100vw, 38vw"
             />
             <p className="ev1-cover-media-note">Dominique Ropion · intensidad y precisión</p>
+            <p className="ev1-cover-media-credit">{visualCredit(personStory.slot)}</p>
           </div>
           <div className="ev1-cover-feature-copy ev1-cover-feature-copy--person">
             <div className="ev1-cover-feature-meta">
               <span>03</span>
               <span>{personStory.kicker}</span>
             </div>
-            <h2>{personStory.title}</h2>
+            <h2>
+              <Link className="ev1-story-link" href={personStory.href}>
+                {personStory.title}
+              </Link>
+            </h2>
             <p>{personStory.summary}</p>
-            <Link className="ev1-read" href={personStory.href}>
+            <Link className="ev1-read" href={personStory.href} aria-label={`Leer «${personStory.title}»`}>
               Leer historia <span>→</span>
             </Link>
           </div>
