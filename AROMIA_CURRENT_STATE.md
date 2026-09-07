@@ -23,14 +23,19 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 45
-UPDATED_AT: 2026-09-06
-LAST_ACTOR: ChatGPT — Publisher relay
-LAST_ACTION: Publisher approved a second full-site implementation pass led by Code with substantially higher rigor and explicit Design integration. Persisted the executable handoff at `handoffs/AROMIA_CODE_DEEP_DESIGN_INTEGRATION_2026-09-06.md`. This directive intentionally does not cap Code to the previous PR #148 composition choices, component boundaries or five-archetype implementation; PR #148 is the baseline, not the ceiling. Code is authorized to challenge/refactor public-facing composition, tokens, primitives, page structures, responsive behavior and legacy surfaces when rendered evidence justifies it, while preserving actual product/legal/publication constraints.
-ACTIVE_OBJECTIVE: Code executes the deep Design-integrated public-surface audit and implementation pass from the repository handoff, using rendered evidence across the required viewport matrix, then runs CI/QA, merges when green, verifies Railway production and persists the next relay. preserve the production baseline; integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener” (do not advance visual generation to 02B yet); separately, advance sub-batches 03/04 through ART_DIRECTION once merged, and let Cowork continue with the next sub-batch (batch-100 has 67 items left unwritten).
+STATE_VERSION: 46
+UPDATED_AT: 2026-09-07
+LAST_ACTOR: Code — deep Design-integrated pass, Tandas A + B
+LAST_ACTION: Executed handoffs/AROMIA_CODE_DEEP_DESIGN_INTEGRATION_2026-09-06.md. Persisted the full audit at audits/AROMIA_DEEP_DESIGN_INTEGRATION_AUDIT_2026-09-06.md (17 surfaces x 7 viewports x light/dark, measured against production with headless Chromium; harness installed OUTSIDE the repo, no new dependency). Implemented and merged Tandas A + B via PR #151 (squash 4f80be01b02362d8ec1995c2cbd6aa7618dd42f6). Railway auto-deployed both services SUCCESS; production re-swept: 118/119 route records 200, zero horizontal overflow, zero dead hrefs, zero external images, zero text below 4.5:1 in either theme. The one non-200 is the pre-existing SubBatch 01 P0 (see below), deliberately not touched. Tandas C and the typographic migration remain open and are described in the closeout handoff.
+ACTIVE_OBJECTIVE: Continue the deep Design-integrated pass — Tanda C (first-viewport hierarchy on /descubrir/familias, /academia, /perfumistas; rhythm of /magazine and /perfumistas toward the Editorial Index archetype; Home reading measure at wide viewports; label-vs-link differentiation) plus the Omán hero recomposition (§9.1 of the audit) and, if Publisher/Design sign off, the deliberate typographic-scale migration onto the new --type-* tokens. Separately: the SubBatch 01 runtime P0 needs an owner. Also still pending from v45: integrate Publisher-approved SubBatch 01 asset 02A into the real renderer for "Comprar para oler o comprar para tener" (do NOT advance visual generation to 02B); advance sub-batches 03/04 through ART_DIRECTION; let Cowork continue batch-100 (67 items left).
 ACTIVE_BRANCH: main
-FUNCTIONAL_BASELINE_SHA: de3ed9db40ca964f2a0814c92fd12985b9cab957
+FUNCTIONAL_BASELINE_SHA: 4f80be01b02362d8ec1995c2cbd6aa7618dd42f6
 LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
+DEEP_DESIGN_AUDIT: audits/AROMIA_DEEP_DESIGN_INTEGRATION_AUDIT_2026-09-06.md — §6 plan by tandas; §9 corrections found while implementing
+DEEP_DESIGN_CLOSEOUT_HANDOFF: handoffs/AROMIA_CODE_DEEP_DESIGN_CLOSEOUT_2026-09-07.md
+DEEP_DESIGN_PR: #151 — MERGED — squash 4f80be01b02362d8ec1995c2cbd6aa7618dd42f6
+TYPOGRAPHIC_SCALE_TOKENS: apps/web/src/app/design-tokens.css — --type-display-1..4 / --type-deck / --type-body / --type-metadata defined, NOT yet consumed; migration needs art-direction sign-off (measured debt: 36 distinct clamp() formulas in CSS + 37 distinct text-[Npx] >=28px in TSX)
+SUBBATCH_01_RUNTIME_P0: /historias/{antes-del-perfume-ya-oliamos, comprar-para-oler-o-comprar-para-tener, cuando-ya-no-hueles-tu-perfume, fougere-no-significa-viejo, huele-sintetico-que-estamos-diciendo, lavanda-limpia-medicinal-barata-elegante, nos-perfumamos-para-nosotros-o-para-los-demas, podemos-describir-un-olor-sin-compararlo, por-que-una-lista-de-notas-no-te-dice-como-huele} return HTTP 500 in production. Cause: apps/web/src/app/(editorial)/historias/subBatch01Story.tsx reads drafts/*.md from disk at render time; drafts/ is in the build context (commit e408cf2) but NOT in the runtime image. Build prerenders them (local returns 200); runtime render throws. Routes are ORPHANED — absent from sitemap.xml, unlinked from Home and /magazine — so no reader lands on a 500 and no SEO damage, but all nine SubBatch 01 stories are unreachable. Not fixed here: the handoff forbids touching SubBatch pipelines and the fix (stop reading disk at runtime — bundle the drafts, or move to the articles table) is editorial-pipeline work, not Design-layer. Needs an owner.
 UX_UI_CLOSEOUT: audits/AROMIA_UX_UI_IMPLEMENTATION_CLOSEOUT_2026-09-02.md
 UX_UI_SOURCE_AUDIT: audits/AROMIA_UX_UI_INFORMATION_ARCHITECTURE_AUDIT_2026-09-02.md
 RENDER_QA_CLOSEOUT: audits/AROMIA_RENDER_QA_CLOSEOUT_2026-09-02.md
@@ -53,19 +58,19 @@ DISCOVERY_JOURNEY: Discovery → optional Quiz onboarding → result → map →
 PERFUME_ROUTE_ROLE: /catalogo/[slug] = reference/context object; public /catalogo grid remains retired
 CLUB_ROLE: future continuation / waitlist, explicitly in preparation
 SEARCH_ROLE: cross-search of fragancias + unified editorial archive
-P0_STATUS: RESOLVED
-P1_STATUS: RESOLVED FOR CURRENT BASELINE
-V2_CI: run 34043989452 — SUCCESS on visual-direction head 474b76e57827a849fe415979651e3d14cc2fa41a
-STRICT_AUDIT: run 34043989456 — SUCCESS; OMNI governance PASS + INTERNAL LINK INTEGRITY PASS + API/web builds PASS
-RAILWAY_WEB_DEPLOYMENT: f9bb4d4d-5c23-46f6-aeaa-9fda8ef110bd — SUCCESS — production commit de3ed9db40ca964f2a0814c92fd12985b9cab957
-RAILWAY_RUNTIME: production build succeeded after draft-context fix; all nine SubBatch 01 routes prerendered successfully
-BUILD_EVIDENCE: v2.0 CI PASS; Strict Audit PASS; internal literal-link audit PASS; API build PASS; web tests/lint/TypeScript/production build PASS; Railway generated 49/49 static pages
-PRODUCTION_ROUTE_CHECKS: production deployment SUCCESS with Home, Magazine, Saber, Personas, Discovery/family routes and all current story routes included in the generated route manifest
-PERSONAS_RIGHTS_READY: Alberto Morillas + Christine Nagel use real reusable portraits with visible attribution
+P0_STATUS: RESOLVED for the visual-direction baseline. NEW P0 surfaced by the deep-design audit: SUBBATCH_01_RUNTIME_P0 (see above) — nine orphaned story routes 500 in production; needs an owner, not a Design-layer fix.
+P1_STATUS: RESOLVED FOR CURRENT BASELINE. Tandas A + B closed additional P1s: 26 MB third-party hotlinking, dark-theme metadata at 1.08:1, /magazine mobile overflow, two CC BY-SA images with no visible attribution.
+V2_CI: PR #151 checks — api (lint+typecheck) PASS, code-and-governance PASS, web (test+lint+typecheck+build) PASS on head 523048a
+STRICT_AUDIT: run 34043989456 — SUCCESS (visual-direction baseline); PR #151's code-and-governance check PASS covers strict audit + internal link integrity for this merge
+RAILWAY_WEB_DEPLOYMENT: c5b359f9-cbd4-442e-8607-438371378acd — SUCCESS — production commit 4f80be01b02362d8ec1995c2cbd6aa7618dd42f6 (api deploy 816d41db also SUCCESS)
+RAILWAY_RUNTIME: production build + deploy SUCCESS for 4f80be0. Post-deploy production sweep: 118/119 route records HTTP 200 across 7 viewports; the 119th is the SubBatch 01 runtime P0. WARNING: v45 claimed "all nine SubBatch 01 routes prerendered successfully" — they prerender at build but 500 at runtime.
+BUILD_EVIDENCE: PR #151 CI all-green; local tsc/next lint/next build clean on the merged head; production re-swept with headless Chromium (audit harness in scratchpad, out-prod-final/report.json)
+PRODUCTION_ROUTE_CHECKS: post-merge sweep — Home, /magazine, /magazine/[slug], /academia, /perfumistas, /perfumistas/[slug] (real portrait + monogram), /descubrir, /descubrir/familias, /descubrir/familias/[familia], /catalogo/[slug], /buscar, /club, /quiz all 200 in every viewport; four SubBatch 01 stories (el-coleccionista, el-perfume-que-encargo-un-sultan, el-ambar-que-nunca-toco-una-ballena, el-perfumista-que-no-teme-exagerar) 200; the other nine SubBatch 01 story routes 500 (SUBBATCH_01_RUNTIME_P0)
+PERSONAS_RIGHTS_READY: Alberto Morillas + Christine Nagel use real reusable portraits with visible attribution (PerfumerPortrait.tsx renders portraitCredit as figcaption; confirmed correct in the deep-design audit §9.2). Both portraits now served locally from public/perfumistas/ through the optimizer, not hotlinked from Wikimedia.
 PERSONAS_RIGHTS_BLOCKED: Francis Kurkdjian, Jacques Polge, Olivier Polge, Dominique Ropion, Anne Flipo, Quentin Bisch, Olivier Cresp, Nathalie Lorson, Frank Voelkl and Alessandro Gualtieri remain on deliberate monogram fallback until a reusable source is verified
 GENERATED_IMAGE_QUARANTINE: ENFORCED — no rejected still life, laboratory scene, moodboard, infographic or synthetic portrait from the disqualified operational context was ingested
 BROWSER_QA_BOUNDARY: production HTTP/runtime and build evidence are verified for this closeout; do not equate route reachability with a new exhaustive manual aesthetic review of every viewport screenshot
-KNOWN_NONBLOCKING_TECH_DEBT: non-fatal Newsreader font-override warning and existing dependency audit vulnerabilities remain; neither was introduced by the visual-direction pass
+KNOWN_NONBLOCKING_TECH_DEBT: non-fatal Newsreader font-override warning and existing dependency audit vulnerabilities remain. Tailwind config/content globs were being resolved against process CWD — invisible in production (Railway builds with root apps/web) but `next dev apps/web` from the monorepo root emitted ZERO utilities, so every Tailwind-based component rendered unstyled in local QA. Fixed in PR #151 (postcss + tailwind.config both anchored to apps/web; output now byte-identical from either CWD). Local dev also cannot fetch Newsreader from next/font (falls back to sans), so typographic judgement must be made against production, not local. Perfumer-portrait next/image requests fetch the w=3840 variant on some viewports (sizes attr not tuned) — cold-optimizer first hit can time out a headless sweep; warm cache serves 200 at 25–82 KB. Candidate for Tanda C.
 VOICE_BIBLE: AROMIA_VOICE_BIBLE.md — v0.3
 EL_COLECCIONISTA: LIVE — CLOSED — DO NOT REOPEN CASUALLY
 EDITORIAL_CALENDAR_CONCURRENT_WORK: preserve commit e4a81fad5bd948a39a22ccdfe1e8125c8140f492 and any later calendar work
@@ -78,9 +83,9 @@ VISUAL_ASSET_02A_STATUS: PUBLISHER_APPROVED / PASS / READY_FOR_INGEST — extern
 VISUAL_ASSET_02A_HANDOFF: handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md
 CURRENT_GENERATION_CONTEXT: 02A generation completed and approved; no further generation authorized in this turn. 02B is explicitly paused.
 EDITORIAL_SUBBATCHES_INGESTED: 01 (9, PR #136 merged), 03 (10), 04 (11) — 03/04 ingested to drafts/ pending merge, EDITORIAL: READY / ART_DIRECTION: PENDING, not yet art-directed. Batch-100 items covered so far: 1, 3, 6, 8, 11, 13, 15, 19, 21, 24, 30, 33, 39, 41, 42, 45, 51, 54, 56, 61, 67, 74, 76, 78, 81, 89, 91, 93, 97, 98, 99 (33/100). Cowork's own instruction on each bundle: do not re-propose these items.
-NEXT_ACTOR: Code — deep Design-integrated implementation pass
-NEXT_ACTION: read handoffs/AROMIA_CODE_DEEP_DESIGN_INTEGRATION_2026-09-06.md and execute it end-to-end. Treat AROMIA_DESIGN_SYSTEM.md and AROMIA_VISUAL_DIRECTION_SYSTEM.md as current evidence/contracts that may themselves be corrected if rendered implementation evidence warrants it.
-BLOCKERS: NONE for the Code/Design pass. Existing independent rights blockers for uncleared perfumer portraits and separate SubBatch 01/02A workflow remain unchanged.
+NEXT_ACTOR: Code — deep Design pass, Tanda C (or ChatGPT/Publisher first if the typographic-scale migration is to be authorized)
+NEXT_ACTION: read handoffs/AROMIA_CODE_DEEP_DESIGN_CLOSEOUT_2026-09-07.md, then audits/AROMIA_DEEP_DESIGN_INTEGRATION_AUDIT_2026-09-06.md §6 (Tanda C) and §9 (corrections). Execute Tanda C from rendered evidence. The Omán hero recomposition (§9.1) and the --type-* migration are art-direction calls: implement Tanda C freely, but flag those two for Publisher/Design unless rendered evidence makes the direction unambiguous. Separately, the SubBatch 01 runtime P0 needs an explicit owner — it is editorial-pipeline, not Design.
+BLOCKERS: SUBBATCH_01_RUNTIME_P0 blocks the nine orphaned SubBatch 01 stories from being reachable; it does NOT block Tanda C. Rights blockers for uncleared perfumer portraits unchanged. 02A ingest into the real renderer still pending. Typographic migration blocked on art-direction sign-off (by design, not by defect).
 ```
 
 ## Mandatory turn-closure rule
