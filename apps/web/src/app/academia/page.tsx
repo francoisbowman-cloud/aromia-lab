@@ -139,7 +139,11 @@ export default function SaberPage() {
             {materialStrip.map((material,index)=> {
               return <Link key={material.name} href={material.href} className={`group min-w-0 border-line py-4 ${index % 2 === 0 ? "pr-2" : "pl-2"} sm:px-2 lg:border-r lg:px-3 lg:last:border-r-0`}>
                 <figure>
-                  <div className="relative aspect-[4/5] overflow-hidden bg-soft">
+                  {/* Cuadrado y no 4/5: la tira mezcla fuentes apaisadas (bergamota 1.33,
+                      pachuli 1.50) con una vertical (salvia 0.75). El marco vertical
+                      descartaba hasta el 47% del ancho de las apaisadas; el cuadrado
+                      reparte el recorte y ninguna pierde su motivo. */}
+                  <div className="relative aspect-square overflow-hidden bg-soft">
                     <Image src={material.src} alt={material.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" style={{objectFit:"cover"}} />
                   </div>
                   <figcaption className="pt-3">

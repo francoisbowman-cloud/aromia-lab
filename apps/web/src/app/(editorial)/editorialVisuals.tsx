@@ -29,6 +29,8 @@ export interface VisualSlot {
   quality?: number;
   alt: string;
   caption?: string;
+  /** Atribucion visible para el lector. CC BY / BY-SA la exigen; provenance sola no alcanza porque nunca se renderiza. */
+  credit?: string;
   provenance?: string;
   placeholderLabel: string;
 }
@@ -36,6 +38,7 @@ export interface VisualSlot {
 export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   "ambroxan-material-interpretive": {
     id: "ambroxan-material-interpretive",
+    credit: "Salvia sclarea. Foto: Llez · Wikimedia Commons · CC BY-SA 3.0",
     type: "interpretive",
     present: true,
     file: "/editorial-v1/clary-sage-documentary.jpg",
@@ -63,6 +66,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   },
   "ropion-overdose-interpretive": {
     id: "ropion-overdose-interpretive",
+    credit: "Foto: Jez Timms · Wikimedia Commons · CC0 1.0",
     type: "interpretive",
     present: true,
     file: "/editorial-v1/red-rose-interpretive.jpg",
@@ -75,6 +79,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
   },
   "amouage-material-density-interpretive": {
     id: "amouage-material-density-interpretive",
+    credit: "Jabal Akhdar, Omán. Foto: Ontheroadom · Wikimedia Commons · CC BY-SA 4.0",
     type: "interpretive",
     present: true,
     file: "/editorial-v1/oman-place-documentary.jpg",
@@ -125,6 +130,10 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
       "Espacio reservado para imagen documental de Boswellia sacra (Dhofar, Omán), pendiente de descarga con procedencia.",
   },
 };
+
+export function visualCredit(slotId: string) {
+  return EDITORIAL_V1_SLOTS[slotId]?.credit ?? null;
+}
 
 interface VisualFieldProps {
   slotId: string;

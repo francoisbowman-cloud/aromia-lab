@@ -431,3 +431,87 @@ estilos, en silencio y sin fallar el build.
 Verificación: la salida de Tailwind pasó de **1 byte** a **92.449 bytes** desde
 la raíz, y es ahora byte a byte idéntica lanzada desde cualquiera de los dos
 directorios. `tsc` limpio, `next lint` limpio, `next build` completo.
+
+---
+
+## 9. Correcciones a esta auditoría, halladas al implementar
+
+Registradas acá en vez de editar los hallazgos originales, para que quede el
+rastro de qué se afirmó y qué resultó ser al mirarlo de cerca.
+
+### 9.1 El recorte de Omán: el diagnóstico estaba mal
+
+§4.4 decía que el recorte del paisaje de Jabal Akhdar «descarta ~57 % del ancho»
+y sugería que se perdía el motivo documental. La primera parte es correcta; la
+segunda no.
+
+El marco del hero de historia es **más alto** que la proporción de la fuente
+(columna ~0,73 contra fuente 1,78), así que `object-fit: cover` recorta en
+**horizontal**, no en vertical: se muestra la altura completa. La sierra —la
+evidencia documental— **sí está visible**, en la banda inferior. Lo que se pierde
+es la amplitud panorámica, no el sujeto.
+
+Consecuencia práctica: `object-position` no puede arreglarlo, porque no hay
+desborde vertical que reencuadrar. Se probó un `objectPosition: 50% 82%` y era un
+no-op; se revirtió en vez de dejar configuración muerta en el registro de slots.
+
+El arreglo real es de composición —que una fuente de 1,78 no caiga en una columna
+de 0,73— y es una decisión de dirección de arte, no un ajuste. Queda abierto.
+
+### 9.2 Los retratos sí llevan atribución
+
+§4.5 marcaba los retratos de perfumistas entre las figuras sin `figcaption` y
+dejaba en duda si la atribución se rendía. Se confirma que **sí**:
+`PerfumerPortrait.tsx` renderiza `portraitCredit` como `figcaption`. Lo que la
+métrica contaba eran otras imágenes de esas páginas. `PERSONAS_RIGHTS_READY` es
+correcto.
+
+### 9.3 Hallazgo nuevo: dos imágenes CC BY-SA sin atribución visible en Home
+
+No estaba en la auditoría original y es más serio que el resto de §4.5, porque no
+es estético sino de licencia.
+
+Home mostraba dos fotografías **CC BY-SA** sin ningún crédito a la vista:
+
+- `oman-place-documentary.jpg` — Ontheroadom — **CC BY-SA 4.0**
+- `clary-sage-documentary.jpg` — Llez — **CC BY-SA 3.0 / GFDL**
+
+El registro de slots tenía el dato en un campo `provenance`, pero ese campo
+**nunca se renderiza**: es un registro interno. CC BY y CC BY-SA exigen que la
+atribución sea visible para quien mira la obra.
+
+Corregido: se añadió un campo `credit` explícito al slot, un helper
+`visualCredit()` y una línea de crédito bajo cada imagen de portada.
+
+### 9.4 La medición de contraste era optimista
+
+La sonda leía `getComputedStyle(el).color` sin considerar la **opacidad
+acumulada** de los ancestros. Varias piezas de metadata se pintan con
+`opacity: .6` sobre `var(--ink)`, lo que da un color percibido bastante más claro
+que el declarado.
+
+Con la sonda corregida aparecieron tres casos que el barrido original había dado
+por buenos, todos de 10 px al 60 %:
+
+| Elemento | Contraste real |
+|---|---|
+| `.story-close-related-kicker` | 4,13:1 |
+| `.ropion-omission-label` | 4,14:1 |
+| `.ev1-cover-media-note` | ~4,3:1 |
+
+Los tres quedan por debajo del 4,5:1 de AA. Corregidos pasándolos a
+`var(--muted)`, que pasa en ambos temas, en vez de simular gris con opacidad.
+
+Las reglas con `opacity` de .66 a .7 se midieron y **pasan**; se dejaron como
+están. No se hizo un reemplazo masivo de opacidades.
+
+### 9.5 La deuda tipográfica es mayor que la reportada
+
+§4.3 contaba 30 tamaños display distintos en un viewport. Medido sobre el código,
+la deuda real es:
+
+- **36 fórmulas `clamp()` distintas** de `font-size` en CSS;
+- **37 valores `text-[Npx]` distintos de 28 px para arriba** en TSX;
+- fórmulas duplicadas que sólo difieren en un espacio.
+
+Unas 73 decisiones independientes de tamaño donde el contrato pide cuatro roles.

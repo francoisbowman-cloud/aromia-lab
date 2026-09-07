@@ -73,6 +73,33 @@
   --aromia-texture-strong: .72;
   --aromia-texture-medium: .62;
   --aromia-texture-soft: .48;
+
+  /*
+   * Escala tipográfica editorial.
+   *
+   * AROMIA_VISUAL_DIRECTION_SYSTEM.md §4 declara cuatro roles repetidos
+   * (Display, Deck, Body, Metadata) y pide no inventar estilos nuevos para
+   * resolver una página. La implementación se había ido al otro lado: la
+   * auditoría del 6/09 midió 36 fórmulas clamp() distintas en CSS y 37 valores
+   * text-[Npx] distintos de 28px para arriba en TSX, con fórmulas duplicadas
+   * que sólo difieren en un espacio.
+   *
+   * Estos pasos salen de los grupos que ya existen en el sitio, no de una
+   * escala inventada: son los valores dominantes de cada rol. Existen para que
+   * el trabajo nuevo y las superficies que se toquen los consuman.
+   *
+   * NO migrar en masa: AROMIA_DESIGN_SYSTEM.md lo prohíbe explícitamente
+   * ("Do not perform mass token replacement merely for purity"), y colapsar los
+   * 73 tamaños actuales cambia cómo se ve el sitio, que es una decisión de
+   * dirección de arte y no de refactor.
+   */
+  --type-display-1: clamp(54px, 6.8vw, 112px);
+  --type-display-2: clamp(42px, 5vw, 76px);
+  --type-display-3: clamp(30px, 4vw, 58px);
+  --type-display-4: clamp(24px, 2.2vw, 34px);
+  --type-deck: clamp(19px, 1.6vw, 27px);
+  --type-body: clamp(16px, 1.1vw, 18px);
+  --type-metadata: 11px;
 }
 
 [data-theme="dark"] {
