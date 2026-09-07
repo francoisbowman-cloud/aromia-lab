@@ -65,7 +65,7 @@ export const EDITORIAL_V1_SLOTS: Record<string, VisualSlot> = {
     id: "ropion-overdose-interpretive",
     type: "interpretive",
     present: true,
-    file: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Blood-red_rose_up_close_%28Unsplash%29.jpg",
+    file: "/editorial-v1/red-rose-interpretive.jpg",
     quality: 95,
     alt: "Primer plano fotográfico de una rosa rojo profundo, usada como imagen editorial del volumen floral asociado a Dominique Ropion.",
     provenance:
@@ -148,8 +148,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
     );
   }
 
-  const isExternal = /^https?:\/\//.test(slot.file);
-
   if (slot.width && slot.height) {
     return (
       <figure className={`${className} ev1-doc-figure`}>
@@ -161,7 +159,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
           height={slot.height}
           quality={slot.quality}
           sizes={sizes ?? "100vw"}
-          unoptimized={isExternal}
         />
         {slot.caption ? <figcaption>{slot.caption}</figcaption> : null}
       </figure>
@@ -176,7 +173,6 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         fill
         quality={slot.quality}
         sizes={sizes ?? "100vw"}
-        unoptimized={isExternal}
         style={{ objectFit: "cover" }}
       />
     </figure>

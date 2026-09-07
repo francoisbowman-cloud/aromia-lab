@@ -78,11 +78,11 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
           <span>{index == null ? "Aromia" : String(index + 1).padStart(2, "0")}</span>
         </div>
 
-        <h3 className={`mt-2 max-w-[13ch] font-display font-medium leading-[.94] tracking-[-.03em] text-ink transition-colors group-hover:text-[#5a6b54] sm:mt-3 ${titleClass}`}>
+        <h3 className={`mt-2 max-w-[13ch] font-display font-medium leading-[.94] tracking-[-.03em] text-ink transition-colors group-hover:text-[var(--aromia-editorial-accent)] sm:mt-3 ${titleClass}`}>
           {perfume.nombre}
         </h3>
 
-        <p className="mt-3 font-plex text-[9px] uppercase tracking-[.12em] text-[#5a6b54] sm:mt-4 sm:text-[10px]">
+        <p className="mt-3 font-plex text-[9px] uppercase tracking-[.12em] text-[var(--aromia-editorial-accent)] sm:mt-4 sm:text-[10px]">
           {family ?? perfume.concentracion ?? "Objeto olfativo"}
         </p>
 

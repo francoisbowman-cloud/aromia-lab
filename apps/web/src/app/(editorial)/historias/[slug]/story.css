@@ -121,3 +121,21 @@ figure.story-visual img,figure.story-interruption img{object-fit:cover}
     padding:34px 20px 38px
   }
 }
+
+/* Los bloques de color de cada historia se escribieron sólo en claro: fijaban un
+   fondo cálido sin fijar el texto. En tema oscuro el texto sí se aclara y el
+   fondo no, así que quedaba claro sobre claro (medido en 1,03:1 en el titular de
+   "Lo que decidió no usar"). Estas contrapartidas conservan el rol editorial del
+   bloque —una superficie tintada que se despega del papel— en vez de devolverlo
+   al fondo base. .ropion .section-2 no aparece acá porque ya declaraba su propio
+   par fondo/texto y funciona en ambos temas. */
+[data-theme="dark"] .ambroxan .section-2{background:#191b18}
+[data-theme="dark"] .ropion .section-3{background:#17100f}
+[data-theme="dark"] .amouage .section-1{background:#1b1815}
+[data-theme="dark"] .amouage .section-4{background:#131512}
+
+/* La trama de la interrupción se dibujaba con tinta oscura fija; sobre fondo
+   oscuro desaparecía. */
+[data-theme="dark"] .story-interruption{
+  background:repeating-linear-gradient(45deg,rgba(244,241,234,.04) 0 12px,rgba(244,241,234,.075) 12px 24px)
+}

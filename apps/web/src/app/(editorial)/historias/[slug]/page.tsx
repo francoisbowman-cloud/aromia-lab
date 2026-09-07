@@ -29,14 +29,14 @@ interface Story {
 
 const ROPION_MATERIALS = [
   {
-    src: "https://upload.wikimedia.org/wikipedia/commons/d/dc/Red_rose_close-up.jpg",
+    src: "/editorial-v1/rose-documentary.jpg",
     alt: "Primer plano documental de una rosa roja.",
     width: 2160,
     height: 1440,
     caption: "Rosa. Foto: Vatadoshu Phyto, Wikimedia Commons, CC0 1.0.",
   },
   {
-    src: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Patchouli.jpg",
+    src: "/editorial-v1/patchouli-documentary.jpg",
     alt: "Planta de pachulí, Pogostemon cablin, fotografiada en Seychelles.",
     width: 640,
     height: 427,
@@ -55,7 +55,6 @@ function RopionMaterialDiptych() {
             width={material.width}
             height={material.height}
             sizes="(max-width: 800px) 100vw, 24vw"
-            unoptimized
           />
           <figcaption>{material.caption}</figcaption>
         </figure>

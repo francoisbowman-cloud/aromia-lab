@@ -25,7 +25,7 @@ const STORY_VISUALS: Record<string, { src: string; alt: string; objectPosition?:
     objectPosition: "center",
   },
   "el-perfumista-que-no-teme-exagerar": {
-    src: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Blood-red_rose_up_close_%28Unsplash%29.jpg",
+    src: "/editorial-v1/red-rose-interpretive.jpg",
     alt: "Rosa rojo profundo, imagen editorial asociada al trabajo floral de Dominique Ropion.",
     objectPosition: "center",
   },
@@ -45,7 +45,6 @@ function StoryVisual({
 }) {
   const visual = STORY_VISUALS[item.slug];
   if (!visual) return null;
-  const external = /^https?:\/\//.test(visual.src);
 
   return (
     <figure className={`relative overflow-hidden bg-soft ${className}`}>
@@ -54,7 +53,6 @@ function StoryVisual({
         alt={visual.alt}
         fill
         sizes="(max-width: 900px) 100vw, 62vw"
-        unoptimized={external}
         style={{ objectFit: "cover", objectPosition: visual.objectPosition ?? "center" }}
       />
     </figure>
@@ -91,7 +89,10 @@ export function EditorialArchive({ items }: { items: EditorialIndexItem[] }) {
         {!lead ? <div className="flex min-h-[320px] items-center justify-center border-y border-line"><p className="font-sans text-sm text-muted">Todavía no hay historias en este territorio.</p></div> : <>
           {leadHasVisual ? (
             <Link href={lead.href} className="group grid gap-0 border-b border-line pb-14 lg:grid-cols-[1.45fr_.85fr] lg:items-stretch lg:pb-20">
-              <StoryVisual item={lead} className="aspect-[4/3] min-h-[360px] lg:aspect-auto lg:min-h-[620px]" />
+              {/* w-full es necesario: aspect-[4/3] junto a min-h-[360px] le da a la
+                  figura un ancho intrínseco de 480px y, como ítem de grid, no baja
+                  de ahí — desbordaba el documento 110px a 390 y 70px a 430. */}
+              <StoryVisual item={lead} className="w-full aspect-[4/3] min-h-[360px] lg:aspect-auto lg:min-h-[620px]" />
               <div className="flex flex-col justify-end border-line pt-8 lg:border-l lg:pl-10 lg:pt-0">
                 <div className="font-plex text-xs uppercase tracking-[.14em] text-gold-contrast">{lead.territory} · Lectura 01</div>
                 <h2 className="mt-5 max-w-[12ch] font-display text-[48px] leading-[.92] tracking-[-.045em] text-ink transition group-hover:opacity-70 sm:text-[60px] lg:text-[72px]">{lead.title}</h2>

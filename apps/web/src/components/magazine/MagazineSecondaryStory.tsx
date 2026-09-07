@@ -28,8 +28,8 @@ export function MagazineSecondaryStory({ article, isFirst }: { article: Article;
         )}
       </div>
       <div className="py-5">
-        <p className="font-plex text-xs uppercase tracking-[.13em] text-[#5a6b54] dark:text-[#b8c5b3]">{CATEGORIA_LABEL[article.categoria]}</p>
-        <h3 className="mt-3 max-w-[16ch] font-display text-[27px] leading-[1.02] tracking-[-.025em] text-ink transition-colors group-hover:text-[#5a6b54]">{article.titulo}</h3>
+        <p className="font-plex text-xs uppercase tracking-[.13em] text-[var(--aromia-editorial-accent)]">{CATEGORIA_LABEL[article.categoria]}</p>
+        <h3 className="mt-3 max-w-[16ch] font-display text-[27px] leading-[1.02] tracking-[-.025em] text-ink transition-colors group-hover:text-[var(--aromia-editorial-accent)]">{article.titulo}</h3>
         <span className="mt-4 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-muted transition group-hover:text-ink">Abrir →</span>
       </div>
     </Link>
