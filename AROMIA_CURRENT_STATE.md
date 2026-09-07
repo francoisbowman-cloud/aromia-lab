@@ -23,11 +23,11 @@ A meaningful turn is not operationally complete until the next actor can continu
 ## Current relay
 
 ```text
-STATE_VERSION: 44
+STATE_VERSION: 45
 UPDATED_AT: 2026-09-06
-LAST_ACTOR: ChatGPT — Art Direction / Code / QA / Production
-LAST_ACTION: completed the full visual-direction pass requested by the Publisher. Formalized the compact canonical composition contract in `AROMIA_VISUAL_DIRECTION_SYSTEM.md`, recorded the full audit in `audits/AROMIA_VISUAL_DIRECTION_FULL_AUDIT_2026-09-06.md`, recomposed Home from repetitive image/text bands into an editorial cover with masthead, dominant lead spread, asymmetric supporting stories, typographic index and direct Discovery family routes; moved real perfumer portrait credits out of photography into normal document flow; improved Discovery family signals to prefer canonical family pages; added a deterministic internal-link audit to Strict Audit CI. The new link gate immediately found and forced removal of a real retired `/catalogo` route in legacy TasteLanding. PR #148 merged to main as `de3ed9db40ca964f2a0814c92fd12985b9cab957`. GitHub v2.0 CI run 34043989452 and Aromia Strict Audit run 34043989456 both completed SUCCESS. Railway production deployment f9bb4d4d-5c23-46f6-aeaa-9fda8ef110bd completed SUCCESS on the same commit. No generated/quarantined publication image was ingested and PR #145 / SubBatch 01 asset 02A was not modified.
-ACTIVE_OBJECTIVE: preserve the production baseline; integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener” (do not advance visual generation to 02B yet); separately, advance sub-batches 03/04 through ART_DIRECTION once merged, and let Cowork continue with the next sub-batch (batch-100 has 67 items left unwritten).
+LAST_ACTOR: ChatGPT — Publisher relay
+LAST_ACTION: Publisher approved a second full-site implementation pass led by Code with substantially higher rigor and explicit Design integration. Persisted the executable handoff at `handoffs/AROMIA_CODE_DEEP_DESIGN_INTEGRATION_2026-09-06.md`. This directive intentionally does not cap Code to the previous PR #148 composition choices, component boundaries or five-archetype implementation; PR #148 is the baseline, not the ceiling. Code is authorized to challenge/refactor public-facing composition, tokens, primitives, page structures, responsive behavior and legacy surfaces when rendered evidence justifies it, while preserving actual product/legal/publication constraints.
+ACTIVE_OBJECTIVE: Code executes the deep Design-integrated public-surface audit and implementation pass from the repository handoff, using rendered evidence across the required viewport matrix, then runs CI/QA, merges when green, verifies Railway production and persists the next relay. preserve the production baseline; integrate Publisher-approved SubBatch 01 asset 02A into the real article renderer for “Comprar para oler o comprar para tener” (do not advance visual generation to 02B yet); separately, advance sub-batches 03/04 through ART_DIRECTION once merged, and let Cowork continue with the next sub-batch (batch-100 has 67 items left unwritten).
 ACTIVE_BRANCH: main
 FUNCTIONAL_BASELINE_SHA: de3ed9db40ca964f2a0814c92fd12985b9cab957
 LATEST_VISUAL_ASSET_INGEST_SHA: 1a3de3c9db311ea441555bf7df2ff00f92a397f0
@@ -78,9 +78,9 @@ VISUAL_ASSET_02A_STATUS: PUBLISHER_APPROVED / PASS / READY_FOR_INGEST — extern
 VISUAL_ASSET_02A_HANDOFF: handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md
 CURRENT_GENERATION_CONTEXT: 02A generation completed and approved; no further generation authorized in this turn. 02B is explicitly paused.
 EDITORIAL_SUBBATCHES_INGESTED: 01 (9, PR #136 merged), 03 (10), 04 (11) — 03/04 ingested to drafts/ pending merge, EDITORIAL: READY / ART_DIRECTION: PENDING, not yet art-directed. Batch-100 items covered so far: 1, 3, 6, 8, 11, 13, 15, 19, 21, 24, 30, 33, 39, 41, 42, 45, 51, 54, 56, 61, 67, 74, 76, 78, 81, 89, 91, 93, 97, 98, 99 (33/100). Cowork's own instruction on each bundle: do not re-propose these items.
-NEXT_ACTOR: Code for the 02A visual-asset ingest (primary, see below). In parallel, non-blocking: Art Direction for sub-batches 03/04 once merged; Cowork may continue with the next sub-batch (67 items of batch-100 remain unwritten).
-NEXT_ACTION: read handoffs/AROMIA_VISUAL_ASSET_02A_HANDOFF_2026-09-04.md; obtain the approved JPEG, verify the recorded SHA256, ingest it at the canonical asset path, integrate it into the article “Comprar para oler o comprar para tener”, preserve the intended landscape/mobile crop relationship, and run browser QA. Do not generate or implement 02B yet.
-BLOCKERS: 02A binary transport only — the approved JPEG is external to the repository and must be transported to Code, then checksum-verified. No creative blocker. 02B remains intentionally paused. Separate rights blockers for uncleared perfumer portraits remain unchanged.
+NEXT_ACTOR: Code — deep Design-integrated implementation pass
+NEXT_ACTION: read handoffs/AROMIA_CODE_DEEP_DESIGN_INTEGRATION_2026-09-06.md and execute it end-to-end. Treat AROMIA_DESIGN_SYSTEM.md and AROMIA_VISUAL_DIRECTION_SYSTEM.md as current evidence/contracts that may themselves be corrected if rendered implementation evidence warrants it.
+BLOCKERS: NONE for the Code/Design pass. Existing independent rights blockers for uncleared perfumer portraits and separate SubBatch 01/02A workflow remain unchanged.
 ```
 
 ## Mandatory turn-closure rule
