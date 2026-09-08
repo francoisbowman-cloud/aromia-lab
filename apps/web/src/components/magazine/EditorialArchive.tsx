@@ -114,11 +114,13 @@ export function EditorialArchive({ items }: { items: EditorialIndexItem[] }) {
             {rest.map((item, index) => {
               const showVisual = SPARSE_VISUAL_SLUGS.has(item.slug) && Boolean(STORY_VISUALS[item.slug]);
               return (
-                <Link key={`${item.source}-${item.slug}`} href={item.href} className={`group border-b border-line py-12 ${index % 3 === 1 ? "lg:translate-y-8" : ""}`}>
+                <Link key={`${item.source}-${item.slug}`} href={item.href} className="group border-b border-line py-12">
                   {showVisual ? <StoryVisual item={item} className="mb-8 aspect-[4/5] min-h-[320px]" /> : null}
-                  <div className="flex items-center justify-between gap-4 font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{item.territory}</span><span>{String(index + 2).padStart(2, "0")}</span></div>
-                  <h3 className="mt-7 max-w-[12ch] font-display text-[34px] leading-[.96] tracking-[-.035em] text-ink transition group-hover:opacity-70 lg:text-[40px]">{item.title}</h3>
-                  <p className="mt-5 max-w-[38ch] font-sans text-sm leading-6 text-muted">{item.summary}</p>
+                  {/* Índice editorial: el número lleva el peso, el titular deja de
+                      competir en cada tarjeta (auditoría §4.8, arquetipo C). */}
+                  <div className="flex items-baseline justify-between gap-4 font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{item.territory}</span><span className="font-display text-lg tabular-nums text-ink">{String(index + 2).padStart(2, "0")}</span></div>
+                  <h3 className="mt-6 max-w-[16ch] font-display text-[25px] leading-[1] tracking-[-.02em] text-ink transition group-hover:opacity-70 lg:text-[27px]">{item.title}</h3>
+                  <p className="mt-4 max-w-[38ch] font-sans text-sm leading-6 text-muted">{item.summary}</p>
                   <span className="mt-6 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">Continuar →</span>
                 </Link>
               );

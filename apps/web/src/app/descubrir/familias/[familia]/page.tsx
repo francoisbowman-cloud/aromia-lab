@@ -53,9 +53,9 @@ export default async function FamiliaSheet({ params }: { params: { familia: stri
     <main className="min-h-screen bg-paper text-ink">
       <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
         <nav aria-label="Ruta" className="mb-8 flex flex-wrap items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted">
-          <Link href="/descubrir" className="transition hover:text-ink">Discovery</Link>
+          <Link href="/descubrir" className="breadcrumb-link">Discovery</Link>
           <span>／</span>
-          <Link href="/descubrir/familias" className="transition hover:text-ink">Familias</Link>
+          <Link href="/descubrir/familias" className="breadcrumb-link">Familias</Link>
           <span>／</span>
           <span className="text-ink">{family.name}</span>
         </nav>

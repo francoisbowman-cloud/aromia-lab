@@ -15,7 +15,7 @@ export default function QuizPage() {
       <section className="mx-auto grid min-h-[calc(100vh-68px)] max-w-[1440px] grid-cols-1 lg:grid-cols-[.78fr_1.22fr]">
         <div className="flex flex-col justify-between px-6 py-10 lg:px-10 lg:py-14">
           <div>
-            <div className="flex items-center gap-4 font-plex text-xs uppercase tracking-[.16em] text-muted"><Link href="/descubrir" className="transition hover:text-ink">Discovery</Link><span className="h-px w-12 bg-line"/><span>Inicio del mapa</span></div>
+            <div className="flex items-center gap-4 font-plex text-xs uppercase tracking-[.16em] text-muted"><Link href="/descubrir" className="breadcrumb-link">Discovery</Link><span className="h-px w-12 bg-line"/><span>Inicio del mapa</span></div>
             <p className="mt-12 font-plex text-xs uppercase tracking-[.16em] text-[var(--aromia-editorial-accent)]">Tu mapa olfativo</p>
             <h1 className="mt-5 max-w-[9ch] font-display text-[50px] font-medium leading-[.94] tracking-[-.04em] text-ink sm:text-[58px] lg:text-[70px]">¿Qué perfume eres?</h1>
             <p className="mt-7 max-w-[38ch] font-sans text-base leading-7 text-muted">Seis decisiones intuitivas para darle una primera dirección a tu mapa. Después puedes seguir afinándolo simplemente explorando Aromia.</p>

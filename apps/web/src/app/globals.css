@@ -113,6 +113,25 @@ body { color: var(--text); background: var(--bg); font-family: var(--font-body),
   .nav-link:hover::after, .nav-link[aria-current="page"]::after { left: 0; right: 0; }
   .nav-link:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; border-radius: 2px; }
 
+  /* Enlace de salto dentro de un índice editorial (p. ej. la nav de Saber).
+     A diferencia de .nav-link, el subrayado es permanente: junto a etiquetas
+     decorativas idénticas en mayúsculas, lo navegable tiene que leerse como
+     navegable en reposo, no sólo al pasar el cursor (auditoría §4.10). */
+  .jump-link { display: inline-flex; align-items: center; gap: .45em; min-height: 40px; color: var(--ink); border-bottom: 1px solid currentColor; transition: color .2s ease; }
+  .jump-link::after { content: "\2192"; font-size: .9em; opacity: .55; transition: transform .18s ease; }
+  .jump-link:hover { color: var(--aromia-editorial-accent); }
+  .jump-link:hover::after { transform: translateX(3px); }
+  .jump-link:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; border-radius: 2px; }
+
+  /* Los breadcrumbs son enlaces de texto en línea: min-height no les crea área
+     táctil (una caja inline lo ignora). En puntero grueso se vuelven inline-flex
+     para alcanzar los 44px (auditoría §4.11). */
+  .breadcrumb-link { transition: color .2s ease; }
+  .breadcrumb-link:hover { color: var(--ink); }
+  @media (pointer: coarse) {
+    .breadcrumb-link { display: inline-flex; align-items: center; min-height: 44px; }
+  }
+
   .aromia-scene-macro { background: radial-gradient(circle at 20% 30%, rgba(214,196,86,.55), transparent 42%), radial-gradient(circle at 78% 20%, rgba(224,168,84,.62), transparent 40%), radial-gradient(circle at 13% 68%, rgba(178,122,74,.5), transparent 42%), radial-gradient(circle at 80% 76%, rgba(255,250,240,.75), transparent 38%), radial-gradient(ellipse 60% 45% at 40% 22%, rgba(255,252,244,.65), transparent 60%), linear-gradient(155deg,#f7f2e6 0%,#efe6d2 55%,#f2ebda 100%); }
   [data-theme="dark"] .aromia-scene-macro { background: radial-gradient(circle at 20% 30%, rgba(196,181,84,.5), transparent 40%), radial-gradient(circle at 78% 20%, rgba(200,168,107,.5), transparent 40%), radial-gradient(circle at 13% 68%, rgba(122,70,48,.48), transparent 40%), radial-gradient(circle at 80% 76%, rgba(233,220,192,.34), transparent 38%), linear-gradient(160deg,#0e0c0a,#100b08); }
   .aromia-scene-reveal { background: radial-gradient(ellipse 24% 46% at 74% 54%, rgba(255,255,255,.78), transparent 68%), radial-gradient(ellipse 34% 28% at 72% 66%, rgba(196,137,78,.34), transparent 70%), radial-gradient(circle at 82% 28%, rgba(224,168,84,.46), transparent 33%), radial-gradient(circle at 58% 74%, rgba(214,196,86,.3), transparent 38%), linear-gradient(145deg,#f8f3e8 0%,#eee4d1 58%,#f4ecdf 100%); }
