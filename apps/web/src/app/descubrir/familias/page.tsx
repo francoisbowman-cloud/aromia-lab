@@ -21,7 +21,7 @@ export default async function FamiliasPage() {
     <main className="min-h-screen bg-paper text-ink">
       <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
         <nav aria-label="Ruta" className="mb-8 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted">
-          <Link href="/descubrir" className="transition hover:text-ink">Discovery</Link>
+          <Link href="/descubrir" className="breadcrumb-link">Discovery</Link>
           <span>／</span>
           <span className="text-ink">Familias</span>
         </nav>
@@ -45,8 +45,8 @@ export default async function FamiliasPage() {
                 href={`/descubrir/familias/${family.slug}`}
                 className="group grid gap-4 py-8 lg:grid-cols-[64px_1fr_1.1fr_auto] lg:items-baseline lg:gap-8"
               >
-                <span className="font-plex text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
-                <h2 className="font-display text-[30px] leading-none tracking-[-.03em] text-ink transition group-hover:opacity-70 sm:text-[38px]">
+                <span className="font-plex text-base tabular-nums text-ink/70">{String(index + 1).padStart(2, "0")}</span>
+                <h2 className="font-display text-[25px] leading-none tracking-[-.03em] text-ink transition group-hover:opacity-70 sm:text-[27px]">
                   {family.name}
                 </h2>
                 <p className="max-w-[52ch] font-sans text-sm leading-6 text-muted">{family.smellsLike}</p>

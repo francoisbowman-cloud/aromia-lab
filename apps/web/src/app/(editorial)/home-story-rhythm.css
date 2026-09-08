@@ -55,7 +55,10 @@
 
 .ev1-cover-lead {
   display: grid;
-  grid-template-columns: 84px minmax(0, 1.55fr) minmax(340px, .85fr);
+  /* La columna de copy pasa de .85fr a .96fr y pierde padding lateral: en
+     pantallas anchas el deck caía a ~31 caracteres por línea (auditoría §4.9).
+     La columna de imagen sólo cede ~5%; su recomposición sigue abierta (§9.1). */
+  grid-template-columns: 84px minmax(0, 1.5fr) minmax(360px, .96fr);
   min-height: clamp(680px, 84vh, 940px);
   border-bottom: 1px solid var(--line);
 }
@@ -125,7 +128,7 @@
 }
 
 .ev1-cover-lead-copy {
-  padding: clamp(48px, 6vw, 92px) clamp(28px, 4.5vw, 72px);
+  padding: clamp(48px, 6vw, 92px) clamp(24px, 2.2vw, 40px);
   display: flex;
   flex-direction: column;
   justify-content: center;

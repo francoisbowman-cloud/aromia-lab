@@ -98,7 +98,7 @@ export default function SaberPage() {
       <header className="mx-auto max-w-[1320px] px-6 pb-12 pt-14 lg:px-10 lg:pb-20 lg:pt-24">
         <div className="grid gap-8 lg:grid-cols-[1.08fr_.72fr] lg:items-end">
           <div><p className="font-plex text-xs uppercase tracking-[.16em] text-[var(--aromia-editorial-accent)]">Saber</p><h1 className="mt-5 max-w-[11ch] font-display text-[54px] leading-[.9] tracking-[-.045em] sm:text-[68px] lg:text-[86px]">Entender cambia la manera de oler.</h1></div>
-          <div className="lg:justify-self-end"><p className="max-w-[43ch] font-sans text-base leading-7 text-muted">Estructura, familias, concentración e historia. No para convertir el perfume en una clase, sino para tener mejores preguntas cuando volvamos a olerlo.</p><nav className="mt-7 flex flex-wrap gap-x-6 gap-y-2 font-plex text-xs uppercase tracking-[.12em] text-muted" aria-label="Índice de Saber"><a href="#estructura" className="nav-link">Estructura</a><a href="#familias" className="nav-link">Familias</a><a href="#concentracion" className="nav-link">Concentración</a><a href="#historia" className="nav-link">Historia</a></nav></div>
+          <div className="lg:justify-self-end"><p className="max-w-[43ch] font-sans text-base leading-7 text-muted">Estructura, familias, concentración e historia. No para convertir el perfume en una clase, sino para tener mejores preguntas cuando volvamos a olerlo.</p><nav className="mt-7 flex flex-wrap gap-x-7 gap-y-3 font-plex text-xs uppercase tracking-[.12em]" aria-label="Índice de Saber"><a href="#estructura" className="jump-link">Estructura</a><a href="#familias" className="jump-link">Familias</a><a href="#concentracion" className="jump-link">Concentración</a><a href="#historia" className="jump-link">Historia</a></nav></div>
         </div>
       </header>
 
@@ -118,7 +118,7 @@ export default function SaberPage() {
                 {piramide.map((tier,index)=>(
                   <li key={tier.titulo} className="relative grid gap-4 border-b border-line py-7 last:border-b-0 sm:grid-cols-[84px_1fr_1fr] sm:items-start">
                     <span className="font-plex text-xs uppercase tracking-[.12em] text-muted">{tier.etiqueta}</span>
-                    <div><p className="font-plex text-[10px] uppercase tracking-[.14em] text-gold-contrast">0{index+1} · {tier.rol}</p><h3 className="mt-2 font-display text-[30px] leading-none">{tier.titulo}</h3></div>
+                    <div><p className="font-plex text-[10px] uppercase tracking-[.14em] text-gold-contrast">0{index+1} · {tier.rol}</p><h3 className="mt-2 font-display text-[22px] leading-none">{tier.titulo}</h3></div>
                     <p className="font-sans text-sm leading-6 text-muted">{tier.texto}</p>
                   </li>
                 ))}

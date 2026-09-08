@@ -23,7 +23,7 @@ export default async function PerfumistasPage() {
           <div className="flex justify-between font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{String(index + 1).padStart(2,"0")}</span><span>{profile.visibleCount} obras</span></div>
           <div className="mt-6 transition group-hover:opacity-90"><PerfumerPortrait name={profile.name} portrait={profile.portrait} portraitCredit={profile.portraitCredit} portraitCreditHref={profile.portraitCreditHref} era={profile.era} variant="card" /></div>
           <p className="mt-7 font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">{profile.era}</p>
-          <h2 className="mt-3 font-display text-[32px] leading-[.98] transition group-hover:opacity-70">{profile.name}</h2>
+          <h2 className="mt-3 font-display text-[25px] leading-[1] transition group-hover:opacity-70 lg:text-[27px]">{profile.name}</h2>
           <p className="mt-5 max-w-[32ch] font-sans text-sm leading-6 text-muted">{profile.signature}</p>
           <span className="mt-7 inline-flex min-h-11 items-center font-plex text-xs uppercase tracking-[.12em] text-[var(--aromia-editorial-accent)]">Explorar →</span>
         </Link>)}

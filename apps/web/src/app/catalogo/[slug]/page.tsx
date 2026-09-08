@@ -40,7 +40,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
 
       <div className="mx-auto max-w-[1520px] px-5 pt-8 sm:px-8 lg:px-12 lg:pt-10">
         <nav aria-label="Ruta de navegación" className="mb-6 flex flex-wrap items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted">
-          <Link href="/" className="transition hover:text-ink">Aromia</Link><span>／</span><Link href="/descubrir" className="transition hover:text-ink">Discovery</Link><span>／</span><span className="text-ink">{perfume.nombre}</span>
+          <Link href="/" className="breadcrumb-link">Aromia</Link><span>／</span><Link href="/descubrir" className="breadcrumb-link">Discovery</Link><span>／</span><span className="text-ink">{perfume.nombre}</span>
         </nav>
         <HeroHeader perfume={perfume}/>
       </div>

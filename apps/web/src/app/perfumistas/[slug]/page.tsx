@@ -35,7 +35,7 @@ export default async function PerfumerDetailPage({ params }: { params: { slug: s
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd(profile)) }} />
     <DiscoverySignal perfumerSlug={profile.slug} />
     <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
-      <div className="mb-5 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted"><Link href="/perfumistas" className="transition hover:text-ink">Personas</Link><span>／</span><span>{profile.era}</span></div>
+      <div className="mb-5 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted"><Link href="/perfumistas" className="breadcrumb-link">Personas</Link><span>／</span><span>{profile.era}</span></div>
       <div className="grid gap-9 pb-12 lg:grid-cols-[.5fr_1.5fr] lg:items-start">
         <PerfumerPortrait name={profile.name} portrait={profile.portrait} portraitCredit={profile.portraitCredit} portraitCreditHref={profile.portraitCreditHref} era={profile.era} variant="detail" />
         <div>
