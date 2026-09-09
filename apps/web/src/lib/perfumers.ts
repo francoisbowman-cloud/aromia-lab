@@ -17,6 +17,12 @@ export interface PerfumerProfile {
  * Editorial attribution index. Every relationship here is intentionally explicit:
  * we prefer an incomplete, reviewed index over inferring a perfumer from brand,
  * style or launch year. Perfumes without a verified attribution simply omit it.
+ *
+ * `perfumeSlugs` must contain slugs that exist in the published catalog — the
+ * `/perfumistas` listing counts only those. Verified works by these perfumers
+ * that are NOT yet in the Aromia catalog are left out on purpose; re-add them
+ * here when the perfume is added to the catalog (e.g. Kurkdjian's Grand Soir /
+ * Gentle Fluidity, Nagel's H24, Bisch's Delina Exclusif).
  */
 export const PERFUMERS: PerfumerProfile[] = [
   {
@@ -25,7 +31,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Contemporáneo",
     signature: "transparencia · volumen · contraste",
     bio: "Una escritura de gran claridad técnica que puede pasar de estructuras luminosas a densidades ambaradas sin perder precisión.",
-    perfumeSlugs: ["baccarat-rouge-540", "grand-soir", "gentle-fluidity-silver", "gentle-fluidity-gold", "for-her-edp", "burberry-her-edp"],
+    perfumeSlugs: ["baccarat-rouge-540-edp", "for-her-edp", "burberry-her-edp"],
   },
   {
     slug: "jacques-polge",
@@ -33,7 +39,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Moderno",
     signature: "floral · elegante · textural",
     bio: "Figura central de la perfumería francesa moderna, con una obra reconocible por su equilibrio entre estructura clásica y tactilidad contemporánea.",
-    perfumeSlugs: ["bleu-de-chanel-edt", "bleu-de-chanel-edp", "chance-eau-tendre", "allure-homme-sport"],
+    perfumeSlugs: ["bleu-de-chanel-edp", "chance-eau-tendre"],
   },
   {
     slug: "olivier-polge",
@@ -49,7 +55,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Contemporáneo",
     signature: "floral · intensidad · precisión",
     bio: "Conocido por fórmulas de gran presencia y una lectura muy controlada de flores, maderas y contrastes de alta proyección.",
-    perfumeSlugs: ["linterdit-edp", "invictus-edt", "la-vie-est-belle", "portrait-of-a-lady"],
+    perfumeSlugs: ["linterdit-edp", "invictus-edt", "la-vie-est-belle", "portrait-of-a-lady-edp"],
   },
   {
     slug: "anne-flipo",
@@ -65,7 +71,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Contemporáneo",
     signature: "impacto · flores · contraste",
     bio: "Una firma de alto impacto que suele amplificar materias reconocibles hasta convertirlas en gestos olfativos muy definidos.",
-    perfumeSlugs: ["delina", "delina-exclusif", "le-male-elixir", "hibiscus-mahajad"],
+    perfumeSlugs: ["delina"],
   },
   {
     slug: "alberto-morillas",
@@ -73,7 +79,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Moderno / contemporáneo",
     signature: "aire · limpieza · difusión",
     bio: "Maestro de la difusión y la sensación de espacio, con un repertorio que abarca frescos transparentes, florales y maderas pulidas.",
-    perfumeSlugs: ["daisy-edt", "acqua-di-gio-edt", "flower-by-kenzo"],
+    perfumeSlugs: ["daisy-edt", "acqua-di-gio-edt"],
     portrait: "/perfumistas/alberto-morillas.jpg",
     portraitCredit: "Foto: Mizensir · Wikimedia Commons · CC BY-SA 4.0",
     portraitCreditHref: "https://commons.wikimedia.org/wiki/File:Alberto_Morillas.jpg",
@@ -84,7 +90,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Moderno / contemporáneo",
     signature: "gourmand · contraste · legibilidad",
     bio: "Su lenguaje combina ideas inmediatamente legibles con estructuras refinadas, y ha sido decisivo en la evolución del gourmand moderno.",
-    perfumeSlugs: ["light-blue-edt", "black-opium-edp", "wanted-edt"],
+    perfumeSlugs: ["light-blue", "black-opium-edp", "wanted-edt"],
   },
   {
     slug: "nathalie-lorson",
@@ -92,7 +98,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Contemporáneo",
     signature: "madera · suavidad · profundidad",
     bio: "Una perfumería de contrastes suaves y fondos trabajados, donde maderas y texturas oscuras pueden convivir con aperturas muy accesibles.",
-    perfumeSlugs: ["black-opium-edp", "encre-noire-edt"],
+    perfumeSlugs: ["black-opium-edp"],
   },
   {
     slug: "frank-voelkl",
@@ -108,7 +114,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Contemporáneo",
     signature: "materia · contraste · intimidad",
     bio: "Su obra explora la materia con una mirada táctil y narrativa, construyendo tensión entre ingredientes familiares y giros inesperados.",
-    perfumeSlugs: ["for-her-edp", "h24-edt", "h24-edp"],
+    perfumeSlugs: ["for-her-edp"],
     portrait: "/perfumistas/christine-nagel.jpg",
     portraitCredit: "Foto: Comparfums1 · Wikimedia Commons · CC BY-SA 4.0",
     portraitCreditHref: "https://commons.wikimedia.org/wiki/File:Christine_Nagel.jpg",
@@ -119,7 +125,7 @@ export const PERFUMERS: PerfumerProfile[] = [
     era: "Contemporáneo experimental",
     signature: "materia · oscuridad · exceso controlado",
     bio: "Una aproximación radicalmente material y experimental, asociada a composiciones densas, táctiles y deliberadamente difíciles de reducir a una pirámide convencional.",
-    perfumeSlugs: ["black-afgano"],
+    perfumeSlugs: ["black-afgano-extrait"],
   },
 ];
 
