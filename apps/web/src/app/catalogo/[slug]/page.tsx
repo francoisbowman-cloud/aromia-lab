@@ -65,12 +65,14 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
         <PriceTable retailers={perfume.retailers ?? []} directLink={catalogBuyUrl(perfume.slug)} perfumeSlug={perfume.slug} perfumeNombre={perfume.nombre}/>
       </section>
 
-      <section className="border-y border-line bg-paper">
-        <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-          <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">04 / Comunidad</p><h2 className="mt-3 max-w-[13ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">Cómo lo viven otras personas.</h2></div>
-          <CommunityReviews ratingPromedio={perfume.rating_promedio} resenaSintetizada={perfume.resena_sintetizada}/>
-        </div>
-      </section>
+      {perfume.rating_promedio ? (
+        <section className="border-y border-line bg-paper">
+          <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+            <div className="mb-10"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">04 / Comunidad</p><h2 className="mt-3 max-w-[13ch] font-display text-[38px] font-medium leading-[.96] tracking-[-.035em] text-ink sm:text-[48px]">Cómo lo viven otras personas.</h2></div>
+            <CommunityReviews ratingPromedio={perfume.rating_promedio} resenaSintetizada={perfume.resena_sintetizada}/>
+          </div>
+        </section>
+      ) : null}
 
       <SimilarPerfumes sourceSlug={perfume.slug} results={similares} />
       <RelatedEditorial perfumeSlug={perfume.slug} articles={relacionados} />

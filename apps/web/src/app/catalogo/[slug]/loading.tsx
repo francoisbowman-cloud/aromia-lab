@@ -1,7 +1,6 @@
 import { HeroHeaderSkeleton } from "@/components/perfume/HeroHeader";
 import { PriceTableSkeleton } from "@/components/perfume/PriceTable";
 import { SkinEvolutionSkeleton } from "@/components/perfume/SkinEvolution";
-import { CommunityReviewsSkeleton } from "@/components/perfume/CommunityReviews";
 
 export default function Loading() {
   return (
@@ -13,7 +12,6 @@ export default function Loading() {
       <HeroHeaderSkeleton />
       <PriceTableSkeleton />
       <SkinEvolutionSkeleton />
-      <CommunityReviewsSkeleton />
     </main>
   );
 }

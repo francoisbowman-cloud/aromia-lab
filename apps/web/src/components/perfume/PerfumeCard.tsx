@@ -52,7 +52,7 @@ export function PerfumeCard({ perfume, variant = "catalog", index, trackingConte
         className={`relative block overflow-hidden outline-none ${mediaClass}`}
       >
         {layout === "monument" && index != null ? (
-          <span aria-hidden="true" className="absolute -right-2 top-1/2 z-0 -translate-y-1/2 font-display text-[clamp(96px,16vw,220px)] leading-none tracking-[-.08em] text-ink/[.028]">
+          <span aria-hidden="true" className="absolute -right-2 top-1/2 z-0 -translate-y-1/2 font-display text-[clamp(96px,16vw,220px)] leading-none tracking-[-.08em] text-ink opacity-[0.028]">
             {String(index + 1).padStart(2, "0")}
           </span>
         ) : null}

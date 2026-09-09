@@ -5,7 +5,7 @@ import { MagazineSecondaryStorySkeleton } from "./MagazineSecondaryStory";
 export function MagazineHubSkeleton() {
   return (
     <>
-      <div className="sticky top-0 z-40 border-b border-line bg-paper/[.88] backdrop-blur-md">
+      <div className="sticky top-0 z-40 border-b border-line bg-white/[0.88] backdrop-blur-md dark:bg-[#0a0a0a]/[0.88]">
         <nav className="mx-auto flex h-[66px] max-w-[1440px] items-center gap-8 overflow-x-auto whitespace-nowrap px-6 lg:gap-12 lg:px-10">
           {MAGAZINE_TABS.map((tab, i) => (
             <span
