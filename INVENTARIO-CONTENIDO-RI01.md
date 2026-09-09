@@ -79,7 +79,7 @@ de Amazon embebido en cada perfume puntual mencionado.
 |---|---|---|---|---|
 | **A** | 4-10 (Acto II) | **Ensayo largo, ~2.000 palabras**, sobre Baccarat Rouge 540: hype vs. mérito real. Ángulo observacional, no reseña de compra. Debe tener suficiente longitud y cambios de tempo para que Design pruebe `editorialOpening` (`overlap`), `fullBleedImage` (`immersive`), pausa y matriz sensorial. | BR540 ya en catálogo (`baccarat-rouge-540-edp`), con OVL. Datos de composición: verificar contra ficha oficial de Maison Francis Kurkdjian, no contra foros. | 🔴 Pendiente |
 | **B** | 11 (retrato) + 12 (cita) | **Perfil de Jean-Claude Ellena**, ~700-1.000 palabras + una cita destacada real para la pieza 12. | Construido **solo** sobre *Journal d'un parfumeur* / *The Diary of a Nose* y entrevistas on-record. Cada frase atribuida a Ellena: cita textual + fuente. Sin paráfrasis presentada como cita. | 🔴 Pendiente |
-| **C** | — (metadata) | Poblar `autor = "Redacción Aromia"` en los 15 artículos publicados. | Acción de datos vía `/admin/magazine`, no reescritura de contenido. La ejecuta Brey (o Code si Brey lo pide) — no es tarea de redacción. | 🔴 Pendiente |
+| **C** | — (metadata) | Poblar `autor = "Redacción Aromia"` en los 15 artículos publicados. | Acción de datos vía `PATCH /api/admin/articles/:id`, no reescritura de contenido. | ✅ **Hecho 2026-09-08** — 15/15 vía script `scratchpad/encargo-C-poblar-autor.py --apply`, verificado contra la API pública. |
 | **D** | 9 (matriz sensorial) + 13 (familia olfativa) | **Pieza de datos**: matriz/tabla derivada del catálogo (familia olfativa × género × notas dominantes) para un subconjunto curado de perfumes de la Issue. | Es dato, no imagen — PLAN §C pieza 9: "forzarlo a un primitive visual violaría el criterio". Cowork arma la selección y el texto de encuadre; los valores salen de la DB (Code puede exportar el subconjunto si hace falta). | 🔴 Pendiente |
 
 ---
@@ -117,7 +117,7 @@ que A, B y D existan con contenido real.
 ## 5. Próximo paso
 
 1. Cowork arranca los encargos **A**, **B**, **D** (borradores en `drafts/`).
-2. Brey ejecuta el encargo **C** (poblar `autor`).
+2. ~~Brey ejecuta el encargo **C** (poblar `autor`).~~ — hecho 2026-09-08.
 3. Design arranca Fase 1 sobre las 10 piezas no bloqueadas + arquitectura global.
 4. Cuando A/B/D estén, Design completa las 6 piezas restantes.
 5. Auditoría intermedia (PLAN §H, capa de número completo) antes de tocar código.
