@@ -7,3 +7,7 @@
 .env.*
 !.env.example
 reports/image-audits/*.tmp
+
+# Credenciales sueltas dejadas en la raíz para pasar un token a una sesión
+A.txt
+*.secret.txt
