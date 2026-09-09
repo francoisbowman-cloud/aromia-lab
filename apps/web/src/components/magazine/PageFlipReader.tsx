@@ -50,23 +50,23 @@ export function PageFlipReader({
         Cerrar ✕
       </button>
 
-      <div className="relative max-h-[calc(100dvh-3rem)] w-[min(1080px,94vw)] overflow-hidden">
+      <div className="relative flex h-[min(90dvh,880px)] w-[min(94vw,560px)] items-center justify-center">
         <HTMLFlipBook
           ref={bookRef}
           startPage={0}
           size="stretch"
-          width={480}
-          height={690}
+          width={440}
+          height={660}
           minWidth={280}
-          maxWidth={800}
-          minHeight={400}
-          maxHeight={900}
+          maxWidth={560}
+          minHeight={420}
+          maxHeight={880}
           drawShadow
-          flippingTime={reducedMotion ? 1 : 650}
+          flippingTime={reducedMotion ? 1 : 700}
           usePortrait
           startZIndex={30}
-          autoSize
-          maxShadowOpacity={0.3}
+          autoSize={false}
+          maxShadowOpacity={0.5}
           showCover={false}
           mobileScrollSupport={false}
           clickEventForward
@@ -95,12 +95,12 @@ export function PageFlipReader({
           {pages.map((page, i) => (
             <div
               key={i}
-              className="h-full overflow-hidden bg-[#f8f3e8] p-[clamp(28px,4vw,58px)] text-[#1b1712] shadow-[0_20px_70px_rgba(0,0,0,.3)]"
+              className="flex h-full flex-col overflow-hidden bg-[#f8f3e8] p-[clamp(26px,4vw,54px)] text-[#1b1712] shadow-[0_20px_70px_rgba(0,0,0,.3)]"
             >
               <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#8d7144]">
                 {page.kicker}
               </p>
-              <div className="mt-9 font-display text-[17px] leading-8 [&_blockquote]:my-6 [&_blockquote]:border-l-2 [&_blockquote]:border-[#b68a44] [&_blockquote]:pl-6 [&_blockquote]:text-[24px] [&_blockquote]:leading-[1.3] [&_h2]:mt-3 [&_h2]:text-[36px] [&_h2]:leading-none [&_p+p]:mt-5">
+              <div className="mt-7 flex-1 overflow-y-auto font-display text-[16px] leading-7 [&_blockquote]:my-5 [&_blockquote]:border-l-2 [&_blockquote]:border-[#b68a44] [&_blockquote]:pl-6 [&_blockquote]:text-[22px] [&_blockquote]:leading-[1.3] [&_h2]:mt-2 [&_h2]:text-[32px] [&_h2]:leading-none [&_p+p]:mt-4">
                 {page.blocks.map((block, bi) => (
                   <div key={bi} dangerouslySetInnerHTML={{ __html: block.html }} />
                 ))}

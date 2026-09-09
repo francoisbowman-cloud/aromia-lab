@@ -9,7 +9,7 @@ export interface ArticlePage {
   blocks: ArticleBlock[];
 }
 
-const CHARS_PER_PAGE = 550;
+const CHARS_PER_PAGE = 460;
 const DEFAULT_KICKER = "LECTURA";
 
 /**
