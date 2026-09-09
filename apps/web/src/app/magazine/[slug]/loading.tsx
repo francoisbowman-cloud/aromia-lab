@@ -9,8 +9,8 @@ export default function MagazineArticleLoading() {
 
       <div className="relative flex min-h-[500px] items-end overflow-hidden bg-soft lg:min-h-[650px]" aria-busy="true">
         <div className="mx-auto w-full max-w-[1180px] px-6 pb-14 lg:px-10 lg:pb-20">
-          <div className="h-16 w-2/3 animate-pulse rounded bg-line/40" />
-          <div className="mt-4 h-16 w-1/2 animate-pulse rounded bg-line/40" />
+          <div className="h-16 w-2/3 animate-pulse rounded bg-line" />
+          <div className="mt-4 h-16 w-1/2 animate-pulse rounded bg-line" />
         </div>
       </div>
 

@@ -82,7 +82,7 @@ export function PerformanceBars({
               <span className="font-sans text-sm text-ink">{METRIC_LABELS[key]}</span>
               <span className="font-sans text-xs text-muted">{nivelDescripcion(valor)}</span>
             </div>
-            <div className="relative h-1.5 overflow-hidden rounded-full bg-gold/15">
+            <div className="relative h-1.5 overflow-hidden rounded-full bg-[color:color-mix(in_srgb,var(--gold)_15%,transparent)]">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-gold-contrast to-gold transition-[width] duration-[1200ms] ease-out"
                 style={{ width: ready ? `${valor * 10}%` : "0%" }}
