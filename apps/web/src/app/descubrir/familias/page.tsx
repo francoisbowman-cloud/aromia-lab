@@ -45,7 +45,7 @@ export default async function FamiliasPage() {
                 href={`/descubrir/familias/${family.slug}`}
                 className="group grid gap-4 py-8 lg:grid-cols-[64px_1fr_1.1fr_auto] lg:items-baseline lg:gap-8"
               >
-                <span className="font-plex text-base tabular-nums text-ink/70">{String(index + 1).padStart(2, "0")}</span>
+                <span className="font-plex text-base tabular-nums text-ink opacity-70">{String(index + 1).padStart(2, "0")}</span>
                 <h2 className="font-display text-[25px] leading-none tracking-[-.03em] text-ink transition group-hover:opacity-70 sm:text-[27px]">
                   {family.name}
                 </h2>
