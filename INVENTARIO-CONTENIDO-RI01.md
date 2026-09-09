@@ -103,10 +103,10 @@ de Amazon embebido en cada perfume puntual mencionado.
 
 | ID | Pieza(s) del PLAN | Encargo | Restricción específica | Estado |
 |---|---|---|---|---|
-| **A** | 4-10 (Acto II) | **Ensayo largo, ~2.000 palabras**, sobre Baccarat Rouge 540: hype vs. mérito real. Ángulo observacional, no reseña de compra. Debe tener longitud y cambios de tempo para que Design pruebe `editorialOpening` (`overlap`), `fullBleedImage` (`immersive`), pausa y matriz. **Base:** extender/reenfocar `drafts/puede-un-perfume-oler-barato-aunque-cueste-300.md` (~1.205 w, serie "Cómo se construye una impresión", ya toca BR540) con BR540 como eje — no escribir de cero (ver §2.2). | BR540 ya en catálogo (`baccarat-rouge-540-edp`), con OVL. Datos de composición: verificar contra ficha oficial de Maison Francis Kurkdjian, no contra foros. | 🔴 Pendiente (adaptación) |
-| **B** | 11 (retrato) + 12 (cita) | **Perfil de Jean-Claude Ellena**, ~700-1.000 palabras + una cita destacada real para la pieza 12. Segunda entrada de la serie **"Personas"** (hoy tiene 1: `drafts/el-perfumista-que-no-teme-exagerar.md` — usar de referencia de registro). | Construido **solo** sobre *Journal d'un parfumeur* / *The Diary of a Nose* y entrevistas on-record. Cada frase atribuida a Ellena: cita textual + fuente. Sin paráfrasis presentada como cita. | 🔴 Pendiente |
+| **A** | 4-10 (Acto II) | **Ensayo largo** sobre Baccarat Rouge 540: hype vs. mérito real. Ángulo observacional. Base: adaptación de `drafts/puede-un-perfume-oler-barato-aunque-cueste-300.md`. | BR540 ya en catálogo (`baccarat-rouge-540-edp`), con OVL. Datos contra ficha oficial de Maison Francis Kurkdjian. | ✅ **Entregado 2026-09-08** — `drafts/br540-hype-vs-merito.md` (~1.833 w). Ingestado a la rama. Ver §6. |
+| **B** | 11 (retrato) + 12 (cita) | **Perfil de Jean-Claude Ellena** + cita destacada real para la pieza 12. Segunda entrada de la serie **"Personas"**. | Solo *Journal d'un parfumeur* / *The Diary of a Nose* y entrevistas on-record. Cada cita: textual + fuente. | ✅ **Entregado 2026-09-08** — `drafts/jean-claude-ellena-la-sustraccion.md` (~1.070 w). Ingestado. Ver §6. |
 | **C** | — (metadata) | Poblar `autor = "Redacción Aromia"` en los 15 artículos publicados. | Acción de datos vía `PATCH /api/admin/articles/:id`, no reescritura de contenido. | ✅ **Hecho 2026-09-08** — 15/15 vía script `scratchpad/encargo-C-poblar-autor.py --apply`, verificado contra la API pública. |
-| **D** | 9 (matriz sensorial) + 13 (familia olfativa) | **Pieza de datos**: matriz/tabla derivada del catálogo (familia olfativa × género × notas dominantes) para un subconjunto curado de perfumes de la Issue. | Es dato, no imagen — PLAN §C pieza 9: "forzarlo a un primitive visual violaría el criterio". Cowork arma la selección y el texto de encuadre; los valores salen de la DB (Code puede exportar el subconjunto si hace falta). | 🔴 Pendiente |
+| **D** | 9 (matriz sensorial) + 13 (familia olfativa) | **Pieza de datos**: matriz familia olfativa × género × notas dominantes para un subconjunto curado. | Es dato, no imagen — PLAN §C pieza 9. | ✅ **Entregado 2026-09-08** — `drafts/matriz-olfativa-numero-01.md`, 15 perfumes. Ingestado. Ver §6. |
 
 ---
 
@@ -151,3 +151,44 @@ paralelo a Cowork — pero la Reference Issue no llega a Definition of Done
 5. Auditoría intermedia (PLAN §H, capa de número completo) antes de tocar código.
 6. Recién ahí se evalúa arrancar `ticket-arquitectura-editorial-tiptap.md`
    (Fase 2 — traducción digital), que sigue su propio gate de aprobación.
+
+---
+
+## 6. Ingesta de encargos A/B/D (Code, 2026-09-08)
+
+Cowork entregó los tres `.md` en su working tree (`/home/claude/aromia-lab/drafts/`,
+sin trackear, per instrucción del brief). Brey los bridgeó a Code; ingestados a
+`drafts/` en la rama `claude/continue-from-zip-6a0b76`.
+
+### 6.1 Hallazgo de Cowork: los docs de alcance no estaban en `main`
+
+Correcto. `PLAN-`, `INVENTARIO-`, `ticket-arquitectura-editorial-tiptap` y
+`brief-cowork-RI01-encargos` están **solo en la rama `claude/continue-from-zip-6a0b76`,
+sin pushear** a `origin`. Nada perdido. Cowork trabajó del brief (autocontenido) y
+salió bien. **Acción pendiente:** push + PR de la rama para que Cowork y Design
+tengan el alcance canónico — gate de Brey (main protegida).
+
+### 6.2 Review de Code por pieza
+
+| Pieza | Checklist §5 | Notas de Code |
+|---|---|---|
+| **A** `br540-hype-vs-merito.md` | ✅ pasa | Frontmatter, status block, `## Sí, pero`, afiliado `tag=aromialab-20` (ASIN directo). Fact-check contra `franciskurkdjian.com` directo. 2 marcas `[AROMIA_VISUAL_OPPORTUNITY]` con 6 campos. Estudio Caltech/Stanford 2008 (Plassmann et al.) correctamente acotado. Título/serie: se reubicó en serie "Coleccionar, comprar y desear" (no la del borrador base). |
+| **B** `jean-claude-ellena-la-sustraccion.md` | ✅ pasa | ~1.070 w (brief pedía 700-1.000; Cowork justificó el exceso). Citas de *The Diary of a Nose* marcadas explícitamente como **segunda mano** (vía Grain de Musc / Beaulieu) — pendiente confirmar contra el libro si se sube a producción. Rechazo de "minimalista" en 3ª persona (solo fuente blog). Pull-quote pieza 12 = Marie Claire 2014 (on-record, trazable). |
+| **D** `matriz-olfativa-numero-01.md` | ✅ pasa | **Code validó la tabla contra Postgres de producción (los 15 perfumes):** género y familia olfativa coinciden 15/15; las notas coinciden en lo sustancial (el CSV es subconjunto abreviado/reordenado de lo que hay en la DB). Única divergencia: Fahrenheit — Cowork eligió "cedro" como salida dominante, la DB la lista 3ª. Es criterio editorial, no error. |
+
+### 6.3 Ítems abiertos (no bloquean la ingesta, sí antes de publicar a producción)
+
+1. **Catálogo `baccarat-rouge-540-edp`** — dato a revisar contra fuente oficial MFK:
+   - `notas_fondo = ["cedro","abeto"]` — ausentes de la comunicación oficial (que usa "auras": hedione/jazmín, azafrán/etil-maltol, Ambroxan/ámbar gris). Está igual en el CSV y en Postgres.
+   - `precio_referencia = 325 USD` vs. 360 USD retail oficial sep-2026 (dato viejo *por diseño* — scraper apagado, decisión #103; baja prioridad).
+   - `anio = NULL`, `perfumista = NULL` (debería ser Francis Kurkdjian).
+   - **No se toca el catálogo desde este flujo.** Queda para una revisión de datos aparte.
+2. **Citas de *The Diary of a Nose* en pieza B** — verificar contra el libro original si el estándar editorial de producción lo exige.
+3. **Matriz D** — si se publica, considerar recalcular las notas contra Postgres (no el CSV); el diff de Code muestra que cambiaría poco.
+
+### 6.4 Estado
+
+Con A/B/D + C hechos, **el bloqueo de contenido de RI01 está esencialmente
+cerrado**. Faltan solo piezas menores que se escriben al final (carta editorial
+pieza 3, cierre pieza 16). Design puede trabajar la Fase 1 completa. La Fase 2
+(ticket Tiptap) sigue con su gate.
