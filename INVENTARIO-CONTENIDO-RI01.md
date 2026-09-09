@@ -66,6 +66,32 @@ ni con copy inventado.** Lo que no tiene contenido real se marca
 | `comparativa-black-opium-vs-good-girl` | analisis | ~330 | pieza 14 alternativa |
 | `comparativa-aventus-vs-layton` | analisis | ~295 | pieza 14 alternativa |
 
+### 2.2 Corpus editorial de `drafts/` — corrección al inventario (agregado 2026-09-08)
+
+La primera versión de este documento (§2 / §2.1) miró **solo los 15 artículos
+publicados vía la API** y trató `drafts/` como pendiente. Es un error: `drafts/`
+ya tiene **46 piezas `estado: editorial_ready`**, de ~1.050 a ~1.400 palabras
+cada una, con frontmatter real (`titulo`, `tipo`, `serie`, `perfumes_mencionados`,
+`keyword_objetivo`) y organizadas en 14 series. Taxonomía: 15 `ensayo`,
+10 `material_study`, 7 `guia_con_investigacion`, 5 `explicacion`,
+4 `reflexion_editorial`, 3 `investigacion`, 2 `historia`.
+
+Esto es material observacional del registro que pide PLAN §A, y cambia el
+panorama:
+
+| Necesidad de RI01 | Qué aporta `drafts/` | Efecto en los encargos |
+|---|---|---|
+| Ensayo largo del Acto II (piezas 4-10) | `puede-un-perfume-oler-barato-aunque-cueste-300` (serie "Cómo se construye una impresión", ~1.205 w, ya toca BR540), + adyacentes `la-necesito-en-mi-coleccion`, `comprar-para-oler-o-comprar-para-tener` | **Encargo A pasa de "escribir de cero" a "extender/reenfocar un borrador existente a ~2.000 w con BR540 como eje"** |
+| Retrato de perfumista (piezas 11-12) | Serie **"Personas"** con 1 sola entrada hoy (`el-perfumista-que-no-teme-exagerar`). `el-perfumista-como-ilusionista-material` menciona a Ellena. | **Encargo B = segunda entrada de "Personas", sobre Ellena.** Net-new, pero con serie y registro ya definidos. |
+| Materiales / macro (pieza 10) | 10 `material_study`: `cuero-sin-cuero`, `iris-flor-polvo-madera`, `sandalo-madera-crema-piel`, `vetiver-`, `lavanda-`, `vainilla-`, `rosa-sin-ramo-de-flores`, `el-agua-que-no-viene-del-agua`, `chypre-`, `fougere-` | ✅ Cubierto de sobra. Design elige. |
+| Discovery / familia olfativa (pieza 13) | `chypre-estructura-que-cambio`, `fougere-no-significa-viejo`, `aldehidos-`, `el-nacimiento-del-gourmand` + las academia publicadas | ✅ Prosa cubierta. Falta solo la **matriz** (encargo D). |
+| Pausa / cierre / silencio (piezas 7, 16) | Cualquier `reflexion_editorial` corta sirve de interludio | ✅ |
+
+**Neto:** encargos **B** y **D** siguen siendo net-new. **A** se reduce a
+adaptación. La Reference Issue tiene contenido real para ~13-14 de las 16 piezas
+hoy (no 10). Recordatorio del protocolo: Cowork deja los `.md` listos en el
+working tree, **no commitea** — eso es de Code.
+
 ---
 
 ## 3. Encargos a Cowork (borradores Markdown en `drafts/`)
@@ -77,8 +103,8 @@ de Amazon embebido en cada perfume puntual mencionado.
 
 | ID | Pieza(s) del PLAN | Encargo | Restricción específica | Estado |
 |---|---|---|---|---|
-| **A** | 4-10 (Acto II) | **Ensayo largo, ~2.000 palabras**, sobre Baccarat Rouge 540: hype vs. mérito real. Ángulo observacional, no reseña de compra. Debe tener suficiente longitud y cambios de tempo para que Design pruebe `editorialOpening` (`overlap`), `fullBleedImage` (`immersive`), pausa y matriz sensorial. | BR540 ya en catálogo (`baccarat-rouge-540-edp`), con OVL. Datos de composición: verificar contra ficha oficial de Maison Francis Kurkdjian, no contra foros. | 🔴 Pendiente |
-| **B** | 11 (retrato) + 12 (cita) | **Perfil de Jean-Claude Ellena**, ~700-1.000 palabras + una cita destacada real para la pieza 12. | Construido **solo** sobre *Journal d'un parfumeur* / *The Diary of a Nose* y entrevistas on-record. Cada frase atribuida a Ellena: cita textual + fuente. Sin paráfrasis presentada como cita. | 🔴 Pendiente |
+| **A** | 4-10 (Acto II) | **Ensayo largo, ~2.000 palabras**, sobre Baccarat Rouge 540: hype vs. mérito real. Ángulo observacional, no reseña de compra. Debe tener longitud y cambios de tempo para que Design pruebe `editorialOpening` (`overlap`), `fullBleedImage` (`immersive`), pausa y matriz. **Base:** extender/reenfocar `drafts/puede-un-perfume-oler-barato-aunque-cueste-300.md` (~1.205 w, serie "Cómo se construye una impresión", ya toca BR540) con BR540 como eje — no escribir de cero (ver §2.2). | BR540 ya en catálogo (`baccarat-rouge-540-edp`), con OVL. Datos de composición: verificar contra ficha oficial de Maison Francis Kurkdjian, no contra foros. | 🔴 Pendiente (adaptación) |
+| **B** | 11 (retrato) + 12 (cita) | **Perfil de Jean-Claude Ellena**, ~700-1.000 palabras + una cita destacada real para la pieza 12. Segunda entrada de la serie **"Personas"** (hoy tiene 1: `drafts/el-perfumista-que-no-teme-exagerar.md` — usar de referencia de registro). | Construido **solo** sobre *Journal d'un parfumeur* / *The Diary of a Nose* y entrevistas on-record. Cada frase atribuida a Ellena: cita textual + fuente. Sin paráfrasis presentada como cita. | 🔴 Pendiente |
 | **C** | — (metadata) | Poblar `autor = "Redacción Aromia"` en los 15 artículos publicados. | Acción de datos vía `PATCH /api/admin/articles/:id`, no reescritura de contenido. | ✅ **Hecho 2026-09-08** — 15/15 vía script `scratchpad/encargo-C-poblar-autor.py --apply`, verificado contra la API pública. |
 | **D** | 9 (matriz sensorial) + 13 (familia olfativa) | **Pieza de datos**: matriz/tabla derivada del catálogo (familia olfativa × género × notas dominantes) para un subconjunto curado de perfumes de la Issue. | Es dato, no imagen — PLAN §C pieza 9: "forzarlo a un primitive visual violaría el criterio". Cowork arma la selección y el texto de encuadre; los valores salen de la DB (Code puede exportar el subconjunto si hace falta). | 🔴 Pendiente |
 
@@ -97,7 +123,7 @@ de Amazon embebido en cada perfume puntual mencionado.
 | 7 | Pausa / interrupción | `fullBleedImage` — OVL o `/editorial/*` | ✅ Listo |
 | 8 | Reseña — objeto con evidencia | `resena-tobacco-vanille` (o `santal-33` / `delina`) + packshot real | ✅ Listo |
 | 9 | Reseña — matriz sensorial | Encargo **D** | 🔴 Depende de D |
-| 10 | Materiales / macro | Foto de producto/material del catálogo + texto de A | 🟡 Depende de A |
+| 10 | Materiales / macro | Cualquier `material_study` de `drafts/` (`cuero-sin-cuero`, `iris-flor-polvo-madera`, `sandalo-madera-crema-piel`, `vetiver-…`, …) + foto de material | ✅ Listo (10 disponibles, ver §2.2) |
 | 11 | Perfumista — retrato | Encargo **B** | 🔴 Depende de B |
 | 12 | Perfumista — cita | Encargo **B** (cita real de Ellena) | 🔴 Depende de B |
 | 13 | Discovery / familia olfativa | `academia-familias-olfativas` + `academia-piramide-olfativa` + Encargo **D** | 🟡 Parcial (base lista, matriz depende de D) |
@@ -105,21 +131,23 @@ de Amazon embebido en cada perfume puntual mencionado.
 | 15 | Historia visual breve | `photoSequence` — 3-5 OVL/packshots en secuencia | ✅ Listo (selección de Design) |
 | 16 | Cierre editorial | **Nuevo, breve** — párrafo de cierre + créditos | 🟡 Menor, se escribe al final |
 
-**Resumen de bloqueo:** 6 de 16 piezas dependen de los encargos A/B/D. Las
-otras 10 tienen contenido real disponible hoy. Design **puede** empezar la
-Fase 1 (revista pura, mockups estáticos) por las piezas no bloqueadas y por la
-estructura global (Actos, secuencia, ritmo), en paralelo a que Cowork produce
-A/B/D — pero la Reference Issue no llega a Definition of Done (PLAN §K) hasta
-que A, B y D existan con contenido real.
+**Resumen de bloqueo (revisado con §2.2):** solo **4 de 16 piezas** dependen
+todavía de los encargos: 4-5-6 de **A** (adaptación) y 9 de **D**. La pieza 13
+queda parcial hasta la matriz de **D**. Las 11-12 dependen de **B** pero son
+una sola unidad narrativa. El resto (12-13 piezas) tiene contenido real hoy
+entre publicados + `drafts/`. Design **puede** empezar la Fase 1 ya, en
+paralelo a Cowork — pero la Reference Issue no llega a Definition of Done
+(PLAN §K) hasta que A, B y D existan.
 
 ---
 
 ## 5. Próximo paso
 
 1. Cowork arranca los encargos **A**, **B**, **D** (borradores en `drafts/`).
+   Brief completo en `brief-cowork-RI01-encargos.md` (raíz del repo).
 2. ~~Brey ejecuta el encargo **C** (poblar `autor`).~~ — hecho 2026-09-08.
-3. Design arranca Fase 1 sobre las 10 piezas no bloqueadas + arquitectura global.
-4. Cuando A/B/D estén, Design completa las 6 piezas restantes.
+3. Design arranca Fase 1 sobre las ~12 piezas no bloqueadas + arquitectura global.
+4. Cuando A/B/D estén, Design completa las piezas restantes.
 5. Auditoría intermedia (PLAN §H, capa de número completo) antes de tocar código.
 6. Recién ahí se evalúa arrancar `ticket-arquitectura-editorial-tiptap.md`
    (Fase 2 — traducción digital), que sigue su propio gate de aprobación.
