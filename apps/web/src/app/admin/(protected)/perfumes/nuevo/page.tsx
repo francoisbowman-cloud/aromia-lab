@@ -84,7 +84,7 @@ export default function AdminPerfumeNuevoPage() {
       </div>
 
       {error ? (
-        <p className="mt-4 rounded border border-destructive/30 bg-destructive/10 px-4 py-3 font-sans text-sm text-destructive">
+        <p className="mt-4 rounded border border-[color:color-mix(in_srgb,var(--destructive)_30%,transparent)] bg-[color:color-mix(in_srgb,var(--destructive)_10%,transparent)] px-4 py-3 font-sans text-sm text-destructive">
           {error}
         </p>
       ) : null}

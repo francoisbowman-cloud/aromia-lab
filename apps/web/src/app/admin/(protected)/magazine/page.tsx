@@ -155,7 +155,7 @@ export default function AdminMagazinePage() {
                   type="button"
                   onClick={() => setSelectedId(item.id)}
                   className={`rounded p-2 text-left font-sans text-xs ${
-                    selectedId === item.id ? "bg-gold/15" : "hover:bg-admin-bg"
+                    selectedId === item.id ? "bg-[color:color-mix(in_srgb,var(--gold)_15%,transparent)]" : "hover:bg-admin-bg"
                   }`}
                 >
                   <b className="block text-sm text-admin-text">{item.titulo}</b>

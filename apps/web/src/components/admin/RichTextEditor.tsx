@@ -35,7 +35,7 @@ export function RichTextEditor({
 
   const toolbarBtn = (active: boolean) =>
     `rounded px-2 py-1 transition ${
-      active ? "bg-gold/15 font-semibold text-gold-contrast" : "text-admin-muted hover:bg-admin-surface hover:text-admin-text"
+      active ? "bg-[color:color-mix(in_srgb,var(--gold)_15%,transparent)] font-semibold text-gold-contrast" : "text-admin-muted hover:bg-admin-surface hover:text-admin-text"
     }`;
 
   return (

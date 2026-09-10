@@ -7,7 +7,7 @@ export function ImagePlaceholder({ alt }: { alt: string }) {
     >
       <svg
         viewBox="0 0 64 96"
-        className="h-24 w-16 text-muted/40"
+        className="h-24 w-16 text-muted opacity-40"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"

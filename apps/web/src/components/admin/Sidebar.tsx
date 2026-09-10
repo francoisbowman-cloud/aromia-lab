@@ -80,7 +80,7 @@ export default function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={`rounded px-3 py-2.5 font-sans text-sm ${
-                  active ? "bg-gold/20 text-white" : "text-white/70 hover:bg-white/5"
+                  active ? "bg-[color:color-mix(in_srgb,var(--gold)_20%,transparent)] text-white" : "text-white/70 hover:bg-white/5"
                 }`}
               >
                 {item.label}
