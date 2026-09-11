@@ -68,7 +68,7 @@ export function PerfumerPortrait({
     >
       <span
         aria-hidden="true"
-        className="absolute inset-0 flex items-center justify-center font-display leading-none tracking-[-.05em] text-ink opacity-[0.12]"
+        className="absolute inset-0 flex items-center justify-center font-display leading-none tracking-[-.05em] text-ink/[0.12]"
         style={{ fontSize: variant === "detail" ? "clamp(72px,11vw,150px)" : "clamp(52px,9vw,96px)" }}
       >
         {initials(name)}

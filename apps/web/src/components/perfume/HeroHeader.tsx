@@ -38,7 +38,7 @@ export function HeroHeader({ perfume }: { perfume: Perfume }) {
       <div className="aromia-material-wash relative min-h-[520px] overflow-hidden sm:min-h-[620px] lg:min-h-[76vh]">
         <div aria-hidden="true" className="absolute -left-[8%] top-[7%] h-[78%] w-[88%] rounded-[50%] bg-[#d9c8b1]/38 blur-[110px] dark:bg-[#4a1f24]/18" />
         <div aria-hidden="true" className="absolute left-[8%] top-[20%] h-[52%] w-[64%] rounded-[50%] bg-[#dfe5db]/28 blur-[90px] dark:bg-[#5a6b54]/12" />
-        <div aria-hidden="true" className="absolute -left-[2%] top-[8%] max-w-[8ch] overflow-hidden font-display text-[clamp(120px,22vw,330px)] leading-[.78] tracking-[-.09em] text-ink opacity-[0.028]">
+        <div aria-hidden="true" className="absolute -left-[2%] top-[8%] max-w-[8ch] overflow-hidden font-display text-[clamp(120px,22vw,330px)] leading-[.78] tracking-[-.09em] text-ink/[0.028]">
           {perfume.nombre}
         </div>
         <div className="absolute inset-[-2%] sm:inset-[1%] lg:inset-[-1%_5%_0%_1%]">

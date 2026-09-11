@@ -9,6 +9,10 @@
   --line: rgba(32, 35, 31, 0.14);
   --gold: #c49a54;
   --gold-2: #b88442;
+  /* Canales RGB (espacios) para el slot <alpha-value> de Tailwind — seguir 1:1
+     a --muted / --gold de esta misma capa, que es la que gana en el cascade. */
+  --muted-rgb: 98 95 88;
+  --gold-rgb: 196 154 84;
   --gold-contrast: #755d32;
   --card: var(--surface);
   --card-foreground: var(--text);
@@ -48,6 +52,8 @@
   --line: rgba(247, 245, 240, 0.14);
   --gold: #c49a54;
   --gold-2: #d9b773;
+  --muted-rgb: 182 183 175;
+  --gold-rgb: 196 154 84;
   --gold-contrast: #d9b773;
   --primary: #b8c5b3;
   --primary-foreground: #0e1311;
