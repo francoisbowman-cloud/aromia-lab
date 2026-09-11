@@ -10,7 +10,7 @@ export function MagazineCategoryNav({
   onSelect: (key: string) => void;
 }) {
   return (
-    <div className="sticky top-0 z-40 border-b border-line bg-white/[0.88] backdrop-blur-md dark:bg-[#0a0a0a]/[0.88]">
+    <div className="sticky top-0 z-40 border-b border-line bg-paper/[0.88] backdrop-blur-md">
       <nav className="mx-auto flex h-[66px] max-w-[1440px] items-center gap-8 overflow-x-auto whitespace-nowrap px-6 lg:gap-12 lg:px-10">
         {MAGAZINE_TABS.map((tab) => {
           const active = tab.key === activeKey;

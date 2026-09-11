@@ -20,14 +20,20 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        paper: "var(--bg)",
-        surface: "var(--surface)",
-        ink: "var(--text)",
-        muted: "var(--muted)",
+        // Los tokens con consumidores de opacidad (bg-paper/[.88], text-ink/70,
+        // bg-gold/15, text-muted/40…) se declaran con el slot <alpha-value> sobre
+        // el canal RGB hermano (--*-rgb, definido junto a cada hex en los CSS de
+        // tokens). Sin esto Tailwind v3.4 no genera los utilities de opacidad
+        // para un color que es var() pelado. `bg-paper` sin modificador compila a
+        // rgb(var(--bg-rgb) / 1), color idéntico a var(--bg).
+        paper: "rgb(var(--bg-rgb) / <alpha-value>)",
+        surface: "rgb(var(--surface-rgb) / <alpha-value>)",
+        ink: "rgb(var(--text-rgb) / <alpha-value>)",
+        muted: "rgb(var(--muted-rgb) / <alpha-value>)",
         line: "var(--line)",
-        soft: "var(--soft)",
+        soft: "rgb(var(--soft-rgb) / <alpha-value>)",
         gold: {
-          DEFAULT: "var(--gold)",
+          DEFAULT: "rgb(var(--gold-rgb) / <alpha-value>)",
           light: "#B68A44",
           dark: "#C8A86B",
           contrast: "var(--gold-contrast)",
@@ -58,7 +64,7 @@ const config: Config = {
           foreground: "var(--accent-foreground)",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
+          DEFAULT: "rgb(var(--destructive-rgb) / <alpha-value>)",
           foreground: "var(--destructive-foreground)",
         },
         admin: {

@@ -18,6 +18,16 @@
   --line: rgba(33, 29, 23, 0.1);
   --gold: #a87f4a;
   --gold-2: #c8a86b;
+  /* Canales RGB (espacios) para el slot <alpha-value> de Tailwind. En la
+     superficie normal ganan las capas de aromia-redesign.css / design-tokens.css
+     (cargadas después); estos valores son el fallback para las páginas que sólo
+     importan globals.css (p. ej. global-error.tsx) y siguen 1:1 a los hex de
+     arriba. */
+  --text-rgb: 33 29 23;
+  --surface-rgb: 255 255 255;
+  --soft-rgb: 245 240 230;
+  --muted-rgb: 103 94 82;
+  --gold-rgb: 168 127 74;
   /* --gold-contrast: mismo ajuste que --muted y por la misma razón —
      4.08-4.47:1 sobre las bandas tintadas, por debajo de AA. */
   --gold-contrast: #77571e;
@@ -34,6 +44,7 @@
   --accent: var(--soft);
   --accent-foreground: var(--text);
   --destructive: #b4443c;
+  --destructive-rgb: 180 68 60;
   --destructive-foreground: #ffffff;
   --border: var(--line);
   --input: var(--line);
@@ -48,6 +59,11 @@
   --line: rgba(242, 235, 221, 0.14);
   --gold: #c8a86b;
   --gold-2: #a87f4a;
+  --text-rgb: 242 235 221;
+  --surface-rgb: 23 18 13;
+  --soft-rgb: 28 22 16;
+  --muted-rgb: 163 154 136;
+  --gold-rgb: 200 168 107;
   /* Override explícito: sin esto heredaría el --gold-contrast oscurecido de
      :root (pensado para fondos claros), que perdería contraste sobre fondos
      oscuros. Se fija al valor histórico para no alterar el tema oscuro. */

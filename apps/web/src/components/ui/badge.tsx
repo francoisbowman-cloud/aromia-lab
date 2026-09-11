@@ -10,8 +10,8 @@ const badgeVariants = cva(
       variant: {
         default: "bg-surface text-ink",
         outline: "border border-line text-muted",
-        gold: "bg-[color:color-mix(in_srgb,var(--gold)_15%,transparent)] text-gold-contrast",
-        destructive: "bg-[color:color-mix(in_srgb,var(--destructive)_10%,transparent)] text-destructive",
+        gold: "bg-gold/15 text-gold-contrast",
+        destructive: "bg-destructive/10 text-destructive",
       },
     },
     defaultVariants: {

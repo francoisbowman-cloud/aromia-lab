@@ -4,8 +4,16 @@
   --aromia-paper-clean: #fffdf8;
   --aromia-paper-soft: #f7f1e8;
   --aromia-ink: #20231f;
-  --aromia-ink-rgb: 32, 35, 31;
   --aromia-line: rgba(32, 35, 31, .14);
+
+  /* Canales RGB de las superficies de arriba, en formato separado por espacios,
+     para el slot <alpha-value> de Tailwind (ver tailwind.config.ts). Deben
+     seguir 1:1 al hex hermano. --aromia-ink-rgb pasó de "32, 35, 31" (coma, sin
+     consumidores) a este formato. */
+  --aromia-paper-rgb: 247 245 240;
+  --aromia-paper-clean-rgb: 255 253 248;
+  --aromia-paper-soft-rgb: 247 241 232;
+  --aromia-ink-rgb: 32 35 31;
   --aromia-chrome-bg: rgba(247, 245, 240, .94);
   --aromia-chrome-shadow: rgba(14, 19, 17, .12);
   --aromia-editorial-accent: #5a6b54;
@@ -18,6 +26,11 @@
   --soft: var(--aromia-paper-soft);
   --text: var(--aromia-ink);
   --line: var(--aromia-line);
+  --bg-rgb: var(--aromia-paper-rgb);
+  --background-rgb: var(--aromia-paper-rgb);
+  --surface-rgb: var(--aromia-paper-clean-rgb);
+  --soft-rgb: var(--aromia-paper-soft-rgb);
+  --text-rgb: var(--aromia-ink-rgb);
   --card: var(--surface);
   --card-foreground: var(--text);
   --popover: var(--surface);
@@ -108,6 +121,10 @@
   --aromia-paper-soft: #15110d;
   --aromia-ink: #f4f1ea;
   --aromia-line: rgba(247, 245, 240, .14);
+  --aromia-paper-rgb: 14 19 17;
+  --aromia-paper-clean-rgb: 16 13 10;
+  --aromia-paper-soft-rgb: 21 17 13;
+  --aromia-ink-rgb: 244 241 234;
   --aromia-chrome-bg: rgba(14, 19, 17, .94);
   --aromia-editorial-accent: #b8c5b3;
 }
