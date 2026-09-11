@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 11 de septiembre de 2026 — por: Code (Claude Code) — ver "Actualización 2026-09-11 (decisión #107)" más abajo en este mismo bloque. **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloques 1.1, 1.2 y 1.2b ejecutados 2026-08-27** — decisión #104. 1.1 (PR #114, mergeado): 39 de 41 ramas sueltas borradas en `origin` en dos pasadas con "Kill" de Brey, token `--bg` consolidado, WIP de OMNI plegado (lienzo blanco Opción A adelantado). 1.2 (PR #115, mergeado): retiro del grid público `/catalogo`, del comparador `/comparar` y de `HomeCatalogPreview`; redirects 308 a `/magazine`; `sitemap`/`SEO_STRATEGY`/`omni-strict-audit` alineados; la ficha `/catalogo/[slug]` y el Quiz se conservan. 1.2b + 1.3 modo claro (rama `feat/ticket-1.3-lienzo-blanco`, en PR): links internos repuntados a `/buscar`/`/magazine`, fondos de Home/Ficha a token blanco puro. **Pendientes:** 10 preview de Railway (staged, requieren 2FA de Brey desde el dashboard); 1.3 modo oscuro (QA visual en vivo); 1.4 (ficha para tráfico frío). Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
+Última actualización: 11 de septiembre de 2026 — por: Code (Claude Code) — ver "Actualización 2026-09-11 (decisión #108)" más abajo en este mismo bloque. **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloques 1.1, 1.2 y 1.2b ejecutados 2026-08-27** — decisión #104. 1.1 (PR #114, mergeado): 39 de 41 ramas sueltas borradas en `origin` en dos pasadas con "Kill" de Brey, token `--bg` consolidado, WIP de OMNI plegado (lienzo blanco Opción A adelantado). 1.2 (PR #115, mergeado): retiro del grid público `/catalogo`, del comparador `/comparar` y de `HomeCatalogPreview`; redirects 308 a `/magazine`; `sitemap`/`SEO_STRATEGY`/`omni-strict-audit` alineados; la ficha `/catalogo/[slug]` y el Quiz se conservan. 1.2b + 1.3 modo claro (rama `feat/ticket-1.3-lienzo-blanco`, en PR): links internos repuntados a `/buscar`/`/magazine`, fondos de Home/Ficha a token blanco puro. **Pendientes:** 10 preview de Railway (staged, requieren 2FA de Brey desde el dashboard); 1.3 modo oscuro (QA visual en vivo); 1.4 (ficha para tráfico frío). Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
 
 **Actualización 2026-09-10 (decisión #106):** sesión de Code (8-10/09) con 5 PR mergeados y desplegados. **Reference Issue 01 ("Aromia · Número 01")** arrancada desde un `.zip` de Chat — docs rectores `PLAN-Aromia-Reference-Issue-01.md` y `ticket-arquitectura-editorial-tiptap.md` (Fase 2 / Tiptap gateada) en la raíz; inventario cerrado (`INVENTARIO-CONTENIDO-RI01.md`); 4 encargos hechos (C = `autor` poblado en los 15 artículos publicados; A/B/D = 3 borradores de Cowork en `drafts/`) — PR #156. **Ticket maestro de Diseño** `ticket-diseno-aromia-punta-a-punta.md` (5 workstreams, 10 decisiones abiertas D-1…D-10) en la raíz. **Bugs visuales corregidos:** defecto de opacidad sobre tokens `var()` de Tailwind (PRs #157 + #160, ~18 sitios; fix de fondo pendiente = WS-4); `perfumeSlugs` desactualizados en `lib/perfumers.ts` (PR #158); héroe de artículo blanco/blanco + lector page-flip que no encajaba (PR #159, verificado en vivo). **El pase profundo de Diseño** (relay v46→v48, PRs #151-155, 2026-09-06/08) también entró desde la última actualización de este documento — no se detalla acá; ver `handoffs/AROMIA_CODE_DEEP_DESIGN_*` y `audits/AROMIA_DEEP_DESIGN_INTEGRATION_AUDIT_2026-09-06.md`.
 **Actualización 2026-09-11 (decisión #107):** WS-4 del ticket maestro de Diseño
@@ -16,9 +16,31 @@ antes de mergear: `tsc`/`lint` limpios, compilación standalone de Tailwind
 probando los modificadores, computados de los 7 tokens verificados 1:1 contra
 `aromialab.com` en claro y oscuro (`next dev` local con
 `NEXT_PUBLIC_API_URL` a la API de producción). Ítem 1.8 de WS-1 y la mitad de
-tokens de WS-4 quedan cerrados; la migración tipográfica (`--type-*` +
-hero de Omán) de WS-4 sigue esperando D-7. Detalle en
+tokens de WS-4 quedan cerrados; la migración tipográfica (`--type-*`) de WS-4
+sigue esperando su propio sign-off de dirección de arte. Detalle en
 `reference_tailwind_opacity_token_defect` (memoria de Code).
+
+**Actualización 2026-09-11 (decisión #108):** D-7 — recomposición del hero de
+Omán (PR #165, mergeado). Brey dio sign-off para arrancar sólo esta parte de
+D-7 (la escala tipográfica sigue abierta). El marco de `.story-hero` en la
+historia "El perfume que encargó un sultán" recortaba en horizontal la
+amplitud panorámica de `oman-place-documentary.jpg` (1920×1080, 1.78) —
+diagnóstico ya corregido en el audit del 6/09 §9.1 (no se perdía el sujeto,
+se perdía la vista panorámica; `object-position` no servía). Dirigido vía
+skill `director-de-diseno`: de los tres heroes de historia sólo Omán es
+panorámico (ambroxan 0.75 retrato, ropion 1.50 macro encajan bien con
+`cover`) — fix acotado a esa única historia, no un cambio de sistema.
+`VisualField` (`editorialVisuals.tsx`) ganó un prop opcional `fit` (default
+`"cover"`, sin cambio para los demás ~15 consumidores); la historia del
+sultán pasa `heroFit:"contain"` — cero recorte, foto completa. El marco que
+deja visible detrás de la foto lo cubre el gradiente ámbar/carbón ya
+declarado en `.amouage .story-visual` pero apagado a propósito por
+`.ev1-photo{background:none!important}` (regla que evita que un fallback
+sintético se vea detrás de una foto real cuando NO hay foto); se reintrodujo
+acotado a `.amouage .story-visual.ev1-photo` (3 clases), sin tocar ningún
+otro `.ev1-photo` del sitio. QA: tsc/lint limpios, verificado claro/oscuro,
+desktop/mobile en `next dev` local. Detalle en `project_deep_design_pass`
+(memoria de Code).
 
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 

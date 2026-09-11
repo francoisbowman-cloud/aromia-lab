@@ -131,6 +131,11 @@ casos).
 Deuda técnica de sistema, medida, sin dirección nueva. Requiere sign-off de
 dirección de arte para la parte tipográfica.
 
+- **Hecho (2026-09-11, D-7 parte 1):** recomposición del hero de Omán —
+  PR #165, mergeado. `VisualField` ganó un prop `fit` opcional; sólo la
+  historia del sultán usa `heroFit:"contain"` (los otros dos heroes de
+  historia encajan bien con el `cover` de siempre). Detalle en
+  `project_deep_design_pass` (memoria de Code) y ESTADO decisión #108.
 - **Tipografía:** `design-tokens.css` ya define tokens `--type-*` que **nadie
   consume**. Deuda medida: 36 `clamp()` distintos en CSS + 37 `text-[Npx]` ≥28px
   en TSX. Migrar la escala a los tokens. Sign-off de dirección de arte sobre la
@@ -178,7 +183,7 @@ Brey. Cuando lo esté, extraer únicamente lo que RI01 realmente usó:
 | D-4 | Personas gate de ≥5 obras: ¿sumar atribuciones verificadas, esperar expansión de catálogo, o bajar el mínimo? | WS-1 1.5 |
 | D-5 | Modo oscuro de `ProductImage` en la ficha (tratamiento del fondo blanco de Amazon sobre `#0A0A0A`) | WS-1 1.3 |
 | D-6 | Historias SubBatch 01 (500 en prod): ¿ingestar los `.md` a la fuente real y publicarlas, o retirarlas? | WS-1 1.2 |
-| D-7 | Sign-off de dirección de arte: escala tipográfica `--type-*` + recomposición del hero de Omán | WS-4 |
+| D-7 | Sign-off de dirección de arte: escala tipográfica `--type-*` (recomposición del hero de Omán ya hecha, PR #165) | WS-4 |
 | D-8 | Gate para arrancar WS-2 (Fase 1 de RI01) ahora, en paralelo a WS-1 | WS-2 |
 | D-9 | Gate para la migración técnica de WS-3 (después de la auditoría de WS-2) | WS-3 |
 | D-10 | Relevancia visual del Quiz en Discovery — dirección que quiere Brey | pieza de WS-1 / entra en un mini-brief propio |
