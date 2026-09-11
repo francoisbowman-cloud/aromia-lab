@@ -140,9 +140,17 @@ interface VisualFieldProps {
   className: string;
   marker?: string;
   sizes?: string;
+  /**
+   * "cover" (default) llena el marco y recorta lo que sobre — correcto
+   * cuando la fuente y el marco tienen una relación de aspecto parecida.
+   * "contain" muestra la fuente completa, sin recortar, dejando ver el
+   * fondo del slot en los márgenes — para fuentes panorámicas dentro de un
+   * marco que no comparte su relación de aspecto (ver D-7, hero de Omán).
+   */
+  fit?: "cover" | "contain";
 }
 
-export function VisualField({ slotId, className, marker, sizes }: VisualFieldProps) {
+export function VisualField({ slotId, className, marker, sizes, fit = "cover" }: VisualFieldProps) {
   const slot = EDITORIAL_V1_SLOTS[slotId];
 
   if (!slot || !slot.present || !slot.file) {
@@ -182,7 +190,7 @@ export function VisualField({ slotId, className, marker, sizes }: VisualFieldPro
         fill
         quality={slot.quality}
         sizes={sizes ?? "100vw"}
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: fit }}
       />
     </figure>
   );

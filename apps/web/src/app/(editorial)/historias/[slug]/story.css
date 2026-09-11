@@ -6,6 +6,20 @@
 .story-visual{position:relative;overflow:hidden}
 figure.story-visual,figure.story-interruption{margin:0;display:block}
 figure.story-visual img,figure.story-interruption img{object-fit:cover}
+
+/* D-7 (recomposición del hero de Omán): heroFit="contain" en historias/[slug]/page.tsx
+   deja ver la fuente panorámica completa en vez de recortarla, así que el
+   marco de esta figura queda visible en los márgenes que el object-fit ya no
+   cubre. editorial-sharp.css apaga ese fondo con `.ev1-photo{background:none
+   !important}` a propósito — esa regla existe para que una foto real gane
+   siempre sobre el estudio de material sintético que la reemplaza cuando no
+   hay foto. Acá el fondo no es un fallback de "no hay foto": la foto SIEMPRE
+   está, y el fondo es el marco visible alrededor de ella. Por eso se
+   reintroduce con la misma herramienta (!important) pero acotado a este único
+   selector de 3 clases — no afecta ningún otro `.ev1-photo` del sitio. */
+.amouage .story-visual.ev1-photo {
+  background: linear-gradient(115deg,transparent 0 48%,rgba(240,225,195,.18) 49% 51%,transparent 52%),radial-gradient(ellipse at 55% 72%,#a96d32 0 5%,#3a2517 6% 19%,transparent 28%),linear-gradient(145deg,#cdbb9c 0 20%,#665d50 21% 22%,#282722 45%,#10100f) !important;
+}
 .story-interruption{position:relative;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(45deg,rgba(23,23,21,.03) 0 12px,rgba(23,23,21,.055) 12px 24px)}
 .ev1-figcaption{position:absolute;left:0;right:0;bottom:0;margin:0;padding:8px 12px;font-size:10px;letter-spacing:.04em;line-height:1.35;background:rgba(244,240,229,.88);color:#171715}
 .story-intro{padding:clamp(36px,6vw,80px) clamp(24px,7vw,110px);max-width:1000px;border-bottom:1px solid var(--line)}

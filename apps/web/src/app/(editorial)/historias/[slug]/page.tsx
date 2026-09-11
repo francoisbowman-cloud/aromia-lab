@@ -22,6 +22,17 @@ interface Story {
   deck: string;
   intro: string[];
   heroSlot: string;
+  /**
+   * D-7 (recomposición del hero de Omán, audit 2026-09-06 §4.4/§9.1): la
+   * fuente de amouage-material-density-interpretive es un paisaje 16:9
+   * (1920×1080) documental — recorta amplitud panorámica en el marco
+   * vertical-ish de .story-hero con object-fit:cover por defecto.
+   * "contain" muestra la foto completa (cero recorte) y deja ver el
+   * gradiente ámbar/carbón ya declarado para .amouage .story-visual como
+   * marco, en vez de estirarla. Sólo esta historia lo necesita: ambroxan
+   * (0.75, retrato) y ropion (1.50, macro) encajan bien con cover.
+   */
+  heroFit?: "cover" | "contain";
   sections: StorySection[];
   commerceNote: string;
   commerce: { label: string; href: string; note: string }[];
@@ -219,6 +230,7 @@ const data: Record<string, Story> = {
       `Eso, por sí solo, ya sería una anécdota curiosa. Lo que la vuelve una historia es lo que el sultán le pidió que hiciera con él.`,
     ],
     heroSlot: "amouage-material-density-interpretive",
+    heroFit: "contain",
     sections: [
       {
         h: "Un país que vende incienso desde hace milenios",
@@ -313,6 +325,7 @@ export default function Story({ params }: { params: { slug: string } }) {
             slotId={s.heroSlot}
             className="story-visual"
             sizes="(max-width: 800px) 100vw, 50vw"
+            fit={s.heroFit}
           />
         </header>
 
