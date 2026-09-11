@@ -281,3 +281,229 @@ fuente auténtica
 ```
 
 Sin perder autenticidad del producto y sin convertir el sistema en una máquina de reprocesamiento innecesaria.
+
+
+## 13. Addendum Publisher — hallazgos visuales observados en la experiencia actual
+
+Las siguientes observaciones se añaden al handoff después de revisar la experiencia publicada en light/dark y varias superficies editoriales. Forman parte de la misma reestructuración; **no abrir un sistema paralelo**.
+
+### 13.1 Light / dark: el asset debe sobrevivir al cambio de fondo
+
+Hallazgo visible: algunos packshots parecen integrados en light porque el fondo blanco de la fuente se confunde con el lienzo. En dark aparece el rectángulo blanco completo y se rompe la armonía.
+
+Esto confirma que el criterio de éxito del pipeline OMNI no puede ser solo “se eliminó el fondo”.
+
+Añadir gate explícito:
+
+- cada cutout aprobado debe probarse sobre blanco puro y sobre el fondo dark real de Aromia;
+- no debe aparecer caja blanca, halo, matte, borde lechoso ni contaminación del fondo original;
+- vidrio, transparencias y reflejos deben conservarse sin parecer recortados a mano;
+- el mismo asset debe funcionar sin una corrección CSS específica para cada modo;
+- si un asset solo funciona en light o solo en dark, todavía no está aprobado.
+
+Objetivo:
+
+> **un único objeto fiel que pertenezca a Aromia en ambos temas, no una foto comercial disimulada por el fondo.**
+
+---
+
+## 14. Historias — convertir el archivo en una superficie editorial con ritmo
+
+Hallazgo: la superficie de Historias es limpia, pero actualmente muchas entradas se presentan con peso muy parecido: título + título + título. El resultado puede sentirse plano aunque la tipografía sea correcta.
+
+Design debe revisar esta superficie como **archivo editorial**, no como listado de cards.
+
+Objetivos:
+
+- preservar sobriedad y facilidad de exploración;
+- introducir jerarquía real entre historias;
+- variar escala, densidad, aire y presencia visual;
+- permitir que algunas piezas tengan imagen, otras sean tipográficas y otras funcionen como pausas;
+- utilizar únicamente visuales con relación editorial real con la historia;
+- evitar convertir todas las entradas en cards o miniaturas uniformes;
+- crear ritmo de revista sin dificultar el escaneo.
+
+La composición debe poder comunicar qué historia merece atención ahora, qué piezas acompañan y dónde descansa el ojo.
+
+---
+
+## 15. Fragancias — evolucionar de índice tipográfico a índice editorial de objetos
+
+Hallazgo: el índice de Fragancias es elegante y limpio, pero al presentar esencialmente nombres puede sentirse demasiado próximo a una base de datos tipográfica.
+
+No convertirlo en un catálogo ecommerce.
+
+Design debe explorar una presencia visual **selectiva y editorial** de los frascos, apoyándose en los cutouts aprobados por OMNI.
+
+Objetivos:
+
+- que al encontrar “Good Girl”, “Aventus”, etc. exista suficiente señal visual para anticipar el objeto al que se va a entrar;
+- conservar el protagonismo del nombre y la navegación;
+- usar miniaturas, apariciones, hover/reveal, cambios de escala o composición solo donde mejoren reconocimiento y deseo de exploración;
+- evitar una cuadrícula uniforme de producto;
+- no introducir precio, badges de venta ni lenguaje de tienda;
+- mobile debe recibir una reinterpretación propia y no depender de hover.
+
+La regla es:
+
+> **dar presencia al objeto sin convertir el índice en un shop grid.**
+
+---
+
+## 16. PDP / “Dónde encontrarlo” — comercio como servicio secundario
+
+Mantener por ahora el módulo de afiliación sin precio fijo de Amazon.
+
+Razones:
+
+- la identidad principal de Aromia sigue siendo editorial;
+- el precio de Amazon puede variar con rapidez;
+- no mostrar un valor que Aromia no pueda verificar de forma fiable y actual;
+- el CTA afiliado ya permite al lector consultar disponibilidad y precio actual.
+
+Por tanto:
+
+- mantener “Ver en Amazon” / equivalente como salida contextual;
+- Design puede mejorar la composición y el contexto del módulo;
+- no convertirlo en bloque de ecommerce dominante;
+- no mostrar un precio estático guardado manualmente.
+
+Un precio solo debería incorporarse en el futuro si existe una fuente en vivo suficientemente fiable, con moneda, timestamp/frescura y fallback claros.
+
+---
+
+## 17. Portada — pasar de landing estática a publicación viva
+
+Hallazgo: la portada actual tiene identidad y calidad, pero el mismo protagonista puede permanecer siempre en el primer impacto. Para una revista viva, la portada debe poder cambiar de edición sin perder su marco visual.
+
+Implementar una **lógica editorial controlada de portada**, no un carrusel aleatorio.
+
+Debe permitir:
+
+- lead story;
+- supporting stories;
+- visual principal;
+- contexto de edición/issue cuando corresponda;
+- promoción de Historias, Saber, Personas, Materia u otros territorios según criterio editorial.
+
+Reglas:
+
+- no cambiar aleatoriamente en cada refresh;
+- evitar comportamiento de banner publicitario;
+- la rotación debe venir de selección editorial, estado/fecha o una configuración explícita;
+- el lector puede volver horas o días después y encontrar una edición distinta cuando realmente haya cambiado la selección;
+- la identidad visual, navegación y orientación deben permanecer estables;
+- SEO/SSR no debe depender de aleatoriedad client-side.
+
+Objetivo:
+
+> **que Aromia tenga una portada que edita, no una landing que permanece congelada.**
+
+---
+
+## 18. Saber — dirección visual de materiales con estándar editorial alto
+
+Hallazgo: algunas imágenes actuales de la sección Saber cumplen una función nominal, pero no alcanzan todavía el nivel de presentación de la publicación. Casos señalados por Publisher: bergamota, limón/cítricos, incienso, salvia sclarea y pachulí.
+
+La imagen de Saber debe enseñar además de decorar.
+
+### Criterio de selección
+
+Prioridad:
+
+1. fotografía documental o botánica real, de calidad editorial y licencia válida;
+2. fuente institucional/archivo fiable cuando sea pertinente;
+3. generación asistida por IA **solo cuando no exista una fuente adecuada o la pieza requiera una interpretación controlada**.
+
+Si se usa IA:
+
+- debe conservar morfología real del material;
+- no inventar flores, hojas, resinas, frutos o formas botánicas;
+- evitar perfección plástica, brillo artificial, simetría excesiva y “AI look”;
+- preferir iluminación, textura, imperfecciones y contexto plausibles;
+- la imagen debe ser reconocible por sí misma, no depender del rótulo para que el lector entienda qué está viendo;
+- debe pasar revisión visual antes de publicación.
+
+Especialmente en materiales como incienso, la representación debe dejar claro **qué se está enseñando**: resina, materia prima, humo/ritual o árbol, según el contenido de la pieza. No usar una imagen ambigua solo porque resulte atmosférica.
+
+Objetivo:
+
+> **la mejor presentación creíble del material, no la versión más bonita ni la más artificial.**
+
+---
+
+## 19. Guías deben pertenecer a Saber
+
+Decisión editorial de Publisher:
+
+> **Guías pasa a formar parte del territorio Saber.**
+
+Racional:
+
+- **Historias** = relatos, cultura, acontecimientos, personajes, observaciones y piezas narrativas;
+- **Saber** = aprendizaje, técnica, materiales, criterio olfativo y enseñanza;
+- las **Guías** son contenido pedagógico y por tanto pertenecen naturalmente a Saber.
+
+Code + Design deben revisar:
+
+- navegación principal;
+- landing de Saber;
+- taxonomía/categorías;
+- enlaces internos;
+- breadcrumbs;
+- sitemap;
+- SEO/canonical;
+- analytics;
+- filtros y búsqueda;
+- links existentes desde artículos y Home.
+
+No romper URLs existentes de forma innecesaria. Si la arquitectura requiere mover rutas, establecer redirects/canonicals seguros y verificar enlaces antes de retirar cualquier ruta anterior.
+
+Design debe hacer visible dentro de Saber que existen distintas formas de aprender —por ejemplo materiales, técnica, guías y piezas explicativas— sin convertirlo en un dashboard de cards.
+
+Objetivo de producto:
+
+> **Saber debe sentirse como el lugar donde Aromia enseña a oler.**
+
+---
+
+## 20. Principio transversal para Design + Code
+
+Estas observaciones no piden rehacer Aromia desde cero.
+
+La experiencia actual ya tiene identidad, humanidad y una dirección editorial reconocible. La reestructuración debe **elevar lo que ya funciona** y corregir los puntos donde la implementación todavía revela su origen técnico/comercial.
+
+Orden sugerido:
+
+1. estabilizar workstream visual actualmente abierto;
+2. activar piloto real OMNI de producto;
+3. convertir light/dark en gate del asset;
+4. resolver dirección de Historias / Fragancias / Saber / Portada en Design;
+5. ajustar la arquitectura de Guías dentro de Saber;
+6. validar PDP commerce treatment;
+7. QA conjunto en preview;
+8. extraer solo los patrones que hayan demostrado ser recurrentes.
+
+No institucionalizar docenas de componentes o variantes antes de que Design demuestre qué necesita la experiencia.
+
+### Definition of Done adicional
+
+Antes de considerar cerrada esta parte de la reestructuración:
+
+- [ ] un perfume aprobado no revela fondo heredado al cambiar light/dark;
+- [ ] Historias tiene ritmo y jerarquía, no una lista visualmente plana;
+- [ ] Fragancias ofrece reconocimiento visual selectivo sin convertirse en ecommerce;
+- [ ] “Dónde encontrarlo” sigue siendo secundario y no muestra precio no verificable;
+- [ ] la portada admite edición/rotación editorial controlada;
+- [ ] Saber usa imágenes de materiales claras, creíbles y con calidad de publicación;
+- [ ] Guías está integrada editorialmente en Saber;
+- [ ] navegación, SEO, analytics y enlaces siguen coherentes tras esa integración;
+- [ ] todo lo anterior pasa responsive + a11y + dark/light + performance QA.
+
+---
+
+## Cierre actualizado
+
+La dirección común queda así:
+
+> **Aromia ya tiene identidad. La siguiente evolución no consiste en añadir más decoración, sino en hacer que cada superficie se comporte como parte de una publicación viva: objetos bien producidos, archivos con ritmo, aprendizaje visualmente riguroso, comercio subordinado y una portada que realmente edita.**
