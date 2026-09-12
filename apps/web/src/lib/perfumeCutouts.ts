@@ -12,10 +12,21 @@
  * ChatGPT** (no por Code), con la regla dura de no inventar ningún rasgo
  * del frasco. Code integra el archivo y registra el slug acá.
  *
- * Se llena a mano tras el piloto (ver `docs/images/CUTOUT-PILOT-PLAN.md`).
+ * Piloto de 10 perfumes corrido 2026-09-12 (ver
+ * `docs/images/OMNI-PILOT-RESULTADOS-2026-09-12.md`) — 7 clasificados A
+ * (AUTO_CLEAN) y registrados acá. Quedan fuera a propósito: `oud-wood`
+ * (clasificación B, artefacto de borde sin limpiar) y los 2 casos C con caja
+ * en la foto (`baccarat-rouge-540-edp`, `1-million`) — Brey decidió dejarlos
+ * con su caja, sin cutout, hasta que haya foto solo-frasco o imagen IA.
  */
 export const PERFUME_CUTOUTS: ReadonlySet<string> = new Set<string>([
-  // piloto pendiente de correr — vacío por ahora, comportamiento = fallback total
+  "bleu-de-chanel-edp",
+  "chanel-no5-edp",
+  "santal-33-edp",
+  "aventus",
+  "molecule-01",
+  "acqua-di-gio-edt",
+  "nishane-hacivat",
 ]);
 
 export function hasCutout(slug: string): boolean {
