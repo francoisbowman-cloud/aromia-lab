@@ -1,5 +1,5 @@
 # Estado del proyecto: Aromia
-Última actualización: 11 de septiembre de 2026 — por: Code (Claude Code) — ver "Actualización 2026-09-11 (decisión #108)" más abajo en este mismo bloque. **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloques 1.1, 1.2 y 1.2b ejecutados 2026-08-27** — decisión #104. 1.1 (PR #114, mergeado): 39 de 41 ramas sueltas borradas en `origin` en dos pasadas con "Kill" de Brey, token `--bg` consolidado, WIP de OMNI plegado (lienzo blanco Opción A adelantado). 1.2 (PR #115, mergeado): retiro del grid público `/catalogo`, del comparador `/comparar` y de `HomeCatalogPreview`; redirects 308 a `/magazine`; `sitemap`/`SEO_STRATEGY`/`omni-strict-audit` alineados; la ficha `/catalogo/[slug]` y el Quiz se conservan. 1.2b + 1.3 modo claro (rama `feat/ticket-1.3-lienzo-blanco`, en PR): links internos repuntados a `/buscar`/`/magazine`, fondos de Home/Ficha a token blanco puro. **Pendientes:** 10 preview de Railway (staged, requieren 2FA de Brey desde el dashboard); 1.3 modo oscuro (QA visual en vivo); 1.4 (ficha para tráfico frío). Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
+Última actualización: 12 de septiembre de 2026 — por: Code (Claude Code) — ver "Actualización 2026-09-12 (decisión #109)" más abajo en este mismo bloque. **Pivote de producto: Aromia pasa de comparador/catálogo navegable a revista de perfumería con afiliados de Amazon embebidos en los artículos** — decisión #103 (Brey con Chat, 24-25/08; documento rector `decision-aromia-revista-sin-catalogo.md` y ticket de coordinación `ticket-transicion-editorial-code-cowork.md`, ambos ahora en la raíz del repo). El grid público `/catalogo` desaparece; la ficha individual `/catalogo/[slug]` sobrevive como destino del Quiz y contenido long-tail indexable. Scraper Awin desactivado por Brey el 25/08 (variables vaciadas en Railway, no-op, reversible). **Bloques 1.1, 1.2 y 1.2b ejecutados 2026-08-27** — decisión #104. 1.1 (PR #114, mergeado): 39 de 41 ramas sueltas borradas en `origin` en dos pasadas con "Kill" de Brey, token `--bg` consolidado, WIP de OMNI plegado (lienzo blanco Opción A adelantado). 1.2 (PR #115, mergeado): retiro del grid público `/catalogo`, del comparador `/comparar` y de `HomeCatalogPreview`; redirects 308 a `/magazine`; `sitemap`/`SEO_STRATEGY`/`omni-strict-audit` alineados; la ficha `/catalogo/[slug]` y el Quiz se conservan. 1.2b + 1.3 modo claro (rama `feat/ticket-1.3-lienzo-blanco`, en PR): links internos repuntados a `/buscar`/`/magazine`, fondos de Home/Ficha a token blanco puro. **Pendientes:** 10 preview de Railway (staged, requieren 2FA de Brey desde el dashboard); 1.3 modo oscuro (QA visual en vivo); 1.4 (ficha para tráfico frío). Contexto previo (8/08): Release Candidate del backlog fusionado a `main` y desplegado — decisión #102; PR #10 (Fase 3, pipeline de catálogo) sigue deliberadamente fuera de `main`, aislado — decisiones #100-101.
 
 **Actualización 2026-09-10 (decisión #106):** sesión de Code (8-10/09) con 5 PR mergeados y desplegados. **Reference Issue 01 ("Aromia · Número 01")** arrancada desde un `.zip` de Chat — docs rectores `PLAN-Aromia-Reference-Issue-01.md` y `ticket-arquitectura-editorial-tiptap.md` (Fase 2 / Tiptap gateada) en la raíz; inventario cerrado (`INVENTARIO-CONTENIDO-RI01.md`); 4 encargos hechos (C = `autor` poblado en los 15 artículos publicados; A/B/D = 3 borradores de Cowork en `drafts/`) — PR #156. **Ticket maestro de Diseño** `ticket-diseno-aromia-punta-a-punta.md` (5 workstreams, 10 decisiones abiertas D-1…D-10) en la raíz. **Bugs visuales corregidos:** defecto de opacidad sobre tokens `var()` de Tailwind (PRs #157 + #160, ~18 sitios; fix de fondo pendiente = WS-4); `perfumeSlugs` desactualizados en `lib/perfumers.ts` (PR #158); héroe de artículo blanco/blanco + lector page-flip que no encajaba (PR #159, verificado en vivo). **El pase profundo de Diseño** (relay v46→v48, PRs #151-155, 2026-09-06/08) también entró desde la última actualización de este documento — no se detalla acá; ver `handoffs/AROMIA_CODE_DEEP_DESIGN_*` y `audits/AROMIA_DEEP_DESIGN_INTEGRATION_AUDIT_2026-09-06.md`.
 **Actualización 2026-09-11 (decisión #107):** WS-4 del ticket maestro de Diseño
@@ -41,6 +41,35 @@ acotado a `.amouage .story-visual.ev1-photo` (3 clases), sin tocar ningún
 otro `.ev1-photo` del sitio. QA: tsc/lint limpios, verificado claro/oscuro,
 desktop/mobile en `next dev` local. Detalle en `project_deep_design_pass`
 (memoria de Code).
+
+**Actualización 2026-09-12 (decisión #109):** absorbido el handoff de
+ChatGPT/Publisher `handoffs/AROMIA_OMNI_PRODUCT_IMAGE_INTEGRATION_2026-09-11.md`
+(PR #167) como **WS-6** del ticket maestro de Diseño (PR #168, mergeado).
+**Bloqueo real encontrado:** el MCP `image-toolkit` (OMNI, `remove_background`
+y afines) no está conectado en la sesión de Code — no hay ningún cutout real
+en el repo (`apps/web/public/perfumes/cutouts/` no existe, `PERFUME_CUTOUTS`
+sigue vacío) pese a las pruebas manuales que documenta `CUTOUT-PILOT-PLAN.md`.
+No se simula con heurística propia. Piloto de 10 perfumes ya seleccionado y
+documentado en `docs/images/OMNI-PILOT-2026-09-11.md`, cubriendo los 10 tipos
+difíciles del handoff — listo para correr en cuanto el MCP esté disponible
+(D-11, nueva fila del ticket maestro). Hallazgo colateral sin resolver: 4
+perfumes con `visual_quality = 'omni-product-approved'` en Postgres sin
+ningún WebP real detrás — a confirmar con Brey/Cowork.
+**Hecho, sin depender del pipeline:** Guías pasa a formar parte de Saber
+(§19 del handoff) — `/academia` gana sección "05 / Guías" (4 artículos reales,
+`categoria='guia'`), el archivo de Historias (`/magazine`) deja de listarlos
+y pierde el filtro "Guías" (mismo patrón que ya excluía `categoria='academia'`
+de ese archivo); `/buscar` sigue encontrándolos (no se tocó
+`buildEditorialIndex`); cero URLs movidas. **Ya conforme, sin cambio:**
+"Dónde encontrarlo" no muestra precio estático de Amazon; Portada no tiene
+rotación aleatoria client-side. **Hallazgo colateral sin resolver:** 4
+artículos `categoria='academia'` están huérfanos del sitio (no aparecen en
+Historias ni en búsqueda ni enlazados desde ningún lado) desde antes de esta
+sesión — decisión de contenido, no técnica. **Sin empezar** (Design, no
+bloqueado por el MCP pero fuera de esta sesión): ritmo editorial de
+Historias, dirección de Fragancias (bloqueada en la práctica sin cutouts
+reales), curación de imágenes de materiales de Saber. Detalle completo en
+`project_omni_cutout_pilot` (memoria de Code).
 
 Nivel: **Producto**, dentro del sistema **Atlas Comerce** (ver `ESTADO-atlas-comerce.md`, Project Atlas-Comerce-Lab)
 
