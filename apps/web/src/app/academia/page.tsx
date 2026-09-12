@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getArticulos } from "@/lib/api";
 
 export const metadata = {
   title: "Saber — Aromia",
@@ -92,13 +93,16 @@ const concentraciones = [
   ["Eau de Cologne", "2–4%", "10%"],
 ] as const;
 
-export default function SaberPage() {
+export default async function SaberPage() {
+  const articulos = await getArticulos();
+  const guias = articulos.filter((articulo) => articulo.categoria === "guia");
+
   return (
     <main className="bg-paper text-ink">
       <header className="mx-auto max-w-[1320px] px-6 pb-12 pt-14 lg:px-10 lg:pb-20 lg:pt-24">
         <div className="grid gap-8 lg:grid-cols-[1.08fr_.72fr] lg:items-end">
           <div><p className="font-plex text-xs uppercase tracking-[.16em] text-[var(--aromia-editorial-accent)]">Saber</p><h1 className="mt-5 max-w-[11ch] font-display text-[54px] leading-[.9] tracking-[-.045em] sm:text-[68px] lg:text-[86px]">Entender cambia la manera de oler.</h1></div>
-          <div className="lg:justify-self-end"><p className="max-w-[43ch] font-sans text-base leading-7 text-muted">Estructura, familias, concentración e historia. No para convertir el perfume en una clase, sino para tener mejores preguntas cuando volvamos a olerlo.</p><nav className="mt-7 flex flex-wrap gap-x-7 gap-y-3 font-plex text-xs uppercase tracking-[.12em]" aria-label="Índice de Saber"><a href="#estructura" className="jump-link">Estructura</a><a href="#familias" className="jump-link">Familias</a><a href="#concentracion" className="jump-link">Concentración</a><a href="#historia" className="jump-link">Historia</a></nav></div>
+          <div className="lg:justify-self-end"><p className="max-w-[43ch] font-sans text-base leading-7 text-muted">Estructura, familias, concentración e historia. No para convertir el perfume en una clase, sino para tener mejores preguntas cuando volvamos a olerlo.</p><nav className="mt-7 flex flex-wrap gap-x-7 gap-y-3 font-plex text-xs uppercase tracking-[.12em]" aria-label="Índice de Saber"><a href="#estructura" className="jump-link">Estructura</a><a href="#familias" className="jump-link">Familias</a><a href="#concentracion" className="jump-link">Concentración</a><a href="#historia" className="jump-link">Historia</a>{guias.length > 0 ? <a href="#guias" className="jump-link">Guías</a> : null}</nav></div>
         </div>
       </header>
 
@@ -181,6 +185,26 @@ export default function SaberPage() {
           </ol>
         </div>
       </section>
+
+      {guias.length > 0 ? (
+        <section id="guias" className="border-t border-line bg-soft">
+          <div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24">
+            <div className="mb-12"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">05 / Guías</p><h2 className="mt-4 max-w-[15ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Lo que aprendiste, puesto en práctica.</h2><p className="mt-5 max-w-[48ch] font-sans text-sm leading-6 text-muted">Guías de compra y de ocasión — contenido pedagógico, no reseñas. Viven acá, no en el archivo de Historias.</p></div>
+            <ul className="grid grid-cols-1 gap-x-10 gap-y-2 border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+              {guias.map((guia, index) => (
+                <li key={guia.slug} className="border-b border-line py-7">
+                  <Link href={`/magazine/${guia.slug}`} className="group block">
+                    <p className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">0{index + 1}</p>
+                    <h3 className="mt-4 max-w-[18ch] font-display text-2xl leading-[1.05] transition group-hover:opacity-70">{guia.titulo}</h3>
+                    {guia.meta_description ? <p className="mt-3 font-sans text-sm leading-6 text-muted">{guia.meta_description}</p> : null}
+                    <span className="mt-5 inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">Leer guía →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       <section className="mx-auto max-w-[1320px] px-6 pb-20 lg:px-10 lg:pb-28"><div className="grid gap-8 border-t border-line pt-10 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">Seguir</p><h2 className="mt-4 max-w-[16ch] font-display text-[36px] leading-[.98] tracking-[-.03em]">Ahora vuelve a las historias y mira si algo huele distinto.</h2></div><div className="flex flex-wrap gap-6"><Link href="/magazine" className="nav-link text-sm text-ink">Ir a Historias</Link><Link href="/descubrir" className="nav-link text-sm text-ink">Abrir Discovery</Link></div></div></section>
     </main>
