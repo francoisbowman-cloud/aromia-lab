@@ -212,7 +212,7 @@ selección del piloto), PR de Guías→Saber, este mismo bloque.
 | D-8 | Gate para arrancar WS-2 (Fase 1 de RI01) ahora, en paralelo a WS-1 | WS-2 |
 | D-9 | Gate para la migración técnica de WS-3 (después de la auditoría de WS-2) | WS-3 |
 | D-10 | Relevancia visual del Quiz en Discovery — dirección que quiere Brey | pieza de WS-1 / entra en un mini-brief propio |
-| D-11 | Conectar el MCP `image-toolkit` (OMNI) en una sesión de Code, o asignar a otro actor que ya lo tenga, para correr el piloto de 10 perfumes preparado en `docs/images/OMNI-PILOT-2026-09-11.md` | WS-6 |
+| D-11 | ~~Conectar el MCP `image-toolkit` (OMNI)...~~ — **resuelto 2026-09-12**: piloto corrido, 7/10 slugs A registrados en `PERFUME_CUTOUTS`, sign-off de Brey dado. Ver `docs/images/OMNI-PILOT-RESULTADOS-2026-09-12.md` | WS-6 |
 
 ---
 
@@ -233,7 +233,7 @@ WS-5 (extracción del sistema)
 
 WS-4 (tipografía + tokens)  ──► independiente; tipografía espera D-7; tokens de opacidad puede ir cuando haya banda de QA
 
-WS-6 (OMNI producto + refinamientos editoriales)  ──► Guías→Saber hecho; piloto OMNI espera D-11 (MCP image-toolkit); Fragancias espera al piloto aprobado
+WS-6 (OMNI producto + refinamientos editoriales)  ──► Guías→Saber hecho; piloto OMNI CERRADO (D-11, 2026-09-12, 7/10 cutouts en PERFUME_CUTOUTS); Fragancias ya puede apoyarse en los 7 cutouts reales
 ```
 
 **Orden recomendado de arranque:** D-8 (arrancar WS-2 ya) + los fixes chicos de
