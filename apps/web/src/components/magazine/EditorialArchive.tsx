@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { EditorialIndexItem } from "@/lib/editorialIndex";
 
-const FILTERS = ["Todas", "Historias", "Materia", "Personas", "Reflexión", "Guías", "Análisis"] as const;
+const FILTERS = ["Todas", "Historias", "Materia", "Personas", "Reflexión", "Análisis"] as const;
 type Filter = (typeof FILTERS)[number];
 
 const STORY_VISUALS: Record<string, { src: string; alt: string; objectPosition?: string }> = {
@@ -61,7 +61,11 @@ function StoryVisual({
 
 export function EditorialArchive({ items }: { items: EditorialIndexItem[] }) {
   const [active, setActive] = useState<Filter>("Todas");
-  const filtered = useMemo(() => active === "Todas" ? items : items.filter((item) => item.territory === active), [active, items]);
+  // Guías es territorio de Saber (/academia), no de este archivo — se excluye acá
+  // en vez de en buildEditorialIndex() para no tocar /buscar, que reutiliza esa
+  // misma función y sí debe seguir encontrando artículos de guía.
+  const historiasItems = useMemo(() => items.filter((item) => item.territory !== "Guías"), [items]);
+  const filtered = useMemo(() => active === "Todas" ? historiasItems : historiasItems.filter((item) => item.territory === active), [active, historiasItems]);
   const lead = filtered[0];
   const rest = filtered.slice(1);
   const leadHasVisual = Boolean(lead && STORY_VISUALS[lead.slug]);

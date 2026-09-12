@@ -173,6 +173,31 @@ Brey. Cuando lo esté, extraer únicamente lo que RI01 realmente usó:
 
 ---
 
+### WS-6 · OMNI producto real + refinamientos editoriales (absorbido 2026-09-11)
+
+Handoff de ChatGPT/Publisher — `handoffs/AROMIA_OMNI_PRODUCT_IMAGE_INTEGRATION_2026-09-11.md`
+(PR #167, mergeado). Amplía el alcance de Design/OMNI, no es un proyecto
+aparte. Reutiliza la infra de PR #117 (`ProductImage.tsx`, `perfumeCutouts.ts`,
+`CUTOUT-PILOT-PLAN.md`, `omni-strict-audit`) — no se duplica el pipeline.
+
+**Regla operativa:** Design define la intención visual · OMNI prepara y valida
+los assets · Code integra, prueba y entrega.
+
+| Frente | Estado (2026-09-11) |
+|---|---|
+| Piloto OMNI (8-12 perfumes, clasificación A/B/C/D, light/dark gate) | **Bloqueado** — el MCP `image-toolkit` (OMNI) no está conectado en la sesión de Code; no se simula con heurística propia. Selección de 10 slugs ya preparada y documentada en `docs/images/OMNI-PILOT-2026-09-11.md`, lista para correr en cuanto el MCP esté disponible (en esta sesión o en la que lo tenga, entregando los WebP a Code). |
+| Guías dentro de Saber | **Hecho** (PR de esta sesión) — sección "05 / Guías" en `/academia`, excluida del archivo de Historias; cero URLs movidas; `/buscar` sigue encontrando las guías. |
+| "Dónde encontrarlo" sin precio estático | **Ya conforme** — verificado en `PriceTable.tsx`, sin cambio. |
+| Portada sin rotación aleatoria client-side | **Ya conforme** en la parte "no aleatorio" (sin `Math.random`); la lógica editorial de rotación por edición (lead/supporting stories) **no está implementada** — contenido nuevo, no un fix. |
+| Historias con ritmo editorial (§14 del handoff) | **Sin empezar** — trabajo de composición de Design, no bloqueado por el pipeline pero fuera del alcance ejecutado esta sesión. |
+| Fragancias como índice editorial de objetos (§15) | **Bloqueado** en la práctica — depende de cutouts reales, hoy inexistentes. |
+| Saber — imágenes de materiales con estándar editorial (§18) | **Sin empezar** — curación de fuentes documentales/botánicas o IA vía ChatGPT, no ejecutable por Code sin sourcing o generación. |
+
+**Entregable de este tramo:** `docs/images/OMNI-PILOT-2026-09-11.md` (hallazgos +
+selección del piloto), PR de Guías→Saber, este mismo bloque.
+
+---
+
 ## 3. Decisiones abiertas de Brey (bloquean tramos concretos)
 
 | # | Decisión | Bloquea |
@@ -187,6 +212,7 @@ Brey. Cuando lo esté, extraer únicamente lo que RI01 realmente usó:
 | D-8 | Gate para arrancar WS-2 (Fase 1 de RI01) ahora, en paralelo a WS-1 | WS-2 |
 | D-9 | Gate para la migración técnica de WS-3 (después de la auditoría de WS-2) | WS-3 |
 | D-10 | Relevancia visual del Quiz en Discovery — dirección que quiere Brey | pieza de WS-1 / entra en un mini-brief propio |
+| D-11 | Conectar el MCP `image-toolkit` (OMNI) en una sesión de Code, o asignar a otro actor que ya lo tenga, para correr el piloto de 10 perfumes preparado en `docs/images/OMNI-PILOT-2026-09-11.md` | WS-6 |
 
 ---
 
@@ -206,6 +232,8 @@ WS-3 (RI01 Fase 2 / Tiptap)  ──► prototipo Acto II ──► responsive re
 WS-5 (extracción del sistema)
 
 WS-4 (tipografía + tokens)  ──► independiente; tipografía espera D-7; tokens de opacidad puede ir cuando haya banda de QA
+
+WS-6 (OMNI producto + refinamientos editoriales)  ──► Guías→Saber hecho; piloto OMNI espera D-11 (MCP image-toolkit); Fragancias espera al piloto aprobado
 ```
 
 **Orden recomendado de arranque:** D-8 (arrancar WS-2 ya) + los fixes chicos de
@@ -231,6 +259,10 @@ Aromia "tiene su diseño cerrado punta a punta" cuando:
    viewports × claro/oscuro.
 5. **WS-5:** `SISTEMA-EXTRAIDO.md` entregado, con solo lo que RI01 probó en uso
    real.
+6. **WS-6:** piloto OMNI de 8-12 perfumes aprobado (A/B/C/D, light/dark gate,
+   `PERFUME_CUTOUTS` sólo con aprobados) antes de escalar a los 125; Guías
+   integrado en Saber; Fragancias/Historias/Saber con la dirección editorial
+   del handoff sin convertirse en ecommerce ni mega design system.
 
 Cada workstream cierra con handoff nativo a Code (mockups + especificación de
 relaciones + `DESVIACIONES.md` + decisiones de traducción), no "diseño terminado
