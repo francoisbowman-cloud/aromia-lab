@@ -45,7 +45,7 @@ adminArticlesRouter.get(
 
     const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
     const { rows } = await pool.query(
-      `SELECT id, slug, titulo, categoria, estado, imagen_portada_url, actualizado_en
+      `SELECT id, slug, titulo, categoria, estado, imagen_portada_url, actualizado_en, nivel
        FROM articles ${where} ORDER BY actualizado_en DESC`,
       params,
     );
@@ -84,7 +84,7 @@ adminArticlesRouter.patch(
     const b = req.body;
     const fields = [
       "titulo", "categoria", "estado", "contenido_html", "autor", "meta_title",
-      "meta_description", "url_canonica", "keyword_objetivo",
+      "meta_description", "url_canonica", "keyword_objetivo", "nivel",
     ];
 
     const updates: string[] = [];

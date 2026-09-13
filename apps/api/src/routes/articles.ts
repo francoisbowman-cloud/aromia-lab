@@ -9,7 +9,7 @@ articlesRouter.get(
   asyncHandler(async (_req, res) => {
     const { rows } = await pool.query(
       `SELECT id, slug, titulo, categoria, imagen_portada_url, meta_description,
-              perfumes_relacionados, publicado_en
+              perfumes_relacionados, publicado_en, nivel
        FROM articles WHERE estado = 'publicado' ORDER BY publicado_en DESC`,
     );
     res.json(rows);
