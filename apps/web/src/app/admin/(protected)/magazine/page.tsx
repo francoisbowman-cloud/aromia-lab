@@ -11,6 +11,7 @@ interface ArticleListItem {
   estado: "borrador" | "publicado";
   imagen_portada_url: string | null;
   actualizado_en: string;
+  nivel: "n1" | "n2" | "n3" | "n4" | null;
 }
 
 interface ArticleDetail extends ArticleListItem {
@@ -22,6 +23,14 @@ interface ArticleDetail extends ArticleListItem {
 }
 
 const CATEGORIAS = ["resena", "guia", "analisis", "tendencias"];
+
+const NIVELES: { value: ArticleDetail["nivel"]; label: string; hint: string }[] = [
+  { value: null, label: "Sin asignar", hint: "corre como N3 (fila corriente)" },
+  { value: "n1", label: "N1 · Portada", hint: "1 por tanda, con foto propia de la escena" },
+  { value: "n2", label: "N2 · Destacada", hint: "2-3 por tanda, con imagen que ilustra de verdad" },
+  { value: "n3", label: "N3 · Corriente", hint: "el resto — miniatura solo si ilustra el tema" },
+  { value: "n4", label: "N4 · Nota breve", hint: "respiro sin foto, 1 cada 6-8 piezas" },
+];
 
 export default function AdminMagazinePage() {
   const [items, setItems] = useState<ArticleListItem[] | null>(null);
@@ -176,7 +185,7 @@ export default function AdminMagazinePage() {
             </p>
           ) : (
             <div>
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
                 <div>
                   <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Título
@@ -226,6 +235,25 @@ export default function AdminMagazinePage() {
                   >
                     <option value="borrador">Borrador</option>
                     <option value="publicado">Publicado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                    Nivel editorial
+                  </label>
+                  <select
+                    value={article.nivel ?? ""}
+                    onChange={(e) =>
+                      setArticle({ ...article, nivel: (e.target.value || null) as ArticleDetail["nivel"] })
+                    }
+                    title={NIVELES.find((n) => (n.value ?? "") === (article.nivel ?? ""))?.hint}
+                    className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
+                  >
+                    {NIVELES.map((n) => (
+                      <option key={n.label} value={n.value ?? ""}>
+                        {n.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>

@@ -230,6 +230,30 @@ export const OLFACTIVE_FAMILIES: OlfactiveFamily[] = [
   },
 ];
 
+// Matiz base del sello olfativo (encargo A) por familia canónica — nunca
+// inventado por perfume, ver OlfactiveSeal.tsx. Elegido por asociación de
+// color con la materia dominante de cada familia, no decorativo.
+export const FAMILY_HUES: Record<string, number> = {
+  citrica: 62,
+  floral: 336,
+  amaderada: 30,
+  "ambar-oriental": 28,
+  chipre: 74,
+  fougere: 114,
+  aromatica: 96,
+  gourmand: 22,
+  acuatica: 200,
+  cuero: 20,
+};
+
+export const DEFAULT_FAMILY_HUE = 40;
+
+export function hueForFamily(familyOlfativa: string | null | undefined): number {
+  const [match] = familiesForValue(familyOlfativa ?? null);
+  if (!match) return DEFAULT_FAMILY_HUE;
+  return FAMILY_HUES[match.slug] ?? DEFAULT_FAMILY_HUE;
+}
+
 function normalize(value: string) {
   return value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }

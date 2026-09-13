@@ -49,9 +49,22 @@
   --border: var(--line);
   --input: var(--line);
   --ring: var(--gold);
+  /* Sello olfativo (encargo A, listado de Fragancias por familia): la tonalidad
+     (--sello-h) se fija por perfume en línea, derivada de la familia olfativa;
+     estos tres tokens fijan cuánto "baja" cada fase sin tocar el matiz — el
+     mismo esquema para las 10 familias. */
+  --sello-s: 42%;
+  --sello-l-out: 78%;
+  --sello-l-mid: 58%;
+  --sello-l-base: 36%;
 }
 
 [data-theme="dark"] {
+  /* "El sello baja luminosidad, no satura" (Design, encargo A) — misma
+     saturación, luminosidad más baja en las tres fases. */
+  --sello-l-out: 58%;
+  --sello-l-mid: 42%;
+  --sello-l-base: 24%;
   --surface: #17120d;
   --soft: #1c1610;
   --text: #f2ebdd;

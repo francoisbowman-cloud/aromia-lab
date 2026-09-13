@@ -33,14 +33,43 @@ const familias = [
   { nombre: "Gourmand", texto: "Vainilla, cacao y notas dulces inspiradas en sabores y postres.", href: "/descubrir/familias/gourmand" },
 ] as const;
 
-const materialStrip = [
+// Encargo C (Design, WS-6): por material, orden de preferencia de foto es
+// documental > archivo institucional > generada por IA (esta última nunca la
+// hace Code). `bergamota` e `incienso` ya tienen una foto real que cumple el
+// criterio (fruto/resina, no plano decorativo). `salvia romana`, `pachulí` y
+// `limón` NO lo cumplen todavía (las dos primeras mostraban la planta viva en
+// el campo — Design pidió justo lo contrario: hoja seca/lámina de herbario,
+// no maleza en un jardín) y quedan a propósito sin `src` hasta que se
+// consiga la toma correcta — mejor un hueco tipográfico que una foto que no
+// pasó el estándar editorial.
+interface SaberMaterial {
+  name: string;
+  scientificName?: string;
+  family: string;
+  href: string;
+  src?: string;
+  alt?: string;
+  whatShows?: string;
+  credit?: string;
+}
+
+const materialStrip: SaberMaterial[] = [
   {
     name: "Bergamota",
+    scientificName: "Citrus bergamia",
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
     src: "/editorial-v1/bergamot-documentary.jpg",
     alt: "Fruto de bergamota de Calabria.",
+    whatShows: "El fruto entero, cáscara al frente — ahí está el aceite.",
     credit: "Xenocryst / Antares Scorpii · CC BY-SA 2.0",
+  },
+  {
+    name: "Limón / cítricos",
+    scientificName: "Citrus limon",
+    family: "Cítrica",
+    href: "/descubrir/familias/citrica",
+    whatShows: "Pendiente: cáscara prensada o ralladura, no el fruto entero — para no repetir la bergamota.",
   },
   {
     name: "Rosa",
@@ -60,29 +89,29 @@ const materialStrip = [
   },
   {
     name: "Incienso",
+    scientificName: "Boswellia sacra",
     family: "Ámbar / Oriental",
     href: "/descubrir/familias/ambar-oriental",
     src: "/editorial-v1/frankincense-documentary.jpg",
-    alt: "Boswellia sacra, árbol del incienso, en Dhofar, Omán.",
+    alt: "Resina de Boswellia sacra en el tronco, Dhofar, Omán.",
+    whatShows: "La resina saliendo del tronco, recién cortada — no el árbol entero ni el humo del ritual.",
     credit: "Krzysztof Ziarnek (Kenraiz) · CC BY-SA 4.0",
   },
   {
     name: "Salvia romana",
+    scientificName: "Salvia sclarea",
     family: "Aromática",
     href: "/descubrir/familias/aromatica",
-    src: "/editorial-v1/clary-sage-documentary.jpg",
-    alt: "Salvia sclarea, salvia romana.",
-    credit: "Llez · CC BY-SA 3.0",
+    whatShows: "Pendiente: lámina de herbario o ilustración científica de dominio público — la planta en el campo se lee como maleza.",
   },
   {
     name: "Pachulí",
+    scientificName: "Pogostemon cablin",
     family: "Amaderada",
     href: "/descubrir/familias/amaderada",
-    src: "/editorial-v1/patchouli-documentary.jpg",
-    alt: "Pogostemon cablin, planta de pachulí.",
-    credit: "Joe Laurence / Seychelles News Agency · CC BY 4.0",
+    whatShows: "Pendiente: la hoja seca y fermentada, apilada o en manojo — la planta fresca no huele a pachulí y confunde.",
   },
-] as const;
+];
 
 // La barra representa el punto medio del rango real de concentrado, normalizado
 // al del Parfum (~30%) — no un valor decorativo.
@@ -139,7 +168,7 @@ export default async function SaberPage() {
             <div className="lg:justify-self-end"><p className="max-w-[48ch] font-sans text-base leading-7 text-muted">No son cajas cerradas. Son una primera orientación para reconocer parentescos entre perfumes que, a simple vista, pueden parecer muy distintos.</p><Link href="/descubrir/familias" className="mt-4 inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">Explorar las diez familias en Discovery →</Link></div>
           </div>
 
-          <div className="grid grid-cols-2 border-y border-line sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 border-y border-line sm:grid-cols-4 lg:grid-cols-7">
             {materialStrip.map((material,index)=> {
               return <Link key={material.name} href={material.href} className={`group min-w-0 border-line py-4 ${index % 2 === 0 ? "pr-2" : "pl-2"} sm:px-2 lg:border-r lg:px-3 lg:last:border-r-0`}>
                 <figure>
@@ -148,12 +177,20 @@ export default async function SaberPage() {
                       descartaba hasta el 47% del ancho de las apaisadas; el cuadrado
                       reparte el recorte y ninguna pierde su motivo. */}
                   <div className="relative aspect-square overflow-hidden bg-soft">
-                    <Image src={material.src} alt={material.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" style={{objectFit:"cover"}} />
+                    {material.src ? (
+                      <Image src={material.src} alt={material.alt ?? material.name} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 14vw" style={{objectFit:"cover"}} />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center border border-dashed border-line p-3 text-center">
+                        <span className="font-plex text-[9px] uppercase tracking-[.1em] text-muted">Foto documental pendiente</span>
+                      </div>
+                    )}
                   </div>
                   <figcaption className="pt-3">
                     <span className="block font-display text-lg leading-none text-ink transition group-hover:opacity-70">{material.name}</span>
+                    {material.scientificName ? <span className="mt-1 block font-display italic text-xs text-muted">{material.scientificName}</span> : null}
                     <span className="mt-1 block font-plex text-[9px] uppercase tracking-[.12em] text-muted">{material.family}</span>
-                    <span className="mt-2 block font-sans text-[9px] leading-4 text-muted">{material.credit}</span>
+                    {material.whatShows ? <span className="mt-2 block font-sans text-[11px] leading-4 text-muted">{material.whatShows}</span> : null}
+                    {material.credit ? <span className="mt-2 block font-sans text-[9px] leading-4 text-muted">{material.credit}</span> : null}
                   </figcaption>
                 </figure>
               </Link>;
