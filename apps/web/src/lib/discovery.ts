@@ -1,4 +1,4 @@
-import type { Perfume } from "./types";
+import type { DiscoveryPerfume } from "./types";
 
 function norm(value: string | null | undefined) {
   return (value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
@@ -17,12 +17,12 @@ function overlap(a?: string[], b?: string[]) {
 }
 
 export interface SimilarityResult {
-  perfume: Perfume;
+  perfume: DiscoveryPerfume;
   score: number;
   reasons: string[];
 }
 
-export function similarityScore(source: Perfume, candidate: Perfume): SimilarityResult {
+export function similarityScore(source: DiscoveryPerfume, candidate: DiscoveryPerfume): SimilarityResult {
   let score = 0;
   const reasons: string[] = [];
   const familyA = norm(source.familia_olfativa);
@@ -49,7 +49,7 @@ export function similarityScore(source: Perfume, candidate: Perfume): Similarity
   return { perfume: candidate, score, reasons: reasons.slice(0, 3) };
 }
 
-export function getSimilarPerfumes(source: Perfume, perfumes: Perfume[], limit = 6): SimilarityResult[] {
+export function getSimilarPerfumes(source: DiscoveryPerfume, perfumes: DiscoveryPerfume[], limit = 6): SimilarityResult[] {
   return perfumes
     .filter((candidate) => candidate.slug !== source.slug)
     .map((candidate) => similarityScore(source, candidate))
@@ -60,7 +60,7 @@ export function getSimilarPerfumes(source: Perfume, perfumes: Perfume[], limit =
 
 export type DiscoverySort = "relevancia" | "rating" | "precio-asc" | "precio-desc" | "nombre";
 
-export function discoveryTextScore(perfume: Perfume, query: string) {
+export function discoveryTextScore(perfume: DiscoveryPerfume, query: string) {
   const q = norm(query);
   if (!q) return 0;
   const name = norm(perfume.nombre);

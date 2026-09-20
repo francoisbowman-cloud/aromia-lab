@@ -45,6 +45,48 @@ export interface Perfume {
   retailers?: Retailer[];
 }
 
+// DTO acotado que devuelven /api/perfumes/search y /api/perfumes/discovery-seed
+// (Discovery/Search bounded queries, handoffs/AROMIA_CODE_DISCOVERY_SEARCH_ARCHITECTURE_2026-09-20.md).
+// Trae los campos que PerfumeCard renderiza más los que discovery.ts/
+// personalization.ts necesitan para rankear en el cliente — nada de
+// retailers, precios ni reseñas largas, eso vive solo en la ficha completa.
+// `Perfume` cumple esta forma estructuralmente, así que las funciones que
+// migran a este tipo siguen aceptando perfumes completos sin cambios.
+export type DiscoveryPerfume = Pick<
+  Perfume,
+  | "slug"
+  | "nombre"
+  | "marca"
+  | "genero"
+  | "familia_olfativa"
+  | "concentracion"
+  | "notas_salida"
+  | "notas_corazon"
+  | "notas_fondo"
+  | "temporada_recomendada"
+  | "ocasion"
+  | "categoria_precio"
+  | "nicho_o_comercial"
+  | "imagen_url"
+  | "rating_promedio"
+>;
+
+export interface PerfumeSearchResponse {
+  items: DiscoveryPerfume[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface PerfumeFacet {
+  name: string;
+  count: number;
+}
+
+export interface PerfumeFacetsResponse {
+  families: PerfumeFacet[];
+}
+
 export interface Article {
   id: number;
   slug: string;

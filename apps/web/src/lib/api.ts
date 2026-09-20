@@ -1,4 +1,4 @@
-import type { Article, Perfume } from "./types";
+import type { Article, DiscoveryPerfume, Perfume, PerfumeFacetsResponse, PerfumeSearchResponse } from "./types";
 
 const LOCAL_API = "http://localhost:4000";
 const PRIVATE_API = "http://api.railway.internal:4000";
@@ -37,6 +37,57 @@ async function fetchApi(path: string, init?: RequestInit & { next?: { revalidate
 
 export async function getPerfumes(): Promise<Perfume[]> {
   const res = await fetchApi("/api/perfumes", { cache: "no-store" });
+  if (!res?.ok) return [];
+  try {
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+// Búsqueda acotada server-backed (reemplaza cargar Perfume[] completo en
+// /buscar — ver handoffs/AROMIA_CODE_DISCOVERY_SEARCH_ARCHITECTURE_2026-09-20.md).
+// `revalidate` corto en vez de no-store: mismas queries repetidas en una
+// ventana de 30s reusan cache, sin perder frescura real.
+export async function searchPerfumes(params: { q?: string; familia?: string; page?: number; pageSize?: number }): Promise<PerfumeSearchResponse> {
+  const qs = new URLSearchParams();
+  if (params.q) qs.set("q", params.q);
+  if (params.familia) qs.set("familia", params.familia);
+  if (params.page) qs.set("page", String(params.page));
+  if (params.pageSize) qs.set("pageSize", String(params.pageSize));
+
+  const res = await fetchApi(`/api/perfumes/search?${qs.toString()}`, { next: { revalidate: 30 } });
+  const empty: PerfumeSearchResponse = { items: [], total: 0, page: 1, pageSize: params.pageSize ?? 20 };
+  if (!res?.ok) return empty;
+  try {
+    const data = await res.json();
+    return {
+      items: Array.isArray(data?.items) ? data.items : [],
+      total: typeof data?.total === "number" ? data.total : 0,
+      page: typeof data?.page === "number" ? data.page : 1,
+      pageSize: typeof data?.pageSize === "number" ? data.pageSize : empty.pageSize,
+    };
+  } catch {
+    return empty;
+  }
+}
+
+export async function getPerfumeFacets(): Promise<PerfumeFacetsResponse> {
+  const res = await fetchApi("/api/perfumes/facets", { next: { revalidate: 300 } });
+  if (!res?.ok) return { families: [] };
+  try {
+    const data = await res.json();
+    return { families: Array.isArray(data?.families) ? data.families : [] };
+  } catch {
+    return { families: [] };
+  }
+}
+
+// Muestra acotada y diversa para rankear recomendaciones en /descubrir sin
+// transportar el catálogo completo — ver discovery-seed en apps/api.
+export async function getDiscoverySeedPerfumes(limit = 48): Promise<DiscoveryPerfume[]> {
+  const res = await fetchApi(`/api/perfumes/discovery-seed?limit=${limit}`, { next: { revalidate: 300 } });
   if (!res?.ok) return [];
   try {
     const data = await res.json();

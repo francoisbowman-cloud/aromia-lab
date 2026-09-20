@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPerfumes } from "@/lib/api";
+import { getDiscoverySeedPerfumes, getPerfumeFacets } from "@/lib/api";
 import { DiscoveryDashboard } from "@/components/discovery/DiscoveryDashboard";
 
 export const metadata: Metadata = {
@@ -9,7 +9,13 @@ export const metadata: Metadata = {
 };
 
 export default async function DescubrirPage() {
-  const perfumes = await getPerfumes();
+  // Antes: getPerfumes() traía el catálogo completo al browser solo para
+  // derivar la lista de familias y rankear 6 recomendaciones. Ahora: facetas
+  // (familias ya agregadas por el servidor) + una muestra acotada y diversa
+  // (hasta 8 perfumes por familia) — suficiente para el atlas y para
+  // rankear localmente contra el perfil, sin transportar el catálogo entero.
+  // Ver handoffs/AROMIA_CODE_DISCOVERY_SEARCH_ARCHITECTURE_2026-09-20.md.
+  const [facets, seedPerfumes] = await Promise.all([getPerfumeFacets(), getDiscoverySeedPerfumes(48)]);
 
   return (
     <main className="min-h-screen bg-paper text-ink">
@@ -28,7 +34,7 @@ export default async function DescubrirPage() {
             </div>
           </div>
         </div>
-        <DiscoveryDashboard perfumes={perfumes} />
+        <DiscoveryDashboard facets={facets.families} seedPerfumes={seedPerfumes} />
       </section>
     </main>
   );
