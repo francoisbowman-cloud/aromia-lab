@@ -1,4 +1,4 @@
-import type { Perfume } from "./types";
+import type { DiscoveryPerfume } from "./types";
 import type { DiscoveryProfile } from "./discoveryProfile";
 import { perfumersForPerfume } from "./perfumers";
 import { similarityScore } from "./discovery";
@@ -8,12 +8,12 @@ function norm(value: string | null | undefined) {
 }
 
 export interface PersonalizedPerfumeResult {
-  perfume: Perfume;
+  perfume: DiscoveryPerfume;
   score: number;
   reasons: string[];
 }
 
-export function personalizedPerfumeScore(perfume: Perfume, profile: DiscoveryProfile, source?: Perfume | null): PersonalizedPerfumeResult {
+export function personalizedPerfumeScore(perfume: DiscoveryPerfume, profile: DiscoveryProfile, source?: DiscoveryPerfume | null): PersonalizedPerfumeResult {
   let score = 0;
   const reasons: string[] = [];
   const family = norm(perfume.familia_olfativa);
@@ -45,7 +45,7 @@ export function personalizedPerfumeScore(perfume: Perfume, profile: DiscoveryPro
   return { perfume, score, reasons: Array.from(new Set(reasons)).slice(0, 3) };
 }
 
-export function rankPersonalizedPerfumes(perfumes: Perfume[], profile: DiscoveryProfile, options: { source?: Perfume | null; excludeSlugs?: string[]; limit?: number } = {}) {
+export function rankPersonalizedPerfumes(perfumes: DiscoveryPerfume[], profile: DiscoveryProfile, options: { source?: DiscoveryPerfume | null; excludeSlugs?: string[]; limit?: number } = {}) {
   const exclude = new Set(options.excludeSlugs ?? []);
   if (options.source) exclude.add(options.source.slug);
   return perfumes.filter((perfume) => !exclude.has(perfume.slug)).map((perfume) => personalizedPerfumeScore(perfume, profile, options.source)).sort((a, b) => b.score - a.score || (b.perfume.rating_promedio ?? 0) - (a.perfume.rating_promedio ?? 0) || a.perfume.nombre.localeCompare(b.perfume.nombre)).slice(0, options.limit ?? 6);

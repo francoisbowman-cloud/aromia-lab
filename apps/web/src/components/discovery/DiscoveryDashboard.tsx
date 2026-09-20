@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ProductImage } from "@/components/perfume/ProductImage";
-import type { Perfume } from "@/lib/types";
+import type { DiscoveryPerfume, PerfumeFacet } from "@/lib/types";
 import { PERFUMERS } from "@/lib/perfumers";
 import { clearDiscoveryProfile, DISCOVERY_PROFILE_EVENT, loadDiscoveryProfile, topSignals } from "@/lib/discoveryProfile";
 import { familiesForValue } from "@/lib/olfactiveFamilies";
@@ -14,7 +14,7 @@ function label(value: string) { return value.replace(/-/g, " "); }
 function strength(score: number, max: number) { return max > 0 ? Math.max(.28, score / max) : .28; }
 const ACCENT = "text-[var(--aromia-editorial-accent)]";
 
-export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
+export function DiscoveryDashboard({ facets, seedPerfumes }: { facets: PerfumeFacet[]; seedPerfumes: DiscoveryPerfume[] }) {
   const [profile, setProfile] = useState(() => loadDiscoveryProfile());
   const [atlasFamily, setAtlasFamily] = useState("");
 
@@ -29,7 +29,12 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
     };
   }, []);
 
-  const ranked = useMemo(() => rankPersonalizedPerfumes(perfumes, profile, { limit: 6 }), [perfumes, profile]);
+  // `seedPerfumes` es una muestra acotada y diversa (hasta 8 por familia,
+  // ver GET /api/perfumes/discovery-seed) — no el catálogo completo. Rankear
+  // y previsualizar sobre esta muestra es una aproximación deliberada del
+  // handoff de Discovery/Search: variedad real por familia sin transportar
+  // los ~125 perfumes al browser.
+  const ranked = useMemo(() => rankPersonalizedPerfumes(seedPerfumes, profile, { limit: 6 }), [seedPerfumes, profile]);
   const families = topSignals(profile.families, 5);
   const notes = topSignals(profile.notes, 8);
   const perfumers = topSignals(profile.perfumers, 4).map(([slug]) => ({ item: PERFUMERS.find((entry) => entry.slug === slug), slug }));
@@ -37,11 +42,11 @@ export function DiscoveryDashboard({ perfumes }: { perfumes: Perfume[] }) {
   const familyMax = families[0]?.[1] ?? 1;
   const noteMax = notes[0]?.[1] ?? 1;
 
-  const atlasFamilies = useMemo(() => Array.from(new Set(perfumes.map((p) => p.familia_olfativa).filter((value): value is string => Boolean(value)))).slice(0, 7), [perfumes]);
+  const atlasFamilies = useMemo(() => facets.map((facet) => facet.name).slice(0, 7), [facets]);
   const atlasPreview = useMemo(() => {
-    const source = atlasFamily ? perfumes.filter((p) => p.familia_olfativa === atlasFamily) : perfumes;
+    const source = atlasFamily ? seedPerfumes.filter((p) => p.familia_olfativa === atlasFamily) : seedPerfumes;
     return source.filter((p) => Boolean(p.imagen_url)).slice(0, 4);
-  }, [perfumes, atlasFamily]);
+  }, [seedPerfumes, atlasFamily]);
 
   return (
     <div>

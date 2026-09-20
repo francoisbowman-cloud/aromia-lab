@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { Perfume } from "@/lib/types";
+import type { DiscoveryPerfume } from "@/lib/types";
 import { publicText } from "@/lib/catalogDisplay";
 import { trackEvent } from "@/lib/analytics";
 import { RatingStars } from "@/components/RatingStars";
@@ -21,7 +21,7 @@ export function PerfumeCardSkeleton() {
   );
 }
 
-export function PerfumeCard({ perfume, variant = "catalog", index, trackingContext, layout = "standard" }: { perfume: Perfume; variant?: "catalog" | "featured"; index?: number; trackingContext?: "quiz_result" | "search" | "catalog"; layout?: Layout }) {
+export function PerfumeCard({ perfume, variant = "catalog", index, trackingContext, layout = "standard" }: { perfume: DiscoveryPerfume; variant?: "catalog" | "featured"; index?: number; trackingContext?: "quiz_result" | "search" | "catalog"; layout?: Layout }) {
   const family = publicText(perfume.familia_olfativa);
   const trackOpen = () => {
     if (!trackingContext) return;
