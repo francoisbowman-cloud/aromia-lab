@@ -28,6 +28,19 @@ type Props = {
  *    se sirve la fuente auténtica vía el endpoint same-origin `catalog-image`,
  *    fundida en el lienzo con `mix-blend-multiply` + máscara radial que
  *    difumina el borde de la foto. No se reescribe ni regenera el producto.
+ *
+ *    WS-1 ítem 1.3 (D-5, criterio de Code): `mix-blend-multiply` funciona
+ *    porque asume un fondo claro detrás — es exactamente lo que rompía en
+ *    modo oscuro (`dark:mix-blend-normal` dejaba el blanco de la foto de
+ *    Amazon como un parche luminoso sobre `#0A0A0A`, y `multiply` liso
+ *    sobre negro oscurece también el frasco). La solución no es cambiar el
+ *    blend, es dejar de pedirle que funcione sobre negro: se agrega un
+ *    plinto claro fijo (no reactivo al tema) detrás de la foto, con la
+ *    misma máscara radial que ya recorta el borde — en claro es
+ *    indistinguible del fondo de página real; en oscuro convierte el
+ *    "parche" accidental en una tarjeta de producto intencional, mismo
+ *    recurso que ya usa cualquier ficha de e-commerce con fotos de fondo
+ *    blanco sobre una interfaz oscura.
  */
 export function ProductImage({ slug, alt, mode = "card", className = "" }: Props) {
   const useCutout = hasCutout(slug);
@@ -37,7 +50,7 @@ export function ProductImage({ slug, alt, mode = "card", className = "" }: Props
   const hoverClass = mode === "card" ? "group-hover:scale-[1.025]" : "hover:scale-[1.008]";
 
   const cutoutClass = `${sizeClass} object-contain object-center transition-transform duration-500 ease-out ${hoverClass} [filter:drop-shadow(0_18px_28px_rgba(20,23,25,.14))]`;
-  const fallbackClass = `${sizeClass} object-contain object-center mix-blend-multiply transition-transform duration-500 ease-out dark:mix-blend-normal ${hoverClass}`;
+  const fallbackClass = `${sizeClass} object-contain object-center mix-blend-multiply transition-transform duration-500 ease-out ${hoverClass}`;
 
   const editorialMask = {
     WebkitMaskImage: "radial-gradient(ellipse 78% 84% at 50% 50%, #000 54%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 82%, transparent 100%)",
@@ -46,6 +59,12 @@ export function ProductImage({ slug, alt, mode = "card", className = "" }: Props
 
   return (
     <div className={`relative flex h-full w-full items-center justify-center overflow-hidden bg-transparent ${className}`}>
+      {!useCutout ? (
+        // Plinto claro fijo (no reactivo al tema, ver nota arriba): sin él,
+        // `mix-blend-multiply` en modo oscuro deja el fondo blanco de la
+        // foto original como un parche luminoso sobre #0A0A0A.
+        <div aria-hidden="true" className={`absolute ${sizeClass}`} style={{ ...editorialMask, background: "#fffdf8" }} />
+      ) : null}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
