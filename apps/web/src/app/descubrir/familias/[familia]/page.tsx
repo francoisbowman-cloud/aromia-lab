@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import { getPerfumes } from "@/lib/api";
 import { PERFUMERS } from "@/lib/perfumers";
 import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
+import { hasCutout } from "@/lib/perfumeCutouts";
+import { ProductImage } from "@/components/perfume/ProductImage";
+import { OlfactiveSeal, olfactiveIntensity } from "@/components/perfume/OlfactiveSeal";
 import {
   OLFACTIVE_FAMILIES,
   familyBySlug,
@@ -33,7 +36,12 @@ export default async function FamiliaSheet({ params }: { params: { familia: stri
   if (!family) notFound();
 
   const catalog = await getPerfumes().catch(() => []);
-  const fragancias = perfumesForFamily(family, catalog).slice(0, 8);
+  const fraganciasFamilia = perfumesForFamily(family, catalog);
+  const fragancias = fraganciasFamilia.slice(0, 8);
+  // Apertura de familia (encargo A): solo si alguna de las 7 fotos reales
+  // recortadas cae en esta familia — si no, la familia abre en versión
+  // tipográfica (el header de abajo ya lo es, no hace falta nada más).
+  const openerPerfume = fraganciasFamilia.find((perfume) => hasCutout(perfume.slug));
 
   const personas = PERFUMERS.filter((perfumer) => {
     if (familyMatchesText(family, perfumer.signature)) return true;
@@ -60,15 +68,20 @@ export default async function FamiliaSheet({ params }: { params: { familia: stri
           <span className="text-ink">{family.name}</span>
         </nav>
 
-        <div className="grid gap-8 border-b border-line pb-14 lg:grid-cols-[.9fr_1.1fr] lg:items-end">
+        <div className={`grid gap-10 border-b border-line pb-14 ${openerPerfume ? "lg:grid-cols-[1.2fr_.8fr] lg:items-end" : "lg:grid-cols-[.9fr_1.1fr] lg:items-end"}`}>
           <div>
             <p className={KICKER}>Familia olfativa</p>
             <h1 className="mt-5 font-display text-[52px] leading-[.9] tracking-[-.04em] sm:text-[66px] lg:text-[84px]">{family.name}</h1>
+            <p className="mt-6 max-w-[46ch] font-display text-[22px] leading-[1.3] tracking-[-.01em] text-ink sm:text-[26px]">{family.smellsLike}</p>
           </div>
-          <div className="lg:justify-self-end">
-            <p className={MUTED_KICKER}>A qué huele</p>
-            <p className="mt-4 max-w-[46ch] font-display text-[22px] leading-[1.3] tracking-[-.01em] text-ink sm:text-[26px]">{family.smellsLike}</p>
-          </div>
+          {openerPerfume ? (
+            <div className="lg:justify-self-end">
+              <div className="aspect-[4/5] w-full max-w-[320px] bg-soft lg:ml-auto">
+                <ProductImage slug={openerPerfume.slug} alt={`${openerPerfume.marca} ${openerPerfume.nombre}`} mode="hero" className="h-full w-full" />
+              </div>
+              <p className="mt-3 max-w-[320px] font-plex text-[10px] uppercase tracking-[.1em] text-muted lg:text-right">{openerPerfume.marca} · {openerPerfume.nombre}</p>
+            </div>
+          ) : null}
         </div>
 
         <div className="grid gap-12 py-14 lg:grid-cols-2 lg:gap-16">
@@ -123,18 +136,24 @@ export default async function FamiliaSheet({ params }: { params: { familia: stri
               <p className={KICKER}>Fragancias relacionadas</p>
               <span className="font-display text-2xl text-ink">{fragancias.length}</span>
             </div>
-            <ul className="mt-8 grid grid-cols-1 border-t border-line sm:grid-cols-2">
-              {fragancias.map((perfume) => (
-                <li key={perfume.slug} className="border-b border-line">
-                  <Link href={`/catalogo/${perfume.slug}`} className="group flex items-baseline justify-between gap-5 py-5">
-                    <span>
-                      <span className="font-plex text-[10px] uppercase tracking-[.12em] text-muted">{perfume.marca}</span>
-                      <span className="mt-1 block font-display text-xl leading-tight text-ink transition group-hover:opacity-70">{perfume.nombre}</span>
-                    </span>
-                    <span className="shrink-0 font-sans text-xs capitalize text-muted">{perfume.familia_olfativa}</span>
-                  </Link>
-                </li>
-              ))}
+            <ul className="mt-8 border-t border-line">
+              {fragancias.map((perfume) => {
+                const intensity = olfactiveIntensity(perfume);
+                const notas = [perfume.notas_salida?.[0], perfume.notas_corazon?.[0], perfume.notas_fondo?.[0]].filter(Boolean).join(" · ");
+                return (
+                  <li key={perfume.slug} className="border-b border-line">
+                    <Link href={`/catalogo/${perfume.slug}`} className="group grid grid-cols-[18px_1fr_auto] items-center gap-4 py-5 sm:gap-5">
+                      <OlfactiveSeal perfume={perfume} className="h-full justify-center" />
+                      <span className="min-w-0">
+                        <span className="block font-plex text-[10px] uppercase tracking-[.1em] text-muted">{perfume.marca}</span>
+                        <span className="mt-1 block font-display text-xl leading-tight text-ink transition group-hover:opacity-70 sm:text-2xl">{perfume.nombre}</span>
+                        {notas ? <span className="mt-1.5 block font-sans text-[13.5px] text-muted">{notas}</span> : null}
+                      </span>
+                      {intensity ? <span className="shrink-0 self-start font-display italic text-sm text-muted">{intensity}</span> : null}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
             <Link href={`/buscar?q=${encodeURIComponent(family.name.toLowerCase())}`} className="mt-6 inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">
               Ver más en Buscar →
