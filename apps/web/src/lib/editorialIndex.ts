@@ -1,4 +1,7 @@
 import type { Article } from "./types";
+import { SUBBATCH_01_SLUGS } from "./subBatch01Slugs";
+
+const SUBBATCH_01_SLUG_SET: ReadonlySet<string> = new Set(SUBBATCH_01_SLUGS);
 
 export type EditorialTerritory = "Historias" | "Materia" | "Personas" | "Reflexión" | "Guías" | "Análisis";
 export type EditorialLevel = "n1" | "n2" | "n3" | "n4";
@@ -94,7 +97,12 @@ export function magazineArticleToIndexItem(article: Article): EditorialIndexItem
 
 export function buildEditorialIndex(articles: Article[]) {
   const seen = new Set<string>();
-  const combined = [...EDITORIAL_STORIES, ...articles.filter((article) => article.categoria !== "academia").map(magazineArticleToIndexItem)];
+  const combined = [
+    ...EDITORIAL_STORIES,
+    ...articles
+      .filter((article) => article.categoria !== "academia" && !SUBBATCH_01_SLUG_SET.has(article.slug))
+      .map(magazineArticleToIndexItem),
+  ];
   return combined.filter((item) => {
     if (seen.has(item.href)) return false;
     seen.add(item.href);

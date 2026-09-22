@@ -3,6 +3,9 @@ import { getPerfumes, getArticulos } from "@/lib/api";
 import { PERFUMERS } from "@/lib/perfumers";
 import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
 import { OLFACTIVE_FAMILIES } from "@/lib/olfactiveFamilies";
+import { SUBBATCH_01_SLUGS } from "@/lib/subBatch01Slugs";
+
+const SUBBATCH_01_SLUG_SET: ReadonlySet<string> = new Set(SUBBATCH_01_SLUGS);
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -34,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const published = new Set(perfumes.map((p) => p.slug));
 
   const paginasPerfumes: MetadataRoute.Sitemap = perfumes.map((p) => ({ url: `${SITE_URL}/catalogo/${p.slug}`, changeFrequency: "weekly", priority: 0.7 }));
-  const paginasArticulos: MetadataRoute.Sitemap = articulos.filter((a) => a.categoria !== "academia").map((a) => ({ url: `${SITE_URL}/magazine/${a.slug}`, lastModified: a.publicado_en, changeFrequency: "monthly", priority: 0.6 }));
+  const paginasArticulos: MetadataRoute.Sitemap = articulos.filter((a) => a.categoria !== "academia" && !SUBBATCH_01_SLUG_SET.has(a.slug)).map((a) => ({ url: `${SITE_URL}/magazine/${a.slug}`, lastModified: a.publicado_en, changeFrequency: "monthly", priority: 0.6 }));
   const paginasPerfumistas: MetadataRoute.Sitemap = PERFUMERS.filter((profile) => profile.perfumeSlugs.some((slug) => published.has(slug))).map((profile) => ({ url: `${SITE_URL}/perfumistas/${profile.slug}`, changeFrequency: "monthly", priority: 0.6 }));
 
   return [...estaticas, ...historias, ...paginasPerfumes, ...paginasPerfumistas, ...paginasArticulos];

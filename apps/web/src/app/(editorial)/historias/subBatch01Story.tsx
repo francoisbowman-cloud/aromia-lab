@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { existsSync, readFileSync } from "node:fs";
-import path from "node:path";
 import styles from "./subBatch01Story.module.css";
+import { getArticuloBySlug } from "@/lib/api";
 
 type StoryBlock =
   | { kind: "heading"; text: string; number: number }
@@ -17,16 +16,8 @@ interface ParsedStory {
   blocks: StoryBlock[];
 }
 
-export type SubBatch01Slug =
-  | "antes-del-perfume-ya-oliamos"
-  | "comprar-para-oler-o-comprar-para-tener"
-  | "cuando-ya-no-hueles-tu-perfume"
-  | "fougere-no-significa-viejo"
-  | "huele-sintetico-que-estamos-diciendo"
-  | "lavanda-limpia-medicinal-barata-elegante"
-  | "nos-perfumamos-para-nosotros-o-para-los-demas"
-  | "podemos-describir-un-olor-sin-compararlo"
-  | "por-que-una-lista-de-notas-no-te-dice-como-huele";
+export type { SubBatch01Slug } from "@/lib/subBatch01Slugs";
+import type { SubBatch01Slug } from "@/lib/subBatch01Slugs";
 
 const visualAssets: Partial<Record<SubBatch01Slug, Partial<Record<number, string>>>> = {
   "antes-del-perfume-ya-oliamos": {
@@ -40,18 +31,18 @@ const visualAlts: Partial<Record<SubBatch01Slug, Partial<Record<number, string>>
   },
 };
 
-function draftDirectory() {
-  const candidates = [
-    path.join(process.cwd(), "drafts"),
-    path.join(process.cwd(), "..", "..", "drafts"),
-  ];
-  return candidates.find((candidate) => existsSync(candidate));
-}
-
-function readDraft(slug: SubBatch01Slug) {
-  const directory = draftDirectory();
-  if (!directory) throw new Error("Aromia drafts directory was not found during build.");
-  return readFileSync(path.join(directory, `${slug}.md`), "utf8");
+// Ingestado a Postgres (WS-1 ítem 1.2 / D-6, migración 022): antes esto
+// leía drafts/*.md del disco en tiempo de render, y drafts/ no está en la
+// imagen de runtime de Railway (Dockerfile solo copia .next/public al
+// stage final) — de ahí el 500 real en producción. El contenido crudo del
+// .md original vive ahora en articles.contenido_markdown, ingestado tal
+// cual con el script apps/api/scripts/ingest-subbatch01.js.
+async function readDraft(slug: SubBatch01Slug) {
+  const article = await getArticuloBySlug(slug);
+  if (!article?.contenido_markdown) {
+    throw new Error(`Aromia: no se encontró contenido_markdown para el artículo "${slug}".`);
+  }
+  return article.contenido_markdown;
 }
 
 function plainMarkdown(value: string) {
@@ -69,8 +60,8 @@ function frontmatterValue(source: string, key: string) {
   return match?.[1]?.replace(/[\"']$/, "").trim() ?? "";
 }
 
-function parseStory(slug: SubBatch01Slug): ParsedStory {
-  const source = readDraft(slug);
+async function parseStory(slug: SubBatch01Slug): Promise<ParsedStory> {
+  const source = await readDraft(slug);
   const title = frontmatterValue(source, "titulo") || slug.replaceAll("-", " ");
   const serie = frontmatterValue(source, "serie") || "Historias";
   const articleStart = source.indexOf(`\n# ${title}`);
@@ -140,8 +131,8 @@ function parseStory(slug: SubBatch01Slug): ParsedStory {
   return { slug, title, serie, deck, blocks: bodyBlocks };
 }
 
-export function makeSubBatchMetadata(slug: SubBatch01Slug): Metadata {
-  const story = parseStory(slug);
+export async function makeSubBatchMetadata(slug: SubBatch01Slug): Promise<Metadata> {
+  const story = await parseStory(slug);
   return {
     title: { absolute: `${story.title} | Aromia` },
     description: story.deck,
@@ -240,10 +231,9 @@ function StoryVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) {
   if (filename) {
     return (
       <figure className={`${styles.visual} ${index === 0 ? styles.photoOpening : ""}`}>
-        {/* Canonical binary is served directly from the quarantined repo asset directory. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/api/editorial-asset/${filename}`}
+          src={`/historias/${filename}`}
           alt={visualAlts[slug]?.[index] ?? "Vista editorial observacional que acompaña la historia."}
           loading={index === 0 ? "eager" : "lazy"}
         />
@@ -255,8 +245,8 @@ function StoryVisual({ slug, index }: { slug: SubBatch01Slug; index: number }) {
   return <NativeVisual slug={slug} index={index} />;
 }
 
-export function SubBatch01Story({ slug }: { slug: SubBatch01Slug }) {
-  const story = parseStory(slug);
+export async function SubBatch01Story({ slug }: { slug: SubBatch01Slug }) {
+  const story = await parseStory(slug);
 
   return (
     <main className={styles.page}>

@@ -100,4 +100,5 @@ export interface Article {
   perfumes_relacionados: number[];
   publicado_en: string;
   nivel?: "n1" | "n2" | "n3" | "n4" | null;
+  contenido_markdown?: string | null;
 }
