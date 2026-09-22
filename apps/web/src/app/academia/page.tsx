@@ -35,13 +35,12 @@ const familias = [
 
 // Encargo C (Design, WS-6): por material, orden de preferencia de foto es
 // documental > archivo institucional > generada por IA (esta última nunca la
-// hace Code). `bergamota` e `incienso` ya tienen una foto real que cumple el
-// criterio (fruto/resina, no plano decorativo). `salvia romana`, `pachulí` y
-// `limón` NO lo cumplen todavía (las dos primeras mostraban la planta viva en
-// el campo — Design pidió justo lo contrario: hoja seca/lámina de herbario,
-// no maleza en un jardín) y quedan a propósito sin `src` hasta que se
-// consiga la toma correcta — mejor un hueco tipográfico que una foto que no
-// pasó el estándar editorial.
+// hace Code). Las 7 fotos ya cumplen el criterio (fruto/resina/hoja real,
+// nunca la planta viva confundible con maleza de jardín). `limón`, `salvia
+// romana` y `pachulí` se cerraron el 22/09 buscando en Wikimedia Commons:
+// zeste real (no el fruto entero, para no repetir la bergamota), lámina
+// botánica de dominio público (Jacob Sturm, 1796) y hoja seca embalada de
+// un archivo institucional (Nationaal Museum van Wereldculturen), respectivamente.
 interface SaberMaterial {
   name: string;
   scientificName?: string;
@@ -69,7 +68,10 @@ const materialStrip: SaberMaterial[] = [
     scientificName: "Citrus limon",
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
-    whatShows: "Pendiente: cáscara prensada o ralladura, no el fruto entero — para no repetir la bergamota.",
+    src: "/editorial-v1/lemon-zest-documentary.jpg",
+    alt: "Ralladura de limón recién rallada.",
+    whatShows: "La cáscara ya rallada, no el fruto entero — para no repetir la bergamota.",
+    credit: "Rebecca Siegel · CC BY 2.0",
   },
   {
     name: "Rosa",
@@ -102,14 +104,20 @@ const materialStrip: SaberMaterial[] = [
     scientificName: "Salvia sclarea",
     family: "Aromática",
     href: "/descubrir/familias/aromatica",
-    whatShows: "Pendiente: lámina de herbario o ilustración científica de dominio público — la planta en el campo se lee como maleza.",
+    src: "/editorial-v1/clary-sage-herbarium.jpg",
+    alt: "Lámina botánica de Salvia sclarea, Deutschlands Flora in Abbildungen (1796).",
+    whatShows: "Lámina de herbario de dominio público — la planta en el campo se lee como maleza.",
+    credit: "Jacob Sturm, 1796 · dominio público",
   },
   {
     name: "Pachulí",
     scientificName: "Pogostemon cablin",
     family: "Amaderada",
     href: "/descubrir/familias/amaderada",
-    whatShows: "Pendiente: la hoja seca y fermentada, apilada o en manojo — la planta fresca no huele a pachulí y confunde.",
+    src: "/editorial-v1/patchouli-leaves-documentary.jpg",
+    alt: "Balas de hojas de pachulí (nilam) secas, listas para embarcar, Aceh, 1929.",
+    whatShows: "La hoja seca y embalada — la planta fresca no huele a pachulí y confunde.",
+    credit: "Nationaal Museum van Wereldculturen · dominio público",
   },
 ];
 
