@@ -39,7 +39,10 @@
   margin: 0;
   max-width: 9ch;
   font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(62px, 8.2vw, 132px);
+  /* Coincide 1:1 con lo que ya renderiza .ev1 h1 (editorial.css), que gana
+     por especificidad — este valor nunca se aplicaba en producción. Migrar
+     al token deja esto correcto en vez de solo silenciosamente ignorado. */
+  font-size: var(--type-display-1);
   line-height: .82;
   letter-spacing: -.058em;
   font-weight: 400;
@@ -49,7 +52,7 @@
   margin: 0;
   max-width: 32ch;
   font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(20px, 1.75vw, 28px);
+  font-size: var(--type-deck);
   line-height: 1.35;
 }
 
@@ -138,7 +141,7 @@
   margin: 0 0 28px;
   max-width: 9ch;
   font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(48px, 5.2vw, 82px);
+  font-size: var(--type-display-2);
   line-height: .93;
   letter-spacing: -.045em;
   font-weight: 400;
@@ -199,7 +202,7 @@
   margin: 0 0 26px;
   max-width: 11ch;
   font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(44px, 5vw, 76px);
+  font-size: var(--type-display-2);
   line-height: .94;
   letter-spacing: -.04em;
   font-weight: 400;
@@ -209,7 +212,7 @@
   margin: 0 0 30px;
   max-width: 42ch;
   font-family: var(--font-display, Georgia, serif);
-  font-size: 18px;
+  font-size: var(--type-body);
   line-height: 1.52;
 }
 
@@ -240,7 +243,7 @@
   margin: 0;
   max-width: 9ch;
   font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(46px, 5.4vw, 78px);
+  font-size: var(--type-display-2);
   line-height: .94;
   letter-spacing: -.04em;
   font-weight: 400;
@@ -272,7 +275,7 @@
 
 .ev1-cover-index-label {
   font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(24px, 2.2vw, 34px);
+  font-size: var(--type-display-4);
   line-height: 1;
 }
 
