@@ -27,7 +27,7 @@
 .coll-open-copy h1{max-width:760px}
 .coll-deck{
   font-family:var(--font-display,Georgia,serif);
-  font-size:clamp(19px,1.6vw,27px);line-height:1.45;max-width:640px;margin:0;
+  font-size:var(--type-deck);line-height:1.45;max-width:640px;margin:0;
 }
 .coll-shelf{
   position:relative;overflow:hidden;min-height:560px;margin:0;

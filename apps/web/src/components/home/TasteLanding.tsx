@@ -53,7 +53,7 @@ export function TasteLanding({ perfumes, articulos, categorias }: { perfumes: Pe
             <p className="font-plex text-[9px] uppercase tracking-[.19em] text-muted">Perfume · Cultura · Descubrimiento</p>
 
             <div className="max-w-[700px] py-12 lg:py-8">
-              <h1 className="max-w-[9.4ch] font-display text-[clamp(3.5rem,6.4vw,6.8rem)] font-medium leading-[.84] tracking-[-.05em] text-ink">
+              <h1 className="max-w-[9.4ch] font-display text-[length:var(--type-display-1)] font-medium leading-[.84] tracking-[-.05em] text-ink">
                 El perfume no se elige. <span className="text-gold-contrast">Se reconoce.</span>
               </h1>
               <div className="mt-9 grid max-w-[680px] gap-7 sm:grid-cols-[1fr_auto] sm:items-end">

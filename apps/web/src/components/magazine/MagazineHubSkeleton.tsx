@@ -23,7 +23,7 @@ export function MagazineHubSkeleton() {
 
       <section className="mx-auto max-w-[1440px] px-6 pb-20 pt-12 lg:px-10 lg:pt-14">
         <div className="mb-8 flex items-end justify-between">
-          <h1 className="font-display text-[clamp(38px,5vw,72px)] leading-none text-ink">
+          <h1 className="font-display text-[length:var(--type-display-2)] leading-none text-ink">
             Magazine
           </h1>
         </div>
