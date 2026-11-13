@@ -6,10 +6,11 @@ const PUBLIC_API = "https://api-production-fe2f.up.railway.app";
 const RETRY_DELAYS_MS = [200, 500, 900];
 
 function apiBases() {
+  if (process.env.API_URL?.trim()) return [process.env.API_URL.trim().replace(/\/$/, "")];
   if (process.env.NODE_ENV === "production") {
     return [PRIVATE_API, PUBLIC_API];
   }
-  return [(process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? LOCAL_API).replace(/\/$/, "")];
+  return [(process.env.NEXT_PUBLIC_API_URL?.trim() || LOCAL_API).replace(/\/$/, "")];
 }
 
 async function fetchWithRetry(url: string, init?: RequestInit & { next?: { revalidate?: number } }): Promise<Response | null> {

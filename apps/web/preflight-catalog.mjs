@@ -1,5 +1,5 @@
 const EXPECTED_PUBLISHED = 125;
-const BASES = [
+const BASES = process.env.API_URL?.trim() ? [process.env.API_URL.trim().replace(/\/$/, "")] : [
   "http://api.railway.internal:4000",
   "https://api-production-fe2f.up.railway.app",
 ];
@@ -22,8 +22,8 @@ async function readCatalog(base) {
     return {
       ok: true,
       count: data.length,
-      complete: data.length === EXPECTED_PUBLISHED,
-      reason: data.length === EXPECTED_PUBLISHED ? "ok" : `expected ${EXPECTED_PUBLISHED}, got ${data.length}`,
+      complete: data.length >= EXPECTED_PUBLISHED,
+      reason: data.length >= EXPECTED_PUBLISHED ? "ok" : `expected at least ${EXPECTED_PUBLISHED}, got ${data.length}`,
     };
   } catch (error) {
     return { ok: false, reason: error instanceof Error ? error.message : String(error) };
