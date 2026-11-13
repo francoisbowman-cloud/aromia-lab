@@ -14,6 +14,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 const { Pool } = require("pg");
+const matter = require("gray-matter");
 
 const DRAFTS_DIR = join(__dirname, "..", "..", "..", "drafts");
 
@@ -29,17 +30,12 @@ const SLUGS = [
   "por-que-una-lista-de-notas-no-te-dice-como-huele",
 ];
 
-function frontmatterValue(source, key) {
-  const match = source.match(new RegExp(`^${key}:\\s*["']?(.+?)["']?\\s*$`, "m"));
-  return match?.[1]?.replace(/["']$/, "").trim() ?? "";
-}
-
 async function main() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
   for (const slug of SLUGS) {
     const raw = readFileSync(join(DRAFTS_DIR, `${slug}.md`), "utf8");
-    const titulo = frontmatterValue(raw, "titulo") || slug.replaceAll("-", " ");
+    const titulo = matter(raw).data.titulo || slug.replaceAll("-", " ");
 
     await pool.query(
       `INSERT INTO articles (slug, titulo, categoria, estado, contenido_markdown, publicado_en)

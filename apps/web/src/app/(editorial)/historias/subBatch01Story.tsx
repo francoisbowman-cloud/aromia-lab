@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "./subBatch01Story.module.css";
 import { getArticuloBySlug } from "@/lib/api";
+import { extractStorySource } from "@/lib/storySource";
 
 type StoryBlock =
   | { kind: "heading"; text: string; number: number }
@@ -62,10 +63,8 @@ function frontmatterValue(source: string, key: string) {
 
 async function parseStory(slug: SubBatch01Slug): Promise<ParsedStory> {
   const source = await readDraft(slug);
-  const title = frontmatterValue(source, "titulo") || slug.replaceAll("-", " ");
+  const { title, body: article } = extractStorySource(source);
   const serie = frontmatterValue(source, "serie") || "Historias";
-  const articleStart = source.indexOf(`\n# ${title}`);
-  const article = articleStart >= 0 ? source.slice(articleStart + 1) : source;
   const lines = article.split(/\r?\n/);
   const blocks: StoryBlock[] = [];
   let paragraph: string[] = [];
