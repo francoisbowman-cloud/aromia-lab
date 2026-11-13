@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Perfume } from "@/lib/types";
-import { DISCOVERY_PROFILE_EVENT, loadDiscoveryProfile } from "@/lib/discoveryProfile";
+import { DISCOVERY_PROFILE_EVENT, emptyDiscoveryProfile, loadDiscoveryProfile } from "@/lib/discoveryProfile";
 import { rankPersonalizedPerfumes } from "@/lib/personalization";
 
 export function PersonalizedDiscoveryRail({ perfumes, source, title = "Explora después" }: { perfumes: Perfume[]; source?: Perfume | null; title?: string }) {
-  const [profile, setProfile] = useState(() => loadDiscoveryProfile());
+  const [profile, setProfile] = useState(emptyDiscoveryProfile);
   useEffect(() => {
     const refresh = () => setProfile(loadDiscoveryProfile());
     refresh();

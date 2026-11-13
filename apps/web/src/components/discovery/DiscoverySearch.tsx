@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { DiscoveryPerfume, PerfumeSearchResponse } from "@/lib/types";
 import type { EditorialIndexItem } from "@/lib/editorialIndex";
 import { discoveryTextScore } from "@/lib/discovery";
-import { loadDiscoveryProfile } from "@/lib/discoveryProfile";
+import { emptyDiscoveryProfile, loadDiscoveryProfile } from "@/lib/discoveryProfile";
 import { personalizedPerfumeScore } from "@/lib/personalization";
 import { trackEvent } from "@/lib/analytics";
 import { fetchPerfumeSearch } from "@/lib/searchClient";
@@ -18,7 +18,7 @@ type SearchState = { status: "idle" | "loading" | "ok" | "error"; response: Perf
 export function DiscoverySearch({ initialResults, editorialItems, initialQuery = "" }: { initialResults: PerfumeSearchResponse | null; editorialItems: EditorialIndexItem[]; initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [retry, setRetry] = useState(0);
-  const [profile, setProfile] = useState(() => loadDiscoveryProfile());
+  const [profile, setProfile] = useState(emptyDiscoveryProfile);
   const [search, setSearch] = useState<SearchState>(
     initialResults ? { status: "ok", response: initialResults } : { status: "idle", response: null },
   );

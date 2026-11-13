@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ProductImage } from "@/components/perfume/ProductImage";
 import type { DiscoveryPerfume, PerfumeFacet } from "@/lib/types";
 import { PERFUMERS } from "@/lib/perfumers";
-import { clearDiscoveryProfile, DISCOVERY_PROFILE_EVENT, loadDiscoveryProfile, topSignals } from "@/lib/discoveryProfile";
+import { clearDiscoveryProfile, DISCOVERY_PROFILE_EVENT, emptyDiscoveryProfile, loadDiscoveryProfile, topSignals } from "@/lib/discoveryProfile";
 import { familiesForValue } from "@/lib/olfactiveFamilies";
 import { rankPersonalizedPerfumes } from "@/lib/personalization";
 import { trackEvent } from "@/lib/analytics";
@@ -15,7 +15,7 @@ function strength(score: number, max: number) { return max > 0 ? Math.max(.28, s
 const ACCENT = "text-[var(--aromia-editorial-accent)]";
 
 export function DiscoveryDashboard({ facets, seedPerfumes }: { facets: PerfumeFacet[]; seedPerfumes: DiscoveryPerfume[] }) {
-  const [profile, setProfile] = useState(() => loadDiscoveryProfile());
+  const [profile, setProfile] = useState(emptyDiscoveryProfile);
   const [atlasFamily, setAtlasFamily] = useState("");
 
   useEffect(() => {

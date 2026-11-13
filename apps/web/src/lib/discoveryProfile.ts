@@ -51,7 +51,11 @@ export function parseDiscoveryProfile(raw: string | null): DiscoveryProfile {
 
 export function loadDiscoveryProfile(): DiscoveryProfile {
   if (typeof window === "undefined") return emptyDiscoveryProfile();
-  return parseDiscoveryProfile(window.localStorage.getItem(DISCOVERY_PROFILE_KEY));
+  try {
+    return parseDiscoveryProfile(window.localStorage.getItem(DISCOVERY_PROFILE_KEY));
+  } catch {
+    return emptyDiscoveryProfile();
+  }
 }
 
 export function saveDiscoveryProfile(profile: DiscoveryProfile) {

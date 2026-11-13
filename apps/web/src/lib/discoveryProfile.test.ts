@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { emptyDiscoveryProfile, parseDiscoveryProfile, topSignals } from "./discoveryProfile";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { emptyDiscoveryProfile, loadDiscoveryProfile, parseDiscoveryProfile, topSignals } from "./discoveryProfile";
 
 describe("discovery profile", () => {
   it("returns an empty v2 profile for invalid JSON", () => {
@@ -24,4 +24,11 @@ describe("discovery profile", () => {
     expect(profile.quizProfiles).toEqual({});
     expect(profile.perfumers).toEqual({});
   });
+});
+
+
+afterEach(() => vi.unstubAllGlobals());
+it("keeps Discovery usable when browser storage is denied", () => {
+  vi.stubGlobal("window", { get localStorage() { throw new DOMException("Blocked", "SecurityError"); } });
+  expect(loadDiscoveryProfile()).toEqual(emptyDiscoveryProfile());
 });
