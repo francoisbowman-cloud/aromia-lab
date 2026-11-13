@@ -22,6 +22,8 @@ export async function fetchPerfumeSearch(
   params: { q?: string; familia?: string; page?: number; pageSize?: number },
   externalSignal?: AbortSignal,
 ): Promise<SearchFetchResult> {
+  if (externalSignal?.aborted) return { status: "aborted" };
+
   const qs = new URLSearchParams();
   if (params.q) qs.set("q", params.q);
   if (params.familia) qs.set("familia", params.familia);
@@ -37,6 +39,7 @@ export async function fetchPerfumeSearch(
     const res = await fetch(`${PUBLIC_API_URL}/api/perfumes/search?${qs.toString()}`, {
       signal: controller.signal,
     });
+    if (externalSignal?.aborted) return { status: "aborted" };
     if (!res.ok) return { status: "error" };
     const data = await res.json();
     return {
@@ -48,8 +51,9 @@ export async function fetchPerfumeSearch(
         pageSize: typeof data?.pageSize === "number" ? data.pageSize : params.pageSize ?? 20,
       },
     };
-  } catch (err) {
-    if (err instanceof DOMException && err.name === "AbortError") return { status: "aborted" };
+  } catch {
+    // Only superseded/unmounted requests are silent. A timeout must exit loading.
+    if (externalSignal?.aborted) return { status: "aborted" };
     return { status: "error" };
   } finally {
     clearTimeout(timeoutId);

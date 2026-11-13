@@ -17,6 +17,7 @@ type SearchState = { status: "idle" | "loading" | "ok" | "error"; response: Perf
 
 export function DiscoverySearch({ initialResults, editorialItems, initialQuery = "" }: { initialResults: PerfumeSearchResponse | null; editorialItems: EditorialIndexItem[]; initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
+  const [retry, setRetry] = useState(0);
   const [profile, setProfile] = useState(() => loadDiscoveryProfile());
   const [search, setSearch] = useState<SearchState>(
     initialResults ? { status: "ok", response: initialResults } : { status: "idle", response: null },
@@ -51,13 +52,13 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
 
     const timer = setTimeout(async () => {
       const result = await fetchPerfumeSearch({ q, pageSize: CANDIDATE_PAGE_SIZE }, controller.signal);
-      if (result.status === "aborted") return;
+      if (controller.signal.aborted || result.status === "aborted") return;
       if (result.status === "error") { setSearch({ status: "error", response: null }); return; }
       setSearch({ status: "ok", response: result.data });
     }, DEBOUNCE_MS);
 
     return () => { clearTimeout(timer); controller.abort(); };
-  }, [q]);
+  }, [q, retry]);
 
   const perfumeResults = useMemo(() => {
     const candidates = search.response?.items ?? [];
@@ -79,6 +80,7 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
   function submit(event: FormEvent) {
     event.preventDefault();
     if (!q) return;
+    if (search.status === "error") setRetry((attempt) => attempt + 1);
     trackEvent("internal_search", { query_length: q.length, perfume_results: perfumeResults.length, article_results: storyResults.length });
   }
 
@@ -91,7 +93,7 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
       <section className="py-12">
         <div className="mb-6 flex items-center gap-4 border-b border-line pb-4 font-plex text-xs uppercase tracking-[.16em] text-muted"><span>Fragancias</span><span className="h-px flex-1 bg-line" /><span>{isLoading ? "…" : perfumeResults.length}</span></div>
         {isError ? (
-          <p className="pt-6 font-sans text-sm text-muted">No pudimos completar la búsqueda. Probá de nuevo en unos segundos.</p>
+          <div role="status" className="pt-6 font-sans text-sm text-muted"><p>No pudimos completar la búsqueda. Probá de nuevo en unos segundos.</p><button type="button" onClick={() => setRetry((attempt) => attempt + 1)} className="mt-3 min-h-11 underline underline-offset-4 text-ink">Reintentar búsqueda</button></div>
         ) : (
           <div className="grid grid-cols-1 border-b border-line md:grid-cols-2 lg:grid-cols-3" aria-busy={isLoading}>
             {perfumeResults.map(({ perfume }, index) => <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} onClick={() => trackEvent("discovery_product_clicked", { context: "search", perfume_slug: perfume.slug, position: index + 1 })} className="border-b border-r border-line p-6 transition hover:bg-soft"><p className="font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">{perfume.marca}</p><h2 className="mt-3 font-display text-3xl text-ink">{perfume.nombre}</h2><p className="mt-3 font-sans text-xs text-muted">{perfume.familia_olfativa ?? "Perfil olfativo"}</p></Link>)}
