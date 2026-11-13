@@ -35,7 +35,7 @@ async function readCatalog(base) {
 for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
   for (const base of BASES) {
     const result = await readCatalog(base);
-    const source = base.includes("railway.internal") ? "private" : "public";
+    const source = process.env.API_URL?.trim() ? "configured" : base.includes("railway.internal") ? "private" : "public";
     if (result.ok) {
       if (result.complete) {
         console.log(`[web-catalog-preflight] PASS source=${source} count=${result.count}`);
