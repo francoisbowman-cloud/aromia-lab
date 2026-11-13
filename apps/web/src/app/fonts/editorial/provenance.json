@@ -1,0 +1,31 @@
+{
+  "repository": "google/fonts",
+  "commit": "29b4ec6df2522a8aee279414b78a07910b065874",
+  "conversion": "fontTools TTFont, flavor=woff2; full glyph coverage, no subsetting",
+  "fonts": [
+    {
+      "file": "Newsreader.woff2",
+      "source": "https://raw.githubusercontent.com/google/fonts/29b4ec6df2522a8aee279414b78a07910b065874/ofl/newsreader/Newsreader%5Bopsz,wght%5D.ttf",
+      "source_sha256": "8a08d13f8a6c0d51be379a60af84f945f65369a67e509ee3c3bdcc421254d7c1",
+      "woff2_sha256": "71c8797438021522c14d8aa21ddb9ba24b4ee55539eff60a8b764739a655d8df"
+    },
+    {
+      "file": "Newsreader-Italic.woff2",
+      "source": "https://raw.githubusercontent.com/google/fonts/29b4ec6df2522a8aee279414b78a07910b065874/ofl/newsreader/Newsreader-Italic%5Bopsz,wght%5D.ttf",
+      "source_sha256": "796668611f80b64d5adf182fde3b6f29ed83b4e7cbec7b96937e84ac01364792",
+      "woff2_sha256": "5acf8ee8fed83efd9a9ddab0c65cafe1772bc54c250a05372423e0c7e7157794"
+    },
+    {
+      "file": "Archivo.woff2",
+      "source": "https://raw.githubusercontent.com/google/fonts/29b4ec6df2522a8aee279414b78a07910b065874/ofl/archivo/Archivo%5Bwdth,wght%5D.ttf",
+      "source_sha256": "0e094a7d3c7c4c25cf1310c4b30014f1dae9332220b1c2c88f4fa996f0b05053",
+      "woff2_sha256": "7fcf7049c9a81043dc36aa973eadb8f1724148b783ecd6498925162c54192994"
+    },
+    {
+      "file": "IBMPlexSans.woff2",
+      "source": "https://raw.githubusercontent.com/google/fonts/29b4ec6df2522a8aee279414b78a07910b065874/ofl/ibmplexsans/IBMPlexSans%5Bwdth,wght%5D.ttf",
+      "source_sha256": "3b031aa4216174205bd8471f88a49b91f093169e9e87bd5262242bc5967fe2e3",
+      "woff2_sha256": "da10c5142804deb303ac024320877079c1b00fceb1dd9d642c1b745d9e893592"
+    }
+  ]
+}

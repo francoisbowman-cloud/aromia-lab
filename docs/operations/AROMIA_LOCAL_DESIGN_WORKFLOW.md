@@ -210,14 +210,12 @@ For cutouts and editorial assets:
 - do not evaluate composition against a temporary external hotlink if the production implementation will use a local asset;
 - preserve exact aspect ratio and transparency behavior expected in production.
 
-## Font caveat
+## Fonts
 
-The repository has previously observed that local `next/font` may fail to fetch Newsreader in some environments.
-
-If this happens:
-- do not redesign typography around the fallback font;
-- use local work for composition/spacing/function;
-- perform final typographic judgment against a production-like build or verified remote render.
+Newsreader (upright and italic), Archivo and IBM Plex Sans are now served locally
+from `apps/web/src/app/fonts/editorial/`. The official pinned sources, checksums
+and OFL licenses accompany the assets. Builds require no Google Fonts request.
+See that directory's README for provenance and the full-glyph payload tradeoff.
 
 ## Branch discipline
 
@@ -256,5 +254,4 @@ rendering and the startup preflight, including in production mode. Without
 before running `npm --prefix apps/web run build`; both use `.next`.
 
 `npm --prefix apps/web run typecheck` runs TypeScript in the correct app directory
-and is now used by `local:verify`. Google Fonts requires `fonts.googleapis.com`
-and `fonts.gstatic.com`; do not use mock fonts for release typography evidence.
+and is now used by `local:verify`. Editorial fonts are local; do not use mock fonts for release typography evidence.
