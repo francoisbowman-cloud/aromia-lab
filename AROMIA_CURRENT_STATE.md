@@ -6,6 +6,31 @@ This file is the compact relay for the command:
 
 It indexes the latest verified operational state. Git history, checkpoints and canonical workflow documents remain authoritative evidence.
 
+## Active mission override — 2026-11-13 (v55)
+
+The historical v54 relay below is preserved as context, not current launch status.
+Publisher Issue #185 is the current execution contract; source and progress are in
+[`docs/mission-185/TRACEABILITY.md`](docs/mission-185/TRACEABILITY.md).
+
+- Actor: Codex / Code. Branch: `feat/185-release-foundation`, base main `589eee2`.
+- Main already includes PR178, PR179, PR181, PR182 and PR183; their old OPEN/P0
+  labels below must not be interpreted as verified current production failures.
+- Implemented: search timeout/retry recovery, profile/portrait hydration fixes,
+  explicit API selection for isolated release checks, correct verification CWD,
+  repeatable local fixture DB, licensed local fonts, and story/preparation separation.
+- Verified locally: full local:verify with 41 web tests and 49 generated build routes;
+  28 compiled-app viewport/theme checks; nine SubBatch01 story routes; failed-search
+  retry restores real results. Evidence and limitations in docs/mission-185.
+- Work is committed on the branch; remote push/PR status is in the checkpoint.
+- NOT LIVE, NOT a final release candidate. Production runtime/data verification,
+  rights/editorial inventory, independent creative review, full accessibility and
+  performance work remain incomplete. No production writes/deployments performed.
+- Network draft: GitHub API and production domains saved; not yet applied or
+  published. Git HTTPS reads/push work; GraphQL and production requests return 403.
+- Next actor: Code, continue Issue185. Apply network settings and recheck access,
+  create draft PR, reconcile live blockers, then finish the critical CMS/content,
+  accessibility/performance and historical visual-experiment work in the ledger.
+
 ## Mandatory actor order
 
 Default production order:
