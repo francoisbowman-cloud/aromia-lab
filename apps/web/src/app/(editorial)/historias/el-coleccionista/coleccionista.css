@@ -10,6 +10,7 @@
   --coll-glass:#8a9690;
   --coll-steel:#62696f;
   --coll-steel-wash:#eceef1;
+  --coll-multiply-wash:#efeee7;
 }
 
 /* ── opening / domestic recognition ─────────────────────────────
@@ -100,7 +101,7 @@
 }
 
 /* density grows through "El objeto tiene la culpa" */
-.coll-section.multiplying{background:#efeee7}
+.coll-section.multiplying{background:var(--coll-multiply-wash)}
 .coll-section.multiplying .coll-rail{color:var(--coll-tobacco)}
 
 /* Le Male typographic lineage — Asset B fallback, approved as the stronger
@@ -232,4 +233,12 @@
 
 @media(prefers-reduced-motion:reduce){
   .coll *{animation:none!important;transition:none!important}
+}
+
+/* Keep the approved composition; adapt only its episodic surfaces for dark reading. */
+[data-theme="dark"] .coll {
+  --coll-steel:#a8b1b7;
+  --coll-steel-wash:#1b2328;
+  --coll-multiply-wash:#1b201b;
+  --coll-tobacco:#ccb290;
 }

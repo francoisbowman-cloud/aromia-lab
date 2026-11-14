@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { adminRequest } from "@/lib/adminRequest";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 interface ArticleListItem {
@@ -17,6 +18,7 @@ interface ArticleListItem {
 
 interface ArticleDetail extends ArticleListItem {
   contenido_html: string;
+  imagen_og_url: string | null;
   autor: string | null;
   meta_title: string | null;
   meta_description: string | null;
@@ -110,6 +112,28 @@ export default function AdminMagazinePage() {
       await loadList();
     } catch { setSaveError(true); }
     finally { setSaving("idle"); }
+  }
+
+  async function saveImage(file: File, field: "imagen_portada_url" | "imagen_og_url") {
+    if (!article) return;
+    const id = article.id;
+    const body = new FormData();
+    body.append("image", file);
+    if (field === "imagen_og_url") body.append("field", "og");
+    const updated = await adminRequest<Partial<ArticleDetail>>(`/api/admin/articles/${id}/image`, { method: "POST", body });
+    setArticle((current) => current?.id === id ? { ...current, ...updated } : current);
+    await loadList();
+  }
+
+  async function saveImageUrl(url: string, field: "imagen_portada_url" | "imagen_og_url") {
+    if (!article) return;
+    if (!/^https?:\/\//i.test(url)) throw new Error("Invalid image URL");
+    const id = article.id;
+    const updated = await adminRequest<ArticleDetail>(`/api/admin/articles/${id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ [field]: url }),
+    });
+    setArticle((current) => current?.id === id ? { ...current, [field]: updated[field] } : current);
+    await loadList();
   }
 
   return (
@@ -297,6 +321,11 @@ export default function AdminMagazinePage() {
                     onChange={(html) => updateArticle({ contenido_html: html })}
                   />
                 </div>
+              </div>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <ImageUpload key={`${article.id}-cover`} label="Imagen de portada" currentUrl={article.imagen_portada_url ?? undefined} onUpload={(file) => saveImage(file, "imagen_portada_url")} onUrlSave={(url) => saveImageUrl(url, "imagen_portada_url")} />
+                <ImageUpload key={`${article.id}-og`} label="Imagen para compartir" currentUrl={article.imagen_og_url ?? undefined} onUpload={(file) => saveImage(file, "imagen_og_url")} onUrlSave={(url) => saveImageUrl(url, "imagen_og_url")} />
               </div>
 
               <div className="mt-5 border-t border-admin-border pt-4">

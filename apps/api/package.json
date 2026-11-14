@@ -11,6 +11,7 @@
     "seed": "tsx src/db/seed.ts",
     "seed:articles": "tsx src/db/seedArticles.ts",
     "catalog-import": "tsx src/db/importCatalogBatch.ts",
+    "test:uploads": "tsx --test src/lib/imageUpload.test.ts",
     "test:catalog-import": "tsx --test src/db/catalogBatchImportContract.test.ts",
     "lint": "eslint \"src/**/*.ts\""
   },

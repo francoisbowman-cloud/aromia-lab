@@ -16,7 +16,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!articulo) return {};
   const title = articulo.meta_title ?? articulo.titulo;
   const description = articulo.meta_description ?? undefined;
-  return { title, description, alternates: { canonical: `/magazine/${articulo.slug}` }, openGraph: { type: "article", title, description, publishedTime: articulo.publicado_en, authors: articulo.autor ? [articulo.autor] : undefined, images: articulo.imagen_portada_url ? [articulo.imagen_portada_url] : undefined }, twitter: { card: "summary_large_image", title, description, images: articulo.imagen_portada_url ? [articulo.imagen_portada_url] : undefined } };
+  const socialImage = articulo.imagen_og_url ?? articulo.imagen_portada_url;
+  return { title, description, alternates: { canonical: `/magazine/${articulo.slug}` }, openGraph: { type: "article", title, description, publishedTime: articulo.publicado_en, authors: articulo.autor ? [articulo.autor] : undefined, images: socialImage ? [socialImage] : undefined }, twitter: { card: "summary_large_image", title, description, images: socialImage ? [socialImage] : undefined } };
 }
 
 export default async function MagazineArticlePage({ params }: { params: { slug: string } }) {

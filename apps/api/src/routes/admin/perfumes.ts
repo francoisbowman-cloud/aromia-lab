@@ -1,32 +1,11 @@
 import { Router } from "express";
-import multer from "multer";
-import { existsSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
 import { pool } from "../../db/pool";
 import { logActivity } from "../../db/activityLog";
 import { asyncHandler } from "../../lib/asyncHandler";
+import { receiveImage, storeEntityImage } from "../../lib/imageUpload";
 
 export const adminPerfumesRouter = Router();
 
-const UPLOADS_DIR = join(__dirname, "..", "..", "..", "uploads", "perfumes");
-if (!existsSync(UPLOADS_DIR)) mkdirSync(UPLOADS_DIR, { recursive: true });
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: UPLOADS_DIR,
-    filename: (_req, file, cb) => {
-      const ext = file.originalname.split(".").pop();
-      cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}.${ext}`);
-    },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (_req, file, cb) => {
-    if (!["image/png", "image/jpeg", "image/webp"].includes(file.mimetype)) {
-      return cb(new Error("Formato no soportado (solo PNG, JPG o WEBP)"));
-    }
-    cb(null, true);
-  },
-});
 
 // ---------- Listado con búsqueda/filtros/paginación ----------
 adminPerfumesRouter.get(
@@ -170,17 +149,13 @@ adminPerfumesRouter.delete(
 // ---------- Subida de imagen ----------
 adminPerfumesRouter.post(
   "/:id/image",
-  upload.single("image"),
+  receiveImage,
   asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No se recibió ninguna imagen" });
-
-    const imagenUrl = `/uploads/perfumes/${req.file.filename}`;
-    const { rows } = await pool.query(
-      "UPDATE perfumes SET imagen_url = $1, actualizado_en = now() WHERE id = $2 RETURNING imagen_url",
-      [imagenUrl, req.params.id],
-    );
-    if (rows.length === 0) return res.status(404).json({ error: "Perfume no encontrado" });
-    res.json(rows[0]);
+    if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: "Identificador no válido" });
+    const updated = await storeEntityImage("perfumes", req.params.id, req.file);
+    if (!updated) return res.status(404).json({ error: "No encontrado" });
+    res.json(updated);
   }),
 );
 

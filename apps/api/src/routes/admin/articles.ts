@@ -1,27 +1,12 @@
 import { Router } from "express";
 import { randomUUID } from "node:crypto";
-import multer from "multer";
-import { existsSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
 import { pool } from "../../db/pool";
 import { logActivity } from "../../db/activityLog";
 import { asyncHandler } from "../../lib/asyncHandler";
+import { receiveImage, storeEntityImage } from "../../lib/imageUpload";
 
 export const adminArticlesRouter = Router();
 
-const UPLOADS_DIR = join(__dirname, "..", "..", "..", "uploads", "articles");
-if (!existsSync(UPLOADS_DIR)) mkdirSync(UPLOADS_DIR, { recursive: true });
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: UPLOADS_DIR,
-    filename: (_req, file, cb) => {
-      const ext = file.originalname.split(".").pop();
-      cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}.${ext}`);
-    },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
 
 function slugify(title: string): string {
   return title
@@ -101,7 +86,7 @@ adminArticlesRouter.patch(
     const b = req.body;
     const fields = [
       "titulo", "categoria", "estado", "contenido_html", "contenido_markdown", "autor", "meta_title",
-      "meta_description", "url_canonica", "keyword_objetivo", "nivel",
+      "meta_description", "url_canonica", "keyword_objetivo", "nivel", "imagen_portada_url", "imagen_og_url",
     ];
 
     const updates: string[] = [];
@@ -146,18 +131,12 @@ adminArticlesRouter.delete(
 
 adminArticlesRouter.post(
   "/:id/image",
-  upload.single("image"),
+  receiveImage,
   asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No se recibió ninguna imagen" });
-
-    const url = `/uploads/articles/${req.file.filename}`;
-    const field = req.body.field === "og" ? "imagen_og_url" : "imagen_portada_url";
-
-    const { rows } = await pool.query(
-      `UPDATE articles SET ${field} = $1, actualizado_en = now() WHERE id = $2 RETURNING ${field}`,
-      [url, req.params.id],
-    );
-    if (rows.length === 0) return res.status(404).json({ error: "Artículo no encontrado" });
-    res.json(rows[0]);
+    if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: "Identificador no válido" });
+    const updated = await storeEntityImage("articles", req.params.id, req.file, req.body.field === "og");
+    if (!updated) return res.status(404).json({ error: "No encontrado" });
+    res.json(updated);
   }),
 );

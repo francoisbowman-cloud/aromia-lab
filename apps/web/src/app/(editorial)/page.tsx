@@ -109,6 +109,7 @@ export default function EditorialHome() {
         <div className="ev1-cover-media-shell">
           <VisualField
             slotId={lead.slot}
+            priority
             className="ev1-resin ev1-cover-media"
             sizes="(max-width: 800px) 100vw, 58vw"
           />

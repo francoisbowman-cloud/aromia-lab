@@ -22,7 +22,7 @@ const migrations = [
   '004_add_perfume_estado.sql', '005_create_activity_log.sql', '006_create_articles.sql',
   '007_create_subscribers.sql', '008_add_retailer_sync_columns.sql', '009_add_club_fuente.sql',
   '010_add_articles_autor.sql', '011_catalog_expansion_nullable_fields.sql',
-  '021_add_articles_nivel_editorial.sql', '021_discovery_search_indexes.sql', '022_add_articles_contenido_markdown.sql',
+  '021_add_articles_nivel_editorial.sql', '021_discovery_search_indexes.sql', '022_add_articles_contenido_markdown.sql', '023_create_media_uploads.sql',
 ];
 const adminUrl = new URL(url); adminUrl.pathname = '/postgres';
 const admin = new Client({ connectionString: adminUrl.toString() });

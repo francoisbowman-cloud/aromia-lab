@@ -110,3 +110,36 @@ HTTP evidence must not be presented as a visual or browser result.
    review before preparing the final publication decision.
 
 STATE: IN PROGRESS. No launch-ready or LIVE claim.
+
+## Active continuation — persistent media and container candidate
+
+The Chromium trust blocker above is resolved: running Chromium with its normal
+NSS store outside the filesystem sandbox works with the explicitly authorized
+public environment CA. TLS checks remain enabled. Live read-only browser checks
+reproduced Personas hydration errors and the missing SubBatch01 reader failures.
+
+Implemented PostgreSQL-backed uploads (migration023), same-origin public media
+transport, bounded admin upload handling, cover/social image editing and
+non-root multi-stage Docker images. Local browser upload, invalid-type retention,
+fresh-process persistence and actual Node20 container upload passed. A dedicated
+loopback aromia_release_dev snapshot imports125 public perfumes/15 public articles
+and passes the original migration assertions without bypasses. No production
+content writes occurred. Full local:verify passed: link/governance audits, API
+build and upload test,60 web tests, lint, typecheck and production web build.
+
+Candidate accessibility sweep covered52 states and exposed contrast/progress
+semantics defects; targeted fixes are implemented and await the rebuilt candidate
+sweep. Initial Docker images passed startup/health with UID1000. Media durability
+across a container restart, final image rebuild and rollback documentation remain.
+Evidence is under /workspace/aromia-evidence (outside the checkout).
+
+Editorial readiness now maps43 of100 agenda topics to existing drafts;57 have no
+mapped draft. This is coverage, not approval or a publication quota. Source-host
+network configuration was saved as a draft; source verification depends on that
+configuration being applied. No magazine deployment is authorized.
+
+The Publisher has now explicitly requested creative freedom, colorimetry and
+editorial composition. The active next pass develops a warmer, more expressive
+cover with coordinated desktop/mobile and downstream section references before
+implementation. Existing UI studies are not publication photographic assets.
+STATE remains IN PROGRESS; PR186 remains draft and main unchanged.

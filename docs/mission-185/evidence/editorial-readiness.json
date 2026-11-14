@@ -1,0 +1,1386 @@
+{
+  "scope": "Repository source-state inventory. READY/source links are not independent factual/rights approval; old drafts may describe already-live stories as pending.",
+  "totalAgendaItems": 100,
+  "draftFiles": 49,
+  "coveredAgendaItems": 43,
+  "agenda": [
+    {
+      "id": 1,
+      "topic": "Antes del perfume ya olíamos",
+      "drafts": [
+        "drafts/antes-del-perfume-ya-oliamos.md"
+      ]
+    },
+    {
+      "id": 2,
+      "topic": "¿Cuál es el mejor olor del mundo?",
+      "drafts": []
+    },
+    {
+      "id": 3,
+      "topic": "La tierra después de la lluvia",
+      "drafts": [
+        "drafts/la-tierra-despues-de-la-lluvia.md"
+      ]
+    },
+    {
+      "id": 4,
+      "topic": "El café antes de beberlo",
+      "drafts": []
+    },
+    {
+      "id": 5,
+      "topic": "El olor de una casa que no es la nuestra",
+      "drafts": [
+        "drafts/el-olor-de-una-casa-que-no-es-la-nuestra.md"
+      ]
+    },
+    {
+      "id": 6,
+      "topic": "¿A qué huele una persona?",
+      "drafts": [
+        "drafts/a-que-huele-una-persona.md"
+      ]
+    },
+    {
+      "id": 7,
+      "topic": "El olor de la infancia no viene en un frasco",
+      "drafts": []
+    },
+    {
+      "id": 8,
+      "topic": "Por qué un olor puede devolvernos un lugar entero",
+      "drafts": [
+        "drafts/olores-que-amamos-pero-no-llevariamos-puestos.md"
+      ]
+    },
+    {
+      "id": 9,
+      "topic": "Olores que amamos pero no querríamos llevar puestos",
+      "drafts": []
+    },
+    {
+      "id": 10,
+      "topic": "El olor de limpio no es universal",
+      "drafts": []
+    },
+    {
+      "id": 11,
+      "topic": "¿A qué huele realmente el ambroxan?",
+      "drafts": []
+    },
+    {
+      "id": 12,
+      "topic": "Ámbar gris: el olor detrás del mito",
+      "drafts": []
+    },
+    {
+      "id": 13,
+      "topic": "Iris: por qué algo floral puede oler a polvo, maquillaje y madera",
+      "drafts": [
+        "drafts/iris-flor-polvo-madera.md"
+      ]
+    },
+    {
+      "id": 14,
+      "topic": "Bergamota: no es simplemente limón",
+      "drafts": []
+    },
+    {
+      "id": 15,
+      "topic": "Lavanda: ¿limpia, medicinal, barata o elegante?",
+      "drafts": [
+        "drafts/lavanda-limpia-medicinal-barata-elegante.md"
+      ]
+    },
+    {
+      "id": 16,
+      "topic": "Musgo de roble: el olor de una sombra verde",
+      "drafts": []
+    },
+    {
+      "id": 17,
+      "topic": "Vetiver: raíces que pueden oler secas, verdes, ahumadas o terrosas",
+      "drafts": [
+        "drafts/vetiver-raices-secas-verdes-ahumadas-terrosas.md"
+      ]
+    },
+    {
+      "id": 18,
+      "topic": "Patchouli sin hippies ni clichés",
+      "drafts": []
+    },
+    {
+      "id": 19,
+      "topic": "Sándalo: ¿madera, crema o piel caliente?",
+      "drafts": [
+        "drafts/sandalo-madera-crema-piel.md"
+      ]
+    },
+    {
+      "id": 20,
+      "topic": "Almizcle: del animal a la camiseta limpia",
+      "drafts": []
+    },
+    {
+      "id": 21,
+      "topic": "Vainilla no siempre significa postre",
+      "drafts": [
+        "drafts/vainilla-no-siempre-significa-postre.md"
+      ]
+    },
+    {
+      "id": 22,
+      "topic": "Rosa sin ramo de flores",
+      "drafts": [
+        "drafts/rosa-sin-ramo-de-flores.md"
+      ]
+    },
+    {
+      "id": 23,
+      "topic": "Jazmín: la flor bonita con un lado animal",
+      "drafts": []
+    },
+    {
+      "id": 24,
+      "topic": "Cuero sin cuero",
+      "drafts": [
+        "drafts/cuero-sin-cuero.md"
+      ]
+    },
+    {
+      "id": 25,
+      "topic": "Tabaco sin cigarrillo",
+      "drafts": []
+    },
+    {
+      "id": 26,
+      "topic": "¿Qué hace que un perfume huela fresco?",
+      "drafts": []
+    },
+    {
+      "id": 27,
+      "topic": "¿Qué hace que un perfume se sienta cálido?",
+      "drafts": []
+    },
+    {
+      "id": 28,
+      "topic": "¿Qué hace sensual a un perfume?",
+      "drafts": []
+    },
+    {
+      "id": 29,
+      "topic": "¿Qué hace serio a un perfume?",
+      "drafts": [
+        "drafts/que-hace-serio-a-un-perfume.md"
+      ]
+    },
+    {
+      "id": 30,
+      "topic": "¿Qué hace que algo huela caro?",
+      "drafts": []
+    },
+    {
+      "id": 31,
+      "topic": "¿Puede un perfume oler barato aunque cueste 300 dólares?",
+      "drafts": [
+        "drafts/puede-un-perfume-oler-barato-aunque-cueste-300.md"
+      ]
+    },
+    {
+      "id": 32,
+      "topic": "¿Cómo se construye la limpieza?",
+      "drafts": []
+    },
+    {
+      "id": 33,
+      "topic": "¿Cómo se construye oscuridad sin que exista un olor llamado oscuro?",
+      "drafts": [
+        "drafts/como-se-construye-oscuridad.md"
+      ]
+    },
+    {
+      "id": 34,
+      "topic": "¿Cómo se vuelve cremoso un olor?",
+      "drafts": []
+    },
+    {
+      "id": 35,
+      "topic": "¿Cómo puede un perfume sentirse frío sin estar frío?",
+      "drafts": []
+    },
+    {
+      "id": 36,
+      "topic": "Del limón a la piel: cómo cambia una fórmula cuando añadimos profundidad",
+      "drafts": []
+    },
+    {
+      "id": 37,
+      "topic": "Una misma bergamota, cinco perfumes distintos",
+      "drafts": []
+    },
+    {
+      "id": 38,
+      "topic": "La nota que no puedes identificar pero cambia todo",
+      "drafts": [
+        "drafts/la-nota-que-no-puedes-identificar.md"
+      ]
+    },
+    {
+      "id": 39,
+      "topic": "Por qué una lista de notas no te dice cómo huele un perfume",
+      "drafts": [
+        "drafts/por-que-una-lista-de-notas-no-te-dice-como-huele.md"
+      ]
+    },
+    {
+      "id": 40,
+      "topic": "Perfume como mezcla: aprender a escuchar acordes en lugar de instrumentos",
+      "drafts": []
+    },
+    {
+      "id": 41,
+      "topic": "El agua que no viene del agua",
+      "drafts": [
+        "drafts/el-agua-que-no-viene-del-agua.md"
+      ]
+    },
+    {
+      "id": 42,
+      "topic": "“Huele sintético”: ¿qué estamos diciendo realmente?",
+      "drafts": [
+        "drafts/huele-sintetico-que-estamos-diciendo.md"
+      ]
+    },
+    {
+      "id": 43,
+      "topic": "Los sintéticos que hicieron posible la perfumería moderna",
+      "drafts": []
+    },
+    {
+      "id": 44,
+      "topic": "Natural no significa simple",
+      "drafts": []
+    },
+    {
+      "id": 45,
+      "topic": "Sintético no significa falso",
+      "drafts": [
+        "drafts/sintetico-no-significa-falso.md"
+      ]
+    },
+    {
+      "id": 46,
+      "topic": "¿Existe el olor de la lluvia dentro de un perfume?",
+      "drafts": []
+    },
+    {
+      "id": 47,
+      "topic": "Perfumes de flores que casi no contienen esa flor",
+      "drafts": []
+    },
+    {
+      "id": 48,
+      "topic": "La fantasía del océano dentro de una botella",
+      "drafts": []
+    },
+    {
+      "id": 49,
+      "topic": "Cuando la química huele más natural que “lo natural”",
+      "drafts": []
+    },
+    {
+      "id": 50,
+      "topic": "El perfumista como ilusionista material",
+      "drafts": [
+        "drafts/el-perfumista-como-ilusionista-material.md"
+      ]
+    },
+    {
+      "id": 51,
+      "topic": "¿Nos perfumamos para nosotros o para los demás?",
+      "drafts": [
+        "drafts/nos-perfumamos-para-nosotros-o-para-los-demas.md"
+      ]
+    },
+    {
+      "id": 52,
+      "topic": "La firma invisible",
+      "drafts": []
+    },
+    {
+      "id": 53,
+      "topic": "El perfume llega antes que nosotros y se queda después",
+      "drafts": []
+    },
+    {
+      "id": 54,
+      "topic": "Querer oler distinto cada día",
+      "drafts": [
+        "drafts/querer-oler-distinto-cada-dia.md"
+      ]
+    },
+    {
+      "id": 55,
+      "topic": "El perfume como ropa que nadie puede ver",
+      "drafts": []
+    },
+    {
+      "id": 56,
+      "topic": "¿Puede un olor hacernos sentir más seguros?",
+      "drafts": [
+        "drafts/puede-un-olor-hacernos-sentir-mas-seguros.md"
+      ]
+    },
+    {
+      "id": 57,
+      "topic": "Oler “apropiado”",
+      "drafts": [
+        "drafts/oler-apropiado.md"
+      ]
+    },
+    {
+      "id": 58,
+      "topic": "El perfume que usamos para estar solos",
+      "drafts": []
+    },
+    {
+      "id": 59,
+      "topic": "El perfume que dejamos de usar cuando alguien lo reconoce demasiado",
+      "drafts": []
+    },
+    {
+      "id": 60,
+      "topic": "Cuando otra persona lleva “tu” perfume mejor que tú",
+      "drafts": []
+    },
+    {
+      "id": 61,
+      "topic": "Cuando tú ya no hueles tu perfume pero todos los demás sí",
+      "drafts": [
+        "drafts/cuando-ya-no-hueles-tu-perfume.md"
+      ]
+    },
+    {
+      "id": 62,
+      "topic": "“Wow, ese perfume es demasiado”",
+      "drafts": []
+    },
+    {
+      "id": 63,
+      "topic": "Cuántos sprays son demasiados",
+      "drafts": []
+    },
+    {
+      "id": 64,
+      "topic": "Perfume al mediodía bajo el calor",
+      "drafts": []
+    },
+    {
+      "id": 65,
+      "topic": "El perfume que funciona en aire acondicionado y fracasa al salir a la calle",
+      "drafts": []
+    },
+    {
+      "id": 66,
+      "topic": "Dónde aplicar perfume y qué cambia realmente",
+      "drafts": []
+    },
+    {
+      "id": 67,
+      "topic": "¿Hay que frotarse las muñecas?",
+      "drafts": [
+        "drafts/hay-que-frotarse-las-munecas.md"
+      ]
+    },
+    {
+      "id": 68,
+      "topic": "Cómo probar un perfume cuando tu nariz ya está cansada",
+      "drafts": []
+    },
+    {
+      "id": 69,
+      "topic": "El día que se rompe un frasco",
+      "drafts": []
+    },
+    {
+      "id": 70,
+      "topic": "Vivir con alguien que no soporta tu perfume favorito",
+      "drafts": []
+    },
+    {
+      "id": 71,
+      "topic": "Perfume en la oficina: presencia sin invasión",
+      "drafts": [
+        "drafts/perfume-en-la-oficina-presencia-sin-invasion.md"
+      ]
+    },
+    {
+      "id": 72,
+      "topic": "¿Debemos perfumarnos antes de dormir?",
+      "drafts": []
+    },
+    {
+      "id": 73,
+      "topic": "Guardar perfumes sin convertir el armario en un laboratorio",
+      "drafts": []
+    },
+    {
+      "id": 74,
+      "topic": "Cómo saber si un perfume realmente cambió o cambiaste tú",
+      "drafts": [
+        "drafts/cambio-el-perfume-o-cambiaste-tu.md"
+      ]
+    },
+    {
+      "id": 75,
+      "topic": "Comprar una fragancia después de oler veinte: probablemente ya no sabes qué estás oliendo",
+      "drafts": []
+    },
+    {
+      "id": 76,
+      "topic": "Fougère no significa viejo",
+      "drafts": [
+        "drafts/fougere-no-significa-viejo.md"
+      ]
+    },
+    {
+      "id": 77,
+      "topic": "La lavanda que construyó una idea de masculinidad",
+      "drafts": []
+    },
+    {
+      "id": 78,
+      "topic": "Chypre: una estructura que cambió aunque su materia emblemática tuviera que cambiar",
+      "drafts": [
+        "drafts/chypre-estructura-que-cambio.md"
+      ]
+    },
+    {
+      "id": 79,
+      "topic": "La barbería como memoria olfativa",
+      "drafts": []
+    },
+    {
+      "id": 80,
+      "topic": "Cómo llegó “oler limpio” a convertirse en una categoría de perfume",
+      "drafts": []
+    },
+    {
+      "id": 81,
+      "topic": "Aldehídos: cuando la abstracción entró al perfume",
+      "drafts": [
+        "drafts/aldehidos-la-abstraccion-entro-al-perfume.md"
+      ]
+    },
+    {
+      "id": 82,
+      "topic": "El nacimiento del gourmand y el día en que empezamos a querer oler comestibles",
+      "drafts": [
+        "drafts/el-nacimiento-del-gourmand.md"
+      ]
+    },
+    {
+      "id": 83,
+      "topic": "De colonia a “cologne”: una palabra que terminó significando demasiadas cosas",
+      "drafts": []
+    },
+    {
+      "id": 84,
+      "topic": "Por qué seguimos clasificando perfumes en familias",
+      "drafts": []
+    },
+    {
+      "id": 85,
+      "topic": "Masculino, femenino, unisex: ¿qué parte está realmente dentro del frasco?",
+      "drafts": []
+    },
+    {
+      "id": 86,
+      "topic": "El Coleccionista",
+      "drafts": [
+        "drafts/el-coleccionista.md"
+      ]
+    },
+    {
+      "id": 87,
+      "topic": "“La necesito en mi colección”",
+      "drafts": [
+        "drafts/la-necesito-en-mi-coleccion.md"
+      ]
+    },
+    {
+      "id": 88,
+      "topic": "El pequeño espacio que queda en la repisa",
+      "drafts": []
+    },
+    {
+      "id": 89,
+      "topic": "Comprar para oler o comprar para tener",
+      "drafts": [
+        "drafts/comprar-para-oler-o-comprar-para-tener.md"
+      ]
+    },
+    {
+      "id": 90,
+      "topic": "El perfume que nunca usamos pero no podemos vender",
+      "drafts": [
+        "drafts/el-perfume-que-nunca-usamos-pero-no-podemos-vender.md"
+      ]
+    },
+    {
+      "id": 91,
+      "topic": "Muestras: quizá la forma más inteligente de tener cien perfumes",
+      "drafts": [
+        "drafts/muestras-forma-inteligente-cien-perfumes.md"
+      ]
+    },
+    {
+      "id": 92,
+      "topic": "La búsqueda del perfume perfecto puede impedirnos disfrutar los buenos",
+      "drafts": []
+    },
+    {
+      "id": 93,
+      "topic": "Blind buy: comprar un olor que todavía no conocemos",
+      "drafts": [
+        "drafts/blind-buy-comprar-sin-oler.md"
+      ]
+    },
+    {
+      "id": 94,
+      "topic": "Cuando una discontinuación convierte una botella en objeto de deseo",
+      "drafts": []
+    },
+    {
+      "id": 95,
+      "topic": "¿Cuándo una colección está completa?",
+      "drafts": []
+    },
+    {
+      "id": 96,
+      "topic": "El perfume y la obsesión por poseer el olor de otra persona",
+      "drafts": [
+        "drafts/la-obsesion-por-poseer-el-olor-de-otro.md"
+      ]
+    },
+    {
+      "id": 97,
+      "topic": "¿Podemos describir un olor sin compararlo con otra cosa?",
+      "drafts": [
+        "drafts/podemos-describir-un-olor-sin-compararlo.md"
+      ]
+    },
+    {
+      "id": 98,
+      "topic": "Una civilización contada por sus malos olores",
+      "drafts": [
+        "drafts/civilizacion-contada-por-malos-olores.md"
+      ]
+    },
+    {
+      "id": 99,
+      "topic": "Los olores que una época intenta borrar",
+      "drafts": [
+        "drafts/los-olores-que-una-epoca-intenta-borrar.md"
+      ]
+    },
+    {
+      "id": 100,
+      "topic": "Si mañana desaparecieran todos los perfumes",
+      "drafts": []
+    }
+  ],
+  "drafts": [
+    {
+      "file": "drafts/a-que-huele-una-persona.md",
+      "title": "¿A qué huele una persona?",
+      "batchItem": 6,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.nature.com/articles/s41598-020-68860-z",
+        "https://pubmed.ncbi.nlm.nih.gov/26551789/",
+        "https://www.sciencedirect.com/science/article/abs/pii/S1090513816301933",
+        "https://pubmed.ncbi.nlm.nih.gov/18489300/",
+        "https://www.nature.com/articles/ng1733"
+      ]
+    },
+    {
+      "file": "drafts/aldehidos-la-abstraccion-entro-al-perfume.md",
+      "title": "Aldehídos: cuando la abstracción entró al perfume",
+      "batchItem": 81,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://dropofodor.com/en/aldehydes-in-perfumery/",
+        "https://www.chemistryworld.com/podcasts/2-methylundecanal/3005680.article",
+        "https://en.wikipedia.org/wiki/Ernest_Beaux",
+        "https://en.wikipedia.org/wiki/Arp%C3%A8ge",
+        "https://www.wikiparfum.com/en/fragrances/je-reviens-couture"
+      ]
+    },
+    {
+      "file": "drafts/antes-del-perfume-ya-oliamos.md",
+      "title": "Antes del perfume ya olíamos",
+      "batchItem": 1,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://asm.org/articles/2021/december/microbial-origins-of-body-odor",
+        "https://www.pyrgos-mavroraki.eu/perfumes",
+        "https://www.timesofisrael.com/residue-found-in-3600-year-old-holy-land-tomb-rewrites-the-history-of-vanilla/",
+        "https://www.collectorsweekly.com/articles/our-pungent-history/"
+      ]
+    },
+    {
+      "file": "drafts/blind-buy-comprar-sin-oler.md",
+      "title": "Blind buy: comprar un olor que todavía no conocemos",
+      "batchItem": 93,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://osmetheca.be/en/glossary/blind-buy",
+        "https://thescentstories.com/blog/perfume-guides-fragrance-tips-1/blind-buying-perfume-why-the-internet-s-biggest-fragrance-community-keeps-warning-you-against-it-38",
+        "https://www.jstor.org/stable/2232929",
+        "https://en.wikipedia.org/wiki/Baccarat_Rouge_540",
+        "https://www.glossy.co/beauty/beauty-briefing-how-exclusivity-is-driving-niche-fragrance-sales/"
+      ]
+    },
+    {
+      "file": "drafts/br540-hype-vs-merito.md",
+      "title": "Baccarat Rouge 540: qué queda cuando se apaga el ruido",
+      "batchItem": null,
+      "batchMapping": "unassigned",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.newyorker.com/magazine/2024/09/23/francis-kurkdjian-perfume-baccarat-rouge",
+        "https://www.amazon.com/dp/B074V34X4C?tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/cambio-el-perfume-o-cambiaste-tu.md",
+      "title": "Cómo saber si un perfume realmente cambió o cambiaste tú",
+      "batchItem": 74,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://osmetheca.be/en/faq/ifra-reformulations-vintage/",
+        "https://link.springer.com/article/10.3758/BF03213109",
+        "https://www.osmotheque.fr/en/the-collection/"
+      ]
+    },
+    {
+      "file": "drafts/chypre-estructura-que-cambio.md",
+      "title": "Chypre: una estructura que cambió aunque su materia emblemática tuviera que cambiar",
+      "batchItem": 78,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.washingtonpost.com/magazine/2021/04/21/perfume-makers-raising-a-stink-over-new-safety-rules/"
+      ]
+    },
+    {
+      "file": "drafts/civilizacion-contada-por-malos-olores.md",
+      "title": "Una civilización contada por sus malos olores",
+      "batchItem": 98,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://searchworks.stanford.edu/view/1290925",
+        "https://www.londonmuseum.org.uk/collections/london-stories/great-stink-of-1858/",
+        "https://www.londonmuseum.org.uk/collections/london-stories/john-snow-cholera-broad-street-pump/",
+        "https://www.sciencehistory.org/stories/magazine/the-smell-detectives/",
+        "https://www.medievalists.net/2022/05/pollution-medieval-cities/"
+      ]
+    },
+    {
+      "file": "drafts/como-se-construye-oscuridad.md",
+      "title": "¿Cómo se construye oscuridad sin que exista un olor llamado oscuro?",
+      "batchItem": 33,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://cognitiveresearchjournal.springeropen.com/articles/10.1186/s41235-020-00246-1",
+        "https://boisdejasmin.com/2006/07/black_orchid.html"
+      ]
+    },
+    {
+      "file": "drafts/comprar-para-oler-o-comprar-para-tener.md",
+      "title": "Comprar para oler o comprar para tener",
+      "batchItem": 89,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://academic.oup.com/jcr/article-abstract/15/2/139/1841428",
+        "https://en.wikipedia.org/wiki/Russell_W._Belk",
+        "https://www.beautyindependent.com/fragrance-decanting-brands/",
+        "https://en.wikipedia.org/wiki/Endowment_effect"
+      ]
+    },
+    {
+      "file": "drafts/cuando-ya-no-hueles-tu-perfume.md",
+      "title": "Cuando tú ya no hueles tu perfume pero todos los demás sí",
+      "batchItem": 61,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Olfactory_fatigue",
+        "https://www.perfumerflavorist.com/fragrance/regulatory-research/article/21855850/olfactory-fatigue-what-it-is-and-how-to-avoid-it-in-product-testing",
+        "https://academic.oup.com/chemse/article/25/4/487/342753",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8834429/"
+      ]
+    },
+    {
+      "file": "drafts/cuero-sin-cuero.md",
+      "title": "Cuero sin cuero",
+      "batchItem": 24,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Russia_leather",
+        "https://en.wikipedia.org/wiki/Germaine_Cellier",
+        "https://premierepeau.com/pages/glossary-terms/isobutyl-quinoline",
+        "https://en.wikipedia.org/wiki/Cuir_de_Russie",
+        "https://perfumeprojects.com/museum/bottles/TabacBlond.shtml",
+        "https://en.wikipedia.org/wiki/Castoreum"
+      ]
+    },
+    {
+      "file": "drafts/el-agua-que-no-viene-del-agua.md",
+      "title": "El agua que no viene del agua",
+      "batchItem": 41,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Calone",
+        "https://www.osmetheca.be/en/encyclopedia/calone",
+        "https://www.4160tuesdays.com/blog/read_117159/7-calone-the-seaside-and-a-visit-to-the-osmotheque.html",
+        "https://en.wikipedia.org/wiki/Cool_Water_(perfume)"
+      ]
+    },
+    {
+      "file": "drafts/el-ambar-que-nunca-toco-una-ballena.md",
+      "title": "El ámbar que nunca tocó una ballena",
+      "batchItem": null,
+      "batchMapping": "unassigned",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://laborammeer.de/en/pages/ambroxan-history-explained",
+        "https://scentgrail.com/holy-grail-scents/molecule-01-review/",
+        "https://www.amazon.com/s?k=Escentric+Molecules+Molecule+01&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Escentric+Molecules+Molecule+02&tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/el-coleccionista.md",
+      "title": "El coleccionista",
+      "batchItem": 86,
+      "batchMapping": "exact agenda title",
+      "editorial": "UNRECORDED",
+      "artDirection": "UNRECORDED",
+      "qa": "UNRECORDED",
+      "publishInDraft": "UNRECORDED",
+      "sourceUrls": [
+        "https://www.amazon.com/dp/B0733677R6?tag=aromialab-20",
+        "https://www.amazon.com/dp/B071CYS5ZZ?tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/el-nacimiento-del-gourmand.md",
+      "title": "El nacimiento del gourmand y el día en que empezamos a querer oler comestibles",
+      "batchItem": 82,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Angel_(perfume)",
+        "https://en.wikipedia.org/wiki/Gourmand_(fragrance)",
+        "https://en.wikipedia.org/wiki/Ethyl_maltol",
+        "https://www.scentspiracy.com/fragrance-ingredients/p/ethylmaltol",
+        "https://www.beautyindependent.com/fragrance-entrepreneurs-executives-reflect-indelible-impact-thierry-muglers-angel/",
+        "https://cafleurebon.com/new-fragrance-review-parfums-de-marly-delina-quentin-bisch-2017-a-horse-of-a-different-color-draw/"
+      ]
+    },
+    {
+      "file": "drafts/el-olor-de-una-casa-que-no-es-la-nuestra.md",
+      "title": "El olor de una casa que no es la nuestra",
+      "batchItem": 5,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.washingtonpost.com/home/2023/06/14/why-house-smells-like-home/",
+        "https://learnmem.cshlp.org/content/29/5/136.full",
+        "https://www.nature.com/articles/s41598-025-25503-5",
+        "https://academic.oup.com/chemse/article-abstract/25/4/487/342753",
+        "https://journals.sagepub.com/doi/abs/10.1177/0146167297235005"
+      ]
+    },
+    {
+      "file": "drafts/el-perfume-que-encargo-un-sultan.md",
+      "title": "El perfume que encargó un sultán",
+      "batchItem": null,
+      "batchMapping": "unassigned",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Amouage",
+        "https://amouage.com/pages/our-story",
+        "https://cafleurebon.com/amouage-gold-man-review-guy-robert-champagne-cocktail-draw/",
+        "https://www.ouddict.com/threads/gold-man-gold-woman-amouage-sultan-qaboos.8827/",
+        "https://www.amazon.com/s?k=Amouage+Interlude+Man&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Amouage+Reflection+Man&tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/el-perfume-que-nunca-usamos-pero-no-podemos-vender.md",
+      "title": "El perfume que nunca usamos pero no podemos vender",
+      "batchItem": 90,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.journals.uchicago.edu/doi/abs/10.1086/261737",
+        "https://academic.oup.com/jcr/article-abstract/15/2/139/1841428",
+        "https://journals.sagepub.com/doi/10.1509/jm.16.0311"
+      ]
+    },
+    {
+      "file": "drafts/el-perfumista-como-ilusionista-material.md",
+      "title": "El perfumista como ilusionista material",
+      "batchItem": 50,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://boisdejasmin.com/2006/03/hermes-terre-d-hermes-perfume-review.html",
+        "https://cafleurebon.com/new-fragrance-review-steidl-paper-passion-geza-schoen-puts-ink-to-paper-according-to-karl/",
+        "https://img.perfumerflavorist.com/files/base/allured/all/document/2014/02/pf.PF_39_03_034_10.pdf",
+        "https://www.fragrantica.com/news/Antoine-Lie-the-Subversive-Perfumer-4793.html",
+        "https://www.dazeddigital.com/beauty/article/70788/1/fantasy-notes-perfume-weirdest-obsession-fragrance-nostos-vacation"
+      ]
+    },
+    {
+      "file": "drafts/el-perfumista-que-no-teme-exagerar.md",
+      "title": "El perfumista que no teme exagerar",
+      "batchItem": null,
+      "batchMapping": "unassigned",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Dominique_Ropion",
+        "https://www.fredericmalle.com/product/19566/50241/parfums/portrait-of-a-lady/by-dominique-ropion",
+        "http://graindemusc.blogspot.com/2010/10/portrait-of-lady-by-dominique-ropion.html",
+        "https://www.amazon.com/s?k=Viktor+Rolf+Flowerbomb&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Lancome+La+Vie+Est+Belle&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Dior+Pure+Poison&tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/fougere-no-significa-viejo.md",
+      "title": "Fougère no significa viejo",
+      "batchItem": 76,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Foug%C3%A8re",
+        "https://premierepeau.com/blogs/news/coumarin-the-banned-molecule-fr",
+        "https://cafleurebon.com/masque-milano-sleight-of-fern-review-stephanie-bakouche-2022-just-before-the-curtain-drops-draw/",
+        "https://mag.bynez.com/en/perfume/oakmoss-an-exemplary-case-of-ifras-role/"
+      ]
+    },
+    {
+      "file": "drafts/hay-que-frotarse-las-munecas.md",
+      "title": "¿Hay que frotarse las muñecas?",
+      "batchItem": 67,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.wikiparfum.com/en/blog/myths-about-perfumes",
+        "https://greatist.com/live/perfume-wrong-places"
+      ]
+    },
+    {
+      "file": "drafts/huele-sintetico-que-estamos-diciendo.md",
+      "title": "\"Huele sintético\": ¿qué estamos diciendo realmente?",
+      "batchItem": 42,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Absolute_(perfumery)",
+        "https://cen.acs.org/business/consumer-products/perfumers-walk-fine-line-between/97/i16",
+        "https://en.wikipedia.org/wiki/Synthetic_musk",
+        "https://en.wikipedia.org/wiki/Chanel_No._5"
+      ]
+    },
+    {
+      "file": "drafts/iris-flor-polvo-madera.md",
+      "title": "Iris: por qué algo floral puede oler a polvo, maquillaje y madera",
+      "batchItem": 13,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://premierepeau.com/blogs/news/orris-root-perfumerys-5-year-wait-premiere-peau",
+        "https://www.sciencedirect.com/science/article/pii/S266615432500119X",
+        "https://en.wikipedia.org/wiki/Maurice_Roucel",
+        "https://premierepeau.com/blogs/news/iris-of-florence-three-years-underground-for-an-ounce-of-butter"
+      ]
+    },
+    {
+      "file": "drafts/jean-claude-ellena-la-sustraccion.md",
+      "title": "El perfumista que prefiere quitar",
+      "batchItem": null,
+      "batchMapping": "unassigned",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Jean-Claude_Ellena",
+        "https://www.astro.com/astro-databank/Ellena,_Jean-Claude",
+        "https://nstperfume.com/perfumers-a-to-e/jean-claude-ellena/",
+        "https://www.marieclaire.com/beauty/a9638/jean-claude-ellena-hermes-interview/",
+        "https://en.wikipedia.org/wiki/Christine_Nagel",
+        "http://graindemusc.blogspot.com/2011/04/jean-claude-ellenas-diary-of-perfumer.html",
+        "https://www.amazon.com/dp/B09N3WKW1S?tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/la-necesito-en-mi-coleccion.md",
+      "title": "\"La necesito en mi colección\"",
+      "batchItem": 87,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://academic.oup.com/jcr/article-abstract/15/2/139/1841428",
+        "https://epublications.marquette.edu/cgi/viewcontent.cgi?article=1277&context=market_fac",
+        "https://journals.sagepub.com/doi/abs/10.1509/jmkr.43.1.39"
+      ]
+    },
+    {
+      "file": "drafts/la-nota-que-no-puedes-identificar.md",
+      "title": "La nota que no puedes identificar pero cambia todo",
+      "batchItem": 38,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Galaxolide",
+        "https://www.iff.com/scent/ingredients-compendium/cashmeran/",
+        "https://www.perfumerflavorist.com/fragrance/fine-fragrance/article/21861470/perfumery-techniques-in-evolution-part-v",
+        "https://www.washingtonpost.com/magazine/2021/04/21/perfume-makers-raising-a-stink-over-new-safety-rules/"
+      ]
+    },
+    {
+      "file": "drafts/la-obsesion-por-poseer-el-olor-de-otro.md",
+      "title": "El perfume y la obsesión por poseer el olor de otra persona",
+      "batchItem": 96,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Perfume_(novel)",
+        "https://www.sfadb.com/World_Fantasy_Awards_1987",
+        "https://www.cambridge.org/core/journals/pmla/article/abs/dialectic-of-enscentment-patrick-suskinds-das-parfum-as-critical-history-of-enlightenment-culture/5A4EC59158E236810C00173750A310EA",
+        "https://digitalcommons.chapman.edu/cgi/viewcontent.cgi?article=1010&context=film_studies_theses",
+        "https://en.wikipedia.org/wiki/Perfume:_The_Story_of_a_Murderer_(film)"
+      ]
+    },
+    {
+      "file": "drafts/la-tierra-despues-de-la-lluvia.md",
+      "title": "La tierra después de la lluvia",
+      "batchItem": 3,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.nature.com/articles/201993a0",
+        "https://www.csiro.au/en/news/All/Articles/2015/March/the-smell-of-rain-how-our-scientists-invented-a-new-word",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC1058374/?page=1",
+        "https://www.nature.com/articles/ncomms7083",
+        "https://journals.asm.org/doi/10.1128/aem.00093-22"
+      ]
+    },
+    {
+      "file": "drafts/lavanda-limpia-medicinal-barata-elegante.md",
+      "title": "Lavanda: ¿limpia, medicinal, barata o elegante?",
+      "batchItem": 15,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Eau_de_Cologne",
+        "https://en.wikipedia.org/wiki/Foug%C3%A8re",
+        "https://en.wikipedia.org/wiki/Lavender_oil",
+        "https://en.wikipedia.org/wiki/Jicky"
+      ]
+    },
+    {
+      "file": "drafts/los-olores-que-una-epoca-intenta-borrar.md",
+      "title": "Los olores que una época intenta borrar",
+      "batchItem": 99,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://americanhistory.si.edu/collections/object-groups/health-hygiene-and-beauty/alleviating-body-odors",
+        "https://en.wikipedia.org/wiki/Mum_(deodorant)",
+        "https://www.smithsonianmag.com/history/how-advertisers-convinced-americans-they-smelled-bad-12552404/",
+        "https://aacrjournals.org/cebp/article/23/1/32/158084/The-Changing-Public-Image-of-Smoking-in-the-United"
+      ]
+    },
+    {
+      "file": "drafts/matriz-olfativa-numero-01.md",
+      "title": "Matriz olfativa: quince perfumes, cuatro maneras de leerlos",
+      "batchItem": null,
+      "batchMapping": "unassigned",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.amazon.com/s?k=Mugler+Angel&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Creed+Aventus&tag=aromialab-20",
+        "https://www.amazon.com/dp/B074V34X4C?tag=aromialab-20",
+        "https://www.amazon.com/s?k=Parfums+de+Marly+Delina&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Dior+Eau+Sauvage&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Dior+Fahrenheit&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Viktor+Rolf+Flowerbomb&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Amouage+Interlude+Man&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Lancome+La+Vie+Est+Belle&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Jean+Paul+Gaultier+Le+Male&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Dior+Miss+Dior+Blooming+Bouquet&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Escentric+Molecules+Molecule+01&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Dior+Pure+Poison&tag=aromialab-20",
+        "https://www.amazon.com/s?k=Amouage+Reflection+Man&tag=aromialab-20",
+        "https://www.amazon.com/dp/B09N3WKW1S?tag=aromialab-20"
+      ]
+    },
+    {
+      "file": "drafts/muestras-forma-inteligente-cien-perfumes.md",
+      "title": "Muestras: quizá la forma más inteligente de tener cien perfumes",
+      "batchItem": 91,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Scratch_and_sniff",
+        "https://patents.justia.com/patent/20050048243",
+        "https://www.cosmeticsdesign.com/Article/2023/10/03/mintel-research-points-to-benefits-of-more-creative-fragrance-sampling/",
+        "https://www.beautyindependent.com/scentbird/"
+      ]
+    },
+    {
+      "file": "drafts/nos-perfumamos-para-nosotros-o-para-los-demas.md",
+      "title": "¿Nos perfumamos para nosotros o para los demás?",
+      "batchItem": 51,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://academic.oup.com/beheco/article/12/2/140/239863",
+        "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0258773",
+        "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0033810",
+        "https://cew.org/beauty_news/npd-blog-consumers-invest-in-fragrance-to-lift-mood/",
+        "https://www.mintel.com/insights/beauty-and-personal-care/tapping-into-three-distinct-fragrance-consumer-profiles-for-beauty-and-personal-care-brands/"
+      ]
+    },
+    {
+      "file": "drafts/oler-apropiado.md",
+      "title": "Oler \"apropiado\"",
+      "batchItem": 57,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://link.springer.com/article/10.1007/s11869-019-00699-4",
+        "https://www.shrm.org/topics-tools/employment-law-compliance/fragrance-sensitivities-raise-bouquet-legal-issues"
+      ]
+    },
+    {
+      "file": "drafts/olores-que-amamos-pero-no-llevariamos-puestos.md",
+      "title": "Olores que amamos pero no querríamos llevar puestos",
+      "batchItem": 8,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.sciencedaily.com/releases/2017/04/170407113046.htm",
+        "https://poplab.stanford.edu/pdfs/Illy-ComplexityCoffee-sciam02.pdf",
+        "https://journals.sagepub.com/doi/10.1068/p3179",
+        "https://en.wikipedia.org/wiki/Demeter_Fragrance_Library"
+      ]
+    },
+    {
+      "file": "drafts/perfume-en-la-oficina-presencia-sin-invasion.md",
+      "title": "Perfume en la oficina: presencia sin invasión",
+      "batchItem": 71,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.sciencedaily.com/releases/2018/03/180314092312.htm",
+        "https://www.ccohs.ca/oshanswers/hsprograms/scent_free.html",
+        "https://www.chrc-ccdp.gc.ca/sites/default/files/publication-pdfs/policy_sensitivity_2019.pdf",
+        "https://www.epa.gov/indoor-air-quality-iaq/volatile-organic-compounds-impact-indoor-air-quality",
+        "https://www.cbsnews.com/news/stink-over-perfume-at-detroit-workplace/"
+      ]
+    },
+    {
+      "file": "drafts/podemos-describir-un-olor-sin-compararlo.md",
+      "title": "¿Podemos describir un olor sin compararlo con otra cosa?",
+      "batchItem": 97,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://cogsci.northwestern.edu/documents/MajidBurenhult-2014.pdf",
+        "https://www.sciencedaily.com/releases/2014/01/140103085248.htm",
+        "https://royalsocietypublishing.org/rstb/article/373/1752/20170139/23615/Olfactory-language-and-abstraction-across",
+        "https://news.harvard.edu/gazette/story/2020/02/how-scent-emotion-and-memory-are-intertwined-and-exploited/"
+      ]
+    },
+    {
+      "file": "drafts/por-que-una-lista-de-notas-no-te-dice-como-huele.md",
+      "title": "Por qué una lista de notas no te dice cómo huele un perfume",
+      "batchItem": 39,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/George_William_Septimus_Piesse",
+        "https://premierepeau.com/pages/glossary-terms/watermelon",
+        "https://www.chemistryworld.com/features/perfumery-the-molecular-art-form/9003.article"
+      ]
+    },
+    {
+      "file": "drafts/puede-un-olor-hacernos-sentir-mas-seguros.md",
+      "title": "¿Puede un olor hacernos sentir más seguros?",
+      "batchItem": 56,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": []
+    },
+    {
+      "file": "drafts/puede-un-perfume-oler-barato-aunque-cueste-300.md",
+      "title": "¿Puede un perfume oler barato aunque cueste 300 dólares?",
+      "batchItem": 31,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.pnas.org/doi/10.1073/pnas.0706929105",
+        "https://mag.bynez.com/en/perfume/oakmoss-an-exemplary-case-of-ifras-role/",
+        "https://www.aol.com/lifestyle/difference-between-cheap-expensive-perfume-195040231.html"
+      ]
+    },
+    {
+      "file": "drafts/que-hace-serio-a-un-perfume.md",
+      "title": "¿Qué hace serio a un perfume?",
+      "batchItem": 29,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://persolaise.com/2024/01/knize-ten-100th-anniversary-review-francois-coty-1924.html",
+        "https://en.wikipedia.org/wiki/Antaeus_(perfume)",
+        "https://nstperfume.com/2009/09/11/tom-ford-grey-vetiver-fragrance-review/",
+        "https://www.mdpi.com/2076-3425/11/7/955",
+        "https://shopping.yahoo.com/beauty/fragrance/articles/goodbye-tobacco-leather-hello-peaches-220000942.html"
+      ]
+    },
+    {
+      "file": "drafts/querer-oler-distinto-cada-dia.md",
+      "title": "Querer oler distinto cada día",
+      "batchItem": 54,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://academic.oup.com/jcr/article-abstract/9/3/311/1795774",
+        "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0033810"
+      ]
+    },
+    {
+      "file": "drafts/rosa-sin-ramo-de-flores.md",
+      "title": "Rosa sin ramo de flores",
+      "batchItem": 22,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC4737971/"
+      ]
+    },
+    {
+      "file": "drafts/sandalo-madera-crema-piel.md",
+      "title": "Sándalo: ¿madera, crema o piel caliente?",
+      "batchItem": 19,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.iucnredlist.org/species/31852/9665066"
+      ]
+    },
+    {
+      "file": "drafts/sintetico-no-significa-falso.md",
+      "title": "Sintético no significa falso",
+      "batchItem": 45,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://www.osmetheca.be/en/encyclopedia/calone",
+        "https://osmetheca.be/en/encyclopedia/iso-e-super",
+        "https://www.scentspiracy.com/fragrance-ingredients/p/cashmeran"
+      ]
+    },
+    {
+      "file": "drafts/vainilla-no-siempre-significa-postre.md",
+      "title": "Vainilla no siempre significa postre",
+      "batchItem": 21,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Vanillin",
+        "https://en.wikipedia.org/wiki/Wilhelm_Haarmann",
+        "https://www.mdpi.com/1420-3049/30/4/825",
+        "https://premierepeau.com/pages/glossary-terms/benzoin-resinoid",
+        "https://en.wikipedia.org/wiki/Shalimar_(perfume)",
+        "https://en.wikipedia.org/wiki/Edmond_Albius",
+        "https://www.smithsonianmag.com/science-nature/bittersweet-story-vanilla-180962757/"
+      ]
+    },
+    {
+      "file": "drafts/vetiver-raices-secas-verdes-ahumadas-terrosas.md",
+      "title": "Vetiver: raíces que pueden oler secas, verdes, ahumadas o terrosas",
+      "batchItem": 17,
+      "batchMapping": "frontmatter",
+      "editorial": "READY",
+      "artDirection": "PENDING",
+      "qa": "PENDING",
+      "publishInDraft": "PENDING",
+      "sourceUrls": [
+        "https://premierepeau.com/pages/glossary-terms/vetiver",
+        "https://onlinelibrary.wiley.com/doi/10.1002/anie.202014609",
+        "https://www.kofo.mpg.de/kofo/en/aktuelles/neuigkeiten/2021/20210106-duftgeheimnis-vetiveroel",
+        "https://www.wikiparfum.com/en/perfumers/jean-paul-guerlain",
+        "https://fragroom.com/2018/05/19/nathalie-lorson-interview-exploring-beyond-the-limits/",
+        "https://boisdejasmin.com/2008/04/sycomore-chanel.html"
+      ]
+    }
+  ]
+}

@@ -4,14 +4,9 @@ import { CATEGORIA_LABEL } from "@/lib/magazineCategories";
 const FALLBACK_GRADIENT = "linear-gradient(135deg,#d3b47a,#6c4525 45%,#15110d)";
 
 export function ArticleHero({ article }: { article: Article }) {
-  // El fondo (imagen o degradé de respaldo) vive en la propia sección, no en un
-  // hijo con z-index negativo: un `-z-10` sobre un padre sin stacking context
-  // propio se pinta detrás de <main>, que es opaco → el titular `text-white`
-  // quedaba blanco sobre blanco. `bg-[#15110d]` es el piso sólido por si la
-  // imagen o el degradé no cargan.
-  const backgroundImage = article.imagen_portada_url
-    ? `linear-gradient(105deg,rgba(0,0,0,.14),rgba(0,0,0,.68)), url(${article.imagen_portada_url})`
-    : FALLBACK_GRADIENT;
+  // A dark scrim keeps white title/deck and gold metadata legible even on white uploads.
+  const image = article.imagen_portada_url ? `url(${article.imagen_portada_url})` : FALLBACK_GRADIENT;
+  const backgroundImage = `linear-gradient(105deg,rgba(0,0,0,.72),rgba(0,0,0,.68)), ${image}`;
 
   return (
     <section

@@ -20,12 +20,13 @@
     "catalog:audit:ccl": "node scripts/catalog/ccl-production-audit.mjs",
     "audit:omni": "node scripts/omni-strict-audit.mjs",
     "audit:links": "node scripts/audit-internal-links.mjs",
+    "local:release-data": "node scripts/local/prepare-release-data.mjs",
     "local:db": "node scripts/local/bootstrap.mjs",
     "local:infra": "docker compose up -d postgres redis",
     "local:infra:down": "docker compose down",
     "local:api": "npm --prefix apps/api run dev",
     "local:web": "npm --prefix apps/web run dev",
-    "local:verify": "npm run audit:links && npm run audit:omni && npm --prefix apps/api run build && npm --prefix apps/web run test && npm --prefix apps/web run lint && npm --prefix apps/web run typecheck && npm --prefix apps/web run build"
+    "local:verify": "npm run audit:links && npm run audit:omni && npm --prefix apps/api run build && npm --prefix apps/api run test:uploads && npm --prefix apps/web run test && npm --prefix apps/web run lint && npm --prefix apps/web run typecheck && npm --prefix apps/web run build"
   },
   "dependencies": {
     "ajv": "^8.17.1",
