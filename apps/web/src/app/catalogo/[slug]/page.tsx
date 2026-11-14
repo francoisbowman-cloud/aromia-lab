@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/serializeJsonLd";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -36,7 +37,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
 
   return (
     <main className="bg-paper text-ink" aria-live="polite">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(perfume)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildProductJsonLd(perfume)) }} />
 
       <div className="mx-auto max-w-[1520px] px-5 pt-8 sm:px-8 lg:px-12 lg:pt-10">
         <nav aria-label="Ruta de navegación" className="mb-6 flex flex-wrap items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted">

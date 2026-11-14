@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/serializeJsonLd";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,7 +33,7 @@ export default async function PerfumerDetailPage({ params }: { params: { slug: s
   const stories = EDITORIAL_STORIES.filter((story) => story.relatedPerfumerSlug === profile.slug);
 
   return <main className="bg-paper text-ink">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd(profile)) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildPersonJsonLd(profile)) }} />
     <DiscoverySignal perfumerSlug={profile.slug} />
     <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
       <div className="mb-5 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted"><Link href="/perfumistas" className="breadcrumb-link">Personas</Link><span>／</span><span>{profile.era}</span></div>

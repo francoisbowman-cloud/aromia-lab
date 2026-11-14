@@ -172,7 +172,7 @@ export function VisualField({ slotId, className, marker, sizes, fit = "cover", p
         <Image
           className="ev1-doc-img"
           priority={priority}
-        src={slot.file}
+          src={slot.file}
           alt={slot.alt}
           width={slot.width}
           height={slot.height}

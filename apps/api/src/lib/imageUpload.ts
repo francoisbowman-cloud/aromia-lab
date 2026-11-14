@@ -27,18 +27,20 @@ export const receiveImage: RequestHandler = (req, res, next) => {
   });
 };
 
-export async function storeEntityImage(kind: "articles" | "perfumes", id: string, file: Express.Multer.File, og = false) {
+export async function storeEntityImage(kind: "articles" | "perfumes", id: string, file: Express.Multer.File, og = false, inline = false) {
   const field = kind === "perfumes" ? "imagen_url" : og ? "imagen_og_url" : "imagen_portada_url";
   const filename = `${randomUUID()}.${EXTENSIONS[file.mimetype]}`;
   const url = `/uploads/${kind}/${filename}`;
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
-    const { rows } = await client.query(`UPDATE ${kind} SET ${field} = $1, actualizado_en = now() WHERE id = $2 RETURNING ${field}`, [url, id]);
+    const { rows } = inline && kind === "articles"
+      ? await client.query("SELECT id FROM articles WHERE id = $1 FOR UPDATE", [id])
+      : await client.query(`UPDATE ${kind} SET ${field} = $1, actualizado_en = now() WHERE id = $2 RETURNING ${field}`, [url, id]);
     if (!rows.length) { await client.query("ROLLBACK"); return null; }
     await client.query("INSERT INTO media_uploads (filename, kind, content_type, bytes) VALUES ($1, $2, $3, $4)", [filename, kind, file.mimetype, file.buffer]);
     await client.query("COMMIT");
-    return rows[0];
+    return inline && kind === "articles" ? { image_url: url } : rows[0];
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;

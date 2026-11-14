@@ -16,8 +16,18 @@ for(const [table,source] of Object.entries(sources)){
  const raw=execFileSync('curl',['-fsSL','--max-time','30',source],{maxBuffer:10*1024*1024});data[table]=JSON.parse(raw);hashes[table]=createHash('sha256').update(raw).digest('hex');
  if(!Array.isArray(data[table])||!data[table].length||new Set(data[table].map(x=>x.slug)).size!==data[table].length||new Set(data[table].map(x=>x.id)).size!==data[table].length)throw Error('Invalid public dataset '+table);
 }
+// The listing is only metadata; fetch each public story body before snapshotting.
+const articleList = data.articles;
+data.articles = articleList.map((item) => {
+ if(typeof item.slug !== 'string' || !/^[a-z0-9-]+$/.test(item.slug)) throw Error('Invalid article slug');
+ const raw=execFileSync('curl',['-fsSL','--max-time','30',sources.articles+'/'+encodeURIComponent(item.slug)],{maxBuffer:10*1024*1024});
+ const detail=JSON.parse(raw);
+ if(detail.id!==item.id || detail.slug!==item.slug || (!detail.contenido_html && !detail.contenido_markdown)) throw Error('Incomplete public article detail');
+ return detail;
+});
+hashes.articles=createHash('sha256').update(JSON.stringify(data.articles)).digest('hex');
 if(data.perfumes.length<125)throw Error('Public catalog is below the documented floor');
-const receipt={sources,sha256:hashes,counts:{perfumes:data.perfumes.length,articles:data.articles.length},scope:'Public read-only sources imported into an isolated local database; not editorial fact/right approval'};
+const receipt={version:2,sources,sha256:hashes,counts:{perfumes:data.perfumes.length,articles:data.articles.length},scope:'Public read-only sources imported into an isolated local database; not editorial fact/right approval'};
 const adminUrl=new URL(url);adminUrl.pathname='/postgres';const admin=new Client({connectionString:adminUrl.toString()});await admin.connect();try{
  const found=await admin.query('SELECT 1 FROM pg_database WHERE datname=$1',[database]);if(!found.rowCount)await admin.query(`CREATE DATABASE "${database}"`);
 }finally{await admin.end();}

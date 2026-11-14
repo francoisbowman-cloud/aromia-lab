@@ -165,3 +165,54 @@ existing source-host network draft, preserving prior custom hosts and package
 presets. Save confirmed, requires_publish:true. Runtime source connections still
 return CONNECT403. User was informed that environment review/save/publish applies
 this configuration; magazine production remains unchanged.
+
+## Reader/editor integrity continuation
+
+Three legacy story openings now continue the cover's art direction: forest for
+Omán, burgundy for Ropion, authentic botanical plate for Ambroxan. Hero image
+ratios and credits are explicit and visible. Intro/section accents follow the
+same palette; full authored body text is retained. Sixty route/width/theme states
+passed axe/error/overflow checks in the local browser. Desktop/mobile reader
+concepts and actual captures were inspected directly.
+
+CMS now edits source Markdown rather than showing a blank HTML editor for those
+stories. Title saves synchronize the actual source heading. Public article
+responses select explicit fields and strip editorial preparation from Markdown,
+retaining visual insertion markers. Public HTML preserves captioned images while
+removing executable markup. JSON-LD serialization escapes HTML script boundaries.
+Three API content tests include the49-file source corpus; web tests now61 pass.
+
+Tiptap captioned images support upload, alt text and source caption, insertion at
+the selected text position and metadata editing. Inline uploads do not replace
+the cover. Real browser QA passed insert/save/reload/publish-to-local-reader,
+caption roundtrip, retained cover, mobile fit and Markdown editor/private-source
+separation. Evidence: /workspace/aromia-evidence/inline-qa.json. No production
+content writes occurred. A task-created orphan development API was unresponsive
+at100%CPU; replaced only that process with the compiled API using existing local
+keys and a durable log. Runtime health and editor workflow then passed.
+
+The ingest script now creates drafts and preserves existing published content.
+Only --publish-local-fixtures on loopback *_dev outside production permits local
+published fixtures. Tested fresh9 drafts, preserved published body, local fixture
+publication, idempotent rerun and three unsafe-target refusals. Complete public
+snapshot now fetches each article body (the listing alone is metadata). New
+aromia_release_full_dev has125 public perfumes/15 full public articles, plus9
+explicitly published LOCAL fixtures for reader/container QA. Original receipt
+counts are not a claim that fixtures are live or fact-approved.
+
+Publisher has asked for web research, strict UI/UX critique, editorial web-app
+principles and selective AI retouch. Read actual public sources from official
+GitHub repositories: Google web.dev typography/layout, IBM Design Language
+photography/editorial rhythm/type, W3C contrast/reflow, GOV.UK navigation/tabs.
+Source text/blob receipts are /workspace/aromia-evidence/research. Direct Vogue
+and NNGroup requests are blocked by current network policy, and were not claimed
+reviewed. Codex Security tools/reference preflight are unavailable; no formal
+Codex Security scan completion is claimed.
+
+Next: fix the newly observed320px masthead glyph clipping (overflow alone missed
+it), strengthen the archive composition and deep-link filter UX, integrate the
+new lemon reference edit and the actually delivered approved02A source. Source
+handoff from PR145 explicitly supersedes the older02A metadata: delivered JPEG
+is1536×1152,273581bytes,SHAa07de6e766bb518463d8108e3cd08642fece2902474c666b2716b2d549c2e35d.
+Actual file recovered and visually inspected; narrative objects are intact.
+Final host/container builds, durability/recovery and performance checks remain.

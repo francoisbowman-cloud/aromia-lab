@@ -19,6 +19,7 @@ export async function proxyAdminImage(req: Request, path: string) {
   }
   const body = new FormData();
   body.append("image", file);
-  if (incoming.get("field") === "og") body.append("field", "og");
+  const field = incoming.get("field");
+  if (field === "og" || field === "inline") body.append("field", field);
   return proxyToAdminApi(path, { method: "POST", body });
 }

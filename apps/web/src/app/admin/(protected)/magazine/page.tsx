@@ -18,6 +18,7 @@ interface ArticleListItem {
 
 interface ArticleDetail extends ArticleListItem {
   contenido_html: string;
+  contenido_markdown: string | null;
   imagen_og_url: string | null;
   autor: string | null;
   meta_title: string | null;
@@ -158,10 +159,10 @@ export default function AdminMagazinePage() {
             <button
               type="button"
               onClick={() => saveArticle({ ...article, estado: "publicado" }, "publicando")}
-              disabled={saving !== "idle" || !article.titulo || !article.contenido_html}
+              disabled={saving !== "idle" || !article.titulo || !(article.contenido_markdown || article.contenido_html)}
               title={
-                !article.titulo || !article.contenido_html
-                  ? "Completá título y contenido para poder publicar"
+                !article.titulo || !(article.contenido_markdown || article.contenido_html)
+                  ? "Completa título y contenido para poder publicar"
                   : undefined
               }
               className="rounded bg-gold-contrast px-4 py-2 font-sans text-sm font-semibold text-white disabled:opacity-50"
@@ -315,11 +316,22 @@ export default function AdminMagazinePage() {
                   Contenido
                 </label>
                 <div className="mt-1.5">
-                  <RichTextEditor
-                    key={article.id}
-                    content={article.contenido_html}
-                    onChange={(html) => updateArticle({ contenido_html: html })}
-                  />
+                  {article.contenido_markdown ? (
+                    <div>
+                      <p className="mb-3 text-sm text-admin-muted">Esta historia usa Markdown. La fuente conserva las notas de preparación; el lector solo recibe el texto de la historia.</p>
+                      <textarea aria-label="Fuente Markdown de la historia" value={article.contenido_markdown} rows={24}
+                        onChange={(event) => updateArticle({ contenido_markdown: event.target.value })}
+                        className="w-full rounded border border-admin-border bg-admin-bg p-4 font-mono text-sm leading-6" />
+                    </div>
+                  ) : (
+                    <RichTextEditor key={article.id} content={article.contenido_html ?? ""}
+                      onChange={(html) => updateArticle({ contenido_html: html })}
+                      onUploadImage={async (file) => {
+                        const body = new FormData(); body.append("image", file); body.append("field", "inline");
+                        const result = await adminRequest<{ image_url: string }>(`/api/admin/articles/${article.id}/image`, { method: "POST", body });
+                        return result.image_url;
+                      }} />
+                  )}
                 </div>
               </div>
 

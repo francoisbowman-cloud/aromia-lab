@@ -5,6 +5,8 @@ import { logActivity } from "../../db/activityLog";
 import { asyncHandler } from "../../lib/asyncHandler";
 import { receiveImage, storeEntityImage } from "../../lib/imageUpload";
 
+import { synchronizeStoryTitle } from "../../lib/articleContent";
+
 export const adminArticlesRouter = Router();
 
 
@@ -83,7 +85,14 @@ adminArticlesRouter.post(
 adminArticlesRouter.patch(
   "/:id",
   asyncHandler(async (req, res) => {
-    const b = req.body;
+    const b = { ...req.body };
+    if (b.titulo !== undefined && (typeof b.titulo !== "string" || !b.titulo.trim() || /[\r\n]/.test(b.titulo))) return res.status(400).json({ error: "Título no válido" });
+    if (b.contenido_markdown !== undefined && b.contenido_markdown !== null && typeof b.contenido_markdown !== "string") return res.status(400).json({ error: "Contenido no válido" });
+    if (typeof b.titulo === "string") {
+      const { rows } = await pool.query("SELECT contenido_markdown FROM articles WHERE id = $1", [req.params.id]);
+      const markdown = b.contenido_markdown ?? rows[0]?.contenido_markdown;
+      if (markdown) b.contenido_markdown = synchronizeStoryTitle(markdown, b.titulo.trim());
+    }
     const fields = [
       "titulo", "categoria", "estado", "contenido_html", "contenido_markdown", "autor", "meta_title",
       "meta_description", "url_canonica", "keyword_objetivo", "nivel", "imagen_portada_url", "imagen_og_url",
@@ -135,7 +144,7 @@ adminArticlesRouter.post(
   asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No se recibió ninguna imagen" });
     if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: "Identificador no válido" });
-    const updated = await storeEntityImage("articles", req.params.id, req.file, req.body.field === "og");
+    const updated = await storeEntityImage("articles", req.params.id, req.file, req.body.field === "og", req.body.field === "inline");
     if (!updated) return res.status(404).json({ error: "No encontrado" });
     res.json(updated);
   }),
