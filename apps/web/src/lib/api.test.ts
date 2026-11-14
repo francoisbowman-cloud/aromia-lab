@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { getPerfumes } from './api';
+import { getArticuloBySlug, getPerfumes } from './api';
 
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 
@@ -30,4 +30,14 @@ it('uses the configured development API instead of production', async () => {
   vi.stubGlobal('fetch', fetch);
   await getPerfumes();
   expect(fetch).toHaveBeenCalledWith('http://localhost:4100/api/perfumes', expect.anything());
+});
+
+
+it('distinguishes unavailable service from an absent story for strict readers', async () => {
+  vi.stubEnv('API_URL', 'http://localhost:4000');
+  const fetch = vi.fn().mockResolvedValueOnce(Response.json({error:'unavailable'}, {status:401}))
+    .mockResolvedValueOnce(Response.json({error:'not found'}, {status:404}));
+  vi.stubGlobal('fetch', fetch);
+  await expect(getArticuloBySlug('fixture', {throwOnUnavailable:true})).rejects.toThrow('service unavailable');
+  await expect(getArticuloBySlug('fixture', {throwOnUnavailable:true})).resolves.toBeNull();
 });

@@ -113,10 +113,18 @@ export async function getArticulos(): Promise<Article[]> {
   try { return await res.json(); } catch { return []; }
 }
 
-export async function getArticuloBySlug(slug: string): Promise<Article | null> {
+export async function getArticuloBySlug(slug: string, options: { throwOnUnavailable?: boolean } = {}): Promise<Article | null> {
   const res = await fetchApi(`/api/articulos/${slug}`, { next: { revalidate: 60 } });
-  if (!res || res.status === 404 || !res.ok) return null;
-  try { return await res.json(); } catch { return null; }
+  if (res?.status === 404) return null;
+  if (!res?.ok) {
+    if (options.throwOnUnavailable) throw new Error("Aromia article service unavailable");
+    return null;
+  }
+  try { return await res.json(); }
+  catch {
+    if (options.throwOnUnavailable) throw new Error("Aromia article response invalid");
+    return null;
+  }
 }
 
 export async function getPerfumeBySlug(slug: string): Promise<Perfume | null> {
