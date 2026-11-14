@@ -18,6 +18,7 @@ export interface EditorialIndexItem {
   nivel?: EditorialLevel;
   imageUrl?: string;
   imageAlt?: string;
+  imageCredit?: string;
 }
 
 // Assignado a mano por Code para las 4 historias hardcodeadas: son las únicas
@@ -45,6 +46,7 @@ export const EDITORIAL_STORIES: EditorialIndexItem[] = [
     source: "story",
     nivel: "n1",
     imageUrl: "/editorial-v1/oman-place-documentary.jpg",
+    imageCredit: "Jabal Akhdar, Omán · Ontheroadom · CC BY-SA 4.0",
     imageAlt: "Paisaje de Jabal Akhdar, Omán, contexto de El perfume que encargó un sultán.",
   },
   {
@@ -55,7 +57,8 @@ export const EDITORIAL_STORIES: EditorialIndexItem[] = [
     territory: "Materia",
     source: "story",
     nivel: "n3",
-    imageUrl: "/editorial-v1/clary-sage-documentary.jpg",
+    imageUrl: "/editorial-v1/clary-sage-herbarium.jpg",
+    imageCredit: "Salvia sclarea · Jacob Sturm, 1796 · Dominio público",
     imageAlt: "Salvia sclarea, materia vegetal vinculada a la historia moderna del ambroxan.",
   },
   {
@@ -68,6 +71,7 @@ export const EDITORIAL_STORIES: EditorialIndexItem[] = [
     relatedPerfumerSlug: "dominique-ropion",
     nivel: "n2",
     imageUrl: "/editorial-v1/red-rose-interpretive.jpg",
+    imageCredit: "Jez Timms · CC0 1.0",
     imageAlt: "Rosa rojo profundo, imagen editorial asociada al trabajo floral de Dominique Ropion.",
   },
 ];

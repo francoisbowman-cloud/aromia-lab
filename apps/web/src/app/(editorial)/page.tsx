@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import { EditorialImage } from "@/components/editorial/EditorialImage";
 import "./editorial.css";
 import "./home-story-rhythm.css";
@@ -86,46 +87,33 @@ const DISCOVERY_FAMILIES = [
 export default function EditorialHome() {
   return (
     <main className="ev1 ev1-cover">
-      <section className="ev1-cover-lead" id="historias" aria-label="Historia principal">
-        <h1 className="ev1-cover-lead-title">
-          <Link className="ev1-story-link" href={lead.href}>{lead.title}</Link>
-        </h1>
-        <div className="ev1-cover-media-shell ev1-cover-lead-media">
-          <VisualField slotId={lead.slot} priority className="ev1-resin ev1-cover-media" sizes="(max-width: 800px) 100vw, 62vw" />
-          <p className="ev1-cover-media-credit">{visualCredit(lead.slot)}</p>
+      <section className="cover-atmosphere" aria-labelledby="cover-title">
+        <div className="cover-atmosphere-copy">
+          <p className="cover-eyebrow">El arte de perfumarse</p>
+          <h1 id="cover-title">Lo invisible<br />deja huella.</h1>
+          <p className="cover-intro">Una mirada íntima al perfume, la memoria y el deseo.</p>
+          <Link className="ev1-read" href="/magazine">Explorar las historias <ArrowUpRight aria-hidden="true" size={22} strokeWidth={1.4} /></Link>
         </div>
-        <div className="ev1-cover-lead-copy">
-          <p className="ev1-deck">En 1982, un perfumista francés subió a un avión rumbo a Mascate.</p>
-          <Link className="ev1-read" href={lead.href} aria-label={`Leer «${lead.title}»`}>
-            Leer historia <span aria-hidden="true">→</span>
-          </Link>
+        <figure className="cover-atmosphere-photo">
+          <Image src="/editorial-v1/perfume-silk-cover.webp" alt="Composición imaginada: un frasco de vidrio ámbar sobre travertino, seda vino y flores de cítrico." width={1200} height={1500} priority sizes="(max-width: 700px) 100vw, 65vw" />
+          <figcaption>Creación visual con IA · AROMIA</figcaption>
+        </figure>
+      </section>
+
+      <section className="cover-citrus" aria-labelledby="citrus-title">
+        <figure>
+          <Image src="/editorial-v1/bergamot-editorial-v2.webp" alt="Bergamota verde reinterpretada con luz lateral que revela la textura de su piel." width={640} height={640} sizes="(max-width: 700px) 100vw, 50vw" />
+          <figcaption>Reinterpretación con IA · <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></figcaption>
+        </figure>
+        <div>
+          <p className="cover-eyebrow">Atlas de materias</p>
+          <h2 id="citrus-title">La luz de<br />la bergamota</h2>
+          <p>El comienzo luminoso de una historia en la piel.</p>
+          <Link className="ev1-read" href="/descubrir/familias/citrica">Explorar la familia cítrica <ArrowUpRight aria-hidden="true" size={22} strokeWidth={1.4} /></Link>
         </div>
       </section>
 
       <section className="ev1-cover-supporting" aria-label="Historias destacadas">
-        <article className="ev1-cover-feature ev1-cover-feature--material">
-          <div className="ev1-cover-feature-copy">
-            <div className="ev1-cover-feature-meta">
-              <span>{materialStory.kicker}</span>
-            </div>
-            <h2>
-              <Link className="ev1-story-link" href={materialStory.href}>
-                {materialStory.title}
-              </Link>
-            </h2>
-            <p>{materialStory.summary}</p>
-            <Link className="ev1-read" href={materialStory.href} aria-label={`Leer «${materialStory.title}»`}>
-              Leer historia <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="ev1-cover-media-shell ev1-cover-media-shell--wide">
-            <Image src="/editorial-v1/clary-sage-herbarium.jpg" width={801} height={1200}
-              sizes="(max-width: 800px) 66vw, 30vw" className="ev1-cover-herbarium"
-              alt="Lámina botánica histórica de Salvia sclarea: hojas, flores y semillas." />
-            <p className="ev1-cover-media-credit">Salvia sclarea · Jacob Sturm, 1796 · Dominio público</p>
-          </div>
-        </article>
-
         <article className="ev1-cover-feature ev1-cover-feature--person">
           <div className="ev1-cover-media-shell ev1-cover-media-shell--portrait">
             <EditorialImage
@@ -152,7 +140,43 @@ export default function EditorialHome() {
             </Link>
           </div>
         </article>
+        <article className="ev1-cover-feature ev1-cover-feature--material">
+          <div className="ev1-cover-feature-copy">
+            <div className="ev1-cover-feature-meta">
+              <span>{materialStory.kicker}</span>
+            </div>
+            <h2>
+              <Link className="ev1-story-link" href={materialStory.href}>
+                {materialStory.title}
+              </Link>
+            </h2>
+            <p>{materialStory.summary}</p>
+            <Link className="ev1-read" href={materialStory.href} aria-label={`Leer «${materialStory.title}»`}>
+              Leer historia <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <div className="ev1-cover-media-shell ev1-cover-media-shell--wide">
+            <Image src="/editorial-v1/clary-sage-herbarium.jpg" width={801} height={1200}
+              sizes="(max-width: 800px) 66vw, 30vw" className="ev1-cover-herbarium"
+              alt="Lámina botánica histórica de Salvia sclarea: hojas, flores y semillas." />
+            <p className="ev1-cover-media-credit">Salvia sclarea · Jacob Sturm, 1796 · Dominio público</p>
+          </div>
+        </article>
+
       </section>
+
+      <article className="cover-dispatch" id="historias">
+        <div className="cover-dispatch-heading">
+          <p className="cover-eyebrow">Fuera del radar · Omán</p>
+          <h2><Link className="ev1-story-link" href={lead.href}>{lead.title}</Link></h2>
+          <p>En 1982, un perfumista francés subió a un avión rumbo a Mascate.</p>
+          <Link className="ev1-read" href={lead.href}>Leer historia <ArrowUpRight aria-hidden="true" size={22} strokeWidth={1.4} /></Link>
+        </div>
+        <div>
+          <VisualField slotId={lead.slot} className="ev1-cover-media" sizes="(max-width: 700px) 100vw, 70vw" />
+          <p className="ev1-cover-media-credit">{visualCredit(lead.slot)}</p>
+        </div>
+      </article>
 
       <section className="ev1-cover-index" aria-labelledby="cover-index-title">
         <div className="ev1-cover-index-heading">
