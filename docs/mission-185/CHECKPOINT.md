@@ -1,5 +1,8 @@
 # Execution checkpoint — Issue 185
 
+Historical first-tranche checkpoint. See [CONTINUATION.md](CONTINUATION.md) for
+the latest restored environment, PR186, CMS fixes and production observations.
+
 Date: 2026-11-13. Actor: Codex / Code.
 Branch: `feat/185-release-foundation`, base `589eee2`.
 Implementation commits: `e70445c`, `ea2f7a3`, `bf38aed`, `0424ccd`,

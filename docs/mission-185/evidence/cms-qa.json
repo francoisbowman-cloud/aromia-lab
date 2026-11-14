@@ -1,0 +1,13 @@
+{
+  "evidence": [
+    "Login network failure exits loading",
+    "Two repeated-title draft creations return201",
+    "Failed save preserves draft text and exits saving",
+    "Saved draft persists after reload and remains unpublished",
+    "Failed list recovers via retry"
+  ],
+  "errors": [],
+  "overflow": false,
+  "draftId": 49,
+  "draftStatus": "borrador"
+}
