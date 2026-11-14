@@ -143,3 +143,25 @@ editorial composition. The active next pass develops a warmer, more expressive
 cover with coordinated desktop/mobile and downstream section references before
 implementation. Existing UI studies are not publication photographic assets.
 STATE remains IN PROGRESS; PR186 remains draft and main unchanged.
+
+## Active visual continuation — glamour, composition and framework support
+
+Publisher explicitly rejected a newspaper-like result and requested a more
+expressive magazine, creative ingredient reuse and framework/tool assistance.
+Implemented a cover with an oversized burgundy masthead, forest panoramic lead,
+authentic Salvia sclarea paper inset, burgundy rose spread and sparse index.
+Motion14.14.0 supplies only a bounded interpretive image drift; source photography
+on the cover remains uncropped and static. Details, accepted visual studies,
+provenance and fidelity adaptations: docs/design/cover-glamour-185.md.
+
+Twelve width/theme states passed loading/overflow/page-error/axe checks. Motion
+normal/reduced/no-JS behavior and keyboard/menu/theme flows passed. Lint and
+TypeScript pass. Full production/container rebuild is the next required check.
+The28-ingredient ZIP remains unavailable; no missing binary was faked. New
+bergamot interpretation is explicitly labeled and licensed,38,236 bytes.
+
+Added commons.wikimedia.org, upload.wikimedia.org and creativecommons.org to the
+existing source-host network draft, preserving prior custom hosts and package
+presets. Save confirmed, requires_publish:true. Runtime source connections still
+return CONNECT403. User was informed that environment review/save/publish applies
+this configuration; magazine production remains unchanged.

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import { EditorialImage } from "@/components/editorial/EditorialImage";
 import "./editorial.css";
 import "./home-story-rhythm.css";
 import { VisualField, visualCredit } from "./editorialVisuals";
@@ -84,53 +86,18 @@ const DISCOVERY_FAMILIES = [
 export default function EditorialHome() {
   return (
     <main className="ev1 ev1-cover">
-      <section className="ev1-cover-masthead" aria-labelledby="cover-title">
-        <div className="ev1-cover-masthead-mark">
-          <p className="ev1-kicker">Aromia · Edición actual</p>
-          <p className="ev1-cover-folio">Revista de perfumería</p>
-        </div>
-        <div>
-          <h1 id="cover-title" className="ev1-cover-title">
-            Perfume, materia y personas.
-          </h1>
-        </div>
-        <p className="ev1-cover-intro">
-          Una portada para entrar por curiosidad, no por catálogo. Cada historia
-          abre una ruta distinta dentro del mismo mundo.
-        </p>
-      </section>
-
       <section className="ev1-cover-lead" id="historias" aria-label="Historia principal">
-        <div className="ev1-cover-lead-index" aria-hidden="true">
-          <span>Portada</span>
-          <strong>01</strong>
-        </div>
-
-        <div className="ev1-cover-media-shell">
-          <VisualField
-            slotId={lead.slot}
-            priority
-            className="ev1-resin ev1-cover-media"
-            sizes="(max-width: 800px) 100vw, 58vw"
-          />
-          <p className="ev1-cover-media-note">Mascate · Omán · 1982</p>
+        <h1 className="ev1-cover-lead-title">
+          <Link className="ev1-story-link" href={lead.href}>{lead.title}</Link>
+        </h1>
+        <div className="ev1-cover-media-shell ev1-cover-lead-media">
+          <VisualField slotId={lead.slot} priority className="ev1-resin ev1-cover-media" sizes="(max-width: 800px) 100vw, 62vw" />
           <p className="ev1-cover-media-credit">{visualCredit(lead.slot)}</p>
         </div>
-
         <div className="ev1-cover-lead-copy">
-          <p className="ev1-kicker">{lead.kicker}</p>
-          <h2>
-            <Link className="ev1-story-link" href={lead.href}>
-              {lead.title}
-            </Link>
-          </h2>
-          <p className="ev1-deck">
-            En 1982, un perfumista francés subió a un avión rumbo a Mascate. No
-            iba de vacaciones. Iba a componer un perfume por encargo directo de
-            un sultán.
-          </p>
+          <p className="ev1-deck">En 1982, un perfumista francés subió a un avión rumbo a Mascate.</p>
           <Link className="ev1-read" href={lead.href} aria-label={`Leer «${lead.title}»`}>
-            Leer historia <span>→</span>
+            Leer historia <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
@@ -139,7 +106,6 @@ export default function EditorialHome() {
         <article className="ev1-cover-feature ev1-cover-feature--material">
           <div className="ev1-cover-feature-copy">
             <div className="ev1-cover-feature-meta">
-              <span>02</span>
               <span>{materialStory.kicker}</span>
             </div>
             <h2>
@@ -149,33 +115,30 @@ export default function EditorialHome() {
             </h2>
             <p>{materialStory.summary}</p>
             <Link className="ev1-read" href={materialStory.href} aria-label={`Leer «${materialStory.title}»`}>
-              Leer historia <span>→</span>
+              Leer historia <span aria-hidden="true">→</span>
             </Link>
           </div>
           <div className="ev1-cover-media-shell ev1-cover-media-shell--wide">
-            <VisualField
-              slotId={materialStory.slot}
-              className="ev1-material ev1-cover-media"
-              sizes="(max-width: 800px) 100vw, 62vw"
-            />
-            <p className="ev1-cover-media-note">Materia · origen · transformación</p>
-            <p className="ev1-cover-media-credit">{visualCredit(materialStory.slot)}</p>
+            <Image src="/editorial-v1/clary-sage-herbarium.jpg" width={801} height={1200}
+              sizes="(max-width: 800px) 66vw, 30vw" className="ev1-cover-herbarium"
+              alt="Lámina botánica histórica de Salvia sclarea: hojas, flores y semillas." />
+            <p className="ev1-cover-media-credit">Salvia sclarea · Jacob Sturm, 1796 · Dominio público</p>
           </div>
         </article>
 
         <article className="ev1-cover-feature ev1-cover-feature--person">
           <div className="ev1-cover-media-shell ev1-cover-media-shell--portrait">
-            <VisualField
-              slotId={personStory.slot}
-              className="ev1-material ev1-cover-media"
-              sizes="(max-width: 800px) 100vw, 38vw"
+            <EditorialImage
+              src="/editorial-v1/red-rose-interpretive.jpg"
+              alt="Una rosa rojo profundo, imagen editorial del volumen floral asociado a Dominique Ropion."
+              className="ev1-cover-media"
+              sizes="(max-width: 800px) 100vw, 52vw"
             />
-            <p className="ev1-cover-media-note">Dominique Ropion · intensidad y precisión</p>
+
             <p className="ev1-cover-media-credit">{visualCredit(personStory.slot)}</p>
           </div>
           <div className="ev1-cover-feature-copy ev1-cover-feature-copy--person">
             <div className="ev1-cover-feature-meta">
-              <span>03</span>
               <span>{personStory.kicker}</span>
             </div>
             <h2>
@@ -185,7 +148,7 @@ export default function EditorialHome() {
             </h2>
             <p>{personStory.summary}</p>
             <Link className="ev1-read" href={personStory.href} aria-label={`Leer «${personStory.title}»`}>
-              Leer historia <span>→</span>
+              Leer historia <span aria-hidden="true">→</span>
             </Link>
           </div>
         </article>
@@ -199,21 +162,19 @@ export default function EditorialHome() {
         <div className="ev1-cover-index-list">
           {SECTION_INDEX.map((item) => (
             <Link key={item.href} href={item.href} className="ev1-cover-index-item">
-              <span className="ev1-cover-index-number">{item.number}</span>
               <span className="ev1-cover-index-label">{item.label}</span>
-              <span className="ev1-cover-index-copy">{item.copy}</span>
+              <span className="sr-only">{item.copy}</span>
               <span className="ev1-cover-index-arrow" aria-hidden="true">→</span>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="ev1-thinking ev1-cover-discovery" id="discovery">
-        <p className="ev1-kicker">Discovery</p>
+      <section className="ev1-cover-discovery" id="discovery" aria-labelledby="cover-discovery-title">
         <div>
-          <p className="ev1-question">¿Qué te mueve cuando eliges un perfume?</p>
+          <h2 id="cover-discovery-title" className="ev1-question">¿Qué te mueve cuando eliges un perfume?</h2>
           <p className="ev1-cover-discovery-copy">
-            No empezamos por una lista de productos. Puedes entrar por una familia
+            Puedes entrar por una familia
             y seguir desde ahí hacia materias, fragancias, personas e historias.
           </p>
           <ul className="ev1-thinking-families" aria-label="Empezar por una familia">
@@ -224,9 +185,23 @@ export default function EditorialHome() {
             ))}
           </ul>
           <Link href="/descubrir" className="ev1-read">
-            Abrir Discovery <span>→</span>
+            Abrir Discovery <span aria-hidden="true">→</span>
           </Link>
         </div>
+        <aside className="ev1-cover-marginalia" aria-label="Dos materias para explorar">
+          <figure>
+            <Link href="/descubrir/familias/citrica" aria-label="Explorar la familia cítrica">
+              <Image src="/editorial-v1/bergamot-editorial-v2.webp" width={640} height={640} sizes="(max-width: 800px) 38vw, 15vw" alt="Estudio reinterpretado de una bergamota verde: luz lateral y textura de la cáscara." />
+            </Link>
+            <figcaption><em>Bergamota</em><span>Reinterpretación con IA a partir de <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></span></figcaption>
+          </figure>
+          <figure>
+            <Link href="/descubrir/familias/ambar-oriental" aria-label="Explorar la familia ámbar">
+              <Image src="/editorial-v1/frankincense-documentary.jpg" width={1920} height={1440} sizes="(max-width: 800px) 38vw, 15vw" alt="Detalle documental de resina de Boswellia sacra en la corteza." />
+            </Link>
+            <figcaption><em>Incienso</em><span><a href="https://commons.wikimedia.org/wiki/File:Boswellia_sacra_kz05.jpg">Krzysztof Ziarnek</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></span></figcaption>
+          </figure>
+        </aside>
       </section>
     </main>
   );
