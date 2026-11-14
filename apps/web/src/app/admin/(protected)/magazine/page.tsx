@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { adminRequest } from "@/lib/adminRequest";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 interface ArticleListItem {
@@ -22,7 +23,7 @@ interface ArticleDetail extends ArticleListItem {
   url_canonica: string | null;
 }
 
-const CATEGORIAS = ["resena", "guia", "analisis", "tendencias"];
+const CATEGORIAS = ["resena", "guia", "analisis", "academia", "tendencias"];
 
 const NIVELES: { value: ArticleDetail["nivel"]; label: string; hint: string }[] = [
   { value: null, label: "Sin asignar", hint: "corre como N3 (fila corriente)" },
@@ -40,54 +41,75 @@ export default function AdminMagazinePage() {
   const [saving, setSaving] = useState<"idle" | "guardando" | "publicando">("idle");
   const [saveError, setSaveError] = useState(false);
 
+  const [listError, setListError] = useState(false);
+  const [detailError, setDetailError] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [loadingArticle, setLoadingArticle] = useState(false);
+  const [reload, setReload] = useState(0);
+  const [notice, setNotice] = useState<string | null>(null);
+
   const loadList = useCallback(async () => {
-    const res = await fetch("/api/admin/articles");
-    const json = await res.json();
-    setItems(json.items);
+    setListError(false);
+    try {
+      const json = await adminRequest<{ items: ArticleListItem[] }>("/api/admin/articles");
+      if (!Array.isArray(json.items)) throw new Error("Invalid article list");
+      setItems(json.items);
+    } catch { setListError(true); }
   }, []);
 
-  useEffect(() => {
-    loadList();
-  }, [loadList]);
+  useEffect(() => { void loadList(); }, [loadList]);
 
   useEffect(() => {
-    if (selectedId == null) {
-      setArticle(null);
-      return;
-    }
-    fetch(`/api/admin/articles/${selectedId}`)
-      .then((r) => r.json())
-      .then(setArticle);
-  }, [selectedId]);
+    setArticle(null);
+    setDetailError(false);
+    setNotice(null);
+    if (selectedId == null) { setLoadingArticle(false); return; }
+    const controller = new AbortController();
+    setLoadingArticle(true);
+    adminRequest<ArticleDetail>(`/api/admin/articles/${selectedId}`, { signal: controller.signal })
+      .then((result) => { if (!controller.signal.aborted) setArticle(result); })
+      .catch(() => { if (!controller.signal.aborted) setDetailError(true); })
+      .finally(() => { if (!controller.signal.aborted) setLoadingArticle(false); });
+    return () => controller.abort();
+  }, [selectedId, reload]);
+
+  function updateArticle(patch: Partial<ArticleDetail>) {
+    setArticle((current) => current ? { ...current, ...patch } : current);
+  }
 
   async function handleCreate() {
-    const res = await fetch("/api/admin/articles", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ titulo: "Nuevo artículo", categoria: "guia", estado: "borrador" }),
-    });
-    const created = await res.json();
-    await loadList();
-    setSelectedId(created.id);
+    if (creating) return;
+    setCreating(true);
+    setSaveError(false);
+    try {
+      const created = await adminRequest<ArticleDetail>("/api/admin/articles", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ titulo: "Nuevo artículo", categoria: "guia", estado: "borrador" }),
+      });
+      await loadList();
+      setArticle(null);
+      setLoadingArticle(true);
+      setSelectedId(created.id);
+    } catch { setSaveError(true); }
+    finally { setCreating(false); }
   }
 
   async function saveArticle(patch: Partial<ArticleDetail>, mode: "guardando" | "publicando") {
-    if (!article) return;
+    if (!article || saving !== "idle") return;
+    const snapshot = article;
     setSaving(mode);
     setSaveError(false);
-    const res = await fetch(`/api/admin/articles/${article.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(patch),
-    });
-    setSaving("idle");
-    if (!res.ok) {
-      setSaveError(true);
-      return;
-    }
-    const updated = await res.json();
-    setArticle(updated);
-    await loadList();
+    setNotice(null);
+    try {
+      const updated = await adminRequest<ArticleDetail>(`/api/admin/articles/${article.id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch),
+      });
+      // Keep any edits made while the save request was in flight.
+      setArticle((current) => current === snapshot ? updated : current);
+      setNotice(mode === "publicando" ? "Artículo publicado." : "Cambios guardados.");
+      await loadList();
+    } catch { setSaveError(true); }
+    finally { setSaving("idle"); }
   }
 
   return (
@@ -104,6 +126,7 @@ export default function AdminMagazinePage() {
             <button
               type="button"
               onClick={() => saveArticle(article, "guardando")}
+              disabled={saving !== "idle"}
               className="rounded border border-admin-border px-4 py-2 font-sans text-sm"
             >
               {saving === "guardando" ? "Guardando…" : "Guardar"}
@@ -111,7 +134,7 @@ export default function AdminMagazinePage() {
             <button
               type="button"
               onClick={() => saveArticle({ ...article, estado: "publicado" }, "publicando")}
-              disabled={!article.titulo || !article.contenido_html}
+              disabled={saving !== "idle" || !article.titulo || !article.contenido_html}
               title={
                 !article.titulo || !article.contenido_html
                   ? "Completá título y contenido para poder publicar"
@@ -126,32 +149,36 @@ export default function AdminMagazinePage() {
       </div>
 
       {saveError ? (
-        <p className="mt-3 font-sans text-sm text-destructive">
-          No se pudo guardar el artículo. Reintentá.
+        <p role="alert" className="mt-3 font-sans text-sm text-destructive">
+          No se pudo completar la operación. Tus cambios siguen en el editor; reintentá.
         </p>
       ) : null}
 
+      {notice ? <p role="status" className="mt-3 text-sm">{notice}</p> : null}
+      {listError ? <div role="alert" className="mt-3 text-sm"><p>No se pudo cargar la lista de artículos.</p><button type="button" onClick={loadList} className="min-h-11 underline">Reintentar lista</button></div> : null}
       <div className="mt-6 grid grid-cols-1 gap-3.5 lg:grid-cols-[250px_1fr]">
         <aside className="rounded-admin-card border border-admin-border bg-admin-surface p-3">
           <button
             type="button"
             onClick={handleCreate}
+            disabled={creating}
             className="w-full rounded bg-gold-contrast px-3 py-2 font-sans text-sm font-semibold text-white"
           >
             + Nuevo artículo
           </button>
 
           <div className="mt-3 grid gap-1">
-            {items === null ? (
+            {items === null && !listError ? (
               Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="h-12 animate-pulse rounded bg-admin-bg" />
               ))
-            ) : items.length === 0 ? (
+            ) : items === null ? null : items.length === 0 ? (
               <div className="p-4 text-center">
                 <p className="font-sans text-sm text-admin-muted">Aún no hay artículos</p>
                 <button
                   type="button"
                   onClick={handleCreate}
+            disabled={creating}
                   className="mt-3 rounded bg-gold-contrast px-3 py-1.5 font-sans text-xs font-semibold text-white"
                 >
                   Crear primer artículo
@@ -161,8 +188,9 @@ export default function AdminMagazinePage() {
               items.map((item) => (
                 <button
                   key={item.id}
+                  aria-pressed={selectedId === item.id}
                   type="button"
-                  onClick={() => setSelectedId(item.id)}
+                  onClick={() => { if (item.id !== selectedId) { setArticle(null); setLoadingArticle(true); setSelectedId(item.id); } }}
                   className={`rounded p-2 text-left font-sans text-xs ${
                     selectedId === item.id ? "bg-[color:color-mix(in_srgb,var(--gold)_15%,transparent)]" : "hover:bg-admin-bg"
                   }`}
@@ -179,40 +207,40 @@ export default function AdminMagazinePage() {
         </aside>
 
         <div className="rounded-admin-card border border-admin-border bg-admin-surface p-5">
-          {!article ? (
+          {loadingArticle ? <p role="status">Cargando artículo…</p> : detailError ? <div role="alert"><p>No se pudo cargar el artículo.</p><button type="button" onClick={() => setReload((value) => value + 1)} className="min-h-11 underline">Reintentar artículo</button></div> : !article ? (
             <p className="font-sans text-sm text-admin-muted">
               Seleccioná un artículo de la lista, o creá uno nuevo.
             </p>
           ) : (
-            <div>
+            <div data-article-id={article.id}>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
                 <div>
-                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                  <label htmlFor="article-titulo" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Título
                   </label>
-                  <input
+                  <input id="article-titulo"
                     value={article.titulo}
-                    onChange={(e) => setArticle({ ...article, titulo: e.target.value })}
+                    onChange={(e) => updateArticle({ titulo: e.target.value })}
                     className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                   />
                 </div>
                 <div>
-                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                  <label htmlFor="article-autor" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Autor
                   </label>
-                  <input
+                  <input id="article-autor"
                     value={article.autor ?? ""}
-                    onChange={(e) => setArticle({ ...article, autor: e.target.value })}
+                    onChange={(e) => updateArticle({ autor: e.target.value })}
                     className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                   />
                 </div>
                 <div>
-                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                  <label htmlFor="article-categoria" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Categoría
                   </label>
-                  <select
+                  <select id="article-categoria"
                     value={article.categoria}
-                    onChange={(e) => setArticle({ ...article, categoria: e.target.value })}
+                    onChange={(e) => updateArticle({ categoria: e.target.value })}
                     className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                   >
                     {CATEGORIAS.map((c) => (
@@ -223,13 +251,13 @@ export default function AdminMagazinePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                  <label htmlFor="article-estado" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Estado
                   </label>
-                  <select
+                  <select id="article-estado"
                     value={article.estado}
                     onChange={(e) =>
-                      setArticle({ ...article, estado: e.target.value as "borrador" | "publicado" })
+                      updateArticle({ estado: e.target.value as "borrador" | "publicado" })
                     }
                     className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                   >
@@ -238,13 +266,13 @@ export default function AdminMagazinePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                  <label htmlFor="article-nivel" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                     Nivel editorial
                   </label>
-                  <select
+                  <select id="article-nivel"
                     value={article.nivel ?? ""}
                     onChange={(e) =>
-                      setArticle({ ...article, nivel: (e.target.value || null) as ArticleDetail["nivel"] })
+                      updateArticle({ nivel: (e.target.value || null) as ArticleDetail["nivel"] })
                     }
                     title={NIVELES.find((n) => (n.value ?? "") === (article.nivel ?? ""))?.hint}
                     className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
@@ -264,8 +292,9 @@ export default function AdminMagazinePage() {
                 </label>
                 <div className="mt-1.5">
                   <RichTextEditor
+                    key={article.id}
                     content={article.contenido_html}
-                    onChange={(html) => setArticle({ ...article, contenido_html: html })}
+                    onChange={(html) => updateArticle({ contenido_html: html })}
                   />
                 </div>
               </div>
@@ -281,34 +310,34 @@ export default function AdminMagazinePage() {
                 {seoOpen ? (
                   <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div>
-                      <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                      <label htmlFor="article-meta_title" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                         Meta title
                       </label>
-                      <input
+                      <input id="article-meta_title"
                         value={article.meta_title ?? ""}
-                        onChange={(e) => setArticle({ ...article, meta_title: e.target.value })}
+                        onChange={(e) => updateArticle({ meta_title: e.target.value })}
                         className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                       />
                     </div>
                     <div>
-                      <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                      <label htmlFor="article-url_canonica" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                         URL canónica
                       </label>
-                      <input
+                      <input id="article-url_canonica"
                         value={article.url_canonica ?? ""}
-                        onChange={(e) => setArticle({ ...article, url_canonica: e.target.value })}
+                        onChange={(e) => updateArticle({ url_canonica: e.target.value })}
                         className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="font-sans text-[11px] font-bold uppercase text-admin-muted">
+                      <label htmlFor="article-meta_description" className="font-sans text-[11px] font-bold uppercase text-admin-muted">
                         Meta description
                       </label>
-                      <textarea
+                      <textarea id="article-meta_description"
                         rows={3}
                         value={article.meta_description ?? ""}
                         onChange={(e) =>
-                          setArticle({ ...article, meta_description: e.target.value })
+                          updateArticle({ meta_description: e.target.value })
                         }
                         className="mt-1.5 w-full rounded border border-admin-border px-3 py-2 font-sans text-sm outline-none focus:border-gold"
                       />

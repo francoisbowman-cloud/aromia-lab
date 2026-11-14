@@ -14,21 +14,21 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError(null);
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) {
+        setError(res.status === 401 ? "Contraseña incorrecta." : "No se pudo iniciar sesión. Reintentá en unos segundos.");
+        return;
+      }
+      router.push("/admin");
+      router.refresh();
+    } catch {
+      setError("No se pudo conectar. Comprobá tu conexión y reintentá.");
+    } finally { setLoading(false); }
 
-    setLoading(false);
-
-    if (!res.ok) {
-      setError("Contraseña incorrecta.");
-      return;
-    }
-
-    router.push("/admin");
-    router.refresh();
   }
 
   return (
@@ -49,6 +49,8 @@ export default function AdminLoginPage() {
         <input
           id="admin-password"
           type="password"
+          autoComplete="current-password"
+          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mt-2 w-full rounded border border-line bg-surface px-3 py-2 font-sans text-sm text-ink outline-none focus:border-gold focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { randomUUID } from "node:crypto";
 import multer from "multer";
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
@@ -65,14 +66,30 @@ adminArticlesRouter.get(
 adminArticlesRouter.post(
   "/",
   asyncHandler(async (req, res) => {
-    const b = req.body;
-    const slug = b.slug || slugify(b.titulo);
+    const b = req.body ?? {};
+    if (typeof b.titulo !== "string" || !b.titulo.trim()) {
+      return res.status(400).json({ error: "El título es obligatorio" });
+    }
+    if (!["resena", "guia", "analisis", "academia", "tendencias"].includes(b.categoria ?? "guia")
+        || !["borrador", "publicado"].includes(b.estado ?? "borrador")
+        || (b.slug !== undefined && (typeof b.slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(b.slug)))) {
+      return res.status(400).json({ error: "Categoría, estado o slug no válido" });
+    }
+    const slug = b.slug || `${slugify(b.titulo) || "articulo"}-${randomUUID().slice(0, 8)}`;
 
-    const { rows } = await pool.query(
+    let rows;
+    try {
+      ({ rows } = await pool.query(
       `INSERT INTO articles (slug, titulo, categoria, estado, contenido_html)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [slug, b.titulo, b.categoria ?? "guia", b.estado ?? "borrador", b.contenido_html ?? ""],
-    );
+      [slug, b.titulo.trim(), b.categoria ?? "guia", b.estado ?? "borrador", b.contenido_html ?? ""],
+      ));
+    } catch (error) {
+      if ((error as { code?: string }).code === "23505") {
+        return res.status(409).json({ error: "Ya existe un artículo con ese slug" });
+      }
+      throw error;
+    }
     await logActivity(`Se creó el artículo "${rows[0].titulo}"`);
     res.status(201).json(rows[0]);
   }),
