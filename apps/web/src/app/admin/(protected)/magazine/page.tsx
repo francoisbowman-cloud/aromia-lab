@@ -167,7 +167,7 @@ export default function AdminMagazinePage() {
             + Nuevo artículo
           </button>
 
-          <div className="mt-3 grid gap-1">
+          <div role="region" aria-label="Lista de artículos" tabIndex={0} className="mt-3 grid max-h-64 gap-1 overflow-y-auto lg:max-h-[calc(100dvh-220px)]">
             {items === null && !listError ? (
               Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="h-12 animate-pulse rounded bg-admin-bg" />
