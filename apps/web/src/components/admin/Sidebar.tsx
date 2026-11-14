@@ -38,6 +38,8 @@ export default function Sidebar() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Abrir menú"
+          aria-expanded={open}
+          aria-controls="admin-navigation"
           className="flex h-9 w-9 items-center justify-center rounded text-white/80 hover:bg-white/10"
         >
           <Menu className="h-5 w-5" />
@@ -53,8 +55,9 @@ export default function Sidebar() {
       ) : null}
 
       <aside
+        id="admin-navigation"
         className={`fixed inset-y-0 left-0 z-50 flex h-screen w-[240px] flex-col bg-admin-sidebar p-4 text-white transition-transform duration-200 lg:sticky lg:top-0 lg:translate-x-0 ${
-          open ? "translate-x-0" : "-translate-x-full"
+          open ? "visible translate-x-0" : "invisible -translate-x-full lg:visible"
         }`}
       >
         <div className="flex items-center justify-between px-2 pb-6">
@@ -79,6 +82,7 @@ export default function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={active ? "page" : undefined}
                 className={`rounded px-3 py-2.5 font-sans text-sm ${
                   active ? "bg-[color:color-mix(in_srgb,var(--gold)_20%,transparent)] text-white" : "text-white/70 hover:bg-white/5"
                 }`}
