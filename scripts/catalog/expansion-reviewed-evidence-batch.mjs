@@ -55,5 +55,13 @@ export function runReviewedEvidenceBatch({ batchId = DEFAULT_EXPANSION_BATCH } =
 
 if (isMainModule(import.meta.url)) {
   try { console.log(JSON.stringify(runReviewedEvidenceBatch({ batchId: resolveBatchId() }), null, 2)); }
-  catch (error) { console.error(error); process.exitCode = 1; }
+  catch (error) {
+    console.error(error);
+    if (process.env.GITHUB_ACTIONS === "true") {
+      const message = String(error instanceof Error ? error.message : error)
+        .replaceAll("%", "%25").replaceAll("\r", "%0D").replaceAll("\n", "%0A");
+      console.error(`::error title=Reviewed evidence rejected::${message}`);
+    }
+    process.exitCode = 1;
+  }
 }
