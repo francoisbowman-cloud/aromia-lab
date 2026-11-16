@@ -31,7 +31,7 @@ export default async function MagazineArticlePage({ params }: { params: { slug: 
   const canonicalUrl = `${SITE_URL}/magazine/${articulo.slug}`;
   const articleJsonLd = { "@context": "https://schema.org", "@type": "Article", headline: articulo.titulo, description: articulo.meta_description ?? undefined, image: articulo.imagen_portada_url ? [articulo.imagen_portada_url] : undefined, datePublished: articulo.publicado_en, author: articulo.autor ? { "@type": "Person", name: articulo.autor } : { "@type": "Organization", name: "Aromia" }, publisher: { "@type": "Organization", name: "Aromia" }, mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl } };
 
-  return <main className="bg-paper text-ink">
+  return <main className="ed-page ed-reader bg-paper text-ink">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }} />
     <div className="mx-auto flex h-[62px] max-w-[1180px] items-center justify-between gap-5 px-6 lg:px-10"><Link href="/magazine" className="font-plex text-xs uppercase tracking-[.12em] text-muted transition hover:text-ink">← Volver a Historias</Link><Link href="/buscar" className="font-plex text-xs uppercase tracking-[.12em] text-muted transition hover:text-ink">Buscar</Link></div>
     <ArticleHero article={articulo} />

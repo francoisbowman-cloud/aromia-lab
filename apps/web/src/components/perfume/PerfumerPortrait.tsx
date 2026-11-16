@@ -20,7 +20,6 @@ export function PerfumerPortrait({
   portrait,
   portraitCredit,
   portraitCreditHref,
-  era,
   variant = "card",
 }: {
   name: string;
@@ -43,7 +42,7 @@ export function PerfumerPortrait({
           />
         </div>
         {portraitCredit ? (
-          <figcaption className="border-x border-b border-line px-3 py-2 font-sans text-[9px] leading-4 text-muted">
+          <figcaption className="border-x border-b border-line px-3 py-2 font-sans text-xs leading-5 text-muted">
             {portraitCreditHref ? (
               <a
                 href={portraitCreditHref}
@@ -60,23 +59,5 @@ export function PerfumerPortrait({
     );
   }
 
-  return (
-    <div
-      role="img"
-      aria-label={`${name} — retrato editorial pendiente de fuente reutilizable`}
-      className="aromia-material-wash relative aspect-[4/5] overflow-hidden border border-line"
-    >
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 flex items-center justify-center font-display leading-none tracking-[-.05em] text-ink/[0.12]"
-        style={{ fontSize: variant === "detail" ? "clamp(72px,11vw,150px)" : "clamp(52px,9vw,96px)" }}
-      >
-        {initials(name)}
-      </span>
-      <span className="absolute inset-x-4 bottom-4 flex items-center justify-between border-t border-line pt-2 font-plex text-[9px] uppercase tracking-[.15em] text-muted">
-        <span>Personas</span>
-        {era ? <span>{era}</span> : null}
-      </span>
-    </div>
-  );
+  return <div role="img" aria-label={`Monograma de ${name}`} className="ed-portrait-monogram">{initials(name)}</div>;
 }

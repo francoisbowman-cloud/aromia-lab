@@ -9,6 +9,7 @@ import { WebVitals } from "@/components/WebVitals";
 import "./globals.css";
 import "./aromia-redesign.css";
 import "./design-tokens.css";
+import "./editorial-world.css";
 
 const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
 const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
@@ -49,8 +50,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${archivo.variable} ${ibmPlexSans.variable} antialiased`}>
         <Suspense fallback={null}><RouteAnalytics /></Suspense>
         <WebVitals />
+        <a href="#contenido" className="aromia-skip-link">Saltar al contenido</a>
         <NavBar />
-        <div className="flex-1">{children}</div>
+        <div id="contenido" tabIndex={-1} className="flex-1">{children}</div>
         <Footer />
       </body>
     </html>

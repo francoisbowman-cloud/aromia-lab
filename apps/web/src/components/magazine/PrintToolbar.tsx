@@ -15,7 +15,7 @@ export function PrintToolbar({ slug }: { slug: string }) {
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex min-h-[48px] items-center justify-center bg-gold px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-ink"
+          className="inline-flex min-h-[48px] items-center justify-center bg-gold px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-[#242820]"
         >
           Imprimir / Guardar PDF
         </button>

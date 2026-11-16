@@ -36,7 +36,7 @@ export default async function CatalogoDetailPage({ params }: { params: { slug: s
   const relacionados = articulos.filter((article) => article.perfumes_relacionados?.includes(perfume.id));
 
   return (
-    <main className="bg-paper text-ink" aria-live="polite">
+    <main className="ed-page ed-product bg-paper text-ink" aria-live="polite">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildProductJsonLd(perfume)) }} />
 
       <div className="mx-auto max-w-[1520px] px-5 pt-8 sm:px-8 lg:px-12 lg:pt-10">

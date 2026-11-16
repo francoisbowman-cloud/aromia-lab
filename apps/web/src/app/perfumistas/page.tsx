@@ -9,16 +9,16 @@ export const metadata: Metadata = { title: "Personas — Aromia", description: "
 export default async function PerfumistasPage() {
   const perfumes = await getPerfumes();
   const published = new Set(perfumes.map((p) => p.slug));
-  const profiles = PERFUMERS.map((profile) => ({ ...profile, visibleCount: profile.perfumeSlugs.filter((slug) => published.has(slug)).length })).filter((profile) => profile.visibleCount > 0);
+  const profiles = PERFUMERS.map((profile) => ({ ...profile, visibleCount: profile.perfumeSlugs.filter((slug) => published.has(slug)).length })).filter((profile) => profile.visibleCount > 0).sort((a,b) => Number(Boolean(b.portrait)) - Number(Boolean(a.portrait)));
 
-  return <main className="bg-paper text-ink">
+  return <main className="ed-page ed-people bg-paper text-ink">
     <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
       <div className="grid gap-8 pb-14 lg:grid-cols-[1.1fr_.75fr] lg:items-end">
         <div><p className="font-plex text-xs uppercase tracking-[.16em] text-[var(--aromia-editorial-accent)]">Personas</p><h1 className="mt-5 max-w-[11ch] font-display text-[48px] leading-[.94] tracking-[-.04em] sm:text-[58px] lg:text-[70px]">Quién está detrás del olor.</h1></div>
-        <p className="max-w-[44ch] font-sans text-base leading-7 text-muted lg:justify-self-end">Aromia muestra únicamente autorías revisadas. Una persona puede abrir una historia, una obra o una pista para seguir explorando; nunca rellenamos una atribución que no está verificada.</p>
+        <p className="max-w-[44ch] font-sans text-base leading-7 text-muted lg:justify-self-end">Las miradas, los gestos y las composiciones que dan forma a una fragancia. Conoce a sus autores y sigue el hilo de sus obras.</p>
       </div>
 
-      <div className="grid grid-cols-1 border-t border-line md:grid-cols-2 lg:grid-cols-3">
+      <div className="ed-people-grid">
         {profiles.map((profile, index) => <article key={profile.slug} className="group flex flex-col border-b border-line py-8 outline-none md:pr-8 lg:px-7">
           <div className="flex justify-between font-plex text-xs uppercase tracking-[.12em] text-muted"><span>{String(index + 1).padStart(2,"0")}</span><span>{profile.visibleCount} obras</span></div>
           <div className="mt-6 transition group-hover:opacity-90"><PerfumerPortrait name={profile.name} portrait={profile.portrait} portraitCredit={profile.portraitCredit} portraitCreditHref={profile.portraitCreditHref} era={profile.era} variant="card" /></div>

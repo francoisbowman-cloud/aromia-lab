@@ -58,7 +58,7 @@ export default async function FamiliaSheet({ params }: { params: { familia: stri
   const siblings = OLFACTIVE_FAMILIES.filter((entry) => entry.slug !== family.slug);
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
+    <main className="ed-page ed-family min-h-screen bg-paper text-ink">
       <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
         <nav aria-label="Ruta" className="mb-8 flex flex-wrap items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted">
           <Link href="/descubrir" className="breadcrumb-link">Discovery</Link>
@@ -68,7 +68,7 @@ export default async function FamiliaSheet({ params }: { params: { familia: stri
           <span className="text-ink">{family.name}</span>
         </nav>
 
-        <div className={`grid gap-10 border-b border-line pb-14 ${openerPerfume ? "lg:grid-cols-[1.2fr_.8fr] lg:items-end" : "lg:grid-cols-[.9fr_1.1fr] lg:items-end"}`}>
+        <div className={`ed-family-header grid gap-10 border-b border-line pb-14 ${openerPerfume ? "lg:grid-cols-[1.2fr_.8fr] lg:items-end" : "lg:grid-cols-[.9fr_1.1fr] lg:items-end"}`}>
           <div>
             <p className={KICKER}>Familia olfativa</p>
             <h1 className="mt-5 font-display text-[52px] leading-[.9] tracking-[-.04em] sm:text-[66px] lg:text-[84px]">{family.name}</h1>

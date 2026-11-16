@@ -22,7 +22,7 @@ export default async function BuscarPage({ searchParams }: { searchParams: { q?:
   ]);
   const editorialItems = buildEditorialIndex(articles);
 
-  return <main className="bg-paper text-ink">
+  return <main className="ed-page ed-search bg-paper text-ink">
     <section className="mx-auto max-w-[1180px] px-6 py-12 lg:px-10 lg:py-20">
       <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_.72fr] lg:items-end">
         <div><p className="font-plex text-xs uppercase tracking-[.16em] text-gold-contrast">Buscar en Aromia</p><h1 className="mt-4 max-w-[11ch] font-display text-[46px] leading-[.94] tracking-[-.04em] text-ink sm:text-[56px] lg:text-[68px]">Encuentra la siguiente pista.</h1></div>

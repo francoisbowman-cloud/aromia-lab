@@ -1,0 +1,10 @@
+{
+  "asset": "lemon-zest-editorial-v2.webp",
+  "source": "lemon-zest-documentary.jpg",
+  "source_sha256": "604dee6075b9c827e9323e370b8c9bd802232b27665868dbf3a05fb1ea4b009b",
+  "credit": "Rebecca Siegel",
+  "license": "CC BY 2.0",
+  "sourceRecord": "https://github.com/francoisbowman-cloud/aromia-lab/pull/179",
+  "treatment": "AI reference edit; light, color and background reinterpretation",
+  "sha256": "c121ae3dac96041f575f99d59da57fda5151b279fac6e75a2e9823be8f9b6598"
+}

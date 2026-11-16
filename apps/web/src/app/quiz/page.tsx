@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function QuizPage() {
   return (
-    <main className="bg-paper text-ink">
+    <main className="ed-page ed-quiz bg-paper text-ink">
       <section className="mx-auto grid min-h-[calc(100vh-68px)] max-w-[1440px] grid-cols-1 lg:grid-cols-[.78fr_1.22fr]">
         <div className="flex flex-col justify-between px-6 py-10 lg:px-10 lg:py-14">
           <div>

@@ -1,3 +1,4 @@
+import { EditorialOpening } from "@/components/editorial/EditorialOpening";
 import Image from "next/image";
 import Link from "next/link";
 import { getArticulos } from "@/lib/api";
@@ -33,14 +34,8 @@ const familias = [
   { nombre: "Gourmand", texto: "Vainilla, cacao y notas dulces inspiradas en sabores y postres.", href: "/descubrir/familias/gourmand" },
 ] as const;
 
-// Encargo C (Design, WS-6): por material, orden de preferencia de foto es
-// documental > archivo institucional > generada por IA (esta última nunca la
-// hace Code). Las 7 fotos ya cumplen el criterio (fruto/resina/hoja real,
-// nunca la planta viva confundible con maleza de jardín). `limón`, `salvia
-// romana` y `pachulí` se cerraron el 22/09 buscando en Wikimedia Commons:
-// zeste real (no el fruto entero, para no repetir la bergamota), lámina
-// botánica de dominio público (Jacob Sturm, 1796) y hoja seca embalada de
-// un archivo institucional (Nationaal Museum van Wereldculturen), respectivamente.
+// Documentary sources and archival plates retain their credits. Reference edits
+// of bergamot and lemon are explicitly labeled as AI interpretations.
 interface SaberMaterial {
   name: string;
   scientificName?: string;
@@ -58,20 +53,20 @@ const materialStrip: SaberMaterial[] = [
     scientificName: "Citrus bergamia",
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
-    src: "/editorial-v1/bergamot-documentary.jpg",
-    alt: "Fruto de bergamota de Calabria.",
+    src: "/editorial-v1/bergamot-editorial-v2.webp",
+    alt: "Interpretación con IA de una bergamota verde.",
     whatShows: "El fruto entero, cáscara al frente — ahí está el aceite.",
-    credit: "Xenocryst / Antares Scorpii · CC BY-SA 2.0",
+    credit: "Reinterpretación con IA · Xenocryst / Antares Scorpii · CC BY-SA 2.0",
   },
   {
     name: "Limón / cítricos",
     scientificName: "Citrus limon",
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
-    src: "/editorial-v1/lemon-zest-documentary.jpg",
-    alt: "Ralladura de limón recién rallada.",
-    whatShows: "La cáscara ya rallada, no el fruto entero — para no repetir la bergamota.",
-    credit: "Rebecca Siegel · CC BY 2.0",
+    src: "/editorial-v1/lemon-zest-editorial-v2.webp",
+    alt: "Reinterpretación con IA de ralladura de limón sobre un plato claro.",
+    whatShows: "La ralladura revela la superficie donde se encuentran los aceites aromáticos.",
+    credit: "Reinterpretación con IA · Rebecca Siegel · CC BY 2.0",
   },
   {
     name: "Rosa",
@@ -96,7 +91,7 @@ const materialStrip: SaberMaterial[] = [
     href: "/descubrir/familias/ambar-oriental",
     src: "/editorial-v1/frankincense-documentary.jpg",
     alt: "Resina de Boswellia sacra en el tronco, Dhofar, Omán.",
-    whatShows: "La resina saliendo del tronco, recién cortada — no el árbol entero ni el humo del ritual.",
+    whatShows: "Detalle de la resina en la corteza.",
     credit: "Krzysztof Ziarnek (Kenraiz) · CC BY-SA 4.0",
   },
   {
@@ -106,7 +101,7 @@ const materialStrip: SaberMaterial[] = [
     href: "/descubrir/familias/aromatica",
     src: "/editorial-v1/clary-sage-herbarium.jpg",
     alt: "Lámina botánica de Salvia sclarea, Deutschlands Flora in Abbildungen (1796).",
-    whatShows: "Lámina de herbario de dominio público — la planta en el campo se lee como maleza.",
+    whatShows: "Archivo botánico: hojas, flores y semillas.",
     credit: "Jacob Sturm, 1796 · dominio público",
   },
   {
@@ -116,7 +111,7 @@ const materialStrip: SaberMaterial[] = [
     href: "/descubrir/familias/amaderada",
     src: "/editorial-v1/patchouli-leaves-documentary.jpg",
     alt: "Balas de hojas de pachulí (nilam) secas, listas para embarcar, Aceh, 1929.",
-    whatShows: "La hoja seca y embalada — la planta fresca no huele a pachulí y confunde.",
+    whatShows: "Archivo histórico: hojas secas embaladas en Aceh, 1929.",
     credit: "Nationaal Museum van Wereldculturen · dominio público",
   },
 ];
@@ -135,15 +130,42 @@ export default async function SaberPage() {
   const guias = articulos.filter((articulo) => articulo.categoria === "guia");
 
   return (
-    <main className="bg-paper text-ink">
-      <header className="mx-auto max-w-[1320px] px-6 pb-12 pt-14 lg:px-10 lg:pb-20 lg:pt-24">
-        <div className="grid gap-8 lg:grid-cols-[1.08fr_.72fr] lg:items-end">
-          <div><p className="font-plex text-xs uppercase tracking-[.16em] text-[var(--aromia-editorial-accent)]">Saber</p><h1 className="mt-5 max-w-[11ch] font-display text-[54px] leading-[.9] tracking-[-.045em] sm:text-[68px] lg:text-[86px]">Entender cambia la manera de oler.</h1></div>
-          <div className="lg:justify-self-end"><p className="max-w-[43ch] font-sans text-base leading-7 text-muted">Estructura, familias, concentración e historia. No para convertir el perfume en una clase, sino para tener mejores preguntas cuando volvamos a olerlo.</p><nav className="mt-7 flex flex-wrap gap-x-7 gap-y-3 font-plex text-xs uppercase tracking-[.12em]" aria-label="Índice de Saber"><a href="#estructura" className="jump-link">Estructura</a><a href="#familias" className="jump-link">Familias</a><a href="#concentracion" className="jump-link">Concentración</a><a href="#historia" className="jump-link">Historia</a>{guias.length > 0 ? <a href="#guias" className="jump-link">Guías</a> : null}</nav></div>
-        </div>
-      </header>
+    <main className="ed-page ed-saber bg-paper text-ink">
+      <EditorialOpening label="Saber" title="Entender cambia la manera de oler." description="Materias, familias y el tiempo de un perfume." image={{src:"/editorial-v1/clary-sage-herbarium.jpg", alt:"Lámina botánica histórica de Salvia sclarea.", credit:"Jacob Sturm, 1796 · Dominio público", botanical:true}} />
+      <nav className="ed-section-nav" aria-label="Índice de Saber"><a href="#materias">Materias</a><a href="#estructura">Estructura</a><a href="#familias">Familias</a><a href="#concentracion">Concentración</a><a href="#historia">Historia</a>{guias.length > 0 && <a href="#guias">Guías</a>}</nav>
 
-      <section id="estructura" className="border-y border-line">
+      <section id="materias" className="ed-materials"><h2>La materia, de cerca.</h2>          <div className="ed-material-grid">
+            {materialStrip.map((material)=> {
+              return <Link key={material.name} href={material.href} className="group min-w-0">
+                <figure>
+                  {/* Cuadrado y no 4/5: la tira mezcla fuentes apaisadas (bergamota 1.33,
+                      pachuli 1.50) con una vertical (salvia 0.75). El marco vertical
+                      descartaba hasta el 47% del ancho de las apaisadas; el cuadrado
+                      reparte el recorte y ninguna pierde su motivo. */}
+                  <div className="relative aspect-square overflow-hidden bg-soft">
+                    {material.src ? (
+                      <Image src={material.src} alt={material.alt ?? material.name} fill sizes="(max-width: 700px) 50vw, 25vw" style={{objectFit:"cover"}} />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center border border-dashed border-line p-3 text-center">
+                        <span className="font-plex text-[9px] uppercase tracking-[.1em] text-muted">Foto documental pendiente</span>
+                      </div>
+                    )}
+                  </div>
+                  <figcaption className="pt-3">
+                    <span className="block font-display text-lg leading-none text-ink transition group-hover:opacity-70">{material.name}</span>
+                    {material.scientificName ? <span className="mt-1 block font-display italic text-xs text-muted">{material.scientificName}</span> : null}
+                    <span className="mt-1 block font-plex text-[9px] uppercase tracking-[.12em] text-muted">{material.family}</span>
+                    {material.whatShows ? <span className="mt-2 block font-sans text-[11px] leading-4 text-muted">{material.whatShows}</span> : null}
+                    {material.credit ? <span className="mt-2 block font-sans text-[9px] leading-4 text-muted">{material.credit}</span> : null}
+                  </figcaption>
+                </figure>
+              </Link>;
+            })}
+          </div>
+
+</section>
+
+      <section id="estructura" className="ed-forest border-y border-line">
         <div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[.58fr_1.42fr]">
             <div>
@@ -176,35 +198,6 @@ export default async function SaberPage() {
             <div className="lg:justify-self-end"><p className="max-w-[48ch] font-sans text-base leading-7 text-muted">No son cajas cerradas. Son una primera orientación para reconocer parentescos entre perfumes que, a simple vista, pueden parecer muy distintos.</p><Link href="/descubrir/familias" className="mt-4 inline-flex min-h-11 items-center border-b border-ink font-plex text-xs uppercase tracking-[.12em] text-ink">Explorar las diez familias en Discovery →</Link></div>
           </div>
 
-          <div className="grid grid-cols-2 border-y border-line sm:grid-cols-4 lg:grid-cols-7">
-            {materialStrip.map((material,index)=> {
-              return <Link key={material.name} href={material.href} className={`group min-w-0 border-line py-4 ${index % 2 === 0 ? "pr-2" : "pl-2"} sm:px-2 lg:border-r lg:px-3 lg:last:border-r-0`}>
-                <figure>
-                  {/* Cuadrado y no 4/5: la tira mezcla fuentes apaisadas (bergamota 1.33,
-                      pachuli 1.50) con una vertical (salvia 0.75). El marco vertical
-                      descartaba hasta el 47% del ancho de las apaisadas; el cuadrado
-                      reparte el recorte y ninguna pierde su motivo. */}
-                  <div className="relative aspect-square overflow-hidden bg-soft">
-                    {material.src ? (
-                      <Image src={material.src} alt={material.alt ?? material.name} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 14vw" style={{objectFit:"cover"}} />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center border border-dashed border-line p-3 text-center">
-                        <span className="font-plex text-[9px] uppercase tracking-[.1em] text-muted">Foto documental pendiente</span>
-                      </div>
-                    )}
-                  </div>
-                  <figcaption className="pt-3">
-                    <span className="block font-display text-lg leading-none text-ink transition group-hover:opacity-70">{material.name}</span>
-                    {material.scientificName ? <span className="mt-1 block font-display italic text-xs text-muted">{material.scientificName}</span> : null}
-                    <span className="mt-1 block font-plex text-[9px] uppercase tracking-[.12em] text-muted">{material.family}</span>
-                    {material.whatShows ? <span className="mt-2 block font-sans text-[11px] leading-4 text-muted">{material.whatShows}</span> : null}
-                    {material.credit ? <span className="mt-2 block font-sans text-[9px] leading-4 text-muted">{material.credit}</span> : null}
-                  </figcaption>
-                </figure>
-              </Link>;
-            })}
-          </div>
-
           <div className="mt-10 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:grid-cols-4">
             {familias.map((family,index)=>{
               const body = <><span className="font-plex text-xs text-muted">{String(index+1).padStart(2,"0")}</span><h3 className="mt-6 font-display text-2xl">{family.nombre}</h3><p className="mt-3 font-sans text-sm leading-6 text-muted">{family.texto}</p>{family.href ? <span className="mt-5 inline-flex font-plex text-[10px] uppercase tracking-[.12em] text-[var(--aromia-editorial-accent)]">Abrir familia →</span> : null}</>;
@@ -234,7 +227,7 @@ export default async function SaberPage() {
       {guias.length > 0 ? (
         <section id="guias" className="border-t border-line bg-soft">
           <div className="mx-auto max-w-[1320px] px-6 py-16 lg:px-10 lg:py-24">
-            <div className="mb-12"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">05 / Guías</p><h2 className="mt-4 max-w-[15ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Lo que aprendiste, puesto en práctica.</h2><p className="mt-5 max-w-[48ch] font-sans text-sm leading-6 text-muted">Guías de compra y de ocasión — contenido pedagógico, no reseñas. Viven acá, no en el archivo de Historias.</p></div>
+            <div className="mb-12"><p className="font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]">05 / Guías</p><h2 className="mt-4 max-w-[15ch] font-display text-[42px] leading-[.94] tracking-[-.035em] lg:text-[54px]">Lo que aprendiste, puesto en práctica.</h2><p className="mt-5 max-w-[48ch] font-sans text-sm leading-6 text-muted">Guías de compra y de ocasión — contenido pedagógico, no reseñas. Para seguir explorando con más contexto.</p></div>
             <ul className="grid grid-cols-1 gap-x-10 gap-y-2 border-t border-line sm:grid-cols-2 lg:grid-cols-4">
               {guias.map((guia, index) => (
                 <li key={guia.slug} className="border-b border-line py-7">
