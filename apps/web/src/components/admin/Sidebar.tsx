@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 
 const NAV = [
   { href: "/admin/operaciones", label: "Operaciones", match: (p: string) => p.startsWith("/admin/operaciones") },
+  { href: "/admin/revision-visual", label: "Revisión visual", match: (p: string) => p.startsWith("/admin/revision-visual") },
   { href: "/admin", label: "Dashboard", match: (p: string) => p === "/admin" },
   {
     href: "/admin/catalogo",
