@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { adminRequest } from "@/lib/adminRequest";
 import Image from "next/image";
+import { compareVisualClaims } from "@/lib/visualReviewComparison";
 
 type Observation = {
   id: number;
@@ -58,6 +59,7 @@ export default function VisualReviewJournalPage() {
     setError("");
     setLoaded(false);
     setRecords([]);
+    setAssetEvidence(null); // Prevent a different perfume query from reusing an old image comparison.
     setSearched(target);
     try {
       const result = await adminRequest<JournalResponse>(
@@ -177,13 +179,21 @@ export default function VisualReviewJournalPage() {
             <p><strong>Tamaño:</strong> {assetEvidence.bytes.toLocaleString("es")} bytes</p>
             <p className="break-all"><strong>SHA-256 real:</strong> {assetEvidence.bytesSha256}</p>
             <p className="font-medium text-amber-900">Archivo inspeccionado, no certificado. Identidad, derechos y calidad siguen pendientes.</p>
-            {loaded && records.length > 0 && <p className="text-stone-700">
-              Comparación con el historial de {searched}: {
-                records.some(record => record.image_sha256 === assetEvidence.bytesSha256)
-                  ? "existe una huella declarada coincidente; esto no prueba que la revisión sea válida."
-                  : "ninguna huella declarada coincide; requiere investigación antes de reutilizar la imagen."
-              }
-            </p>}
+            {loaded && searched && <div className="space-y-1 rounded border border-stone-300 p-3 text-stone-800" role="status">
+              <p className="font-semibold">Comparación técnica · {searched}</p>
+              {(() => {
+                const comparison = compareVisualClaims(searched, assetEvidence.bytesSha256, records);
+                return <>
+                  <p>{comparison.state === "no_history"
+                    ? "No hay huellas registradas para este perfume."
+                    : comparison.state === "match_claimed_digest"
+                      ? "La imagen coincide con una huella previamente declarada para este perfume."
+                      : "La imagen no coincide con ninguna huella registrada para este perfume."}</p>
+                  <p>{comparison.comparedClaims} registros comparados · {comparison.matchingReviewIds.length} coincidencias · {comparison.mismatchingReviewIds.length} divergencias.</p>
+                  <p className="text-amber-950">Las coincidencias son técnicas; no certifican concentración, frasco, licencia ni calidad visual. Publicación bloqueada.</p>
+                </>;
+              })()}
+            </div>}
           </div>
         </div>}
       </section>

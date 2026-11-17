@@ -24,3 +24,11 @@ Bergamot replacement stays rejected/pending; no new source channel is enrolled. 
 ## Follow-on work
 
 A later approved tranche may add a private immutable captured-media object store and structured reviewer role identity with audit log, revocation and version-locked approvals. That must respect image licensing, media delivery rules, platform terms and cost gates before handling commercial packshots.
+
+## Supervised per-product comparison
+
+The operator can now compare a locally inspected asset's real SHA-256 with journal claims for the **currently selected perfume slug**. The function `compareVisualClaims` filters out other product slugs, distinguishes no history from a hash conflict, and reports both matching and divergent review identifiers. Switching to another perfume clears the previous inspected asset to avoid carrying its evidence across product identities.
+
+A matching digest means only that bytes match an earlier **operator-supplied claim**. The source of the claim, image licensing, brand, flanker, exact EDT/EDP concentration, crop and packaging remain unverified. No new review is created, no asset is replaced, no endorsement is inferred and publication stays blocked. Remote images are not fetched. Source selection for future YouTube research remains exclusively the Publisher's decision.
+
+This tranche also fixes the previous PR #196 GitHub PR metadata test double (each fetch call receives a fresh Response object); its prior red CI was caused by a single-use mocked Response body, not by the production GitHub client. Verify exact HEAD CI before treating this branch as ready for review.
