@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "observations": [
+    {
+      "id": "publisher-bergamot-2026-11-17",
+      "asset": "apps/web/public/editorial-v1/bergamot-editorial-v2.webp",
+      "sha256": "5f862938233e92441bace6aa7f5ec150859bc5fee8c1239ac09438d09b96944a",
+      "status": "replacement_requested",
+      "reason": "Publisher: natural pero visualmente poco atractiva. Fruto pesado, piel apagada, tallo cortado prominente; insuficiente atractivo editorial.",
+      "scope": ["portada", "Academia"],
+      "replacement": null,
+      "approval": "pending"
+    }
+  ]
+}

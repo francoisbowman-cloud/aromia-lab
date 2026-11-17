@@ -52,7 +52,7 @@ export function HomeHero({ perfume }: { perfume?: Perfume }) {
             <div className="absolute inset-0 grid place-items-center font-display text-5xl text-muted">Aromia</div>
           )}
           <div className="absolute bottom-6 right-0 hidden w-[250px] border-t border-line pt-3 font-plex text-[9px] uppercase leading-5 tracking-[.14em] text-muted lg:block">
-            Producto auténtico · sin reconstrucción IA
+            Fotografía del producto
           </div>
         </div>
       </div>

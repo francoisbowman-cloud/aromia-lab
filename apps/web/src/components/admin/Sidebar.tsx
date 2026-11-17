@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 const NAV = [
+  { href: "/admin/operaciones", label: "Operaciones", match: (p: string) => p.startsWith("/admin/operaciones") },
   { href: "/admin", label: "Dashboard", match: (p: string) => p === "/admin" },
   {
     href: "/admin/catalogo",
