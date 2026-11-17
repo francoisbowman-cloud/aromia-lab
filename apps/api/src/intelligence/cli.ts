@@ -9,6 +9,8 @@ async function main() {
   switch(command) {
     case 'enqueue': return store.enqueue(arg,JSON.parse(readFileSync(file,'utf8')));
     case 'work': return { processed: await runOnce(store) };
+    case 'artifacts': return store.artifacts(arg);
+    case 'append-artifact': return store.appendArtifact(arg,JSON.parse(readFileSync(file,'utf8')));
     case 'list': return store.list();
     case 'dashboard': { const jobs = await store.list(); console.table(jobs); return { displayed: jobs.length, limit: 100, publication: 'disabled', providers: 'disabled' }; }
     case 'detail': return store.detail(arg);

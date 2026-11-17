@@ -38,7 +38,7 @@ OMNI: consulta read-only confirmó main `bafa1188eb379459a29b92fd306f2a03e2eafaa
 - El expediente contiene una pregunta y una cita de la Voice Bible, NO investigación científica ni artículo terminado. Sources.verified=false, article=null, QA factual/editorial pendiente. Nunca genera aprobación humana.
 - Coste de proveedor observado: cero llamadas/0 unidades monetarias. Coste de cómputo local no medido. No se configura facturación ni se usan créditos.
 - Entrega al menos una vez, tokens de fencing, lease fijo60s, reintento10s×intento. Solo handler local breve/sin efectos externos. Antes de handlers largos o de pago hacen falta heartbeat/cancelación cooperativa, idempotencia externa y reserva presupuestaria.
-- No hay model router conectado, investigación web autónoma, memoria de aprendizaje aprobada, RBAC fino ni panel web; no se declara autosuficiencia. El panel inicial es consola y API administrativa.
+- No hay model router conectado, investigación web autónoma, memoria de aprendizaje aprobada ni RBAC fino; no se declara autosuficiencia. El panel inicial de consola y API ahora se complementa con `/admin/operaciones`.
 
 ## Operación local reproducible
 
@@ -64,3 +64,18 @@ Pruebas: `INTELLIGENCE_TEST_DATABASE_URL=.../aromia_intelligence_test npm run te
 NEXT_ACTOR: Code. NEXT_ACTION: revisar CI del nuevo lote; ampliar panel operativo y persistencia de etapas/artefactos para un piloto editorial, sin declarar completo el expediente actual. Para investigación/generación real: seleccionar y validar un proveedor disponible con presupuesto autorizado o un runner local; preservar fuentes y revisiones de Voice Bible. Revisar derechos y backlog43/100 y nueve SubBatch sin duplicarlos. No fabricar artículo/fuentes para llenar el gate.
 
 BLOCKERS: endpoint/credenciales OMNI no verificados; runtime/modelo de producción no configurado; autorización de coste y publicación ausente. Son bloqueos de esas integraciones, no del motor local probado. Sin merge, despliegue, publicación, cambios de datos de producción ni cambios de OMNI autorizados por este lote.
+
+
+## Lote siguiente — panel privado, versiones y lenguaje público (17-11-2026)
+
+- CI remoto de `8ffd664`: SUCCESS en persistencia, web, API, código e importador. Referencia: https://github.com/francoisbowman-cloud/aromia-lab/actions/runs/44009255470. Esta evidencia corresponde al lote anterior, no al nuevo commit.
+- `/admin/operaciones`: lista/detalle, creación de expediente, conservación de campos tras error, cancelación confirmable y reintento de fallidos; usa sesión y proxy administrativo existentes. Token del API nunca llega al cliente. No ejecuta publicación ni inicia proveedores.
+- Migración opt-in025: versiones anexadas de notas de investigación, borradores, revisión factual, edición, brief visual e informeQA. Cada registro guarda fuentes y actor administrativo (sin identidad individual inventada). Lock por expediente y versión esperada evitan sobrescritura concurrente. Solo admite trabajos awaiting_review y fuentes ya aportadas. Guardar fact_check o qa_report NO aprueba su contenido.
+- Panel permite escribir/leer versiones; CLI `append-artifact UUID FILE` y `artifacts UUID`. API GET/POST `/api/admin/intelligence/:id/artifacts`. JSON de entrada: kind, content, sourceUrls, expectedVersion. Listado limitado a100 versiones recientes; las anteriores siguen enBD. La migración025 se aplica después de024; rollback en orden inverso y solo con tablas vacías. No se añade ninguna al arranque de producción.
+- Portada/Saber: sustituida la reiteración de IA por Ilustración digital/Adaptación digital; retirado el sello “sin reconstrucción IA”. Autores, enlaces de licencia y archivos de procedencia permanecen. No se presentan las ilustraciones como fotografías documentales. Sin regeneración de imágenes ni rediseño.
+- Verificación local: 61 pruebas web del lote del panel, lint/tipos, build API y pruebas PostgreSQL extendidas correctos. Build optimizado web final también completado correctamente en copia aislada. Concurrencia de versiones: una escritura gana y la otra recibe conflicto; v1 se conserva tras v2; fuentes desconocidas y tipos publish se rechazan; trabajo cancelado no admite versiones.
+- Navegador real conAPI/BD local: autorización, creación, worker, lectura, dos versiones, consulta de v1, cancelación/conservar, recarga y error503 inyectado con campos preservados. 390px sin desbordamiento. Inspección de capturas de móvil y escritorio. Portada y Saber sin palabra IA visible. La prueba inicial del selector role=alert chocó con el anunciador de Next; se corrigió el selector de la prueba y el recorrido final pasó.
+- Evidencia local temporal: `/tmp/aromia-versions-qa-final.log`, `/workspace/aromia-evidence/operations-{desktop,mobile}.png`. No son certificación de producción ni garantía de que estos archivos sobrevivan a otra restauración.
+- Aplicación local de024/025 exclusivamente a aromia_dev y esquemas temporales de pruebas. Ninguna escritura en producción. Datos QA locales identificados por título QA operaciones.
+
+NEXT_ACTOR: Code. NEXT_ACTION: revisar CI del lote actual y conectar captura/verificación de fuentes y ejecución de etapas mediante capacidades disponibles, antes de presentar un piloto completo. Siguen pendientes investigador/model router, approvals humanos vinculados a versión, presupuestos y scheduler autorizado. No sustituirlos por una plantilla que finja investigar. El trabajador solo prepara el expediente suministrado; las versiones de esta prueba fueron textos QA aportados, no un artículo autónomo real.

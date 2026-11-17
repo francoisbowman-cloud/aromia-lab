@@ -25,3 +25,13 @@ intelligenceRouter.post('/',asyncHandler(async(req,res)=>{
 for (const action of ['cancel','retry'] as const) intelligenceRouter.post(`/:id/${action}`,asyncHandler(async(req,res)=>{
   const changed=await store[action](req.params.id);res.status(changed?200:409).json({changed});
 }));
+
+intelligenceRouter.get('/:id/artifacts',asyncHandler(async(req,res)=>{res.json({artifacts:await store.artifacts(req.params.id)});}));
+intelligenceRouter.post('/:id/artifacts',asyncHandler(async(req,res)=>{
+  try {res.status(201).json(await store.appendArtifact(req.params.id,req.body));}
+  catch(e) {
+    const code=e instanceof Error?e.message:'';
+    const status:Record<string,number>={invalid_artifact:400,unknown_source:400,job_not_found:404,job_not_reviewable:409,artifact_version_conflict:409};
+    if(status[code]) {res.status(status[code]).json({error:code});return;} throw e;
+  }
+}));

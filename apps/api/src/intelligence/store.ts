@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { Pool, PoolClient } from 'pg';
+import { validateArtifact } from './artifacts';
 import { validateBrief } from './policy';
 export type Job = { id: string; token: string; payload: unknown; attempts: number; status: string };
 export class JobStore {
@@ -57,6 +58,24 @@ export class JobStore {
       const r = await c.query("UPDATE intelligence_jobs SET status='queued',attempts=0,available_at=now(),error_code=NULL,updated_at=now() WHERE id=$1 AND status='failed' RETURNING id",[id]);
       if (r.rowCount) await this.event(c,id,'manual_retry'); return Boolean(r.rowCount);
     });
+  }
+  async appendArtifact(id: string, input: unknown) {
+    const a = validateArtifact(input);
+    return this.tx(async c => {
+      const job = (await c.query('SELECT payload,status FROM intelligence_jobs WHERE id=$1 FOR UPDATE',[id])).rows[0];
+      if (!job) throw new Error('job_not_found');
+      if (job.status !== 'awaiting_review') throw new Error('job_not_reviewable');
+      const sources = validateBrief(job.payload).sources.map(s=>s.url);
+      if (a.sourceUrls.some(url=>!sources.includes(url))) throw new Error('unknown_source');
+      const latest = (await c.query('SELECT coalesce(max(version),0)::int AS version FROM intelligence_artifacts WHERE job_id=$1 AND kind=$2',[id,a.kind])).rows[0].version;
+      if (latest !== a.expectedVersion) throw new Error('artifact_version_conflict');
+      const result = await c.query('INSERT INTO intelligence_artifacts(job_id,kind,version,content,source_urls,actor) VALUES($1,$2,$3,$4,$5,$6) RETURNING *',[id,a.kind,latest+1,a.content,JSON.stringify(a.sourceUrls),'admin']);
+      await this.event(c,id,'artifact_added',{kind:a.kind,version:latest+1,publication:'blocked'});
+      return result.rows[0];
+    });
+  }
+  async artifacts(id: string) {
+    return (await this.db.query('SELECT id,kind,version,content,source_urls,actor,created_at FROM intelligence_artifacts WHERE job_id=$1 ORDER BY id DESC LIMIT 100',[id])).rows;
   }
   async list() { return (await this.db.query('SELECT id,kind,status,priority,attempts,error_code,created_at,updated_at FROM intelligence_jobs ORDER BY created_at DESC LIMIT 100')).rows; }
   async detail(id: string) {

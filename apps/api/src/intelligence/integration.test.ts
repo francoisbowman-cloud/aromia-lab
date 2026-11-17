@@ -23,6 +23,7 @@ test('PostgreSQL: idempotency, concurrency, restart, fencing, cancellation, retr
   try {
     await db.query(readFileSync('migrations/024_intelligence_jobs.sql','utf8'));
     await db.query(readFileSync('migrations/024_intelligence_jobs.sql','utf8')); // idempotent DDL
+    await db.query(readFileSync('migrations/025_intelligence_artifacts.sql','utf8'));
     let store = new JobStore(db);
     const brief = {title:'Materia',question:'¿Qué falta verificar?',sources:[{url:'https://example.org/source',excerpt:'Texto suministrado, sin verificación factual.'}]};
     const [a,b] = await Promise.all([store.enqueue('one',brief),store.enqueue('one',brief)]);
@@ -59,6 +60,17 @@ test('PostgreSQL: idempotency, concurrency, restart, fencing, cancellation, retr
     assert.equal(result.result.providerCostMicros,0);
     assert.ok(result.events.some((e:{event:string})=>e.event==='manual_retry'));
     assert.equal(await runOnce(store),false);
+    const artifact = {kind:'draft',content:'Borrador aportado; revisión factual pendiente.',sourceUrls:['https://example.org/source'],expectedVersion:0};
+    await assert.rejects(store.appendArtifact(failing.id,{...artifact,sourceUrls:['https://unverified.example']}),/unknown_source/);
+    await assert.rejects(store.appendArtifact(failing.id,{...artifact,kind:'publish'}),/invalid_artifact/);
+    const saves=await Promise.allSettled([store.appendArtifact(failing.id,artifact),store.appendArtifact(failing.id,artifact)]);
+    assert.equal(saves.filter(x=>x.status==='fulfilled').length,1);
+    await store.appendArtifact(failing.id,{...artifact,expectedVersion:1,content:'Segunda versión'});
+    const history=await store.artifacts(failing.id);
+    assert.equal(history.length,2);assert.equal(history[1].content,artifact.content);
+    assert.equal((await store.detail(failing.id)).status,'awaiting_review');
+    await store.cancel(failing.id);
+    await assert.rejects(store.appendArtifact(failing.id,{...artifact,expectedVersion:2}),/job_not_reviewable/);
   } finally { await db.end(); await admin.query(`DROP SCHEMA ${schema} CASCADE`); await admin.end(); }
 });
 
