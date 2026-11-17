@@ -2,6 +2,8 @@
 
 Contrato vigente: [MANDATO-V2.md](MANDATO-V2.md). Responsable: Code/Codex. Rama `feat/intelligence-foundation`, base `1619c776560f5d6f9c5948f8092ff5241540048f`.
 
+Commit funcional: `0896076`. PR borrador: https://github.com/francoisbowman-cloud/aromia-lab/pull/187. Pruebas adicionales de contenido (3) y firma de subida (1) pasan. CI remoto iniciado; no se declara aprobado en este checkpoint.
+
 ## Reconciliación
 
 PR186 está MERGED; el estado antiguo que la describe abierta queda superado. CI de la cabecera previa `218094c` pasó; los controles omitidos no equivalen a aprobación. Esta sesión no certifica el despliegue Railway del merge. Se preservan portada, archivo, Saber, Discovery, Personas, Club, lectura y CMS.
