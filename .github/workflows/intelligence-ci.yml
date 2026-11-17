@@ -11,6 +11,8 @@ on:
       - 'apps/api/migrations/026_editorial_review.sql'
       - 'apps/api/migrations/027_visual_review_journal.sql'
       - 'apps/api/migrations/down/027_visual_review_journal.sql'
+      - 'apps/api/migrations/028_visual_review_decisions.sql'
+      - 'apps/api/migrations/down/028_visual_review_decisions.sql'
       - '.github/workflows/intelligence-ci.yml'
   workflow_dispatch:
 jobs:

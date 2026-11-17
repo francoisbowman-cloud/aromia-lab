@@ -2,10 +2,12 @@ import { Router } from 'express';
 import { pool } from '../../db/pool';
 import { JobStore } from '../../intelligence/store';
 import { VisualReviewJournal } from '../../intelligence/visualReviewJournal';
+import { VisualReviewDecisions } from '../../intelligence/visualReviewDecisions';
 import { asyncHandler } from '../../lib/asyncHandler';
 export const intelligenceRouter = Router();
 const store = new JobStore(pool);
 const visualJournal = new VisualReviewJournal(pool);
+const visualDecisions = new VisualReviewDecisions(pool);
 intelligenceRouter.use((_req,res,next)=>{
   if (process.env.INTELLIGENCE_ENABLED !== 'true') { res.status(503).json({error:'Intelligence not enabled'}); return; }
   next();
@@ -32,6 +34,28 @@ intelligenceRouter.post('/visual-reviews',asyncHandler(async(req,res)=>{
     const code=e instanceof Error?e.message:'';
     if(code==='invalid_visual_review' || code==='visual_review_id_conflict') {
       res.status(code==='invalid_visual_review'?400:409).json({error:code});return;
+    }
+    throw e;
+  }
+}));
+// Visual decisions remain independent of editorial release authorization.
+// A normal admin token can read; a separate Publisher token is mandatory for writes.
+intelligenceRouter.get('/visual-decisions/:observationId',asyncHandler(async(req,res)=>{
+  if(process.env.VISUAL_REVIEW_JOURNAL_ENABLED!=='true') {res.status(503).json({error:'Visual review journal disabled'});return;}
+  const id=Number(req.params.observationId);
+  try{res.json(await visualDecisions.list(id));}
+  catch(e){if(e instanceof Error && e.message==='invalid_visual_decision'){res.status(400).json({error:e.message});return;}throw e;}
+}));
+intelligenceRouter.post('/visual-decisions',asyncHandler(async(req,res)=>{
+  if(process.env.VISUAL_REVIEW_JOURNAL_ENABLED!=='true') {res.status(503).json({error:'Visual review journal disabled'});return;}
+  const expected=process.env.EDITORIAL_REVIEW_TOKEN;
+  if(!expected || expected===process.env.ADMIN_API_TOKEN || req.header('x-editorial-review-token')!==expected) {
+    res.status(403).json({error:'Publisher credential required'});return;
+  }
+  try{res.status(201).json(await visualDecisions.append(req.body));}
+  catch(e){const code=e instanceof Error?e.message:'';
+    if(['invalid_visual_decision','visual_decision_conflict','visual_observation_not_found'].includes(code)) {
+      res.status(code==='invalid_visual_decision'?400:code==='visual_observation_not_found'?404:409).json({error:code});return;
     }
     throw e;
   }
