@@ -9,6 +9,17 @@ async function main() {
   switch(command) {
     case 'enqueue': return store.enqueue(arg,JSON.parse(readFileSync(file,'utf8')));
     case 'work': return { processed: await runOnce(store) };
+    case 'research': {
+      const job=await store.detail(arg); if(!job) throw new Error('job_not_found');
+      const results=[];
+      const saved=await store.reviewPackage(arg);
+      for(const source of job.payload.sources) {
+        if(saved.sources.some(s=>s.url===source.url)) {results.push({url:source.url,status:'already_captured'});continue;}
+        try {results.push(await store.captureSource(arg,source.url));} catch {results.push({url:source.url,status:'retrieval_failed',factualApproval:false});}}
+      return {results,package:await store.reviewPackage(arg)};
+    }
+    case 'capture-source': return store.captureSource(arg,file);
+    case 'review-package': return store.reviewPackage(arg);
     case 'artifacts': return store.artifacts(arg);
     case 'append-artifact': return store.appendArtifact(arg,JSON.parse(readFileSync(file,'utf8')));
     case 'list': return store.list();

@@ -6,6 +6,6 @@ export async function POST(_req: NextRequest,{params}:{params:{id:string;action:
 }
 
 export async function GET(_req: NextRequest,{params}:{params:{id:string;action:string}}) {
-  if (!/^[0-9a-f-]{36}$/i.test(params.id) || params.action !== 'artifacts') return NextResponse.json({error:'Invalid action'},{status:400});
-  return proxyToAdminApi(`/intelligence/${params.id}/artifacts`);
+  if (!/^[0-9a-f-]{36}$/i.test(params.id) || !['artifacts','review-package'].includes(params.action)) return NextResponse.json({error:'Invalid action'},{status:400});
+  return proxyToAdminApi(`/intelligence/${params.id}/${params.action}`);
 }

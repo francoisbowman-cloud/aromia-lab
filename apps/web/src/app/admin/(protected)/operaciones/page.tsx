@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from 'react';
+import ReviewPackage from "@/components/admin/ReviewPackage";
 import EditorialVersions from "@/components/admin/EditorialVersions";
 import { adminRequest } from '@/lib/adminRequest';
 type Job = {id:string;status:string;attempts:number;updated_at:string;error_code:string|null};
@@ -55,6 +56,7 @@ export default function Operations() {
       {detail.result&&<div><p>Gasto en proveedores: {detail.result.providerCostMicros/1000000}. Cómputo local no medido.</p><p>Publicación bloqueada. La preparación automática no acredita veracidad ni derechos.</p></div>}
       {detail.error_code&&<p>Error registrado: {detail.error_code}</p>}
       <EditorialVersions key={detail.id} id={detail.id} sources={detail.payload.sources.map(s=>s.url)} editable={detail.status==='awaiting_review'}/>
+      <ReviewPackage key={detail.id+detail.updated_at} id={detail.id}/>
       <h3 className="font-semibold">Historial</h3><ol className="space-y-1">{detail.events.map((e,i)=><li key={i}>{new Date(e.created_at).toLocaleString('es')} · {e.event}</li>)}</ol>
       {detail.status==='failed'&&<button disabled={busy} onClick={()=>void action('retry')} className="rounded border px-4 py-2">Reintentar trabajo</button>}
       {['queued','running','awaiting_review'].includes(detail.status)&&!confirm&&<button disabled={busy} onClick={()=>setConfirm(true)} className="rounded border px-4 py-2">Cancelar trabajo</button>}

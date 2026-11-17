@@ -7,6 +7,7 @@ on:
       - 'apps/api/src/index.ts'
       - 'apps/api/migrations/024_intelligence_jobs.sql'
       - 'apps/api/migrations/025_intelligence_artifacts.sql'
+      - 'apps/api/migrations/026_editorial_review.sql'
       - '.github/workflows/intelligence-ci.yml'
   workflow_dispatch:
 jobs:

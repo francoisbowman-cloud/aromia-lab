@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Pool, PoolClient } from 'pg';
+import { bundleOf } from './review';
+import { retrieveSource } from './sources';
 import { validateArtifact } from './artifacts';
 import { validateBrief } from './policy';
 export type Job = { id: string; token: string; payload: unknown; attempts: number; status: string };
@@ -76,6 +78,53 @@ export class JobStore {
   }
   async artifacts(id: string) {
     return (await this.db.query('SELECT id,kind,version,content,source_urls,actor,created_at FROM intelligence_artifacts WHERE job_id=$1 ORDER BY id DESC LIMIT 100',[id])).rows;
+  }
+  async captureSource(id: string, url: string) {
+    const job=await this.detail(id);
+    if(!job || job.status!=='awaiting_review') throw new Error('job_not_reviewable');
+    const source=validateBrief(job.payload).sources.find(s=>s.url===url);
+    if(!source) throw new Error('unknown_source');
+    let result;
+    try {result=await retrieveSource(source.url,source.excerpt);}
+    catch(error) {
+      await this.tx(c=>this.event(c,id,'source_retrieval_failed',{url:source.url}));
+      throw error;
+    }
+    return this.tx(async c=>{
+      const current=(await c.query('SELECT status FROM intelligence_jobs WHERE id=$1 FOR UPDATE',[id])).rows[0];
+      if(current.status!=='awaiting_review') throw new Error('job_not_reviewable');
+      const r=await c.query('INSERT INTO intelligence_sources(job_id,url,sha256,content,excerpt_found) VALUES($1,$2,$3,$4,$5) ON CONFLICT(job_id,url,sha256) DO NOTHING RETURNING id',[id,url,result.sha256,result.content,result.excerptFound]);
+      if(r.rowCount) await this.event(c,id,'source_captured',{url,sha256:result.sha256,excerptFound:result.excerptFound});
+      return {url,sha256:result.sha256,excerptFound:result.excerptFound,factualApproval:false};
+    });
+  }
+  private async bundle(c: PoolClient, id: string) {
+    const artifacts=(await c.query('SELECT id,kind,version,content,source_urls FROM intelligence_artifacts WHERE job_id=$1 ORDER BY id',[id])).rows;
+    const sources=(await c.query('SELECT id,url,sha256,excerpt_found FROM intelligence_sources WHERE job_id=$1 ORDER BY id',[id])).rows;
+    return bundleOf(id,artifacts,sources);
+  }
+  async reviewPackage(id: string) {
+    return this.tx(async c=>{
+      const job=(await c.query('SELECT status FROM intelligence_jobs WHERE id=$1 FOR UPDATE',[id])).rows[0];
+      if(!job) throw new Error('job_not_found');
+      const bundle=await this.bundle(c,id);
+      const last=(await c.query('SELECT bundle_hash,decision,note,actor,created_at FROM intelligence_reviews WHERE job_id=$1 ORDER BY id DESC LIMIT 1',[id])).rows[0];
+      return {...bundle,status:job.status,review:last??null,reviewCurrent:Boolean(last && last.bundle_hash===bundle.hash)};
+    });
+  }
+  async recordReview(id: string,input: unknown) {
+    const r=input as {hash:string;decision:string;note:string;confirmed:boolean};
+    if(!r || !/^[a-f0-9]{64}$/.test(r.hash) || !['approved','changes_requested'].includes(r.decision) || typeof r.note!=='string' || !r.note.trim() || r.note.length>5000 || r.confirmed!==true) throw new Error('invalid_review');
+    return this.tx(async c=>{
+      const job=(await c.query('SELECT status FROM intelligence_jobs WHERE id=$1 FOR UPDATE',[id])).rows[0];
+      if(!job || job.status!=='awaiting_review') throw new Error('job_not_reviewable');
+      const bundle=await this.bundle(c,id);
+      if(bundle.hash!==r.hash) throw new Error('review_version_conflict');
+      if(r.decision==='approved' && bundle.blockers.length) throw new Error('review_blocked');
+      const saved=await c.query('INSERT INTO intelligence_reviews(job_id,bundle_hash,decision,note,actor) VALUES($1,$2,$3,$4,$5) RETURNING *',[id,r.hash,r.decision,r.note,'publisher_credential']);
+      await this.event(c,id,'review_recorded',{hash:r.hash,decision:r.decision});
+      return {...saved.rows[0],publication:'blocked'};
+    });
   }
   async list() { return (await this.db.query('SELECT id,kind,status,priority,attempts,error_code,created_at,updated_at FROM intelligence_jobs ORDER BY created_at DESC LIMIT 100')).rows; }
   async detail(id: string) {

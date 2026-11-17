@@ -79,3 +79,26 @@ BLOCKERS: endpoint/credenciales OMNI no verificados; runtime/modelo de producci�
 - Aplicación local de024/025 exclusivamente a aromia_dev y esquemas temporales de pruebas. Ninguna escritura en producción. Datos QA locales identificados por título QA operaciones.
 
 NEXT_ACTOR: Code. NEXT_ACTION: revisar CI del lote actual y conectar captura/verificación de fuentes y ejecución de etapas mediante capacidades disponibles, antes de presentar un piloto completo. Siguen pendientes investigador/model router, approvals humanos vinculados a versión, presupuestos y scheduler autorizado. No sustituirlos por una plantilla que finja investigar. El trabajador solo prepara el expediente suministrado; las versiones de esta prueba fueron textos QA aportados, no un artículo autónomo real.
+
+
+## Captura de fuentes y revisión vinculada a versiones — lote 17-11-2026
+
+CI previo `1a2413f`: persistencia, web, API, código e importador SUCCESS (workflow persistencia44112339108). Controles omitidos siguen sin equivaler a aprobación.
+
+Implementado:
+- Migración opt-in026: capturas inmutables por URL/hash y decisiones editoriales anexadas. Aplicar después de024/025; rollback inverso solo si no hay datos. No forma parte del arranque de producción.
+- Recuperación HTTPS con allowlist cerrada (en.wikipedia.org, pmc.ncbi.nlm.nih.gov y raw.githubusercontent.com limitado al repositorio Aromia y SHA40), sin credenciales, puertos alternativos, fragmentos ni redirecciones; timeout15s, texto y máximo1MiB. No ejecuta HTML/instrucciones de fuentes. Recuperación no es verificación de hechos/licencias. Coincidencia del extracto es literal y conservadora; HTML puede producir falsos negativos que quedan pendientes.
+- CLI `capture-source UUID URL`, `research UUID` (recorre fuentes suministradas, conserva éxitos, registra fallos y reutiliza capturas al reanudar), `review-package UUID`. No es descubrimiento de nuevas fuentes ni generación de texto.
+- Paquete identifica versiones últimas de seis materiales, fuentes capturadas y hash del conjunto. Una nueva versión/captura invalida la correspondencia de la revisión anterior. Presencia de materiales no implica calidad.
+- Endpoint POST /api/admin/intelligence/:id/review requiere adminAuth y una credencial editorial separada EDITORIAL_REVIEW_TOKEN, distinta de ADMIN_API_TOKEN, además de hash/decisión/nota/confirmación. No hay proxy web ni capacidad del worker que emita aprobaciones. Actor registrado: publisher_credential (credencial compartida, no identidad personal inventada). Sin token configurado devuelve403.
+- El panel muestra paquete, carencias, huellas y vigencia de revisión. Ninguna decisión cambia artículos ni estado público; publication sigue blocked. Aprobación editorial y autorización de despliegue son operaciones distintas.
+
+Evidencia:
+- Cinco pruebas API con PostgreSQL: recuperaciones y límites, auth, concurrencia, versiones, bloqueo de revisión incompleta, conflicto de hash, invalidación tras edición; cambios de publicación ausentes. Las aprobaciones de prueba se crean solo en schema aleatorio de *_test y se eliminan al terminar.
+- Build API, lint/tipos web y build optimizado web final correctos. Navegador local volvió a pasar el recorrido con paquete, versiones, cancelación, recarga, fallo503 conservando campos y ausencia de IA visible en portada/Saber.
+- Captura REAL sin modelo/pago: Voice Bible fijada a1619c77, SHA256 f5c20725080b97d1e407ff308c59a4b070c2127c0f4050256bb31b7a140f00d2, extracto “Nunca inventes experiencias personales” localizado. Job local6c1ef028-5095-48d7-a57f-7064bb061e3f; factualApproval=false. Se conserva el expediente al ejecutar en otro proceso; research reutiliza captura. No se afirma un artículo ni investigación científica terminados.
+- Entorno local Node24 necesitó NODE_USE_ENV_PROXY=1 para la recuperación real a través del proxy configurado; el runtime del proyecto en Node20 debe verificarse en su propia red. No se desactivó TLS ni se añadieron credenciales a las URLs.
+
+Bloqueo real para redacción autónoma: no se identificó proveedor de texto operativo ni presupuesto autorizado. La única variable de entorno coincidente era OPENAI_CLUSTER, que no acredita una API de generación utilizable ni autorización de gasto. Se solicitó proveedor/presupuesto sin pedir claves por chat. No se han consumido créditos ni creado una falsa ejecución autónoma con contenido manual.
+
+NEXT_ACTOR: Code. Con respuesta de proveedor/presupuesto y secretos por canal seguro, implementar router/contador de costes y piloto editorial real hasta aprobación humana; entretanto revisar CI de este lote. Fases audiovisuales y publicación mantienen sus compuertas. No declarar autosuficiencia ni cierre del Master Plan.

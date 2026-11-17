@@ -24,6 +24,7 @@ test('PostgreSQL: idempotency, concurrency, restart, fencing, cancellation, retr
     await db.query(readFileSync('migrations/024_intelligence_jobs.sql','utf8'));
     await db.query(readFileSync('migrations/024_intelligence_jobs.sql','utf8')); // idempotent DDL
     await db.query(readFileSync('migrations/025_intelligence_artifacts.sql','utf8'));
+    await db.query(readFileSync('migrations/026_editorial_review.sql','utf8'));
     let store = new JobStore(db);
     const brief = {title:'Materia',question:'¿Qué falta verificar?',sources:[{url:'https://example.org/source',excerpt:'Texto suministrado, sin verificación factual.'}]};
     const [a,b] = await Promise.all([store.enqueue('one',brief),store.enqueue('one',brief)]);
@@ -69,8 +70,20 @@ test('PostgreSQL: idempotency, concurrency, restart, fencing, cancellation, retr
     const history=await store.artifacts(failing.id);
     assert.equal(history.length,2);assert.equal(history[1].content,artifact.content);
     assert.equal((await store.detail(failing.id)).status,'awaiting_review');
+    const firstBundle=await store.reviewPackage(failing.id);
+    await assert.rejects(store.recordReview(failing.id,{hash:firstBundle.hash,decision:'approved',note:'Test only',confirmed:true}),/review_blocked/);
+    for(const kind of ['research_note','fact_check','edit','art_brief','qa_report']) await store.appendArtifact(failing.id,{...artifact,kind,expectedVersion:0});
+    await db.query("INSERT INTO intelligence_sources(job_id,url,sha256,content,excerpt_found) VALUES($1,$2,$3,$4,true)",[failing.id,'https://example.org/source','test-fixture-hash','Local fixture, not real verification']);
+    const ready=await store.reviewPackage(failing.id);
+    assert.equal(ready.blockers.length,0);
+    await assert.rejects(store.recordReview(failing.id,{hash:firstBundle.hash,decision:'approved',note:'Test only',confirmed:true}),/review_version_conflict/);
+    await store.recordReview(failing.id,{hash:ready.hash,decision:'approved',note:'Local test fixture only; no actual publication approval',confirmed:true});
+    assert.equal((await store.reviewPackage(failing.id)).reviewCurrent,true);
+    assert.equal((await store.reviewPackage(failing.id)).publication,'blocked');
+    await store.appendArtifact(failing.id,{...artifact,expectedVersion:2,content:'Changed after review'});
+    assert.equal((await store.reviewPackage(failing.id)).reviewCurrent,false);
     await store.cancel(failing.id);
-    await assert.rejects(store.appendArtifact(failing.id,{...artifact,expectedVersion:2}),/job_not_reviewable/);
+    await assert.rejects(store.appendArtifact(failing.id,{...artifact,expectedVersion:3}),/job_not_reviewable/);
   } finally { await db.end(); await admin.query(`DROP SCHEMA ${schema} CASCADE`); await admin.end(); }
 });
 
@@ -90,6 +103,7 @@ test('operations routes require existing admin authentication and explicit enabl
     assert.equal((await fetch(`http://127.0.0.1:${address.port}/ops`,{headers:{authorization:`Bearer ${token}`}})).status,503);
     process.env.INTELLIGENCE_ENABLED='true';
     assert.equal((await fetch(`http://127.0.0.1:${address.port}/ops/no-uuid`,{headers:{authorization:`Bearer ${token}`}})).status,400);
+    assert.equal((await fetch(`http://127.0.0.1:${address.port}/ops/00000000-0000-0000-0000-000000000000/review`,{method:'POST',headers:{authorization:`Bearer ${token}`}})).status,403);
     assert.equal((await fetch(`http://127.0.0.1:${address.port}/ops/00000000-0000-0000-0000-000000000000/approve`,{method:'POST',headers:{authorization:`Bearer ${token}`}})).status,404);
   } finally {
     server.closeAllConnections(); await new Promise<void>(resolve=>server.close(()=>resolve()));

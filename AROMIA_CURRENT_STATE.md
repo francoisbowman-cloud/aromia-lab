@@ -11,7 +11,7 @@ It indexes the latest verified operational state. Git history, checkpoints and c
 - LAST_ACTOR: Code/Codex. PR186 is MERGED at `1619c776560f5d6f9c5948f8092ff5241540048f`; older OPEN labels below are historical.
 - ACTIVE_OBJECTIVE: autonomous editorial infrastructure, incremental and without publication.
 - ACTIVE_BRANCH: `feat/intelligence-foundation`.
-- DELIVERABLES: persistent PostgreSQL job engine, gated preparation handler, CLI + private web operations panel, authenticated opt-in API, versioned editorial materials and local integration tests. See [board and handoff](docs/intelligence/BOARD.md).
+- DELIVERABLES: persistent PostgreSQL job engine, gated preparation handler, CLI + private web operations panel, authenticated opt-in API, versioned editorial materials, bounded source capture, version-bound review packages and local integration tests. See [board and handoff](docs/intelligence/BOARD.md).
 - STATE: first operational foundation proven locally; full autonomous editorial pilot and production runtime NOT complete; private panel implemented. Existing magazine design preserved.
 - NEXT_ACTOR: Code; follow the board for CI and next safe implementation tranche.
 - BLOCKERS: external runtime/provider availability and approved spend for real autonomous research; OMNI deployment unverified.
