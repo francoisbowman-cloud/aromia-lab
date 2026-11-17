@@ -142,12 +142,15 @@ export function extractExplicitMetadata(html, url = "", product = null) {
   const searchable = `${primary} ${text.slice(0, 12000)}`;
   let gender = genderFromExplicitAudience(jsonAudience);
   if (!gender) {
-    const men = /\b(for|pour|para)\s+(men|him|homme|hombre|uomo)|\bmens?\s+(fragrance|perfume|parfum)|\bhomme\b|\bmasculin\b|\bmasculino\b|\buomo\b|\/men(?:\/|-|$)/i.test(searchable);
-    const women = /\b(for|pour|para)\s+(women|her|femme|mujer|donna)|\bwomens?\s+(fragrance|perfume|parfum)|\bfemme\b|\bféminin\b|\bfeminin\b|\bfemenino\b|\bdonna\b|\/women(?:\/|-|$)/i.test(searchable);
-    const unisex = /\bunisex\b|gender[- ]?neutral|sans genre|senza genere/i.test(searchable);
-    if (unisex || (men && women)) gender = "unisex";
-    else if (men) gender = "masculino";
-    else if (women) gender = "femenino";
+    // Navigation and recommendations describe other products; they are not
+    // evidence of this product's audience. Prefer product-scoped metadata.
+    const genderText = `${primary} ${product?.name ?? ""} ${stripHtml(product?.description ?? "")}`;
+    const men = /\b(for|pour|para)\s+(men|him|homme|hombre|uomo)|\bmens?\s+(fragrance|perfume|parfum)|\bhomme\b|\bmasculin\b|\bmasculino\b|\buomo\b|\/men(?:\/|-|$)/i.test(genderText);
+    const women = /\b(for|pour|para)\s+(women|her|femme|mujer|donna)|\bwomens?\s+(fragrance|perfume|parfum)|\bfemme\b|\bféminin\b|\bfeminin\b|\bfemenino\b|\bdonna\b|\/women(?:\/|-|$)/i.test(genderText);
+    const unisex = /\bunisex\b|gender[- ]?neutral|sans genre|senza genere|for (?:women and men|men and women)/i.test(genderText);
+    if (unisex) gender = "unisex";
+    else if (men && !women) gender = "masculino";
+    else if (women && !men) gender = "femenino";
   }
 
   const concentration = concentrationFrom(primary) || concentrationFrom(text.slice(0, 2500));
