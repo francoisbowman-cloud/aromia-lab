@@ -1,0 +1,34 @@
+name: Intelligence persistence
+on:
+  pull_request:
+    paths:
+      - 'apps/api/src/intelligence/**'
+      - 'apps/api/src/routes/admin/intelligence.ts'
+      - 'apps/api/src/index.ts'
+      - 'apps/api/migrations/024_intelligence_jobs.sql'
+      - '.github/workflows/intelligence-ci.yml'
+  workflow_dispatch:
+jobs:
+  persistence:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: aromia
+          POSTGRES_PASSWORD: aromia
+          POSTGRES_DB: aromia_intelligence_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U aromia"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci --prefix apps/api
+      - run: npm --prefix apps/api run build
+      - run: npm --prefix apps/api run test:intelligence
+        env:
+          INTELLIGENCE_TEST_DATABASE_URL: postgresql://aromia:aromia@127.0.0.1:5432/aromia_intelligence_test

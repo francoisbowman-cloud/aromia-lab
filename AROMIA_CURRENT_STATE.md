@@ -6,6 +6,17 @@ This file is the compact relay for the command:
 
 It indexes the latest verified operational state. Git history, checkpoints and canonical workflow documents remain authoritative evidence.
 
+## Active V2 mandate — latest checkpoint
+
+- LAST_ACTOR: Code/Codex. PR186 is MERGED at `1619c776560f5d6f9c5948f8092ff5241540048f`; older OPEN labels below are historical.
+- ACTIVE_OBJECTIVE: autonomous editorial infrastructure, incremental and without publication.
+- ACTIVE_BRANCH: `feat/intelligence-foundation`.
+- DELIVERABLES: persistent PostgreSQL job engine, gated preparation handler, CLI operations console, authenticated opt-in API, local integration tests. See [board and handoff](docs/intelligence/BOARD.md).
+- STATE: first operational foundation proven locally; full editorial pilot, panel web and production runtime NOT complete. Existing magazine design preserved.
+- NEXT_ACTOR: Code; follow the board for CI and next safe implementation tranche.
+- BLOCKERS: external runtime/provider availability and approved spend for real autonomous research; OMNI deployment unverified.
+- AUTHORITY: no merge/deploy/publication/production writes or OMNI modifications in this mandate.
+
 ## Active mission override — 2026-11-13 (v56)
 
 The historical v54 relay below is preserved as context, not current launch status.

@@ -1,0 +1,20 @@
+import 'dotenv/config';
+import { readFileSync } from 'node:fs';
+import { pool } from '../db/pool';
+import { JobStore } from './store';
+import { runOnce } from './worker';
+async function main() {
+  const store = new JobStore(pool);
+  const [command,arg,file] = process.argv.slice(2);
+  switch(command) {
+    case 'enqueue': return store.enqueue(arg,JSON.parse(readFileSync(file,'utf8')));
+    case 'work': return { processed: await runOnce(store) };
+    case 'list': return store.list();
+    case 'dashboard': { const jobs = await store.list(); console.table(jobs); return { displayed: jobs.length, limit: 100, publication: 'disabled', providers: 'disabled' }; }
+    case 'detail': return store.detail(arg);
+    case 'cancel': return { cancelled: await store.cancel(arg) };
+    case 'retry': return { retried: await store.retry(arg) };
+    default: throw new Error('Usage: intelligence enqueue KEY FILE | work | list | detail/cancel/retry UUID');
+  }
+}
+main().then(v=>console.log(JSON.stringify(v,null,2))).catch(()=>{console.error('Operation failed; check arguments, database and migration.');process.exitCode=1;}).finally(()=>pool.end());

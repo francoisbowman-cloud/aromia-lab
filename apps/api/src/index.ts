@@ -12,6 +12,7 @@ import { adminPerfumesRouter } from "./routes/admin/perfumes";
 import { adminDashboardRouter } from "./routes/admin/dashboard";
 import { adminArticlesRouter } from "./routes/admin/articles";
 import { adminScraperRouter } from "./routes/admin/scraper";
+import { intelligenceRouter } from "./routes/admin/intelligence";
 import { adminAuth } from "./middleware/adminAuth";
 import { startPriceSyncCron } from "./scraper/runner";
 
@@ -52,6 +53,7 @@ app.get("/api/admin/ping", adminAuth, (_req, res) => {
   res.json({ ok: true });
 });
 
+app.use("/api/admin/intelligence", adminAuth, intelligenceRouter);
 app.use("/api/admin/perfumes", adminAuth, adminPerfumesRouter);
 app.use("/api/admin/dashboard", adminAuth, adminDashboardRouter);
 app.use("/api/admin/articles", adminAuth, adminArticlesRouter);
