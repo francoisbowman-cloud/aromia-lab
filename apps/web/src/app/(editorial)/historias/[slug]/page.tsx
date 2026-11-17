@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import "../../editorial.css";
 import "./story.css";
-import { VisualField } from "../../editorialVisuals";
+import { VisualField, visualCredit } from "../../editorialVisuals";
 import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
 
 interface StorySection {
@@ -22,17 +22,6 @@ interface Story {
   deck: string;
   intro: string[];
   heroSlot: string;
-  /**
-   * D-7 (recomposición del hero de Omán, audit 2026-09-06 §4.4/§9.1): la
-   * fuente de amouage-material-density-interpretive es un paisaje 16:9
-   * (1920×1080) documental — recorta amplitud panorámica en el marco
-   * vertical-ish de .story-hero con object-fit:cover por defecto.
-   * "contain" muestra la foto completa (cero recorte) y deja ver el
-   * gradiente ámbar/carbón ya declarado para .amouage .story-visual como
-   * marco, en vez de estirarla. Sólo esta historia lo necesita: ambroxan
-   * (0.75, retrato) y ropion (1.50, macro) encajan bien con cover.
-   */
-  heroFit?: "cover" | "contain";
   sections: StorySection[];
   commerceNote: string;
   commerce: { label: string; href: string; note: string }[];
@@ -230,7 +219,6 @@ const data: Record<string, Story> = {
       `Eso, por sí solo, ya sería una anécdota curiosa. Lo que la vuelve una historia es lo que el sultán le pidió que hiciera con él.`,
     ],
     heroSlot: "amouage-material-density-interpretive",
-    heroFit: "contain",
     sections: [
       {
         h: "Un país que vende incienso desde hace milenios",
@@ -316,17 +304,27 @@ export default function Story({ params }: { params: { slug: string } }) {
     <main className={`ev1 story-page ${s.heroSlot.split("-")[0]}`}>
       <article>
         <header className="story-hero">
-          <div>
+          <div className="story-hero-title">
             <p className="ev1-kicker">{s.territory}</p>
             <h1>{s.title}</h1>
-            <p className="story-deck">{s.deck}</p>
           </div>
-          <VisualField
-            slotId={s.heroSlot}
-            className="story-visual"
-            sizes="(max-width: 800px) 100vw, 50vw"
-            fit={s.heroFit}
-          />
+          <div className="story-hero-media">
+            {params.slug === "el-ambar-que-nunca-toco-una-ballena" ? (
+              <figure className="story-botanical-plate">
+                <Image src="/editorial-v1/clary-sage-herbarium.jpg" width={801} height={1200}
+                  priority sizes="(max-width: 800px) 66vw, 30vw"
+                  alt="Lámina histórica de Salvia sclarea con sus hojas, flores y semillas." />
+                <figcaption>Salvia sclarea · Jacob Sturm, 1796 · Dominio público</figcaption>
+              </figure>
+            ) : (
+              <>
+                <VisualField slotId={s.heroSlot} className="story-visual" priority
+                  sizes="(max-width: 800px) 100vw, 58vw" />
+                <p className="story-hero-credit">{visualCredit(s.heroSlot)}</p>
+              </>
+            )}
+          </div>
+          <p className="story-deck">{s.deck}</p>
         </header>
 
         <div className="story-intro">

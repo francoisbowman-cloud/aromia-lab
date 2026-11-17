@@ -1,0 +1,8 @@
+{
+  "results": [
+    "Missing story uses authored unavailable page instead of exception",
+    "Malformed story uses recovery boundary; archive link returns to real archive"
+  ],
+  "overflow": false,
+  "fixture": "Local HTTP proxy injects missing/malformed source, no production writes"
+}

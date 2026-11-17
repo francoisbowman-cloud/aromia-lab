@@ -1,26 +1,14 @@
 import { Router } from "express";
-import multer from "multer";
-import { existsSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
+import { randomUUID } from "node:crypto";
 import { pool } from "../../db/pool";
 import { logActivity } from "../../db/activityLog";
 import { asyncHandler } from "../../lib/asyncHandler";
+import { receiveImage, storeEntityImage } from "../../lib/imageUpload";
+
+import { synchronizeStoryTitle } from "../../lib/articleContent";
 
 export const adminArticlesRouter = Router();
 
-const UPLOADS_DIR = join(__dirname, "..", "..", "..", "uploads", "articles");
-if (!existsSync(UPLOADS_DIR)) mkdirSync(UPLOADS_DIR, { recursive: true });
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: UPLOADS_DIR,
-    filename: (_req, file, cb) => {
-      const ext = file.originalname.split(".").pop();
-      cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}.${ext}`);
-    },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
 
 function slugify(title: string): string {
   return title
@@ -65,14 +53,30 @@ adminArticlesRouter.get(
 adminArticlesRouter.post(
   "/",
   asyncHandler(async (req, res) => {
-    const b = req.body;
-    const slug = b.slug || slugify(b.titulo);
+    const b = req.body ?? {};
+    if (typeof b.titulo !== "string" || !b.titulo.trim()) {
+      return res.status(400).json({ error: "El título es obligatorio" });
+    }
+    if (!["resena", "guia", "analisis", "academia", "tendencias"].includes(b.categoria ?? "guia")
+        || !["borrador", "publicado"].includes(b.estado ?? "borrador")
+        || (b.slug !== undefined && (typeof b.slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(b.slug)))) {
+      return res.status(400).json({ error: "Categoría, estado o slug no válido" });
+    }
+    const slug = b.slug || `${slugify(b.titulo) || "articulo"}-${randomUUID().slice(0, 8)}`;
 
-    const { rows } = await pool.query(
+    let rows;
+    try {
+      ({ rows } = await pool.query(
       `INSERT INTO articles (slug, titulo, categoria, estado, contenido_html)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [slug, b.titulo, b.categoria ?? "guia", b.estado ?? "borrador", b.contenido_html ?? ""],
-    );
+      [slug, b.titulo.trim(), b.categoria ?? "guia", b.estado ?? "borrador", b.contenido_html ?? ""],
+      ));
+    } catch (error) {
+      if ((error as { code?: string }).code === "23505") {
+        return res.status(409).json({ error: "Ya existe un artículo con ese slug" });
+      }
+      throw error;
+    }
     await logActivity(`Se creó el artículo "${rows[0].titulo}"`);
     res.status(201).json(rows[0]);
   }),
@@ -81,10 +85,17 @@ adminArticlesRouter.post(
 adminArticlesRouter.patch(
   "/:id",
   asyncHandler(async (req, res) => {
-    const b = req.body;
+    const b = { ...req.body };
+    if (b.titulo !== undefined && (typeof b.titulo !== "string" || !b.titulo.trim() || /[\r\n]/.test(b.titulo))) return res.status(400).json({ error: "Título no válido" });
+    if (b.contenido_markdown !== undefined && b.contenido_markdown !== null && typeof b.contenido_markdown !== "string") return res.status(400).json({ error: "Contenido no válido" });
+    if (typeof b.titulo === "string") {
+      const { rows } = await pool.query("SELECT contenido_markdown FROM articles WHERE id = $1", [req.params.id]);
+      const markdown = b.contenido_markdown ?? rows[0]?.contenido_markdown;
+      if (markdown) b.contenido_markdown = synchronizeStoryTitle(markdown, b.titulo.trim());
+    }
     const fields = [
       "titulo", "categoria", "estado", "contenido_html", "contenido_markdown", "autor", "meta_title",
-      "meta_description", "url_canonica", "keyword_objetivo", "nivel",
+      "meta_description", "url_canonica", "keyword_objetivo", "nivel", "imagen_portada_url", "imagen_og_url",
     ];
 
     const updates: string[] = [];
@@ -129,18 +140,12 @@ adminArticlesRouter.delete(
 
 adminArticlesRouter.post(
   "/:id/image",
-  upload.single("image"),
+  receiveImage,
   asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No se recibió ninguna imagen" });
-
-    const url = `/uploads/articles/${req.file.filename}`;
-    const field = req.body.field === "og" ? "imagen_og_url" : "imagen_portada_url";
-
-    const { rows } = await pool.query(
-      `UPDATE articles SET ${field} = $1, actualizado_en = now() WHERE id = $2 RETURNING ${field}`,
-      [url, req.params.id],
-    );
-    if (rows.length === 0) return res.status(404).json({ error: "Artículo no encontrado" });
-    res.json(rows[0]);
+    if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: "Identificador no válido" });
+    const updated = await storeEntityImage("articles", req.params.id, req.file, req.body.field === "og", req.body.field === "inline");
+    if (!updated) return res.status(404).json({ error: "No encontrado" });
+    res.json(updated);
   }),
 );

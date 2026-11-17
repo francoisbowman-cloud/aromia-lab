@@ -189,3 +189,9 @@ body { color: var(--text); background: var(--bg); font-family: var(--font-body),
 ) {
   font-size: 0.75rem;
 }
+
+/* Images authored in the magazine editor retain their own readable caption. */
+.admin-richtext figure { margin: 1.5rem 0; }
+.admin-richtext img { display: block; max-width: 100%; height: auto; }
+.admin-richtext figcaption { margin-top: .6rem; font: 13px/1.5 var(--font-body), sans-serif; color: var(--muted); }
+.admin-richtext .ProseMirror-selectednode { outline: 2px solid var(--ring); outline-offset: 4px; }

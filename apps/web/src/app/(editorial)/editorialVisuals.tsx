@@ -148,9 +148,10 @@ interface VisualFieldProps {
    * marco que no comparte su relación de aspecto (ver D-7, hero de Omán).
    */
   fit?: "cover" | "contain";
+  priority?: boolean;
 }
 
-export function VisualField({ slotId, className, marker, sizes, fit = "cover" }: VisualFieldProps) {
+export function VisualField({ slotId, className, marker, sizes, fit = "cover", priority = false }: VisualFieldProps) {
   const slot = EDITORIAL_V1_SLOTS[slotId];
 
   if (!slot || !slot.present || !slot.file) {
@@ -170,6 +171,7 @@ export function VisualField({ slotId, className, marker, sizes, fit = "cover" }:
       <figure className={`${className} ev1-doc-figure`}>
         <Image
           className="ev1-doc-img"
+          priority={priority}
           src={slot.file}
           alt={slot.alt}
           width={slot.width}
@@ -185,6 +187,7 @@ export function VisualField({ slotId, className, marker, sizes, fit = "cover" }:
   return (
     <figure className={`${className} ev1-photo`}>
       <Image
+        priority={priority}
         src={slot.file}
         alt={slot.alt}
         fill

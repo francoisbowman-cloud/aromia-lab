@@ -11,8 +11,10 @@
     "seed": "tsx src/db/seed.ts",
     "seed:articles": "tsx src/db/seedArticles.ts",
     "catalog-import": "tsx src/db/importCatalogBatch.ts",
+    "test:uploads": "tsx --test src/lib/imageUpload.test.ts",
     "test:catalog-import": "tsx --test src/db/catalogBatchImportContract.test.ts",
-    "lint": "eslint \"src/**/*.ts\""
+    "lint": "eslint \"src/**/*.ts\"",
+    "test:content": "tsx --test src/lib/articleContent.test.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -24,7 +26,8 @@
     "marked": "^18.0.6",
     "multer": "^2.2.0",
     "node-cron": "^3.0.3",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "sanitize-html": "2.18.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -33,6 +36,7 @@
     "@types/node": "^20.14.10",
     "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.11.6",
+    "@types/sanitize-html": "2.16.2",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3"
   }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { TagInput } from "@/components/admin/TagInput";
+import { adminRequest } from "@/lib/adminRequest";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 
 interface FormValues {
@@ -113,26 +114,18 @@ export default function AdminPerfumeEditPage({ params }: { params: { id: string 
   async function handleImageUpload(file: File) {
     const formData = new FormData();
     formData.append("image", file);
-    const res = await fetch(`/api/admin/perfumes/${params.id}/image`, {
-      method: "POST",
-      body: formData,
+    const json = await adminRequest<{ imagen_url: string }>(`/api/admin/perfumes/${params.id}/image`, {
+      method: "POST", body: formData,
     });
-    const json = await res.json();
-    if (json.imagen_url) setImagenUrl(json.imagen_url);
+    setImagenUrl(json.imagen_url);
   }
 
   async function handleImageUrlSave(url: string) {
-    const res = await fetch(`/api/admin/perfumes/${params.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+    await adminRequest(`/api/admin/perfumes/${params.id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imagen_url: url }),
     });
-    if (!res.ok) {
-      setSaveError(true);
-      return;
-    }
     setImagenUrl(url);
-    setSaved(true);
   }
 
   async function handleAddRetailer() {

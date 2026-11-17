@@ -6,6 +6,40 @@ This file is the compact relay for the command:
 
 It indexes the latest verified operational state. Git history, checkpoints and canonical workflow documents remain authoritative evidence.
 
+## Active mission override — 2026-11-13 (v56)
+
+The historical v54 relay below is preserved as context, not current launch status.
+Publisher Issue #185 is the current execution contract; source and progress are in
+[`docs/mission-185/TRACEABILITY.md`](docs/mission-185/TRACEABILITY.md).
+
+- Actor: Codex / Code. Branch: `feat/185-release-foundation`, base main `589eee2`.
+- Main already includes PR178, PR179, PR181, PR182 and PR183; their old OPEN/P0
+  labels below must not be interpreted as verified current production failures.
+- Implemented: search timeout/retry recovery, profile/portrait hydration fixes,
+  explicit API selection for isolated release checks, correct verification CWD,
+  repeatable local fixture DB, licensed local fonts, and story/preparation separation.
+- Verified locally: full local:verify with 53 web tests and 49 generated build routes;
+  28 compiled-app viewport/theme checks; nine SubBatch01 story routes; failed-search
+  retry restores real results. Evidence and limitations in docs/mission-185.
+- Draft [PR186](https://github.com/francoisbowman-cloud/aromia-lab/pull/186) is open.
+  CMS recovery now covers login/create/save/list failures, duplicate draft titles,
+  preserved editor fields and accessible input labels. Latest full local:verify
+  passes53 tests plus lint/typecheck/audits/API build and49-route production build.
+- The new environment restored the checkout and local Docker data successfully.
+  GitHub API and production HTTP requests now work. No previous setup changes
+  were reapplied to the configuration draft and no environment publication made.
+- LIVE CHECK: all nine SubBatch01 production content endpoints return404.
+  The huele-sintetico page streams HTTP200 but lacks the article and includes
+  Next error digests. The production P0 remains open despite the main-branch fix.
+- Browser trust: Publisher explicitly authorized the environment proxy CA import;
+  NSS import completed but Chromium still rejects production certificates.
+  Browser production QA remains blocked; curl HTTP checks retain TLS validation.
+- NOT LIVE, NOT a final release candidate. Production content/rights, independent
+  creative review, accessibility and performance are incomplete. No production
+  writes/deployments, PR merge or application publication performed.
+- Next actor: Code. Follow docs/mission-185/CONTINUATION.md, continue critical-flow,
+  content/rights and design work, and verify CI on the newest PR commit.
+
 ## Mandatory actor order
 
 Default production order:

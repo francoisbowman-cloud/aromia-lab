@@ -5,7 +5,7 @@ serie: "Cómo se construye una impresión"
 perfumes_mencionados: ["Baccarat Rouge 540"]
 keyword_objetivo: "perfume caro huele barato"
 estado: editorial_ready
-batch_100_item: 30
+batch_100_item: 31
 ---
 
 ```text
@@ -19,7 +19,7 @@ TARGET_DATE: UNSCHEDULED
 ```
 
 **Territorio del batch 100:** III. Cómo se construye una impresión —
-ítem 30.
+ítem 31.
 **Fact-check:** Plassmann, Rangel, O'Doherty & Shiv, "Marketing
 actions can modulate neural representations of experienced
 pleasantness" (*PNAS*, 2008) — el precio etiquetado alteró la

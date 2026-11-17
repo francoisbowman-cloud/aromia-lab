@@ -2,24 +2,36 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { CaptionedImage } from "./captionedImage";
 
 export function RichTextEditor({
   content,
   onChange,
+  onUploadImage,
 }: {
   content: string;
   onChange: (html: string) => void;
+  onUploadImage?: (file: File) => Promise<string>;
 }) {
+  const id = useId();
+  const [imageOpen, setImageOpen] = useState(false);
+  const [alt, setAlt] = useState("");
+  const [caption, setCaption] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [editingImage, setEditingImage] = useState(false);
+  const insertion = useRef({ from: 0, to: 0 });
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, CaptionedImage],
     content,
     immediatelyRender: false,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
     editorProps: {
       attributes: {
+        role: "textbox", "aria-label": "Contenido del artículo", "aria-multiline": "true",
         class:
-          "min-h-[330px] rounded-b border border-t-0 border-admin-border p-5 font-display text-base leading-relaxed outline-none",
+          "admin-richtext min-h-[330px] rounded-b border border-t-0 border-admin-border p-5 font-display text-base leading-relaxed outline-none",
       },
     },
   });
@@ -86,7 +98,40 @@ export function RichTextEditor({
         >
           Cita
         </button>
+        {onUploadImage ? <button type="button" aria-expanded={imageOpen} aria-controls={`${id}-image-panel`}
+          className={toolbarBtn(false)} onClick={() => {
+            insertion.current = { from: editor.state.selection.from, to: editor.state.selection.to };
+            const selected = editor.isActive("image"); setEditingImage(selected);
+            const attrs = selected ? editor.getAttributes("image") : {};
+            setAlt(attrs.alt ?? ""); setCaption(attrs.caption ?? ""); setImageError(false); setImageOpen((open) => !open);
+          }}>Imagen</button> : null}
       </div>
+      {imageOpen ? <fieldset id={`${id}-image-panel`} className="space-y-3 border-x border-admin-border bg-admin-bg p-4 text-sm">
+        <legend className="sr-only">Imagen intercalada</legend>
+        <div><label htmlFor={`${id}-alt`}>Texto alternativo</label><input id={`${id}-alt`} value={alt}
+          onChange={(event) => setAlt(event.target.value)} className="mt-1 w-full rounded border border-admin-border p-2" /></div>
+        <div><label htmlFor={`${id}-caption`}>Pie de foto y fuente</label><input id={`${id}-caption`} value={caption}
+          onChange={(event) => setCaption(event.target.value)} className="mt-1 w-full rounded border border-admin-border p-2" /></div>
+        {editingImage ? <button type="button" disabled={!alt.trim() || !caption.trim()} className="min-h-11 underline disabled:opacity-50"
+          onClick={() => { editor.chain().focus().updateAttributes("image", { alt, caption }).run(); setImageOpen(false); }}>Actualizar texto de la imagen</button> : null}
+        <div><label htmlFor={`${id}-file`}>Subir imagen PNG, JPG o WEBP (hasta 5MB)</label>
+          <input id={`${id}-file`} type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading || !alt.trim() || !caption.trim()}
+            className="mt-2 block min-h-11 w-full" onChange={async (event) => {
+              const file = event.target.files?.[0]; const input = event.target; if (!file || !onUploadImage) return;
+              if (file.size > 5 * 1024 * 1024 || !["image/png", "image/jpeg", "image/webp"].includes(file.type)) { setImageError(true); input.value = ""; return; }
+              setUploading(true); setImageError(false);
+              try {
+                const src = await onUploadImage(file);
+                if (!editor.isDestroyed) {
+                  editor.chain().focus().insertContentAt(insertion.current, [{ type: "image", attrs: { src, alt: alt.trim(), caption: caption.trim() } }, { type: "paragraph" }]).run();
+                  setImageOpen(false);
+                }
+              } catch { setImageError(true); }
+              finally { setUploading(false); input.value = ""; }
+            }} /></div>
+        {uploading ? <p role="status">Subiendo imagen…</p> : null}
+        {imageError ? <p role="alert">No se pudo insertar la imagen. El texto sigue en el editor; puedes reintentar.</p> : null}
+      </fieldset> : null}
       <EditorContent editor={editor} />
     </div>
   );

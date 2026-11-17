@@ -18,7 +18,7 @@ export default async function FamiliasPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
+    <main className="ed-page ed-families min-h-screen bg-paper text-ink">
       <section className="mx-auto max-w-[1240px] px-6 py-12 lg:px-10 lg:py-20">
         <nav aria-label="Ruta" className="mb-8 flex items-center gap-3 font-plex text-xs uppercase tracking-[.12em] text-muted">
           <Link href="/descubrir" className="breadcrumb-link">Discovery</Link>
@@ -32,13 +32,13 @@ export default async function FamiliasPage() {
             <h1 className="mt-5 max-w-[12ch] font-display text-[48px] leading-[.92] tracking-[-.04em] sm:text-[60px] lg:text-[76px]">Las diez familias.</h1>
           </div>
           <p className="max-w-[44ch] font-sans text-base leading-7 text-muted lg:justify-self-end">
-            No es un filtro de tienda. Cada familia abre una lectura: a qué huele, con qué
+            Cada familia abre un mundo: a qué huele, con qué
             materias se construye, en qué subfamilias se ramifica y qué fragancias,
             personas e historias la cruzan dentro de Aromia.
           </p>
         </div>
 
-        <ol className="grid grid-cols-1 border-t border-line">
+        <ol className="ed-family-list grid grid-cols-1 border-t border-line">
           {rows.map(({ family, count }, index) => (
             <li key={family.slug} className="border-b border-line">
               <Link

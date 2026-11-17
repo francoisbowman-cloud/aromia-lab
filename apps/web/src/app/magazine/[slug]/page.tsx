@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/serializeJsonLd";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -16,7 +17,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!articulo) return {};
   const title = articulo.meta_title ?? articulo.titulo;
   const description = articulo.meta_description ?? undefined;
-  return { title, description, alternates: { canonical: `/magazine/${articulo.slug}` }, openGraph: { type: "article", title, description, publishedTime: articulo.publicado_en, authors: articulo.autor ? [articulo.autor] : undefined, images: articulo.imagen_portada_url ? [articulo.imagen_portada_url] : undefined }, twitter: { card: "summary_large_image", title, description, images: articulo.imagen_portada_url ? [articulo.imagen_portada_url] : undefined } };
+  const socialImage = articulo.imagen_og_url ?? articulo.imagen_portada_url;
+  return { title, description, alternates: { canonical: `/magazine/${articulo.slug}` }, openGraph: { type: "article", title, description, publishedTime: articulo.publicado_en, authors: articulo.autor ? [articulo.autor] : undefined, images: socialImage ? [socialImage] : undefined }, twitter: { card: "summary_large_image", title, description, images: socialImage ? [socialImage] : undefined } };
 }
 
 export default async function MagazineArticlePage({ params }: { params: { slug: string } }) {
@@ -29,8 +31,8 @@ export default async function MagazineArticlePage({ params }: { params: { slug: 
   const canonicalUrl = `${SITE_URL}/magazine/${articulo.slug}`;
   const articleJsonLd = { "@context": "https://schema.org", "@type": "Article", headline: articulo.titulo, description: articulo.meta_description ?? undefined, image: articulo.imagen_portada_url ? [articulo.imagen_portada_url] : undefined, datePublished: articulo.publicado_en, author: articulo.autor ? { "@type": "Person", name: articulo.autor } : { "@type": "Organization", name: "Aromia" }, publisher: { "@type": "Organization", name: "Aromia" }, mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl } };
 
-  return <main className="bg-paper text-ink">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+  return <main className="ed-page ed-reader bg-paper text-ink">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }} />
     <div className="mx-auto flex h-[62px] max-w-[1180px] items-center justify-between gap-5 px-6 lg:px-10"><Link href="/magazine" className="font-plex text-xs uppercase tracking-[.12em] text-muted transition hover:text-ink">← Volver a Historias</Link><Link href="/buscar" className="font-plex text-xs uppercase tracking-[.12em] text-muted transition hover:text-ink">Buscar</Link></div>
     <ArticleHero article={articulo} />
     <section className="mx-auto max-w-[1180px] px-6 py-10 lg:px-10 lg:py-14"><div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(220px,.55fr)_minmax(0,1.45fr)] lg:gap-20"><ArticleReadingView article={articulo} />{articulo.contenido_html ? <article className="prose prose-neutral max-w-[760px] font-display text-[19px] leading-[1.75] text-ink prose-headings:font-display prose-headings:text-ink prose-p:text-ink prose-blockquote:border-gold prose-blockquote:text-ink md:text-[22px]" dangerouslySetInnerHTML={{ __html: articulo.contenido_html }} /> : null}</div></section>

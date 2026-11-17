@@ -1,0 +1,19 @@
+{
+  "asset": "bergamot-editorial-v2.webp",
+  "role": "interpretive ingredient study; never documentary or perfume identity",
+  "source_type": "generated_reference_edit",
+  "source": "https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg",
+  "source_authors": "Xenocryst / Antares Scorpii",
+  "source_local_path": "bergamot-documentary.jpg",
+  "source_sha256": "27b2a11732471c29993f8ee0b5307fa7c4f629d98cd3232d66e40b2e5404b9c8",
+  "adaptation": "AI reinterpretation of lighting, background and presentation of one fruit; resized and encoded as WebP",
+  "license": "CC BY-SA 2.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "generated_master_sha256": "b9257ac96f2e0e2de7f1a333a4bc13ac96ea2862042ed66ce556e157fde9beb8",
+  "sha256": "5f862938233e92441bace6aa7f5ec150859bc5fee8c1239ac09438d09b96944a",
+  "width": 640,
+  "height": 640,
+  "bytes": 38236,
+  "canonical_product_identity": false,
+  "review": "Visual narrative inspection passed locally; publication remains governed by PR/release review"
+}

@@ -1,16 +1,8 @@
 import type { Article, DiscoveryPerfume, Perfume, PerfumeFacetsResponse, PerfumeSearchResponse } from "./types";
 
-const LOCAL_API = "http://localhost:4000";
-const PRIVATE_API = "http://api.railway.internal:4000";
-const PUBLIC_API = "https://api-production-fe2f.up.railway.app";
-const RETRY_DELAYS_MS = [200, 500, 900];
+import { serverApiBases } from "./serverApiBases";
 
-function apiBases() {
-  if (process.env.NODE_ENV === "production") {
-    return [PRIVATE_API, PUBLIC_API];
-  }
-  return [(process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? LOCAL_API).replace(/\/$/, "")];
-}
+const RETRY_DELAYS_MS = [200, 500, 900];
 
 async function fetchWithRetry(url: string, init?: RequestInit & { next?: { revalidate?: number } }): Promise<Response | null> {
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt += 1) {
@@ -28,7 +20,7 @@ async function fetchWithRetry(url: string, init?: RequestInit & { next?: { reval
 }
 
 async function fetchApi(path: string, init?: RequestInit & { next?: { revalidate?: number } }): Promise<Response | null> {
-  for (const base of apiBases()) {
+  for (const base of serverApiBases()) {
     const response = await fetchWithRetry(`${base}${path}`, init);
     if (response?.ok || response?.status === 404 || (response && response.status < 500)) return response;
   }
@@ -112,10 +104,18 @@ export async function getArticulos(): Promise<Article[]> {
   try { return await res.json(); } catch { return []; }
 }
 
-export async function getArticuloBySlug(slug: string): Promise<Article | null> {
+export async function getArticuloBySlug(slug: string, options: { throwOnUnavailable?: boolean } = {}): Promise<Article | null> {
   const res = await fetchApi(`/api/articulos/${slug}`, { next: { revalidate: 60 } });
-  if (!res || res.status === 404 || !res.ok) return null;
-  try { return await res.json(); } catch { return null; }
+  if (res?.status === 404) return null;
+  if (!res?.ok) {
+    if (options.throwOnUnavailable) throw new Error("Aromia article service unavailable");
+    return null;
+  }
+  try { return await res.json(); }
+  catch {
+    if (options.throwOnUnavailable) throw new Error("Aromia article response invalid");
+    return null;
+  }
 }
 
 export async function getPerfumeBySlug(slug: string): Promise<Perfume | null> {

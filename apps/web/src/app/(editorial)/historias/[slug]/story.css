@@ -7,19 +7,6 @@
 figure.story-visual,figure.story-interruption{margin:0;display:block}
 figure.story-visual img,figure.story-interruption img{object-fit:cover}
 
-/* D-7 (recomposición del hero de Omán): heroFit="contain" en historias/[slug]/page.tsx
-   deja ver la fuente panorámica completa en vez de recortarla, así que el
-   marco de esta figura queda visible en los márgenes que el object-fit ya no
-   cubre. editorial-sharp.css apaga ese fondo con `.ev1-photo{background:none
-   !important}` a propósito — esa regla existe para que una foto real gane
-   siempre sobre el estudio de material sintético que la reemplaza cuando no
-   hay foto. Acá el fondo no es un fallback de "no hay foto": la foto SIEMPRE
-   está, y el fondo es el marco visible alrededor de ella. Por eso se
-   reintroduce con la misma herramienta (!important) pero acotado a este único
-   selector de 3 clases — no afecta ningún otro `.ev1-photo` del sitio. */
-.amouage .story-visual.ev1-photo {
-  background: linear-gradient(115deg,transparent 0 48%,rgba(240,225,195,.18) 49% 51%,transparent 52%),radial-gradient(ellipse at 55% 72%,#a96d32 0 5%,#3a2517 6% 19%,transparent 28%),linear-gradient(145deg,#cdbb9c 0 20%,#665d50 21% 22%,#282722 45%,#10100f) !important;
-}
 .story-interruption{position:relative;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(45deg,rgba(23,23,21,.03) 0 12px,rgba(23,23,21,.055) 12px 24px)}
 .ev1-figcaption{position:absolute;left:0;right:0;bottom:0;margin:0;padding:8px 12px;font-size:10px;letter-spacing:.04em;line-height:1.35;background:rgba(244,240,229,.88);color:#171715}
 .story-intro{padding:clamp(36px,6vw,80px) clamp(24px,7vw,110px);max-width:1000px;border-bottom:1px solid var(--line)}
@@ -152,4 +139,44 @@ figure.story-visual img,figure.story-interruption img{object-fit:cover}
    oscuro desaparecía. */
 [data-theme="dark"] .story-interruption{
   background:repeating-linear-gradient(45deg,rgba(244,241,234,.04) 0 12px,rgba(244,241,234,.075) 12px 24px)
+}
+
+
+/* Magazine cover continuity: actual picture ratios, owned color fields and
+   visible provenance; body copy and story-specific interruptions are retained. */
+.story-page { --story-accent: #641e2f; font-family: var(--font-body), Arial, sans-serif; }
+[data-theme="dark"] .story-page { --story-accent: #efc4cc; }
+.story-page .story-hero {
+  min-height: 0; border: 0; padding: clamp(36px, 4vw, 64px) clamp(22px, 3.5vw, 64px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  grid-template-areas: "title media" "deck media"; grid-template-rows: min-content 1fr;
+  gap: 28px clamp(28px, 4vw, 64px); align-items: start;
+}
+.amouage .story-hero { background: #263e33; color: #f7f5f0; }
+.ropion .story-hero { background: #641e2f; color: #f7f5f0; }
+.ambroxan .story-hero { color: var(--story-accent); grid-template-columns: minmax(0, 1.3fr) minmax(0, .8fr); }
+.story-page .story-hero .story-hero-title { grid-area: title; padding: 0; display: block; }
+.story-hero-title .ev1-kicker { margin-bottom: 24px; font-size: 12px; font-weight: 400; }
+.story-page .story-hero h1 { margin: 0; font-size: clamp(48px, 5.5vw, 92px); line-height: .96; letter-spacing: -.045em; text-wrap: balance; }
+.story-hero-media { grid-area: media; min-width: 0; align-self: center; }
+.story-page .story-hero .story-visual { min-height: 0; width: 100%; aspect-ratio: 16 / 9; background: none; }
+.story-hero .story-visual::after { content: none; }
+.ropion .story-hero .story-visual { aspect-ratio: 3 / 2; }
+.story-hero-credit { margin: 10px 0 0; font-size: 11px; line-height: 1.5; }
+.story-page .story-hero .story-deck { grid-area: deck; margin: 0; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.45; max-width: 38ch; }
+.story-botanical-plate { margin: 0; width: min(100%, 360px); justify-self: center; transform: rotate(3deg); }
+.story-botanical-plate img { display: block; width: 100%; height: auto; }
+.story-botanical-plate figcaption { margin-top: 12px; font-size: 11px; line-height: 1.5; }
+.story-page .story-intro { max-width: 850px; margin: 0 auto; padding: 64px 40px; border: 0; }
+.story-page .story-intro p:first-child::first-letter { color: var(--story-accent); }
+.story-page .story-section h2 { color: var(--story-accent); }
+.ropion .section-2 h2 { color: #f7f5f0; }
+@media (max-width: 800px) {
+  .story-page .story-hero { grid-template-columns: 1fr; grid-template-areas: "title" "media" "deck"; padding: 36px 0 44px; gap: 28px; }
+  .story-page .story-hero .story-hero-title, .story-page .story-hero .story-deck { padding: 0 22px; }
+  .story-page .story-hero h1 { font-size: clamp(48px, 13vw, 84px); }
+  .story-hero-credit { padding: 0 22px; }
+  .story-page .story-hero .story-deck { font-size: 20px; max-width: 42ch; }
+  .story-botanical-plate { margin: 0 28px 0 auto; width: 60%; }
+  .story-page .story-intro { padding: 48px 22px; }
 }

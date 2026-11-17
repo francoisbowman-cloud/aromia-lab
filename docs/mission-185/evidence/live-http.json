@@ -1,0 +1,44 @@
+[
+  {
+    "route": "/",
+    "status": "200",
+    "h1": "Perfume, materia y personas.",
+    "internalPreamble": false,
+    "tlsVerification": "curl default CA validation"
+  },
+  {
+    "route": "/magazine",
+    "status": "200",
+    "h1": "Historias",
+    "internalPreamble": false,
+    "tlsVerification": "curl default CA validation"
+  },
+  {
+    "route": "/academia",
+    "status": "200",
+    "h1": "Entender cambia la manera de oler.",
+    "internalPreamble": false,
+    "tlsVerification": "curl default CA validation"
+  },
+  {
+    "route": "/perfumistas",
+    "status": "200",
+    "h1": "Quién está detrás del olor.",
+    "internalPreamble": false,
+    "tlsVerification": "curl default CA validation"
+  },
+  {
+    "route": "/descubrir",
+    "status": "200",
+    "h1": "Tu mapa olfativo.",
+    "internalPreamble": false,
+    "tlsVerification": "curl default CA validation"
+  },
+  {
+    "route": "/historias/huele-sintetico-que-estamos-diciendo",
+    "status": "200",
+    "h1": "",
+    "internalPreamble": false,
+    "tlsVerification": "curl default CA validation"
+  }
+]

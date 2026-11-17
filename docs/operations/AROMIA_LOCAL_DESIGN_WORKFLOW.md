@@ -74,19 +74,29 @@ Do not commit real secrets.
 npm run local:infra
 ```
 
-Then, if database initialization is required:
+For a reproducible development dataset, use a dedicated loopback database:
 
 ```bash
-npm --prefix apps/api run migrate
+npm run local:db
 ```
 
-Seed only when the task explicitly requires a local dataset:
+This creates `aromia_dev` (50 repository perfume fixtures, 15 legacy articles), applies
+schema migrations with checksums and seeds only once. It never resets a database.
+It rejects remote hosts, names not ending in `_dev`, production mode and existing
+perfume datasets without its local history table. Override the target only with
+`LOCAL_DATABASE_URL` (keep credentials in local settings, never commits).
+
+Start the API against that same database; with the example-only local credentials:
 
 ```bash
-npm --prefix apps/api run seed
+DATABASE_URL=postgresql://aromia:aromia@localhost:5432/aromia_dev npm run local:api
 ```
 
-Do not reseed casually if the developer is using a curated local database for visual QA.
+The historical `migrate` command remains for the production migration chain.
+Migrations 012–020 repair/assert the real production catalog (at least 125 rows);
+they are deliberately outside the local fixture bootstrap. Local fixture success
+is not production catalog parity. No existing production assertion is disabled.
+The fixtures are development data, not newly reviewed/published editorial content.
 
 ## Start Aromia
 
@@ -200,14 +210,12 @@ For cutouts and editorial assets:
 - do not evaluate composition against a temporary external hotlink if the production implementation will use a local asset;
 - preserve exact aspect ratio and transparency behavior expected in production.
 
-## Font caveat
+## Fonts
 
-The repository has previously observed that local `next/font` may fail to fetch Newsreader in some environments.
-
-If this happens:
-- do not redesign typography around the fallback font;
-- use local work for composition/spacing/function;
-- perform final typographic judgment against a production-like build or verified remote render.
+Newsreader (upright and italic), Archivo and IBM Plex Sans are now served locally
+from `apps/web/src/app/fonts/editorial/`. The official pinned sources, checksums
+and OFL licenses accompany the assets. Builds require no Google Fonts request.
+See that directory's README for provenance and the full-glyph payload tradeoff.
 
 ## Branch discipline
 
@@ -236,3 +244,14 @@ A local Design/Code cycle is complete when:
 - the relay is updated.
 
 Local is for speed, not for bypassing release discipline.
+
+## Isolated production-mode checks
+
+`API_URL=http://localhost:4000` explicitly selects the local server for both server
+rendering and the startup preflight, including in production mode. Without
+`API_URL`, production retains the private/public Railway fallback. Set
+`NEXT_PUBLIC_API_URL` separately for browser search at build time. Stop Next dev
+before running `npm --prefix apps/web run build`; both use `.next`.
+
+`npm --prefix apps/web run typecheck` runs TypeScript in the correct app directory
+and is now used by `local:verify`. Editorial fonts are local; do not use mock fonts for release typography evidence.

@@ -19,6 +19,7 @@ const REQUIRED_MIGRATIONS = [
   "018_restore_remaining_product_packshots.sql",
   "019_ccl_restore_three_verified_packshots.sql",
   "020_catalog_white_background_normalization.sql",
+  "023_create_media_uploads.sql",
 ];
 
 async function applyCatalogCompleteness() {

@@ -5,6 +5,7 @@ import type { NextFunction, Request, Response } from "express";
 import { join } from "node:path";
 import { redis } from "./redis/client";
 import { perfumesRouter } from "./routes/perfumes";
+import { uploadsRouter } from "./routes/uploads";
 import { articlesRouter } from "./routes/articles";
 import { subscribersRouter } from "./routes/subscribers";
 import { adminPerfumesRouter } from "./routes/admin/perfumes";
@@ -29,6 +30,7 @@ const port = process.env.PORT ?? 4000;
 
 app.use(cors({ origin: process.env.CORS_ORIGIN ?? "http://localhost:3000" }));
 app.use(express.json());
+app.use("/uploads", uploadsRouter);
 app.use("/uploads", express.static(join(__dirname, "..", "uploads")));
 
 app.get("/health", async (_req, res) => {

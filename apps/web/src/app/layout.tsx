@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Suspense } from "react";
-import { Archivo, IBM_Plex_Sans, Newsreader } from "next/font/google";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
@@ -10,12 +9,13 @@ import { WebVitals } from "@/components/WebVitals";
 import "./globals.css";
 import "./aromia-redesign.css";
 import "./design-tokens.css";
+import "./editorial-world.css";
 
 const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
 const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
-const newsreader = Newsreader({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-display" });
-const archivo = Archivo({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body" });
-const ibmPlexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-plex" });
+const newsreader = localFont({ src: [{ path: "./fonts/editorial/Newsreader.woff2", weight: "200 800", style: "normal" }, { path: "./fonts/editorial/Newsreader-Italic.woff2", weight: "200 800", style: "italic" }], variable: "--font-display", display: "swap" });
+const archivo = localFont({ src: "./fonts/editorial/Archivo.woff2", weight: "100 900", variable: "--font-body", display: "swap" });
+const ibmPlexSans = localFont({ src: "./fonts/editorial/IBMPlexSans.woff2", weight: "100 700", variable: "--font-plex", display: "swap" });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const SITE_DESCRIPTION = "Historias, materias, personas y rutas para entender el perfume con más contexto y menos ruido.";
@@ -50,8 +50,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${archivo.variable} ${ibmPlexSans.variable} antialiased`}>
         <Suspense fallback={null}><RouteAnalytics /></Suspense>
         <WebVitals />
+        <a href="#contenido" className="aromia-skip-link">Saltar al contenido</a>
         <NavBar />
-        <div className="flex-1">{children}</div>
+        <div id="contenido" tabIndex={-1} className="flex-1">{children}</div>
         <Footer />
       </body>
     </html>

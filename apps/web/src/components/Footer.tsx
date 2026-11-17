@@ -18,12 +18,12 @@ const VALORES = ["Claridad", "Curiosidad", "Criterio"];
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--aromia-paper-clean)] font-sans print:hidden">
+    <footer className="ed-footer bg-[var(--aromia-paper-clean)] font-sans print:hidden">
       <div className="mx-auto max-w-[1440px] px-6 py-14 lg:px-10 lg:py-20">
         <div className="flex items-center justify-between font-plex text-xs uppercase tracking-[.16em] text-muted"><span>Aromia</span><span>Fin / índice</span></div>
-        <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-[1.55fr_1fr_1fr_1fr] lg:gap-10">
-          <div>
-            <span className="font-display text-[28px] tracking-[.16em] text-ink">AROMIA</span>
+        <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-2 lg:grid-cols-[1.55fr_1fr_1fr_1fr] lg:gap-10">
+          <div className="col-span-2 lg:col-span-1">
+            <span className="font-display text-[40px] tracking-[-.03em] text-[var(--ed-wine)]">AROMIA</span>
             <p className="mt-5 max-w-[34ch] text-sm leading-7 text-muted">Una revista de perfumería para seguir historias, materias, personas y las pistas que conectan unas con otras.</p>
           </div>
           <div><div className="mb-3 font-plex text-xs uppercase tracking-[.16em] text-gold-contrast">Explorar</div><ul className="flex flex-col gap-1">{EXPLORAR.map((item) => <li key={item.href}><Link href={item.href} className="nav-link inline-flex min-h-11 items-center text-sm text-muted transition hover:text-ink">{item.label}</Link></li>)}</ul></div>

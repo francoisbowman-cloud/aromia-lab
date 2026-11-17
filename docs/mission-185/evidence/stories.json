@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "antes-del-perfume-ya-oliamos",
+    "status": 200,
+    "h1": "Antes del perfume ya olíamos",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "comprar-para-oler-o-comprar-para-tener",
+    "status": 200,
+    "h1": "Comprar para oler o comprar para tener",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "cuando-ya-no-hueles-tu-perfume",
+    "status": 200,
+    "h1": "Cuando tú ya no hueles tu perfume pero todos los demás sí",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "fougere-no-significa-viejo",
+    "status": 200,
+    "h1": "Fougère no significa viejo",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "huele-sintetico-que-estamos-diciendo",
+    "status": 200,
+    "h1": "\"Huele sintético\": ¿qué estamos diciendo realmente?",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "lavanda-limpia-medicinal-barata-elegante",
+    "status": 200,
+    "h1": "Lavanda: ¿limpia, medicinal, barata o elegante?",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "nos-perfumamos-para-nosotros-o-para-los-demas",
+    "status": 200,
+    "h1": "¿Nos perfumamos para nosotros o para los demás?",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "podemos-describir-un-olor-sin-compararlo",
+    "status": 200,
+    "h1": "¿Podemos describir un olor sin compararlo con otra cosa?",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  },
+  {
+    "slug": "por-que-una-lista-de-notas-no-te-dice-como-huele",
+    "status": 200,
+    "h1": "Por qué una lista de notas no te dice cómo huele un perfume",
+    "overflow": false,
+    "leakedPreamble": false,
+    "errors": []
+  }
+]

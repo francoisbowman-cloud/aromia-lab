@@ -21,7 +21,7 @@ export default async function QuizResultadoPage({ params }: { params: { perfil: 
   const recomendados = ranked.map((item) => item.perfume);
 
   return (
-    <main className="bg-paper text-ink">
+    <main className="ed-page ed-result bg-paper text-ink">
       <section className="mx-auto max-w-[1440px] px-6 pb-12 pt-10 lg:px-10 lg:pb-16 lg:pt-14">
         <div className="flex items-center gap-4 border-b border-line pb-4 font-plex text-xs uppercase tracking-[.14em] text-muted"><Link href="/descubrir" className="breadcrumb-link">Discovery</Link><span className="h-px flex-1 bg-line"/><span>Primera lectura</span></div>
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">

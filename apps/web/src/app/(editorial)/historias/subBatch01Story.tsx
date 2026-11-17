@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "./subBatch01Story.module.css";
-import { getArticuloBySlug } from "@/lib/api";
+import { getStoryMarkdown } from "@/lib/storyAvailability";
+import { extractStorySource } from "@/lib/storySource";
 
 type StoryBlock =
   | { kind: "heading"; text: string; number: number }
@@ -37,13 +38,6 @@ const visualAlts: Partial<Record<SubBatch01Slug, Partial<Record<number, string>>
 // stage final) — de ahí el 500 real en producción. El contenido crudo del
 // .md original vive ahora en articles.contenido_markdown, ingestado tal
 // cual con el script apps/api/scripts/ingest-subbatch01.js.
-async function readDraft(slug: SubBatch01Slug) {
-  const article = await getArticuloBySlug(slug);
-  if (!article?.contenido_markdown) {
-    throw new Error(`Aromia: no se encontró contenido_markdown para el artículo "${slug}".`);
-  }
-  return article.contenido_markdown;
-}
 
 function plainMarkdown(value: string) {
   return value
@@ -61,11 +55,9 @@ function frontmatterValue(source: string, key: string) {
 }
 
 async function parseStory(slug: SubBatch01Slug): Promise<ParsedStory> {
-  const source = await readDraft(slug);
-  const title = frontmatterValue(source, "titulo") || slug.replaceAll("-", " ");
+  const source = await getStoryMarkdown(slug);
+  const { title, body: article } = extractStorySource(source);
   const serie = frontmatterValue(source, "serie") || "Historias";
-  const articleStart = source.indexOf(`\n# ${title}`);
-  const article = articleStart >= 0 ? source.slice(articleStart + 1) : source;
   const lines = article.split(/\r?\n/);
   const blocks: StoryBlock[] = [];
   let paragraph: string[] = [];

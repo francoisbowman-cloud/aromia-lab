@@ -24,7 +24,7 @@ export function ArticleMetaRail({ article, onOpenReader }: { article: Article; o
         <dt className="mt-3 uppercase tracking-[.12em] text-muted">Lectura</dt><dd className="text-ink">{minutos} minutos</dd>
       </dl>
       <div className="mt-8 grid gap-3">
-        <button type="button" onClick={openReader} className="inline-flex min-h-[48px] items-center justify-center bg-gold px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-ink transition hover:-translate-y-px">Iniciar lectura</button>
+        <button type="button" onClick={openReader} className="inline-flex min-h-[48px] items-center justify-center bg-gold px-5 font-sans text-[13px] font-semibold uppercase tracking-[.02em] text-[#242820] transition hover:-translate-y-px">Iniciar lectura</button>
       </div>
     </aside>
   );

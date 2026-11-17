@@ -1,3 +1,6 @@
 node_modules
 dist
 .env
+
+# Runtime uploads are persisted by the deployment, not Git.
+uploads/

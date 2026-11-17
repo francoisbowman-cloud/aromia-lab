@@ -133,23 +133,13 @@ function compactLabel(value: string | null | undefined, max = 34) {
 function placeholderResponse(perfume: { nombre: string; marca: string; familia_olfativa?: string | null }) {
   const name = escapeSvgText(compactLabel(perfume.nombre, 28));
   const brand = escapeSvgText(compactLabel(perfume.marca, 24));
-  const family = escapeSvgText(compactLabel(perfume.familia_olfativa ?? "Objeto olfativo", 28));
+  const initial = escapeSvgText(perfume.nombre.trim().charAt(0).toUpperCase());
   const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640" role="img" aria-label="Imagen de producto temporalmente no disponible para ${name} de ${brand}">
-      <rect width="480" height="640" fill="#f3efe8"/>
-      <rect x="32" y="32" width="416" height="576" fill="none" stroke="#d9ccb7" stroke-width="1"/>
-      <line x1="32" y1="116" x2="448" y2="116" stroke="#d9ccb7" stroke-width="1"/>
-      <line x1="330" y1="32" x2="330" y2="116" stroke="#d9ccb7" stroke-width="1"/>
-      <circle cx="367" cy="425" r="92" fill="none" stroke="#c8a86b" stroke-opacity=".28" stroke-width="1"/>
-      <circle cx="367" cy="425" r="58" fill="none" stroke="#c8a86b" stroke-opacity=".18" stroke-width="1"/>
-      <line x1="96" y1="466" x2="392" y2="466" stroke="#c8a86b" stroke-opacity=".38" stroke-width="1"/>
-      <text x="56" y="76" fill="#8d744d" font-family="Arial, Helvetica, sans-serif" font-size="12" letter-spacing="3">AROMIA / IMAGE PENDING</text>
-      <text x="352" y="77" fill="#8d744d" font-family="Arial, Helvetica, sans-serif" font-size="12" letter-spacing="2">INDEX</text>
-      <text x="56" y="176" fill="#8d744d" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2">${family.toUpperCase()}</text>
-      <text x="56" y="256" fill="#221d18" font-family="Georgia, 'Times New Roman', serif" font-size="40">${name}</text>
-      <text x="56" y="292" fill="#6f665d" font-family="Arial, Helvetica, sans-serif" font-size="16" letter-spacing="1">${brand}</text>
-      <text x="56" y="548" fill="#8d8174" font-family="Arial, Helvetica, sans-serif" font-size="11" letter-spacing="2">PRODUCT IMAGE NOT VERIFIED</text>
-      <text x="56" y="572" fill="#8d8174" font-family="Arial, Helvetica, sans-serif" font-size="11">Datos del catálogo preservados · sin imagen fabricada</text>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640" role="img" aria-label="Imagen no disponible para ${name} de ${brand}">
+      <rect width="480" height="640" fill="#f7f3eb"/>
+      <text x="240" y="115" text-anchor="middle" fill="#641e2f" font-family="Georgia, serif" font-size="24">${brand}</text>
+      <text x="240" y="390" text-anchor="middle" fill="#641e2f" font-family="Georgia, serif" font-style="italic" font-size="220">${initial}</text>
+      <text x="240" y="550" text-anchor="middle" fill="#645b54" font-family="Arial, sans-serif" font-size="18">Imagen no disponible</text>
     </svg>`;
   return new Response(svg, {
     status: 200,

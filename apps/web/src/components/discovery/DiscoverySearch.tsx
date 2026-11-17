@@ -1,11 +1,13 @@
 "use client";
 
+import { PERFUMERS } from "@/lib/perfumers";
+import { OLFACTIVE_FAMILIES } from "@/lib/olfactiveFamilies";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { DiscoveryPerfume, PerfumeSearchResponse } from "@/lib/types";
 import type { EditorialIndexItem } from "@/lib/editorialIndex";
 import { discoveryTextScore } from "@/lib/discovery";
-import { loadDiscoveryProfile } from "@/lib/discoveryProfile";
+import { emptyDiscoveryProfile, loadDiscoveryProfile } from "@/lib/discoveryProfile";
 import { personalizedPerfumeScore } from "@/lib/personalization";
 import { trackEvent } from "@/lib/analytics";
 import { fetchPerfumeSearch } from "@/lib/searchClient";
@@ -17,7 +19,8 @@ type SearchState = { status: "idle" | "loading" | "ok" | "error"; response: Perf
 
 export function DiscoverySearch({ initialResults, editorialItems, initialQuery = "" }: { initialResults: PerfumeSearchResponse | null; editorialItems: EditorialIndexItem[]; initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
-  const [profile, setProfile] = useState(() => loadDiscoveryProfile());
+  const [retry, setRetry] = useState(0);
+  const [profile, setProfile] = useState(emptyDiscoveryProfile);
   const [search, setSearch] = useState<SearchState>(
     initialResults ? { status: "ok", response: initialResults } : { status: "idle", response: null },
   );
@@ -27,6 +30,15 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
   useEffect(() => { setProfile(loadDiscoveryProfile()); }, []);
 
   const q = query.trim();
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (q) url.searchParams.set("q", q); else url.searchParams.delete("q");
+    window.history.replaceState(null, "", url);
+  }, [q]);
+  const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const peopleResults = q ? PERFUMERS.filter(person => normalize(`${person.name} ${person.signature}`).includes(normalize(q))).slice(0, 6) : [];
+  const familyResults = q ? OLFACTIVE_FAMILIES.filter(family => normalize(`${family.name} ${family.smellsLike} ${family.materials.join(" ")}`).includes(normalize(q))).slice(0, 4) : [];
+
 
   // Búsqueda acotada server-backed, con debounce y cancelación del pedido
   // anterior — el candidato ya viene filtrado por el servidor (ILIKE sobre
@@ -51,13 +63,13 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
 
     const timer = setTimeout(async () => {
       const result = await fetchPerfumeSearch({ q, pageSize: CANDIDATE_PAGE_SIZE }, controller.signal);
-      if (result.status === "aborted") return;
+      if (controller.signal.aborted || result.status === "aborted") return;
       if (result.status === "error") { setSearch({ status: "error", response: null }); return; }
       setSearch({ status: "ok", response: result.data });
     }, DEBOUNCE_MS);
 
     return () => { clearTimeout(timer); controller.abort(); };
-  }, [q]);
+  }, [q, retry]);
 
   const perfumeResults = useMemo(() => {
     const candidates = search.response?.items ?? [];
@@ -72,13 +84,14 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
 
   const storyResults = useMemo(() => {
     if (!q) return [];
-    const needle = q.toLowerCase();
-    return editorialItems.filter((item) => `${item.title} ${item.summary} ${item.territory}`.toLowerCase().includes(needle)).slice(0, 8);
+    const needle = q.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return editorialItems.filter((item) => `${item.title} ${item.summary} ${item.territory}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(needle)).slice(0, 8);
   }, [editorialItems, q]);
 
   function submit(event: FormEvent) {
     event.preventDefault();
     if (!q) return;
+    if (search.status === "error") setRetry((attempt) => attempt + 1);
     trackEvent("internal_search", { query_length: q.length, perfume_results: perfumeResults.length, article_results: storyResults.length });
   }
 
@@ -86,12 +99,19 @@ export function DiscoverySearch({ initialResults, editorialItems, initialQuery =
   const isError = search.status === "error";
 
   return <div>
-    <form onSubmit={submit} className="border-y border-line py-5"><label htmlFor="discovery-search" className="font-plex text-xs uppercase tracking-[.16em] text-gold-contrast">Buscar por perfume, historia, persona, familia o nota</label><div className="mt-4 flex flex-col gap-3 sm:flex-row"><input id="discovery-search" value={query} onChange={(event) => setQuery(event.target.value)} autoFocus placeholder="Ej. vetiver, Ropion, amaderado…" className="min-h-14 flex-1 border border-line bg-transparent px-4 font-sans text-base text-ink outline-none focus:border-gold" /><button className="min-h-14 border border-ink px-6 font-plex text-xs uppercase tracking-[.12em] text-ink hover:border-gold hover:text-gold-contrast">Buscar</button></div></form>
+    <form onSubmit={submit} className="ed-search-form border-y border-line py-5"><label htmlFor="discovery-search" className="font-plex text-xs uppercase tracking-[.16em] text-gold-contrast">Buscar por perfume, historia, persona, familia o nota</label><div className="mt-4 flex flex-col gap-3 sm:flex-row"><input id="discovery-search" value={query} onChange={(event) => setQuery(event.target.value)} maxLength={80} type="search" placeholder="Ej. vetiver, Ropion, amaderado…" className="min-h-14 flex-1 border border-line bg-transparent px-4 font-sans text-base text-ink outline-none focus:border-gold" /><button type="submit" className="min-h-14 border border-ink px-6 font-plex text-xs uppercase tracking-[.12em] text-ink hover:border-gold hover:text-gold-contrast">Buscar</button></div></form>
+    <p role="status" className="sr-only">{isLoading ? "Buscando fragancias…" : q ? `${perfumeResults.length} fragancias, ${storyResults.length} historias, ${peopleResults.length} personas y ${familyResults.length} familias.` : "Escribe para buscar en Aromia."}</p>
+    {q && <button type="button" className="ed-link" onClick={() => { setQuery(""); document.getElementById("discovery-search")?.focus(); }}>Limpiar búsqueda</button>}
+    {!q && <div className="ed-suggestions" aria-label="Ideas para empezar">{["Bergamota", "Rosa", "Vetiver", "Ropion"].map(term => <button type="button" key={term} onClick={() => setQuery(term)}>{term}</button>)}</div>}
+    {(peopleResults.length > 0 || familyResults.length > 0) && <section className="ed-search-links" aria-label="Personas y familias relacionadas">
+      {peopleResults.map(person => <Link key={person.slug} href={`/perfumistas/${person.slug}`}><small>Personas</small>{person.name}</Link>)}
+      {familyResults.map(family => <Link key={family.slug} href={`/descubrir/familias/${family.slug}`}><small>Familias</small>{family.name}</Link>)}
+    </section>}
     {!q ? <div className="py-16"><p className="max-w-[24ch] font-display text-4xl leading-[1.02] text-ink">Empieza por una sensación, una nota, una persona o un nombre.</p><p className="mt-4 max-w-[52ch] font-sans text-sm leading-6 text-muted">La búsqueda recorre fragancias y todo el archivo editorial. Tu mapa olfativo solo ayuda a ordenar resultados de perfume que ya son relevantes.</p></div> : <>
       <section className="py-12">
         <div className="mb-6 flex items-center gap-4 border-b border-line pb-4 font-plex text-xs uppercase tracking-[.16em] text-muted"><span>Fragancias</span><span className="h-px flex-1 bg-line" /><span>{isLoading ? "…" : perfumeResults.length}</span></div>
         {isError ? (
-          <p className="pt-6 font-sans text-sm text-muted">No pudimos completar la búsqueda. Probá de nuevo en unos segundos.</p>
+          <div role="status" className="pt-6 font-sans text-sm text-muted"><p>No pudimos completar la búsqueda. Probá de nuevo en unos segundos.</p><button type="button" onClick={() => setRetry((attempt) => attempt + 1)} className="mt-3 min-h-11 underline underline-offset-4 text-ink">Reintentar búsqueda</button></div>
         ) : (
           <div className="grid grid-cols-1 border-b border-line md:grid-cols-2 lg:grid-cols-3" aria-busy={isLoading}>
             {perfumeResults.map(({ perfume }, index) => <Link key={perfume.slug} href={`/catalogo/${perfume.slug}`} onClick={() => trackEvent("discovery_product_clicked", { context: "search", perfume_slug: perfume.slug, position: index + 1 })} className="border-b border-r border-line p-6 transition hover:bg-soft"><p className="font-plex text-xs uppercase tracking-[.12em] text-gold-contrast">{perfume.marca}</p><h2 className="mt-3 font-display text-3xl text-ink">{perfume.nombre}</h2><p className="mt-3 font-sans text-xs text-muted">{perfume.familia_olfativa ?? "Perfil olfativo"}</p></Link>)}

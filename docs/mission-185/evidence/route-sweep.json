@@ -1,0 +1,313 @@
+{
+  "results": [
+    {
+      "route": "/",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Aromia — Una fragancia, una historia",
+      "h1": "Perfume, materia y personas.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/magazine",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Historias — Archivo Aromia | Aromia",
+      "h1": "Historias",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/academia",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Saber — Aromia | Aromia",
+      "h1": "Entender cambia la manera de oler.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/perfumistas",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Personas — Aromia | Aromia",
+      "h1": "Quién está detrás del olor.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/descubrir",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Tu mapa olfativo — Aromia | Aromia",
+      "h1": "Tu mapa olfativo.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/buscar",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Buscar — Aromia | Aromia",
+      "h1": "Encuentra la siguiente pista.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/magazine/resena-delina",
+      "width": 390,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino | Aromia",
+      "h1": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino",
+      "overflow": false,
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Aromia — Una fragancia, una historia",
+      "h1": "Perfume, materia y personas.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/magazine",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Historias — Archivo Aromia | Aromia",
+      "h1": "Historias",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/academia",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Saber — Aromia | Aromia",
+      "h1": "Entender cambia la manera de oler.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/perfumistas",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Personas — Aromia | Aromia",
+      "h1": "Quién está detrás del olor.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/descubrir",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Tu mapa olfativo — Aromia | Aromia",
+      "h1": "Tu mapa olfativo.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/buscar",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Buscar — Aromia | Aromia",
+      "h1": "Encuentra la siguiente pista.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/magazine/resena-delina",
+      "width": 390,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino | Aromia",
+      "h1": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino",
+      "overflow": false,
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "route": "/",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Aromia — Una fragancia, una historia",
+      "h1": "Perfume, materia y personas.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/magazine",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Historias — Archivo Aromia | Aromia",
+      "h1": "Historias",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/academia",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Saber — Aromia | Aromia",
+      "h1": "Entender cambia la manera de oler.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/perfumistas",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Personas — Aromia | Aromia",
+      "h1": "Quién está detrás del olor.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/descubrir",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Tu mapa olfativo — Aromia | Aromia",
+      "h1": "Tu mapa olfativo.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/buscar",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Buscar — Aromia | Aromia",
+      "h1": "Encuentra la siguiente pista.",
+      "overflow": false,
+      "color": "rgb(32, 35, 31)"
+    },
+    {
+      "route": "/magazine/resena-delina",
+      "width": 1280,
+      "theme": "light",
+      "status": 200,
+      "errors": [],
+      "title": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino | Aromia",
+      "h1": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino",
+      "overflow": false,
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "route": "/",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Aromia — Una fragancia, una historia",
+      "h1": "Perfume, materia y personas.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/magazine",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Historias — Archivo Aromia | Aromia",
+      "h1": "Historias",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/academia",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Saber — Aromia | Aromia",
+      "h1": "Entender cambia la manera de oler.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/perfumistas",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Personas — Aromia | Aromia",
+      "h1": "Quién está detrás del olor.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/descubrir",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Tu mapa olfativo — Aromia | Aromia",
+      "h1": "Tu mapa olfativo.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/buscar",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Buscar — Aromia | Aromia",
+      "h1": "Encuentra la siguiente pista.",
+      "overflow": false,
+      "color": "rgb(244, 241, 234)"
+    },
+    {
+      "route": "/magazine/resena-delina",
+      "width": 1280,
+      "theme": "dark",
+      "status": 200,
+      "errors": [],
+      "title": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino | Aromia",
+      "h1": "Delina de Parfums de Marly: el floral rosado que conquistó al nicho femenino",
+      "overflow": false,
+      "color": "rgb(255, 255, 255)"
+    }
+  ],
+  "errors": []
+}
