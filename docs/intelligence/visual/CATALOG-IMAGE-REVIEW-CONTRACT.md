@@ -36,3 +36,15 @@ A receipt includes `reviewId`, `fingerprint`, `reviewer`, `decision` (approved/r
 `assessImageReview` reports `authenticated_review_recorded` or `authenticated_rejection_recorded` as evidence states. It **always returns `publishAllowed: false`**, including for authenticated approvals. This is intentionally *not* a publishing authorization or a production-ready reviewer workflow. A future authenticated server-side process must validate human identity and roles, evidence sources, revocation, immutable storage, content rights, and exact bytes before accepting approval; until then no data or assets change in Aromia.
 
 This module is imported by its regression tests only: the read-only queue and historical fixture remain unchanged, and no mock review has been installed as a real approval.
+
+## Private local reviewer — operator tranche
+
+Run `node scripts/private-image-review-operator.mjs image-quality-signals.json /private/location/review-receipts.json` in an authorized local operator environment. The second input must be a JSON object containing `{"reviews":[{"slug":"...","receipt":{...}}]}`. Set `IMAGE_REVIEW_HMAC_KEY` through the local environment or secret manager **only**, never in a repository, CLI argument, artifact or browser. The review credential is distinct from the editorial publishing credential. This utility only **verifies** externally prepared receipts; it never self-issues/signs an approval, impersonates a human or changes the catalogue.
+
+For now, this operator can verify image bytes only for canonical images already staged under `apps/web/public` with image URLs like `/assets/bottle.webp`. URLs on Amazon or other external hosts are **explicitly deferred** as `remote_or_unsupported_image_requires_capture`. The operator does not scrape, download, infer product identity, or accept an arbitrary local file mapped to an external URL. Exact image bytes, identity, provenance and permissions still require separate factual/human evaluation. Its JSON output contains only status, digest-bound fingerprint and counts; `publication` and every `publishAllowed` remain blocked.
+
+This is a private **local inspection step**, not a public or admin API, stored review decision, server authentication workflow, or editorial authorization. Existing `intelligenceRouter` and `EDITORIAL_REVIEW_TOKEN` remain unchanged; do not conflate visual HMAC receipt integrity with the publisher's editorial review or release approval.
+
+### Curated external inputs
+
+Any future YouTube/channel source registry must begin empty. **The Publisher selects every channel**. Do not auto-enroll recommendations, channels returned by search, subscriptions, adjacent videos or suggested creators. YouTube-source retrieval, when implemented, needs a separate access/rights and factual-verification policy and must not affect image approvals.
