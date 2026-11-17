@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { adminRequest } from "@/lib/adminRequest";
 import Image from "next/image";
 import { compareVisualClaims } from "@/lib/visualReviewComparison";
+import VisualProvenanceDraft from "@/components/admin/VisualProvenanceDraft";
 
 type Observation = {
   id: number;
@@ -197,6 +198,11 @@ export default function VisualReviewJournalPage() {
           </div>
         </div>}
       </section>
+
+      {assetEvidence && loaded && searched && <VisualProvenanceDraft
+        key={`${searched}:${assetEvidence.url}:${assetEvidence.bytesSha256}`}
+        slug={searched} imageUrl={assetEvidence.url} sha256={assetEvidence.bytesSha256}
+      />}
 
       {error && <p role="alert" className="rounded border border-red-300 bg-red-50 p-4 text-red-950">{error}</p>}
       {loaded && (

@@ -4,6 +4,8 @@ on:
     paths:
       - 'apps/web/src/lib/visualEvidence*'
       - 'apps/web/src/lib/visualReviewComparison*'
+      - 'apps/web/src/lib/visualProvenance*'
+      - 'apps/web/src/components/admin/VisualProvenanceDraft.tsx'
       - 'apps/web/src/lib/projectProgress*'
       - 'apps/web/src/lib/githubProgress.server*'
       - 'apps/web/src/components/admin/GitHubProgressStatus.tsx'
