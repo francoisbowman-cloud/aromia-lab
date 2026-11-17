@@ -26,3 +26,13 @@ The default data source is `PERFUMES_INITIAL_50.csv`, an **historical fixture**,
 ## Next evidence gate
 
 For each item, an independent reviewer must inspect actual rendered images and confirm exact perfume **brand, name, concentration, flanker and packaging**, plus source rights, editorial quality and responsive rendering. A later audited review/approval contract must bind that verdict to product identity, resource digest and reviewer authority; do not infer approval from a filename, slug, URL, or a different image. The bergamot art-direction capsule requires a separately approved candidate.
+
+## Signed review evidence (next tranche)
+
+The optional `scripts/catalog-image-review-evidence.mjs` adds an **isolated, testable review-record contract**, without exposing an endpoint or writing to any product. A reviewer must provide a SHA-256 digest of the actual image **bytes** (a URL hash is not sufficient). The `imageReviewFingerprint(item, imageSha256)` binds this to the exact slug, brand, product name, declared concentration and image URL. Changing any field, including the remote image bytes behind an unchanged URL, invalidates the prior review.
+
+A receipt includes `reviewId`, `fingerprint`, `reviewer`, `decision` (approved/rejected), `identityEvidence`, `rightsEvidence`, `visualEvidence`, and `reviewedAt`. A separate, protected review credential signs these fields with HMAC-SHA256. A missing/altered signature or mismatched fingerprint is rejected. **Do not commit the secret or store receipts in public CI artifacts.** Signature verification proves credential possession and record integrity, not that the evidence statements are true or that the named reviewer is a verified person.
+
+`assessImageReview` reports `authenticated_review_recorded` or `authenticated_rejection_recorded` as evidence states. It **always returns `publishAllowed: false`**, including for authenticated approvals. This is intentionally *not* a publishing authorization or a production-ready reviewer workflow. A future authenticated server-side process must validate human identity and roles, evidence sources, revocation, immutable storage, content rights, and exact bytes before accepting approval; until then no data or assets change in Aromia.
+
+This module is imported by its regression tests only: the read-only queue and historical fixture remain unchanged, and no mock review has been installed as a real approval.
