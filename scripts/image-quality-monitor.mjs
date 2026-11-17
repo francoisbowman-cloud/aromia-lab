@@ -4,11 +4,23 @@ import { createHash } from 'node:crypto';
 import { resolve, relative, isAbsolute, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'csv-parse/sync';
+// Compare only concentrations explicitly written in product names/metadata.
+// A slug, remote image URL or Amazon link is not evidence for a perfume variant.
+export function declaredConcentration(value) {
+  const text = String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const edt = /\b(?:edt|eau\s+de\s+toilette)\b/.test(text);
+  const edp = /\b(?:edp|eau\s+de\s+parfum)\b/.test(text);
+  return edt && edp ? 'ambiguous' : edt ? 'edt' : edp ? 'edp' : null;
+}
 export function auditImages(products) {
   const findings = [];
   const urls = new Map();
   for (const product of products) {
     if (!product.slug) throw new Error('Catalog row requires slug');
+    const named = declaredConcentration(product.nombre);
+    const metadata = declaredConcentration(product.concentracion);
+    if (named === 'ambiguous' || metadata === 'ambiguous' || (named && metadata && named !== metadata))
+      findings.push({ key: `variant-conflict:${product.slug}`, slug: product.slug, reason: 'declared_concentration_conflict_requires_review', namedConcentration: named, metadataConcentration: metadata });
     const url = String(product.imagen_url ?? '').trim();
     if (!url) findings.push({ key: `missing:${product.slug}`, slug: product.slug, reason: 'missing_image' });
     else {
