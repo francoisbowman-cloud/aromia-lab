@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import ReviewPackage from "@/components/admin/ReviewPackage";
 import EditorialVersions from "@/components/admin/EditorialVersions";
 import { adminRequest } from '@/lib/adminRequest';
+import ProjectProgress from '@/components/admin/ProjectProgress';
 type Job = {id:string;status:string;attempts:number;updated_at:string;error_code:string|null};
 type Detail = Job & {payload:{title:string;question:string;sources:{url:string;excerpt:string}[]};result:null|{publication:string;providerCostMicros:number;checks:Record<string,string>};events:{event:string;created_at:string}[]};
 const labels:Record<string,string>={queued:'En cola',running:'En ejecución',awaiting_review:'Pendiente de revisión',failed:'Falló',cancelled:'Cancelado'};
@@ -42,6 +43,7 @@ export default function Operations() {
   const input='block w-full rounded border border-stone-300 bg-white p-3 text-stone-950';
   return <div className="mx-auto max-w-6xl space-y-8 text-stone-900">
     <header><h1 className="text-3xl font-semibold">Operaciones editoriales</h1><p className="mt-2">Preparación interna de expedientes. Ninguna acción de este panel publica artículos.</p></header>
+    <ProjectProgress compact />
     {error&&<p role="alert" className="border border-red-300 bg-red-50 p-4 text-red-900">{error}</p>}
     <section aria-labelledby="jobs-title" className="rounded border bg-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-3"><h2 id="jobs-title" className="text-xl font-semibold">Trabajos recientes</h2><button type="button" disabled={loading||busy} onClick={()=>void refresh()} className="rounded border px-4 py-2">Actualizar</button></div>
