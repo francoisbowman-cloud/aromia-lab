@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci --ignore-scripts
-      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs
+      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs
       - run: node scripts/image-quality-monitor.mjs > image-quality-signals.json
       - uses: actions/upload-artifact@v4
         with:
