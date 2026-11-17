@@ -2,6 +2,8 @@
 
 Resumen preparado el 16 de noviembre de 2026 (America/Santo_Domingo).
 
+> Actualización: ver [VERIFICACION-CI.md](VERIFICACION-CI.md). El CI de `edafd79` pasó, incluido el paso de evidencia revisada de Batch 003. El texto siguiente conserva el contexto del checkpoint anterior. La restricción de no publicar sigue vigente.
+
 ## Estado actual
 
 - Rama: `feat/185-release-foundation`.
@@ -37,7 +39,7 @@ Error observado: `reviewed_evidence_gender_conflict:c036:unisex->masculino`, cor
 
 Se identificó un defecto en el extractor: buscaba género en toda la página, incluyendo navegación y recomendaciones, e interpretaba referencias masculinas y femeninas simultáneas como unisex. `e246b51` limita esa inferencia a metadatos del producto, conserva audiencias explícitas y deja vacíos los casos ambiguos. El rechazo de contradicciones de la evidencia revisada se mantiene.
 
-Esta corrección tiene pruebas de regresión, pero **todavía no se ha confirmado que resuelva el recorrido completo del catálogo en GitHub**. No afirmar que el bloqueo de publicación está cerrado hasta verificar CI sobre el commit actual.
+Esta corrección tiene pruebas de regresión y el recorrido completo del catálogo pasó en `edafd79`, verificado después de este checkpoint. El bloqueo observado de CI queda resuelto para ese SHA; los pendientes de publicación permanecen abiertos. Véase `VERIFICACION-CI.md` y su evidencia.
 
 ## Validaciones disponibles
 
