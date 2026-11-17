@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { adminRequest } from "@/lib/adminRequest";
+import Image from "next/image";
 
 type Observation = {
   id: number;
@@ -21,6 +22,14 @@ type JournalResponse = {
   rightsVerified: false;
   identityVerified: false;
 };
+type VisualEvidence = {
+  url: string; bytesSha256: string; bytes: number; width: number; height: number;
+  format: string; publication: "blocked"; identityVerified: false;
+  rightsVerified: false; visualQualityVerified: false;
+};
+const validLocalAsset = (value: string) =>
+  /^\/[a-zA-Z0-9_./-]+\.(png|jpe?g|webp|avif|gif)$/i.test(value) &&
+  !value.includes("//") && !value.split("/").some(part => part === "." || part === "..");
 const validSlug = (value: string) => /^[a-z0-9][a-z0-9._-]{0,159}$/.test(value);
 
 export default function VisualReviewJournalPage() {
@@ -31,6 +40,11 @@ export default function VisualReviewJournalPage() {
   const [error, setError] = useState("");
   const [loaded, setLoaded] = useState(false);
   const requestRef = useRef<AbortController | null>(null);
+  const [assetPath, setAssetPath] = useState("");
+  const [assetEvidence, setAssetEvidence] = useState<VisualEvidence | null>(null);
+  const [assetError, setAssetError] = useState("");
+  const [assetBusy, setAssetBusy] = useState(false);
+  const assetRequestRef = useRef<AbortController | null>(null);
 
   const lookup = useCallback(async (target: string) => {
     if (!validSlug(target)) {
@@ -62,7 +76,44 @@ export default function VisualReviewJournalPage() {
       if (requestRef.current === controller) setBusy(false);
     }
   }, []);
-  useEffect(() => () => requestRef.current?.abort(), []);
+  useEffect(() => () => {
+    requestRef.current?.abort();
+    assetRequestRef.current?.abort();
+  }, []);
+
+  async function inspectAsset(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const target = assetPath.trim();
+    if (!validLocalAsset(target)) {
+      setAssetEvidence(null);
+      setAssetError("Utiliza una ruta local de imagen, por ejemplo /editorial-v1/bergamot-editorial-v2.webp.");
+      return;
+    }
+    assetRequestRef.current?.abort();
+    const controller = new AbortController();
+    assetRequestRef.current = controller;
+    setAssetBusy(true);
+    setAssetEvidence(null);
+    setAssetError("");
+    try {
+      const result = await adminRequest<VisualEvidence>(
+        `/api/admin/intelligence/visual-evidence?asset=${encodeURIComponent(target)}`,
+        { signal: controller.signal }
+      );
+      if (controller.signal.aborted) return;
+      if (result.publication !== "blocked" || result.identityVerified !== false ||
+          result.rightsVerified !== false || result.visualQualityVerified !== false ||
+          result.url !== target || !/^[a-f0-9]{64}$/.test(result.bytesSha256)) {
+        throw new Error("Unexpected asset evidence");
+      }
+      setAssetEvidence(result);
+    } catch {
+      if (!controller.signal.aborted)
+        setAssetError("No se pudo inspeccionar la imagen local. Comprueba su ruta y que el módulo de evidencia esté habilitado.");
+    } finally {
+      if (assetRequestRef.current === controller) setAssetBusy(false);
+    }
+  }
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -94,6 +145,47 @@ export default function VisualReviewJournalPage() {
           </button>
         </form>
         <p id="search-help" className="mt-3 text-sm text-stone-600">Solo consulta registros existentes. No modifica imágenes ni fichas.</p>
+      </section>
+
+      <section className="rounded border border-stone-300 bg-white p-5" aria-labelledby="visual-asset-title">
+        <h2 id="visual-asset-title" className="mb-2 text-xl font-semibold">Inspección de una imagen local</h2>
+        <p className="mb-4 text-sm text-stone-600">
+          Introduce la ruta pública exacta de una imagen ya existente en Aromia. No se descargan imágenes de Amazon ni se genera contenido.
+        </p>
+        <form onSubmit={inspectAsset} className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <label className="flex-1 text-sm font-medium">
+            Ruta pública del archivo
+            <input value={assetPath} maxLength={512} onChange={event => {
+              setAssetPath(event.target.value); setAssetEvidence(null); setAssetError("");
+            }} placeholder="/editorial-v1/bergamot-editorial-v2.webp"
+              className="mt-2 block w-full rounded border border-stone-400 bg-white p-3 text-stone-950" required />
+          </label>
+          <button type="submit" disabled={assetBusy}
+            className="rounded bg-stone-900 px-5 py-3 text-white disabled:opacity-60">
+            {assetBusy ? "Inspeccionando…" : "Inspeccionar archivo"}
+          </button>
+        </form>
+        {assetError && <p role="alert" className="mt-3 rounded border border-red-300 bg-red-50 p-3 text-sm text-red-950">{assetError}</p>}
+        {assetEvidence && <div className="mt-5 grid gap-4 border-t pt-4 md:grid-cols-[minmax(0,240px)_1fr]">
+          <div className="overflow-hidden rounded bg-stone-100">
+            <Image unoptimized src={assetEvidence.url} alt="Vista previa del archivo para revisión; identidad del perfume sin verificar"
+              width={assetEvidence.width} height={assetEvidence.height}
+              className="h-auto max-h-72 w-full object-contain" />
+          </div>
+          <div className="min-w-0 space-y-2 text-sm">
+            <p><strong>Formato:</strong> {assetEvidence.format.toUpperCase()} · {assetEvidence.width} × {assetEvidence.height} px</p>
+            <p><strong>Tamaño:</strong> {assetEvidence.bytes.toLocaleString("es")} bytes</p>
+            <p className="break-all"><strong>SHA-256 real:</strong> {assetEvidence.bytesSha256}</p>
+            <p className="font-medium text-amber-900">Archivo inspeccionado, no certificado. Identidad, derechos y calidad siguen pendientes.</p>
+            {loaded && records.length > 0 && <p className="text-stone-700">
+              Comparación con el historial de {searched}: {
+                records.some(record => record.image_sha256 === assetEvidence.bytesSha256)
+                  ? "existe una huella declarada coincidente; esto no prueba que la revisión sea válida."
+                  : "ninguna huella declarada coincide; requiere investigación antes de reutilizar la imagen."
+              }
+            </p>}
+          </div>
+        </div>}
       </section>
 
       {error && <p role="alert" className="rounded border border-red-300 bg-red-50 p-4 text-red-950">{error}</p>}
