@@ -13,8 +13,9 @@ It indexes the latest verified operational state. Git history, checkpoints and c
 - ACTIVE_BRANCH: `feat/intelligence-foundation`.
 - DELIVERABLES: persistent PostgreSQL job engine, gated preparation handler, CLI + private web operations panel, authenticated opt-in API, versioned editorial materials, bounded source capture, version-bound review packages and local integration tests. See [board and handoff](docs/intelligence/BOARD.md).
 - STATE: first operational foundation proven locally; full autonomous editorial pilot and production runtime NOT complete; private panel implemented. Existing magazine design preserved.
-- LATEST_TRANCHE: immutable local recovery of an existing manuscript, idempotent import and explicit source blockers; evidence in `docs/intelligence/evidence/backlog-pilot.json`. Prior CI at16162f0 passed all five executed checks; seven skipped checks remain unverified. PR187 remains draft.
-- NEXT_ACTOR: Code; verify new tranche CI, continue factual review of the recovered pilot, and follow the board for provider/budget prerequisites.
+- LATEST_TRANCHE: immutable local recovery of an existing manuscript, idempotent import and explicit source blockers; evidence in `docs/intelligence/evidence/backlog-pilot.json`. CI at0888145 passed all five executed checks; seven skipped checks remain unverified. PR187 remains draft.
+- VISUAL_DIRECTION: Publisher mockup feedback and phase-by-phase pending work are recorded in [vision and task list](docs/intelligence/VISION-Y-PENDIENTES.md). Concept only; real products require identity and rights evidence.
+- NEXT_ACTOR: Code; verify Amazon identity correction CI, continue factual review of the pilot, and prepare a scoped visual proof using authorized real assets.
 - BLOCKERS: external runtime/provider availability and approved spend for real autonomous research; OMNI deployment unverified.
 - AUTHORITY: no merge/deploy/publication/production writes or OMNI modifications in this mandate.
 

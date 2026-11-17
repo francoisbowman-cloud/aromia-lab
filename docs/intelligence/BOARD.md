@@ -125,3 +125,14 @@ node apps/api/dist/intelligence/cli.js review-package UUID_DEVUELTO
 Validación local de este lote: build API y seis pruebas de persistencia/fuentes/revisión; reimportación real idempotente; reanudación reutiliza las tres capturas. Sin cambios visuales en este lote. El workflow incluye el importador en sus rutas y valida sintaxis; la prueba de importación real fue local, no se presenta como prueba automatizada de CI.
 
 NEXT_ACTOR: Code. NEXT_ACTION: comprobar CI de este lote y continuar revisión factual del piloto con fuentes permitidas; para generación autónoma implementar proveedor y presupuesto solo al disponer de autorización y secretos seguros. BLOCKERS: proveedor/gasto no resueltos, dos dominios no permitidos, extractos y revisión editorial pendientes, derechos/arte/QA pendientes; OMNI remoto sin validar. No merge, despliegue, publicación ni cambios de OMNI. El Master Plan continúa abierto.
+
+
+## Conversación visual incorporada y fidelidad comercial — 17-11-2026
+
+La dirección del mockup y las reservas sobre productos reales quedan incorporadas a [visión y lista de pendientes](VISION-Y-PENDIENTES.md), con fases0–7, criterios de cierre y límites. No se sustituye el Master Plan por un rediseño. El concepto del chat no está ingestado como activo ni publicado.
+
+CI0888145 confirmado: cinco SUCCESS y siete SKIPPED; PR187 sigue abierta en borrador. Hallazgo real en resolver Amazon: una búsqueda podía seleccionar un producto distinto y un ASIN cambiaba de marketplace. Corrección acotada: búsquedas no producen packshots inferidos; destinos explícitos preservan marketplace y parámetros. Pruebas de regresión para búsqueda, variante y fallo de recuperación. No certifica derechos de imágenes ni correspondencia de todos los registros históricos.
+
+NEXT_ACTOR: Code. NEXT_ACTION: verificar CI del lote y seguir el orden de tareas de VISION-Y-PENDIENTES.md. BLOCKERS: se mantienen los de proveedor/presupuesto, fuentes, derechos y revisión editorial. Sin nuevas generaciones de imágenes, gasto de proveedores, merge, publicación, despliegue ni cambios OMNI.
+
+Validación local de este lote:64 pruebas web (18 archivos), typecheck y lint correctos; diff sin errores de whitespace. El build y CI remoto se verifican por SHA después del push.
