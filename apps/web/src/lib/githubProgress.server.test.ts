@@ -23,7 +23,7 @@ it("fetches only fixed repository PRs and never treats open drafts as merged",as
   expect(fetchMock.mock.calls.every(c=>String(c[0]).startsWith("https://api.github.com/repos/francoisbowman-cloud/aromia-lab/pulls/"))).toBe(true);
 });
 it("rejects mismatched URLs and cannot accept unrelated repo metadata",async()=>{
-  vi.stubGlobal("fetch",vi.fn().mockResolvedValue(Response.json({
+  vi.stubGlobal("fetch",vi.fn().mockImplementation(async () => Response.json({
     number:186,state:"open",draft:false,merged_at:null,
     html_url:"https://github.com/evil/example/pull/186",
     title:"Malicious",updated_at:"2026-11-17T12:00:00Z",head:{sha:"a".repeat(40)}
