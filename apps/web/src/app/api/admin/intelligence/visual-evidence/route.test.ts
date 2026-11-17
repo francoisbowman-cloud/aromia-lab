@@ -52,8 +52,8 @@ it("rejects invalid files without granting publication", async () => {
 });
 
 it("exposes no mutation handler", async () => {
-  const module = await import("./route");
-  expect("POST" in module).toBe(false);
-  expect("PUT" in module).toBe(false);
-  expect("DELETE" in module).toBe(false);
+  const routeHandlers = await import("./route");
+  expect("POST" in routeHandlers).toBe(false);
+  expect("PUT" in routeHandlers).toBe(false);
+  expect("DELETE" in routeHandlers).toBe(false);
 });
