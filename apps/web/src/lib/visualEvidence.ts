@@ -40,7 +40,7 @@ export async function inspectLocalVisualAsset(root: string, candidate: unknown) 
     if (error instanceof Error && error.message.startsWith("invalid_visual_asset")) throw error;
     throw new Error("visual_asset_unavailable");
   }
-  let metadata: sharp.Metadata;
+  let metadata: { width?: number; height?: number; format?: string };
   try {
     metadata = await sharp(bytes, { failOn: "error", limitInputPixels: 60_000_000 }).metadata();
   } catch {
