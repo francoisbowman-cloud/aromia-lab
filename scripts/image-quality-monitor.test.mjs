@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { auditImages, inspectFeedback, readFeedbackAsset } from './image-quality-monitor.mjs';
+import { auditImages, inspectFeedback, readFeedbackAsset, declaredConcentration } from './image-quality-monitor.mjs';
 import { mkdtempSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -47,4 +47,23 @@ test('feedback reader confines paths, file types and symlinks to public image as
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('explicit EDT/EDP conflicts are signaled without guessing from slug or external images', () => {
+  assert.equal(declaredConcentration('Eau de Parfum'), 'edp');
+  assert.equal(declaredConcentration('EDT'), 'edt');
+  assert.equal(declaredConcentration('Eau de Parfum / Eau de Toilette'), 'ambiguous');
+  assert.equal(declaredConcentration('Parfum Intense'), null);
+  const rows = [
+    { slug: 'foo-edp', nombre: 'Test fragrance EDT', concentracion: 'EDP', imagen_url: 'https://example.com/one.jpg' },
+    { slug: 'bar-edt', nombre: 'Test fragrance', concentracion: 'Eau de Parfum', imagen_url: 'https://example.com/two.jpg' },
+    { slug: 'baz', nombre: 'Test fragrance Eau de Parfum', concentracion: 'Eau de Parfum', imagen_url: 'https://example.com/three.jpg' },
+    { slug: 'ambiguous', nombre: 'Test EDT / EDP', imagen_url: 'https://example.com/four.jpg' },
+  ];
+  const findings = auditImages(rows);
+  assert.deepEqual(findings.map(f => f.key), ['variant-conflict:ambiguous', 'variant-conflict:foo-edp']);
+  assert.equal(findings[0].reason, 'declared_concentration_conflict_requires_review');
+  assert.equal(findings[1].namedConcentration, 'edt');
+  assert.equal(findings[1].metadataConcentration, 'edp');
+  assert.deepEqual(auditImages([...rows].reverse()), findings);
 });
