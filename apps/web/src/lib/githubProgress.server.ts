@@ -1,6 +1,6 @@
 // Server-only, read-only GitHub PR metadata for the private Aromia dashboard.
 // Never count PR activity as a completed milestone or infer CI from mergeability.
-export const AROMIA_TRACKED_PRS = [186,187,188,189,190,191,192,193,194,195] as const;
+export const AROMIA_TRACKED_PRS = [186,187,188,189,190,191,192,193,194,195,196] as const;
 const REPO = "francoisbowman-cloud/aromia-lab";
 type GithubPR = {
   number: number;
