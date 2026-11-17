@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve, relative, isAbsolute, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'csv-parse/sync';
+import { buildImageReviewQueue, summarizeImageReviewQueue } from './catalog-image-review.mjs';
 // Compare only concentrations explicitly written in product names/metadata.
 // A slug, remote image URL or Amazon link is not evidence for a perfume variant.
 export function declaredConcentration(value) {
@@ -68,5 +69,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   if (!Array.isArray(products)) throw new Error('Input must be an array of catalog records');
   const ledger = JSON.parse(readFileSync(resolve(root,'docs/intelligence/visual/feedback.json'),'utf8'));
   const feedback = inspectFeedback(ledger.observations, path => readFeedbackAsset(root, path));
-  console.log(JSON.stringify({ schemaVersion: 1, input: input ?? 'PERFUMES_INITIAL_50.csv (historical baseline, not live production)', products: products.length, findings: auditImages(products), feedback, publication: 'blocked', limitations: ['Signals do not certify visual identity or image rights.', 'No model calls or automatic image replacements.', 'Changed bytes require a new review, never an inferred approval.'] }, null, 2));
+  const findings = auditImages(products);
+  const reviewQueue = buildImageReviewQueue(products, findings);
+  console.log(JSON.stringify({ schemaVersion: 2, input: input ?? 'PERFUMES_INITIAL_50.csv (historical baseline, not live production)', products: products.length, findings, reviewSummary: summarizeImageReviewQueue(reviewQueue), reviewQueue, feedback, publication: 'blocked', limitations: ['A review queue is not visual proof: no perfume image, license or aesthetic quality was certified.', 'Historical baseline is not the live production catalog; a new production snapshot needs separate authorization and provenance.', 'No model calls or automatic image replacements.', 'Changed bytes require a new review, never an inferred approval.'] }, null, 2));
 }
