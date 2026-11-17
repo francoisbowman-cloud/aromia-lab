@@ -4,6 +4,9 @@ on:
     paths:
       - 'apps/web/src/lib/visualEvidence*'
       - 'apps/web/src/lib/projectProgress*'
+      - 'apps/web/src/lib/githubProgress.server*'
+      - 'apps/web/src/components/admin/GitHubProgressStatus.tsx'
+      - 'apps/web/src/app/api/admin/progress-status/**'
       - 'apps/web/src/components/admin/ProjectProgress.tsx'
       - 'apps/web/src/app/admin/(protected)/progreso/**'
       - 'apps/web/src/app/admin/(protected)/operaciones/page.tsx'
