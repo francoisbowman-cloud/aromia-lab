@@ -136,3 +136,15 @@ CI0888145 confirmado: cinco SUCCESS y siete SKIPPED; PR187 sigue abierta en borr
 NEXT_ACTOR: Code. NEXT_ACTION: verificar CI del lote y seguir el orden de tareas de VISION-Y-PENDIENTES.md. BLOCKERS: se mantienen los de proveedor/presupuesto, fuentes, derechos y revisión editorial. Sin nuevas generaciones de imágenes, gasto de proveedores, merge, publicación, despliegue ni cambios OMNI.
 
 Validación local de este lote:64 pruebas web (18 archivos), typecheck y lint correctos; diff sin errores de whitespace. El build y CI remoto se verifican por SHA después del push.
+
+## Calidad de imagen y ciclo de mejora — 17-11-2026
+
+Feedback del Publisher persistido con SHA del recurso de bergamota y estado replacement_requested; dirección de sustitución en visual/BERGAMOTA-CAPSULA.md. No se sustituye silenciosamente la evidencia anterior ni se interpreta una generación como aprobación. El protocolo de aislamiento visual requiere contexto limpio; este lote prepara la cápsula sin generar.
+
+Monitor determinista sin coste de proveedor añadido: imágenes ausentes/compartidas, concentración ambigua, activo ausente/cambiado desde el feedback. Tres pruebas del monitor pasan. Baseline50 y API local50 arrojan concentración no verificada de Chance Eau Tendre; no demuestran ausencia de errores visuales ni describen producción. La auditoría histórica de Sauvage fue reconciliada: el nombre se corrigió a EDT manteniendo slug legado, por eso no se vuelve a marcar como error por sufijo.
+
+Corrección concreta del resolver oficial: concentración desconocida no selecciona EDP. Pruebas unitarias y ruta de imagen verifican fallback neutro cuando no hay fuentes. Nueva CI Image quality signals genera informe de señales; SUCCESS no significa identidad/derechos aprobados. Producción/automejora integral pendientes.
+
+NEXT_ACTOR: Code. NEXT_ACTION: verificar CI, revisar correspondencia producto por producto sobre catálogo actual autorizado y completar la sustitución de bergamota desde la cápsula visual aislada; continuar piloto editorial según VISION-Y-PENDIENTES.md. BLOCKERS: identidad/derechos de imágenes sin revisión completa, nueva bergamota pendiente, proveedor/presupuesto del piloto sin resolver. Sin merge, publicación, despliegue o cambios de OMNI.
+
+Validación del lote:75 pruebas web, tres del monitor, tipos y lint correctos. Playwright (Browser plugin no disponible) sobre localhost:3000/catalogo/chance-eau-tendre a1440 y390px: título/H1 correctos, contenido presente, sin errores de página ni desbordamiento; menú abre/cierra. Capturas inspeccionadas en /tmp/aromia-product-quality-{1440,390}.png, temporales. Se observó marcador “Imagen no disponible”: no se certifica la recuperación remota ni la identidad de una imagen ausente. No hay cambio de composición ni reemplazo de la bergamota en este lote.

@@ -35,3 +35,13 @@ Backlog editorial de la última ejecución:100 entradas de agenda,49 archivos de
 `apps/web/src/lib/amazonCatalog.server.ts` promovía el primer resultado no patrocinado de una búsqueda a producto/packshot y convertía ASINs al marketplace amazon.com. El resolver ahora conserva búsquedas como enlaces sin recuperar ni elegir resultados; los productos explícitos conservan marketplace, ASIN y parámetros de variante. Las imágenes existentes del catálogo siguen sujetas a revisión: este cambio no certifica identidad ni licencia de todos los datos previos. La extracción de imágenes desde HTML también requiere revisión de condiciones aplicables antes de producción.
 
 NEXT_ACTOR: Code. NEXT_ACTION: verificar CI del lote; continuar revisión factual del piloto y seleccionar activos existentes para una prueba visual fiel, sin ampliar allowlists ni fabricar aprobaciones. BLOCKERS: proveedor/presupuesto sin resolver; verificación de fuentes, variantes y derechos pendiente; integración OMNI remota y gates de publicación no confirmados. AUTHORITY: sin merge, despliegue, publicación ni cambios OMNI. No se declara terminado el Master Plan.
+
+## Observaciones del Publisher — calidad visual y automejora
+
+La bergamota actual queda con sustitución solicitada, no aprobada estéticamente por su naturalidad. Registro ligado a SHA en `visual/feedback.json`; cápsula en `visual/BERGAMOTA-CAPSULA.md`. El Publisher reporta varias imágenes de perfumes incorrectas: esto exige revisión por producto/variante, no se considera solucionado con un cambio de resolver.
+
+Incremento funcional del ciclo de mejora: `scripts/image-quality-monitor.mjs` produce señales deterministas de imágenes ausentes/compartidas, concentración ambigua y cambios del activo observado. Acepta un JSON de catálogo exportado; por defecto usa50 registros históricos, claramente etiquetados. Workflow `Image quality signals` lo ejecuta en PR relevante o manualmente y conserva informe como artefacto. No usa modelos ni modifica datos/publicación. Una ejecución verde valida el detector, no declara buenas las imágenes.
+
+Pendiente para automejora completa: conectar catálogo real autorizado, revisión visual por identidad y derechos, propuestas de sustitución, comparación antes/después, aprobación ligada al hash, aplicación reversible, observación de resultados y rollback. No hay todavía un agente en producción que haga todo esto. Los hallazgos deben persistir hasta evidencia de resolución, sin inventar aprobaciones ni reemplazar automáticamente un frasco.
+
+Corrección aplicada: Chance Eau Tendre sin concentración ya no implica EDP; las concentraciones EDT/EDP deben ser explícitas para elegir la página oficial. Las fuentes alternativas existentes no quedan certificadas por esta corrección.
