@@ -8,7 +8,11 @@ export function bundleOf(jobId:string,artifacts:BundleArtifact[],sources:SourceE
   const selected=[...latest.values()].sort((a,b)=>a.kind.localeCompare(b.kind));
   const ordered=[...sources].sort((a,b)=>a.url.localeCompare(b.url)||a.sha256.localeCompare(b.sha256));
   const blockers=artifactKinds.filter(k=>!latest.has(k)).map(k=>`missing:${k}`);
-  for(const url of new Set(selected.flatMap(a=>a.source_urls))) if(!ordered.some(s=>s.url===url&&s.excerpt_found)) blockers.push(`source_not_captured:${url}`);
+  for(const url of new Set(selected.flatMap(a=>a.source_urls))) {
+    const captures=ordered.filter(s=>s.url===url);
+    if(!captures.length) blockers.push(`source_not_captured:${url}`);
+    else if(!captures.some(s=>s.excerpt_found)) blockers.push(`source_excerpt_unmatched:${url}`);
+  }
   const manifest={version:1,jobId,artifacts:selected,sources:ordered};
   return {...manifest,hash:createHash('sha256').update(JSON.stringify(manifest)).digest('hex'),blockers,publication:'blocked',humanReviewRequired:true};
 }

@@ -1,0 +1,96 @@
+{
+  "scope": "local aromia_dev only; no publication or editorial approval",
+  "date": "2026-11-17",
+  "import": {
+    "jobId": "11a5aa59-c29f-4587-abb2-157668596f4b",
+    "file": "drafts/cuando-ya-no-hueles-tu-perfume.md",
+    "base": "1619c776560f5d6f9c5948f8092ff5241540048f",
+    "sha256": "bdf4abfea53fd8dd52a34c801d35b60f8dd9114b6321adbce8344eb37947a270",
+    "draftVersion": 1,
+    "alreadyImported": false,
+    "publication": "blocked",
+    "editorialApproval": "not_inferred",
+    "sources": [
+      "https://raw.githubusercontent.com/francoisbowman-cloud/aromia-lab/1619c776560f5d6f9c5948f8092ff5241540048f/drafts/cuando-ya-no-hueles-tu-perfume.md",
+      "https://en.wikipedia.org/wiki/Olfactory_fatigue",
+      "https://www.perfumerflavorist.com/fragrance/regulatory-research/article/21855850/olfactory-fatigue-what-it-is-and-how-to-avoid-it-in-product-testing",
+      "https://academic.oup.com/chemse/article/25/4/487/342753",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8834429/"
+    ],
+    "remaining": [
+      "source verification",
+      "factual review",
+      "edit",
+      "art direction",
+      "QA",
+      "human review"
+    ]
+  },
+  "repeat": {
+    "sameJob": true,
+    "sameDraftVersion": 1,
+    "sameHash": "bdf4abfea53fd8dd52a34c801d35b60f8dd9114b6321adbce8344eb37947a270"
+  },
+  "research": [
+    {
+      "url": "https://raw.githubusercontent.com/francoisbowman-cloud/aromia-lab/1619c776560f5d6f9c5948f8092ff5241540048f/drafts/cuando-ya-no-hueles-tu-perfume.md",
+      "status": "already_captured"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Olfactory_fatigue",
+      "status": "already_captured"
+    },
+    {
+      "url": "https://www.perfumerflavorist.com/fragrance/regulatory-research/article/21855850/olfactory-fatigue-what-it-is-and-how-to-avoid-it-in-product-testing",
+      "status": "retrieval_failed",
+      "reason": "source_not_allowed",
+      "factualApproval": false
+    },
+    {
+      "url": "https://academic.oup.com/chemse/article/25/4/487/342753",
+      "status": "retrieval_failed",
+      "reason": "source_not_allowed",
+      "factualApproval": false
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8834429/",
+      "status": "already_captured"
+    }
+  ],
+  "sources": [
+    {
+      "id": "3",
+      "url": "https://en.wikipedia.org/wiki/Olfactory_fatigue",
+      "sha256": "d7547b20873f1f167817f5ee799f78e90c8aa6d9075b173f56cecd4c6026d9d4",
+      "excerpt_found": false
+    },
+    {
+      "id": "4",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8834429/",
+      "sha256": "ed582cb420b0b46bae51aa5945f5556031fab7377a2082532532a8051e59a94f",
+      "excerpt_found": false
+    },
+    {
+      "id": "2",
+      "url": "https://raw.githubusercontent.com/francoisbowman-cloud/aromia-lab/1619c776560f5d6f9c5948f8092ff5241540048f/drafts/cuando-ya-no-hueles-tu-perfume.md",
+      "sha256": "bdf4abfea53fd8dd52a34c801d35b60f8dd9114b6321adbce8344eb37947a270",
+      "excerpt_found": true
+    }
+  ],
+  "blockers": [
+    "missing:research_note",
+    "missing:fact_check",
+    "missing:edit",
+    "missing:art_brief",
+    "missing:qa_report",
+    "source_excerpt_unmatched:https://en.wikipedia.org/wiki/Olfactory_fatigue",
+    "source_not_captured:https://www.perfumerflavorist.com/fragrance/regulatory-research/article/21855850/olfactory-fatigue-what-it-is-and-how-to-avoid-it-in-product-testing",
+    "source_not_captured:https://academic.oup.com/chemse/article/25/4/487/342753",
+    "source_excerpt_unmatched:https://pmc.ncbi.nlm.nih.gov/articles/PMC8834429/"
+  ],
+  "limitations": [
+    "Link labels imported as candidate excerpts, not verified quotations",
+    "Captured content is not factual or rights approval",
+    "This is recovery of existing work, not autonomous article generation"
+  ]
+}

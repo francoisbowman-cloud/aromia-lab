@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'apps/api/src/intelligence/**'
+      - 'scripts/intelligence-import-draft.mjs'
       - 'apps/api/src/routes/admin/intelligence.ts'
       - 'apps/api/src/index.ts'
       - 'apps/api/migrations/024_intelligence_jobs.sql'
@@ -30,6 +31,7 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci --prefix apps/api
+      - run: node --check scripts/intelligence-import-draft.mjs
       - run: npm --prefix apps/api run build
       - run: npm --prefix apps/api run test:intelligence
         env:

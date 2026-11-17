@@ -26,15 +26,15 @@ export class JobStore {
       return existing.rows[0];
     });
   }
-  async claim(): Promise<Job | undefined> {
+  async claim(id?: string): Promise<Job | undefined> {
     return this.tx(async c => {
       // Locks and fencing tokens prevent concurrent workers/stale completion.
-      const expired = await c.query("SELECT * FROM intelligence_jobs WHERE status='running' AND lease_until<=now() FOR UPDATE SKIP LOCKED");
+      const expired = await c.query("SELECT * FROM intelligence_jobs WHERE status='running' AND lease_until<=now() AND ($1::uuid IS NULL OR id=$1) FOR UPDATE SKIP LOCKED",[id??null]);
       for (const j of expired.rows) {
         await c.query("UPDATE intelligence_jobs SET status=CASE WHEN attempts>=max_attempts THEN 'failed' ELSE 'queued' END,token=NULL,lease_until=NULL,updated_at=now() WHERE id=$1", [j.id]);
         await this.event(c,j.id,'lease_expired');
       }
-      const r = await c.query("SELECT * FROM intelligence_jobs WHERE status='queued' AND available_at<=now() AND attempts<max_attempts ORDER BY priority DESC,created_at FOR UPDATE SKIP LOCKED LIMIT 1");
+      const r = await c.query("SELECT * FROM intelligence_jobs WHERE status='queued' AND available_at<=now() AND attempts<max_attempts AND ($1::uuid IS NULL OR id=$1) ORDER BY priority DESC,created_at FOR UPDATE SKIP LOCKED LIMIT 1",[id??null]);
       if (!r.rowCount) return;
       const j = await c.query("UPDATE intelligence_jobs SET status='running',attempts=attempts+1,token=$2,lease_until=now()+interval '60 seconds',updated_at=now() WHERE id=$1 RETURNING *",[r.rows[0].id,randomUUID()]);
       await this.event(c,j.rows[0].id,'claimed',{attempt:j.rows[0].attempts}); return j.rows[0];

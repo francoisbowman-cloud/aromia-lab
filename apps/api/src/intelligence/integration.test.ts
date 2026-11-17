@@ -6,6 +6,7 @@ import { Pool } from 'pg';
 import { JobStore } from './store';
 import { runOnce } from './worker';
 import { validateBrief } from './policy';
+import { bundleOf } from './review';
 const connectionString = process.env.INTELLIGENCE_TEST_DATABASE_URL;
 test('brief refuses unsupported sources and preserves untrusted excerpts as data',()=>{
   assert.throws(()=>validateBrief({title:'x',question:'q',sources:[{url:'file:///etc/passwd',excerpt:'x'}]}));
@@ -30,6 +31,7 @@ test('PostgreSQL: idempotency, concurrency, restart, fencing, cancellation, retr
     const [a,b] = await Promise.all([store.enqueue('one',brief),store.enqueue('one',brief)]);
     assert.equal(a.id,b.id);
     await assert.rejects(store.enqueue('one',{...brief,title:'Otro'}),/idempotency_conflict/);
+    assert.equal(await store.claim(randomUUID()),undefined); // targeted worker must not consume another queued job
     const claims = await Promise.all([store.claim(),store.claim()]);
     assert.equal(claims.filter(Boolean).length,1);
     const old = claims.find(Boolean)!;
@@ -110,4 +112,12 @@ test('operations routes require existing admin authentication and explicit enabl
     if(beforeToken===undefined) delete process.env.ADMIN_API_TOKEN; else process.env.ADMIN_API_TOKEN=beforeToken;
     if(beforeFlag===undefined) delete process.env.INTELLIGENCE_ENABLED; else process.env.INTELLIGENCE_ENABLED=beforeFlag;
   }
+});
+
+test('review distinguishes absent captures from unmatched excerpts without clearing either gate',()=>{
+  const artifacts=[{id:1,kind:'draft',version:1,content:'draft',source_urls:['https://example.org/a','https://example.org/b']}];
+  const result=bundleOf('job',artifacts,[{id:1,url:'https://example.org/b',sha256:'hash',excerpt_found:false}]);
+  assert.ok(result.blockers.includes('source_not_captured:https://example.org/a'));
+  assert.ok(result.blockers.includes('source_excerpt_unmatched:https://example.org/b'));
+  assert.equal(result.publication,'blocked');
 });

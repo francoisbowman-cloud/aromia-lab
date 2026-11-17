@@ -102,3 +102,26 @@ Evidencia:
 Bloqueo real para redacción autónoma: no se identificó proveedor de texto operativo ni presupuesto autorizado. La única variable de entorno coincidente era OPENAI_CLUSTER, que no acredita una API de generación utilizable ni autorización de gasto. Se solicitó proveedor/presupuesto sin pedir claves por chat. No se han consumido créditos ni creado una falsa ejecución autónoma con contenido manual.
 
 NEXT_ACTOR: Code. Con respuesta de proveedor/presupuesto y secretos por canal seguro, implementar router/contador de costes y piloto editorial real hasta aprobación humana; entretanto revisar CI de este lote. Fases audiovisuales y publicación mantienen sus compuertas. No declarar autosuficiencia ni cierre del Master Plan.
+
+
+## Recuperación trazable del backlog — 17-11-2026
+
+- CI de `16162f0d168e5517a89842ff39e494010789843c`: cinco controles ejecutados SUCCESS (persistencia, web, API, código e importador). Persistencia: https://github.com/francoisbowman-cloud/aromia-lab/actions/runs/44114447353. Siete controles SKIPPED no acreditan producción ni QA visual. PR187 abierta en borrador.
+- Script `scripts/intelligence-import-draft.mjs`: recupera un manuscrito de un SHA40 de Git, conserva bytes, autoría y metadatos, añade versión1 y registra procedencia fijada. Solo admite BD localhost *_dev o *_test. Repetir no duplica; contenido diferente exige revisión deliberada. No hereda aprobaciones históricas, no publica. Worker dirigido al expediente evita consumir otros trabajos.
+- Piloto: `drafts/cuando-ya-no-hueles-tu-perfume.md` desde main1619c77, expediente local `11a5aa59-c29f-4587-abb2-157668596f4b`. Dos importaciones conservan identidad, versión1 y SHA256. Evidencia durable: [recibo del piloto](evidence/backlog-pilot.json). El contenido capturado y la BD local son temporales; el manuscrito original sigue versionado en Git.
+- Recuperadas tres fuentes: original fijado, Wikipedia y PMC. Solo el título del original coincide literalmente. Los rótulos de enlaces se importan como extractos candidatos, NO como citas verificadas. Wikipedia/PMC permanecen `source_excerpt_unmatched`. Perfumer & Flavorist y OUP permanecen sin captura por `source_not_allowed`; no se afirma que los servidores estén caídos ni se amplía la allowlist para pasar controles.
+- CLI ahora expone causas sanitizadas de recuperación. Paquete distingue ausencia de captura de extracto no coincidente; ambos bloquean aprobación. Faltan notas de investigación, fact checking, edición, dirección artística, QA y revisión humana. Este piloto recupera trabajo existente; no demuestra generación autónoma.
+- Inventario ejecutado: 100 entradas de agenda, 49 archivos de borrador, 43 entradas cubiertas y57 pendientes. Archivos y cobertura no son métricas equivalentes.
+
+Reproducir después de aplicar024/025/026 a una BD local aislada y compilar API:
+
+```sh
+# Configurar DATABASE_URL de la BD local mediante el entorno.
+node scripts/intelligence-import-draft.mjs drafts/cuando-ya-no-hueles-tu-perfume.md 1619c776560f5d6f9c5948f8092ff5241540048f
+node apps/api/dist/intelligence/cli.js research UUID_DEVUELTO
+node apps/api/dist/intelligence/cli.js review-package UUID_DEVUELTO
+```
+
+Validación local de este lote: build API y seis pruebas de persistencia/fuentes/revisión; reimportación real idempotente; reanudación reutiliza las tres capturas. Sin cambios visuales en este lote. El workflow incluye el importador en sus rutas y valida sintaxis; la prueba de importación real fue local, no se presenta como prueba automatizada de CI.
+
+NEXT_ACTOR: Code. NEXT_ACTION: comprobar CI de este lote y continuar revisión factual del piloto con fuentes permitidas; para generación autónoma implementar proveedor y presupuesto solo al disponer de autorización y secretos seguros. BLOCKERS: proveedor/gasto no resueltos, dos dominios no permitidos, extractos y revisión editorial pendientes, derechos/arte/QA pendientes; OMNI remoto sin validar. No merge, despliegue, publicación ni cambios de OMNI. El Master Plan continúa abierto.

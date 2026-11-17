@@ -15,7 +15,7 @@ async function main() {
       const saved=await store.reviewPackage(arg);
       for(const source of job.payload.sources) {
         if(saved.sources.some(s=>s.url===source.url)) {results.push({url:source.url,status:'already_captured'});continue;}
-        try {results.push(await store.captureSource(arg,source.url));} catch {results.push({url:source.url,status:'retrieval_failed',factualApproval:false});}}
+        try {results.push(await store.captureSource(arg,source.url));} catch(error) {const reason=error instanceof Error && ['source_not_allowed','source_requires_pinned_repository','source_unavailable','source_content_type','source_too_large'].includes(error.message)?error.message:'retrieval_failed';results.push({url:source.url,status:'retrieval_failed',reason,factualApproval:false});}}
       return {results,package:await store.reviewPackage(arg)};
     }
     case 'capture-source': return store.captureSource(arg,file);
