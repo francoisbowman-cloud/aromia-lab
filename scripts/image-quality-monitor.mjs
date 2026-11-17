@@ -1,7 +1,7 @@
 // Read-only quality signals: no paid calls, image generation, approvals or publishing.
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, realpathSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { resolve } from 'node:path';
+import { resolve, relative, isAbsolute, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'csv-parse/sync';
 export function auditImages(products) {
@@ -23,6 +23,25 @@ export function auditImages(products) {
     findings.push({ key: `shared:${createHash('sha256').update(url).digest('hex').slice(0,16)}`, slugs: [...slugs].sort(), reason: 'shared_image_requires_review', url });
   return findings.sort((a,b) => a.key.localeCompare(b.key));
 }
+// Feedback files are repository-controlled, but their asset paths are still untrusted.
+// Never hash/read files outside the public image directory (including symlink escapes).
+export function readFeedbackAsset(root, asset) {
+  if (typeof asset !== 'string' || !/^apps\/web\/public\/[a-zA-Z0-9_./-]+\.(webp|png|jpe?g|avif|gif)$/i.test(asset)) return null;
+  const publicRoot = resolve(root, 'apps/web/public');
+  const requested = resolve(root, asset);
+  const inside = path => path && path !== '..' && !path.startsWith(`..${sep}`) && !isAbsolute(path);
+  if (!inside(relative(publicRoot, requested))) return null;
+  try {
+    const canonicalRoot = realpathSync(publicRoot);
+    const canonicalFile = realpathSync(requested);
+    if (!inside(relative(canonicalRoot, canonicalFile))) return null;
+    const info = statSync(canonicalFile);
+    if (!info.isFile() || info.size > 25 * 1024 * 1024) return null;
+    return readFileSync(canonicalFile);
+  } catch {
+    return null; // Missing or unreadable assets stay "missing"; CI must not access arbitrary paths.
+  }
+}
 export function inspectFeedback(observations, readAsset) {
   return observations.map(item => {
     const bytes = readAsset(item.asset);
@@ -36,6 +55,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const products = input ? JSON.parse(readFileSync(input, 'utf8')) : parse(readFileSync(resolve(root,'PERFUMES_INITIAL_50.csv'),'utf8'), { columns: true, skip_empty_lines: true });
   if (!Array.isArray(products)) throw new Error('Input must be an array of catalog records');
   const ledger = JSON.parse(readFileSync(resolve(root,'docs/intelligence/visual/feedback.json'),'utf8'));
-  const feedback = inspectFeedback(ledger.observations, path => existsSync(resolve(root,path)) ? readFileSync(resolve(root,path)) : null);
+  const feedback = inspectFeedback(ledger.observations, path => readFeedbackAsset(root, path));
   console.log(JSON.stringify({ schemaVersion: 1, input: input ?? 'PERFUMES_INITIAL_50.csv (historical baseline, not live production)', products: products.length, findings: auditImages(products), feedback, publication: 'blocked', limitations: ['Signals do not certify visual identity or image rights.', 'No model calls or automatic image replacements.', 'Changed bytes require a new review, never an inferred approval.'] }, null, 2));
 }
