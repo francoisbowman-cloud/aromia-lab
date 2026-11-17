@@ -60,3 +60,37 @@ test('PostgreSQL opt-in visual review journal is append-only and never grants ap
     await admin.end();
   }
 });
+
+test('private visual-review routes require existing admin auth and explicit opt-in', async()=>{
+  const express=(await import('express')).default;
+  const {adminAuth}=await import('../middleware/adminAuth');
+  const {intelligenceRouter}=await import('../routes/admin/intelligence');
+  const keys=['ADMIN_API_TOKEN','EDITORIAL_REVIEW_TOKEN','INTELLIGENCE_ENABLED','VISUAL_REVIEW_JOURNAL_ENABLED'] as const;
+  const saved=Object.fromEntries(keys.map(key=>[key,process.env[key]]));
+  process.env.ADMIN_API_TOKEN='visual-review-test-admin-token';
+  process.env.EDITORIAL_REVIEW_TOKEN='visual-review-test-editorial-token';
+  process.env.INTELLIGENCE_ENABLED='true';
+  delete process.env.VISUAL_REVIEW_JOURNAL_ENABLED;
+  const app=express();app.use(express.json());app.use('/ops',adminAuth,intelligenceRouter);
+  const server=app.listen(0,'127.0.0.1');
+  await new Promise<void>(resolve=>server.once('listening',resolve));
+  const address=server.address() as {port:number};
+  const url=`http://127.0.0.1:${address.port}/ops/visual-reviews`;
+  try {
+    assert.equal((await fetch(url+'?slug=chance-eau-tendre')).status,401);
+    const auth={authorization:'Bearer visual-review-test-admin-token'};
+    assert.equal((await fetch(url+'?slug=chance-eau-tendre',{headers:auth})).status,503);
+    process.env.VISUAL_REVIEW_JOURNAL_ENABLED='true';
+    assert.equal((await fetch(url,{method:'POST',headers:auth})).status,403);
+    assert.equal((await fetch(url,{method:'POST',headers:{
+      ...auth,'x-editorial-review-token':'wrong-credential'
+    }})).status,403);
+    // Invalid slugs are rejected before any database query.
+    assert.equal((await fetch(url+'?slug=..%2Fsecret',{headers:auth})).status,400);
+    assert.equal((await fetch(url+'?slug=chance-eau-tendre',{headers:{}})).status,401);
+  } finally {
+    server.closeAllConnections();
+    await new Promise<void>(resolve=>server.close(()=>resolve()));
+    for(const key of keys){if(saved[key]===undefined)delete process.env[key];else process.env[key]=saved[key];}
+  }
+});
