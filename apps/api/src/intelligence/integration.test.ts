@@ -86,6 +86,32 @@ test('PostgreSQL: idempotency, concurrency, restart, fencing, cancellation, retr
     assert.equal((await store.reviewPackage(failing.id)).reviewCurrent,false);
     await store.cancel(failing.id);
     await assert.rejects(store.appendArtifact(failing.id,{...artifact,expectedVersion:3}),/job_not_reviewable/);
+    // A worker that crashes or loses its lease must never run past max_attempts.
+    // All lease expiry is simulated in a disposable, isolated PostgreSQL schema.
+    const exhausted = await store.enqueue('lease-exhaustion', brief);
+    let leased = (await store.claim(exhausted.id))!;
+    assert.ok(leased);
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      assert.equal(leased.attempts, attempt);
+      await db.query("UPDATE intelligence_jobs SET lease_until=now()-interval '1 second' WHERE id=$1", [exhausted.id]);
+      const next = await store.claim(exhausted.id);
+      assert.equal(await store.finish(leased, {publication:'blocked'}), false);
+      if (attempt < 3) {
+        assert.ok(next);
+        assert.equal(next.attempts, attempt + 1);
+        assert.notEqual(next.token, leased.token);
+        leased = next;
+      } else {
+        assert.equal(next, undefined);
+      }
+    }
+    const exhaustedDetail = await store.detail(exhausted.id);
+    assert.equal(exhaustedDetail.status, 'failed');
+    assert.equal(exhaustedDetail.attempts, 3);
+    assert.equal(exhaustedDetail.events.filter((e:{event:string})=>e.event==='lease_expired').length, 3);
+    assert.equal(await store.claim(exhausted.id), undefined);
+    assert.equal(await store.retry(exhausted.id), true);
+    assert.equal((await store.claim(exhausted.id))!.attempts, 1);
   } finally { await db.end(); await admin.query(`DROP SCHEMA ${schema} CASCADE`); await admin.end(); }
 });
 
