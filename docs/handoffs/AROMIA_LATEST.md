@@ -1,3 +1,15 @@
+## ChatGPT — Intelligence worker fault isolation · 2026-11-18
+
+- **PR / branch:** #214 draft, `claude/aromia-integration`; RELEASE HOLD. No main merge or deployment.
+- **Last verified CI SHA:** `b1c47f90ab004fd1cf8e7876466123a287a34a9d`. **10 SUCCESS / 6 SKIPPED / 0 FAILURE** workflows; includes isolated browser QA, v2.0, Strict Audit, security audit, Intelligence persistence and integrated Intelligence QA. These results **do not certify newer commits**.
+- **Implementation:** `apps/api/src/intelligence/worker.ts` now catches **only** `validateBrief/prepare` failures as `preparation_failed`. Exceptions from `store.finish` propagate without an incorrect second finish call or false diagnosis of a malformed brief.
+- **Added 3 targeted regression tests:** (1) job ID forwarded to `claim`; (2) DB failure on `finish` is propagated, with exactly one finish call and no false preparation error; (3) claim errors propagate without attempting `finish`. Existing 3 tests retained.
+- **Code commit SHAs:** `4559a80566d05561f6de0aebdb64521a4fbe0235` (worker), `75eb97bd863ce5ff419a6da86c0d2550a17de7a6` (tests).
+- **Validation status:** changes committed directly to integration branch, **new CI pending**; no local API/container execution from ChatGPT.
+- **NEXT ACTION:** read CI for final HEAD; fix any concrete regression; evaluate lease expiry/retry integration test against disposable PostgreSQL, then editorial pilot without publication.
+
+---
+
 ## ChatGPT verification and hotfix — 2026-11-18
 
 - **ACTOR:** ChatGPT (GitHub connector; no local repository execution)
