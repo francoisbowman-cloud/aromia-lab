@@ -24,7 +24,7 @@ Este gate es **Intelligence operativo y persistente**. No basta que el motor com
 
 ## Prueba de aceptación propuesta — entorno aislado
 
-**No ejecutar sobre producción sin autorización separada.** Preparar `*_test` o `*_dev` con PostgreSQL aislado y migraciones exclusivamente de prueba. Bajo entorno de test, configurar `INTELLIGENCE_ENABLED=true` y `INTELLIGENCE_WORKER_ENABLED=true` y ejecutar:
+**No ejecutar sobre producción sin autorización separada.** En `NODE_ENV=production`, el comando requiere además `AROMIA_INTELLIGENCE_PRODUCTION_RUNTIME_APPROVED=true`. **La mera presencia de esta bandera no constituye autorización humana**: exige aprobación previa y verificable del Publisher, plan de rollback y entorno correcto. Preparar `*_test` o `*_dev` con PostgreSQL aislado y migraciones exclusivamente de prueba. Bajo entorno de test, configurar `INTELLIGENCE_ENABLED=true` y `INTELLIGENCE_WORKER_ENABLED=true` y ejecutar:
 
 ```bash
 npm --prefix apps/api run build
