@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/aromia-browser"
           npm install --prefix "$RUNNER_TEMP/aromia-browser" --no-save --package-lock=false playwright@1.56.1
-          "$RUNNER_TEMP/aromia-browser/node_modules/.bin/playwright" install --with-deps chromium
+          "$RUNNER_TEMP/aromia-browser/node_modules/.bin/playwright" install chromium
       - name: Execute isolated admin browser QA
         env:
           PLAYWRIGHT_PACKAGE_PATH: ${{ runner.temp }}/aromia-browser/node_modules/playwright
