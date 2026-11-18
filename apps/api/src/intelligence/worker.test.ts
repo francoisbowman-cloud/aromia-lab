@@ -100,3 +100,26 @@ test('worker propagates claim failures without trying to finish a job', async ()
   await assert.rejects(runOnce(store), error => error === claimError);
   assert.equal(finishCalled, false);
 });
+
+test('worker fails closed when a stale lease prevents committing a prepared result', async () => {
+  let finishes = 0;
+  const store = {
+    claim: async () => validJob,
+    finish: async () => { finishes += 1; return false; },
+  } as unknown as JobStore;
+  await assert.rejects(runOnce(store), /job_lease_lost/);
+  assert.equal(finishes, 1);
+});
+
+test('worker fails closed when a stale lease prevents recording invalid input', async () => {
+  const errors: Array<string | undefined> = [];
+  const store = {
+    claim: async () => ({...validJob, payload: null}),
+    finish: async (_job: Job, _result: unknown, error?: string) => {
+      errors.push(error);
+      return false;
+    },
+  } as unknown as JobStore;
+  await assert.rejects(runOnce(store), /job_lease_lost/);
+  assert.deepEqual(errors, ['preparation_failed']);
+});
