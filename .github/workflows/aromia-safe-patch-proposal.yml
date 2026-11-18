@@ -30,7 +30,7 @@ jobs:
       - name: Apply narrowly scoped security-compatible updates
         run: |
           npm update --prefix apps/api express multer csv-parse
-          npm install --prefix apps/web --save-exact sharp@0.35.5 @tiptap/extension-image@3.34.0 @tiptap/react@3.34.0 @tiptap/starter-kit@3.34.0 @tiptap/pm@3.34.0
+          npm install --prefix apps/web --save-exact sharp@0.35.5 @tiptap/core@3.34.0 @tiptap/extension-image@3.34.0 @tiptap/react@3.34.0 @tiptap/starter-kit@3.34.0 @tiptap/pm@3.34.0
           npm update --prefix apps/web postcss source-map-js prosemirror-view
       - name: Verify updates before any commit
         run: |
