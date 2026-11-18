@@ -51,8 +51,13 @@ Investigate `postcss` and `source-map-js` using `npm explain`/`npm ls`, identify
 
 No package upgrades have been performed by this document. Do not confuse this audit with a completed security remediation. Project completion remains 1/10 gates until acceptance.
 
-## Automated disposable compatibility rehearsal
+## Automated disposable compatibility rehearsal — scoped after diagnostics
 
-`.github/workflows/aromia-security-rehearsal.yml` tests an **ephemeral**, explicitly pinned candidate graph on a GitHub runner: Next 15.5.28 / React 19.2.3 / Sharp 0.35.5 / Tiptap 3.32.1. It recomputes the package-lock only in the runner, then runs web tests, lint, TS, Next build, real HTTP smoke and a fresh production-dependency audit. An artifact contains the disposable package manifests for seven days.
+An initial **disposable** trial with Next 15.5.28 / React 19.2.3 / Sharp 0.35.5 / Tiptap 3.32.1 reproduced framework migration requirements:
+- `getStoryMarkdown` test needed to accept Next's supported 404 digest variants; regression test fixed.
+- `adminApiProxy` cookie retrieval needed `await cookies()`; the magazine cover ref needed a React 19-compatible nullable type; both fixes were compatible with the existing Next 14 code.
+- Next 15.5.28 compiled application code, but the optimized build rejected page `params: {slug:string}` because Next 15 expects async `params`. The **major upgrade remains blocked** until a dedicated route-params migration is complete; no Next/React package upgrades are committed.
 
-A rehearsal **does not change the repository, merge anything, or approve production**. CI can reveal unsupported peer versions, missing packages, application incompatibilities or remaining advisories. Never copy a generated lockfile into the integration candidate unless the full combined check and human diff/rights review validate it.
+The next `.github/workflows/aromia-security-rehearsal.yml` run narrows scope to **Sharp 0.35.5 and aligned Tiptap 3.32.1 only**, keeping Next 14 and React 18 unchanged. It regenerates a temporary lockfile and runs tests/lint/types/build, signed-session HTTP smoke and a fresh audit. A GitHub Actions artifact retains the temporary package manifests for seven days, but **nothing is pushed to the repo** by the rehearsal.
+
+Even if Sharp/Tiptap trial passes, the critical unpatched Next 14 advisory remains a release blocker. Any permanent dependency patch must update package.json and package-lock.json together in a separate reviewed branch, with exact SHA and no forced peer resolutions.
