@@ -1,5 +1,8 @@
 # Aromia — instrucciones para Claude Code y agentes de desarrollo
 
+> **FUENTE OPERATIVA ÚNICA (2026-11-18):** [`AROMIA_MASTER_HANDOFF.md`](AROMIA_MASTER_HANDOFF.md). Esta instrucción **prevalece** sobre referencias de continuación de Codex o handoffs anteriores en este archivo. Claude Code es el actor único, puede fusionar ramas internas verificadas en `claude/aromia-integration`; no puede fusionar a `main`, desplegar ni publicar sin aprobación. Las fuentes editoriales y contratos de identidad conservan su autoridad específica.
+
+
 > **Inicio obligatorio:** Claude Code es el único actor activo. Leer primero [CLAUDE_CODE_HANDOFF.md](CLAUDE_CODE_HANDOFF.md), especialmente su **sección 0 de autorización actualizada**; leer después [CODEX_HANDOFF.md](CODEX_HANDOFF.md) como historial técnico. El Publisher **autoriza merges entre ramas de desarrollo**, sobre una sola rama `claude/aromia-integration`, pero **NO merge a `main`, deploy ni publicación** sin aprobación explícita. No usar la parte histórica de `AROMIA_CURRENT_STATE.md` como estado actual sin reconciliar GitHub.
 
 **Misión:** desarrollar de forma autónoma Aromia como revista cultural/editorial de perfumería — no rediseñarla como ecommerce. Implementar, probar, corregir y registrar progreso verificable en GitHub; no limitarse a informes. Continuar secuencialmente sin pedir al Publisher que escriba "Siguiente" por cada bloque.
