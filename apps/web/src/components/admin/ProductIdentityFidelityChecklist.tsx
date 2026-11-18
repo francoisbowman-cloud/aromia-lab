@@ -31,6 +31,7 @@ export default function ProductIdentityFidelityChecklist({slug,imageSha256}:{slu
     <h2 id="identity-fidelity-title" className="text-xl font-semibold">Fidelidad de identidad del producto</h2>
     <p className="mt-2 text-sm text-stone-700"><strong>La imagen debe representar el producto real.</strong> Un resultado espectacular nunca justifica etiquetas, textos, logotipos, geometrías, colores, proporciones ni rasgos inventados o incorrectos.</p>
     <p className="mt-2 break-all text-xs text-stone-600">Producto: {slug} · SHA-256 inspeccionado: {imageSha256}</p>
+    <p className="mt-2 text-xs font-medium text-amber-900">No se autoriza ninguna sustitución ni publicación desde esta lista. Las coincidencias declaradas requieren verificación independiente.</p>
     <form className="mt-4 space-y-3" onSubmit={assess}>
       <label className="block text-sm font-medium">Referencia maestra del producto real
         <input value={reference} maxLength={1500} onChange={event=>{setReference(event.target.value);setResult(null);}}
