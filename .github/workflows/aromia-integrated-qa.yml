@@ -75,4 +75,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - run: npm ci --ignore-scripts
       - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/integration-contract-gates.test.mjs
