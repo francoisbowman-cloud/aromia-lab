@@ -1,30 +1,27 @@
-// Isolated SSR component smoke. This is NOT interactive browser/mobile QA.
+// Static component contract checks: do not claim interactive browser or SSR coverage.
+// Actual signed-session + API proxy integration is tested separately.
 import {expect,it} from "vitest";
-import {createElement} from "react";
-import {renderToStaticMarkup} from "react-dom/server";
-import ProductIdentityFidelityChecklist from "@/components/admin/ProductIdentityFidelityChecklist";
-import VisualDecisionTimeline from "@/components/admin/VisualDecisionTimeline";
-import VisualReplacementDryRun from "@/components/admin/VisualReplacementDryRun";
-it("renders all eight required fidelity checks with publication safeguards",()=>{
-  const html=renderToStaticMarkup(createElement(ProductIdentityFidelityChecklist,{
-    slug:"chance-eau-tendre",imageSha256:"a".repeat(64)
-  }));
-  for(const label of ["Etiqueta y disposición","Textos legibles","Logotipos y marcas",
-    "Geometría del producto","Colores","Dimensiones y proporciones",
-    "Elementos distintivos","Identidad de variante"])expect(html).toContain(label);
-  expect(html).toContain("No se autoriza");
+import {readFileSync} from "node:fs";
+const src=(name:string)=>readFileSync(new URL(`../components/admin/${name}`,import.meta.url),"utf8");
+it("keeps all eight product-identity criteria in the review UI",()=>{
+  const markup=src("ProductIdentityFidelityChecklist.tsx");
+  expect(markup).toContain("PRODUCT_IDENTITY_FIELDS.map");
+  expect(markup).toContain("Sin comprobar");
+  expect(markup).toContain("Diferencia detectada");
+  expect(markup).toContain("No se autoriza");
+  expect(markup).toContain("assessProductIdentityReview");
 });
-it("shows non-authorizing decision timeline affordance",()=>{
-  const html=renderToStaticMarkup(createElement(VisualDecisionTimeline,{observationId:51}));
-  expect(html).toContain("Ver decisiones supervisadas");
-  // No decisions are fetched or authorized during rendering.
-  expect(html).not.toContain("Aprobar imagen");
+it("offers only reading and refreshing the decision history, not a decision approval button",()=>{
+  const markup=src("VisualDecisionTimeline.tsx");
+  expect(markup).toContain("Ver decisiones supervisadas");
+  expect(markup).toContain("adminRequest<ResponseBody>");
+  expect(markup).toContain("applied!==false");
+  expect(markup).not.toContain("Aprobar imagen");
 });
-it("renders replacement as a simulation rather than an apply action",()=>{
-  const html=renderToStaticMarkup(createElement(VisualReplacementDryRun,{
-    slug:"chance-eau-tendre",currentUrl:"/editorial-v1/current.webp"
-  }));
-  expect(html).toContain("Simular sustitución, sin aplicar");
-  expect(html).toContain("No cambia fotografías");
-  expect(html).not.toContain("Aplicar reemplazo");
+it("labels visual replacement a dry-run and requires blocked status",()=>{
+  const markup=src("VisualReplacementDryRun.tsx");
+  expect(markup).toContain("Simular sustitución, sin aplicar");
+  expect(markup).toContain('result.outcome!=="dry_run_only"');
+  expect(markup).toContain('result.publication!=="blocked"');
+  expect(markup).not.toContain("Aplicar reemplazo");
 });
