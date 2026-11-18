@@ -10,6 +10,15 @@ export function parseBatchSize(value: string | undefined): number {
   return Number(value);
 }
 
+export function requireBatchWorkerEnabled(flags: {
+  INTELLIGENCE_ENABLED?: string;
+  INTELLIGENCE_WORKER_ENABLED?: string;
+}): void {
+  if (flags.INTELLIGENCE_ENABLED !== 'true' || flags.INTELLIGENCE_WORKER_ENABLED !== 'true') {
+    throw new Error('worker_not_enabled');
+  }
+}
+
 export type BatchResult = {
   attempted: number;
   processed: number;
