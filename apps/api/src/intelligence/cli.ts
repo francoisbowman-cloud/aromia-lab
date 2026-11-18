@@ -9,7 +9,12 @@ async function main() {
   const [command,arg,file] = process.argv.slice(2);
   switch(command) {
     case 'enqueue': return store.enqueue(arg,JSON.parse(readFileSync(file,'utf8')));
-    case 'work': return { processed: await runOnce(store) };
+    case 'work': {
+      // Preserve local one-job tooling, but fail closed in production unless
+      // the same operational and Publisher approval gates are present.
+      if (process.env.NODE_ENV === 'production') requireBatchWorkerEnabled(process.env);
+      return { processed: await runOnce(store) };
+    }
     // Opt-in one-shot invocation by an external scheduler; no self-scheduling.
     case 'work-batch': {
       requireBatchWorkerEnabled(process.env);
