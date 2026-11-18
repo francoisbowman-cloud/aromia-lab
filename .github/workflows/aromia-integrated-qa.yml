@@ -20,6 +20,9 @@ on:
       - 'scripts/*image*'
       - 'scripts/integration-contract-gates.test.mjs'
       - 'scripts/qa/admin-runtime-smoke.mjs'
+      - 'scripts/qa/summarize-dependency-audit.mjs'
+      - 'apps/web/package-lock.json'
+      - 'apps/web/package.json'
       - '.github/workflows/aromia-integrated-qa.yml'
   workflow_dispatch:
 permissions:
@@ -81,3 +84,24 @@ jobs:
           node-version: '20'
       - run: npm ci --ignore-scripts
       - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/integration-contract-gates.test.mjs
+
+  production-dependency-risk:
+    name: Production dependency advisory gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci --ignore-scripts
+      - name: Capture production npm advisories
+        run: |
+          set +e
+          npm audit --json --omit=dev > "$RUNNER_TEMP/aromia-production-audit.json"
+          set -e
+          node ../../scripts/qa/summarize-dependency-audit.mjs "$RUNNER_TEMP/aromia-production-audit.json" gate
