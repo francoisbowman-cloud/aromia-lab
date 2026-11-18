@@ -27,11 +27,11 @@ test('worker remains idle when no job can be claimed', async () => {
 });
 
 test('worker prepares a claimed brief without granting editorial approval or spending', async () => {
-  let finished: { job: Job; result: any; errorCode?: string } | undefined;
+  const finished: Array<{ job: Job; result: any; errorCode?: string }> = [];
   const store = {
     claim: async () => validJob,
     finish: async (job: Job, result: unknown, errorCode?: string) => {
-      finished = { job, result, errorCode };
+      finished.push({ job, result, errorCode });
       return true;
     },
   } as unknown as JobStore;
@@ -39,24 +39,24 @@ test('worker prepares a claimed brief without granting editorial approval or spe
   assert.equal(await runOnce(store, validJob.id), true);
   assert.ok(finished);
   assert.equal(finished.job.token, validJob.token);
-  assert.equal(finished.errorCode, undefined);
-  assert.equal(finished.result.publication, 'blocked');
-  assert.equal(finished.result.checks.factual, 'pending_human');
-  assert.equal(finished.result.checks.rights, 'pending_human');
-  assert.equal(finished.result.providerCostMicros, 0);
-  assert.equal(finished.result.sources[0].verified, false);
+  assert.equal(finished[0].errorCode, undefined);
+  assert.equal(finished[0].result.publication, 'blocked');
+  assert.equal(finished[0].result.checks.factual, 'pending_human');
+  assert.equal(finished[0].result.checks.rights, 'pending_human');
+  assert.equal(finished[0].result.providerCostMicros, 0);
+  assert.equal(finished[0].result.sources[0].verified, false);
 });
 
 test('worker marks malformed briefs as failed without publishing or silently succeeding', async () => {
-  let recorded: { result: unknown; errorCode?: string } | undefined;
+  const recorded: Array<{ result: unknown; errorCode?: string }> = [];
   const store = {
     claim: async () => ({ ...validJob, payload: { title: 'missing question', sources: [] } }),
     finish: async (_job: Job, result: unknown, errorCode?: string) => {
-      recorded = { result, errorCode };
+      recorded.push({ result, errorCode });
       return true;
     },
   } as unknown as JobStore;
 
   assert.equal(await runOnce(store), true);
-  assert.deepEqual(recorded, { result: null, errorCode: 'preparation_failed' });
+  assert.deepEqual(recorded, [{ result: null, errorCode: 'preparation_failed' }]);
 });
