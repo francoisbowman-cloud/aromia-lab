@@ -1,10 +1,11 @@
 import {describe,it,expect} from "vitest";
 import {PRODUCT_IDENTITY_FIELDS,assessProductIdentityReview} from "./productIdentityFidelity";
-const fixture=()=>({
+import type {ProductIdentityReview} from "./productIdentityFidelity";
+const fixture=():ProductIdentityReview=>({
   productSlug:"sample-edp",imageSha256:"a".repeat(64),
   authoritativeProductReference:"Manufacturer product page or archived authorized packshot, to be independently checked",
   observations:PRODUCT_IDENTITY_FIELDS.map(f=>({
-    field:f.id,state:"claimed_match" as const,
+    field:f.id,state:"claimed_match",
     note:"Operator asserts that the detail matches the exact reference",
     reference:"https://example.org/reference"
   }))
