@@ -40,3 +40,12 @@ The goal of this review surface is to prevent treating 18 individually green sta
 5. Explicit Publisher authorization for merging, enabling migrations, deploying and publishing **separately**.
 
 No newly selected YouTube source was introduced. The channel registry remains Publisher-curated only.
+
+## Confirmed runtime security findings — audit of merged candidate
+
+The dedicated runtime-only audit in [GitHub Actions run 44228654600](https://github.com/francoisbowman-cloud/aromia-lab/actions/runs/44228654600) found:
+- **Web:** 1 critical, 5 high, 26 moderate affected packages. Direct critical `next` (currently declared 14.2.35), high `sharp` and transitive `@tiptap/core`, `postcss`, `prosemirror-view`, `source-map-js`. npm recommends major `next@16.4.6` for its advisory, which **cannot** be treated as a compatibility-safe patch.
+- **API:** 1 critical, 3 high, 4 moderate; critical `proxy-addr`; high `body-parser`, `js-yaml`, `multer`. Reported packages and fixability may change when the registry updates.
+- Both security jobs fail intentionally. This is a **release hold**, not a failed application test. The advisories do not establish that a specific exploit is reachable but cannot be silently dismissed.
+
+Tracking issue: [#207 — Security release block](https://github.com/francoisbowman-cloud/aromia-lab/issues/207). Keep API/Web package-lock changes in narrow reviewed remediation PRs and repeat browser, PG and identity checks after any changes. Do not auto-upgrade Next across major versions or run `npm audit fix --force` without a migration plan.
