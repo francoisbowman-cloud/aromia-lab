@@ -17,7 +17,8 @@ const PASSWORD='aromia-qa-browser-password-not-for-production';
 const COOKIE_SECRET='aromia-qa-browser-long-fixture-cookie-secret-not-for-production';
 const ADMIN_TOKEN='aromia-qa-browser-test-bearer';
 const WEB_PORT=3107, API_PORT=4407;
-const base=`http://127.0.0.1:${WEB_PORT}`;
+// Chrome permits Secure cookies for the special localhost hostname in an isolated HTTP fixture.
+const base=`http://localhost:${WEB_PORT}`;
 const state={apiCalls:0,writeCalls:0,credentialLeak:false};
 
 const fakeApi=createServer((req,res)=>{
@@ -74,7 +75,7 @@ const report=(name,detail)=>process.stdout.write(`PASS ${name}${detail?` — ${d
     await sharp({create:{width:40,height:80,channels:3,background:{r:32,g:101,b:126}}})
       .png().toFile(join(TMP_IMG,'candidate.png'));
     await listen(fakeApi,API_PORT);
-    server=spawn(process.execPath,[join(WEB,'node_modules/next/dist/bin/next'),'start','-p',String(WEB_PORT),'--hostname','127.0.0.1'],{
+    server=spawn(process.execPath,[join(WEB,'node_modules/next/dist/bin/next'),'start','-p',String(WEB_PORT),'--hostname','localhost'],{
       cwd:WEB,env:{...process.env,NODE_ENV:'production',ADMIN_PASSWORD:PASSWORD,
         ADMIN_SESSION_SECRET:COOKIE_SECRET,ADMIN_API_TOKEN:ADMIN_TOKEN,
         API_URL:`http://127.0.0.1:${API_PORT}`,VISUAL_EVIDENCE_INSPECTION_ENABLED:'true',
@@ -99,7 +100,10 @@ const report=(name,detail)=>process.stdout.write(`PASS ${name}${detail?` — ${d
     await page.getByLabel('Contraseña').fill(PASSWORD);
     await page.getByRole('button',{name:'Ingresar'}).click();
     await page.waitForURL(/\/admin(?:\?|$)/);
-    report('Signed admin login and redirect');
+    const signedCookies=await page.context().cookies(base);
+    assert.ok(signedCookies.some(cookie=>cookie.name==='admin_session'&&cookie.httpOnly&&cookie.secure),
+      'A signed, Secure, HttpOnly admin session cookie must survive the browser login');
+    report('Signed admin login, Secure cookie and redirect');
 
     await page.goto(`${base}/admin/progreso`);
     await page.getByRole('heading',{name:'Estado de Aromia'}).waitFor();
