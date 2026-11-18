@@ -6,6 +6,14 @@
 **Actor siguiente:** **Codex / Code**.  
 **Instrucción:** ejecutar autónomamente los bloques elegibles, corregir fallos, mantener checklists y entregar código probado y PRs, **sin publicar**. No es una solicitud para volver a conceptualizar el producto.
 
+## Checkpoint Codex — 18-11-2026, bloque A
+
+Base6933ba4 (#209); rama `codex/aromia-tiptap-security-20261118`. GitHub reconfirmado: #206 ee66f06 y #208 fb85bc0 abiertas/draft, funcionales verdes y runtime web FAIL; #209 abierta/draft sin checks. Familia completa29 paquetes Tiptap a3.34.0; peers exactos coherentes. Primer npm install falló por extensiones3.28 bloqueadas; se retiraron exclusivamente entradas Tiptap del lock para resolverlas juntas con npm install normal. Sin force/legacy-peer-deps.
+
+Advisories GHSA-cp6q-959q-f8rh y GHSA-j95f-988m-3j2f fuera de rango afectado; test mergeAttributes con __proto__/onerror/onclick y ciclo real Editor HTML→imagen/crédito→rehidratación.127 tests, lint y tipos pasan. npm audit runtime tras cambio:0 moderadas,1 alta,1 crítica (Next/PostCSS pendientes). No es exploit demostrado de producción ni release autorizado. Build optimizado y smoke Chromium aislado pasan (login, sesión, historial, identidad bloqueada, dry-run, sin escrituras y390/1440px). Se corrigió selector de error de login para excluir anunciador Next y se usa localhost para cookie Secure en Chromium local. próximo bloque B en rama separada desde este checkpoint. Material temporal /tmp/aromia-tiptap-*. El workflow navegador ahora se dispara también por cambios del manifiesto/lock web.
+
+NEXT_ACTOR: Codex. NEXT_ACTION: concluir QA A y abrir draft; ejecutar migración acotada Next15.5.29 si audit y compatibilidad la respaldan. AUTHORITY: NO_MERGE / NO_DEPLOY / NO_PUBLISH / NO_PRODUCTION_WRITES.
+
 ## 0. DÓNDE EMPEZAR — VERIFICAR EN VIVO
 
 Esta es una fotografía documentada, **no telemetría en tiempo real**. Verificar siempre que la información sigue vigente antes de tocar código.
