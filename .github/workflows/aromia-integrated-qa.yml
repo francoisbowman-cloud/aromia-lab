@@ -12,6 +12,7 @@ on:
       - 'apps/web/src/components/admin/**'
       - 'apps/web/src/app/api/admin/**'
       - 'apps/web/src/lib/adminApiProxy*'
+      - 'apps/web/src/lib/adminVisualFlow.integration.test.ts'
       - 'apps/web/src/lib/visual*'
       - 'apps/web/src/lib/productIdentityFidelity*'
       - 'apps/web/src/lib/projectProgress*'
