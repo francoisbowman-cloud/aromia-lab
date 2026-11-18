@@ -10,7 +10,7 @@ export type ProjectGate = {
   next: string;
 };
 
-export const PROJECT_PROGRESS_SNAPSHOT = "2026-11-17";
+export const PROJECT_PROGRESS_SNAPSHOT = "2026-11-18";
 export const PROJECT_GATES: readonly ProjectGate[] = [
   {
     id: "repository-baseline",
@@ -24,9 +24,9 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "intelligence-runtime",
     title: "Intelligence operativo y persistente",
     status: "in_progress",
-    evidence: "PR #187: jobs, versiones y revisión en rama borrador; runtime de producción sin validar.",
-    href: "https://github.com/francoisbowman-cloud/aromia-lab/pull/187",
-    next: "Validar operación independiente de sesión, scheduler, permisos y observabilidad."
+    evidence: "PR #214 (draft): PostgreSQL aislado, leases, retries, auditoría y navegador probados; batch finito opt-in y pruebas de reconexión añadidos. Runtime autorizado y scheduler persistente no certificados.",
+    href: "https://github.com/francoisbowman-cloud/aromia-lab/pull/214",
+    next: "Probar el batch de CI nuevo, demostrar scheduler, permisos, alertas, recuperación y continuidad en runtime autorizado; certificar solo con evidencia y autorización."
   },
   {
     id: "editorial-pilot",
