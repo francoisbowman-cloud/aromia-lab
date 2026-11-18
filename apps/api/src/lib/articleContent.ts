@@ -32,6 +32,22 @@ export function synchronizeStoryTitle(source: string, title: string): string {
     .replace(/^# [^\r\n]+\r?$/m, `# ${title}`);
 }
 
+const AMAZON_HOST = /(^|\.)amazon\.(com|es|mx|ca|de|fr|it|co\.uk|com\.mx|com\.br|com\.au|co\.jp|in|nl|se|pl|sg|ae|sa|com\.tr|eg)$/;
+const AMAZON_SHORT_HOSTS = new Set(["amzn.to", "amzn.eu", "a.co"]);
+
+/** Amazon links are paid placements: they must carry sponsored/nofollow regardless of editor input. */
+export function isAmazonAffiliateHref(href: string | undefined): boolean {
+  if (!href) return false;
+  try {
+    const url = new URL(href);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return false;
+    const host = url.hostname.toLowerCase();
+    return AMAZON_HOST.test(host) || AMAZON_SHORT_HOSTS.has(host);
+  } catch {
+    return false;
+  }
+}
+
 export function publicArticleHtml(html: string | null): string | null {
   if (!html) return html;
   return sanitizeHtml(html, {
@@ -40,6 +56,11 @@ export function publicArticleHtml(html: string | null): string | null {
     allowedSchemes: ["http", "https", "mailto"],
     allowedSchemesByTag: { img: ["http", "https"] },
     allowProtocolRelative: false,
-    transformTags: { a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }), img: sanitizeHtml.simpleTransform("img", { loading: "lazy" }) },
+    transformTags: {
+      a: (tagName, attribs) => ({
+        tagName,
+        attribs: { ...attribs, rel: isAmazonAffiliateHref(attribs.href) ? "sponsored nofollow noopener noreferrer" : "noopener noreferrer" },
+      }),
+      img: sanitizeHtml.simpleTransform("img", { loading: "lazy" }) },
   });
 }
