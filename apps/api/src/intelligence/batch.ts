@@ -60,3 +60,37 @@ export async function runBoundedBatch(
     providers: 'disabled'
   };
 }
+
+
+// A bounded invocation can be observed without exposing job payloads or
+// changing its processing semantics. Metrics do not grant runtime approval.
+export type BatchTelemetry = {
+  attempted: number;
+  processed: number;
+  idle: boolean;
+  durationMs: number;
+  publication: 'blocked';
+  providers: 'disabled';
+};
+
+export async function runObservedBatch(
+  store: JobStore,
+  size: number,
+  options: {
+    processJob?: (store: JobStore) => Promise<boolean>;
+    now?: () => number;
+  } = {}
+): Promise<BatchTelemetry> {
+  // Validate before sampling or invoking a worker.
+  if (!Number.isInteger(size) || size < 1 || size > 25) {
+    throw new Error('invalid_batch_size');
+  }
+  const now = options.now ?? Date.now;
+  const started = now();
+  const result = await runBoundedBatch(store, size, options.processJob ?? runOnce);
+  const elapsed = now() - started;
+  return {
+    ...result,
+    durationMs: Number.isFinite(elapsed) ? Math.max(0, Math.round(elapsed)) : 0,
+  };
+}
