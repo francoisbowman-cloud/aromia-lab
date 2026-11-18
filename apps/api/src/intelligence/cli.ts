@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { pool } from '../db/pool';
 import { JobStore } from './store';
 import { runOnce } from './worker';
-import { parseBatchSize, requireBatchWorkerEnabled, runObservedBatch } from './batch';
+import { parseBatchSize, requireBatchWorkerEnabled, runObservedBatch, classifyBatchFailure } from './batch';
 async function main() {
   const store = new JobStore(pool);
   const [command,arg,file] = process.argv.slice(2);
@@ -41,4 +41,7 @@ async function main() {
     default: throw new Error('Usage: intelligence enqueue KEY FILE | work | work-batch N (1..25, explicit opt-in) | list | detail/cancel/retry UUID');
   }
 }
-main().then(v=>console.log(JSON.stringify(v,null,2))).catch(()=>{console.error('Operation failed; check arguments, database and migration.');process.exitCode=1;}).finally(()=>pool.end());
+main().then(v=>console.log(JSON.stringify(v,null,2))).catch(error=>{
+  console.error(JSON.stringify({ status: 'failed', code: classifyBatchFailure(error), publication: 'blocked' }));
+  process.exitCode=1;
+}).finally(()=>pool.end());

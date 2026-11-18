@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { JobStore } from './store';
-import { parseBatchSize, requireBatchWorkerEnabled, runBoundedBatch, runObservedBatch } from './batch';
+import { parseBatchSize, requireBatchWorkerEnabled, runBoundedBatch, runObservedBatch, classifyBatchFailure } from './batch';
 
 const stub = {} as JobStore;
 
@@ -121,4 +121,13 @@ test('observed batch propagates worker errors without fabricating completion met
   await assert.rejects(runObservedBatch(stub, 2, {
     processJob: async () => { throw failure; },
   }), error => error === failure);
+});
+
+test('failure classification reveals only allowlisted operational codes', () => {
+  for (const code of ['invalid_batch_size', 'worker_not_enabled', 'production_worker_not_approved', 'job_lease_lost']) {
+    assert.equal(classifyBatchFailure(new Error(code)), code);
+  }
+  assert.equal(classifyBatchFailure(new Error('password=secret database failure')), 'worker_execution_failed');
+  assert.equal(classifyBatchFailure({ message: 'job_lease_lost' }), 'worker_execution_failed');
+  assert.equal(classifyBatchFailure(null), 'worker_execution_failed');
 });

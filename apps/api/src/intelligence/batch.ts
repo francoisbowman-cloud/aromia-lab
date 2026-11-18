@@ -94,3 +94,13 @@ export async function runObservedBatch(
     durationMs: Number.isFinite(elapsed) ? Math.max(0, Math.round(elapsed)) : 0,
   };
 }
+
+// Stable, non-sensitive failure categories for scheduler logs and alerts.
+// Never log arbitrary Error.message: database/provider errors may contain secrets.
+export function classifyBatchFailure(error: unknown): string {
+  const known = new Set([
+    'invalid_batch_size', 'worker_not_enabled', 'production_worker_not_approved',
+    'job_lease_lost',
+  ]);
+  return error instanceof Error && known.has(error.message) ? error.message : 'worker_execution_failed';
+}
