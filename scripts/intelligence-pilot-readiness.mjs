@@ -1,5 +1,5 @@
 // Read-only editorial-pilot evidence assessment. No source fetching, DB, model,
- // publication, rights approval or paid resources.
+// publication, rights approval or paid resources.
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -114,9 +114,13 @@ export function renderPilotReport(result) {
   ].join('\n');
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === fileURLToPath(new URL('file://' + process.argv[1]))) {
-  const data = JSON.parse(readFileSync(process.argv[2] || defaultEvidence, 'utf8'));
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const args = process.argv.slice(2);
+  if (args.some(arg => arg.startsWith('--') && arg !== '--json') || args.filter(arg => !arg.startsWith('--')).length > 1) {
+    throw new Error('Usage: node scripts/intelligence-pilot-readiness.mjs [evidence.json] [--json]');
+  }
+  const data = JSON.parse(readFileSync(args.find(arg => !arg.startsWith('--')) || defaultEvidence, 'utf8'));
   const report = assessEditorialPilot(data);
-  const mode = process.argv.includes('--json') ? 'json' : 'markdown';
+  const mode = args.includes('--json') ? 'json' : 'markdown';
   process.stdout.write(mode === 'json' ? JSON.stringify(report, null, 2) + '\n' : renderPilotReport(report));
 }
