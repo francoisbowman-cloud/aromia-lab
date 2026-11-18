@@ -24,12 +24,11 @@ jobs:
           node-version: '20'
           cache: npm
           cache-dependency-path: apps/web/package-lock.json
-      - name: Recompute ephemeral package and lockfile with patched candidates
+      - name: Recompute a clean disposable peer dependency graph
         run: |
-          npm install --package-lock-only --save-exact --ignore-scripts --no-audit --no-fund \
-            next@15.5.28 react@19.2.3 react-dom@19.2.3 sharp@0.35.5 \
-            @tiptap/core@3.32.1 @tiptap/react@3.32.1 @tiptap/pm@3.32.1 \
-            @tiptap/starter-kit@3.32.1 @tiptap/extension-image@3.32.1
+          node -e 'const fs=require("node:fs");const p=JSON.parse(fs.readFileSync("package.json","utf8"));for(const [k,v] of Object.entries({"next":"15.5.28","react":"19.2.3","react-dom":"19.2.3","sharp":"0.35.5","@tiptap/core":"3.32.1","@tiptap/react":"3.32.1","@tiptap/pm":"3.32.1","@tiptap/starter-kit":"3.32.1","@tiptap/extension-image":"3.32.1"}))p.dependencies[k]=v;p.devDependencies["@types/react"]="^19";p.devDependencies["@types/react-dom"]="^19";fs.writeFileSync("package.json",JSON.stringify(p,null,2)+"\\n")'
+          rm package-lock.json
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
       - run: npm ci
       - run: npm test
       - run: npm run lint
