@@ -16,7 +16,7 @@
     "lint": "eslint \"src/**/*.ts\"",
     "test:content": "tsx --test src/lib/articleContent.test.ts",
     "intelligence": "tsx src/intelligence/cli.ts",
-    "test:intelligence": "tsx --test src/intelligence/integration.test.ts src/intelligence/sources.test.ts src/intelligence/visualReviewJournal.test.ts src/intelligence/visualReviewDecisions.test.ts src/intelligence/visualReviewDecisionRoutes.test.ts src/db/migrationPolicy.test.ts src/intelligence/runtimeDependencyGate.test.ts"
+    "test:intelligence": "tsx --test src/intelligence/integration.test.ts src/intelligence/sources.test.ts src/intelligence/visualReviewJournal.test.ts src/intelligence/visualReviewDecisions.test.ts src/intelligence/visualReviewDecisionRoutes.test.ts src/db/migrationPolicy.test.ts src/intelligence/runtimeDependencyGate.test.ts src/intelligence/worker.test.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
