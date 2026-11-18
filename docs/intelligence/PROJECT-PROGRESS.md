@@ -22,3 +22,18 @@ The private `/admin/progreso` page also has a **live read-only PR status panel**
 The server endpoint requires an existing signed admin session and server-side `ADMIN_API_TOKEN`. If the repository is private or anonymous API access is limited, configure the **server-only** `GITHUB_PROGRESS_TOKEN` with minimum read-only repository permission; never expose it to client JS or an artifact. Do not grant write or merge privileges to this token. If GitHub is inaccessible or responds unexpectedly, the page reports that the feed is unavailable and **does not** manufacture success or change the local snapshot.
 
 The feed is not an Actions CI verifier and does not query deployments, Railway, product photos, image licensing or publishing rights. The source-controlled milestone snapshot remains the authority for declared *closed gates* until evidence is reviewed and updated. No automation may promote gate status solely because a PR has merged.
+
+## Continuidad de bloques largos — 18 de noviembre de 2026
+
+**Estado oficial sin cambios:** **1/10 hitos certificados (10%)**. Esta barra mide exclusivamente gates formalmente cerrados, no esfuerzo, commits o CI. `█░░░░░░░░░` **1/10**.
+
+**Hito 02 / Intelligence:** la rama integrada #214 superó PostgreSQL aislado, fencing de workers, reintentos, agotamiento de intentos y QA en Chromium en SHA `2ca9c85`; **runtime de producción y orquestación autónoma aún no certificados**. No elevarlo a VERIFIED.
+
+**Hito 03 / piloto editorial:** un único artículo histórico (ítem 61) tiene ahora verificador read-only, pruebas, dos cápsulas de Art Direction, matriz de ocho afirmaciones con fuentes y propuesta de edición. El preflight encontró cinco URL, tres capturas, una coincidencia de extracto y dos fallos de recuperación; no son aprobaciones factuales. La implementación del verificador y sus tests fueron validados en workflow de integración run `44341165119` sobre SHA `a996cf7`. Las revisiones humana, factual, de fuentes, derechos, assets y QA final siguen bloqueadas. **No cerrar gate 03.**
+
+**Hito 04 / fidelidad visual:** las cápsulas del piloto evitan frascos comerciales; no se generaron imágenes ni se declaró que estuvieran licenciadas. La política de fidelidad por producto/variante no cambia. **No cerrar gate 04.**
+
+**Control transversal:** #214 sigue DRAFT / RELEASE HOLD; merge a `main`, deploy, publicación, migraciones reales, gastos y aprobación de assets requieren consentimiento nuevo del Publisher. Para continuidad revisar `docs/handoffs/AROMIA_LATEST.md` y CI del HEAD.
+
+---
+
