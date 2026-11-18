@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { Pool } from 'pg';
 import { JobStore } from './store';
 import { runOnce } from './worker';
+import { runBoundedBatch } from './batch';
 import { validateBrief } from './policy';
 import { bundleOf } from './review';
 const connectionString = process.env.INTELLIGENCE_TEST_DATABASE_URL;
@@ -146,4 +147,52 @@ test('review distinguishes absent captures from unmatched excerpts without clear
   assert.ok(result.blockers.includes('source_not_captured:https://example.org/a'));
   assert.ok(result.blockers.includes('source_excerpt_unmatched:https://example.org/b'));
   assert.equal(result.publication,'blocked');
+});
+
+test('PostgreSQL: bounded external invocation resumes remaining jobs after process reconnection', async () => {
+  assert.ok(connectionString, 'Set INTELLIGENCE_TEST_DATABASE_URL to a local *_test database');
+  const url = new URL(connectionString);
+  assert.ok(['localhost', '127.0.0.1'].includes(url.hostname) && url.pathname.endsWith('_test'));
+  const schema = 'intelligence_batch_' + randomUUID().replaceAll('-', '');
+  const admin = new Pool({ connectionString });
+  await admin.query(`CREATE SCHEMA ${schema}`);
+  const options = { connectionString, options: `-c search_path=${schema}` };
+  let db = new Pool(options);
+  try {
+    await db.query(readFileSync('migrations/024_intelligence_jobs.sql', 'utf8'));
+    let store = new JobStore(db);
+    const brief = {
+      title: 'QA: one-shot editorial preparation',
+      question: 'Can pending review remain blocked across separate invocations?',
+      sources: [{ url: 'https://example.org/pilot', excerpt: 'Test fixture, not an approved source.' }],
+    };
+    const jobs = await Promise.all(['alpha', 'beta', 'gamma'].map(key =>
+      store.enqueue('batch-' + key, brief)
+    ));
+    const first = await runBoundedBatch(store, 2);
+    assert.deepEqual(first, {
+      attempted: 2, processed: 2, idle: false, publication: 'blocked', providers: 'disabled',
+    });
+    assert.equal((await store.list()).filter(j => j.status === 'awaiting_review').length, 2);
+    await db.end();
+    db = new Pool(options);
+    store = new JobStore(db);
+    const second = await runBoundedBatch(store, 10);
+    assert.deepEqual(second, {
+      attempted: 2, processed: 1, idle: true, publication: 'blocked', providers: 'disabled',
+    });
+    for (const job of jobs) {
+      const detail = await store.detail(job.id);
+      assert.equal(detail.status, 'awaiting_review');
+      assert.equal(detail.result.publication, 'blocked');
+      assert.equal(detail.result.providerCostMicros, 0);
+      assert.equal(detail.result.checks.factual, 'pending_human');
+      assert.equal(detail.events.filter((e: { event: string }) => e.event === 'claimed').length, 1);
+    }
+    assert.equal(await runOnce(store), false);
+  } finally {
+    await db.end();
+    await admin.query(`DROP SCHEMA ${schema} CASCADE`);
+    await admin.end();
+  }
 });
