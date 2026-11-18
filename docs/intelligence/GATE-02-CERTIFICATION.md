@@ -14,7 +14,7 @@ Este gate es **Intelligence operativo y persistente**. No basta que el motor com
 | 1. Esquema persistente y migraciones reversibles | Migraciones 024–028 opt-in; PostgreSQL 16 desechable en CI; prueba de reconexión y reinicio del proceso | **PROBADO EN AISLADO**, no runtime autorizado |
 | 2. Deduplicación, exclusión mutua y reintentos | `integration.test.ts`: dedupe, `SKIP LOCKED`, fencing, lease expirado, agotamiento de tres intentos, retry manual | **PROBADO EN CI** en SHA histórico; verificar HEAD actual |
 | 3. Fallo seguro del worker | `worker.ts`: error de validación distinto de fallo de `finish`; `worker.test.ts`: persistencia, claim, publicación bloqueada | **PROBADO EN CI** en SHA histórico; verificar HEAD actual |
-| 4. Entrada operativa sin sesión Code/Claude | `intelligence work` procesa un job y termina. `work-batch N` permite ejecución limitada por disparador externo, opt-in `INTELLIGENCE_WORKER_ENABLED=true`, máximo 25, sin loop residente | **IMPLEMENTADO PARA PRUEBAS**, falta invocador real autorizado |
+| 4. Entrada operativa sin sesión Code/Claude | `intelligence work` procesa un job y termina. `work-batch N` permite ejecución limitada por disparador externo, opt-in simultáneo `INTELLIGENCE_ENABLED=true` **y** `INTELLIGENCE_WORKER_ENABLED=true`, máximo 25, sin loop residente | **IMPLEMENTADO PARA PRUEBAS**, falta invocador real autorizado |
 | 5. Scheduler y recuperación operacional | `work-batch` acepta invocación desde scheduler externo; no instala cron ni servicio persistente | **NO VERIFICADO EN RUNTIME** |
 | 6. Presupuestos y proveedores | Registro cerrado `editorial.prepare`, sin modelo, `providerCostMicros=0`; `batch.ts` informa providers disabled | **MODO GRATUITO PROBABLE / SIN RUTA DE PAGO**, no ledger de proveedores para ampliaciones |
 | 7. Autenticación y permisos | AdminAuth, `INTELLIGENCE_ENABLED`, token independiente de Publisher para revisión; no endpoint de publicación | **PRUEBAS AISLADAS**, revisar credenciales/roles en entorno real |
@@ -24,7 +24,7 @@ Este gate es **Intelligence operativo y persistente**. No basta que el motor com
 
 ## Prueba de aceptación propuesta — entorno aislado
 
-**No ejecutar sobre producción sin autorización separada.** Preparar `*_test` o `*_dev` con PostgreSQL aislado y migraciones exclusivamente de prueba. Bajo entorno de test, configurar `INTELLIGENCE_WORKER_ENABLED=true` y ejecutar:
+**No ejecutar sobre producción sin autorización separada.** Preparar `*_test` o `*_dev` con PostgreSQL aislado y migraciones exclusivamente de prueba. Bajo entorno de test, configurar `INTELLIGENCE_ENABLED=true` y `INTELLIGENCE_WORKER_ENABLED=true` y ejecutar:
 
 ```bash
 npm --prefix apps/api run build
@@ -38,7 +38,7 @@ Probar mínimo:
 2. Con varios briefs de prueba: procesa como máximo N; todos los `result.publication` deben permanecer `blocked`.
 3. Restablecer proceso/BD: verificar que los trabajos y eventos sobreviven, que un lease caducado puede recuperarse y que un token obsoleto no puede completar.
 4. Revocar acceso admin/publisher: comprobar respuestas 401/403 y que no existe endpoint de publicación.
-5. Deshabilitar `INTELLIGENCE_WORKER_ENABLED`: `work-batch` debe rechazar ejecución, incluso si hay trabajos listos.
+5. Deshabilitar cualquiera de las dos banderas `INTELLIGENCE_ENABLED` o `INTELLIGENCE_WORKER_ENABLED`: `work-batch` debe rechazar ejecución, incluso si hay trabajos listos.
 6. Medir y registrar la duración por invocación, uso de recursos, errores, retrasos, avisos y reinicio simulado. Describir el mecanismo de alerta y el disparador autorizado.
 7. Confirmar versión de Node/lockfiles; no silenciar auditorías ni ignorar skips.
 
