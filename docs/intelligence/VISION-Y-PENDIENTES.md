@@ -9,7 +9,7 @@ El Publisher expresó entusiasmo por el mockup y preocupación por la diferencia
 La imagen generada permanece en el chat: EXTERNAL_ARTIFACT_STATUS: PENDING. No hay archivo, checksum ni activo ingestado en Git. No inventar su ruta ni afirmar que sus frascos representan perfumes comerciales. No regenerarla de forma rutinaria: reutilizar recursos existentes y limitar consumo.
 
 - Escenas editoriales: libertad con ingredientes, texturas y luz; procedencia y naturaleza de ilustración conservadas sin sellos IA repetitivos en la lectura pública.
-- Productos identificables: conservar frasco, etiqueta, concentración, tamaño y color; acreditar procedencia y permiso de imagen. Un recurso encontrado en Amazon no acredita derechos de reutilización.
+- Productos identificables: **criterio innegociable del Publisher — producto e identidad**. Etiquetas, textos, logotipos, geometría, color, dimensiones y elementos distintivos deben corresponder al producto real. Ningún resultado visual espectacular compensa una representación incorrecta. Conservar frasco, concentración, tamaño, flanker y packaging exactos; acreditar procedencia y permiso de imagen. Contrato operativo: [PRODUCT-IDENTITY-FIDELITY.md](visual/PRODUCT-IDENTITY-FIDELITY.md). Un recurso encontrado en Amazon no acredita derechos de reutilización.
 - Glamour mediante composición y tratamiento del entorno; no redibujar una marca o un producto real para hacerlo encajar.
 - CTA comercial debe corresponder al destino presentado. Un enlace de búsqueda no acredita un ASIN, su variante ni la imagen del primer resultado.
 - Sin precio, disponibilidad o ingresos inventados. Mantener divulgación de afiliación y separación de decisiones editoriales/comerciales.
