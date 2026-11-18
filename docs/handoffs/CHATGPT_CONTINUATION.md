@@ -2,6 +2,15 @@
 
 Fuente operativa vigente: `AROMIA_MASTER_HANDOFF.md` (rama `handoff/aromia-final-unified-20261118`). Checkpoint técnico detallado: `docs/handoffs/AROMIA_LATEST.md`. Este archivo es el resumen para retomar sin Claude Code.
 
+
+## Actualización ChatGPT — 2026-11-18 · PR #214, revisión y pruebas worker
+
+**Verificado contra HEAD anterior `b5eb2aa647844547ea6448f7ec7a5ce39f9219a0`:** audit de dependencias SUCCESS, Strict Audit SUCCESS, verificación de parches SUCCESS, CI v2.0 SUCCESS, Intelligence persistence SUCCESS, Integrated Intelligence QA SUCCESS, Visual Evidence SUCCESS, Image Quality SUCCESS, Catalog Import SUCCESS. Browser QA `44315829259` permanecía **IN_PROGRESS** instalando Playwright; no afirmar PASS hasta conclusión. Los workflows OMNI/catálogo omitidos figuran **SKIPPED**, no PASS.
+
+**Nuevo cambio propio de ChatGPT en `claude/aromia-integration`, HEAD `f03e599100c5eb7349553ac28a740b384a928a83`:** `apps/api/src/intelligence/worker.test.ts` (3 regresiones: cola vacía, preparación con publicación/derechos/fact-check bloqueados y costo cero, brief inválido con código de error) y `apps/api/package.json` (incluir el test en `test:intelligence`). **Aún no ejecutado localmente ni certificado por CI para este nuevo SHA**; GitHub todavía no devolvía workflow runs al consultarlo. No confundir checks verdes del SHA anterior con este SHA. Revisar CI nuevo; si falla, corregir código y volver a probar.
+
+**Siguientes pasos ejecutables:** verificar CI de HEAD actual; esperar resultado de navegador, leer logs si falla; ejecutar tests nuevos con `npm --prefix apps/api run test:intelligence` con PostgreSQL aislado según variables de pruebas, revisar seguridad/permisos, retries y consumo del worker; después avanzar piloto editorial sin publicar. No cambiar release hold.
+
 ## Dónde está el trabajo
 - Repo `francoisbowman-cloud/aromia-lab`, rama única de integración **`claude/aromia-integration`** (hereda #206/#208/#209/#212; no re-fusionar).
 - PR draft de revisión: **#214** hacia `main`. **RELEASE HOLD.** No es permiso de merge.
