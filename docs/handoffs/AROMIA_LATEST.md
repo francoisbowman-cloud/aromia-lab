@@ -1,3 +1,16 @@
+## ChatGPT verification and hotfix — 2026-11-18
+
+- **ACTOR:** ChatGPT (GitHub connector; no local repository execution)
+- **BRANCH:** `claude/aromia-integration`
+- **PR:** #214 (draft, `main` base, RELEASE HOLD)
+- **PROBLEM CONFIRMED:** CI at `8ca4c7d7d19d948a9c203500da9280e7ccd11d74` failed API TypeScript build in workflows Catalog Import Contract, Strict Audit, and Intelligence persistence. Logs identify `src/intelligence/worker.test.ts(41,25): TS2339 Property 'job' does not exist on type Array`.
+- **HOTFIX:** corrected assertion to `finished[0].job.token` with `finished.length === 1`; committed as `2cbdf4f9e8a5edb3edd3b4d32527d7da21592d5d`. Tests cover idle queue, no automatic publication/approval/spend and invalid brief rejection. **No claim these tests have passed CI yet.**
+- **SECURITY:** prior audit run passed; not sufficient for production certification.
+- **NEXT:** monitor CI on new commit, read failed logs if any, and advance isolated PostgreSQL integration tests for claiming, concurrency, leases/retries and publisher permissions. The isolated browser QA workflow was still running in the prior attempt during inspection, not yet verified successful.
+- **RELEASE_STATUS:** HOLD. No merge to main, deployment, production access, paid resources, image substitution or content approval.
+
+---
+
 # AROMIA_LATEST — checkpoint de integración
 
 ```text
