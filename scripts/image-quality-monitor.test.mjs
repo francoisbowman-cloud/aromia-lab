@@ -34,12 +34,23 @@ test('feedback reader confines paths, file types and symlinks to public image as
     writeFileSync(join(publicRoot, 'editorial-v1', 'bergamot.webp'), expected);
     writeFileSync(join(root, 'private.png'), Buffer.from('should never be read'));
     writeFileSync(join(publicRoot, 'notes.txt'), Buffer.from('text'));
-    symlinkSync(join(root, 'private.png'), join(publicRoot, 'editorial-v1', 'escape.png'));
+    let escapeAsset = 'apps/web/public/editorial-v1/escape.png';
+    try {
+      symlinkSync(join(root, 'private.png'), join(publicRoot, 'editorial-v1', 'escape.png'));
+    } catch (error) {
+      // Windows accounts without symlink privilege: a directory junction pointing outside
+      // the public root exercises the same realpath confinement. Other errors propagate.
+      if (error.code !== 'EPERM' || process.platform !== 'win32') throw error;
+      mkdirSync(join(root, 'outside'));
+      writeFileSync(join(root, 'outside', 'escape.png'), Buffer.from('should never be read'));
+      symlinkSync(join(root, 'outside'), join(publicRoot, 'editorial-v1', 'linked'), 'junction');
+      escapeAsset = 'apps/web/public/editorial-v1/linked/escape.png';
+    }
 
     assert.deepEqual(readFeedbackAsset(root, 'apps/web/public/editorial-v1/bergamot.webp'), expected);
     assert.equal(readFeedbackAsset(root, '../private.png'), null);
     assert.equal(readFeedbackAsset(root, 'apps/web/public/../../../private.png'), null);
-    assert.equal(readFeedbackAsset(root, 'apps/web/public/editorial-v1/escape.png'), null);
+    assert.equal(readFeedbackAsset(root, escapeAsset), null);
     assert.equal(readFeedbackAsset(root, 'apps/web/public/notes.txt'), null);
     assert.equal(readFeedbackAsset(root, '/etc/passwd'), null);
     assert.equal(readFeedbackAsset(root, 'apps/web/public/editorial-v1/missing.webp'), null);

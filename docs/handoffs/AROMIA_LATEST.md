@@ -1,3 +1,30 @@
+## 2026-11-18 — HITO 04: inventario de procedencia de imágenes (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: b9df25d
+CURRENT_BLOCK: Gate 04 — trabajo seguro y de solo lectura; ninguna imagen sustituida ni aprobada
+COMPLETED_CHANGES:
+  - scripts/catalog-image-provenance.mjs (+3 tests, cableado al CI integrado): inventario de procedencia por host, sin red ni bytes.
+  - Resultado sobre el catálogo vivo (GET público, 125 perfumes publicados): 125/125 remotas, 0 locales; amazon 38, fimgs.net (CDN de Fragrantica) 44, otros terceros 37, CDN/almacenamiento genérico 5, marketplace de usuarios 1 (chance-eau-tendre).
+  - Hallazgo: /api/catalog-image/[slug] descarga y re-sirve desde el dominio de Aromia las imágenes de terceros (caché 7 d), no es un simple enlace; relevante para derechos.
+  - image-quality-monitor sobre el catálogo vivo: sin imágenes compartidas ni conflictos de concentración; 1 señal (chance-eau-tendre); identityVerified/rightsVerified/visuallyApproved = 0.
+  - Tests de confinamiento por symlink ahora corren en Windows (fallback a junction de directorio, mutación comprobada); web 136/136.
+  - docs/intelligence/visual/CATALOG-IMAGE-PROVENANCE-2026-11-18.md + evidence/*.csv; projectProgress.ts solo texto (estado intacto).
+TESTS_COMMANDS_AND_RESULTS (local, Windows, Node 20.20.2):
+  - npm --prefix apps/web test: 37 files / 136 tests pass; tsc web exit 0.
+  - node --test (visual tooling + provenance + integration contract gates): 25/25.
+  - Mutaciones: desactivar realpath hace fallar ambos tests de confinamiento.
+LIMITES: no se descargaron bytes de imágenes remotas (disponibilidad y contenido sin verificar); los hosts son señales de riesgo, no conclusiones legales; identidad de producto sigue sin verificar.
+REQUIRES_PUBLISHER_APPROVAL: política de procedencia aceptable, orden de revisión, qué se sustituye y por qué fuente, y cualquier cambio en la ruta de servicio (p. ej. tratamiento de fimgs.net); recurso aprobado para la bergamota.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10; Gate 04 in_progress (NO certificado).
+```
+
+---
+
 ## 2026-11-18 — HITO 03: cotejo de fuentes y trazabilidad del piloto (Claude Code, Sonnet 5.5)
 
 ```text

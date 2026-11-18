@@ -80,7 +80,7 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci --ignore-scripts
-      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/integration-contract-gates.test.mjs
+      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/catalog-image-provenance.test.mjs scripts/integration-contract-gates.test.mjs
       - run: node --test scripts/intelligence-pilot-readiness.test.mjs
       - name: Print read-only editorial pilot evidence (no approvals)
         run: node scripts/intelligence-pilot-readiness.mjs --json

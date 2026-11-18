@@ -39,9 +39,9 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "visual-integrity",
     title: "Integridad de imágenes y dirección artística",
     status: "in_progress",
-    evidence: "PR #188–#194: detector, cola de revisión, huellas y panel; identidad y derechos de catálogo sin certificar.",
+    evidence: "PR #188–#194: detector, cola de revisión, huellas y panel. Inventario de procedencia del catálogo vivo (18-11): 125/125 imágenes remotas servidas por proxy desde el dominio de Aromia; 44 del CDN de Fragrantica, 1 de un marketplace de usuarios; 0 con identidad, derechos o calidad verificados.",
     href: "https://github.com/francoisbowman-cloud/aromia-lab/pull/194",
-    next: "Auditar frascos reales y resolver la bergamota rechazada con recurso aprobado."
+    next: "El Publisher define la política de procedencia y el orden de revisión; auditar frascos reales y resolver la bergamota con recurso aprobado."
   },
   {
     id: "living-edition",

@@ -5,7 +5,7 @@ import { join } from "node:path";
 import sharp from "sharp";
 import { inspectLocalVisualAsset, validateVisualAssetPath } from "./visualEvidence";
 
-async function withFixture(run: (root: string, bytes: Buffer) => Promise<void>) {
+async function withFixture(run: (root: string, bytes: Buffer, escapeAsset: string) => Promise<void>) {
   const root = mkdtempSync(join(tmpdir(), "aromia-visual-evidence-"));
   try {
     const images = join(root, "apps", "web", "public", "editorial-v1");
@@ -15,8 +15,19 @@ async function withFixture(run: (root: string, bytes: Buffer) => Promise<void>) 
     writeFileSync(join(images, "bergamot.png"), bytes);
     writeFileSync(join(root, "private.png"), bytes);
     writeFileSync(join(images, "wrong.png"), Buffer.from("not actually an image"));
-    symlinkSync(join(root, "private.png"), join(images, "escape.png"));
-    await run(root, bytes);
+    let escapeAsset = "/editorial-v1/escape.png";
+    try {
+      symlinkSync(join(root, "private.png"), join(images, "escape.png"));
+    } catch (error) {
+      // Windows accounts without symlink privilege: a directory junction pointing outside
+      // the public root exercises the same realpath confinement. Other errors propagate.
+      if ((error as NodeJS.ErrnoException).code !== "EPERM" || process.platform !== "win32") throw error;
+      mkdirSync(join(root, "outside"));
+      writeFileSync(join(root, "outside", "escape.png"), bytes);
+      symlinkSync(join(root, "outside"), join(images, "linked"), "junction");
+      escapeAsset = "/editorial-v1/linked/escape.png";
+    }
+    await run(root, bytes, escapeAsset);
   } finally { rmSync(root, { recursive: true, force: true }); }
 }
 describe("local visual evidence inspection", () => {
@@ -42,8 +53,8 @@ describe("local visual evidence inspection", () => {
       "/image.svg", "/image.png?size=20", "/image.png#fragment", "/x\\bad.png"]) {
       expect(() => validateVisualAssetPath(path)).toThrow("invalid_visual_asset_path");
     }
-    await withFixture(async (root) => {
-      await expect(inspectLocalVisualAsset(root, "/editorial-v1/escape.png")).rejects.toThrow("invalid_visual_asset_path");
+    await withFixture(async (root, _bytes, escapeAsset) => {
+      await expect(inspectLocalVisualAsset(root, escapeAsset)).rejects.toThrow("invalid_visual_asset_path");
       await expect(inspectLocalVisualAsset(root, "/editorial-v1/missing.png")).rejects.toThrow("visual_asset_unavailable");
       await expect(inspectLocalVisualAsset(root, "/editorial-v1/wrong.png")).rejects.toThrow("invalid_visual_asset_content");
     });
