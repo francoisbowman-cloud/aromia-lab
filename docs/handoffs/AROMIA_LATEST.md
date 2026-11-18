@@ -1,3 +1,29 @@
+## 2026-11-18 — HITO 02 · campaña de certificación (NO CERRADO)
+
+**ACTOR:** ChatGPT, GitHub + Railway **read-only**, sin ejecución en la máquina del Publisher.  
+**PR / BRANCH:** #214 DRAFT / `claude/aromia-integration`. **RELEASE HOLD**.  
+**CRITERIO NUEVO:** no cambiar de hito hasta agotar las verificaciones elegibles de su gate; no marcar VERIFIED por código o tests aislados.
+
+**Último SHA integral certificado de la tanda anterior:** `8a66852ecf4f0f6450cc9b8e2883678e93c8ed90`: 11 SUCCESS, 6 SKIPPED, 0 FAILURE, incluyendo Chromium real aislado, API+PostgreSQL y preflight editorial. **No extrapolar resultados a HEAD posterior.**
+
+**CAMBIOS PERSISTIDOS:**
+- `apps/api/src/intelligence/batch.ts`, `batch.test.ts`: lote finito 1–25, sin daemon, parada idle, aborta ante errores, resultado con publicación bloqueada/proveedores inactivos.
+- `cli.ts`: comando `work-batch N` para invocador externo **solo con** `INTELLIGENCE_ENABLED=true` y `INTELLIGENCE_WORKER_ENABLED=true`; tests de ambos flags, tamaño máximo y fault propagation.
+- `apps/api/src/intelligence/integration.test.ts`: pruebas con PostgreSQL desechable: lote 2+1 jobs tras reconexión de pool y prueba **cross-process** del CLI en procesos Node distintos; no automatic publish, `providerCostMicros=0`, review pendiente.
+- `apps/api/package.json`: la suite CI `test:intelligence` incorpora batch tests.
+- `docs/intelligence/GATE-02-CERTIFICATION.md`: diez requisitos, criterios de aceptación, autorización y rollback; **NO CERTIFICADO**.
+- `apps/web/src/lib/projectProgress.ts`: snapshot y evidencia de PR #214 actualizados, **gate 02 permanece `in_progress`**.
+
+**Infraestructura real inspeccionada SIN cambios:** Railway proyecto `aromia-lab-v2`, único entorno visible `production`, servicios web/api/Redis/Postgres. Deploys web y api desde `main` commit `1619c776560f5d6f9c5948f8092ff5241540048f`, estado SUCCESS, creados 2026-11-17 02:58 UTC. **No se observa staging aislado** ni código #214 desplegado. No se inspeccionaron secretos ni se alteró Railway.
+
+**ESTADO DE TESTS NUEVOS:** la prueba cross-process y sus compañeros están en CI reciente **pendiente**; ninguna aprobación antes de la conclusión del SHA exacto. Verificar workflow `Intelligence persistence` y `Aromia integrated Intelligence QA`, inspeccionar logs de errores si los hubiera.
+
+**BLOCKER DE CERTIFICACIÓN OFICIAL:** runtime operativo en entorno autorizado, scheduler externo real, recuperación/observabilidad/alertas y autorización explícita para habilitar entorno/servicios y migraciones. No utilizar producción ni desplegar para alcanzar una cifra de progreso.
+
+**NEXT:** confirmar y reparar CI, consolidar evidencia de aceptación aislada, obtener autorización de entorno de staging antes de probar operación persistente. No dar hito 02 como terminado. **BARRA OFICIAL: 1/10 (10%).**
+
+---
+
 ## 2026-11-18 — Cambio de criterio: de hito certificado a hito certificado
 
 **Instrucción del Publisher:** trabajar por hitos completos, no microbloques. Un hito solo puede marcarse `verified` cuando cumple TODOS sus criterios con evidencia. Los blockers que requieren producción, presupuesto, licencias o aprobación humana **no pueden darse por resueltos por inferencia**.
