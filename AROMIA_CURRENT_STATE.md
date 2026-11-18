@@ -1,5 +1,34 @@
 # Aromia — Current Operational State
 
+## CURRENT CODEx RELAY — 2026-11-17 (state 57; supersedes older operational headers)
+
+**START HERE:** [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md) and [`AGENTS.md`](AGENTS.md). This is the **current working-state pointer**, not permission to bypass the canonical editorial workflow. Older sections below, including references to `feat/intelligence-foundation`, `STATE_VERSION: 54`, PR #186 as OPEN and v56 execution snapshots, remain **historical**; do not treat them as current without live GitHub verification.
+
+```text
+STATE_VERSION: 57
+SNAPSHOT_LOCAL_DATE: 2026-11-17 (America/Santo_Domingo; CI timestamps UTC on 2026-11-18)
+LAST_ACTOR: ChatGPT — verified current GitHub state and wrote a reproducible handoff for Codex
+LAST_ACTION: Recorded AGENTS.md and CODEX_HANDOFF.md, including immutable visual identity, 10 verified-gate checklist and next security/QA blocks
+ACTIVE_OBJECTIVE: Aromia Intelligence consolidation, web runtime dependency remediation, then editorial/visual gates without publishing
+ACTIVE_BRANCH: handoff/aromia-codex-continuation-20261117 (based on security/aromia-runtime-safe-patches-20261117)
+INTEGRATION_PR: #206 — open/draft/unmerged; head inspected ee66f063c5f1332507b45731929729a2959b961a
+SECURITY_PR: #208 — open/draft/unmerged; head inspected fb85bc09d2df47ecd5b0ffc1d85bab2aaa1ac846
+EVIDENCE: PR #206 integrated + Chromium QA SUCCESS; PR #208 Node 22 + PostgreSQL/web/image QA SUCCESS
+SECURITY_GATE: API 0 critical/0 high/2 moderate; web 1 critical/2 high/26 moderate (npm --omit=dev, PR #208 audit; FAIL as designed)
+ROADMAP_GATE: 1/10 verified (10%); NOT a technical-completeness estimate
+NEXT_ACTOR: Codex / Code
+NEXT_ACTION: checkout this handoff branch safely; verify up-to-date refs/CI; coordinate Tiptap peer security update and Next.js remediation in separate draft PRs; run all QA; continue eligible blocks
+BLOCKERS: web next/Tiptap/postcss advisories; no integration to main; product/rights validation and real production runtime pending
+AUTHORITY: NO_MERGE / NO_DEPLOY / NO_PUBLISH / NO_PRODUCTION_MIGRATION / NO_PAID_SERVICES / NO_OMNI_REPO_CHANGES
+```
+
+**Publisher exact-product mandate:** labels, text, logos, geometry, color, dimensions and distinctive features must match the *real* branded product; no spectacular image compensates for false identity. See [visual contract](docs/intelligence/visual/PRODUCT-IDENTITY-FIDELITY.md). No image replacement or legal approval is implied by the current tests.
+
+**Continuation command:** `Continúa Aromia desde el repo, sin publicar. Lee AGENTS.md y CODEX_HANDOFF.md y ejecuta los siguientes bloques seguros sin esperar un nuevo «Siguiente».`
+
+---
+
+
 This file is the compact relay for the command:
 
 > **Continúa Aromia desde el repo.**
