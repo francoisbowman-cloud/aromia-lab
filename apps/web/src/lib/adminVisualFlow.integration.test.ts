@@ -41,7 +41,7 @@ it("fails closed if a valid session has no configured server API token",async()=
 });
 it("reads per-perfume observations and per-observation decisions through signed proxy, without granting approval",async()=>{
   sessionState.value=await createSessionCookieValue();
-  const backend=vi.fn(async(url:string, init:RequestInit)=>{
+  const backend=vi.fn(async(url:string)=>{
     if(url.endsWith("/intelligence/visual-reviews?slug=chance-eau-tendre"))
       return Response.json({reviews:[{
         id:51,review_id:"review-test-51",product_slug:"chance-eau-tendre",
