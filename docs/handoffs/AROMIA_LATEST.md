@@ -1,3 +1,38 @@
+## 2026-11-18 — Bloque deuda técnica Next 16 / React 19 (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: bc11533f44c27320855d92813e1ddb2f4c68cf6b
+HEAD_SHA (código): 5866395 (+ este checkpoint en el commit siguiente)
+CURRENT_BLOCK: deuda técnica tras P0 — proxy.ts, lint API, React 19
+COMPLETED_CHANGES:
+  - middleware.ts -> proxy.ts (convención Next 16) + 5 pruebas de auth (sin cookie, cookie falsa, cookie válida, sin secreto, matcher).
+  - apps/api: script "lint" roto (eslint no es dependencia; CI solo corre tsc) sustituido por "typecheck". Sin tocar nombres de jobs de CI.
+  - React 18 -> 19 (react, react-dom, @types) en apps/web; único ajuste de tipos: RefObject<HTMLAnchorElement | null> en MagazineCoverStory.
+  - Prueba jsdom que monta react-pageflip (PageFlipReader) bajo React 19 sin errores de consola.
+TESTS_COMMANDS_AND_RESULTS (apps/web, Windows, Node 20):
+  - tsc --noEmit: limpio · eslint: 0 errores / 15 warnings (preexistentes)
+  - vitest: 134 passed, 2 failed (visualEvidence EPERM symlink en Windows; entorno, NO es "passed")
+  - next build (Turbopack): OK, 42 páginas; "Proxy (Middleware)" reconocido
+  - smoke next start: / /magazine /buscar /robots.txt /sitemap.xml 200; /admin y /admin/perfumes 307 -> /admin/login; /admin/login 200
+  - npm audit --omit=dev (web): 0 vulnerabilidades
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: PR #214 estaba en 15 pass / 1 pending (catalog) / 7 skipping antes de estos commits; CI de los commits nuevos pendiente de leer.
+SECURITY_AUDIT_COUNTS: web 0 · api 0
+EDITORIAL_VISUAL_RIGHTS_STATUS: sin cambios; nada publicado, sustituido ni aprobado.
+OPEN_BLOCKERS:
+  - HALLAZGO (producción, solo lectura): GET https://api-production-fe2f.up.railway.app/api/articulos/<slug> devuelve 500 para resena-tobacco-vanille, resena-santal-33 y resena-delina, mientras /api/articulos (listado) responde 200 con 15 artículos. Resultado: /magazine/<slug> muestra la página 404 en aromialab.com. Preexistente al cambio; causa NO verificada (hipótesis: columna/migración pendiente en la Postgres de producción, p. ej. 010 'autor', o código viejo — Railway corre commit 1619c776). Corregirlo exige deploy/migración => requiere Publisher.
+  - Editor Tiptap (React) no validado en navegador real bajo React 19 (solo jsdom del core); requiere sesión admin.
+  - 2 pruebas de symlink requieren Linux/CI o Windows con privilegios.
+  - 15 warnings react-hooks/set-state-in-effect.
+NEXT_SAFE_ACTION: leer CI de #214 sobre los commits nuevos y corregir; luego bloques P1 elegibles sin producción (fidelidad visual, piloto editorial en estado de preparación).
+REQUIRES_PUBLISHER_APPROVAL: merge a main, deploy, migraciones/datos de producción (incl. el 500 de /api/articulos/:slug), activar jobs, gasto.
+RELEASE_STATUS: HOLD
+```
+
+---
+
 ## CHECKPOINT DE ENTREGA A CLAUDE — 2026-11-18
 
 **ESTADO GUARDADO EN GITHUB.** Contrato maestro `AROMIA_MASTER_HANDOFF.md` actualizado con puntero a **`docs/handoffs/CLAUDE_RESUME_2026-11-18.md`**, que contiene el handoff operativo completo. `AROMIA_CURRENT_STATE.md` y `AGENTS.md` apuntan a la misma prioridad de continuación.
