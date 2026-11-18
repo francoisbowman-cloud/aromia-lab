@@ -37,8 +37,8 @@ test('worker prepares a claimed brief without granting editorial approval or spe
   } as unknown as JobStore;
 
   assert.equal(await runOnce(store, validJob.id), true);
-  assert.ok(finished);
-  assert.equal(finished.job.token, validJob.token);
+  assert.equal(finished.length, 1);
+  assert.equal(finished[0].job.token, validJob.token);
   assert.equal(finished[0].errorCode, undefined);
   assert.equal(finished[0].result.publication, 'blocked');
   assert.equal(finished[0].result.checks.factual, 'pending_human');
