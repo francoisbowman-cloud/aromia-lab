@@ -6,7 +6,7 @@ export function selectMigrations(files: readonly string[], flags: {
   productionApproved?: string;
   nodeEnv?: string;
 }): {selected:string[]; deferred:string[]} {
-  const sorted=[...files].filter(name=>/^\d{3}_[a-z0-9_-]+\.sql$/.test(name)).sort();
+  const sorted=[...files].filter(name=>name.endsWith(".sql")).sort();
   const intelligence=sorted.filter(name=>INTELLIGENCE.test(name));
   const optedIn=flags.intelligenceEnabled==="true";
   if(optedIn && flags.nodeEnv==="production" && flags.productionApproved!=="true") {
