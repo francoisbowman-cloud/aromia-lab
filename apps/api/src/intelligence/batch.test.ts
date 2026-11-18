@@ -1,0 +1,60 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import type { JobStore } from './store';
+import { parseBatchSize, runBoundedBatch } from './batch';
+
+const stub = {} as JobStore;
+
+test('batch size parser fails closed for absent, malformed or unbounded values', () => {
+  for (const value of [undefined, '', '0', '-1', '1.5', '01', '26', '500', 'Infinity', ' 3 ', '3jobs']) {
+    assert.throws(() => parseBatchSize(value), /invalid_batch_size/);
+  }
+  assert.equal(parseBatchSize('1'), 1);
+  assert.equal(parseBatchSize('25'), 25);
+});
+
+test('finite batch stops at first idle claim instead of polling continuously', async () => {
+  let calls = 0;
+  const result = await runBoundedBatch(stub, 10, async () => {
+    calls += 1;
+    return calls <= 3;
+  });
+  assert.deepEqual(result, {
+    attempted: 4, processed: 3, idle: true, publication: 'blocked', providers: 'disabled',
+  });
+  assert.equal(calls, 4);
+});
+
+test('finite batch stops exactly at max jobs and does not imply publication', async () => {
+  let calls = 0;
+  const result = await runBoundedBatch(stub, 25, async () => {
+    calls += 1;
+    return true;
+  });
+  assert.equal(calls, 25);
+  assert.deepEqual(result, {
+    attempted: 25, processed: 25, idle: false, publication: 'blocked', providers: 'disabled',
+  });
+});
+
+test('failed persistence propagates instead of continuing through jobs', async () => {
+  const failure = new Error('storage_failure');
+  let calls = 0;
+  await assert.rejects(runBoundedBatch(stub, 10, async () => {
+    calls += 1;
+    if (calls === 2) throw failure;
+    return true;
+  }), error => error === failure);
+  assert.equal(calls, 2);
+});
+
+test('invalid direct batch sizes never invoke a worker', async () => {
+  for (const size of [0, -1, 26, 1.1, Number.NaN, Number.POSITIVE_INFINITY]) {
+    let called = false;
+    await assert.rejects(runBoundedBatch(stub, size, async () => {
+      called = true;
+      return true;
+    }), /invalid_batch_size/);
+    assert.equal(called, false);
+  }
+});
