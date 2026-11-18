@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'apps/web/src/lib/visualEvidence*'
+      - 'apps/web/src/lib/productIdentityFidelity*'
+      - 'apps/web/src/components/admin/ProductIdentityFidelityChecklist.tsx'
       - 'apps/web/src/lib/visualReviewComparison*'
       - 'apps/web/src/lib/visualReplacementPlan*'
       - 'apps/web/src/components/admin/VisualReplacementDryRun.tsx'

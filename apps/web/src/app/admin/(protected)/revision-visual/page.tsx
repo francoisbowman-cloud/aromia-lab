@@ -7,6 +7,7 @@ import { compareVisualClaims } from "@/lib/visualReviewComparison";
 import VisualProvenanceDraft from "@/components/admin/VisualProvenanceDraft";
 import VisualDecisionTimeline from "@/components/admin/VisualDecisionTimeline";
 import VisualReplacementDryRun from "@/components/admin/VisualReplacementDryRun";
+import ProductIdentityFidelityChecklist from "@/components/admin/ProductIdentityFidelityChecklist";
 
 type Observation = {
   id: number;
@@ -200,6 +201,11 @@ export default function VisualReviewJournalPage() {
           </div>
         </div>}
       </section>
+
+      {assetEvidence && loaded && searched && <ProductIdentityFidelityChecklist
+        key={`identity:${searched}:${assetEvidence.bytesSha256}`}
+        slug={searched} imageSha256={assetEvidence.bytesSha256}
+      />}
 
       {assetEvidence && loaded && searched && <VisualReplacementDryRun key={`${searched}:${assetEvidence.url}:${assetEvidence.bytesSha256}`} slug={searched} currentUrl={assetEvidence.url} />}
 

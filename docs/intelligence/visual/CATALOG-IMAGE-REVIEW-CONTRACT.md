@@ -23,6 +23,10 @@ The default data source is `PERFUMES_INITIAL_50.csv`, an **historical fixture**,
 - `feedback` keeps the Publisher's rejected bergamot asset pinned to its hash. A modified file remains pending manual review; it does not resolve the rejection.
 - `publication: blocked` is an explicit gate. This output is not authority to publish, replace images, or run paid services.
 
+## Norma vinculante de fidelidad al producto
+
+El Publisher exige que **etiquetas, textos, logotipos, geometría, color, dimensiones y elementos distintivos correspondan al producto comercial real**. Una imagen extraordinaria estéticamente sigue siendo inaceptable si representa un producto incorrecto. No intercambiar concentraciones, flankers, capacidades o ediciones. El gate operativo, matriz de ocho campos y política de evidencia están en [PRODUCT-IDENTITY-FIDELITY.md](PRODUCT-IDENTITY-FIDELITY.md). La ausencia de diferencias detectadas automáticamente nunca certifica la identidad.
+
 ## Next evidence gate
 
 For each item, an independent reviewer must inspect actual rendered images and confirm exact perfume **brand, name, concentration, flanker and packaging**, plus source rights, editorial quality and responsive rendering. A later audited review/approval contract must bind that verdict to product identity, resource digest and reviewer authority; do not infer approval from a filename, slug, URL, or a different image. The bergamot art-direction capsule requires a separately approved candidate.
