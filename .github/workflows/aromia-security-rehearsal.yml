@@ -28,7 +28,7 @@ jobs:
         run: |
           npm install --package-lock-only --save-exact --ignore-scripts --no-audit --no-fund \
             next@15.5.28 react@19.2.3 react-dom@19.2.3 sharp@0.35.5 \
-            @tiptap/react@3.32.1 @tiptap/pm@3.32.1 \
+            @tiptap/core@3.32.1 @tiptap/react@3.32.1 @tiptap/pm@3.32.1 \
             @tiptap/starter-kit@3.32.1 @tiptap/extension-image@3.32.1
       - run: npm ci
       - run: npm test
