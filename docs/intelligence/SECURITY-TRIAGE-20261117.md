@@ -50,3 +50,9 @@ Investigate `postcss` and `source-map-js` using `npm explain`/`npm ls`, identify
 5. Obtain manual mobile/desktop staging QA and explicit Publisher authorization before any production change.
 
 No package upgrades have been performed by this document. Do not confuse this audit with a completed security remediation. Project completion remains 1/10 gates until acceptance.
+
+## Automated disposable compatibility rehearsal
+
+`.github/workflows/aromia-security-rehearsal.yml` tests an **ephemeral**, explicitly pinned candidate graph on a GitHub runner: Next 15.5.28 / React 19.2.3 / Sharp 0.35.5 / Tiptap 3.32.1. It recomputes the package-lock only in the runner, then runs web tests, lint, TS, Next build, real HTTP smoke and a fresh production-dependency audit. An artifact contains the disposable package manifests for seven days.
+
+A rehearsal **does not change the repository, merge anything, or approve production**. CI can reveal unsupported peer versions, missing packages, application incompatibilities or remaining advisories. Never copy a generated lockfile into the integration candidate unless the full combined check and human diff/rights review validate it.
