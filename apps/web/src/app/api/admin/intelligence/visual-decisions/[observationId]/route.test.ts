@@ -6,14 +6,14 @@ import {GET} from "./route";
 beforeEach(()=>proxy.mockReset());
 it("rejects invalid, unsafe and floating observation ids before contacting the server",async()=>{
   for(const id of ["0","-1","1/../2","1.2","NaN","9999999999999999999999"]){
-    const result=await GET(new NextRequest("http://localhost/"),{params:{observationId:id}});
+    const result=await GET(new NextRequest("http://localhost/"),{params:Promise.resolve({observationId:id})});
     expect(result.status).toBe(400);
   }
   expect(proxy).not.toHaveBeenCalled();
 });
 it("routes valid id only through authenticated admin proxy",async()=>{
   proxy.mockResolvedValue(new Response(JSON.stringify({decisions:[],approval:false,publication:"blocked",applied:false}),{status:200}));
-  const result=await GET(new NextRequest("http://localhost/"),{params:{observationId:"123"}});
+  const result=await GET(new NextRequest("http://localhost/"),{params:Promise.resolve({observationId:"123"})});
   expect(result.status).toBe(200);
   expect(proxy).toHaveBeenCalledExactlyOnceWith("/intelligence/visual-decisions/123");
 });

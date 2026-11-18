@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { ADMIN_SESSION_COOKIE, isValidSessionCookie } from "./adminAuth";
 
 export async function adminAuthorizationError(): Promise<NextResponse | null> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const session = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
 
   if (!(await isValidSessionCookie(session))) {

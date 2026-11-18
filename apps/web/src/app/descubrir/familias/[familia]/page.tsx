@@ -18,7 +18,8 @@ export function generateStaticParams() {
   return OLFACTIVE_FAMILIES.map((family) => ({ familia: family.slug }));
 }
 
-export function generateMetadata({ params }: { params: { familia: string } }): Metadata {
+export async function generateMetadata({ params: paramsPromise }: { params: Promise<{ familia: string }> }): Promise<Metadata> {
+  const params = await paramsPromise;
   const family = familyBySlug(params.familia);
   if (!family) return {};
   return {
@@ -31,7 +32,8 @@ export function generateMetadata({ params }: { params: { familia: string } }): M
 const KICKER = "font-plex text-xs uppercase tracking-[.14em] text-[var(--aromia-editorial-accent)]";
 const MUTED_KICKER = "font-plex text-xs uppercase tracking-[.14em] text-muted";
 
-export default async function FamiliaSheet({ params }: { params: { familia: string } }) {
+export default async function FamiliaSheet({ params: paramsPromise }: { params: Promise<{ familia: string }> }) {
+  const params = await paramsPromise;
   const family = familyBySlug(params.familia);
   if (!family) notFound();
 

@@ -143,7 +143,8 @@ function placeholderResponse(perfume: { nombre: string; marca: string; familia_o
   });
 }
 
-export async function GET(_request: Request, { params }: { params: { slug: string } }) {
+export async function GET(_request: Request, { params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+  const params = await paramsPromise;
   const perfume = await getPerfumeBySlug(params.slug);
   if (!perfume) return new Response("Not found", { status: 404 });
 
