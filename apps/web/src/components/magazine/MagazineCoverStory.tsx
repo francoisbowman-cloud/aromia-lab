@@ -16,7 +16,7 @@ function publicationYear(value?: string | null) {
   return Number.isNaN(parsed.getTime()) ? "" : String(parsed.getFullYear());
 }
 
-export function MagazineCoverStory({ article, linkRef }: { article: Article; linkRef?: React.RefObject<HTMLAnchorElement> }) {
+export function MagazineCoverStory({ article, linkRef }: { article: Article; linkRef?: React.RefObject<HTMLAnchorElement | null> }) {
   const [imgError, setImgError] = useState(false);
   const showImage = isAuditedCover(article.imagen_portada_url) && !imgError;
   const category = CATEGORIA_LABEL[article.categoria];
