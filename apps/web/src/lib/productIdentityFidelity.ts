@@ -25,10 +25,10 @@ export type ProductIdentityReview = {
 };
 const SHA=/^[a-f0-9]{64}$/;
 const SLUG=/^[a-z0-9][a-z0-9._-]{0,159}$/;
-const S=(v:unknown,max:number)=>typeof v==="string" && v.length<=max;
+const S=(v:unknown,max:number):v is string=>typeof v==="string" && v.length<=max;
 export function assessProductIdentityReview(input:ProductIdentityReview) {
   if(!input || !SLUG.test(input.productSlug) || !SHA.test(input.imageSha256) ||
-     !S(input.authoritativeProductReference,1500) ||
+     !S(input.authoritativeProductReference,1500) || !input.authoritativeProductReference.trim() ||
      !Array.isArray(input.observations) || input.observations.length!==PRODUCT_IDENTITY_FIELDS.length)
     throw new Error("invalid_product_identity_review");
   const fields=new Set<IdentityField>(),issues:string[]=[];
