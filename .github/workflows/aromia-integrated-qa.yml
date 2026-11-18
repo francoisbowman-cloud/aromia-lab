@@ -88,18 +88,22 @@ jobs:
       - run: node --test scripts/qa/summarize-dependency-audit.test.mjs
 
   production-dependency-risk:
-    name: Production dependency advisory gate
+    name: Production dependency advisory gate (${{ matrix.workspace }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace: [apps/web, apps/api]
     defaults:
       run:
-        working-directory: apps/web
+        working-directory: ${{ matrix.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: npm
-          cache-dependency-path: apps/web/package-lock.json
+          cache-dependency-path: ${{ matrix.workspace }}/package-lock.json
       - run: npm ci --ignore-scripts
       - name: Capture production npm advisories
         run: |
