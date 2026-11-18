@@ -1,6 +1,6 @@
 # Aromia — Current Operational State
 
-Latest Code checkpoint 2026-11-18: branch `codex/aromia-tiptap-security-20261118`, base6933ba4, coherent Tiptap3.34.0 remediation;127 tests/lint/types pass, build/browser pending. Next/PostCSS release hold remains. Follow newest CODEX_HANDOFF.md checkpoint; no publication authority.
+Latest Code checkpoint 2026-11-18: branch `codex/aromia-tiptap-security-20261118`, base6933ba4, coherent Tiptap3.34.0 remediation;127 tests/lint/types pass, optimized build and isolated Chromium smoke pass. Next/PostCSS release hold remains. Follow newest CODEX_HANDOFF.md checkpoint; no publication authority.
 
 ## CURRENT CODEx RELAY — 2026-11-17 (state 57; supersedes older operational headers)
 
