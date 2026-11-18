@@ -49,7 +49,7 @@ No se autorizó merge a main, despliegue, publicación, migraciones ni cambios d
 - `docs/intelligence/EDITORIAL-PILOT-01-CLAIMS.md`: precheck de ocho afirmaciones; estudio `Foods` 2022 fue sobre fragancia estandarizada en **delantales**, no perfume personal habitual aplicado a piel; posible adaptación **o enmascaramiento**. Revisión científica/editorial humana pendiente.
 - `docs/intelligence/EDITORIAL-PILOT-01-EDIT-PROPOSAL.md`: texto revisado como propuesta separada, sin sobrescribir original ni publicar.
 
-## 3. Comp uerta de certificación del HITO 02 — objetivo único
+## 3. Compuerta de certificación del HITO 02 — objetivo único
 
 **No marcar `verified` por el CI.** El gate oficial `intelligence-runtime` requiere funcionamiento persistente e independiente de Claude en runtime real **autorizado**, scheduler, observabilidad, permisos, recuperación, rollback, seguridad y aprobación humana documentada.
 
