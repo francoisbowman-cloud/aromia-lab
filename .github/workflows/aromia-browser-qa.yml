@@ -1,0 +1,41 @@
+name: Aromia isolated real-browser QA
+on:
+  pull_request:
+    paths:
+      - 'scripts/qa/admin-browser-smoke.cjs'
+      - 'apps/web/src/app/admin/**'
+      - 'apps/web/src/app/api/admin/**'
+      - 'apps/web/src/app/api/auth/**'
+      - 'apps/web/src/components/admin/**'
+      - 'apps/web/src/lib/visual*'
+      - 'apps/web/src/lib/productIdentityFidelity*'
+      - 'apps/web/src/lib/projectProgress*'
+      - '.github/workflows/aromia-browser-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-browser:
+    name: Browser session / visual identity blocking / rollback dry run
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci --prefix apps/web
+      - run: npm --prefix apps/web run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - name: Install temporary pinned Playwright (no repository dependency changes)
+        run: |
+          mkdir -p "$RUNNER_TEMP/aromia-browser"
+          npm install --prefix "$RUNNER_TEMP/aromia-browser" --no-save --package-lock=false playwright@1.56.1
+          "$RUNNER_TEMP/aromia-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Execute isolated admin browser QA
+        env:
+          PLAYWRIGHT_PACKAGE_PATH: ${{ runner.temp }}/aromia-browser/node_modules/playwright
+        run: node scripts/qa/admin-browser-smoke.cjs
