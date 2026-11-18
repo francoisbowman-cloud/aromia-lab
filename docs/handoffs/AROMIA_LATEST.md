@@ -1,3 +1,14 @@
+## 2026-11-18 — Cambio ejecutado: coordinación integrada (ChatGPT)
+
+- **Rama/PR:** `claude/aromia-integration` / #214 DRAFT, RELEASE HOLD.
+- **Documentación nueva:** `docs/operations/AROMIA_INTEGRATED_EXECUTION_2026-11-18.md` (commit `1956ebc5d37f4f12313ed984f3b27d7245abbfb0`). `AGENTS.md` enlaza el contrato (commit `74b4d5423b38bb81234503c511c71dbbb68dd9fa`).
+- **Decisión:** carriles Producto, Editorial/Intelligence y Visual coordinados por una rama; WIP limitado y cierres con código+pruebas+evidencia; no crear handoffs ni PRs por microtarea. Si Gate 02 queda bloqueado solo por permisos, continuar entregables aislados del piloto editorial sin declarar Gate 02 terminado.
+- **Ejecución:** cambios solo documentales mediante GitHub; **no se corrieron suites ni se verificó CI del nuevo HEAD**. No se tocaron servicios, secretos, producción, migraciones o assets.
+- **Progreso oficial:** 1/10 gates certificados, HITO 02 `in_progress`. Ninguna nueva certificación.
+- **Siguiente acción ejecutable:** leer CI del HEAD nuevo; corregir errores reales y trabajar autorización 401/403 + scheduler/observabilidad aislados para Gate 02; si depende exclusivamente de staging autorizado, implementar piloto de lectura aislado sin publicación.
+
+---
+
 ## 2026-11-18 — Bloque deuda técnica Next 16 / React 19 (Claude Code, Sonnet 5.5)
 
 ```text
