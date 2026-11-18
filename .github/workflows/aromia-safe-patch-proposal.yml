@@ -14,6 +14,9 @@ jobs:
   patch-branch-only:
     if: github.repository == 'francoisbowman-cloud/aromia-lab' && ((github.event_name == 'push' && github.ref_name == 'security/aromia-runtime-safe-patches-20261117') || (github.event_name == 'pull_request' && github.head_ref == 'security/aromia-runtime-safe-patches-20261117' && github.event.pull_request.head.repo.full_name == 'francoisbowman-cloud/aromia-lab'))
     runs-on: ubuntu-24.04
+    concurrency:
+      group: aromia-security-patch-branch
+      cancel-in-progress: true
     timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
@@ -29,13 +32,14 @@ jobs:
           npm ci --prefix apps/web
       - name: Apply narrowly scoped security-compatible updates
         run: |
-          npm update --prefix apps/api express multer csv-parse
+          npm update --prefix apps/api express multer csv-parse proxy-addr body-parser js-yaml qs
           # Tiptap upgrades need a separate coordinated peer-dependency migration; do not force-install them.
           npm install --prefix apps/web --save-exact sharp@0.35.5
           npm update --prefix apps/web postcss source-map-js prosemirror-view
       - name: Verify updates before any commit
         run: |
           npm --prefix apps/api run build
+          (cd apps/api && npx --no-install tsx --test src/intelligence/runtimeDependencyGate.test.ts)
           npm --prefix apps/web run test
           npm --prefix apps/web run lint
           npm --prefix apps/web run typecheck
