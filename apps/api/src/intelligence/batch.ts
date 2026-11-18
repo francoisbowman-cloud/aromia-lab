@@ -38,7 +38,8 @@ export type BatchResult = {
 export async function runBoundedBatch(
   store: JobStore,
   size: number,
-  processJob: (store: JobStore) => Promise<boolean> = runOnce
+  processJob: (store: JobStore) => Promise<boolean> = runOnce,
+  onProgress?: (attempted: number, processed: number) => void
 ): Promise<BatchResult> {
   if (!Number.isInteger(size) || size < 1 || size > 25) {
     throw new Error('invalid_batch_size');
@@ -48,9 +49,18 @@ export async function runBoundedBatch(
   let processed = 0;
   while (attempted < size) {
     attempted += 1;
-    const didProcess = await processJob(store);
-    if (!didProcess) break;
-    processed += 1;
+    try {
+      const didProcess = await processJob(store);
+      if (!didProcess) {
+        onProgress?.(attempted, processed);
+        break;
+      }
+      processed += 1;
+      onProgress?.(attempted, processed);
+    } catch (error) {
+      onProgress?.(attempted, processed);
+      throw error;
+    }
   }
   return {
     attempted,
@@ -79,15 +89,33 @@ export async function runObservedBatch(
   options: {
     processJob?: (store: JobStore) => Promise<boolean>;
     now?: () => number;
+    onFailure?: (failure: BatchFailureTelemetry) => void;
   } = {}
 ): Promise<BatchTelemetry> {
   // Validate before sampling or invoking a worker.
   if (!Number.isInteger(size) || size < 1 || size > 25) {
     throw new Error('invalid_batch_size');
   }
-  const now = options.now ?? Date.now;
+  const now = options.now ?? (() => performance.now());
   const started = now();
-  const result = await runBoundedBatch(store, size, options.processJob ?? runOnce);
+  let attempted = 0;
+  let processed = 0;
+  let result: BatchResult;
+  try {
+    result = await runBoundedBatch(store, size, options.processJob ?? runOnce, (a, p) => {
+      attempted = a;
+      processed = p;
+    });
+  } catch (error) {
+    const elapsed = now() - started;
+    options.onFailure?.({
+      attempted, processed,
+      durationMs: Number.isFinite(elapsed) ? Math.max(0, Math.round(elapsed)) : 0,
+      code: classifyBatchFailure(error),
+      publication: 'blocked', providers: 'disabled',
+    });
+    throw error;
+  }
   const elapsed = now() - started;
   return {
     ...result,
@@ -104,3 +132,12 @@ export function classifyBatchFailure(error: unknown): string {
   ]);
   return error instanceof Error && known.has(error.message) ? error.message : 'worker_execution_failed';
 }
+
+export type BatchFailureTelemetry = {
+  attempted: number;
+  processed: number;
+  durationMs: number;
+  code: string;
+  publication: 'blocked';
+  providers: 'disabled';
+};

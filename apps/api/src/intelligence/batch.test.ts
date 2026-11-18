@@ -131,3 +131,34 @@ test('failure classification reveals only allowlisted operational codes', () => 
   assert.equal(classifyBatchFailure({ message: 'job_lease_lost' }), 'worker_execution_failed');
   assert.equal(classifyBatchFailure(null), 'worker_execution_failed');
 });
+
+test('failed observed batch reports safe partial counters and rethrows original failure', async () => {
+  const original = new Error('password=SECRET in DB error');
+  let tick = 100;
+  let called = 0;
+  const failures: unknown[] = [];
+  await assert.rejects(runObservedBatch(stub, 5, {
+    now: () => tick,
+    processJob: async () => {
+      called += 1;
+      tick += 8;
+      if (called === 3) throw original;
+      return true;
+    },
+    onFailure: failure => failures.push(failure),
+  }), error => error === original);
+  assert.deepEqual(failures, [{
+    attempted: 3, processed: 2, durationMs: 24,
+    code: 'worker_execution_failed', publication: 'blocked', providers: 'disabled',
+  }]);
+  assert.equal(JSON.stringify(failures).includes('SECRET'), false);
+});
+
+test('idle and successful batches never report failure', async () => {
+  let called = false;
+  await runObservedBatch(stub, 2, {
+    processJob: async () => false,
+    onFailure: () => { called = true; },
+  });
+  assert.equal(called, false);
+});
