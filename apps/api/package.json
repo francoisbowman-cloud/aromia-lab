@@ -13,7 +13,7 @@
     "catalog-import": "tsx src/db/importCatalogBatch.ts",
     "test:uploads": "tsx --test src/lib/imageUpload.test.ts",
     "test:catalog-import": "tsx --test src/db/catalogBatchImportContract.test.ts",
-    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
     "test:content": "tsx --test src/lib/articleContent.test.ts",
     "intelligence": "tsx src/intelligence/cli.ts",
     "test:intelligence": "tsx --test src/intelligence/integration.test.ts src/intelligence/sources.test.ts src/intelligence/visualReviewJournal.test.ts src/intelligence/visualReviewDecisions.test.ts src/intelligence/visualReviewDecisionRoutes.test.ts src/db/migrationPolicy.test.ts src/intelligence/runtimeDependencyGate.test.ts src/intelligence/worker.test.ts src/intelligence/batch.test.ts"
