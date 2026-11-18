@@ -5,6 +5,7 @@ import { adminRequest } from "@/lib/adminRequest";
 import Image from "next/image";
 import { compareVisualClaims } from "@/lib/visualReviewComparison";
 import VisualProvenanceDraft from "@/components/admin/VisualProvenanceDraft";
+import VisualDecisionTimeline from "@/components/admin/VisualDecisionTimeline";
 
 type Observation = {
   id: number;
@@ -224,6 +225,7 @@ export default function VisualReviewJournalPage() {
                   <div><dt className="font-semibold">Derechos declarados</dt><dd className="whitespace-pre-wrap break-words">{record.evidence?.rights ?? "Sin evidencia"}</dd></div>
                   <div><dt className="font-semibold">Evaluación visual</dt><dd className="whitespace-pre-wrap break-words">{record.evidence?.visual ?? "Sin evidencia"}</dd></div>
                 </dl>
+                <VisualDecisionTimeline observationId={record.id} />
                 <details className="text-xs text-stone-600">
                   <summary className="cursor-pointer underline">Ver huellas de trazabilidad</summary>
                   <p className="mt-2 break-all">Producto: {record.product_fingerprint}</p>
