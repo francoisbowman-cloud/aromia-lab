@@ -1,5 +1,22 @@
 # AROMIA — HANDOFF MAESTRO ÚNICO · CLAUDE CODE
 
+## ACTUALIZACIÓN OPERATIVA — 18 NOV 2026 · CONTINUIDAD CLAUDE
+
+**Leer antes de continuar:** [`docs/handoffs/CLAUDE_RESUME_2026-11-18.md`](docs/handoffs/CLAUDE_RESUME_2026-11-18.md) en `claude/aromia-integration`. Este documento conserva el contrato maestro y sus autorizaciones; el archivo de reanudación actualiza **el estado técnico y las prioridades**. No tomar las versiones/PRs de la sección histórica de este master como estado reciente sin verificar.
+
+- **Rama activa:** `claude/aromia-integration`; **PR #214** DRAFT / RELEASE HOLD. Ya existe: **no recrear ni fusionar de nuevo** los PRs heredados.
+- **Prioridad establecida por el Publisher:** trabajar **de hito certificado a hito certificado**, en bloques largos con barra sustentada por evidencia.
+- **Barra oficial:** `1/10 = 10%`; **hito 02, Intelligence runtime, `in_progress`**. NO se certifica por CI aunque esté verde.
+- **Modelo:** el Publisher prefirió **Sonnet Medium** para ahorrar créditos; Opus/High del encabezado original son una recomendación histórica, no una orden de cambiar el modelo.
+- **Runtime:** Railway `aromia-lab-v2` solo muestra `production`; no hay staging autorizado identificado. No crear, desplegar, gastar ni activar worker en producción sin nueva aprobación.
+- **Estado de GitHub:** ver el SHA/CI preciso y la evidencia en el relay nuevo; no atribuir tests anteriores a commits nuevos.
+
+**Autoridad, controles editoriales, fidelidad visual y prohibiciones del master permanecen íntegros.**
+
+---
+
+
+
 **Versión:** 2026-11-18 · **Estado:** contrato operativo vigente para la siguiente sesión.  
 **Repositorio:** `francoisbowman-cloud/aromia-lab`.  
 **Actor único:** Claude Code (familia **Opus**, preferentemente la versión más reciente **efectivamente disponible** en el selector del usuario; **no asumir ni fijar** que “Opus 5.5” está oficialmente disponible sin comprobarlo).  
