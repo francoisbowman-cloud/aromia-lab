@@ -61,3 +61,14 @@ An initial **disposable** trial with Next 15.5.28 / React 19.2.3 / Sharp 0.35.5 
 The next `.github/workflows/aromia-security-rehearsal.yml` run narrows scope to **Sharp 0.35.5 and aligned Tiptap 3.32.1 only**, keeping Next 14 and React 18 unchanged. It regenerates a temporary lockfile and runs tests/lint/types/build, signed-session HTTP smoke and a fresh audit. A GitHub Actions artifact retains the temporary package manifests for seven days, but **nothing is pushed to the repo** by the rehearsal.
 
 Even if Sharp/Tiptap trial passes, the critical unpatched Next 14 advisory remains a release blocker. Any permanent dependency patch must update package.json and package-lock.json together in a separate reviewed branch, with exact SHA and no forced peer resolutions.
+
+## API-specific finding and safe repair rehearsal
+
+The new `apps/api` production-only npm audit reported **1 critical, 3 high and 4 moderate**. Affected packages:
+
+- **Critical:** transitive `proxy-addr` (within current API server dependency chain).
+- **High:** transitive `body-parser` and `js-yaml`, direct `multer`.
+
+The npm audit result marked these as **compatible-candidate** fixes, not proof that upgrades are risk-free. An isolated `.github/workflows/aromia-api-security-rehearsal.yml` job runs `npm audit fix --package-lock-only` **without `--force`**, then `npm ci`, TypeScript build, and real API tests against a disposable PostgreSQL service. It re-audits the resulting API production graph and uploads temporary manifest+lockfile as a short-lived artifact. Nothing is committed or deployed by this rehearsal.
+
+The API advisory gate remains red on the committed dependency graph until a reviewed patch is applied and retested.
