@@ -6,6 +6,8 @@
 
 **NEXT_ACTOR:** Claude Code / Opus (latest actually available model, High effort). **NEXT_ACTION:** verify repo, create/reconcile integration branch, execute P0 Tiptap/Next security, persist `docs/handoffs/AROMIA_LATEST.md`, continue safe blocks autonomously while the session is running.
 
+**LATEST CHECKPOINT (2026-11-18):** `docs/handoffs/AROMIA_LATEST.md` on `claude/aromia-integration` — P0 Tiptap 3.34.0 + Next 16.4.6 done locally (web audit 0 runtime vulns), not yet pushed/CI-verified. RELEASE_STATUS: HOLD.
+
 ---
 
 ## PUBLISHER UPDATE — 2026-11-18: CLAUDE CODE SOLE IMPLEMENTATION ACTOR
