@@ -6,6 +6,20 @@ This file is the compact relay for the command:
 
 It indexes the latest verified operational state. Git history, checkpoints and canonical workflow documents remain authoritative evidence.
 
+## Active V2 mandate — latest checkpoint
+
+- LAST_ACTOR: Code/Codex. PR186 is MERGED at `1619c776560f5d6f9c5948f8092ff5241540048f`; older OPEN labels below are historical.
+- ACTIVE_OBJECTIVE: autonomous editorial infrastructure, incremental and without publication.
+- ACTIVE_BRANCH: `feat/intelligence-foundation`.
+- DELIVERABLES: persistent PostgreSQL job engine, gated preparation handler, CLI + private web operations panel, authenticated opt-in API, versioned editorial materials, bounded source capture, version-bound review packages and local integration tests. See [board and handoff](docs/intelligence/BOARD.md).
+- STATE: first operational foundation proven locally; full autonomous editorial pilot and production runtime NOT complete; private panel implemented. Existing magazine design preserved.
+- LATEST_TRANCHE: immutable local recovery of an existing manuscript, idempotent import and explicit source blockers; evidence in `docs/intelligence/evidence/backlog-pilot.json`. CI at0888145 passed all five executed checks; seven skipped checks remain unverified. PR187 remains draft.
+- VISUAL_DIRECTION: Publisher mockup feedback and phase-by-phase pending work are recorded in [vision and task list](docs/intelligence/VISION-Y-PENDIENTES.md). Concept only; real products require identity and rights evidence.
+- IMAGE_QUALITY: Publisher bergamot rejection tracked by hash; no replacement yet. Read-only quality monitor and explicit Chance concentration correction implemented. See `docs/intelligence/visual/` and board for limits; production does not yet self-improve end to end.
+- NEXT_ACTOR: Code; verify quality-monitor CI, audit current product identity, generate/review bergamot from the isolated capsule, and continue the editorial pilot.
+- BLOCKERS: external runtime/provider availability and approved spend for real autonomous research; OMNI deployment unverified.
+- AUTHORITY: no merge/deploy/publication/production writes or OMNI modifications in this mandate.
+
 ## Active mission override — 2026-11-13 (v56)
 
 The historical v54 relay below is preserved as context, not current launch status.

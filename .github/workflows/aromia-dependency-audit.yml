@@ -1,0 +1,38 @@
+name: Aromia dependency release audit
+on:
+  pull_request:
+    paths:
+      - 'apps/web/package.json'
+      - 'apps/web/package-lock.json'
+      - 'apps/api/package.json'
+      - 'apps/api/package-lock.json'
+      - 'scripts/qa/dependency-audit-summary.mjs'
+      - '.github/workflows/aromia-dependency-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runtime-audit:
+    name: Runtime advisories (high/critical hold)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [web, api]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Acquire official npm advisory report
+        run: |
+          npm audit --omit=dev --prefix "apps/${{ matrix.app }}" --json > "audit-${{ matrix.app }}.json" || true
+      - name: Classify and enforce runtime security hold
+        run: node scripts/qa/dependency-audit-summary.mjs "audit-${{ matrix.app }}.json" strict
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: runtime-dependency-audit-${{ matrix.app }}
+          path: audit-${{ matrix.app }}.json
+          retention-days: 7
