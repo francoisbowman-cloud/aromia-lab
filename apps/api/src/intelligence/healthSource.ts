@@ -71,3 +71,20 @@ export async function runLedgeredBatch(
     throw error;
   }
 }
+
+export function parseRetentionDays(value: string | undefined): number {
+  if (!value || !/^[1-9]\d{0,3}$/.test(value)) throw new Error('invalid_retention_days');
+  return Number(value);
+}
+
+// Bounded retention for the operational ledger. Rows at or after the latest
+// successful run are always kept, so "last success" and the consecutive-failure
+// streak computed by collectHealthSnapshot are never altered by pruning.
+export async function pruneRunLedger(db: Db, keepDays: number): Promise<{ deleted: number }> {
+  if (!Number.isInteger(keepDays) || keepDays < 1 || keepDays > 3650) throw new Error('invalid_retention_days');
+  const r = await db.query(
+    `DELETE FROM intelligence_runs
+      WHERE finished_at < now() - ($1::int * interval '1 day')
+        AND id < COALESCE((SELECT max(id) FROM intelligence_runs WHERE outcome='ok'),0)`, [keepDays]);
+  return { deleted: r.rowCount ?? 0 };
+}

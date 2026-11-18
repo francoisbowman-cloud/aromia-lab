@@ -1,3 +1,28 @@
+## 2026-11-18 — HITO 02: ensayo local de scheduler, retención y rollback (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: 726328f
+CURRENT_BLOCK: Gate 02 — trabajo local (instrucción del Publisher: "trabaja en local")
+COMPLETED_CHANGES:
+  - `intelligence prune-runs DIAS` + pruneRunLedger: retención del ledger que conserva último OK y racha de fallos.
+  - gate02Rehearsal.test.ts: scheduler externo simulado (procesos separados), worker caído/lease, retraso con exit 2, flags, retención, rollback en cadena con respaldo y restauración.
+FILES_CHANGED: apps/api/src/intelligence/{healthSource.ts,cli.ts,gate02Rehearsal.test.ts}, apps/api/package.json, docs/intelligence/GATE-02-CERTIFICATION.md
+TESTS_COMMANDS_AND_RESULTS (local, Node 20.20.2, postgres:16-alpine desechable 127.0.0.1:55432):
+  - test:intelligence 56/56 (0 skipped); tsc --noEmit y build exit 0; npm audit --omit=dev API 0.
+  - Mutación: borrar filas posteriores al último OK hace fallar el test de retención.
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: del SHA anterior 0dc9944: 15 pass / 0 fail / 1 pending / 7 skipping. El SHA de este bloque: pendiente de leer.
+OPEN_BLOCKERS: staging aislado, scheduler/monitor reales y entrega de alertas, rollback sobre datos reales, aprobación Publisher. 500 de artículos en producción (migración 022) sin tocar.
+NEXT_SAFE_ACTION: leer CI del nuevo HEAD. No queda trabajo local de Gate 02 que no dependa de autorización.
+REQUIRES_PUBLISHER_APPROVAL: igual que el checkpoint anterior.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10; Gate 02 in_progress (NO certificado).
+```
+
+---
+
 ## 2026-11-18 — HITO 02: observabilidad real aislada (Claude Code, Sonnet 5.5)
 
 ```text

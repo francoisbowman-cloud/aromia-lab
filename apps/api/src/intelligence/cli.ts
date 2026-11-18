@@ -4,7 +4,7 @@ import { pool } from '../db/pool';
 import { JobStore } from './store';
 import { runOnce } from './worker';
 import { parseBatchSize, requireBatchWorkerEnabled, classifyBatchFailure } from './batch';
-import { parseIntervalMinutes, readIntelligenceHealth, runLedgeredBatch } from './healthSource';
+import { parseIntervalMinutes, parseRetentionDays, pruneRunLedger, readIntelligenceHealth, runLedgeredBatch } from './healthSource';
 async function main() {
   const store = new JobStore(pool);
   const [command,arg,file] = process.argv.slice(2);
@@ -30,6 +30,11 @@ async function main() {
       if (report.status === 'critical') process.exitCode = 2;
       return report;
     }
+    // Operational ledger retention only; never touches jobs, artifacts or reviews.
+    case 'prune-runs': {
+      requireBatchWorkerEnabled(process.env);
+      return pruneRunLedger(pool,parseRetentionDays(arg));
+    }
     case 'research': {
       const job=await store.detail(arg); if(!job) throw new Error('job_not_found');
       const results=[];
@@ -48,7 +53,7 @@ async function main() {
     case 'detail': return store.detail(arg);
     case 'cancel': return { cancelled: await store.cancel(arg) };
     case 'retry': return { retried: await store.retry(arg) };
-    default: throw new Error('Usage: intelligence enqueue KEY FILE | work | work-batch N (1..25, explicit opt-in) | health INTERVAL_MINUTES | list | detail/cancel/retry UUID');
+    default: throw new Error('Usage: intelligence enqueue KEY FILE | work | work-batch N (1..25, explicit opt-in) | health INTERVAL_MINUTES | prune-runs KEEP_DAYS | list | detail/cancel/retry UUID');
   }
 }
 main().then(v=>console.log(JSON.stringify(v,null,2))).catch(error=>{

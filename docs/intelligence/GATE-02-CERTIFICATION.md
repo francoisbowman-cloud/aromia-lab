@@ -77,6 +77,21 @@ Despliegues `web` y `api` observados como `SUCCESS` desde `main` commit `1619c77
 
 **Sigue BLOQUEADO (no se simuló):** scheduler externo real, entrega de alertas, retención/purga del ledger (≈288 filas/día a 5 min; definir al aprobar cadencia), ensayo en staging aislado, backup/rollback de datos reales, aprobación del Publisher. El CI de GitHub sobre el SHA nuevo debe leerse aparte.
 
+### Ensayo local del procedimiento (18 noviembre, `gate02Rehearsal.test.ts`)
+
+Ejecutado sobre PostgreSQL 16 desechable en loopback, invocando el CLI en **procesos Node separados** como lo haría un disparador externo. Acredita el comportamiento del código; **no** sustituye la corrida en runtime autorizado.
+
+| Paso del procedimiento de aceptación | Evidencia | Resultado |
+|---|---|---|
+| 1–2. Sin trabajos: `idle`, sin bucle; con 12 briefs procesa ≤N por invocación; todo `publication=blocked`, `providerCostMicros=0` | 5 + 6 + 1 + idle en 4 invocaciones | PASS |
+| 3. Caída de worker: lease vivo se respeta, lease caducado se recupera (`lease_expired`), token obsoleto no completa | test #1 | PASS |
+| 5. Desactivar `INTELLIGENCE_ENABLED` o `INTELLIGENCE_WORKER_ENABLED`: rechazo `worker_not_enabled` aun con trabajo listo, sin procesar nada | test #1 | PASS |
+| 6. Mecanismo de alerta: `health N` sale con **código 2 = critical** (`scheduler_overdue` tras >2 intervalos), 0 al recuperar | test #1 | PASS (contrato de salida; **entrega** del aviso sigue sin definir) |
+| Retención: `prune-runs DIAS` (mismos flags que `work-batch`) borra solo filas más antiguas que DIAS **y** anteriores al último OK; último éxito y racha de fallos intactos; idempotente | test #2 + mutación (borrar sin esa condición lo hace fallar) | PASS |
+| Rollback en cadena 029→025 limpio; `down/024` **rechaza** destruir jobs y deja los datos intactos; tras archivar en esquema de respaldo y borrar, `down/024` procede; re-aplicar 024–029 y restaurar da jobs y eventos idénticos y el sistema sigue operando | test #3 | PASS |
+
+Suite completa `test:intelligence`: **56/56**, 0 skipped. Sigue pendiente lo que exige autorización: staging, scheduler real, entrega de alertas, rollback sobre datos reales y aprobación del Publisher.
+
 ## Dependencias de autorización
 
 Las siguientes acciones **no están aprobadas por este documento**: fusionar PR #214 a `main`, configurar Railway/staging con secretos, activar trabajos automáticos, migrar datos de producción, desplegar, contratar proveedor, publicar, elevar `PROJECT_GATES[1]` a verified. Si la certificación exige alguna de ellas, **no ejecutar por inferencia**.
