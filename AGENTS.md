@@ -1,6 +1,6 @@
 # Aromia — instrucciones para Codex y agentes de desarrollo
 
-> **Inicio obligatorio:** leer [CODEX_HANDOFF.md](CODEX_HANDOFF.md). No usar la parte histórica de `AROMIA_CURRENT_STATE.md` como estado actual sin reconciliar GitHub.
+> **Inicio obligatorio:** leer [CODEX_HANDOFF.md](CODEX_HANDOFF.md). Si el actor es **Claude Code**, leer además [CLAUDE_CODE_HANDOFF.md](CLAUDE_CODE_HANDOFF.md) y trabajar en ramas `claude/*` desde la rama específica de traspaso, sin pisar ramas de Codex. No usar la parte histórica de `AROMIA_CURRENT_STATE.md` como estado actual sin reconciliar GitHub.
 
 **Misión:** desarrollar de forma autónoma Aromia como revista cultural/editorial de perfumería — no rediseñarla como ecommerce. Implementar, probar, corregir y registrar progreso verificable en GitHub; no limitarse a informes. Continuar secuencialmente sin pedir al Publisher que escriba "Siguiente" por cada bloque.
 
