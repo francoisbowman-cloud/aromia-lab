@@ -17,6 +17,7 @@ on:
       - 'apps/web/src/lib/projectProgress*'
       - 'apps/web/src/lib/githubProgress*'
       - 'scripts/*image*'
+      - 'scripts/integration-contract-gates.test.mjs'
       - '.github/workflows/aromia-integrated-qa.yml'
   workflow_dispatch:
 permissions:
@@ -74,4 +75,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs
+      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/integration-contract-gates.test.mjs
