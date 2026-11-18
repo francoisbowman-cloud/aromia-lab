@@ -1,5 +1,7 @@
 # Aromia — Current Operational State
 
+Latest Code checkpoint 2026-11-18: branch `codex/aromia-tiptap-security-20261118`, base6933ba4, coherent Tiptap3.34.0 remediation;127 tests/lint/types pass, build/browser pending. Next/PostCSS release hold remains. Follow newest CODEX_HANDOFF.md checkpoint; no publication authority.
+
 ## CURRENT CODEx RELAY — 2026-11-17 (state 57; supersedes older operational headers)
 
 **START HERE:** [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md) and [`AGENTS.md`](AGENTS.md). This is the **current working-state pointer**, not permission to bypass the canonical editorial workflow. Older sections below, including references to `feat/intelligence-foundation`, `STATE_VERSION: 54`, PR #186 as OPEN and v56 execution snapshots, remain **historical**; do not treat them as current without live GitHub verification.

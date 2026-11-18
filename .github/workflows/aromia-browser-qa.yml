@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'scripts/qa/admin-browser-smoke.cjs'
+      - 'apps/web/package.json'
+      - 'apps/web/package-lock.json'
       - 'apps/web/src/app/admin/**'
       - 'apps/web/src/app/api/admin/**'
       - 'apps/web/src/app/api/auth/**'
