@@ -9,7 +9,7 @@
 ## Latest checkpoint — Claude Code continuation, 18-11-2026
 
 LAST_ACTOR: Codex. NEXT_ACTOR: Claude Code (Publisher requested handoff).
-ACTIVE_BRANCH: `codex/aromia-next-security-20261118` (isolated checkout /workspace/aromia-next).
+ACTIVE_BRANCH: `codex/aromia-next-security-20261118` (isolated checkout /workspace/aromia-next). PR211 OPEN/DRAFT, base PR210; implementation checkpoint4b87809 pushed.
 BASE_REF: handoff6933ba4 → Tiptap9037b00 + browser verification beb6ac5 (equivalent cherry-pick of af28fcd).
 
 - PR210: `codex/aromia-tiptap-security-20261118`, draft targeting handoff branch; head af28fcd. All29 Tiptap packages3.34.0, no peer overrides/force.127 tests, lint, types, build and real isolated Chromium smoke locally pass. GitHub API/PG/image checks pass; latest web/browser checks were still running at checkpoint. Runtime web gate still FAIL on this branch because Next14/PostCSS remain vulnerable; intentional release hold, not bypassed.

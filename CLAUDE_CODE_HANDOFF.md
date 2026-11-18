@@ -2,6 +2,8 @@
 
 El Publisher solicita guardar el trabajo y continuar en Claude Code, sin publicar.
 
+Checkpoint de implementación: `4b87809`. Rama remota guardada y subida. PR Next: [#211](https://github.com/francoisbowman-cloud/aromia-lab/pull/211), OPEN/DRAFT, base PR210. PR Tiptap: [#210](https://github.com/francoisbowman-cloud/aromia-lab/pull/210). No fusionadas.
+
 ## Inicio
 
 ```sh
