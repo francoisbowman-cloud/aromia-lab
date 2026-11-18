@@ -13,6 +13,8 @@ on:
       - 'apps/api/migrations/down/027_visual_review_journal.sql'
       - 'apps/api/migrations/028_visual_review_decisions.sql'
       - 'apps/api/migrations/down/028_visual_review_decisions.sql'
+      - 'apps/api/migrations/029_intelligence_runs.sql'
+      - 'apps/api/migrations/down/029_intelligence_runs.sql'
       - '.github/workflows/intelligence-ci.yml'
   workflow_dispatch:
 jobs:

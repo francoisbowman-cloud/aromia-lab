@@ -18,7 +18,7 @@ Este gate es **Intelligence operativo y persistente**. No basta que el motor com
 | 5. Scheduler y recuperación operacional | `work-batch` acepta invocación desde scheduler externo; no instala cron ni servicio persistente | **NO VERIFICADO EN RUNTIME** |
 | 6. Presupuestos y proveedores | Registro cerrado `editorial.prepare`, sin modelo, `providerCostMicros=0`; `batch.ts` informa providers disabled | **MODO GRATUITO PROBABLE / SIN RUTA DE PAGO**, no ledger de proveedores para ampliaciones |
 | 7. Autenticación y permisos | AdminAuth, `INTELLIGENCE_ENABLED`, token independiente de Publisher para revisión; no endpoint de publicación | **PRUEBAS AISLADAS**, revisar credenciales/roles en entorno real |
-| 8. Observabilidad y diagnóstico | eventos transaccionales, status y dashboard; logs CLI; alertas, métricas de fallo y continuidad reales | **PARCIAL**: falta observabilidad operacional y alertas probadas |
+| 8. Observabilidad y diagnóstico | eventos transaccionales, status y dashboard; logs CLI; **registro de invocaciones `intelligence_runs` (migración 029 opt-in) + `intelligence health N`** alimentando `health.ts` con fuentes reales (ver sección «Observabilidad real aislada») | **PROBADO EN AISLADO** (PostgreSQL 16 desechable); **falta**: monitor/entrega de alertas y scheduler autorizados que consuman el código de salida |
 | 9. Seguridad y reversibilidad | pruebas integradas, auditoría npm, CI read-only, rollback documentado; prod migrations explícitamente bloqueadas | **CI**, no ensayos de rollback de datos real/backup en staging |
 | 10. Certificación Publisher | aprobación de entorno, migraciones, integración en `main`, activación del scheduler y revisión de evidencia | **NO CONCEDIDA** |
 
@@ -53,6 +53,29 @@ Despliegues `web` y `api` observados como `SUCCESS` desde `main` commit `1619c77
 **Implicación:** Gate 02 necesita una prueba runtime en entorno explícitamente autorizado (idealmente staging aislado, con presupuesto/autorización del Publisher), además del CI. No crear entorno nuevo ni duplicar servicios de pago por iniciativa propia. Hasta contar con esa autorización, solo puede cerrarse la **aceptación técnica en PostgreSQL desechable/CI**, no el hito global.
 
 ---
+
+## Observabilidad real aislada — 18 noviembre (Claude Code)
+
+**Qué se añadió (código de preparación; no activa nada):**
+- Migración **029 `intelligence_runs`** (opt-in, misma política 024–028; `migrationPolicy.ts` la difiere por defecto y en producción exige la doble confirmación) + rollback `down/029`. Guarda por invocación de `work-batch`: `outcome`, `failure_code` cerrado (`^[a-z_]{1,64}$`), `attempted`, `processed`, `duration_ms`, `finished_at`. **Nunca** payloads ni texto de error.
+- `healthSource.ts`: `collectHealthSnapshot` (solo lectura, **reloj de la BD**) → `evaluateIntelligenceHealth`. Trabajo pendiente = `queued` disponible **o** `running` con lease caducado (un worker caído no queda invisible). Una invocación inactiva con cola vacía cuenta como latido real; los rechazos previos a ejecutar (flags, tamaño inválido) **no** cuentan como ejecución.
+- CLI: `work-batch` registra su resultado (best-effort: si la tabla 029 no existe, el job y el error original no cambian y devuelve `ledger: unavailable`). Nuevo `intelligence health INTERVALO_MIN`: requiere `INTELLIGENCE_ENABLED=true`, **sin intervalo por defecto** (el operador declara la cadencia), en producción exige las mismas verificaciones que `work`; **exit code 2 si `critical`**, para que un monitor externo autorizado lo consuma.
+
+**Evidencia local reproducible (Windows, Node 20.20.2, `postgres:16-alpine` desechable en `127.0.0.1:55432`, BD `aromia_intelligence_test`):**
+
+| Criterio | Evidencia | Resultado |
+|---|---|---|
+| Suite `test:intelligence` completa | 53 tests, 53 pass, 0 fail, 0 skipped (antes del bloque: 42/47 solo por ausencia de BD; con BD 47/47) | PASS |
+| Señales desde datos reales (never_succeeded, overdue, backlog, stale, lease caducado) | `healthSource.test.ts` #2 | PASS |
+| Reinicio de proceso (pool nuevo) conserva estado y recupera lease | `healthSource.test.ts` #2 | PASS |
+| Clasificación sin fuga (`postgres://…hunter2…` no llega al ledger), `job_lease_lost`, racha de fallos y reinicio por ejecución OK | #3 + mutación (quitar el reinicio de racha hace fallar #3) | PASS |
+| Constraints del ledger y rollback reversible | #4 | PASS |
+| Compatibilidad sin migración 029 | #5 | PASS |
+| CLI en procesos Node separados, exit codes, gates fail-closed | #6 | PASS |
+| `tsc --noEmit`, `tsc -p` build API | exit 0 | PASS |
+| `npm audit --omit=dev` (API) | 0 vulnerabilidades | PASS |
+
+**Sigue BLOQUEADO (no se simuló):** scheduler externo real, entrega de alertas, retención/purga del ledger (≈288 filas/día a 5 min; definir al aprobar cadencia), ensayo en staging aislado, backup/rollback de datos reales, aprobación del Publisher. El CI de GitHub sobre el SHA nuevo debe leerse aparte.
 
 ## Dependencias de autorización
 

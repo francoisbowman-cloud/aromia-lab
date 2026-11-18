@@ -5,8 +5,9 @@ const migrations=[
   '001_initial.sql','023_catalog.sql','024_intelligence_jobs.sql',
   '025_intelligence_artifacts.sql','026_editorial_review.sql',
   '027_visual_review_journal.sql','028_visual_review_decisions.sql',
+  '029_intelligence_runs.sql',
 ];
-test('legacy migration defaults to ignoring all five Intelligence schemas',()=>{
+test('legacy migration defaults to ignoring all Intelligence schemas',()=>{
   const result=selectMigrations(migrations,{});
   assert.deepEqual(result.selected,['001_initial.sql','023_catalog.sql']);
   assert.deepEqual(result.deferred,migrations.slice(2));

@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs';
 import { pool } from '../db/pool';
 import { JobStore } from './store';
 import { runOnce } from './worker';
-import { parseBatchSize, requireBatchWorkerEnabled, runObservedBatch, classifyBatchFailure } from './batch';
+import { parseBatchSize, requireBatchWorkerEnabled, classifyBatchFailure } from './batch';
+import { parseIntervalMinutes, readIntelligenceHealth, runLedgeredBatch } from './healthSource';
 async function main() {
   const store = new JobStore(pool);
   const [command,arg,file] = process.argv.slice(2);
@@ -18,7 +19,16 @@ async function main() {
     // Opt-in one-shot invocation by an external scheduler; no self-scheduling.
     case 'work-batch': {
       requireBatchWorkerEnabled(process.env);
-      return runObservedBatch(store,parseBatchSize(arg));
+      return runLedgeredBatch(pool,store,parseBatchSize(arg));
+    }
+    // Read-only diagnostic for an external monitor. The interval is the operator's
+    // declared scheduler cadence; there is deliberately no default. Exit code 2 = critical.
+    case 'health': {
+      if (process.env.INTELLIGENCE_ENABLED !== 'true') throw new Error('worker_not_enabled');
+      if (process.env.NODE_ENV === 'production') requireBatchWorkerEnabled({...process.env,INTELLIGENCE_WORKER_ENABLED:'true'});
+      const report = await readIntelligenceHealth(pool,parseIntervalMinutes(arg));
+      if (report.status === 'critical') process.exitCode = 2;
+      return report;
     }
     case 'research': {
       const job=await store.detail(arg); if(!job) throw new Error('job_not_found');
@@ -38,7 +48,7 @@ async function main() {
     case 'detail': return store.detail(arg);
     case 'cancel': return { cancelled: await store.cancel(arg) };
     case 'retry': return { retried: await store.retry(arg) };
-    default: throw new Error('Usage: intelligence enqueue KEY FILE | work | work-batch N (1..25, explicit opt-in) | list | detail/cancel/retry UUID');
+    default: throw new Error('Usage: intelligence enqueue KEY FILE | work | work-batch N (1..25, explicit opt-in) | health INTERVAL_MINUTES | list | detail/cancel/retry UUID');
   }
 }
 main().then(v=>console.log(JSON.stringify(v,null,2))).catch(error=>{

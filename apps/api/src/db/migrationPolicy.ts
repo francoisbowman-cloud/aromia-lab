@@ -1,6 +1,6 @@
-// Default-deny policy for the opt-in Intelligence schemas 024–028.
+// Default-deny policy for the opt-in Intelligence schemas 024–029.
 // This module determines selection only and never connects to a database.
-const INTELLIGENCE = /^(024|025|026|027|028)_.*\.sql$/;
+const INTELLIGENCE = /^(024|025|026|027|028|029)_.*\.sql$/;
 export function selectMigrations(files: readonly string[], flags: {
   intelligenceEnabled?: string;
   productionApproved?: string;

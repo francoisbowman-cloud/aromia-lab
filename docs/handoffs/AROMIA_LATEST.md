@@ -1,3 +1,36 @@
+## 2026-11-18 — HITO 02: observabilidad real aislada (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: ebb3b7a11f04f8322b2d3f24683686094dea8f9f (remoto) + merge local de b613356
+HEAD_SHA (código): ver `git log`; este checkpoint va en el commit del bloque
+CURRENT_BLOCK: Gate 02 — salud operativa con fuentes reales, recuperación y rechazo seguro
+COMPLETED_CHANGES:
+  - Merge (sin reescribir historia) de 12 commits remotos de ChatGPT en la rama local.
+  - Migración opt-in 029 intelligence_runs (+ down/029, política de migraciones, filtro de paths del CI Intelligence).
+  - healthSource.ts: snapshot read-only con reloj de BD -> evaluateIntelligenceHealth; leases caducados cuentan como pendientes.
+  - CLI: work-batch registra ejecución (best-effort); comando `health INTERVALO_MIN` (sin default, exit 2 en critical).
+FILES_CHANGED: apps/api/migrations/029_intelligence_runs.sql, migrations/down/029_intelligence_runs.sql, src/intelligence/{healthSource.ts,healthSource.test.ts,cli.ts}, src/db/{migrationPolicy.ts,migrationPolicy.test.ts}, apps/api/package.json, .github/workflows/intelligence-ci.yml, docs/intelligence/GATE-02-CERTIFICATION.md
+TESTS_COMMANDS_AND_RESULTS (local, Windows, Node 20.20.2, postgres:16-alpine desechable en 127.0.0.1:55432):
+  - Primera corrida SIN BD: 42 pass / 5 fail (los 5 PostgreSQL exigen INTELLIGENCE_TEST_DATABASE_URL; no era un bug).
+  - Con BD desechable: test:intelligence 47/47 antes del bloque; 53/53 tras el bloque (0 skipped).
+  - Mutación: quitar el reinicio de racha de fallos hace fallar healthSource #3 (el test detecta la regresión).
+  - tsc --noEmit y build API exit 0; test:uploads 1/1, test:content 3/3, test:catalog-import 3/3; npm audit --omit=dev API: 0.
+  - NO ejecutado en este bloque: apps/web (no se tocó), suites de navegador.
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: pendiente de leer sobre el SHA nuevo; no se extrapola.
+SECURITY_AUDIT_COUNTS: API runtime 0 (npm audit --omit=dev, local). Web no reauditado en este bloque.
+EDITORIAL_VISUAL_RIGHTS_STATUS: sin cambios; sin imágenes, fuentes ni contenido tocados.
+OPEN_BLOCKERS: scheduler externo autorizado, entrega de alertas, retención del ledger, staging aislado (Railway solo tiene `production`), rollback de datos real, aprobación Publisher. Hallazgo previo sin resolver: 500 en artículo de producción (probable migración 022 sin aplicar; NO se aplicó).
+NEXT_SAFE_ACTION: leer CI del HEAD; si pasa, definir con el Publisher cadencia/monitor/entorno para el ensayo de certificación.
+REQUIRES_PUBLISHER_APPROVAL: staging/recursos, scheduler, alertas, cualquier migración fuera de BD desechable, merge de #214.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10; Gate 02 in_progress (NO certificado).
+```
+
+---
+
 ## 2026-11-18 — HITO 02: instrumentación segura del batch (ChatGPT)
 
 - **Objetivo ejecutado:** hacer visible la duración y resultados agregados de `work-batch`, sin exponer briefs, payloads, contenido de fuentes ni permitir publicación.
