@@ -1,5 +1,23 @@
 # Aromia — Current Operational State
 
+## PUBLISHER UPDATE — 2026-11-18: CLAUDE CODE SOLE IMPLEMENTATION ACTOR
+
+**Current authority supersedes older no-internal-merge/parallel-Codex instructions.** Codex is paused for this phase. Claude Code / Opus may **merge verified development branches internally** and consolidate the existing stacked work into one persistent `claude/aromia-integration` branch. The existing Claude handoff branch contains #206 + #208 + #209 by ancestry; do not re-merge those changes blindly. See section 0 of [`CLAUDE_CODE_HANDOFF.md`](CLAUDE_CODE_HANDOFF.md).
+
+**Not authorized:** merge into `main`, deployment, publication, production migrations, paid resources, or visual identity/licensing approval. Release security gate remains blocked. **NEXT_ACTOR: Claude Code. NEXT_ACTION:** inspect live PRs/CI, create or adopt `claude/aromia-integration` from the latest Claude handoff, execute safe blocks, merge internal development only after tests, persist checkpoints.
+
+---
+
+## CLAUDE CODE SHIFT — 2026-11-18 (parallel safe continuation)
+
+**NEXT_ACTOR: Claude Code / Opus.** Read [`CLAUDE_CODE_HANDOFF.md`](CLAUDE_CODE_HANDOFF.md), [`AGENTS.md`](AGENTS.md), and [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md). Claude's independent working base is `handoff/aromia-claude-autonomous-20261118` (stacked on the Codex handoff branch), and its implementation branches must be `claude/*` with draft PRs. The Codex relay below is **preserved**, not overwritten or invalidated; before implementation inspect new Codex PRs and avoid duplicate changes.
+
+**ACTIVE_OBJECTIVE:** safe autonomous continuation: resolve frontend dependency blockers (Tiptap/Next.js), test and repair, progress on Intelligence/editorial/visual QA where non-overlapping, and persist per-block checkpoint. **RELEASE HOLD:** web security advisories remain unresolved as of handoff; no merge, deployment, publication, paid services, production migrations or image approvals/replacements. No autonomous work promised outside the running Claude session.
+
+**PUBLISHER VISION:** Aromia is a dynamic editorial fragrance magazine with verified storytelling, source and rights provenance, an authentic product-identity gate, and independent editorial authority. See the full Claude handoff for phase plan and stop conditions.
+
+---
+
 ## CURRENT CODEx RELAY — 2026-11-17 (state 57; supersedes older operational headers)
 
 **START HERE:** [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md) and [`AGENTS.md`](AGENTS.md). This is the **current working-state pointer**, not permission to bypass the canonical editorial workflow. Older sections below, including references to `feat/intelligence-foundation`, `STATE_VERSION: 54`, PR #186 as OPEN and v56 execution snapshots, remain **historical**; do not treat them as current without live GitHub verification.
