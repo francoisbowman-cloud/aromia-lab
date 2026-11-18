@@ -46,8 +46,8 @@ export async function inspectLocalVisualAsset(root: string, candidate: unknown) 
   } catch {
     throw new Error("invalid_visual_asset_content");
   }
-  if (!metadata.width || !metadata.height ||
-      !["png","jpeg","webp","avif","gif"].includes(metadata.format ?? "")) {
+  if (!metadata.width || !metadata.height || typeof metadata.format !== "string" ||
+      !["png","jpeg","webp","avif","gif"].includes(metadata.format)) {
     throw new Error("invalid_visual_asset_content");
   }
   const bytesSha256 = createHash("sha256").update(bytes).digest("hex");

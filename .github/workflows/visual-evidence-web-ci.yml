@@ -4,6 +4,9 @@ on:
     paths:
       - 'apps/web/src/lib/visualEvidence*'
       - 'apps/web/src/lib/visualReviewComparison*'
+      - 'apps/web/src/lib/visualReplacementPlan*'
+      - 'apps/web/src/components/admin/VisualReplacementDryRun.tsx'
+      - 'apps/web/src/app/api/admin/intelligence/visual-replacement-plan/**'
       - 'apps/web/src/components/admin/VisualDecisionTimeline.tsx'
       - 'apps/web/src/app/api/admin/intelligence/visual-decisions/**'
       - 'apps/web/src/lib/visualProvenance*'

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { compareVisualClaims } from "@/lib/visualReviewComparison";
 import VisualProvenanceDraft from "@/components/admin/VisualProvenanceDraft";
 import VisualDecisionTimeline from "@/components/admin/VisualDecisionTimeline";
+import VisualReplacementDryRun from "@/components/admin/VisualReplacementDryRun";
 
 type Observation = {
   id: number;
@@ -199,6 +200,8 @@ export default function VisualReviewJournalPage() {
           </div>
         </div>}
       </section>
+
+      {assetEvidence && loaded && searched && <VisualReplacementDryRun key={`${searched}:${assetEvidence.url}:${assetEvidence.bytesSha256}`} slug={searched} currentUrl={assetEvidence.url} />}
 
       {assetEvidence && loaded && searched && <VisualProvenanceDraft
         key={`${searched}:${assetEvidence.url}:${assetEvidence.bytesSha256}`}
