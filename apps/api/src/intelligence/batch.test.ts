@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { JobStore } from './store';
-import { parseBatchSize, runBoundedBatch } from './batch';
+import { parseBatchSize, requireBatchWorkerEnabled, runBoundedBatch } from './batch';
 
 const stub = {} as JobStore;
 
@@ -57,4 +57,20 @@ test('invalid direct batch sizes never invoke a worker', async () => {
     }), /invalid_batch_size/);
     assert.equal(called, false);
   }
+});
+
+test('worker batch requires separate explicit system and worker enablement', () => {
+  for (const flags of [
+    {},
+    { INTELLIGENCE_ENABLED: 'true' },
+    { INTELLIGENCE_WORKER_ENABLED: 'true' },
+    { INTELLIGENCE_ENABLED: '1', INTELLIGENCE_WORKER_ENABLED: 'true' },
+    { INTELLIGENCE_ENABLED: 'true', INTELLIGENCE_WORKER_ENABLED: '1' },
+  ]) {
+    assert.throws(() => requireBatchWorkerEnabled(flags), /worker_not_enabled/);
+  }
+  assert.doesNotThrow(() => requireBatchWorkerEnabled({
+    INTELLIGENCE_ENABLED: 'true',
+    INTELLIGENCE_WORKER_ENABLED: 'true',
+  }));
 });
