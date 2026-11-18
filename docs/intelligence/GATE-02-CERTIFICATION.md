@@ -44,6 +44,16 @@ Probar mínimo:
 
 **Importante:** pasar este procedimiento en un PostgreSQL local acredita únicamente una **prueba operacional aislada**. Para cierre del hito oficial, falta la prueba de ejecución persistente en el entorno escogido y autorizado, independiente de Claude/Codex, con supervisión y recuperabilidad.
 
+## Diagnóstico real de Railway (solo lectura, 2026-11-18)
+
+Se inspeccionó el proyecto existente **`aromia-lab-v2`** mediante Railway, sin leer secretos, crear recursos ni ejecutar despliegues. **Único environment visible:** `production`; **no existe staging separado** en el listado del proyecto. Servicios: `web`, `api`, PostgreSQL, Redis y dos web de QA existentes en ese mismo environment. Su mera existencia no demuestra un staging aislado ni autoriza pruebas con datos reales.
+
+Despliegues `web` y `api` observados como `SUCCESS` desde `main` commit `1619c776560f5d6f9c5948f8092ff5241540048f`, creados el **17-11-2026 02:58 UTC**. Este SHA es **anterior** al código de la PR #214; no contiene el batch de Intelligence que acabamos de preparar. **No ejecutar el piloto de certificación contra esos servicios ni dar por activado Intelligence en Railway.**
+
+**Implicación:** Gate 02 necesita una prueba runtime en entorno explícitamente autorizado (idealmente staging aislado, con presupuesto/autorización del Publisher), además del CI. No crear entorno nuevo ni duplicar servicios de pago por iniciativa propia. Hasta contar con esa autorización, solo puede cerrarse la **aceptación técnica en PostgreSQL desechable/CI**, no el hito global.
+
+---
+
 ## Dependencias de autorización
 
 Las siguientes acciones **no están aprobadas por este documento**: fusionar PR #214 a `main`, configurar Railway/staging con secretos, activar trabajos automáticos, migrar datos de producción, desplegar, contratar proveedor, publicar, elevar `PROJECT_GATES[1]` a verified. Si la certificación exige alguna de ellas, **no ejecutar por inferencia**.
