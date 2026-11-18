@@ -7,6 +7,8 @@ on:
       - 'apps/web/package.json'
       - 'apps/web/package-lock.json'
       - 'apps/web/src/lib/storyAvailability.test.ts'
+      - 'apps/web/src/lib/adminApiProxy.ts'
+      - 'apps/web/src/components/magazine/MagazineCoverStory.tsx'
   workflow_dispatch:
 permissions:
   contents: read
