@@ -4,6 +4,20 @@
 **Base de trabajo:** `handoff/aromia-claude-autonomous-20261118`, derivada de `handoff/aromia-codex-continuation-20261117` (PR #209), derivada de #208, derivada de #206. **No confundir esta cadena de PR draft con `main`.**  
 **Propósito:** permitir una sesión larga de desarrollo y reparación con mínima microgestión, sin depender de los créditos de Codex ni de esta conversación.
 
+
+## 0. NUEVA AUTORIZACIÓN DEL PUBLISHER — 2026-11-18 (PREVALECE SOBRE LAS RESTRICCIONES DE FUSIÓN INTERNAS ANTERIORES)
+
+**Claude Code es el único actor de implementación de esta etapa. Codex queda en pausa.** Ya no es necesario reservar ramas para una ejecución paralela de Codex ni abrir un PR por cada microcambio. El Publisher autoriza expresamente **fusionar ramas y PRs de desarrollo entre sí** y continuar sobre **una única rama de integración de Claude**. Esto reemplaza cualquier prohibición anterior de merge *interno*, pero **NO** autoriza merge a `main`, despliegue, publicación, migraciones de producción, gasto ni aprobación de imágenes/derechos.
+
+**Secuencia de consolidación (obligatoria):**
+1. Antes de fusionar, verificar estado actual de `main` y de #206, #208, #209 y #212; detectar si Codex dejó trabajo nuevo. Revisar graph de commits, cambios sin confirmar, checks por SHA, dependencias y conflictos. Las PRs apiladas **no se deben fusionar a `main`** por comodidad.
+2. Partir de `handoff/aromia-claude-autonomous-20261118` y crear o adoptar una **sola rama persistente** `claude/aromia-integration` (si existe, verificar su procedencia antes de usarla). Esta base ya contiene por ascendencia el código de #206, los parches de #208, el relay #209 y el handoff #212: **NO cherry-pick ni merge duplicado de estas ramas**. Si el upstream cambió, integrar solo cambios faltantes con revisión de diff y conflictos.
+3. Consolidar en esa rama los desarrollos de Claude que pasen tests y revisión, con commits por bloque y checkpoints frecuentes. Se permiten merges internos desde ramas de trabajo a `claude/aromia-integration`, sin pedir aprobación rutinaria. Abrir o mantener **un PR draft de integración** hacia `main` solo como revisión; su existencia NO autoriza fusionarlo. Si el sistema CI no soporta PR draft grande, usar PRs internos apilados con destino `claude/aromia-integration`.
+4. Ejecutar pruebas API, web, PostgreSQL aislado, QA de navegador y auditoría de seguridad tras cambios importantes; **el gate de release permanece rojo mientras la web tenga advisories críticos/altos**. Nunca bajar gates ni ignorar un fallo por conveniencia.
+5. Actualizar `docs/handoffs/CLAUDE_CODE_LATEST.md` y el encabezado actual de `AROMIA_CURRENT_STATE.md` en cada bloque con rama, SHA, tests, CI, riesgos y siguiente acción. Al terminar la sesión, dejar la rama de integración lista para que mañana se inspeccione su estado sin reconstruir el chat.
+
+**Cambio de criterio de ejecución:** donde este documento o `AGENTS.md` indiquen «ramas independientes de Codex», «no fusionar» o «ramas `claude/*` con PRs draft», interpretar: **Claude puede fusionar ramas internas, pero nunca a `main` ni a producción sin aprobación explícita**. Codex permanece inactivo en esta etapa. No modificar ni cerrar PRs históricas innecesariamente; consolidar su contenido por ascendencia, documentando los SHA.
+
 ## 1. Autoridad y contexto — leer antes de programar
 
 1. `AGENTS.md`, `CODEX_HANDOFF.md`, `AROMIA_CURRENT_STATE.md` (la cabecera vigente).
