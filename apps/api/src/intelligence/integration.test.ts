@@ -229,6 +229,7 @@ test('PostgreSQL: CLI bounded workers resume across separate Node processes with
       {cwd:process.cwd(), env:flags, encoding:'utf8', timeout:30000}
     );
     assert.throws(() => invoke('2', {...env, INTELLIGENCE_WORKER_ENABLED:'false'}));
+    assert.throws(() => invoke('2', {...env, NODE_ENV:'production'}));
     assert.equal((await store.list()).filter(j => j.status === 'queued').length,3);
     const first = JSON.parse(invoke('2'));
     assert.equal(first.processed,2);
