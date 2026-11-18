@@ -1,5 +1,13 @@
 # Aromia — Current Operational State
 
+## CANONICAL HANDOFF — 2026-11-18
+
+**ONLY CURRENT OPERATIONAL HANDOFF:** [`AROMIA_MASTER_HANDOFF.md`](AROMIA_MASTER_HANDOFF.md) on `handoff/aromia-final-unified-20261118`. Claude Code is sole development actor; Codex paused. The Publisher authorizes **internal development branch merges** into one `claude/aromia-integration` line after verification; **NO merge to `main`, deploy, publish, production migrations, spending or visual/rights approvals** without separate explicit consent. Earlier CODEX and CLAUDE handoffs and relay entries below are retained **for historical evidence only**, not as conflicting operational instructions. Read master before acting. Latest snapshot is not live telemetry; verify all PRs, commits and CI before making changes.
+
+**NEXT_ACTOR:** Claude Code / Opus (latest actually available model, High effort). **NEXT_ACTION:** verify repo, create/reconcile integration branch, execute P0 Tiptap/Next security, persist `docs/handoffs/AROMIA_LATEST.md`, continue safe blocks autonomously while the session is running.
+
+---
+
 ## PUBLISHER UPDATE — 2026-11-18: CLAUDE CODE SOLE IMPLEMENTATION ACTOR
 
 **Current authority supersedes older no-internal-merge/parallel-Codex instructions.** Codex is paused for this phase. Claude Code / Opus may **merge verified development branches internally** and consolidate the existing stacked work into one persistent `claude/aromia-integration` branch. The existing Claude handoff branch contains #206 + #208 + #209 by ancestry; do not re-merge those changes blindly. See section 0 of [`CLAUDE_CODE_HANDOFF.md`](CLAUDE_CODE_HANDOFF.md).
