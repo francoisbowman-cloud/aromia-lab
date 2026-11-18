@@ -19,7 +19,7 @@ TESTS_COMMANDS_AND_RESULTS (local, Windows, Node 20.20.2, postgres:16-alpine des
   - Mutación: quitar el reinicio de racha de fallos hace fallar healthSource #3 (el test detecta la regresión).
   - tsc --noEmit y build API exit 0; test:uploads 1/1, test:content 3/3, test:catalog-import 3/3; npm audit --omit=dev API: 0.
   - NO ejecutado en este bloque: apps/web (no se tocó), suites de navegador.
-CI_RUNS_WITH_URLS_AND_CONCLUSIONS: pendiente de leer sobre el SHA nuevo; no se extrapola.
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: PR #214 sobre 0dc9944 (leído con `gh pr checks`): 15 pass (incl. Intelligence persistence, API + isolated PostgreSQL, web test+lint+typecheck+build, browser session QA, runtime advisories web/api, code-and-governance), 0 fail, 1 pending (catalog expansion), 7 skipping (visuales; NO cuentan como aprobados).
 SECURITY_AUDIT_COUNTS: API runtime 0 (npm audit --omit=dev, local). Web no reauditado en este bloque.
 EDITORIAL_VISUAL_RIGHTS_STATUS: sin cambios; sin imágenes, fuentes ni contenido tocados.
 OPEN_BLOCKERS: scheduler externo autorizado, entrega de alertas, retención del ledger, staging aislado (Railway solo tiene `production`), rollback de datos real, aprobación Publisher. Hallazgo previo sin resolver: 500 en artículo de producción (probable migración 022 sin aplicar; NO se aplicó).
