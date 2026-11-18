@@ -74,3 +74,17 @@ test('worker batch requires separate explicit system and worker enablement', () 
     INTELLIGENCE_WORKER_ENABLED: 'true',
   }));
 });
+
+test('production batch is blocked without a separate runtime approval flag', () => {
+  const flags = { NODE_ENV: 'production', INTELLIGENCE_ENABLED: 'true', INTELLIGENCE_WORKER_ENABLED: 'true' };
+  assert.throws(() => requireBatchWorkerEnabled(flags), /production_worker_not_approved/);
+  assert.throws(() => requireBatchWorkerEnabled({
+    ...flags, AROMIA_INTELLIGENCE_PRODUCTION_RUNTIME_APPROVED: 'false',
+  }), /production_worker_not_approved/);
+  assert.doesNotThrow(() => requireBatchWorkerEnabled({
+    ...flags, AROMIA_INTELLIGENCE_PRODUCTION_RUNTIME_APPROVED: 'true',
+  }));
+  assert.doesNotThrow(() => requireBatchWorkerEnabled({
+    ...flags, NODE_ENV: 'test',
+  }));
+});
