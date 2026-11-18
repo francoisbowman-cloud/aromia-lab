@@ -17,7 +17,7 @@ const PASSWORD='aromia-qa-browser-password-not-for-production';
 const COOKIE_SECRET='aromia-qa-browser-long-fixture-cookie-secret-not-for-production';
 const ADMIN_TOKEN='aromia-qa-browser-test-bearer';
 const WEB_PORT=3107, API_PORT=4407;
-const base=`http://127.0.0.1:${WEB_PORT}`;
+const base=`http://localhost:${WEB_PORT}`;
 const state={apiCalls:0,writeCalls:0,credentialLeak:false};
 
 const fakeApi=createServer((req,res)=>{
@@ -84,7 +84,7 @@ const report=(name,detail)=>process.stdout.write(`PASS ${name}${detail?` — ${d
     server.stdout.on('data',d=>webLogs+=String(d).slice(-2000));
     server.stderr.on('data',d=>webLogs+=String(d).slice(-2000));
     await waitForWeb(server);
-    browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+    browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,headless:true,args:['--no-sandbox']});
     const page=await browser.newPage({viewport:{width:390,height:844}});
     page.setDefaultTimeout(20000);
 
@@ -94,8 +94,8 @@ const report=(name,detail)=>process.stdout.write(`PASS ${name}${detail?` — ${d
 
     await page.getByLabel('Contraseña').fill('incorrect');
     await page.getByRole('button',{name:'Ingresar'}).click();
-    await page.getByRole('alert').waitFor();
-    assert.match(await page.getByRole('alert').innerText(),/incorrecta/i);
+    await page.getByRole('alert').filter({hasText:'Contraseña incorrecta'}).waitFor();
+    assert.match(await page.getByRole('alert').filter({hasText:'Contraseña incorrecta'}).innerText(),/incorrecta/i);
     report('Incorrect password rejected');
     await page.getByLabel('Contraseña').fill(PASSWORD);
     await page.getByRole('button',{name:'Ingresar'}).click();
