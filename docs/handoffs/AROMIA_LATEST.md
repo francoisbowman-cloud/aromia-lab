@@ -1,3 +1,20 @@
+## 2026-11-18 — Hito 02 · cierre de batería CI y hardening (sin certificación runtime)
+
+**Última batería CI confirmada:** PR #214 en SHA `2ad835d30f8b34f98c97fc83ff208d958645ef49`: 11 SUCCESS / 6 SKIPPED / 0 FAILURE. Pruebas reales PostgreSQL/CLI cross-process, seguridad, navegador y Strict Audit incluidas.
+
+**Hardening posterior (CI NUEVO PENDIENTE):**
+1. `apps/api/src/intelligence/worker.ts`: si `finish()` rechaza token/lease vencido, lanzar `job_lease_lost` en vez de contar como procesado.
+2. `apps/api/src/intelligence/worker.test.ts`: 2 regresiones para respuesta `finish=false`, tanto éxito como error de validación.
+3. `apps/api/src/intelligence/cli.ts`: el comando legado `work` también respeta aprobación explícita en `NODE_ENV=production`, sin romper invocación local.
+4. `apps/api/src/intelligence/integration.test.ts`: denegar `work-batch` cuando `NODE_ENV=production` y no hay bandera productiva aprobada.
+5. `docs/intelligence/GATE-02-CERTIFICATION.md`: hoja de evidencia actualizada.
+
+**Runtime operativo:** Railway `aromia-lab-v2` solo tiene environment production; no se tocó. No se activó scheduler ni se añadieron gastos. **Hito 02 sigue `in_progress`; barra formal 1/10 (10%).** Cuando cierren los checks nuevos, distinguir aceptación técnica aislada de certificación operacional que exige staging/deploy autorizado y observabilidad.
+
+**NEXT (sin cambiar de hito):** leer CI del último SHA, corregir errores sin relajar controles, consolidar informe de aceptación aislada, conservar en HOLD la PR #214 hasta autorización independiente.
+
+---
+
 ## 2026-11-18 — HITO 02 · campaña de certificación (NO CERRADO)
 
 **ACTOR:** ChatGPT, GitHub + Railway **read-only**, sin ejecución en la máquina del Publisher.  
