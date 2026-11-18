@@ -222,6 +222,7 @@ test('PostgreSQL: CLI bounded workers resume across separate Node processes with
       DATABASE_URL: cliUrl.toString(),
       INTELLIGENCE_ENABLED: 'true',
       INTELLIGENCE_WORKER_ENABLED: 'true',
+      NODE_ENV: 'test', // Never exercise the production approval path in this isolated fixture.
     };
     const invoke = (size: string, flags = env) => execFileSync(
       process.execPath, ['--import', 'tsx', 'src/intelligence/cli.ts', 'work-batch', size],
