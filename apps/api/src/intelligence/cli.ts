@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { pool } from '../db/pool';
 import { JobStore } from './store';
 import { runOnce } from './worker';
-import { parseBatchSize, runBoundedBatch } from './batch';
+import { parseBatchSize, requireBatchWorkerEnabled, runBoundedBatch } from './batch';
 async function main() {
   const store = new JobStore(pool);
   const [command,arg,file] = process.argv.slice(2);
@@ -12,7 +12,7 @@ async function main() {
     case 'work': return { processed: await runOnce(store) };
     // Opt-in one-shot invocation by an external scheduler; no self-scheduling.
     case 'work-batch': {
-      if (process.env.INTELLIGENCE_WORKER_ENABLED !== 'true') throw new Error('worker_not_enabled');
+      requireBatchWorkerEnabled(process.env);
       return runBoundedBatch(store,parseBatchSize(arg));
     }
     case 'research': {
