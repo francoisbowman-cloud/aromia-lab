@@ -5,11 +5,14 @@ on:
       - security/aromia-runtime-safe-patches-20261117
     paths:
       - '.github/workflows/aromia-safe-patch-proposal.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/aromia-safe-patch-proposal.yml'
 permissions:
   contents: write
 jobs:
   patch-branch-only:
-    if: github.repository == 'francoisbowman-cloud/aromia-lab' && github.ref_name == 'security/aromia-runtime-safe-patches-20261117'
+    if: github.repository == 'francoisbowman-cloud/aromia-lab' && ((github.event_name == 'push' && github.ref_name == 'security/aromia-runtime-safe-patches-20261117') || (github.event_name == 'pull_request' && github.head_ref == 'security/aromia-runtime-safe-patches-20261117' && github.event.pull_request.head.repo.full_name == 'francoisbowman-cloud/aromia-lab'))
     runs-on: ubuntu-24.04
     timeout-minutes: 18
     steps:
