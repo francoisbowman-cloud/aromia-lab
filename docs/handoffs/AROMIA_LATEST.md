@@ -1,3 +1,16 @@
+## 2026-11-18 — HITO 02: instrumentación segura del batch (ChatGPT)
+
+- **Objetivo ejecutado:** hacer visible la duración y resultados agregados de `work-batch`, sin exponer briefs, payloads, contenido de fuentes ni permitir publicación.
+- **Rama/PR:** `claude/aromia-integration` / #214 DRAFT, RELEASE HOLD.
+- **Commits de código:** `af63ee55f0640a883095b13ff263f74e1dbaad87` (`batch.ts`), `86ea4daede5c35dbae95832506a2b929aec77531` (`cli.ts`), `d03c412524577448ffef7c7669b699fb2f4eca1c` (`batch.test.ts`).
+- **Cambios:** `runObservedBatch` envuelve la ejecución acotada existente y devuelve `attempted`, `processed`, `idle`, `durationMs`, `publication=blocked`, `providers=disabled`; el CLI `work-batch` lo utiliza. No instala scheduler, infraestructura, alertas ni proveedores externos.
+- **Pruebas añadidas:** duración determinista e idle, tamaños inválidos no ejecutan trabajos, errores de DB se propagan. **No se han ejecutado tests locales** desde este conector GitHub. Al consultar `d03c412...`, aún no se listaban workflow runs; **CI pendiente**, no declarar PASS.
+- **Última evidencia previa:** para commit `0557c7ff634857f2921fae03a41d1534ff584e2f`, Intelligence persistence, integrated QA, auditoría, navegador y otros workflows figuraban SUCCESS; Catalog Expansion Engine CI seguía `in_progress`, seis checks visuales SKIPPED. Ninguno valida aún este nuevo cambio.
+- **Siguiente acción:** verificar CI del HEAD final (incluido este checkpoint), diagnosticar/regresar si falla. Preparar evaluación de errores/alertas y autenticación aislada; no certificar HITO 02 sin staging autorizado, scheduler real, rollback y permiso Publisher.
+- **Progreso oficial:** 1/10; HITO 02 `in_progress`. Sin `main`, deploy, migraciones, gastos, imágenes o publicación.
+
+---
+
 ## 2026-11-18 — Cambio ejecutado: coordinación integrada (ChatGPT)
 
 - **Rama/PR:** `claude/aromia-integration` / #214 DRAFT, RELEASE HOLD.
