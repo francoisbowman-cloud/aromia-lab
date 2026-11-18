@@ -94,8 +94,8 @@ const report=(name,detail)=>process.stdout.write(`PASS ${name}${detail?` — ${d
 
     await page.getByLabel('Contraseña').fill('incorrect');
     await page.getByRole('button',{name:'Ingresar'}).click();
-    await page.getByRole('alert').waitFor();
-    assert.match(await page.getByRole('alert').innerText(),/incorrecta/i);
+    await page.locator('form').getByRole('alert').waitFor();
+    assert.match(await page.locator('form').getByRole('alert').innerText(),/incorrecta/i);
     report('Incorrect password rejected');
     await page.getByLabel('Contraseña').fill(PASSWORD);
     await page.getByRole('button',{name:'Ingresar'}).click();
