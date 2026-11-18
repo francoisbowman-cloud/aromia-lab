@@ -5,7 +5,7 @@ DATE_UTC: 2026-11-18
 ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5), esfuerzo Medium por instrucción del Publisher (el handoff sugería Opus/High; no se cambió de modelo)
 BRANCH: claude/aromia-integration
 BASE_SHA: b30cd3da7814441f1a0ea0d404da37fb10c44311
-HEAD_SHA: a20da1def2357aeae4c6a2e461790b30afa8bb1c (+ este checkpoint en el commit siguiente)
+HEAD_SHA (código): a20da1def2357aeae4c6a2e461790b30afa8bb1c (+ este checkpoint en el commit siguiente)
 CURRENT_BLOCK: P0 Tiptap + Next 16 (apps/web) — cerrado local; P1 node-cron 4.6.0 (apps/api) — hecho
 COMPLETED_CHANGES:
   - Familia Tiptap fijada exacta en 3.34.0 (core, pm, react, starter-kit, extension-image); corrige GHSA-cp6q-959q-f8rh y GHSA-j95f-988m-3j2f.
@@ -22,7 +22,7 @@ TESTS_COMMANDS_AND_RESULTS (apps/web, Node 20.20.2, Windows):
   - npm run build (Turbopack): OK, 42 páginas estáticas
   - Smoke con next start local: / /magazine /buscar /robots.txt /sitemap.xml 200; /admin 307 -> /admin/login; /api/admin/dashboard 401;
     /catalogo 308 -> /magazine; /magazine/<slug> e /imprimir 200; CSS Tailwind emitido (102 KB). Slug inexistente da 200 por loading.tsx (streaming), no verificado contra baseline.
-CI_RUNS_WITH_URLS_AND_CONCLUSIONS: rama pusheada; draft PR https://github.com/francoisbowman-cloud/aromia-lab/pull/214 (Auto-fix activo); resultados de CI pendientes al momento de escribir
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: rama pusheada; draft PR https://github.com/francoisbowman-cloud/aromia-lab/pull/214 (Auto-fix activo); al corte 6 pass / 9 pending / 0 fail; un fallo previo (smoke login, selector role=alert) corregido en 35c26d0
 SECURITY_AUDIT_COUNTS (npm audit --omit=dev):
   - web: 0 (antes 1 crítica, 2 altas, 26 moderadas)
   - api: 0 vulnerabilidades tras node-cron 3.0.3 -> 4.6.0 (elimina uuid transitivo; sin @types/node-cron; único uso: cron.schedule en src/scraper/runner.ts)
@@ -37,3 +37,5 @@ NEXT_SAFE_ACTION: leer resultados de CI del PR #214; luego P1 scheduler/colas In
 REQUIRES_PUBLISHER_APPROVAL: merge a main, deploy, migraciones de producción.
 RELEASE_STATUS: HOLD
 ```
+
+Resumen para continuar en ChatGPT: docs/handoffs/CHATGPT_CONTINUATION.md
