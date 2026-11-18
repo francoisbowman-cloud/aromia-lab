@@ -1,3 +1,19 @@
+## 2026-11-18 — Cambio de criterio: de hito certificado a hito certificado
+
+**Instrucción del Publisher:** trabajar por hitos completos, no microbloques. Un hito solo puede marcarse `verified` cuando cumple TODOS sus criterios con evidencia. Los blockers que requieren producción, presupuesto, licencias o aprobación humana **no pueden darse por resueltos por inferencia**.
+
+**Hito objetivo:** 02 (`intelligence-runtime`). **Estado: EN PROGRESO, SIN CERTIFICAR.** Barra oficial 1/10 (10%). Último baseline totalmente verde antes de esta tanda: SHA `8a66852ecf4f0f6450cc9b8e2883678e93c8ed90`, 11 SUCCESS, 6 SKIPPED, 0 FAILED en PR #214.
+
+**Entregas de esta tanda:** `apps/api/src/intelligence/batch.ts` y `batch.test.ts` con operación finita y límite de 25 jobs, parada al primer idle, control de fallos y publicación/proveedores bloqueados; doble opt-in `INTELLIGENCE_ENABLED=true` y `INTELLIGENCE_WORKER_ENABLED=true`; `cli.ts` añade `work-batch N` para disparador EXTERNO autorizado; suite CI `test:intelligence` incluye tests. `integration.test.ts` simula dos invocaciones con reconexión PostgreSQL desechable, procesando 2+1 jobs sin saltarse el review gate. `docs/intelligence/GATE-02-CERTIFICATION.md` contiene los criterios de cierre, evidencia y riesgos; `apps/web/src/lib/projectProgress.ts` actualiza el snapshot sin elevar el gate.
+
+**Checks de estos últimos commits:** corriendo/encolados; **NO declarar aprobados hasta revisar HEAD exacto**. Si falla, leer logs y corregir antes de evaluar cierre. Si pasan, el CI solo certifica el **subconjunto de desarrollo/aislado**, no la operación continua de un runtime autorizado ni el hito 02 oficial.
+
+**Bloqueadores reales de certificación:** despliegue o staging autorizado con scheduler independiente, permisos y secretos supervisados, métricas/alertas observables, simulación de reinicio/rollback del entorno, aprobación explícita. No tocar Railway, datos ni `main` por este handoff.
+
+**NEXT:** verificar el CI de HEAD, corregir fallos, completar evidencias reproducibles de operación aislada; solicitar la autorización pertinente únicamente cuando el gate dependa de ella. Mientras tanto, siguiente hito no se marca como cerrado. **PR #214: DRAFT / RELEASE HOLD.**
+
+---
+
 ## ChatGPT — bloque largo · piloto editorial verificable (2026-11-18)
 
 **ACTOR:** ChatGPT, connector GitHub; ningún entorno local o producción.  
