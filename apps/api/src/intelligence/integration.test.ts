@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { Pool } from 'pg';
+import { execFileSync } from 'node:child_process';
 import { JobStore } from './store';
 import { runOnce } from './worker';
 import { runBoundedBatch } from './batch';
@@ -190,6 +191,57 @@ test('PostgreSQL: bounded external invocation resumes remaining jobs after proce
       assert.equal(detail.events.filter((e: { event: string }) => e.event === 'claimed').length, 1);
     }
     assert.equal(await runOnce(store), false);
+  } finally {
+    await db.end();
+    await admin.query(`DROP SCHEMA ${schema} CASCADE`);
+    await admin.end();
+  }
+});
+
+test('PostgreSQL: CLI bounded workers resume across separate Node processes without auto-publish', async () => {
+  assert.ok(connectionString, 'Set INTELLIGENCE_TEST_DATABASE_URL to a local *_test database');
+  const parsed = new URL(connectionString);
+  assert.ok(['localhost', '127.0.0.1'].includes(parsed.hostname) && parsed.pathname.endsWith('_test'));
+  const schema = 'intelligence_process_' + randomUUID().replaceAll('-', '');
+  const admin = new Pool({connectionString});
+  await admin.query(`CREATE SCHEMA ${schema}`);
+  const options = {connectionString, options: `-c search_path=${schema}`};
+  const db = new Pool(options);
+  try {
+    await db.query(readFileSync('migrations/024_intelligence_jobs.sql', 'utf8'));
+    const store = new JobStore(db);
+    const brief = {
+      title: 'Cross-process fixture',
+      question: 'Do jobs persist when the CLI exits?',
+      sources: [{url:'https://example.org/fixture',excerpt:'Test data only.'}],
+    };
+    const jobs = await Promise.all(['one','two','three'].map(key => store.enqueue('process-'+key,brief)));
+    const cliUrl = new URL(connectionString);
+    cliUrl.searchParams.set('options', `-c search_path=${schema}`);
+    const env = {...process.env,
+      DATABASE_URL: cliUrl.toString(),
+      INTELLIGENCE_ENABLED: 'true',
+      INTELLIGENCE_WORKER_ENABLED: 'true',
+    };
+    const invoke = (size: string, flags = env) => execFileSync(
+      process.execPath, ['--import', 'tsx', 'src/intelligence/cli.ts', 'work-batch', size],
+      {cwd:process.cwd(), env:flags, encoding:'utf8', timeout:30000}
+    );
+    assert.throws(() => invoke('2', {...env, INTELLIGENCE_WORKER_ENABLED:'false'}));
+    assert.equal((await store.list()).filter(j => j.status === 'queued').length,3);
+    const first = JSON.parse(invoke('2'));
+    assert.equal(first.processed,2);
+    assert.equal(first.publication,'blocked');
+    assert.equal(first.providers,'disabled');
+    const second = JSON.parse(invoke('2'));
+    assert.equal(second.processed,1);
+    assert.equal(second.idle,true);
+    for(const job of jobs) {
+      const persisted = await store.detail(job.id);
+      assert.equal(persisted.status,'awaiting_review');
+      assert.equal(persisted.result.publication,'blocked');
+      assert.equal(persisted.result.providerCostMicros,0);
+    }
   } finally {
     await db.end();
     await admin.query(`DROP SCHEMA ${schema} CASCADE`);
