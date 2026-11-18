@@ -8,7 +8,8 @@ export const metadata: Metadata = { title: "Buscar — Aromia", description: "Bu
 
 const RESULT_PAGE_SIZE = 20;
 
-export default async function BuscarPage({ searchParams }: { searchParams: { q?: string } }) {
+export default async function BuscarPage({ searchParams: promisedsearchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const searchParams = await promisedsearchParams;
   const initialQuery = typeof searchParams.q === "string" ? searchParams.q.slice(0, 80) : "";
 
   // Sin query, la vista inicial no trae el catálogo — ver

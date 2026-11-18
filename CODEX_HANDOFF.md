@@ -6,6 +6,26 @@
 **Actor siguiente:** **Codex / Code**.  
 **Instrucción:** ejecutar autónomamente los bloques elegibles, corregir fallos, mantener checklists y entregar código probado y PRs, **sin publicar**. No es una solicitud para volver a conceptualizar el producto.
 
+## Latest checkpoint — Claude Code continuation, 18-11-2026
+
+LAST_ACTOR: Codex. NEXT_ACTOR: Claude Code (Publisher requested handoff).
+ACTIVE_BRANCH: `codex/aromia-next-security-20261118` (isolated checkout /workspace/aromia-next).
+BASE_REF: handoff6933ba4 → Tiptap9037b00 + browser verification beb6ac5 (equivalent cherry-pick of af28fcd).
+
+- PR210: `codex/aromia-tiptap-security-20261118`, draft targeting handoff branch; head af28fcd. All29 Tiptap packages3.34.0, no peer overrides/force.127 tests, lint, types, build and real isolated Chromium smoke locally pass. GitHub API/PG/image checks pass; latest web/browser checks were still running at checkpoint. Runtime web gate still FAIL on this branch because Next14/PostCSS remain vulnerable; intentional release hold, not bypassed.
+- Block B saved on active branch: Next15.5.29 + eslint-config-next15.5.29, React18 preserved. Async route/page params, async cookies, client useParams and native Next15 404 digest expectations updated. Exact nested override `next.postcss=8.5.33` avoids Next15's pinned8.4.31; normal install retained old nested lock entry initially, so only that stale entry was removed and regenerated normally. Clean npm ci succeeds; npm audit runtime reports ZERO advisories, persisted in docs/intelligence/security/next-runtime-audit.json. Audit alone is not release certification.
+-127 tests and lint pass after final clean install. An initial Next15 build/types passed before the PostCSS fix; the final build with patched PostCSS is in progress at this checkpoint, then chained isolated browser smoke. Logs: /tmp/aromia-next-final-qa.log and /tmp/aromia-next-browser.log. These are temporary; rerun if absent. Node local24; verify Node22 CI separately.
+- Initial browser smoke selector hit Next's route announcer; fixed to target incorrect-password text. System Chromium required localhost rather than127.0.0.1 for Secure cookie treatment. Optional PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH selects installed Chromium; no auth weakening. Tiptap local smoke passed all steps, including mismatch block/no writes.
+- PR206/208/209 remain open/draft/unmerged at last live inspection; SHAs match original handoff. PR209 has no recorded checks. No production, OMNI, image replacement, provider spend or publication actions.
+
+NEXT_ACTION:
+1. Fetch active branch; read AGENTS.md, this checkpoint and CLAUDE_CODE_HANDOFF.md. Preserve existing working trees.
+2. Finish final Next build and Chromium; check runtime npm audit and npm ls; run complete integrated API/PostgreSQL/image suite and Node22 CI, fix failures without weakening gates. Check static governance for assumptions about async signatures/Next14. CMS backend save/rehydration browser flow still needs focused coverage; DOM Editor roundtrip alone is not that proof.
+3. Keep separate draft PRs; do not merge to main. Update handoff/relay with exact current CI after validation.
+4. Continue block C: node-cron3→4 feasibility and scheduler tests, then admin auth/CSRF/session/headers/rate limits; then D integration on isolated branch. Only inspected current cron usage, no API scheduler patch yet.
+BLOCKERS: final Next QA/CI incomplete, full CMS browser persistence coverage pending, production/runtime/rights/identity gates remain open. Verified milestones stay1/10.
+AUTHORITY: NO_MERGE / NO_DEPLOY / NO_PUBLISH / NO_PRODUCTION_WRITES / NO_PAID_SERVICES / NO_OMNI_CHANGES.
+
 ## Checkpoint Codex — 18-11-2026, bloque A
 
 Base6933ba4 (#209); rama `codex/aromia-tiptap-security-20261118`. GitHub reconfirmado: #206 ee66f06 y #208 fb85bc0 abiertas/draft, funcionales verdes y runtime web FAIL; #209 abierta/draft sin checks. Familia completa29 paquetes Tiptap a3.34.0; peers exactos coherentes. Primer npm install falló por extensiones3.28 bloqueadas; se retiraron exclusivamente entradas Tiptap del lock para resolverlas juntas con npm install normal. Sin force/legacy-peer-deps.

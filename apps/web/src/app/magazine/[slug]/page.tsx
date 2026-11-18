@@ -12,7 +12,8 @@ import { PersonalizedDiscoveryRail } from "@/components/discovery/PersonalizedDi
 export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params: promisedparams }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await promisedparams;
   const articulo = await getArticuloBySlug(params.slug);
   if (!articulo) return {};
   const title = articulo.meta_title ?? articulo.titulo;
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return { title, description, alternates: { canonical: `/magazine/${articulo.slug}` }, openGraph: { type: "article", title, description, publishedTime: articulo.publicado_en, authors: articulo.autor ? [articulo.autor] : undefined, images: socialImage ? [socialImage] : undefined }, twitter: { card: "summary_large_image", title, description, images: socialImage ? [socialImage] : undefined } };
 }
 
-export default async function MagazineArticlePage({ params }: { params: { slug: string } }) {
+export default async function MagazineArticlePage({ params: promisedparams }: { params: Promise<{ slug: string }> }) {
+  const params = await promisedparams;
   const articulo = await getArticuloBySlug(params.slug);
   if (!articulo) notFound();
   let perfumes: Perfume[] = [];

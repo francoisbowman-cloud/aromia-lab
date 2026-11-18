@@ -274,7 +274,8 @@ export function generateStaticParams() {
   return Object.keys(data).map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+export async function generateMetadata({ params: promisedparams }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await promisedparams;
   const s = data[params.slug];
   if (!s) return {};
   return {
@@ -289,7 +290,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function Story({ params }: { params: { slug: string } }) {
+export default async function Story({ params: promisedparams }: { params: Promise<{ slug: string }> }) {
+  const params = await promisedparams;
   const s = data[params.slug];
   if (!s) notFound();
 

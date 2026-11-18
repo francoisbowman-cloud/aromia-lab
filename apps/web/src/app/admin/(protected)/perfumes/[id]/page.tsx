@@ -1,4 +1,5 @@
 "use client";
+import { useParams } from "next/navigation";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,7 +36,8 @@ interface Retailer {
 
 const TABS = ["General", "Ofertas", "Reseñas"] as const;
 
-export default function AdminPerfumeEditPage({ params }: { params: { id: string } }) {
+export default function AdminPerfumeEditPage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
   const [tab, setTab] = useState<(typeof TABS)[number]>("General");
   const [loading, setLoading] = useState(true);

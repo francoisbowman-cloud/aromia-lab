@@ -6,14 +6,16 @@ import { getProfileBySlug } from "@/lib/quizData";
 import { rankPerfumesForProfile } from "@/lib/quizRanking";
 import { PerfumeCard } from "@/components/perfume/PerfumeCard";
 
-export async function generateMetadata({ params }: { params: { perfil: string } }): Promise<Metadata> {
+export async function generateMetadata({ params: promisedparams }: { params: Promise<{ perfil: string }> }): Promise<Metadata> {
+  const params = await promisedparams;
   const perfil = getProfileBySlug(params.perfil);
   if (!perfil) return {};
   const titulo = `${perfil.titulo} ${perfil.emoji}`;
   return { title: titulo, description: perfil.descripcion, openGraph: { title: titulo, description: perfil.descripcion } };
 }
 
-export default async function QuizResultadoPage({ params }: { params: { perfil: string } }) {
+export default async function QuizResultadoPage({ params: promisedparams }: { params: Promise<{ perfil: string }> }) {
+  const params = await promisedparams;
   const perfil = getProfileBySlug(params.perfil);
   if (!perfil) notFound();
   const perfumes = await getPerfumes();

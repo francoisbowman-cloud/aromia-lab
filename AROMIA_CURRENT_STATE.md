@@ -1,5 +1,10 @@
 # Aromia — Current Operational State
 
+## Latest checkpoint — Claude Code, 2026-11-18
+
+Resume `codex/aromia-next-security-20261118`; read CLAUDE_CODE_HANDOFF.md and newest CODEX_HANDOFF.md checkpoint. Tiptap PR210 draft/local QA passed; Next15.5.29 + PostCSS8.5.33 implemented, runtime audit0, final build/browser/CI pending. No release authority. Historical headers below are superseded for continuation.
+
+
 Latest Code checkpoint 2026-11-18: branch `codex/aromia-tiptap-security-20261118`, base6933ba4, coherent Tiptap3.34.0 remediation;127 tests/lint/types pass, optimized build and isolated Chromium smoke pass. Next/PostCSS release hold remains. Follow newest CODEX_HANDOFF.md checkpoint; no publication authority.
 
 ## CURRENT CODEx RELAY — 2026-11-17 (state 57; supersedes older operational headers)

@@ -13,7 +13,7 @@ import {GET as decisionsGET} from "@/app/api/admin/intelligence/visual-decisions
 
 const reviews=()=>new NextRequest("http://localhost:3000/api/admin/intelligence/visual-reviews?slug=chance-eau-tendre");
 const decisions=()=>new NextRequest("http://localhost:3000/api/admin/intelligence/visual-decisions/51");
-const decisionParams={params:{observationId:"51"}};
+const decisionParams={params: Promise.resolve({observationId:"51"})};
 beforeEach(()=>{
   sessionState.value=undefined;
   vi.stubEnv("ADMIN_SESSION_SECRET","independent-test-session-signing-key-long");
@@ -87,7 +87,7 @@ it("does not proxy malicious identifiers or leak backend on network error",async
   const backend=vi.fn().mockRejectedValue(new Error("backend offline"));
   vi.stubGlobal("fetch",backend);
   const bad=await reviewGET(new NextRequest("http://localhost:3000/api/admin/intelligence/visual-reviews?slug=..%2Fsecret"));
-  const badDecision=await decisionsGET(decisions(),{params:{observationId:"-3"}});
+  const badDecision=await decisionsGET(decisions(),{params: Promise.resolve({observationId:"-3"})});
   expect(bad.status).toBe(400);expect(badDecision.status).toBe(400);
   expect(backend).not.toHaveBeenCalled();
   const unavailable=await reviewGET(reviews());

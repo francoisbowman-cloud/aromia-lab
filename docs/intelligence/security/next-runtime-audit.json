@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-18",
+  "scope": "isolated checkout; npm audit --omit=dev; not deployment evidence",
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "dependencies": {
+      "prod": 86,
+      "dev": 454,
+      "optional": 93,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 579
+    }
+  },
+  "vulnerabilities": {}
+}

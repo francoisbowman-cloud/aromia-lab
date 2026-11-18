@@ -16,7 +16,8 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aromialab.com
 function catalogImageUrl(slug: string) { return `${SITE_URL}/api/catalog-image/${encodeURIComponent(slug)}`; }
 function catalogBuyUrl(slug: string) { return `${SITE_URL}/api/catalog-buy/${encodeURIComponent(slug)}`; }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params: promisedparams }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await promisedparams;
   const perfume = await getPerfumeBySlug(params.slug); if (!perfume) return {};
   const titulo = `${perfume.nombre} — ${perfume.marca}`;
   const descripcion = perfume.descripcion_corta ?? `${perfume.nombre} de ${perfume.marca}: notas, evolución, rendimiento y dónde encontrar esta fragancia.`;
@@ -29,7 +30,8 @@ function buildProductJsonLd(perfume: NonNullable<Awaited<ReturnType<typeof getPe
   return { "@context": "https://schema.org", "@type": "Product", name: perfume.nombre, image: [catalogImageUrl(perfume.slug)], description: perfume.descripcion_corta, brand: { "@type": "Brand", name: perfume.marca }, offers: offer };
 }
 
-export default async function CatalogoDetailPage({ params }: { params: { slug: string } }) {
+export default async function CatalogoDetailPage({ params: promisedparams }: { params: Promise<{ slug: string }> }) {
+  const params = await promisedparams;
   const perfume = await getPerfumeBySlug(params.slug); if (!perfume) notFound();
   const [perfumes, articulos] = await Promise.all([getPerfumes(), getArticulos()]);
   const similares = getSimilarPerfumes(perfume, perfumes, 6);
