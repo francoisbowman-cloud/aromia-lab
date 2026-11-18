@@ -1,0 +1,55 @@
+# Disposable package migration rehearsal. Does not modify GitHub branches or main.
+name: Aromia security upgrade rehearsal
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/aromia-security-rehearsal.yml'
+      - 'apps/web/package.json'
+      - 'apps/web/package-lock.json'
+      - 'apps/web/src/lib/storyAvailability.test.ts'
+      - 'apps/web/src/lib/adminApiProxy.ts'
+      - 'apps/web/src/components/magazine/MagazineCoverStory.tsx'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  security-rehearsal:
+    name: Sharp + Tiptap compatible-patch trial
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Recompute a clean disposable peer dependency graph
+        run: |
+          node -e 'const fs=require("node:fs");const p=JSON.parse(fs.readFileSync("package.json","utf8"));for(const [k,v] of Object.entries({"sharp":"0.35.5","@tiptap/core":"3.32.1","@tiptap/react":"3.32.1","@tiptap/pm":"3.32.1","@tiptap/starter-kit":"3.32.1","@tiptap/extension-image":"3.32.1"}))p.dependencies[k]=v;fs.writeFileSync("package.json",JSON.stringify(p,null,2)+String.fromCharCode(10))'
+          rm package-lock.json
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Real Next HTTP smoke under patched dependencies
+        run: node ../../scripts/qa/admin-runtime-smoke.mjs
+      - name: Audit ephemeral production dependency graph
+        run: |
+          set +e
+          npm audit --json --omit=dev > "$RUNNER_TEMP/aromia-rehearsal-audit.json"
+          set -e
+          node ../../scripts/qa/summarize-dependency-audit.mjs "$RUNNER_TEMP/aromia-rehearsal-audit.json" report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aromia-security-rehearsal-package-and-lock
+          path: |
+            apps/web/package.json
+            apps/web/package-lock.json
+          retention-days: 7

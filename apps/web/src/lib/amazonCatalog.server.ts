@@ -51,15 +51,14 @@ function extractProductImage(html: string): string | null {
   candidates.push(hiRes?.[1],large?.[1],og?.[1]); return firstAmazonImage(candidates);
 }
 function directAsin(url:string){return url.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i)?.[1]?.toUpperCase()??null;}
-function productUrlForAsin(asin:string){const url=new URL(`https://www.amazon.com/dp/${asin}`);if(AMAZON_TAG)url.searchParams.set("tag",AMAZON_TAG);return url.toString();}
-function extractSearchResult(html:string):{asin:string;imageUrl:string|null}|null{
-  for(const match of Array.from(html.matchAll(/data-asin=["']([A-Z0-9]{10})["']/gi))){const asin=match[1].toUpperCase();const start=match.index??0;const block=html.slice(start,start+24000);if(/s-sponsored-label-text|Sponsored/i.test(block.slice(0,2500)))continue;const im=block.match(/<img[^>]+class=["'][^"']*s-image[^"']*["'][^>]+src=["']([^"']+)["']/i)??block.match(/<img[^>]+src=["']([^"']+)["'][^>]+class=["'][^"']*s-image[^"']*["']/i);const imageUrl=firstAmazonImage([im?.[1]]);if(imageUrl)return{asin,imageUrl};}return null;
-}
 async function resolveFromAmazonUrl(url:string):Promise<AmazonCatalogProduct|null>{
-  const affiliateUrl=affiliateAmazonUrl(url);if(!affiliateUrl)return null;const asin=directAsin(affiliateUrl);const html=await fetchAmazonHtml(affiliateUrl);
-  if(asin)return{productUrl:productUrlForAsin(asin),imageUrl:html?extractProductImage(html):null,source:"amazon-product"};
-  if(html){const result=extractSearchResult(html);if(result){const productUrl=productUrlForAsin(result.asin);const productHtml=await fetchAmazonHtml(productUrl);const productImage=productHtml?extractProductImage(productHtml):null;return{productUrl,imageUrl:productImage??result.imageUrl,source:productImage?"amazon-product":"amazon-search"};}}
-  return{productUrl:affiliateUrl,imageUrl:null,source:"amazon-link"};
+  const affiliateUrl=affiliateAmazonUrl(url);if(!affiliateUrl)return null;
+  // Search ranking is not evidence of product identity or concentration/size.
+  // Keep a supplied search link as a link; never promote its first hit to a packshot.
+  if(!directAsin(affiliateUrl))return{productUrl:affiliateUrl,imageUrl:null,source:"amazon-link"};
+  const html=await fetchAmazonHtml(affiliateUrl);
+  // Preserve the supplied marketplace and variant parameters.
+  return{productUrl:affiliateUrl,imageUrl:html?extractProductImage(html):null,source:"amazon-product"};
 }
 export async function resolveAmazonCatalogProduct(perfume:Perfume):Promise<AmazonCatalogProduct|null>{
   const links=[perfume.link_afiliado,perfume.amazon_url].map(cleanAmazonUrl).filter((v):v is string=>Boolean(v)).filter((v,i,a)=>a.indexOf(v)===i);

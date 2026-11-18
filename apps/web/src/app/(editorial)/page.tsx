@@ -96,14 +96,14 @@ export default function EditorialHome() {
         </div>
         <figure className="cover-atmosphere-photo">
           <Image src="/editorial-v1/perfume-silk-cover.webp" alt="Composición imaginada: un frasco de vidrio ámbar sobre travertino, seda vino y flores de cítrico." width={1200} height={1500} priority sizes="(max-width: 700px) 100vw, 65vw" />
-          <figcaption>Creación visual con IA · AROMIA</figcaption>
+          <figcaption>Ilustración digital · AROMIA</figcaption>
         </figure>
       </section>
 
       <section className="cover-citrus" aria-labelledby="citrus-title">
         <figure>
           <Image src="/editorial-v1/bergamot-editorial-v2.webp" alt="Bergamota verde reinterpretada con luz lateral que revela la textura de su piel." width={640} height={640} sizes="(max-width: 700px) 100vw, 50vw" />
-          <figcaption>Reinterpretación con IA · <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></figcaption>
+          <figcaption>Adaptación digital · <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></figcaption>
         </figure>
         <div>
           <p className="cover-eyebrow">Atlas de materias</p>
@@ -217,7 +217,7 @@ export default function EditorialHome() {
             <Link href="/descubrir/familias/citrica" aria-label="Explorar la familia cítrica">
               <Image src="/editorial-v1/bergamot-editorial-v2.webp" width={640} height={640} sizes="(max-width: 800px) 38vw, 15vw" alt="Estudio reinterpretado de una bergamota verde: luz lateral y textura de la cáscara." />
             </Link>
-            <figcaption><em>Bergamota</em><span>Reinterpretación con IA a partir de <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></span></figcaption>
+            <figcaption><em>Bergamota</em><span>Adaptación digital a partir de <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></span></figcaption>
           </figure>
           <figure>
             <Link href="/descubrir/familias/ambar-oriental" aria-label="Explorar la familia ámbar">
