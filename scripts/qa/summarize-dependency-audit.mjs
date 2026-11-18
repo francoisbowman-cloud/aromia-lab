@@ -14,7 +14,13 @@ const list=Object.entries(report.vulnerabilities)
   .map(([name,data])=>({
     name, severity:data.severity,
     direct:Boolean(data.isDirect),
-    fix:data.fixAvailable===false?"none":data.fixAvailable===true?"compatible_candidate":"major_or_specific_candidate",
+    fix:data.fixAvailable===false?"none":
+      data.fixAvailable===true?"compatible_candidate":
+      data.fixAvailable && typeof data.fixAvailable==="object" ? {
+        name:String(data.fixAvailable.name??name),
+        version:String(data.fixAvailable.version??"unknown"),
+        isSemVerMajor:Boolean(data.fixAvailable.isSemVerMajor)
+      }:"unknown",
     viaCount:Array.isArray(data.via)?data.via.length:0
   }))
   .sort((a,b)=>a.severity===b.severity?a.name.localeCompare(b.name):a.severity==="critical"?-1:1);
