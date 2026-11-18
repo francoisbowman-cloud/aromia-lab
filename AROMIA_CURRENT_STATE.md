@@ -1,5 +1,21 @@
 # Aromia — Current Operational State
 
+## ESTADO CANÓNICO ACTUALIZADO — 2026-11-18 · CLAUDE RESUME
+
+**Contrato maestro:** `AROMIA_MASTER_HANDOFF.md` en esta rama. **Continuación vigente:** `docs/handoffs/CLAUDE_RESUME_2026-11-18.md`; **checkpoint:** `docs/handoffs/AROMIA_LATEST.md`. Consultar GitHub antes de declarar CI actual.
+
+**BRANCH:** `claude/aromia-integration` · **PR:** #214 OPEN / DRAFT / RELEASE HOLD (destino `main`). **Objetivo exclusivo:** cerrar la certificación del HITO 02 (Intelligence runtime); 1/10 hitos certificados, **10%**. El Publisher exige trabajo por hitos certificados y bloques largos. Modelo elegido **Sonnet Medium** por eficiencia; no cambiar a Opus sin razón/permiso.
+
+**PR #214 verificada al corte en SHA `bf51c5825b893e0ac4eabab3dfa8888b5f967d30`:** 9 workflows SUCCESS, 6 SKIPPED, 2 IN_PROGRESS (browser real, Catalog Expansion Engine); ningún FAIL observado. El HEAD cambia tras estos commits documentales, por lo que Claude debe volver a verificar las comprobaciones actuales. Hito 02 **no certificado** por CI: falta runtime autorizado con scheduler, observabilidad, permisos y recuperación.
+
+**Railway:** proyecto `aromia-lab-v2`, único entorno visible `production`; web y api del `main` SHA `1619c776560f5d6f9c5948f8092ff5241540048f`. No crear staging, desplegar ni modificar servicios/DB sin autorización explícita.
+
+**NEXT_ACTOR:** Claude Code · **NEXT_ACTION:** leer `docs/handoffs/CLAUDE_RESUME_2026-11-18.md`, verificar CI del último HEAD, corregir, consolidar aceptación técnica aislada, preservar release hold. Solo solicitar aprobación para infraestructura cuando sea realmente indispensable.
+
+---
+
+
+
 ## CANONICAL HANDOFF — 2026-11-18
 
 **ONLY CURRENT OPERATIONAL HANDOFF:** [`AROMIA_MASTER_HANDOFF.md`](AROMIA_MASTER_HANDOFF.md) on `handoff/aromia-final-unified-20261118`. Claude Code is sole development actor; Codex paused. The Publisher authorizes **internal development branch merges** into one `claude/aromia-integration` line after verification; **NO merge to `main`, deploy, publish, production migrations, spending or visual/rights approvals** without separate explicit consent. Earlier CODEX and CLAUDE handoffs and relay entries below are retained **for historical evidence only**, not as conflicting operational instructions. Read master before acting. Latest snapshot is not live telemetry; verify all PRs, commits and CI before making changes.
