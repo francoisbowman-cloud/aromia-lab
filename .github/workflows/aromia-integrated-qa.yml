@@ -21,6 +21,7 @@ on:
       - 'scripts/integration-contract-gates.test.mjs'
       - 'scripts/qa/admin-runtime-smoke.mjs'
       - 'scripts/qa/summarize-dependency-audit.mjs'
+      - 'scripts/qa/summarize-dependency-audit.test.mjs'
       - 'apps/web/package-lock.json'
       - 'apps/web/package.json'
       - '.github/workflows/aromia-integrated-qa.yml'
@@ -84,6 +85,7 @@ jobs:
           node-version: '20'
       - run: npm ci --ignore-scripts
       - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/integration-contract-gates.test.mjs
+      - run: node --test scripts/qa/summarize-dependency-audit.test.mjs
 
   production-dependency-risk:
     name: Production dependency advisory gate
