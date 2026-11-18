@@ -1,3 +1,26 @@
+## ChatGPT — bloque largo · piloto editorial verificable (2026-11-18)
+
+**ACTOR:** ChatGPT, connector GitHub; ningún entorno local o producción.  
+**BRANCH/PR:** `claude/aromia-integration` / #214 DRAFT · RELEASE HOLD.  
+**Baseline CI confirmado:** `2ca9c8512bb00f54b8f5b41b5ca9ae1c75b03a5d`: 10 workflows SUCCESS, 6 SKIPPED, 0 FAILURE, incluida la prueba de leases agotados en PostgreSQL y Chromium aislado.  
+**Piloto:** solo `drafts/cuando-ya-no-hueles-tu-perfume.md` (ítem 61). No duplicar ni publicar.
+
+**Nuevas entregas:**
+- `scripts/intelligence-pilot-readiness.mjs`: evaluación determinista read-only, fuente 5 / capturas 3 / extractos coincidentes 1 / recuperación fallida 2, sin permitir fact-check, derechos, publicación ni cierre de hito por autodeclaraciones.
+- `scripts/intelligence-pilot-readiness.test.mjs`: tres pruebas de seguridad del expediente, incluidos todos los bloqueos incluso si se declara artificialmente «todo capturado».
+- `.github/workflows/aromia-integrated-qa.yml`: ejecuta pruebas y reporta evidencias en logs, además de los tests de Intelligence, web y contratos de imagen.
+- `package.json`: `editorial:pilot:test` y `editorial:pilot:report`.
+- `docs/intelligence/EDITORIAL-PILOT-01.md`: cápsulas A/B para ritmo de lectura, sin imágenes generadas o aprobadas.
+- `docs/intelligence/EDITORIAL-PILOT-01-CLAIMS.md`: revisión preliminar de 8 afirmaciones contrastadas con Dalton 2000, Foods 2022 y fragmento visible de Perfumer & Flavorist. Hallazgo importante: estudio de 19 participantes aplicó perfume **estandarizado sobre delantales**, no la fragancia personal en la piel; adaptación o enmascaramiento son explicaciones alternativas.
+- `docs/intelligence/EDITORIAL-PILOT-01-EDIT-PROPOSAL.md`: redacción alternativa con matices, sin alterar el borrador histórico.
+**Pruebas verificadas de nuevo trabajo:** `Aromia integrated Intelligence QA` run `44341165119` SUCCESS en SHA `a996cf7b9f1fef8c69fd3fdca19474cdb36274b9`, incluidos `node --test scripts/intelligence-pilot-readiness.test.mjs`, reporte JSON, API/Postgres y web. Esto no certifica los commits documentales posteriores o el HEAD actual: consultar CI fresco. La nueva matriz de claims es un precheck editorial, **NO revisión humana**.
+
+**Bloqueo de hito:** 03 requiere fuentes independientes verificadas y revisión factual, edición, arte/licencias/QA y aprobación humana; 04 exige fidelidad de producto y derechos; 02 requiere runtime production aprobado. 1/10 hitos certificados; ningún hito se añade por este bloque.
+
+**NEXT:** revisar CI del último SHA; corregir errores si existen. Elegir y comprobar dos recursos visuales existentes permitidos para A/B o preparar assets únicamente con autorización, integrar una composición de lectura aislada, recabar revisión editorial humana. No fusionar `main`, no desplegar, no gastos, no aprobar imágenes ni publicación.
+
+---
+
 ## 2026-11-18 — P1 Intelligence: lease exhaustion regression
 
 **Previous certified baseline:** PR #214 at `d17837414dd9e3221859f01d50314045e530ca45`, 10 GitHub workflows SUCCESS, 6 SKIPPED, 0 FAILURE, including isolated Chromium browser QA, dependency release audit, strict audit, API/Intelligence integration and PostgreSQL persistence.
