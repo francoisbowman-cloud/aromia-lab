@@ -13,9 +13,17 @@ export function parseBatchSize(value: string | undefined): number {
 export function requireBatchWorkerEnabled(flags: {
   INTELLIGENCE_ENABLED?: string;
   INTELLIGENCE_WORKER_ENABLED?: string;
+  AROMIA_INTELLIGENCE_PRODUCTION_RUNTIME_APPROVED?: string;
+  NODE_ENV?: string;
 }): void {
   if (flags.INTELLIGENCE_ENABLED !== 'true' || flags.INTELLIGENCE_WORKER_ENABLED !== 'true') {
     throw new Error('worker_not_enabled');
+  }
+  // Extra guard against accidental production execution. A flag alone is not
+  // Publisher authorization; the operator must obtain that separately.
+  if (flags.NODE_ENV === 'production' &&
+      flags.AROMIA_INTELLIGENCE_PRODUCTION_RUNTIME_APPROVED !== 'true') {
+    throw new Error('production_worker_not_approved');
   }
 }
 
