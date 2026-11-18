@@ -67,3 +67,15 @@ Las siguientes acciones **no están aprobadas por este documento**: fusionar PR 
 - **Publicado:** **NO**.
 
 **NEXT ACTION:** confirmar tests del último HEAD; luego ejecutar prueba controlada de `work-batch` en sandbox autorizado y preparar evidencia de observabilidad, permisos y recuperación. Mantener gate 02 `in_progress` y barra oficial 1/10.
+
+## Robustez adicional — 18 noviembre, último lote
+
+- El workflow completo del commit `2ad835d30f8b34f98c97fc83ff208d958645ef49` terminó con **11 SUCCESS, 6 SKIPPED, 0 FAILURE**. Esta evidencia verifica las pruebas cross-process anteriores, **no** los cambios posteriores.
+- Se reforzó `runOnce`: si `store.finish` devuelve `false` por pérdida de lease/token obsoleto, el worker produce `job_lease_lost` y **no cuenta ese trabajo como procesado**. Dos regresiones cubren el caso de preparación válida y brief inválido.
+- `intelligence work` (comando legado de un solo trabajo) tampoco debe ejecutarse accidentalmente con `NODE_ENV=production`: ahora requiere las mismas verificaciones que `work-batch` para el entorno productivo. El modo local queda compatible.
+- El test cross-process verifica que `work-batch` sin la autorización productiva se rechaza.
+- **Pruebas de este lote:** todavía pendientes de GitHub Actions sobre SHA actual; no se declara que pasaron anticipadamente.
+- **Certificación oficial:** se mantiene `IN_PROGRESS`: no hay staging independiente en Railway, scheduler real aprobado, alertas ni autorización de despliegue/secretos. No usar una bandera de entorno como reemplazo de aprobación humana.
+
+---
+
