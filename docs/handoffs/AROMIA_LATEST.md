@@ -1,3 +1,24 @@
+## 2026-11-18 — HITO 03: cotejo de fuentes y trazabilidad del piloto (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: a574a91
+CURRENT_BLOCK: Gate 03 — trabajo seguro sobre el piloto, sin aprobar nada
+COMPLETED_CHANGES:
+  - docs/intelligence/EDITORIAL-PILOT-01-SOURCE-CHECK.md: lectura del texto abierto de Foods 2022 (navegador, sin eludir controles). Confirma cifras C03 (TDI 33,05/29,05/26,57; p<0,001) y C05 (p=0,12). Confirma que el diseño usó perfume estándar sobre delantal y que los autores declaran esa limitación; adaptación y enmascaramiento son dos explicaciones plausibles.
+  - Trazabilidad línea a línea del borrador: 8 afirmaciones nuevas sin cobertura (C05b, C09–C15), p. ej. el mecanismo solo se apoya en Wikipedia, «veinte minutos» sin fuente, «la ciencia dice que la nariz es el instrumento menos confiable» sin ninguna fuente.
+  - Borrador original (SHA bdf4abfe…) y evidence/backlog-pilot.json NO modificados (registro histórico).
+LIMITES: Dalton 2000 (PubMed con control de cookies/bot, OUP) y Perfumer & Flavorist NO se pudieron leer; no se intentó eludir ningún control ni se amplió ninguna lista de dominios. C01, C02, C06 y el mecanismo siguen sin verificar.
+TESTS_COMMANDS_AND_RESULTS: node --test scripts/intelligence-pilot-readiness.test.mjs 3/3 pass; verificador re-ejecutado: mismos bloqueos.
+REQUIRES_PUBLISHER_APPROVAL: revisión humana independiente de hechos/fuentes (leer Dalton y P&F), decisión sobre cada afirmación nueva, derechos de las ilustraciones A/B, QA final, Historias→Saber.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10; Gate 03 blocked (NO certificado).
+```
+
+---
+
 ## 2026-11-18 — Plan maestro: pasada por los hitos 03–10 (Claude Code, Sonnet 5.5)
 
 ```text

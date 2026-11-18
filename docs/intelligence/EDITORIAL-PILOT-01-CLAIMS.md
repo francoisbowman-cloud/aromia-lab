@@ -3,7 +3,8 @@
 **Fecha de inspección:** 18 de noviembre de 2026.  
 **Artículo:** `drafts/cuando-ya-no-hueles-tu-perfume.md`.  
 **Estado:** RESEARCH_PRECHECK · **NO equivale a fact-check aprobado** · PUBLISH BLOCKED.  
-**Fuente operativa:** `docs/intelligence/EDITORIAL-PILOT-01.md`.
+**Fuente operativa:** `docs/intelligence/EDITORIAL-PILOT-01.md`.  
+**Cotejo posterior (18 nov, tarde):** `docs/intelligence/EDITORIAL-PILOT-01-SOURCE-CHECK.md` confirma las cifras de C03/C05 con el texto abierto del estudio y añade afirmaciones sin cobertura (C05b, C09–C15).
 
 Se consultaron versiones públicamente accesibles de los artículos originales y sus registros bibliográficos. Este documento registra qué evidencias permiten sostener provisionalmente una afirmación y qué límites deben introducirse. No se ha completado la segunda lectura por un editor independiente ni se han aprobado derechos de ilustración o publicación.
 
