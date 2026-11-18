@@ -19,6 +19,9 @@ on:
       - 'apps/web/src/lib/githubProgress*'
       - 'scripts/*image*'
       - 'scripts/integration-contract-gates.test.mjs'
+      - 'scripts/intelligence-pilot-readiness.mjs'
+      - 'scripts/intelligence-pilot-readiness.test.mjs'
+      - 'docs/intelligence/evidence/backlog-pilot.json'
       - '.github/workflows/aromia-integrated-qa.yml'
   workflow_dispatch:
 permissions:
@@ -78,3 +81,5 @@ jobs:
           node-version: '20'
       - run: npm ci --ignore-scripts
       - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/integration-contract-gates.test.mjs
+      - run: node --test scripts/intelligence-pilot-readiness.test.mjs
+      - run: node scripts/intelligence-pilot-readiness.mjs --json > "$RUNNER_TEMP/aromia-editorial-pilot-readiness.json"
