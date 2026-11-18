@@ -1,3 +1,18 @@
+## CHECKPOINT DE ENTREGA A CLAUDE — 2026-11-18
+
+**ESTADO GUARDADO EN GITHUB.** Contrato maestro `AROMIA_MASTER_HANDOFF.md` actualizado con puntero a **`docs/handoffs/CLAUDE_RESUME_2026-11-18.md`**, que contiene el handoff operativo completo. `AROMIA_CURRENT_STATE.md` y `AGENTS.md` apuntan a la misma prioridad de continuación.
+
+- **Actor siguiente:** Claude Code / Sonnet Medium (preferencia reciente del Publisher).
+- **Rama única:** `claude/aromia-integration`; **PR:** #214 abierta en borrador a `main`, RELEASE HOLD.
+- **Último CI verificado ANTES de los commits de documentación:** SHA `bf51c5825b893e0ac4eabab3dfa8888b5f967d30`: 9 SUCCESS, 6 SKIPPED, 2 IN_PROGRESS (isolated real-browser QA / Catalog Expansion Engine), 0 FAILURE. **El SHA de HEAD es posterior**: no extrapolar checks a commits nuevos; volver a consultar GitHub.
+- **Desarrollo:** Next.js 16.4.6, Tiptap 3.34.0, node-cron 4.6.0; Intelligence con workers, almacenamiento PostgreSQL, idempotencia, retry, fencing y batch finito/opt-in. Piloto editorial 01 con matriz factual y propuesta de edición sin aprobación ni publicación.
+- **Hito único activo:** 02 — Intelligence runtime. **Sin certificación oficial** por falta de scheduler y runtime aislado autorizado/observabilidad. Barra **1/10 (10%)**, no incrementarla por CI.
+- **Railway inspeccionado read-only:** `aromia-lab-v2` solo muestra `production`; web/API en commit viejo `1619c776560f5d6f9c5948f8092ff5241540048f`. Sin escritura/despliegue/migración/gasto.
+- **Reglas:** no merge a `main`, deploy, producción, publicación, licencias o recursos pagos sin nueva autorización explícita. Sin `--force`, sin silenciar gates.
+- **Próxima acción:** Claude verifica HEAD/CI y arregla fallos, consolida aceptación técnica aislada contra `docs/intelligence/GATE-02-CERTIFICATION.md`; solicita únicamente la autorización imprescindible para un staging real. Mantener RELEASE HOLD.
+
+---
+
 ## 2026-11-18 — Hito 02 · cierre de batería CI y hardening (sin certificación runtime)
 
 **Última batería CI confirmada:** PR #214 en SHA `2ad835d30f8b34f98c97fc83ff208d958645ef49`: 11 SUCCESS / 6 SKIPPED / 0 FAILURE. Pruebas reales PostgreSQL/CLI cross-process, seguridad, navegador y Strict Audit incluidas.
