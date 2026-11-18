@@ -1,3 +1,13 @@
+## 2026-11-18 — P1 Intelligence: lease exhaustion regression
+
+**Previous certified baseline:** PR #214 at `d17837414dd9e3221859f01d50314045e530ca45`, 10 GitHub workflows SUCCESS, 6 SKIPPED, 0 FAILURE, including isolated Chromium browser QA, dependency release audit, strict audit, API/Intelligence integration and PostgreSQL persistence.
+
+**New change:** `apps/api/src/intelligence/integration.test.ts`, commit `92a5d38ecabedf604c3497b2188c556d76c72f42`. Extends existing integration test in a **disposable local PostgreSQL schema**: simulate three successive lease expirations; verify stale fencing tokens are rejected, exhausted jobs become `failed` after `max_attempts=3`, cannot be automatically claimed again, and can be explicitly manually retried with attempts reset. No production database/migrations/writes.
+
+**Verification status:** code committed to `claude/aromia-integration`; NEW CI is required before marking this change tested or certified. Previous green SHA does NOT cover this commit. Follow up on `Intelligence persistence`, `Aromia integrated Intelligence QA`, API TypeScript build and strict audit; correct actual failing logs if any. Continue only with safe local/editorial work. PR #214 remains DRAFT/RELEASE HOLD; no merge to main or deploy.
+
+---
+
 ## ChatGPT — Intelligence worker fault isolation · 2026-11-18
 
 - **PR / branch:** #214 draft, `claude/aromia-integration`; RELEASE HOLD. No main merge or deployment.
