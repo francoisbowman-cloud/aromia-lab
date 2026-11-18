@@ -6,6 +6,19 @@ This file is the compact relay for the command:
 
 It indexes the latest verified operational state. Git history, checkpoints and canonical workflow documents remain authoritative evidence.
 
+## Active integration checkpoint — 2026-11-17 (candidate, not released)
+
+- **LAST_ACTOR:** ChatGPT / Code coordination.
+- **ACTIVE_BRANCH:** `integration/aromia-intelligence-candidate-20261117`.
+- **OPEN_DRAFT_INTEGRATION_PR:** [#205](https://github.com/francoisbowman-cloud/aromia-lab/pull/205) → `main`. This integrates candidate code from open drafts #187–#204 **without merging**. GitHub compare confirms 131 commits ahead, 0 behind, mergeable on the inspected base. Recheck before any future merge.
+- **IMPLEMENTATION:** opt-in Intelligence job engine; editorial material/review contracts; private visual provenance journal/decision timeline; real local image SHA inspection; Product Identity Fidelity Gate; identity/rights/publication remain separate human requirements; private milestone progress bar. Future YouTube channels are selected **only by the Publisher** and no channel is auto-enrolled.
+- **VERIFIED_BEFORE_CANDIDATE:** full combined API/PostgreSQL, image contract, web test/lint/typecheck/build on #204.
+- **INTEGRATION_CANDIDATE_QA:** actual production-mode Next.js localhost HTTP smoke with synthetic signed admin session and fake backend, combined PostgreSQL/web/image CI. See [integration handoff](docs/intelligence/INTEGRATION-CANDIDATE-HANDOFF.md).
+- **SECURITY_BLOCKER:** production-only npm audit found **1 critical, 5 high, 26 moderate** advisories; `next@14.2.35` is the critical direct package. Security release gate must remain RED until patched or independently risk-assessed. See [triage](docs/intelligence/SECURITY-TRIAGE-20261117.md). A disposable framework/editor/image dependency migration rehearsal has been queued; it does **not** modify repository files.
+- **NEXT_ACTION:** close latest #205 full CI; interpret security rehearsal and implement a patch in a separately validated branch; perform human browser staging and exact-perfume/licensing review before request to merge.
+- **RELEASE_AUTHORITY:** no merge, production migration, deploy, publication, paid services or real image replacement authorized by this candidate. Keep the project progress at **1/10 verified (10%)**.
+- **CANONICAL_GOVERNANCE:** `AROMIA_EDITORIAL_WORKFLOW.md`, `AROMIA_VOICE_BIBLE.md`, `docs/operations/AROMIA_ACTOR_TURN_HANDOFF_PROTOCOL.md`.
+
 ## Active V2 mandate — latest checkpoint
 
 - LAST_ACTOR: Code/Codex. PR186 is MERGED at `1619c776560f5d6f9c5948f8092ff5241540048f`; older OPEN labels below are historical.
