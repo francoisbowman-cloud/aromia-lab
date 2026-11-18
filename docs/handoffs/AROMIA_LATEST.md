@@ -6,7 +6,7 @@ ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5), esfuerzo Medium por instruc
 BRANCH: claude/aromia-integration
 BASE_SHA: b30cd3da7814441f1a0ea0d404da37fb10c44311
 HEAD_SHA: a20da1def2357aeae4c6a2e461790b30afa8bb1c (+ este checkpoint en el commit siguiente)
-CURRENT_BLOCK: P0 — Tiptap + migración Next.js 14 -> 16 (apps/web)
+CURRENT_BLOCK: P0 Tiptap + Next 16 (apps/web) — cerrado local; P1 node-cron 4.6.0 (apps/api) — hecho
 COMPLETED_CHANGES:
   - Familia Tiptap fijada exacta en 3.34.0 (core, pm, react, starter-kit, extension-image); corrige GHSA-cp6q-959q-f8rh y GHSA-j95f-988m-3j2f.
   - 5 pruebas de ida y vuelta del editor (HTML legado, idempotencia, figura con caption, <img> suelto, __proto__) con jsdom (devDependency).
@@ -22,17 +22,18 @@ TESTS_COMMANDS_AND_RESULTS (apps/web, Node 20.20.2, Windows):
   - npm run build (Turbopack): OK, 42 páginas estáticas
   - Smoke con next start local: / /magazine /buscar /robots.txt /sitemap.xml 200; /admin 307 -> /admin/login; /api/admin/dashboard 401;
     /catalogo 308 -> /magazine; /magazine/<slug> e /imprimir 200; CSS Tailwind emitido (102 KB). Slug inexistente da 200 por loading.tsx (streaming), no verificado contra baseline.
-CI_RUNS_WITH_URLS_AND_CONCLUSIONS: ninguna todavía (rama sin pushear a origin)
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: rama pusheada; draft PR https://github.com/francoisbowman-cloud/aromia-lab/pull/214 (Auto-fix activo); resultados de CI pendientes al momento de escribir
 SECURITY_AUDIT_COUNTS (npm audit --omit=dev):
   - web: 0 (antes 1 crítica, 2 altas, 26 moderadas)
-  - api: 0 críticas, 0 altas, 2 moderadas (uuid <11.1.1 vía node-cron) — sin tocar
+  - api: 0 vulnerabilidades tras node-cron 3.0.3 -> 4.6.0 (elimina uuid transitivo; sin @types/node-cron; único uso: cron.schedule en src/scraper/runner.ts)
 EDITORIAL_VISUAL_RIGHTS_STATUS: sin cambios; nada publicado, sustituido ni aprobado.
 OPEN_BLOCKERS:
   - React 18 deprecado en Next 16 (se retira en 17): planificar React 19.
   - middleware.ts deprecado a favor de proxy.ts (funciona; migrar con prueba de auth).
   - Validar el editor Tiptap en navegador real (solo hay pruebas jsdom) y staging.
+  - API: tsc build OK; test:uploads 1/1, test:content 3/3; test:intelligence 18/18 con Postgres 16 desechable local (docker, 127.0.0.1:5544, aromia_test, ya detenido); sin INTELLIGENCE_TEST_DATABASE_URL fallan 3 (requieren BD). Script lint de api roto: eslint no es dependencia (preexistente).
   - 2 tests de symlink requieren Windows con privilegios o CI Linux.
-NEXT_SAFE_ACTION: push de claude/aromia-integration (autorizado como rama; requiere OK del hook) para correr CI; luego P1 (node-cron/uuid, scheduler Intelligence).
+NEXT_SAFE_ACTION: leer resultados de CI del PR #214; luego P1 scheduler/colas Intelligence (costes, permisos), piloto editorial.
 REQUIRES_PUBLISHER_APPROVAL: merge a main, deploy, migraciones de producción.
 RELEASE_STATUS: HOLD
 ```
