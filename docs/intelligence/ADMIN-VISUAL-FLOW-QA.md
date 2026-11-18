@@ -10,7 +10,7 @@ These checks exercise real Next.js route handler code, the genuine signed admin-
 - Proxy requests carry only the server admin bearer token, not the separate `EDITORIAL_REVIEW_TOKEN`; returned identity/rights/approval statuses remain explicitly unverified/blocked.
 - A traversal slug or invalid observation ID is rejected before the fake backend is called.
 - API failure is reported as a recoverable 502 without turning into an approval.
-- Server-side component render smoke checks that the eight-point real-product fidelity checklist, decision timeline and replacement simulation render their non-authorizing labels.
+- Static **source-contract** checks ensure that the eight-point real-product fidelity checklist, decision timeline and replacement simulation retain their explicit non-authorizing UI labels. These are not component rendering or browser-interaction tests.
 
 ## Reproducible verification
 
@@ -28,7 +28,7 @@ The stacked integrated workflow `.github/workflows/aromia-integrated-qa.yml` als
 
 ## Explicitly not covered
 
-- A real browser clickthrough, screenreader or mobile QA; a human tester must still inspect the UI in authorized local/staging environment.
+- React component runtime rendering, actual browser clickthrough, screenreader or mobile QA; a human tester must still inspect the UI in authorized local/staging environment.
 - A deployed session/cookie, actual Railway or hosted Next runtime, secret configuration and production migrations.
 - A real catalogue item, source authenticity, product variant, visual rights, publisher identity, real media replacement or rollback.
 
