@@ -1,5 +1,8 @@
 # Aromia — instrucciones para Claude Code y agentes de desarrollo
 
+> **MODO DE EJECUCIÓN INTEGRADA (2026-11-18):** seguir también [`docs/operations/AROMIA_INTEGRATED_EXECUTION_2026-11-18.md`](docs/operations/AROMIA_INTEGRATED_EXECUTION_2026-11-18.md). Este complemento reduce handoffs y permite avanzar en trabajo seguro independiente cuando un gate espera autorización; NO altera el master, el HITO 02, la barra 1/10 ni el RELEASE HOLD. Priorizar implementación y QA sobre nuevos informes.
+
+
 > **FUENTE OPERATIVA ÚNICA (2026-11-18):** [`AROMIA_MASTER_HANDOFF.md`](AROMIA_MASTER_HANDOFF.md). Esta instrucción **prevalece** sobre referencias de continuación de Codex o handoffs anteriores en este archivo. Claude Code es el actor único, puede fusionar ramas internas verificadas en `claude/aromia-integration`; no puede fusionar a `main`, desplegar ni publicar sin aprobación. Las fuentes editoriales y contratos de identidad conservan su autoridad específica.
 
 

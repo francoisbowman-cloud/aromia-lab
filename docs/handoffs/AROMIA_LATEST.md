@@ -1,3 +1,27 @@
+## 2026-11-18 — HITO 02: instrumentación segura del batch (ChatGPT)
+
+- **Objetivo ejecutado:** hacer visible la duración y resultados agregados de `work-batch`, sin exponer briefs, payloads, contenido de fuentes ni permitir publicación.
+- **Rama/PR:** `claude/aromia-integration` / #214 DRAFT, RELEASE HOLD.
+- **Commits de código:** `af63ee55f0640a883095b13ff263f74e1dbaad87` (`batch.ts`), `86ea4daede5c35dbae95832506a2b929aec77531` (`cli.ts`), `d03c412524577448ffef7c7669b699fb2f4eca1c` (`batch.test.ts`).
+- **Cambios:** `runObservedBatch` envuelve la ejecución acotada existente y devuelve `attempted`, `processed`, `idle`, `durationMs`, `publication=blocked`, `providers=disabled`; el CLI `work-batch` lo utiliza. No instala scheduler, infraestructura, alertas ni proveedores externos.
+- **Pruebas añadidas:** duración determinista e idle, tamaños inválidos no ejecutan trabajos, errores de DB se propagan. **No se han ejecutado tests locales** desde este conector GitHub. Al consultar `d03c412...`, aún no se listaban workflow runs; **CI pendiente**, no declarar PASS.
+- **Última evidencia previa:** para commit `0557c7ff634857f2921fae03a41d1534ff584e2f`, Intelligence persistence, integrated QA, auditoría, navegador y otros workflows figuraban SUCCESS; Catalog Expansion Engine CI seguía `in_progress`, seis checks visuales SKIPPED. Ninguno valida aún este nuevo cambio.
+- **Siguiente acción:** verificar CI del HEAD final (incluido este checkpoint), diagnosticar/regresar si falla. Preparar evaluación de errores/alertas y autenticación aislada; no certificar HITO 02 sin staging autorizado, scheduler real, rollback y permiso Publisher.
+- **Progreso oficial:** 1/10; HITO 02 `in_progress`. Sin `main`, deploy, migraciones, gastos, imágenes o publicación.
+
+---
+
+## 2026-11-18 — Cambio ejecutado: coordinación integrada (ChatGPT)
+
+- **Rama/PR:** `claude/aromia-integration` / #214 DRAFT, RELEASE HOLD.
+- **Documentación nueva:** `docs/operations/AROMIA_INTEGRATED_EXECUTION_2026-11-18.md` (commit `1956ebc5d37f4f12313ed984f3b27d7245abbfb0`). `AGENTS.md` enlaza el contrato (commit `74b4d5423b38bb81234503c511c71dbbb68dd9fa`).
+- **Decisión:** carriles Producto, Editorial/Intelligence y Visual coordinados por una rama; WIP limitado y cierres con código+pruebas+evidencia; no crear handoffs ni PRs por microtarea. Si Gate 02 queda bloqueado solo por permisos, continuar entregables aislados del piloto editorial sin declarar Gate 02 terminado.
+- **Ejecución:** cambios solo documentales mediante GitHub; **no se corrieron suites ni se verificó CI del nuevo HEAD**. No se tocaron servicios, secretos, producción, migraciones o assets.
+- **Progreso oficial:** 1/10 gates certificados, HITO 02 `in_progress`. Ninguna nueva certificación.
+- **Siguiente acción ejecutable:** leer CI del HEAD nuevo; corregir errores reales y trabajar autorización 401/403 + scheduler/observabilidad aislados para Gate 02; si depende exclusivamente de staging autorizado, implementar piloto de lectura aislado sin publicación.
+
+---
+
 ## 2026-11-18 — Bloque deuda técnica Next 16 / React 19 (Claude Code, Sonnet 5.5)
 
 ```text

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { JobStore } from './store';
-import { parseBatchSize, requireBatchWorkerEnabled, runBoundedBatch } from './batch';
+import { parseBatchSize, requireBatchWorkerEnabled, runBoundedBatch, runObservedBatch, classifyBatchFailure } from './batch';
 
 const stub = {} as JobStore;
 
@@ -87,4 +87,78 @@ test('production batch is blocked without a separate runtime approval flag', () 
   assert.doesNotThrow(() => requireBatchWorkerEnabled({
     ...flags, NODE_ENV: 'test',
   }));
+});
+
+
+test('observed batch emits aggregate counts and deterministic duration without payloads', async () => {
+  let time = 1_000;
+  const result = await runObservedBatch(stub, 3, {
+    now: () => time,
+    processJob: async () => {
+      time += 12;
+      return time < 1_036;
+    },
+  });
+  assert.deepEqual(result, {
+    attempted: 3, processed: 2, idle: true, durationMs: 36,
+    publication: 'blocked', providers: 'disabled',
+  });
+  assert.deepEqual(Object.keys(result).sort(), [
+    'attempted', 'durationMs', 'idle', 'processed', 'providers', 'publication',
+  ]);
+});
+
+test('observed batch never invokes worker for invalid sizes', async () => {
+  let called = false;
+  await assert.rejects(runObservedBatch(stub, 26, {
+    processJob: async () => { called = true; return true; },
+  }), /invalid_batch_size/);
+  assert.equal(called, false);
+});
+
+test('observed batch propagates worker errors without fabricating completion metrics', async () => {
+  const failure = new Error('database_failure');
+  await assert.rejects(runObservedBatch(stub, 2, {
+    processJob: async () => { throw failure; },
+  }), error => error === failure);
+});
+
+test('failure classification reveals only allowlisted operational codes', () => {
+  for (const code of ['invalid_batch_size', 'worker_not_enabled', 'production_worker_not_approved', 'job_lease_lost']) {
+    assert.equal(classifyBatchFailure(new Error(code)), code);
+  }
+  assert.equal(classifyBatchFailure(new Error('password=secret database failure')), 'worker_execution_failed');
+  assert.equal(classifyBatchFailure({ message: 'job_lease_lost' }), 'worker_execution_failed');
+  assert.equal(classifyBatchFailure(null), 'worker_execution_failed');
+});
+
+test('failed observed batch reports safe partial counters and rethrows original failure', async () => {
+  const original = new Error('password=SECRET in DB error');
+  let tick = 100;
+  let called = 0;
+  const failures: unknown[] = [];
+  await assert.rejects(runObservedBatch(stub, 5, {
+    now: () => tick,
+    processJob: async () => {
+      called += 1;
+      tick += 8;
+      if (called === 3) throw original;
+      return true;
+    },
+    onFailure: failure => failures.push(failure),
+  }), error => error === original);
+  assert.deepEqual(failures, [{
+    attempted: 3, processed: 2, durationMs: 24,
+    code: 'worker_execution_failed', publication: 'blocked', providers: 'disabled',
+  }]);
+  assert.equal(JSON.stringify(failures).includes('SECRET'), false);
+});
+
+test('idle and successful batches never report failure', async () => {
+  let called = false;
+  await runObservedBatch(stub, 2, {
+    processJob: async () => false,
+    onFailure: () => { called = true; },
+  });
+  assert.equal(called, false);
 });
