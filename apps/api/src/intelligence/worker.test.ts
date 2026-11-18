@@ -60,3 +60,43 @@ test('worker marks malformed briefs as failed without publishing or silently suc
   assert.equal(await runOnce(store), true);
   assert.deepEqual(recorded, [{ result: null, errorCode: 'preparation_failed' }]);
 });
+
+test('worker forwards the targeted job id to the claim operation', async () => {
+  const claims: Array<string | undefined> = [];
+  const store = {
+    claim: async (id?: string) => { claims.push(id); return undefined; },
+    finish: async () => { throw new Error('unexpected_finish'); },
+  } as unknown as JobStore;
+
+  assert.equal(await runOnce(store, validJob.id), false);
+  assert.deepEqual(claims, [validJob.id]);
+});
+
+test('worker does not mislabel persistence errors as invalid briefs or finish twice', async () => {
+  const calls: Array<{ result: unknown; errorCode?: string }> = [];
+  const dbError = new Error('temporary_database_failure');
+  const store = {
+    claim: async () => validJob,
+    finish: async (_job: Job, result: unknown, errorCode?: string) => {
+      calls.push({ result, errorCode });
+      throw dbError;
+    },
+  } as unknown as JobStore;
+
+  await assert.rejects(runOnce(store), error => error === dbError);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].errorCode, undefined);
+  assert.ok(calls[0].result);
+});
+
+test('worker propagates claim failures without trying to finish a job', async () => {
+  const claimError = new Error('database_unavailable');
+  let finishCalled = false;
+  const store = {
+    claim: async () => { throw claimError; },
+    finish: async () => { finishCalled = true; },
+  } as unknown as JobStore;
+
+  await assert.rejects(runOnce(store), error => error === claimError);
+  assert.equal(finishCalled, false);
+});
