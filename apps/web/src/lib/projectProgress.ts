@@ -24,7 +24,7 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "intelligence-runtime",
     title: "Intelligence operativo y persistente",
     status: "in_progress",
-    evidence: "PR #214 (draft): PostgreSQL aislado, leases, retries, auditoría y navegador probados; batch finito opt-in y pruebas de reconexión añadidos. Runtime autorizado y scheduler persistente no certificados.",
+    evidence: "PR #214 (draft): PostgreSQL aislado, leases, retries, auditoría y navegador probados; batch finito opt-in, registro de ejecuciones (029), diagnóstico de salud con exit code, retención y ensayo local de scheduler/rollback (62 pruebas). Runtime autorizado y scheduler persistente no certificados.",
     href: "https://github.com/francoisbowman-cloud/aromia-lab/pull/214",
     next: "Probar el batch de CI nuevo, demostrar scheduler, permisos, alertas, recuperación y continuidad en runtime autorizado; certificar solo con evidencia y autorización."
   },
@@ -47,8 +47,8 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "living-edition",
     title: "Living Edition y composición editorial dinámica",
     status: "planned",
-    evidence: "Diseño editorial existente; composición dinámica completa no verificada.",
-    next: "Probar composición con assets reales, responsive y accesibilidad."
+    evidence: "Auditoría renderizada local (3 viewports, claro/oscuro, 9 rutas): sin desbordes, alt, encabezados, contraste ni errores. Composición dinámica y revisión de diseño humana no verificadas.",
+    next: "Revisión de dirección de arte con assets reales aprobados y piloto Living Edition acotado."
   },
   {
     id: "creative-studio",
@@ -61,22 +61,22 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "marketing-revenue",
     title: "Distribución y modelo comercial verificables",
     status: "planned",
-    evidence: "Afiliación contextual existente; atribución, newsletter y operación de campañas sin cierre.",
-    next: "Verificar enlaces, divulgaciones, analítica y resultados reales."
+    evidence: "Afiliación contextual existente; los enlaces de Amazon dentro de artículos ahora salen con rel sponsored nofollow (antes se sobrescribía). Atribución, newsletter y operación de campañas sin cierre.",
+    next: "Verificar enlaces en producción, divulgaciones, analítica y resultados reales."
   },
   {
     id: "discovery",
     title: "Discovery personal y PWA",
     status: "planned",
-    evidence: "Experiencia Discovery existente; métricas y criterios PWA aún sin cerrar.",
-    next: "Validar recorridos, preferencias, privacidad, accesibilidad y rendimiento."
+    evidence: "Discovery y familias sin hallazgos en la auditoría renderizada local. No hay manifest, iconos ni service worker: criterios PWA sin cumplir.",
+    next: "Definir iconos de marca (decisión del Publisher), manifest y política offline; validar privacidad y rendimiento."
   },
   {
     id: "omni",
     title: "Integración OMNI segura",
     status: "blocked",
-    evidence: "Contrato documental conocido; handshake y endpoint remoto no verificados.",
-    next: "Validar adaptador desacoplado sin bloquear el avance editorial."
+    evidence: "Adaptador desacoplado en Aromia (contrato aromia-omni/1, desactivado por defecto) con 6 pruebas contra un doble local; handshake y endpoint remoto de OMNI no verificados.",
+    next: "Verificar el contrato real con el Publisher/OMNI sin modificar el repo de OMNI; habilitar solo con aprobación."
   },
   {
     id: "release",

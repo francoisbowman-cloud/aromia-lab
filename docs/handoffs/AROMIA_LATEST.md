@@ -1,3 +1,31 @@
+## 2026-11-18 — Plan maestro: pasada por los hitos 03–10 (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: 9667c0c
+CURRENT_BLOCK: recorrido en orden de los hitos 03–10, solo trabajo seguro y local (instrucción del Publisher)
+COMPLETED_CHANGES:
+  - 07: publicArticleHtml marca enlaces Amazon como "sponsored nofollow noopener noreferrer" (antes sobrescribía rel); 2 tests nuevos.
+  - 09: adaptador OMNI desacoplado (omniAdapter.ts, contrato aromia-omni/1, desactivado por defecto) + 6 pruebas contra doble loopback.
+  - 05/08: auditoría renderizada local (54+24+18 renders): 0 hallazgos reales; hueco PWA registrado (sin manifest/iconos/SW).
+  - 03: verificador del piloto re-ejecutado: mismos bloqueos humanos; sin cambios.
+  - projectProgress.ts: solo texto de evidencia/next (estados intactos); informe docs/intelligence/MASTER-PLAN-STATUS-2026-11-18.md.
+FILES_CHANGED: apps/api/src/lib/articleContent{.ts,.test.ts}, apps/api/src/intelligence/omniAdapter{.ts,.test.ts}, apps/api/package.json, apps/web/src/lib/projectProgress.ts, docs/intelligence/MASTER-PLAN-STATUS-2026-11-18.md
+TESTS_COMMANDS_AND_RESULTS (local, Node 20.20.2, postgres:16-alpine desechable):
+  - test:intelligence 62/62, 0 skipped; test:content 5/5; tsc API limpio; projectProgress.test 3/3.
+  - Mutaciones: redirect:'follow' y quitar el tope de coste hacen fallar el adaptador.
+CI_RUNS_WITH_URLS_AND_CONCLUSIONS: PR #214 sobre 9667c0c: 16 pass / 0 fail / 0 pending / 7 skipping. HEAD de este bloque: pendiente de leer.
+OPEN_BLOCKERS: ver tabla del informe; todos los hitos restantes dependen de decisiones/aprobaciones del Publisher (staging, revisión editorial y de derechos, iconos de marca, contrato OMNI real, merge/deploy).
+NEXT_SAFE_ACTION: leer CI del nuevo HEAD. Sin más trabajo local seguro que no requiera esas decisiones.
+REQUIRES_PUBLISHER_APPROVAL: sí, para cada hito restante (ver informe).
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10 (sin cambios).
+```
+
+---
+
 ## 2026-11-18 — HITO 02: ensayo local de scheduler, retención y rollback (Claude Code, Sonnet 5.5)
 
 ```text
