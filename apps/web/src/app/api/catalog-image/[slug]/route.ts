@@ -1,3 +1,4 @@
+import { officialProductPage } from "@/lib/officialProductPage";
 import { getPerfumeBySlug } from "@/lib/api";
 import { resolveAmazonCatalogProduct } from "@/lib/amazonCatalog.server";
 
@@ -8,16 +9,6 @@ const USER_AGENT = "Mozilla/5.0 (compatible; AromiaCatalogImage/3.1; +https://ww
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 9000;
 
-function officialProductPage(slug: string, concentration?: string | null) {
-  if (slug === "black-afgano") return "https://nasomatto.com/es/products/black-afgano";
-  if (slug === "acqua-di-gio-edt") return "https://www.giorgioarmanibeauty-usa.com/fragrances/mens-cologne/acqua-di-gio/acqua-di-gio-eau-de-toilette/A005.html?geo=false";
-  if (slug === "chance-eau-tendre") {
-    return String(concentration ?? "").toLowerCase().includes("toilette") || String(concentration ?? "").toLowerCase() === "edt"
-      ? "https://www.chanel.com/us/fragrance/p/126320/chance-eau-tendre-eau-de-toilette-spray/"
-      : "https://www.chanel.com/us/fragrance/p/126260/chance-eau-tendre-eau-de-parfum-spray/";
-  }
-  return null;
-}
 
 function safeCatalogImageUrl(value: string | null | undefined): string | null {
   try {
@@ -152,7 +143,8 @@ function placeholderResponse(perfume: { nombre: string; marca: string; familia_o
   });
 }
 
-export async function GET(_request: Request, { params }: { params: { slug: string } }) {
+export async function GET(_request: Request, { params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+  const params = await paramsPromise;
   const perfume = await getPerfumeBySlug(params.slug);
   if (!perfume) return new Response("Not found", { status: 404 });
 

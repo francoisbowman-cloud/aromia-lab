@@ -13,8 +13,10 @@
     "catalog-import": "tsx src/db/importCatalogBatch.ts",
     "test:uploads": "tsx --test src/lib/imageUpload.test.ts",
     "test:catalog-import": "tsx --test src/db/catalogBatchImportContract.test.ts",
-    "lint": "eslint \"src/**/*.ts\"",
-    "test:content": "tsx --test src/lib/articleContent.test.ts"
+    "typecheck": "tsc --noEmit",
+    "test:content": "tsx --test src/lib/articleContent.test.ts",
+    "intelligence": "tsx src/intelligence/cli.ts",
+    "test:intelligence": "tsx --test src/intelligence/integration.test.ts src/intelligence/sources.test.ts src/intelligence/visualReviewJournal.test.ts src/intelligence/visualReviewDecisions.test.ts src/intelligence/visualReviewDecisionRoutes.test.ts src/db/migrationPolicy.test.ts src/intelligence/runtimeDependencyGate.test.ts src/intelligence/worker.test.ts src/intelligence/batch.test.ts src/intelligence/health.test.ts src/intelligence/healthSource.test.ts src/intelligence/gate02Rehearsal.test.ts src/intelligence/omniAdapter.test.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -25,7 +27,7 @@
     "ioredis": "^5.4.1",
     "marked": "^18.0.6",
     "multer": "^2.2.0",
-    "node-cron": "^3.0.3",
+    "node-cron": "^4.6.0",
     "pg": "^8.12.0",
     "sanitize-html": "2.18.2"
   },
@@ -34,7 +36,6 @@
     "@types/express": "^4.17.21",
     "@types/multer": "^2.2.0",
     "@types/node": "^20.14.10",
-    "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.11.6",
     "@types/sanitize-html": "2.16.2",
     "tsx": "^4.16.2",

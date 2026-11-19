@@ -1,5 +1,12 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Monorepo: evita que Turbopack infiera la raíz del repo y pierda la config de tailwind/postcss.
+  turbopack: { root: here },
   // No expone la versión de Next en el header X-Powered-By.
   poweredByHeader: false,
   images: {

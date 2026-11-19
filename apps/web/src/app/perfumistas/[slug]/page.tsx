@@ -13,7 +13,8 @@ import { PersonalizedDiscoveryRail } from "@/components/discovery/PersonalizedDi
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aromialab.com").replace(/\/$/, "");
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params: paramsPromise }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await paramsPromise;
   const profile = getPerfumerProfile(params.slug);
   if (!profile) return {};
   const title = `${profile.name} — Personas — Aromia`;
@@ -24,7 +25,8 @@ function buildPersonJsonLd(profile: NonNullable<ReturnType<typeof getPerfumerPro
   return { "@context": "https://schema.org", "@type": "Person", name: profile.name, url: `${SITE_URL}/perfumistas/${profile.slug}`, description: profile.bio, knowsAbout: ["Perfumería", "Fragancias"] };
 }
 
-export default async function PerfumerDetailPage({ params }: { params: { slug: string } }) {
+export default async function PerfumerDetailPage({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+  const params = await paramsPromise;
   const profile = getPerfumerProfile(params.slug);
   if (!profile) notFound();
   const catalog = await getPerfumes();

@@ -6,10 +6,11 @@ import { PrintToolbar } from "@/components/magazine/PrintToolbar";
 export const dynamic = "force-dynamic";
 
 export default async function MagazineArticlePrintPage({
-  params,
+  params: paramsPromise,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const params = await paramsPromise;
   const articulo = await getArticuloBySlug(params.slug);
 
   if (!articulo) {

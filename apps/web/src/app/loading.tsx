@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <main className="bg-[#fbf8f3] text-ink dark:bg-[#0f0c09]" aria-busy="true" aria-live="polite">
-      <section className="mx-auto min-h-[62vh] max-w-[1180px] px-6 py-16 lg:px-10 lg:py-20">
+      <section className="mx-auto min-h-[100svh] max-w-[1180px] px-6 py-16 lg:px-10 lg:py-20">
         <p className="font-plex text-[9px] uppercase tracking-[.2em] text-gold-contrast">Aromia</p>
         <div className="mt-8 max-w-2xl space-y-4">
           <div className="h-12 w-4/5 animate-pulse bg-soft motion-reduce:animate-none sm:h-14" />

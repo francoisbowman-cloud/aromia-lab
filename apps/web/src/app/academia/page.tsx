@@ -54,9 +54,9 @@ const materialStrip: SaberMaterial[] = [
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
     src: "/editorial-v1/bergamot-editorial-v2.webp",
-    alt: "Interpretación con IA de una bergamota verde.",
+    alt: "Ilustración digital de una bergamota verde.",
     whatShows: "El fruto entero, cáscara al frente — ahí está el aceite.",
-    credit: "Reinterpretación con IA · Xenocryst / Antares Scorpii · CC BY-SA 2.0",
+    credit: "Adaptación digital · Xenocryst / Antares Scorpii · CC BY-SA 2.0",
   },
   {
     name: "Limón / cítricos",
@@ -64,9 +64,9 @@ const materialStrip: SaberMaterial[] = [
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
     src: "/editorial-v1/lemon-zest-editorial-v2.webp",
-    alt: "Reinterpretación con IA de ralladura de limón sobre un plato claro.",
+    alt: "Adaptación digital de ralladura de limón sobre un plato claro.",
     whatShows: "La ralladura revela la superficie donde se encuentran los aceites aromáticos.",
-    credit: "Reinterpretación con IA · Rebecca Siegel · CC BY 2.0",
+    credit: "Adaptación digital · Rebecca Siegel · CC BY 2.0",
   },
   {
     name: "Rosa",

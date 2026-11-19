@@ -2,7 +2,7 @@ import { ArticleMetaRailSkeleton } from "@/components/magazine/ArticleMetaRail";
 
 export default function MagazineArticleLoading() {
   return (
-    <main>
+    <main className="min-h-[100svh]">
       <div className="border-b border-line">
         <div className="mx-auto flex h-[66px] max-w-[1440px] items-center px-6 lg:px-10" />
       </div>
