@@ -47,7 +47,7 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "living-edition",
     title: "Living Edition y composición editorial dinámica",
     status: "planned",
-    evidence: "Auditoría renderizada local (3 viewports, claro/oscuro, 9 rutas): sin desbordes, alt, encabezados, contraste ni errores. Composición dinámica y revisión de diseño humana no verificadas.",
+    evidence: "Auditoría renderizada local con tema oscuro real y artículos de prueba: corregidos CLS del pie, enlaces ilegibles en oscuro, pie de foto y semántica del lector paginado. Hoy ningún artículo se sirve desde producción (API 500). Composición dinámica y revisión de diseño humana no verificadas.",
     next: "Revisión de dirección de arte con assets reales aprobados y piloto Living Edition acotado."
   },
   {
@@ -68,7 +68,7 @@ export const PROJECT_GATES: readonly ProjectGate[] = [
     id: "discovery",
     title: "Discovery personal y PWA",
     status: "planned",
-    evidence: "Discovery y familias sin hallazgos en la auditoría renderizada local. No hay manifest, iconos ni service worker: criterios PWA sin cumplir.",
+    evidence: "Discovery y familias sin hallazgos de accesibilidad en la auditoría renderizada local (tema oscuro real, CLS corregido). No hay manifest, iconos ni service worker: criterios PWA sin cumplir.",
     next: "Definir iconos de marca (decisión del Publisher), manifest y política offline; validar privacidad y rendimiento."
   },
   {

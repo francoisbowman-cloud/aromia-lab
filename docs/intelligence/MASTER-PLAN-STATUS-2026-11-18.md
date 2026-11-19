@@ -24,6 +24,8 @@ Este informe separa lo **hecho y probado en local** de lo que **solo el Publishe
 
 ## Hitos 05 y 08 — auditoría renderizada local
 
+> **CORRECCIÓN (misma jornada):** el resultado de abajo («0 hallazgos reales») **no es válido**. Esa corrida no aplicó el tema oscuro (el sitio ignora `prefers-color-scheme`) y la página de «artículo» auditada era la 404 (los artículos dan 500 en la API de producción). La auditoría rehecha, con sus defectos reales y correcciones, está en `docs/intelligence/LIVING-EDITION-QA-2026-11-18.md`. Se conserva el texto original solo como registro.
+
 Chromium (Playwright, fuera del repo) contra `next dev` local con la API pública en solo lectura. 3 viewports (375, 768, 1280) × claro/oscuro. Rutas: `/`, `/magazine`, `/descubrir`, `/buscar`, `/quiz`, `/club`, `/privacidad`, un artículo, una historia, `/catalogo/loewe-001-man-edp`, `/descubrir/familias`, `/perfumistas`.
 
 - **Resultado: 0 hallazgos reales** — sin desborde horizontal, sin imágenes sin `alt`, sin saltos de encabezado, 1 `h1` por página, sin enlaces/botones sin nombre, sin campos sin etiqueta, sin fallos de contraste medidos (WCAG 4.5/3), sin errores de consola ni respuestas ≥400, foco de teclado visible en los primeros 20 tab-stops.

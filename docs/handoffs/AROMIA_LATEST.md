@@ -1,3 +1,32 @@
+## 2026-11-18 — HITO 05: auditoría renderizada real y correcciones (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-18
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: 2694036
+CURRENT_BLOCK: Gate 05 — Living Edition: QA reproducible, correcciones de accesibilidad/estabilidad
+CORRECCION A LO ANTERIOR: el "0 hallazgos reales" de los checkpoints previos de esta jornada era inválido: (1) el tema oscuro no se aplicaba (el sitio ignora prefers-color-scheme; clave localStorage aromia_theme); (2) el "artículo" auditado era la página 404 porque GET /api/articulos/:slug da 500 en producción (migración 022; NO se tocó) y la web responde 404 con HTTP 200 + noindex.
+COMPLETED_CHANGES:
+  - scripts/qa/editorial-render-audit.cjs: auditoría reproducible (a11y, contraste, legibilidad, CLS/LCP/peso, imágenes sobredimensionadas, movimiento reducido, integridad editorial); falla si el tema pedido no se aplicó.
+  - Pila local desechable (PG 16 con migraciones 006/010/021/022 + API compilada + web + 2 artículos de PRUEBA) para auditar artículos reales sin tocar producción.
+  - CLS del pie 0,22–0,30 -> ~0 (4 loading.tsx con min-h-[100svh]).
+  - Enlaces del cuerpo del artículo en oscuro 1,05:1 -> 16,62:1; figcaption -> 5,85/9,27:1 (prose-a:text-ink prose-figcaption:text-muted).
+  - Lector paginado: role=dialog, aria-modal, nombre, foco inicial, trampa de foco, scroll bloqueado, foco devuelto; kicker 4,15 -> 4,53:1.
+  - Verificado extremo a extremo: enlace Amazon con rel="follow" en el editor sale sponsored nofollow noopener noreferrer (API, página y lector).
+TESTS_COMMANDS_AND_RESULTS (local, Windows, Node 20.20.2):
+  - npm --prefix apps/web test: 39 files / 147 tests pass; tsc web exit 0; lint 0 errores / 15 avisos (preexistentes).
+  - 5 pruebas jsdom nuevas del lector (2 mutaciones las hacen fallar) + renderGuards.test.ts.
+  - Auditoría de navegador: ver docs/intelligence/LIVING-EDITION-QA-2026-11-18.md.
+NO CORREGIDO (decisión): imágenes sobredimensionadas sin srcset, lector 280x420 en escritorio, soft-404 (200+noindex), LCP indicativo de la ficha, contraste sobre imágenes sin medir.
+OPEN_BLOCKERS: GET /api/articulos/:slug = 500 en producción (migración 022 sin aplicar, requiere autorización); sin pieza editorial real servible para la revisión visual del Publisher.
+REQUIRES_PUBLISHER_APPROVAL: aplicar la migración 022 en producción, revisión de dirección de arte, pipeline de imágenes, tamaño del lector, política de 404.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10; Gate 05 planned (NO certificado).
+```
+
+---
+
 ## 2026-11-18 — HITO 04: inventario de procedencia de imágenes (Claude Code, Sonnet 5.5)
 
 ```text
