@@ -1,3 +1,25 @@
+## 2026-11-23 — HITO 06: migración 022 aplicada en producción (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-23
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: 5095586
+CURRENT_BLOCK: desbloqueo del 500 de GET /api/articulos/:slug (migración 022), con OK textual del Publisher
+COMPLETED_CHANGES:
+  - Migración 022_add_articles_contenido_markdown.sql aplicada en la Postgres de producción (ALTER TABLE ... ADD COLUMN IF NOT EXISTS; idempotente, sin pérdida de datos), ejecutada por el Publisher dentro del contenedor del servicio api: railway ssh --service api --environment production -> node scripts/apply-migration.js <archivo>.
+  - Hallazgo: la Postgres de Railway ya no tiene DATABASE_PUBLIC_URL (sin TCP proxy), así que el camino railway run + DATABASE_PUBLIC_URL desde la PC nunca llegó a la base; un primer "aplicada" no tuvo efecto (logs del api seguían con column "contenido_markdown" does not exist).
+VERIFICACION_EN_VIVO (2026-11-23 ~02:50 UTC):
+  - GET /api/articulos/academia-piramide-olfativa y academia-historia-de-la-perfumeria: 500 -> 200. /api/articulos lista 15.
+  - /magazine/academia-piramide-olfativa en la web: 308 -> /academia (200, "Saber — Aromia"); redirect del sitio, no error.
+OPEN_BLOCKERS: sin pieza editorial real con contenido_markdown para la revisión visual (requiere ingesta de SubBatch 01, escritura en producción, necesita OK aparte).
+REQUIRES_PUBLISHER_APPROVAL: ingesta SubBatch 01 en producción; resto de hitos como en AROMIA_LATEST.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10 (sin cambios; NO certificado).
+```
+
+---
+
 ## 2026-11-18 — HITO 05: auditoría renderizada real y correcciones (Claude Code, Sonnet 5.5)
 
 ```text
