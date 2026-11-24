@@ -1,3 +1,25 @@
+## 2026-11-23 — HITO 07: decisiones de diseño del Publisher sobre el QA renderizado (Claude Code, Sonnet 5.5)
+
+```text
+DATE_UTC: 2026-11-23
+ACTOR: Claude Code / Sonnet 5.5 (claude-sonnet-5-5)
+BRANCH: claude/aromia-integration
+BASE_SHA: 0d23fea
+CURRENT_BLOCK: cierre de los puntos "NO CORREGIDO (decisión)" del HITO 05, con decisión explícita del Publisher en cada uno
+DECISIONES_DEL_PUBLISHER:
+  - Tamaño del lector: opción 1, UNA página grande en escritorio. Implementado: PageFlipReader.tsx minWidth 280->300 y className h-full w-full (commit 742a1ef). Medido en local contra la API real: 1280x800 pasa de 280x420 a 480x720, una sola página; 375x812 = 327x491 sin desborde. Causa: el libro colapsaba a sus mínimos en el contenedor flex y pasaba a doble página cuando minWidth*2 <= ancho del contenedor. NO verificado: páginas interiores con texto largo.
+  - Imágenes sin srcset: se hizo solo el caso 4 (sizes de las miniaturas de /academia: calc(50vw - 32px) / calc(25vw - 40px); móvil 640/828w -> 384w; commit 2bf94d6). Caso 3 (recortes de /descubrir): sin cambio, los 8 recortes pesan 134 KB en total. Caso 2 (/api/catalog-image, ruta force-dynamic sin redimensionar): opción A, se deja como está; medido 32-51 KB por imagen y 0,4-1,8 s por petición. Casos 1 (figuras dentro del artículo) y la política de procedencia siguen abiertos.
+  - Soft-404 (200 + noindex en /magazine/[slug] y /catalogo/[slug]): opción A, se deja como está. Causa: loading.tsx hace que el esqueleto salga con 200 antes de notFound(). C (layout.tsx) descartada por ahora: pierde el esqueleto en esas rutas y no está probada.
+  - Migración 022: ver HITO 06.
+CI: PR #214 sobre 2bf94d6, sin checks fallidos ni pendientes al momento de leerlo.
+OPEN_BLOCKERS: PR #214 en RELEASE HOLD; producción sigue con el lector chico hasta el merge. Sin pieza editorial en formato contenido_markdown (la ingesta no corre en producción; se revisa con los artículos existentes).
+REQUIRES_PUBLISHER_APPROVAL: merge del PR #214; política de procedencia de imágenes; figuras dentro de artículos (caso 1); resto de hitos como en AROMIA_LATEST.
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10 (sin cambios; NO certificado).
+```
+
+---
+
 ## 2026-11-23 — HITO 06: migración 022 aplicada en producción (Claude Code, Sonnet 5.5)
 
 ```text
