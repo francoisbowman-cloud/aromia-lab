@@ -99,7 +99,7 @@ export function PageFlipReader({
           size="stretch"
           width={440}
           height={660}
-          minWidth={280}
+          minWidth={300}
           maxWidth={560}
           minHeight={420}
           maxHeight={880}
@@ -116,7 +116,7 @@ export function PageFlipReader({
           swipeDistance={30}
           showPageCorners
           disableFlipByClick={false}
-          className="mx-auto"
+          className="h-full w-full"
           style={{}}
         >
           <div className="flex h-full flex-col justify-between bg-[#f8f3e8] p-[clamp(28px,4vw,58px)] text-[#1b1712] shadow-[0_20px_70px_rgba(0,0,0,.3)]">
