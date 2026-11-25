@@ -29,3 +29,30 @@ test("HTML publishing preserves captioned images and formatting while removing e
   assert(result.includes('src="/uploads/articles/image.png"'));
   assert(!/onerror|javascript:|script|iframe|alert/.test(result));
 });
+test("Amazon affiliate links are always marked sponsored, whatever rel the editor typed", () => {
+  const html = (href: string, rel = "") => publicArticleHtml(`<p><a href="${href}"${rel}>x</a></p>`)!;
+  const sponsored = 'rel="sponsored nofollow noopener noreferrer"';
+  for (const href of [
+    "https://www.amazon.com/dp/B0733677R6?tag=aromialab-20",
+    "https://amazon.es/s?k=molecule+01&tag=aromialab-20",
+    "https://smile.amazon.com/dp/B071CYS5ZZ",
+    "https://amzn.to/abc123",
+    "https://WWW.AMAZON.CO.UK/dp/X",
+  ]) assert(html(href).includes(sponsored), href);
+  // An editor-supplied rel cannot downgrade the disclosure.
+  assert(html("https://www.amazon.com/dp/X", ' rel="follow"').includes(sponsored));
+});
+test("non-Amazon and look-alike hosts are not mislabeled as sponsored", () => {
+  const normal = 'rel="noopener noreferrer"';
+  for (const href of [
+    "https://example.org/amazon.com",
+    "https://amazon.com.evil.example/dp/X",
+    "https://notamazon.com/dp/X",
+    "https://www.sephora.com/product",
+    "mailto:hola@aromialab.com",
+  ]) {
+    const out = publicArticleHtml(`<a href="${href}">x</a>`)!;
+    assert(out.includes(normal), href);
+    assert(!out.includes("sponsored"), href);
+  }
+});

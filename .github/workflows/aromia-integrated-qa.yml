@@ -1,0 +1,86 @@
+name: Aromia integrated Intelligence QA
+on:
+  pull_request:
+    paths:
+      - 'apps/api/src/intelligence/**'
+      - 'apps/api/src/routes/admin/intelligence.ts'
+      - 'apps/api/migrations/**'
+      - 'apps/api/package.json'
+      - 'apps/web/src/app/admin/(protected)/revision-visual/**'
+      - 'apps/web/src/app/admin/(protected)/progreso/**'
+      - 'apps/web/src/app/admin/(protected)/operaciones/**'
+      - 'apps/web/src/components/admin/**'
+      - 'apps/web/src/app/api/admin/**'
+      - 'apps/web/src/lib/adminApiProxy*'
+      - 'apps/web/src/lib/adminVisualFlow.integration.test.ts'
+      - 'apps/web/src/lib/visual*'
+      - 'apps/web/src/lib/productIdentityFidelity*'
+      - 'apps/web/src/lib/projectProgress*'
+      - 'apps/web/src/lib/githubProgress*'
+      - 'scripts/*image*'
+      - 'scripts/integration-contract-gates.test.mjs'
+      - 'scripts/intelligence-pilot-readiness.mjs'
+      - 'scripts/intelligence-pilot-readiness.test.mjs'
+      - 'docs/intelligence/evidence/backlog-pilot.json'
+      - '.github/workflows/aromia-integrated-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  api-integration:
+    name: API + isolated PostgreSQL
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: aromia
+          POSTGRES_PASSWORD: aromia
+          POSTGRES_DB: aromia_intelligence_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U aromia"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/api/package-lock.json
+      - run: npm ci --prefix apps/api
+      - run: npm --prefix apps/api run build
+      - run: npm --prefix apps/api run test:intelligence
+        env:
+          INTELLIGENCE_TEST_DATABASE_URL: postgresql://aromia:aromia@127.0.0.1:5432/aromia_intelligence_test
+  web-integration:
+    name: Admin tests + lint + types + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+  image-contracts:
+    name: Image contracts and provenance invariants
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci --ignore-scripts
+      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs scripts/catalog-image-provenance.test.mjs scripts/integration-contract-gates.test.mjs
+      - run: node --test scripts/intelligence-pilot-readiness.test.mjs
+      - name: Print read-only editorial pilot evidence (no approvals)
+        run: node scripts/intelligence-pilot-readiness.mjs --json

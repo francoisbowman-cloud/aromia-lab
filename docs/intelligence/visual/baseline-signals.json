@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "input": "PERFUMES_INITIAL_50.csv (historical baseline, not live production)",
+  "products": 50,
+  "findings": [
+    {
+      "key": "variant:chance-eau-tendre",
+      "slug": "chance-eau-tendre",
+      "reason": "concentration_requires_verification"
+    }
+  ],
+  "feedback": [
+    {
+      "id": "publisher-bergamot-2026-11-17",
+      "asset": "apps/web/public/editorial-v1/bergamot-editorial-v2.webp",
+      "sha256": "5f862938233e92441bace6aa7f5ec150859bc5fee8c1239ac09438d09b96944a",
+      "status": "replacement_requested",
+      "reason": "Publisher: natural pero visualmente poco atractiva. Fruto pesado, piel apagada, tallo cortado prominente; insuficiente atractivo editorial.",
+      "scope": [
+        "portada",
+        "Academia"
+      ],
+      "replacement": null,
+      "approval": "pending",
+      "currentSha256": "5f862938233e92441bace6aa7f5ec150859bc5fee8c1239ac09438d09b96944a",
+      "assetState": "unchanged"
+    }
+  ],
+  "publication": "blocked",
+  "limitations": [
+    "Signals do not certify visual identity or image rights.",
+    "No model calls or automatic image replacements.",
+    "Changed bytes require a new review, never an inferred approval."
+  ]
+}

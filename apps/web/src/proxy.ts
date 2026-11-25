@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ADMIN_SESSION_COOKIE, isValidSessionCookie } from "@/lib/adminAuth";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const cookie = req.cookies.get(ADMIN_SESSION_COOKIE)?.value;
 
   if (!(await isValidSessionCookie(cookie))) {

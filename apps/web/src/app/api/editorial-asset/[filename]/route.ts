@@ -13,8 +13,9 @@ function assetDirectory() {
 
 export async function GET(
   _request: Request,
-  { params }: { params: { filename: string } },
+  { params: paramsPromise }: { params: Promise<{ filename: string }> },
 ) {
+  const params = await paramsPromise;
   const filename = path.basename(params.filename);
   if (filename !== params.filename || !/^[a-zA-Z0-9._-]+\.(?:jpg|jpeg|png|webp)$/.test(filename)) {
     return new NextResponse("Not found", { status: 404 });

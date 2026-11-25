@@ -82,7 +82,14 @@ await requireText("apps/web/src/app/magazine/[slug]/page.tsx", [["magazine_perso
 await requireText("apps/web/src/components/magazine/RelatedPerfumes.tsx", [["editorial_relationship_signal_missing", /recordPerfumeInterest/]]);
 
 await requireText("apps/web/src/app/api/catalog-image/[slug]/route.ts", [
-  ["ccl_policy_header_missing", /x-aromia-image-policy[^\n]+omni-ccl-product-only/i], ["social_card_normalization_missing", /perfume-social-cards/], ["catalog_image_ssrf_guard_missing", /192\\\.168|169\\\.254|private172/], ["official_media_black_afgano_missing", /nasomatto\.com\/es\/products\/black-afgano/], ["official_media_chance_missing", /chanel\.com\/us\/fragrance\/p\/1263(?:20|60)/], ["official_media_origin_header_missing", /official-brand/],
+  ["ccl_policy_header_missing", /x-aromia-image-policy[^\n]+omni-ccl-product-only/i], ["social_card_normalization_missing", /perfume-social-cards/], ["catalog_image_ssrf_guard_missing", /192\\\.168|169\\\.254|private172/], ["official_media_resolver_import_missing", /import \{ officialProductPage \} from "@\/lib\/officialProductPage"/], ["official_media_resolver_call_missing", /officialProductPage\(perfume\.slug, perfume\.concentracion\)/], ["official_media_origin_header_missing", /official-brand/],
+]);
+
+// Official URLs moved to a testable resolver; retain source and route wiring checks.
+await requireText("apps/web/src/lib/officialProductPage.ts", [
+  ["official_media_black_afgano_missing", /nasomatto\.com\/es\/products\/black-afgano/],
+  ["official_media_chance_edt_missing", /chanel\.com\/us\/fragrance\/p\/126320/],
+  ["official_media_chance_edp_missing", /chanel\.com\/us\/fragrance\/p\/126260/],
 ]);
 
 await requireText("apps/api/src/db/applyCatalogCompleteness.ts", [["amazon_enrichment_should_be_degraded_not_fatal", /AMAZON_CATALOG_COMPLETION_DEGRADED/]]);

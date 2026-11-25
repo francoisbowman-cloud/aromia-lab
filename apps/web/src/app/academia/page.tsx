@@ -54,9 +54,9 @@ const materialStrip: SaberMaterial[] = [
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
     src: "/editorial-v1/bergamot-editorial-v2.webp",
-    alt: "Interpretación con IA de una bergamota verde.",
+    alt: "Ilustración digital de una bergamota verde.",
     whatShows: "El fruto entero, cáscara al frente — ahí está el aceite.",
-    credit: "Reinterpretación con IA · Xenocryst / Antares Scorpii · CC BY-SA 2.0",
+    credit: "Adaptación digital · Xenocryst / Antares Scorpii · CC BY-SA 2.0",
   },
   {
     name: "Limón / cítricos",
@@ -64,9 +64,9 @@ const materialStrip: SaberMaterial[] = [
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
     src: "/editorial-v1/lemon-zest-editorial-v2.webp",
-    alt: "Reinterpretación con IA de ralladura de limón sobre un plato claro.",
+    alt: "Adaptación digital de ralladura de limón sobre un plato claro.",
     whatShows: "La ralladura revela la superficie donde se encuentran los aceites aromáticos.",
-    credit: "Reinterpretación con IA · Rebecca Siegel · CC BY 2.0",
+    credit: "Adaptación digital · Rebecca Siegel · CC BY 2.0",
   },
   {
     name: "Rosa",
@@ -144,7 +144,7 @@ export default async function SaberPage() {
                       reparte el recorte y ninguna pierde su motivo. */}
                   <div className="relative aspect-square overflow-hidden bg-soft">
                     {material.src ? (
-                      <Image src={material.src} alt={material.alt ?? material.name} fill sizes="(max-width: 700px) 50vw, 25vw" style={{objectFit:"cover"}} />
+                      <Image src={material.src} alt={material.alt ?? material.name} fill sizes="(max-width: 700px) calc(50vw - 32px), calc(25vw - 40px)" style={{objectFit:"cover"}} />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center border border-dashed border-line p-3 text-center">
                         <span className="font-plex text-[9px] uppercase tracking-[.1em] text-muted">Foto documental pendiente</span>

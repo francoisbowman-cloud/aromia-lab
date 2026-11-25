@@ -2,7 +2,8 @@ import { serverApiBases } from "@/lib/serverApiBases";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: Request, { params }: { params: { path: string[] } }) {
+export async function GET(req: Request, { params: paramsPromise }: { params: Promise<{ path: string[] }> }) {
+  const params = await paramsPromise;
   const [kind, file, ...extra] = params.path;
   if (extra.length || !["articles", "perfumes"].includes(kind) || !/^[a-z0-9][a-z0-9._-]*\.(?:png|jpe?g|webp)$/i.test(file ?? "")) {
     return new Response(null, { status: 404 });

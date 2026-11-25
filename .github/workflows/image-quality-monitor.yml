@@ -1,0 +1,29 @@
+name: Image quality signals
+on:
+  pull_request:
+    paths:
+      - 'scripts/image-quality-monitor*'
+      - 'scripts/catalog-image-review*'
+      - 'scripts/private-image-review-operator*'
+      - 'docs/intelligence/visual/**'
+      - 'PERFUMES_INITIAL_50.csv'
+      - 'apps/web/public/editorial-v1/**'
+      - '.github/workflows/image-quality-monitor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  signals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci --ignore-scripts
+      - run: node --test scripts/image-quality-monitor.test.mjs scripts/catalog-image-review.test.mjs scripts/catalog-image-review-evidence.test.mjs scripts/private-image-review-operator.test.mjs
+      - run: node scripts/image-quality-monitor.mjs > image-quality-signals.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image-quality-signals
+          path: image-quality-signals.json

@@ -1,0 +1,50 @@
+name: Aromia dependency patch verification (read only)
+on:
+  pull_request:
+    paths:
+      - 'apps/api/package.json'
+      - 'apps/api/package-lock.json'
+      - 'apps/api/src/intelligence/runtimeDependencyGate.test.ts'
+      - 'apps/web/package.json'
+      - 'apps/web/package-lock.json'
+      - '.github/workflows/aromia-safe-patch-proposal.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  api-node22:
+    name: API security lock + TypeScript on Node 22
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/api/package-lock.json
+      - run: npm ci --prefix apps/api
+      - run: npm --prefix apps/api run build
+      - run: cd apps/api && npx --no-install tsx --test src/intelligence/runtimeDependencyGate.test.ts
+      - name: Ensure no tracked dependency changes during checks
+        run: git diff --exit-code -- apps/api/package.json apps/api/package-lock.json
+  web-node22:
+    name: Web patch regression on Node 22
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci --prefix apps/web
+      - run: npm --prefix apps/web test
+      - run: npm --prefix apps/web run lint
+      - run: npm --prefix apps/web run typecheck
+      - run: npm --prefix apps/web run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - name: Ensure no tracked dependency changes during checks
+        run: git diff --exit-code -- apps/web/package.json apps/web/package-lock.json

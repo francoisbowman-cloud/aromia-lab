@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 // Los globs de `content` se resuelven contra el CWD del proceso, no contra este
 // archivo. Railway construye con root apps/web, pero lanzar el dev server desde
@@ -103,6 +104,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [typography],
 };
 export default config;

@@ -1,10 +1,97 @@
 # Aromia — Current Operational State
 
+## ESTADO CANÓNICO ACTUALIZADO — 2026-11-18 · CLAUDE RESUME
+
+**Contrato maestro:** `AROMIA_MASTER_HANDOFF.md` en esta rama. **Continuación vigente:** `docs/handoffs/CLAUDE_RESUME_2026-11-18.md`; **checkpoint:** `docs/handoffs/AROMIA_LATEST.md`. Consultar GitHub antes de declarar CI actual.
+
+**BRANCH:** `claude/aromia-integration` · **PR:** #214 OPEN / DRAFT / RELEASE HOLD (destino `main`). **Objetivo exclusivo:** cerrar la certificación del HITO 02 (Intelligence runtime); 1/10 hitos certificados, **10%**. El Publisher exige trabajo por hitos certificados y bloques largos. Modelo elegido **Sonnet Medium** por eficiencia; no cambiar a Opus sin razón/permiso.
+
+**PR #214 verificada al corte en SHA `bf51c5825b893e0ac4eabab3dfa8888b5f967d30`:** 9 workflows SUCCESS, 6 SKIPPED, 2 IN_PROGRESS (browser real, Catalog Expansion Engine); ningún FAIL observado. El HEAD cambia tras estos commits documentales, por lo que Claude debe volver a verificar las comprobaciones actuales. Hito 02 **no certificado** por CI: falta runtime autorizado con scheduler, observabilidad, permisos y recuperación.
+
+**Railway:** proyecto `aromia-lab-v2`, único entorno visible `production`; web y api del `main` SHA `1619c776560f5d6f9c5948f8092ff5241540048f`. No crear staging, desplegar ni modificar servicios/DB sin autorización explícita.
+
+**NEXT_ACTOR:** Claude Code · **NEXT_ACTION:** leer `docs/handoffs/CLAUDE_RESUME_2026-11-18.md`, verificar CI del último HEAD, corregir, consolidar aceptación técnica aislada, preservar release hold. Solo solicitar aprobación para infraestructura cuando sea realmente indispensable.
+
+---
+
+
+
+## CANONICAL HANDOFF — 2026-11-18
+
+**ONLY CURRENT OPERATIONAL HANDOFF:** [`AROMIA_MASTER_HANDOFF.md`](AROMIA_MASTER_HANDOFF.md) on `handoff/aromia-final-unified-20261118`. Claude Code is sole development actor; Codex paused. The Publisher authorizes **internal development branch merges** into one `claude/aromia-integration` line after verification; **NO merge to `main`, deploy, publish, production migrations, spending or visual/rights approvals** without separate explicit consent. Earlier CODEX and CLAUDE handoffs and relay entries below are retained **for historical evidence only**, not as conflicting operational instructions. Read master before acting. Latest snapshot is not live telemetry; verify all PRs, commits and CI before making changes.
+
+**NEXT_ACTOR:** Claude Code / Opus (latest actually available model, High effort). **NEXT_ACTION:** verify repo, create/reconcile integration branch, execute P0 Tiptap/Next security, persist `docs/handoffs/AROMIA_LATEST.md`, continue safe blocks autonomously while the session is running.
+
+**LATEST CHECKPOINT (2026-11-18):** `docs/handoffs/AROMIA_LATEST.md` on `claude/aromia-integration` — P0 Tiptap 3.34.0 + Next 16.4.6 done locally (web audit 0 runtime vulns), not yet pushed/CI-verified. RELEASE_STATUS: HOLD.
+
+---
+
+## PUBLISHER UPDATE — 2026-11-18: CLAUDE CODE SOLE IMPLEMENTATION ACTOR
+
+**Current authority supersedes older no-internal-merge/parallel-Codex instructions.** Codex is paused for this phase. Claude Code / Opus may **merge verified development branches internally** and consolidate the existing stacked work into one persistent `claude/aromia-integration` branch. The existing Claude handoff branch contains #206 + #208 + #209 by ancestry; do not re-merge those changes blindly. See section 0 of [`CLAUDE_CODE_HANDOFF.md`](CLAUDE_CODE_HANDOFF.md).
+
+**Not authorized:** merge into `main`, deployment, publication, production migrations, paid resources, or visual identity/licensing approval. Release security gate remains blocked. **NEXT_ACTOR: Claude Code. NEXT_ACTION:** inspect live PRs/CI, create or adopt `claude/aromia-integration` from the latest Claude handoff, execute safe blocks, merge internal development only after tests, persist checkpoints.
+
+---
+
+## CLAUDE CODE SHIFT — 2026-11-18 (parallel safe continuation)
+
+**NEXT_ACTOR: Claude Code / Opus.** Read [`CLAUDE_CODE_HANDOFF.md`](CLAUDE_CODE_HANDOFF.md), [`AGENTS.md`](AGENTS.md), and [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md). Claude's independent working base is `handoff/aromia-claude-autonomous-20261118` (stacked on the Codex handoff branch), and its implementation branches must be `claude/*` with draft PRs. The Codex relay below is **preserved**, not overwritten or invalidated; before implementation inspect new Codex PRs and avoid duplicate changes.
+
+**ACTIVE_OBJECTIVE:** safe autonomous continuation: resolve frontend dependency blockers (Tiptap/Next.js), test and repair, progress on Intelligence/editorial/visual QA where non-overlapping, and persist per-block checkpoint. **RELEASE HOLD:** web security advisories remain unresolved as of handoff; no merge, deployment, publication, paid services, production migrations or image approvals/replacements. No autonomous work promised outside the running Claude session.
+
+**PUBLISHER VISION:** Aromia is a dynamic editorial fragrance magazine with verified storytelling, source and rights provenance, an authentic product-identity gate, and independent editorial authority. See the full Claude handoff for phase plan and stop conditions.
+
+---
+
+## CURRENT CODEx RELAY — 2026-11-17 (state 57; supersedes older operational headers)
+
+**START HERE:** [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md) and [`AGENTS.md`](AGENTS.md). This is the **current working-state pointer**, not permission to bypass the canonical editorial workflow. Older sections below, including references to `feat/intelligence-foundation`, `STATE_VERSION: 54`, PR #186 as OPEN and v56 execution snapshots, remain **historical**; do not treat them as current without live GitHub verification.
+
+```text
+STATE_VERSION: 57
+SNAPSHOT_LOCAL_DATE: 2026-11-17 (America/Santo_Domingo; CI timestamps UTC on 2026-11-18)
+LAST_ACTOR: ChatGPT — verified current GitHub state and wrote a reproducible handoff for Codex
+LAST_ACTION: Recorded AGENTS.md and CODEX_HANDOFF.md, including immutable visual identity, 10 verified-gate checklist and next security/QA blocks
+ACTIVE_OBJECTIVE: Aromia Intelligence consolidation, web runtime dependency remediation, then editorial/visual gates without publishing
+ACTIVE_BRANCH: handoff/aromia-codex-continuation-20261117 (based on security/aromia-runtime-safe-patches-20261117)
+INTEGRATION_PR: #206 — open/draft/unmerged; head inspected ee66f063c5f1332507b45731929729a2959b961a
+SECURITY_PR: #208 — open/draft/unmerged; head inspected fb85bc09d2df47ecd5b0ffc1d85bab2aaa1ac846
+EVIDENCE: PR #206 integrated + Chromium QA SUCCESS; PR #208 Node 22 + PostgreSQL/web/image QA SUCCESS
+SECURITY_GATE: API 0 critical/0 high/2 moderate; web 1 critical/2 high/26 moderate (npm --omit=dev, PR #208 audit; FAIL as designed)
+ROADMAP_GATE: 1/10 verified (10%); NOT a technical-completeness estimate
+NEXT_ACTOR: Codex / Code
+NEXT_ACTION: checkout this handoff branch safely; verify up-to-date refs/CI; coordinate Tiptap peer security update and Next.js remediation in separate draft PRs; run all QA; continue eligible blocks
+BLOCKERS: web next/Tiptap/postcss advisories; no integration to main; product/rights validation and real production runtime pending
+AUTHORITY: NO_MERGE / NO_DEPLOY / NO_PUBLISH / NO_PRODUCTION_MIGRATION / NO_PAID_SERVICES / NO_OMNI_REPO_CHANGES
+```
+
+**Publisher exact-product mandate:** labels, text, logos, geometry, color, dimensions and distinctive features must match the *real* branded product; no spectacular image compensates for false identity. See [visual contract](docs/intelligence/visual/PRODUCT-IDENTITY-FIDELITY.md). No image replacement or legal approval is implied by the current tests.
+
+**Continuation command:** `Continúa Aromia desde el repo, sin publicar. Lee AGENTS.md y CODEX_HANDOFF.md y ejecuta los siguientes bloques seguros sin esperar un nuevo «Siguiente».`
+
+---
+
+
 This file is the compact relay for the command:
 
 > **Continúa Aromia desde el repo.**
 
 It indexes the latest verified operational state. Git history, checkpoints and canonical workflow documents remain authoritative evidence.
+
+## Active V2 mandate — latest checkpoint
+
+- LAST_ACTOR: Code/Codex. PR186 is MERGED at `1619c776560f5d6f9c5948f8092ff5241540048f`; older OPEN labels below are historical.
+- ACTIVE_OBJECTIVE: autonomous editorial infrastructure, incremental and without publication.
+- ACTIVE_BRANCH: `feat/intelligence-foundation`.
+- DELIVERABLES: persistent PostgreSQL job engine, gated preparation handler, CLI + private web operations panel, authenticated opt-in API, versioned editorial materials, bounded source capture, version-bound review packages and local integration tests. See [board and handoff](docs/intelligence/BOARD.md).
+- STATE: first operational foundation proven locally; full autonomous editorial pilot and production runtime NOT complete; private panel implemented. Existing magazine design preserved.
+- LATEST_TRANCHE: immutable local recovery of an existing manuscript, idempotent import and explicit source blockers; evidence in `docs/intelligence/evidence/backlog-pilot.json`. CI at0888145 passed all five executed checks; seven skipped checks remain unverified. PR187 remains draft.
+- VISUAL_DIRECTION: Publisher mockup feedback and phase-by-phase pending work are recorded in [vision and task list](docs/intelligence/VISION-Y-PENDIENTES.md). Concept only; real products require identity and rights evidence.
+- IMAGE_QUALITY: Publisher bergamot rejection tracked by hash; no replacement yet. Read-only quality monitor and explicit Chance concentration correction implemented. See `docs/intelligence/visual/` and board for limits; production does not yet self-improve end to end.
+- NEXT_ACTOR: Code; verify quality-monitor CI, audit current product identity, generate/review bergamot from the isolated capsule, and continue the editorial pilot.
+- BLOCKERS: external runtime/provider availability and approved spend for real autonomous research; OMNI deployment unverified.
+- AUTHORITY: no merge/deploy/publication/production writes or OMNI modifications in this mandate.
 
 ## Active mission override — 2026-11-13 (v56)
 

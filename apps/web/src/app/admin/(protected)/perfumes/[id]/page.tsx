@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { TagInput } from "@/components/admin/TagInput";
 import { adminRequest } from "@/lib/adminRequest";
 import { ImageUpload } from "@/components/admin/ImageUpload";
@@ -35,7 +35,8 @@ interface Retailer {
 
 const TABS = ["General", "Ofertas", "Reseñas"] as const;
 
-export default function AdminPerfumeEditPage({ params }: { params: { id: string } }) {
+export default function AdminPerfumeEditPage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
   const [tab, setTab] = useState<(typeof TABS)[number]>("General");
   const [loading, setLoading] = useState(true);

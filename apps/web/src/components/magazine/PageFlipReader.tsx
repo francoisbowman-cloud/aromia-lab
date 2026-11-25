@@ -30,19 +30,61 @@ export function PageFlipReader({
     year: "numeric",
   });
 
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+
+  // Modal behaviour: move focus in, keep it inside, lock page scroll, and hand focus
+  // back to whatever opened the reader when it closes.
+  useEffect(() => {
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (opener && opener.isConnected) opener.focus();
+    };
+  }, []);
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") bookRef.current?.pageFlip()?.flipNext();
       if (e.key === "ArrowLeft") bookRef.current?.pageFlip()?.flipPrev();
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusable = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])'),
+        ).filter((el) => !el.hasAttribute("disabled"));
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+        if (!dialogRef.current.contains(active)) {
+          e.preventDefault();
+          first.focus();
+        } else if (e.shiftKey && active === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-[rgba(5,4,3,.94)] p-6">
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Lector de ${article.titulo}`}
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-[rgba(5,4,3,.94)] p-6"
+    >
       <button
+        ref={closeRef}
         type="button"
         onClick={onClose}
         className="fixed right-6 top-5 font-sans text-[13px] uppercase tracking-[.12em] text-white"
@@ -57,7 +99,7 @@ export function PageFlipReader({
           size="stretch"
           width={440}
           height={660}
-          minWidth={280}
+          minWidth={300}
           maxWidth={560}
           minHeight={420}
           maxHeight={880}
@@ -74,11 +116,11 @@ export function PageFlipReader({
           swipeDistance={30}
           showPageCorners
           disableFlipByClick={false}
-          className="mx-auto"
+          className="h-full w-full"
           style={{}}
         >
           <div className="flex h-full flex-col justify-between bg-[#f8f3e8] p-[clamp(28px,4vw,58px)] text-[#1b1712] shadow-[0_20px_70px_rgba(0,0,0,.3)]">
-            <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#8d7144]">
+            <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#866b41]">
               AROMIA MAGAZINE
             </p>
             <div>
@@ -89,7 +131,7 @@ export function PageFlipReader({
                 {[article.autor, fecha].filter(Boolean).join(" · ")}
               </p>
             </div>
-            <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#8d7144]">01</p>
+            <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#866b41]">01</p>
           </div>
 
           {pages.map((page, i) => (
@@ -97,7 +139,7 @@ export function PageFlipReader({
               key={i}
               className="flex h-full flex-col overflow-hidden bg-[#f8f3e8] p-[clamp(26px,4vw,54px)] text-[#1b1712] shadow-[0_20px_70px_rgba(0,0,0,.3)]"
             >
-              <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#8d7144]">
+              <p className="font-sans text-[10px] uppercase tracking-[.18em] text-[#866b41]">
                 {page.kicker}
               </p>
               <div className="mt-7 flex-1 overflow-y-auto font-display text-[16px] leading-7 [&_blockquote]:my-5 [&_blockquote]:border-l-2 [&_blockquote]:border-[#b68a44] [&_blockquote]:pl-6 [&_blockquote]:text-[22px] [&_blockquote]:leading-[1.3] [&_h2]:mt-2 [&_h2]:text-[32px] [&_h2]:leading-none [&_p+p]:mt-4">
