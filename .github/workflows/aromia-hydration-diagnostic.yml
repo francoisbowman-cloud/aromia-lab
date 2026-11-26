@@ -1,20 +1,25 @@
-name: Aromia hydration diagnostic unit checks
+name: Aromia hydration diagnostic QA
 on:
   pull_request:
     paths:
       - 'scripts/qa/hydration-diagnostic*.cjs'
+      - 'apps/web/src/app/layout.tsx'
+      - 'apps/web/src/components/ThemeToggle.tsx'
       - '.github/workflows/aromia-hydration-diagnostic.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   diagnostic:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
       - name: Syntax checks
         run: |
           node --check scripts/qa/hydration-diagnostic.cjs
@@ -22,3 +27,31 @@ jobs:
           node --check scripts/qa/hydration-diagnostic-lib.test.cjs
       - name: Dependency-free unit tests
         run: node --test scripts/qa/hydration-diagnostic-lib.test.cjs
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+      - name: Install isolated Playwright and Chromium
+        run: |
+          mkdir -p "$RUNNER_TEMP/aromia-browser"
+          npm install --prefix "$RUNNER_TEMP/aromia-browser" --no-save --package-lock=false playwright@1.56.1
+          "$RUNNER_TEMP/aromia-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Start isolated Next development server (no API writes)
+        env:
+          API_URL: http://127.0.0.1:9
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          npm --prefix apps/web run dev -- --hostname 127.0.0.1 > "$RUNNER_TEMP/aromia-next-dev.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/aromia-next-dev.pid"
+          for i in $(seq 1 90); do
+            if curl --silent --fail --output /dev/null http://127.0.0.1:3000/; then exit 0; fi
+            sleep 2
+          done
+          tail -n 80 "$RUNNER_TEMP/aromia-next-dev.log"
+          exit 1
+      - name: Diagnose text and attribute hydration in real Chromium
+        env:
+          PLAYWRIGHT_PACKAGE_PATH: ${{ runner.temp }}/aromia-browser/node_modules/playwright
+        run: |
+          node scripts/qa/hydration-diagnostic.cjs http://127.0.0.1:3000 /,/academia,/quiz
+      - name: Show final development server logs on failure
+        if: failure()
+        run: tail -n 120 "$RUNNER_TEMP/aromia-next-dev.log" || true
