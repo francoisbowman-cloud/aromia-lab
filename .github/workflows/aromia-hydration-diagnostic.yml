@@ -4,6 +4,8 @@ on:
     paths:
       - 'scripts/qa/hydration-diagnostic*.cjs'
       - 'scripts/qa/production-hydration-observe.cjs'
+      - 'scripts/qa/next-image-qualities.test.mjs'
+      - 'apps/web/next.config.mjs'
       - 'apps/web/src/app/layout.tsx'
       - 'apps/web/src/components/ThemeToggle.tsx'
       - '.github/workflows/aromia-hydration-diagnostic.yml'
@@ -28,7 +30,7 @@ jobs:
           node --check scripts/qa/hydration-diagnostic-lib.test.cjs
           node --check scripts/qa/production-hydration-observe.cjs
       - name: Dependency-free unit tests
-        run: node --test scripts/qa/hydration-diagnostic-lib.test.cjs
+        run: node --test scripts/qa/hydration-diagnostic-lib.test.cjs scripts/qa/next-image-qualities.test.mjs
       - name: Install web dependencies
         run: npm ci --prefix apps/web
       - name: Install isolated Playwright and Chromium

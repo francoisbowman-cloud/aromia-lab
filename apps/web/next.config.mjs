@@ -10,6 +10,9 @@ const nextConfig = {
   // No expone la versión de Next en el header X-Powered-By.
   poweredByHeader: false,
   images: {
+    // Next 16 defaults to [75]; editorial images explicitly request 85/95.
+    // Keep this a narrow allowlist rather than allowing arbitrary q values.
+    qualities: [75, 85, 95],
     remotePatterns: [
       {
         protocol: "https",
