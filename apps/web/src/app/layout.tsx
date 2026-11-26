@@ -38,9 +38,9 @@ const THEME_INIT_SCRIPT = `
 `;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Browser-stored dark mode modifies this one attribute before hydration.
+  // Suppress only the unavoidable root-attribute warning, not child mismatches.
   return (
-    {/* Browser-stored dark mode modifies only this root attribute before hydration.
-         Suppress the known, unavoidable html-attribute difference, NOT child mismatches. */}
     <html lang="es" data-theme="light" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://m.media-amazon.com" crossOrigin="anonymous" />
