@@ -1,0 +1,24 @@
+name: Aromia hydration diagnostic unit checks
+on:
+  pull_request:
+    paths:
+      - 'scripts/qa/hydration-diagnostic*.cjs'
+      - '.github/workflows/aromia-hydration-diagnostic.yml'
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax checks
+        run: |
+          node --check scripts/qa/hydration-diagnostic.cjs
+          node --check scripts/qa/hydration-diagnostic-lib.cjs
+          node --check scripts/qa/hydration-diagnostic-lib.test.cjs
+      - name: Dependency-free unit tests
+        run: node --test scripts/qa/hydration-diagnostic-lib.test.cjs
