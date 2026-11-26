@@ -8,6 +8,6 @@ function redactDiagnostic(message) {
       try { const u = new URL(match); return u.origin + u.pathname; } catch { return '[url]'; }
     })
     .replace(/(?:password|secret|authorization|token|api[_-]?key)\s*[:=]\s*[^\s,;]+/gi, '[redacted]')
-    .slice(0, 1600);
+    .slice(0, 3500);
 }
 module.exports = { isHydrationMessage, redactDiagnostic };

@@ -49,7 +49,8 @@ async function run() {
         } catch (error) {
           navigationError = redactDiagnostic(error.message);
         }
-        results.push({route, theme, httpStatus, hydrationErrors: messages, navigationError});
+        const appliedTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+        results.push({route, theme, appliedTheme, httpStatus, hydrationErrors: messages, navigationError});
       } finally {
         await context.close();
       }
@@ -58,7 +59,7 @@ async function run() {
     await browser.close();
   }
   console.log(JSON.stringify({kind:'aromia_hydration_diagnostic', mode:'local-dev', results}, null, 2));
-  if (results.some(r => r.hydrationErrors.length || r.navigationError || r.httpStatus === null || r.httpStatus >= 500)) {
+  if (results.some(r => r.hydrationErrors.length || r.navigationError || r.httpStatus === null || r.httpStatus >= 500 || r.appliedTheme !== r.theme)) {
     process.exitCode = 1;
   }
 }
