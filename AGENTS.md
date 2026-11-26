@@ -1,5 +1,7 @@
 # Aromia — instrucciones para Claude Code y agentes de desarrollo
 
+> **ESTADO VIGENTE, 26 NOV 2026 — TRAS MERGE #214:** el PR #214 está **MERGED** a `main`, commit `5ba7349a11d42ad2d5590f1250a410f1e7b4a317`; Railway web/api reportó ambos despliegues SUCCESS (verificación directa del 26/11). La nueva rama segura es `chore/post-214-hydration-diagnostics` con PR #216 **DRAFT, SIN MERGE**. Leer primero `docs/handoffs/AROMIA_POST_MERGE_2026-11-25.md` para el estado, manteniendo `AROMIA_MASTER_HANDOFF.md` como autoridad normativa. Toda referencia histórica más abajo a #214 pendiente de merge/deploy es **obsoleta**. Gate 02 sigue NO certificado; barra 1/10; no fusionar #216 ni desplegar sin permiso nuevo del Publisher.
+
 > **MODO DE EJECUCIÓN INTEGRADA (2026-11-18):** seguir también [`docs/operations/AROMIA_INTEGRATED_EXECUTION_2026-11-18.md`](docs/operations/AROMIA_INTEGRATED_EXECUTION_2026-11-18.md). Este complemento reduce handoffs y permite avanzar en trabajo seguro independiente cuando un gate espera autorización; NO altera el master, el HITO 02, la barra 1/10 ni el RELEASE HOLD. Priorizar implementación y QA sobre nuevos informes.
 
 
