@@ -1,3 +1,25 @@
+## 2026-11-26 — Post-merge #214: prueba del bug de hidratación y CI de PR #216 (ChatGPT, razonamiento High)
+
+```text
+DATE_UTC: 2026-11-26
+MAIN_VERIFIED_SHA: 5ba7349a11d42ad2d5590f1250a410f1e7b4a317
+PR_214: MERGED, no repetir integración
+PRODUCTION: Railway web/api SUCCESS en SHA de main; inspección en Chromium de www.aromialab.com: 4 rutas x 2 temas, HTTP 200, 0 hydrationErrors (observación puntual; no prueba ausencia histórica o intermitente)
+WORK_BRANCH: chore/post-214-hydration-diagnostics
+WORK_PR: #216 DRAFT, sin merge ni despliegue
+DIAGNOSTICO: Next dev mostró advertencia real en <html>: servidor data-theme=light, cliente dark cuando localStorage=dark; ninguna en light
+CORRECCION: suppressHydrationWarning limitado a <html>, no a contenido hijo; prueba verifica que dark sigue activo
+QA: Next dev y next build/next start aislados, cada uno 3 rutas x 2 temas, 6/6 HTTP 200 sin hydrationErrors, CI success sobre SHA anterior f506da8
+SEGUNDO_HALLAZGO: Next 16 cualidades de imagen 85/95 fuera del default [75], se configura allowlist [75,85,95] y se añade test; CI de ese cambio pendiente
+NEXT: revisar CI exacto HEAD PR #216; QA de imágenes y posible optimización sin comprometer identidad/derechos; preparar landing editorial nueva como bloque separado
+GATE_02: sigue sin certificación; migrations 024–029 no aprobadas en producción
+PUBLISHER_APPROVAL: requerida para merge #216, deploy, migraciones productivas, publicación y decisiones editoriales/visuales
+RELEASE_STATUS: HOLD
+PROGRESO_OFICIAL: 1/10
+```
+
+---
+
 ## 2026-11-23 — HITO 07: decisiones de diseño del Publisher sobre el QA renderizado (Claude Code, Sonnet 5.5)
 
 ```text

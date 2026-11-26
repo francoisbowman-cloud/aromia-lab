@@ -1,5 +1,7 @@
 # Aromia · Hito 02 — expediente de certificación de Intelligence
 
+> **Actualización de estado 2026-11-26 (no de criterios):** PR #214 fue fusionado a `main` en commit `5ba7349` y web/api Railway terminaron SUCCESS. Las descripciones históricas aquí de PR #214 "draft" y "no deploy" quedaron obsoletas. **No cambian los requisitos de certificación:** Intelligence sigue sin activación/certificación, las migraciones opt-in 024–029 no se han aplicado según el reporte del operador, y un merge de frontend no autoriza scheduler ni datos de producción. Leer `docs/handoffs/AROMIA_POST_MERGE_2026-11-25.md`.
+
 **Estado:** `PENDING_OPERATIONAL_CERTIFICATION` — **NO CERTIFICADO**  
 **Actualizado:** 2026-11-18  
 **Alcance:** gate `intelligence-runtime` de `apps/web/src/lib/projectProgress.ts`.  

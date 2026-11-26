@@ -46,3 +46,10 @@ PLAYWRIGHT_PACKAGE_PATH=/ruta/al/playwright node scripts/qa/hydration-diagnostic
 
 - En la auditoría real de Next dev, `EditorialImage` solicita `quality=85` y `VisualField` solicita `quality=95`, pero Next 16 permite `[75]` por defecto, por lo que emitía avisos explícitos. Se configura `images.qualities = [75,85,95]` en `next.config.mjs` conservando los valores que ya estaban especificados por los componentes. No se cambian fuentes, identidad ni derechos de imágenes. Un conjunto limitado evita permitir `q` arbitrarios.
 - Test de contrato `node --test scripts/qa/next-image-qualities.test.mjs`; ejecución vía CI de hidratación. **No afirmar performance o mejora visual sin medidas.** La configuración aún NO está desplegada.
+
+## Último checkpoint de continuidad · 26 noviembre 2026
+
+- PR #214 fusionado, `main` en `5ba7349`; Railway web/api SUCCESS verificados.
+- PR #216 DRAFT: reparación acotada de `data-theme`, diagnósticos de hidratación Next dev + producción aislada; sobre SHA `f506da8`, ambos jobs SUCCESS y 12/12 rutas-tema sin errores, y observación en web pública 8/8 HTTP 200 sin hydrationErrors. **El #418 previo NO se reprodujo en observación puntual tras el deploy.** No se ha fusionado ni desplegado la corrección actual.
+- Nuevo bloque de compatibilidad: `next.config.mjs` `images.qualities [75,85,95]`, prueba de contrato; pendiente CI del HEAD posterior.
+- Handoff de entrada actualizado (`AGENTS.md`, `AROMIA_MASTER_HANDOFF.md`, `docs/handoffs/AROMIA_LATEST.md`, expediente Gate02). El estado 1/10, Gate02 no certificado, derechos de imágenes y autorizaciones se mantienen.

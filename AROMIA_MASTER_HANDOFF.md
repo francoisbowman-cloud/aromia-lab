@@ -1,5 +1,7 @@
 # AROMIA — HANDOFF MAESTRO ÚNICO · CLAUDE CODE
 
+> **ESTADO VIGENTE, 26 NOV 2026 — TRAS MERGE #214:** el PR #214 está **MERGED** a `main`, commit `5ba7349a11d42ad2d5590f1250a410f1e7b4a317`; Railway web/api reportó ambos despliegues SUCCESS (verificación directa del 26/11). La nueva rama segura es `chore/post-214-hydration-diagnostics` con PR #216 **DRAFT, SIN MERGE**. Leer primero `docs/handoffs/AROMIA_POST_MERGE_2026-11-25.md` para el estado, manteniendo `AROMIA_MASTER_HANDOFF.md` como autoridad normativa. Toda referencia histórica más abajo a #214 pendiente de merge/deploy es **obsoleta**. Gate 02 sigue NO certificado; barra 1/10; no fusionar #216 ni desplegar sin permiso nuevo del Publisher.
+
 ## ACTUALIZACIÓN OPERATIVA — 18 NOV 2026 · CONTINUIDAD CLAUDE
 
 **Leer antes de continuar:** [`docs/handoffs/CLAUDE_RESUME_2026-11-18.md`](docs/handoffs/CLAUDE_RESUME_2026-11-18.md) en `claude/aromia-integration`. Este documento conserva el contrato maestro y sus autorizaciones; el archivo de reanudación actualiza **el estado técnico y las prioridades**. No tomar las versiones/PRs de la sección histórica de este master como estado reciente sin verificar.
