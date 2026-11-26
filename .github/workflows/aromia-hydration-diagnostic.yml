@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'scripts/qa/hydration-diagnostic*.cjs'
+      - 'scripts/qa/production-hydration-observe.cjs'
       - 'apps/web/src/app/layout.tsx'
       - 'apps/web/src/components/ThemeToggle.tsx'
       - '.github/workflows/aromia-hydration-diagnostic.yml'
@@ -25,6 +26,7 @@ jobs:
           node --check scripts/qa/hydration-diagnostic.cjs
           node --check scripts/qa/hydration-diagnostic-lib.cjs
           node --check scripts/qa/hydration-diagnostic-lib.test.cjs
+          node --check scripts/qa/production-hydration-observe.cjs
       - name: Dependency-free unit tests
         run: node --test scripts/qa/hydration-diagnostic-lib.test.cjs
       - name: Install web dependencies
@@ -96,6 +98,11 @@ jobs:
         env:
           PLAYWRIGHT_PACKAGE_PATH: ${{ runner.temp }}/aromia-browser/node_modules/playwright
         run: node scripts/qa/hydration-diagnostic.cjs http://127.0.0.1:3100 /,/academia,/quiz
+      - name: Public-site hydration baseline (READ ONLY; nonblocking, not PR-code QA)
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_PACKAGE_PATH: ${{ runner.temp }}/aromia-browser/node_modules/playwright
+        run: node scripts/qa/production-hydration-observe.cjs
       - name: Show local built-web logs on failure
         if: failure()
         run: tail -n 120 "$RUNNER_TEMP/aromia-next-prod.log" || true
