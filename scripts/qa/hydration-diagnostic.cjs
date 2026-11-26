@@ -43,7 +43,7 @@ async function run() {
         let httpStatus = null;
         let navigationError = null;
         try {
-          const response = await page.goto(new URL(route, url), {waitUntil: 'domcontentloaded', timeout: 30000});
+          const response = await page.goto(new URL(route, url).toString(), {waitUntil: 'domcontentloaded', timeout: 30000});
           httpStatus = response?.status() ?? null;
           await page.waitForTimeout(2000); // allow deferred client hydration in dev
         } catch (error) {
