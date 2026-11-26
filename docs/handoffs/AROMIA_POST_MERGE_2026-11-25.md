@@ -25,3 +25,11 @@ PLAYWRIGHT_PACKAGE_PATH=/ruta/al/playwright node scripts/qa/hydration-diagnostic
 - **CI de esta nueva rama y validación interactiva aún pendientes**. Ningún test de navegador se afirma como ejecutado en este corte.
 
 **Próxima acción para Claude Code:** revisar PR/branch HEAD y CI, ejecutar auditoría en un build de desarrollo local, corregir mismatch reproducible; no desplegar ni fusionar sin aprobación explícita.
+
+## Seguimiento verificado · 26 noviembre 2026
+
+- **Railway (lectura directa):** dos deploys de los servicios principales en estado `SUCCESS`, ambos desde `main` y SHA `5ba7349a11d42ad2d5590f1250a410f1e7b4a317`, creados `2026-11-25T01:57:53Z`. No confundir SUCCESS de deployment con verificación de hidratación del navegador.
+- **CI del PR #216, HEAD `665c1cb3d3f2329b72d3879beab30784e476224c`:** `Aromia hydration diagnostic unit checks`, `Aromia Strict Audit` y `v2.0 CI` SUCCESS; seis gates de diseño/visual SKIPPED; cero fallos. Esta evidencia no prueba que desapareciera React #418.
+- **Análisis de código:** `layout.tsx` preconfigura `data-theme` en cliente; esto puede provocar diferencias de atributos, pero React #418 cubre también discrepancias de texto/HTML, no implica por sí mismo que esta sea la causa. `Footer.tsx` usa año actual (evaluar transición de año); formatos de fecha y datos dependientes del entorno requieren revisión por ruta. No se debe aplicar un silenciamiento general como sustituto del diagnóstico.
+- **Bloqueo real:** no hay entorno Next dev completo ni instalación de `apps/web/node_modules` en el contenedor disponible; no se ejecutó el navegador local. Próximo actor debe levantar dev y usar la herramienta ya incorporada. No afirmar "corregido" mientras no exista un diff reproducible y su test de regresión.
+- **Niveles de razonamiento sugeridos:** etapa de verificación de GitHub/Railway/CI = Medium; reproducción/diff React = High; implementación puntual y tests = Medium, elevar a High si hay SSR asíncrono; arquitectura del layout/streaming si falla diagnóstico = Extra High; QA final y handoff = Medium.
