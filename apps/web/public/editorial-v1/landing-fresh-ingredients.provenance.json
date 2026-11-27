@@ -1,0 +1,10 @@
+{
+  "asset": "bergamot-fresh-square.webp / bergamot-fresh-portrait.webp / bergamot-fresh-wide.webp / rose-fresh-portrait.webp / sandalwood-fresh-portrait.webp / resin-fresh-portrait.webp / oakmoss-fresh-portrait.webp",
+  "role": "ingredient study for the landing; AI-generated, never documentary evidence or perfume identity",
+  "source_type": "generated_image",
+  "generator": "Google Flow (Nano Banana 2.1), prompt: fresh whole bergamot, studio light, plain light-grey background, no text",
+  "generated_on": "2026-11-27",
+  "adaptation": "Single generations downloaded at 2K (2752x1536) from Google Flow (Nano Banana 2.1), cropped (1:1, 3:4, 16:9) and encoded as WebP. Resin and oakmoss tiles are two crops of one generation.",
+  "credit_line": "Imagen generada con IA · AROMIA",
+  "canonical_product_identity": false
+}
