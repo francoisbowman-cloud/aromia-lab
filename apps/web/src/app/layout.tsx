@@ -6,10 +6,12 @@ import Footer from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { RouteAnalytics } from "@/components/RouteAnalytics";
 import { WebVitals } from "@/components/WebVitals";
+import { DepthEffects } from "@/components/depth/DepthEffects";
 import "./globals.css";
 import "./aromia-redesign.css";
 import "./design-tokens.css";
 import "./editorial-world.css";
+import "./depth-25d.css";
 
 const geistSans = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist-sans", weight: "100 900" });
 const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900" });
@@ -39,7 +41,7 @@ const THEME_INIT_SCRIPT = `
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" data-theme="light">
+    <html lang="es" data-theme="light" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://m.media-amazon.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.notinoimg.com" crossOrigin="anonymous" />
@@ -50,6 +52,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`flex min-h-screen flex-col ${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${archivo.variable} ${ibmPlexSans.variable} antialiased`}>
         <Suspense fallback={null}><RouteAnalytics /></Suspense>
         <WebVitals />
+        <DepthEffects />
         <a href="#contenido" className="aromia-skip-link">Saltar al contenido</a>
         <NavBar />
         <div id="contenido" tabIndex={-1} className="flex-1">{children}</div>

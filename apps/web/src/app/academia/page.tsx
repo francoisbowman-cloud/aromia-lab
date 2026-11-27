@@ -136,7 +136,7 @@ export default async function SaberPage() {
 
       <section id="materias" className="ed-materials"><h2>La materia, de cerca.</h2>          <div className="ed-material-grid">
             {materialStrip.map((material)=> {
-              return <Link key={material.name} href={material.href} className="group min-w-0">
+              return <Link key={material.name} href={material.href} className="group min-w-0" data-tilt>
                 <figure>
                   {/* Cuadrado y no 4/5: la tira mezcla fuentes apaisadas (bergamota 1.33,
                       pachuli 1.50) con una vertical (salvia 0.75). El marco vertical
@@ -231,7 +231,7 @@ export default async function SaberPage() {
             <ul className="grid grid-cols-1 gap-x-10 gap-y-2 border-t border-line sm:grid-cols-2 lg:grid-cols-4">
               {guias.map((guia, index) => (
                 <li key={guia.slug} className="border-b border-line py-7">
-                  <Link href={`/magazine/${guia.slug}`} className="group block">
+                  <Link href={`/magazine/${guia.slug}`} className="group block" data-tilt>
                     <p className="font-plex text-[9px] uppercase tracking-[.13em] text-muted">0{index + 1}</p>
                     <h3 className="mt-4 max-w-[18ch] font-display text-2xl leading-[1.05] transition group-hover:opacity-70">{guia.titulo}</h3>
                     {guia.meta_description ? <p className="mt-3 font-sans text-sm leading-6 text-muted">{guia.meta_description}</p> : null}
