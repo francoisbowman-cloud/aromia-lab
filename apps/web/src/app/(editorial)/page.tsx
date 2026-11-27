@@ -148,6 +148,12 @@ export default function EditorialHome() {
         </div>
         <aside className="ev1-cover-marginalia" aria-label="Dos materias para explorar">
           <figure data-tilt>
+            <Link href="/descubrir/familias/citrica" aria-label="Explorar la familia cítrica">
+              <Image src="/editorial-v1/bergamot-fresh-wide.webp" width={1600} height={893} sizes="(max-width: 800px) 38vw, 15vw" alt="Bergamota fresca entera con una hoja verde, sobre fondo gris claro." />
+            </Link>
+            <figcaption><em>Bergamota</em><span>Imagen generada con IA · AROMIA</span></figcaption>
+          </figure>
+          <figure data-tilt>
             <Link href="/descubrir/familias/ambar-oriental" aria-label="Explorar la familia ámbar">
               <Image src="/editorial-v1/frankincense-documentary.jpg" width={1920} height={1440} sizes="(max-width: 800px) 38vw, 15vw" alt="Detalle documental de resina de Boswellia sacra en la corteza." />
             </Link>

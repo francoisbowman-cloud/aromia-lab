@@ -210,7 +210,7 @@ main .d25-hero h1 em { font-style: italic; color: var(--d25-gold); }
   .d25-doors ul { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 64px 48px 48px; }
   .d25-door { grid-template-columns: 1fr auto; grid-template-areas: "icon arrow" "label label" "copy copy"; row-gap: 10px; padding: 26px 22px; min-height: 190px; align-content: start; }
   .d25-notes { padding: 24px 48px 88px; }
-  .d25-notes-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px 18px; }
+  .d25-notes-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px 18px; }
   .d25-facts { grid-template-columns: repeat(3, 1fr); }
   .d25-facts li { border-bottom: 0; border-right: 1px solid var(--d25-card-line); }
   .d25-facts li:last-child { border-right: 0; }
