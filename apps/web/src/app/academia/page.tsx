@@ -53,10 +53,10 @@ const materialStrip: SaberMaterial[] = [
     scientificName: "Citrus bergamia",
     family: "Cítrica",
     href: "/descubrir/familias/citrica",
-    src: "/editorial-v1/bergamot-editorial-v2.webp",
-    alt: "Ilustración digital de una bergamota verde.",
+    src: "/editorial-v1/bergamot-fresh-square.webp",
+    alt: "Bergamota fresca entera con una hoja verde, sobre fondo gris claro.",
     whatShows: "El fruto entero, cáscara al frente — ahí está el aceite.",
-    credit: "Adaptación digital · Xenocryst / Antares Scorpii · CC BY-SA 2.0",
+    credit: "Imagen generada con IA · AROMIA",
   },
   {
     name: "Limón / cítricos",
