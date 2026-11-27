@@ -210,7 +210,7 @@ main .d25-hero h1 em { font-style: italic; color: var(--d25-gold); }
   .d25-doors ul { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 64px 48px 48px; }
   .d25-door { grid-template-columns: 1fr auto; grid-template-areas: "icon arrow" "label label" "copy copy"; row-gap: 10px; padding: 26px 22px; min-height: 190px; align-content: start; }
   .d25-notes { padding: 24px 48px 88px; }
-  .d25-notes-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px 18px; }
+  .d25-notes-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px 18px; }
   .d25-facts { grid-template-columns: repeat(3, 1fr); }
   .d25-facts li { border-bottom: 0; border-right: 1px solid var(--d25-card-line); }
   .d25-facts li:last-child { border-right: 0; }
@@ -219,6 +219,24 @@ main .d25-hero h1 em { font-style: italic; color: var(--d25-gold); }
   .d25-scene { margin-bottom: 72px; }
   .d25-med--a { left: -1%; }
   .d25-med--b { right: -1%; }
+}
+
+
+/* ---------- escritorio: más cerca de las referencias ---------- */
+@media (min-width: 1024px) {
+  .d25-hero-inner { grid-template-columns: 1fr; min-height: min(780px, calc(100svh - 68px)); padding: 64px 48px 96px; }
+  .d25-hero-copy { max-width: min(54%, 820px); }
+  main .d25-hero h1 { max-width: 17ch; font-size: clamp(56px, 5.9vw, 88px); line-height: .98; }
+  .d25-scene { position: absolute; right: 0; top: 0; bottom: 0; width: 56%; aspect-ratio: auto; margin: 0; }
+  .d25-arch, .d25-pedestal { display: none; }
+  .d25-plate { inset: -2%; border-radius: 0; outline: 0; box-shadow: none; background: transparent; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%); mask-image: linear-gradient(90deg, transparent 0, #000 34%); }
+  .d25-med--a { left: 15%; top: 15%; width: 12%; }
+  .d25-med--b { right: 7%; top: 50%; width: 9.5%; }
+  .d25-med--c { left: 22%; bottom: 14%; width: 11%; }
+  .d25-scene figcaption { left: auto; right: 24px; bottom: 16px; max-width: 520px; padding: 6px 10px; background: color-mix(in srgb, var(--d25-bg) 84%, transparent); backdrop-filter: blur(6px); }
+  .d25-doors ul { gap: 0; padding: 0 48px; }
+  .d25-door { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; min-height: 170px; padding: 34px 28px; }
+  .d25-doors li + li .d25-door { border-left: 1px solid var(--d25-card-line); }
 }
 
 /* ---------- tratamiento global ---------- */

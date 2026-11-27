@@ -17,7 +17,7 @@ export default function NavBar() {
     <header className={`d25-nav sticky top-0 z-50 border-b border-line backdrop-blur-xl print:static print:hidden bg-[var(--aromia-chrome-bg)]`}>
       <nav className="mx-auto flex h-[68px] max-w-[1520px] items-center justify-between px-5 sm:px-8 lg:px-12" aria-label="Navegación principal">
         <Link href="/" className="aromia-nav-brand inline-flex min-h-11 items-center font-display text-[25px] tracking-[.08em] text-ink lg:text-[28px]" aria-label="Aromia — Portada">
-          AROMIA
+          <span className="inline-flex flex-col items-center leading-none"><span>AROMIA</span><span aria-hidden="true" className="mt-1 pl-[.6em] font-plex text-[9px] tracking-[.6em] text-muted">LAB</span></span>
         </Link>
 
         <ul className="aromia-nav-sections hidden items-center gap-5 font-sans text-[13px] lg:flex xl:gap-7">

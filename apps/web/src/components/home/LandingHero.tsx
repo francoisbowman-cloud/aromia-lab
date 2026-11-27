@@ -11,7 +11,6 @@ const DOORS = [
 ] as const;
 
 const NOTES = [
-  { href: "/descubrir/familias/citrica", label: "Cítricas", src: "/editorial-v1/bergamot-editorial-v2.webp", alt: "Bergamota verde reinterpretada con luz lateral.", credit: "Adaptación digital · Xenocryst / Antares Scorpii · CC BY-SA 2.0" },
   { href: "/descubrir/familias/floral", label: "Florales", src: "/editorial-v1/pink-rose-documentary.jpg", alt: "Primer plano documental de una rosa rosada.", credit: "Jon Sullivan · CC0 1.0" },
   { href: "/descubrir/familias/amaderada", label: "Amaderadas", src: "/editorial-v1/sandalwood-documentary.jpg", alt: "Santalum album, árbol de sándalo.", credit: "Shyamal · CC BY-SA 4.0" },
   { href: "/descubrir/familias/ambar-oriental", label: "Ámbar", src: "/editorial-v1/frankincense-documentary.jpg", alt: "Resina de Boswellia sacra sobre la corteza.", credit: "Krzysztof Ziarnek · CC BY-SA 4.0" },
@@ -21,7 +20,7 @@ const NOTES = [
 
 const FACTS = [
   { value: "125", label: "fragancias en el archivo" },
-  { value: "6", label: "familias olfativas para empezar" },
+  { value: String(NOTES.length), label: "familias olfativas para empezar" },
   { value: "↗", label: "créditos de imagen a la vista" },
 ] as const;
 
@@ -50,9 +49,6 @@ export function LandingHero() {
               <Image src="/editorial-v1/perfume-silk-cover.webp" alt="Un frasco de vidrio ámbar sobre travertino, seda vino y flores de cítrico." fill priority sizes="(max-width: 1023px) 86vw, 520px" />
               <span aria-hidden="true" className="d25-sheen" />
             </div>
-            <div aria-hidden="true" className="d25-med d25-med--a d25-layer" style={{ "--d": 40 } as React.CSSProperties}>
-              <span><Image src="/editorial-v1/bergamot-editorial-v2.webp" alt="" fill sizes="140px" /></span>
-            </div>
             <div aria-hidden="true" className="d25-med d25-med--b d25-layer" style={{ "--d": 58 } as React.CSSProperties}>
               <span><Image src="/editorial-v1/rose-documentary.jpg" alt="" fill sizes="110px" /></span>
             </div>
@@ -63,7 +59,7 @@ export function LandingHero() {
               {Array.from({ length: 9 }, (_, i) => <i key={i} style={{ "--i": i } as React.CSSProperties} />)}
             </div>
             <figcaption>
-              Ilustración digital · AROMIA. Bergamota: Xenocryst / Antares Scorpii (<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>) · Rosa: Vatadoshu Phyto (CC0) · Incienso: Krzysztof Ziarnek (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).
+              Ilustración digital · AROMIA. Rosa: Vatadoshu Phyto (CC0) · Incienso: Krzysztof Ziarnek (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).
             </figcaption>
           </figure>
         </div>

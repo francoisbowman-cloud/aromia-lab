@@ -148,12 +148,6 @@ export default function EditorialHome() {
         </div>
         <aside className="ev1-cover-marginalia" aria-label="Dos materias para explorar">
           <figure data-tilt>
-            <Link href="/descubrir/familias/citrica" aria-label="Explorar la familia cítrica">
-              <Image src="/editorial-v1/bergamot-editorial-v2.webp" width={640} height={640} sizes="(max-width: 800px) 38vw, 15vw" alt="Estudio reinterpretado de una bergamota verde: luz lateral y textura de la cáscara." />
-            </Link>
-            <figcaption><em>Bergamota</em><span>Adaptación digital a partir de <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></span></figcaption>
-          </figure>
-          <figure data-tilt>
             <Link href="/descubrir/familias/ambar-oriental" aria-label="Explorar la familia ámbar">
               <Image src="/editorial-v1/frankincense-documentary.jpg" width={1920} height={1440} sizes="(max-width: 800px) 38vw, 15vw" alt="Detalle documental de resina de Boswellia sacra en la corteza." />
             </Link>
