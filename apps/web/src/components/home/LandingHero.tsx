@@ -12,10 +12,10 @@ const DOORS = [
 
 const NOTES = [
   { href: "/descubrir/familias/citrica", label: "Cítricas", src: "/editorial-v1/bergamot-fresh-portrait.webp", alt: "Bergamota fresca entera con una hoja verde, sobre fondo gris claro.", credit: "Imagen generada con IA · AROMIA" },
-  { href: "/descubrir/familias/floral", label: "Florales", src: "/editorial-v1/pink-rose-documentary.jpg", alt: "Primer plano documental de una rosa rosada.", credit: "Jon Sullivan · CC0 1.0" },
-  { href: "/descubrir/familias/amaderada", label: "Amaderadas", src: "/editorial-v1/sandalwood-documentary.jpg", alt: "Santalum album, árbol de sándalo.", credit: "Shyamal · CC BY-SA 4.0" },
-  { href: "/descubrir/familias/ambar-oriental", label: "Ámbar", src: "/editorial-v1/frankincense-documentary.jpg", alt: "Resina de Boswellia sacra sobre la corteza.", credit: "Krzysztof Ziarnek · CC BY-SA 4.0" },
-  { href: "/descubrir/familias/chipre", label: "Chipre", src: "/editorial-v1/patchouli-documentary.jpg", alt: "Planta de pachulí fotografiada en Seychelles.", credit: "Joe Laurence / Seychelles News Agency · CC BY 4.0" },
+  { href: "/descubrir/familias/floral", label: "Florales", src: "/editorial-v1/rose-fresh-portrait.webp", alt: "Rosa rosada en flor con tallo y hoja, sobre fondo gris claro.", credit: "Imagen generada con IA · AROMIA" },
+  { href: "/descubrir/familias/amaderada", label: "Amaderadas", src: "/editorial-v1/sandalwood-fresh-portrait.webp", alt: "Troncos partidos de sándalo con virutas, sobre fondo gris claro.", credit: "Imagen generada con IA · AROMIA" },
+  { href: "/descubrir/familias/ambar-oriental", label: "Ámbar", src: "/editorial-v1/resin-fresh-portrait.webp", alt: "Lágrimas de resina de incienso doradas, sobre fondo gris claro.", credit: "Imagen generada con IA · AROMIA" },
+  { href: "/descubrir/familias/chipre", label: "Chipre", src: "/editorial-v1/oakmoss-fresh-portrait.webp", alt: "Musgo de roble y hojas de pachulí, sobre fondo gris claro.", credit: "Imagen generada con IA · AROMIA" },
   { href: "/descubrir/familias/aromatica", label: "Aromáticas", src: "/editorial-v1/clary-sage-herbarium.jpg", alt: "Lámina botánica histórica de Salvia sclarea.", credit: "Jacob Sturm, 1796 · dominio público" },
 ] as const;
 
