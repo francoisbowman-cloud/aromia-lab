@@ -9,12 +9,12 @@ import { SITE_NAV, navItemIsActive } from "@/lib/siteNavigation";
 
 export default function NavBar() {
   const pathname = usePathname();
-  const coverMode = pathname === "/";
+  const coverMode = false;
   const menu = useRef<HTMLDetailsElement>(null);
   useEffect(() => { menu.current?.removeAttribute("open"); }, [pathname]);
 
   return (
-    <header className={`sticky top-0 z-50 border-b border-line backdrop-blur-xl print:static print:hidden ${coverMode ? "aromia-cover-nav bg-[var(--aromia-chrome-bg)]" : "bg-[var(--aromia-chrome-bg)]"}`}>
+    <header className={`d25-nav sticky top-0 z-50 border-b border-line backdrop-blur-xl print:static print:hidden bg-[var(--aromia-chrome-bg)]`}>
       <nav className="mx-auto flex h-[68px] max-w-[1520px] items-center justify-between px-5 sm:px-8 lg:px-12" aria-label="Navegación principal">
         <Link href="/" className="aromia-nav-brand inline-flex min-h-11 items-center font-display text-[25px] tracking-[.08em] text-ink lg:text-[28px]" aria-label="Aromia — Portada">
           AROMIA

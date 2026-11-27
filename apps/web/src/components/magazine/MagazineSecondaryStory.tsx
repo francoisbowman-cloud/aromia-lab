@@ -15,7 +15,7 @@ export function MagazineSecondaryStory({ article, isFirst }: { article: Article;
   const showImage = isAuditedCover(article.imagen_portada_url) && !imgError;
 
   return (
-    <Link href={`/magazine/${article.slug}`} className={`group block border-t border-line pt-4 outline-none ${isFirst ? "lg:pt-4" : ""}`}>
+    <Link data-tilt href={`/magazine/${article.slug}`} className={`group block border-t border-line pt-4 outline-none ${isFirst ? "lg:pt-4" : ""}`}>
       <div className="relative aspect-[16/10] overflow-hidden bg-[#e6e8e4] dark:bg-[#151c18]">
         {showImage ? (
           // eslint-disable-next-line @next/next/no-img-element

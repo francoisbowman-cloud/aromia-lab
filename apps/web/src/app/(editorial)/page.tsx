@@ -7,6 +7,7 @@ import "./editorial.css";
 import "./home-story-rhythm.css";
 import { VisualField, visualCredit } from "./editorialVisuals";
 import { EDITORIAL_STORIES } from "@/lib/editorialIndex";
+import { LandingHero } from "@/components/home/LandingHero";
 
 export const metadata: Metadata = {
   title: { absolute: "Aromia — Una fragancia, una historia" },
@@ -49,33 +50,6 @@ const lead = coverStory("el-perfume-que-encargo-un-sultan");
 const materialStory = coverStory("el-ambar-que-nunca-toco-una-ballena");
 const personStory = coverStory("el-perfumista-que-no-teme-exagerar");
 
-const SECTION_INDEX = [
-  {
-    number: "01",
-    label: "Historias",
-    copy: "Ensayos, materias y relatos que empiezan por una pregunta.",
-    href: "/magazine",
-  },
-  {
-    number: "02",
-    label: "Saber",
-    copy: "Una base clara para entender estructura, familias y concentración.",
-    href: "/academia",
-  },
-  {
-    number: "03",
-    label: "Personas",
-    copy: "Las autorías detrás de las fragancias y las obras revisadas.",
-    href: "/perfumistas",
-  },
-  {
-    number: "04",
-    label: "Discovery",
-    copy: "Explora familias, subfamilias, materias y caminos olfativos.",
-    href: "/descubrir",
-  },
-] as const;
-
 const DISCOVERY_FAMILIES = [
   ["Cítrica", "citrica"],
   ["Floral", "floral"],
@@ -87,34 +61,10 @@ const DISCOVERY_FAMILIES = [
 export default function EditorialHome() {
   return (
     <main className="ev1 ev1-cover">
-      <section className="cover-atmosphere" aria-labelledby="cover-title">
-        <div className="cover-atmosphere-copy">
-          <p className="cover-eyebrow">El arte de perfumarse</p>
-          <h1 id="cover-title">Lo invisible<br />deja huella.</h1>
-          <p className="cover-intro">Una mirada íntima al perfume, la memoria y el deseo.</p>
-          <Link className="ev1-read" href="/magazine">Explorar las historias <ArrowUpRight aria-hidden="true" size={22} strokeWidth={1.4} /></Link>
-        </div>
-        <figure className="cover-atmosphere-photo">
-          <Image src="/editorial-v1/perfume-silk-cover.webp" alt="Composición imaginada: un frasco de vidrio ámbar sobre travertino, seda vino y flores de cítrico." width={1200} height={1500} priority sizes="(max-width: 700px) 100vw, 65vw" />
-          <figcaption>Ilustración digital · AROMIA</figcaption>
-        </figure>
-      </section>
-
-      <section className="cover-citrus" aria-labelledby="citrus-title">
-        <figure>
-          <Image src="/editorial-v1/bergamot-editorial-v2.webp" alt="Bergamota verde reinterpretada con luz lateral que revela la textura de su piel." width={640} height={640} sizes="(max-width: 700px) 100vw, 50vw" />
-          <figcaption>Adaptación digital · <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></figcaption>
-        </figure>
-        <div>
-          <p className="cover-eyebrow">Atlas de materias</p>
-          <h2 id="citrus-title">La luz de<br />la bergamota</h2>
-          <p>El comienzo luminoso de una historia en la piel.</p>
-          <Link className="ev1-read" href="/descubrir/familias/citrica">Explorar la familia cítrica <ArrowUpRight aria-hidden="true" size={22} strokeWidth={1.4} /></Link>
-        </div>
-      </section>
+      <LandingHero />
 
       <section className="ev1-cover-supporting" aria-label="Historias destacadas">
-        <article className="ev1-cover-feature ev1-cover-feature--person">
+        <article className="ev1-cover-feature ev1-cover-feature--person" data-depth-reveal>
           <div className="ev1-cover-media-shell ev1-cover-media-shell--portrait">
             <EditorialImage
               src="/editorial-v1/red-rose-interpretive.jpg"
@@ -140,7 +90,7 @@ export default function EditorialHome() {
             </Link>
           </div>
         </article>
-        <article className="ev1-cover-feature ev1-cover-feature--material">
+        <article className="ev1-cover-feature ev1-cover-feature--material" data-depth-reveal>
           <div className="ev1-cover-feature-copy">
             <div className="ev1-cover-feature-meta">
               <span>{materialStory.kicker}</span>
@@ -165,7 +115,7 @@ export default function EditorialHome() {
 
       </section>
 
-      <article className="cover-dispatch" id="historias">
+      <article className="cover-dispatch" id="historias" data-depth-reveal>
         <div className="cover-dispatch-heading">
           <p className="cover-eyebrow">Fuera del radar · Omán</p>
           <h2><Link className="ev1-story-link" href={lead.href}>{lead.title}</Link></h2>
@@ -178,23 +128,7 @@ export default function EditorialHome() {
         </div>
       </article>
 
-      <section className="ev1-cover-index" aria-labelledby="cover-index-title">
-        <div className="ev1-cover-index-heading">
-          <p className="ev1-kicker">Índice</p>
-          <h2 id="cover-index-title">Cuatro puertas de entrada.</h2>
-        </div>
-        <div className="ev1-cover-index-list">
-          {SECTION_INDEX.map((item) => (
-            <Link key={item.href} href={item.href} className="ev1-cover-index-item">
-              <span className="ev1-cover-index-label">{item.label}</span>
-              <span className="sr-only">{item.copy}</span>
-              <span className="ev1-cover-index-arrow" aria-hidden="true">→</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="ev1-cover-discovery" id="discovery" aria-labelledby="cover-discovery-title">
+      <section className="ev1-cover-discovery" id="discovery" aria-labelledby="cover-discovery-title" data-depth-reveal>
         <div>
           <h2 id="cover-discovery-title" className="ev1-question">¿Qué te mueve cuando eliges un perfume?</h2>
           <p className="ev1-cover-discovery-copy">
@@ -213,13 +147,13 @@ export default function EditorialHome() {
           </Link>
         </div>
         <aside className="ev1-cover-marginalia" aria-label="Dos materias para explorar">
-          <figure>
+          <figure data-tilt>
             <Link href="/descubrir/familias/citrica" aria-label="Explorar la familia cítrica">
               <Image src="/editorial-v1/bergamot-editorial-v2.webp" width={640} height={640} sizes="(max-width: 800px) 38vw, 15vw" alt="Estudio reinterpretado de una bergamota verde: luz lateral y textura de la cáscara." />
             </Link>
             <figcaption><em>Bergamota</em><span>Adaptación digital a partir de <a href="https://commons.wikimedia.org/wiki/File:Bergamotfruit.jpg">Xenocryst / Antares Scorpii</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></span></figcaption>
           </figure>
-          <figure>
+          <figure data-tilt>
             <Link href="/descubrir/familias/ambar-oriental" aria-label="Explorar la familia ámbar">
               <Image src="/editorial-v1/frankincense-documentary.jpg" width={1920} height={1440} sizes="(max-width: 800px) 38vw, 15vw" alt="Detalle documental de resina de Boswellia sacra en la corteza." />
             </Link>

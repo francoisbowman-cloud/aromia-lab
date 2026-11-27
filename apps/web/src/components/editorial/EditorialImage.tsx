@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import { LazyMotion, m, useReducedMotion, useScroll, useTransform } from "motion/react";
 
+const subscribeNothing = () => () => {};
 const features = () => import("./motionFeatures").then((module) => module.default);
 
 /** A small drift within an interpretive image, never documentary evidence.
@@ -20,7 +21,10 @@ export function EditorialImage({
   className: string;
 }) {
   const frame = useRef<HTMLDivElement>(null);
-  const reducedMotion = useReducedMotion();
+  // The reduced-motion preference only exists on the client; applying it before
+  // hydration finishes made the server and client styles differ (React #418).
+  const hydrated = useSyncExternalStore(subscribeNothing, () => true, () => false);
+  const reducedMotion = useReducedMotion() && hydrated;
   const { scrollYProgress } = useScroll({ target: frame, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [-8, 8]);
 
