@@ -1,5 +1,7 @@
 # Aromia — resumen para retomar en un chat limpio (2026-11-23)
 
+> **Desfasado.** El PR #214 ya está mergeado (24/11) y desplegado; después entraron #217, #218 y #219. El estado vigente está en `docs/handoffs/ESTADO_2026-11-27_LANDING_2.5D.md`.
+
 Léelo junto con `docs/handoffs/AROMIA_LATEST.md` (hitos 05–07) y `AROMIA_MASTER_HANDOFF.md`. Si algo de aquí contradice lo que devuelve un comando, manda el comando.
 
 ## Dónde estamos

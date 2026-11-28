@@ -43,28 +43,34 @@ export function LandingHero() {
             </div>
           </div>
 
-          <figure className="d25-scene" aria-label="Composición ilustrada: un frasco ámbar entre materias primas">
-            <div aria-hidden="true" className="d25-arch d25-layer" style={{ "--d": -10 } as React.CSSProperties} />
-            <div aria-hidden="true" className="d25-pedestal d25-layer" style={{ "--d": -4 } as React.CSSProperties} />
-            <div className="d25-plate d25-layer" style={{ "--d": 12 } as React.CSSProperties}>
-              <Image src="/editorial-v1/perfume-silk-cover.webp" alt="Un frasco de vidrio ámbar sobre travertino, seda vino y flores de cítrico." fill priority sizes="(max-width: 1023px) 86vw, 520px" />
-              <span aria-hidden="true" className="d25-sheen" />
+          <figure className="d25-scene" aria-label="Composición por capas: un frasco ámbar sobre piedra y seda, con azahar y materias primas">
+            <div className="d25-wall d25-layer" style={{ "--d": -8 } as React.CSSProperties}>
+              <Image src="/editorial-v1/hero/layer-wall.webp" alt="" fill priority sizes="(max-width: 1023px) 92vw, 56vw" />
+            </div>
+            <div aria-hidden="true" className="d25-light d25-layer" style={{ "--d": -14 } as React.CSSProperties} />
+            <div className="d25-stone d25-layer" style={{ "--d": 16 } as React.CSSProperties}>
+              <Image src="/editorial-v1/hero/layer-stone.webp" alt="" width={1300} height={797} priority sizes="(max-width: 1023px) 86vw, 46vw" />
+            </div>
+            <div className="d25-bottle d25-layer" style={{ "--d": 28 } as React.CSSProperties}>
+              <span aria-hidden="true" className="d25-bottle-shadow" />
+              <Image src="/editorial-v1/hero/layer-bottle.webp" alt="Frasco de vidrio ámbar con tapa de travertino, sin etiqueta." width={640} height={1064} priority sizes="(max-width: 1023px) 24vw, 14vw" />
+            </div>
+            <div aria-hidden="true" className="d25-blossom d25-layer" style={{ "--d": 46 } as React.CSSProperties}>
+              <Image src="/editorial-v1/hero/layer-blossom.webp" alt="" width={1000} height={591} priority sizes="(max-width: 1023px) 70vw, 36vw" />
             </div>
             <div aria-hidden="true" className="d25-med d25-med--a d25-layer" style={{ "--d": 40 } as React.CSSProperties}>
               <span><Image src="/editorial-v1/bergamot-fresh-square.webp" alt="" fill sizes="160px" /></span>
             </div>
             <div aria-hidden="true" className="d25-med d25-med--b d25-layer" style={{ "--d": 58 } as React.CSSProperties}>
-              <span><Image src="/editorial-v1/rose-documentary.jpg" alt="" fill sizes="110px" /></span>
+              <span><Image src="/editorial-v1/rose-fresh-portrait.webp" alt="" fill sizes="120px" /></span>
             </div>
             <div aria-hidden="true" className="d25-med d25-med--c d25-layer" style={{ "--d": 30 } as React.CSSProperties}>
-              <span><Image src="/editorial-v1/frankincense-documentary.jpg" alt="" fill sizes="120px" /></span>
+              <span><Image src="/editorial-v1/resin-fresh-portrait.webp" alt="" fill sizes="130px" /></span>
             </div>
             <div aria-hidden="true" className="d25-dust d25-layer" style={{ "--d": 72 } as React.CSSProperties}>
               {Array.from({ length: 9 }, (_, i) => <i key={i} style={{ "--i": i } as React.CSSProperties} />)}
             </div>
-            <figcaption>
-              Ilustración digital · AROMIA. Bergamota: imagen generada con IA · Rosa: Vatadoshu Phyto (CC0) · Incienso: Krzysztof Ziarnek (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).
-            </figcaption>
+            <figcaption>Imágenes generadas con IA · AROMIA. Composición por capas: muro, piedra y tela, frasco, azahar y materias primas.</figcaption>
           </figure>
         </div>
       </section>
