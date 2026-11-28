@@ -108,30 +108,18 @@ main .d25-hero h1 em { font-style: italic; color: var(--d25-gold); }
 
 /* escena */
 .d25-scene { position: relative; width: min(100%, 520px); aspect-ratio: 4 / 5; margin: 0 auto; }
-.d25-arch {
-  position: absolute; inset: -4% -6% 2% -6%;
-  border: 1px solid var(--d25-gold-soft); opacity: .55;
-  border-radius: 999px 999px 28px 28px;
-}
-.d25-pedestal {
-  position: absolute; left: 4%; right: 4%; bottom: -3%; height: 8%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, .34), transparent 70%);
-  filter: blur(6px);
-}
-.d25-plate {
-  position: absolute; inset: 0;
-  border-radius: 999px 999px 18px 18px;
-  overflow: hidden;
-  box-shadow: var(--d25-lift);
-  outline: 1px solid var(--d25-gold-soft); outline-offset: -1px;
-  background: var(--d25-bg-2);
-}
-.d25-plate img { object-fit: cover; }
-.d25-sheen {
-  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
-  background: linear-gradient(115deg, transparent calc(30% + var(--px, 0) * 14%), rgba(255, 255, 255, .5) calc(46% + var(--px, 0) * 14%), transparent calc(62% + var(--px, 0) * 14%));
-}
+
+/* escena por capas reales (muro, piedra y tela, frasco, azahar) */
+.d25-wall { position: absolute; inset: -3%; overflow: hidden; border-radius: 999px 999px 18px 18px; box-shadow: var(--d25-lift); background: #3a2416; }
+.d25-wall img { object-fit: cover; }
+.d25-light { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; background: radial-gradient(ellipse at 78% 16%, rgba(255, 214, 150, .34), transparent 58%); }
+.d25-stone { position: absolute; width: 92%; right: -6%; bottom: 11%; filter: drop-shadow(0 28px 26px rgba(20, 10, 4, .45)); }
+.d25-stone img, .d25-bottle img, .d25-blossom img { display: block; width: 100%; height: auto; }
+.d25-bottle { position: absolute; width: 25%; left: 50%; bottom: 12%; }
+.d25-bottle img { filter: drop-shadow(0 18px 18px rgba(20, 10, 4, .4)); }
+.d25-bottle-shadow { position: absolute; left: -8%; right: -30%; bottom: -3%; height: 9%; border-radius: 50%; background: radial-gradient(ellipse at 40% 50%, rgba(10, 5, 2, .55), transparent 70%); filter: blur(5px); }
+.d25-blossom { position: absolute; width: 74%; top: 2%; right: -14%; }
+.d25-blossom img { transform: scaleX(-1) rotate(-6deg); filter: drop-shadow(0 20px 18px rgba(20, 10, 4, .4)); }
 .d25-med { position: absolute; }
 .d25-med > span {
   position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 50%;
@@ -140,10 +128,10 @@ main .d25-hero h1 em { font-style: italic; color: var(--d25-gold); }
   animation: d25-float 7s ease-in-out infinite;
 }
 .d25-med img { object-fit: cover; }
-.d25-med--a { width: 26%; aspect-ratio: 1; left: -9%; top: 14%; }
-.d25-med--b { width: 20%; aspect-ratio: 1; right: -7%; top: 46%; }
+.d25-med--a { width: 21%; aspect-ratio: 1; left: -3%; top: 34%; }
+.d25-med--b { width: 16%; aspect-ratio: 1; right: -2%; top: 46%; }
 .d25-med--b > span { animation-delay: -2.5s; animation-duration: 8.5s; }
-.d25-med--c { width: 23%; aspect-ratio: 1; left: 6%; bottom: 8%; }
+.d25-med--c { width: 18%; aspect-ratio: 1; left: 6%; bottom: 14%; }
 .d25-med--c > span { animation-delay: -4.5s; animation-duration: 9s; }
 @keyframes d25-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
 .d25-dust { position: absolute; inset: 0; pointer-events: none; }
@@ -228,12 +216,11 @@ main .d25-hero h1 em { font-style: italic; color: var(--d25-gold); }
   .d25-hero-copy { max-width: min(54%, 820px); }
   main .d25-hero h1 { max-width: 17ch; font-size: clamp(56px, 5.9vw, 88px); line-height: .98; }
   .d25-scene { position: absolute; right: 0; top: 0; bottom: 0; width: 56%; aspect-ratio: auto; margin: 0; }
-  .d25-arch, .d25-pedestal { display: none; }
-  .d25-plate { inset: -2%; border-radius: 0; outline: 0; box-shadow: none; background: transparent; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%); mask-image: linear-gradient(90deg, transparent 0, #000 34%); }
+  .d25-wall { inset: -2%; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%); mask-image: linear-gradient(90deg, transparent 0, #000 34%); border-radius: 0; }
   .d25-med--a { left: 15%; top: 15%; width: 12%; }
   .d25-med--b { right: 7%; top: 50%; width: 9.5%; }
   .d25-med--c { left: 22%; bottom: 14%; width: 11%; }
-  .d25-scene figcaption { left: auto; right: 24px; bottom: 16px; max-width: 520px; padding: 6px 10px; background: color-mix(in srgb, var(--d25-bg) 84%, transparent); backdrop-filter: blur(6px); }
+  .d25-scene figcaption { left: auto; right: 24px; bottom: 12px; max-width: 520px; padding: 6px 10px; background: color-mix(in srgb, var(--d25-bg) 84%, transparent); backdrop-filter: blur(6px); }
   .d25-doors ul { gap: 0; padding: 0 48px; }
   .d25-door { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; min-height: 170px; padding: 34px 28px; }
   .d25-doors li + li .d25-door { border-left: 1px solid var(--d25-card-line); }
