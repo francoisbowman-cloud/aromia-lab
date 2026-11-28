@@ -9,22 +9,14 @@ Léelo antes que `RESUMEN_PARA_RETOMAR_2026-11-23.md`, que quedó desfasado (dic
 | #217 | Landing nueva + tratamiento 2.5D (`LandingHero.tsx`, `DepthEffects.tsx`, `depth-25d.css`), nav «AROMIA / LAB», tilt en Magazine/Saber, arreglo de React #418. | `744e845` |
 | #218 | Imágenes frescas (Google Flow) para Florales, Amaderadas, Ámbar y Chipre. | `cd06ce0` |
 | #219 | Bergamota nueva en `/academia`. | `1598f3b` |
+| #220 | Hero con capas reales (muro, piedra y seda, frasco, azahar). | `91cea79` |
 
 Bergamota fresca (`bergamot-fresh-*.webp`) en hero, tarjeta «Cítricas», Discovery y `/academia`. Todas las imágenes de IA llevan «Imagen generada con IA · AROMIA» y su procedencia en `public/editorial-v1/landing-fresh-ingredients.provenance.json`.
 
-## En curso: capas reales del hero (rama `feat/hero-layers`, NO mergeada)
-Objetivo: pasar el parallax del hero de una sola ilustración a **capas reales con transparencia**.
+## Cerrado: capas reales del hero (PR #220, merge `91cea79`, en producción)
+El hero ya se compone de capas con transparencia (muro, travertino con seda, frasco ámbar sin etiqueta, azahar) más los medallones de ingredientes frescos, con parallax por puntero y scroll. Capas en `public/editorial-v1/hero/`; procedencia en `landing-fresh-ingredients.provenance.json`. Verificado en vivo: rutas 200, capas servidas, 0 errores de consola.
 
-Hecho (cortes ya en `apps/web/public/editorial-v1/hero/`):
-- `layer-bottle.webp` (640×1064): frasco ámbar con tapa de travertino, sin marca.
-- `layer-stone.webp` (1300×797): bloque de travertino con seda burdeos.
-- `layer-blossom.webp` (1000×591): rama de azahar.
-
-Pendiente:
-1. **Muro de fondo**: ya generado en Flow (proyecto «nov 27 - 18:07», imagen «Empty chocolate-brown plaster wall…»). Falta descargarlo a 2K y guardarlo como `hero/layer-wall.webp` (~1600 px de ancho, sin transparencia). Si Flow no coopera, se puede usar un degradado CSS marrón con luz diagonal.
-2. **Maquetar la escena** en `LandingHero.tsx`/`depth-25d.css`: muro (d≈-8, con máscara de fundido a la izquierda en escritorio) → piedra (d≈16, abajo a la derecha) → frasco (d≈28, apoyado delante de la piedra, con sombra de contacto CSS) → azahar (d≈46, entrando por arriba a la derecha) → medallones con los ingredientes frescos (bergamota, rosa, resina). Sustituye `.d25-plate`/`.d25-sheen`.
-3. Actualizar el pie de crédito del hero a «Imágenes generadas con IA · AROMIA» y ampliar el provenance JSON (frasco, piedra, azahar, muro, todos de Flow / Nano Banana 2.1, 27/11).
-4. QA con Playwright sin reduced-motion (claro/oscuro, 1440 y 390), luego PR → CI → merge → verificar en vivo.
+Detalle menor abierto: el recorte del frasco deja una pequeña franja clara de sombra a la derecha de la base.
 
 ## Cómo se obtuvieron los recortes (reproducible)
 Scripts en `docs/design/tools/`:
@@ -41,13 +33,14 @@ Ambos requieren `npm i sharp` fuera del repo.
 
 ## Pendientes generales
 - Salvia fresca para «Aromáticas» (Flow, a mano si hace falta).
+- Franja clara de sombra a la derecha de la base del frasco en el hero (recorte).
 - `lemon-zest-editorial-v2.webp` en `/academia` sigue siendo una adaptación «reinterpretada»; revisar si luce vieja como la bergamota.
 - Brief de Flow para más familias (descubrir/familias/*) si se amplía la franja.
 - Fuera de la landing: figuras dentro de artículos (sin `srcset`), política de procedencia de imágenes, iconos y manifest PWA, Gate 02, piloto editorial 01.
 - Archivos temporales de Flow en `C:\Users\user\Downloads` (JPG `…_2K.jpg` y `.tmp`): Brey puede borrarlos; las copias de trabajo ya están procesadas.
 
 ## Reglas vigentes
-- Sin guardas mecánicas: pedir OK textual para merge, deploy, escritura en producción, gasto y push fuera de rama de trabajo. (Brey pidió el 27/11 «deja todo corriendo en main y desplegar»: autorizó merge+deploy de la landing y de las imágenes; la rama `feat/hero-layers` aún no está lista.)
+- Sin guardas mecánicas: pedir OK textual para merge, deploy, escritura en producción, gasto y push fuera de rama de trabajo. (Brey pidió el 27/11 «deja todo corriendo en main y desplegar» y «cierra ese ciclo»: autorizó merge+deploy de la landing, las imágenes y el hero.)
 - `main` = producción (Railway despliega cada push); `main` no tiene protección de rama.
 - El panel del navegador integrado tiene reduced-motion activo: los efectos 2.5D se prueban con Playwright (`reducedMotion: "no-preference"`).
 - Proyecto Faceless_Studio es independiente de Aromia.
